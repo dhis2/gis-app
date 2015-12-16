@@ -1,0 +1,79 @@
+{
+  "name": "dhis2-gis",
+  "version": "0.0.1",
+  "description": "GIS Web App for DHIS 2",
+  "main": "lib/index.js",
+  "scripts": {
+    "validate": "npm ls --depth 0",
+    "start": "webpack-dev-server",
+    "lint": "./node_modules/eslint/bin/eslint.js src",
+    "test": "./node_modules/karma-cli/bin/karma start test/karma.config.js --single-run",
+    "test-watch": "./node_modules/karma-cli/bin/karma start test/karma.config.js",
+    "test-cov": "npm test",
+    "posttest-cov": "open ./coverage/phantomjs/lcov-report/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhis2/dhis2-gis.git"
+  },
+  "keywords": [
+    "DHIS2",
+    "HISP",
+    "GIS"
+  ],
+  "author": "Bjørn Sandvik",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/dhis2/dhis2-gis/issues"
+  },
+  "homepage": "https://github.com/dhis2/dhis2-gis#readme",
+  "dependencies": {
+    "whatwg-fetch": "0.10.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.3.13",
+    "babel-eslint": "5.0.0-beta6",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "6.1.18",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-2": "6.1.18",
+    "chai": "3.4.1",
+    "css-loader": "0.18.0",
+    "eslint": "1.3.1",
+    "eslint-config-dhis2": "0.0.5",
+    "eslint-plugin-react": "3.3.1",
+    "exports-loader": "0.6.2",
+    "file-loader": "^0.8.4",
+    "image-webpack-loader": "^1.6.2",
+    "imports-loader": "0.6.5",
+    "isparta-loader": "1.0.0",
+    "karma": "0.13.15",
+    "karma-chai": "0.1.0",
+    "karma-chrome-launcher": "0.2.1",
+    "karma-cli": "0.1.1",
+    "karma-coverage": "0.5.3",
+    "karma-mocha": "0.2.1",
+    "karma-phantomjs-launcher": "0.2.1",
+    "karma-sinon": "1.0.4",
+    "karma-sinon-chai": "1.1.0",
+    "karma-sourcemap-loader": "0.3.6",
+    "karma-webpack": "1.7.0",
+    "mocha": "2.3.4",
+    "node-sass": "3.4.2",
+    "phantomjs": "1.9.18",
+    "phantomjs-polyfill": "0.0.1",
+    "precommit-hook": "3.0.0",
+    "sass-loader": "2.0.1",
+    "sinon": "1.17.2",
+    "sinon-chai": "2.8.0",
+    "style-loader": "0.12.3",
+    "susy": "2.2.5",
+    "webpack": "1.12.9",
+    "webpack-dev-server": "1.14.0"
+  },
+  "pre-commit": [
+    "test",
+    "lint",
+    "validate"
+  ]
+}

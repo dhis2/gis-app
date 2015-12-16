@@ -5,3 +5,4 @@ webpack.config.prod.js
 webpack-base-config.js
 src/core.js
 src/app.js
+src/custom.js

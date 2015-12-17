@@ -100,6 +100,8 @@ Ext.onReady( function() {
             store = gis.store,
             layer;
 
+        console.log(gis);
+
         // TODO: Add code
     };
 
@@ -192,14 +194,99 @@ Ext.onReady( function() {
             iconCls: 'gis-menu-item-datasource',
             disabled: true,
             xable: function() {
-                // TODO: Add code
+                if (gis.util.map.hasVisibleFeatures()) {
+                    this.enable();
+                }
+                else {
+                    this.disable();
+                }
             },
             handler: function() {
-                // TODO: Add code
+                console.log('embed handler');
+
+                /*
+                var textArea,
+                    window,
+                    text = '',
+                    el = 'table1',
+                    layout = gis.util.map.map2plugin(gis.util.layout.getPluginConfig()),
+                    version = 'v' + parseFloat(gis.init.systemInfo.version.split('.').join(''));
+
+                layout.el = el;
+
+                if (layout.mapViews) {
+                    for (var i = 0, view; i < layout.mapViews.length; i++) {
+                        view = layout.mapViews[i];
+
+                        if (view.legendSet) {
+                            delete view.legendSet.bounds;
+                            delete view.legendSet.colors;
+                            delete view.legendSet.names;
+                        }
+
+                        if (!view.labels) {
+                            delete view.labels;
+                            delete view.labelFontSize;
+                            delete view.labelFontWeight;
+                            delete view.labelFontStyle;
+                            delete view.labelFontColor;
+                        }
+                    }
+                }
+
+                text += '<html>\n<head>\n';
+                text += '<link rel="stylesheet" href="http://dhis2-cdn.org/' + version + '/ext/resources/css/ext-plugin-gray.css" />\n';
+                text += '<script src="http://dhis2-cdn.org/' + version + '/ext/ext-all.js"></script>\n';
+                text += '<script src="http://dhis2-cdn.org/' + version + '/plugin/table.js"></script>\n';
+                text += '</head>\n\n<body>\n';
+                text += '<div id="' + el + '"></div>\n\n';
+                text += '<script>\n\n';
+                text += 'Ext.onReady(function() {\n\n';
+                text += 'DHIS.getMap(' + JSON.stringify(layout, null, 2) + ');\n\n';
+                text += '});\n\n';
+                text += '</script>\n\n';
+                text += '</body>\n</html>';
+
+                textArea = Ext.create('Ext.form.field.TextArea', {
+                    width: 700,
+                    height: 400,
+                    readOnly: true,
+                    cls: 'ns-textarea monospaced',
+                    value: text
+                });
+
+                window = Ext.create('Ext.window.Window', {
+                    title: 'Embed in web page' + (gis.map && gis.map.name ? '<span style="font-weight:normal">&nbsp;|&nbsp;&nbsp;' + gis.map.name + '</span>' : ''),
+                    layout: 'fit',
+                    modal: true,
+                    resizable: false,
+                    items: textArea,
+                    destroyOnBlur: true,
+                    bbar: [
+                        '->',
+                        {
+                            text: 'Select',
+                            handler: function() {
+                                textArea.selectText();
+                            }
+                        }
+                    ],
+                    listeners: {
+                        show: function(w) {
+                            this.setPosition(215, 33);
+
+                            if (!w.hasDestroyOnBlurHandler) {
+                                gis.util.gui.window.addDestroyOnBlurHandler(w);
+                            }
+                        }
+                    }
+                });
+
+                window.show();
+                */
+
             }
         });
-
-        // TODO: Add missing code
 
         favoriteUrlItem = Ext.create('Ext.menu.Item', {
             text: 'Favorite link' + '&nbsp;&nbsp;',
@@ -214,6 +301,9 @@ Ext.onReady( function() {
                 }
             },
             handler: function() {
+                console.log('favorite handler');
+
+                /*
                 var url = gis.init.contextPath + '/dhis-web-mapping/index.html?id=' + gis.map.id,
                     textField,
                     window;
@@ -247,6 +337,7 @@ Ext.onReady( function() {
                 });
 
                 window.show();
+                */
             }
         });
 
@@ -263,6 +354,8 @@ Ext.onReady( function() {
                 }
             },
             handler: function() {
+                console.log('api url handler');
+                /*
                 var url = gis.init.contextPath + '/api/maps/' + gis.map.id + '/data',
                     textField,
                     window;
@@ -296,6 +389,7 @@ Ext.onReady( function() {
                 });
 
                 window.show();
+                */
             }
         });
 
@@ -334,7 +428,6 @@ Ext.onReady( function() {
             menu: {},
             handler: function() {
                 console.log("about handler");
-
                 /*
                 if (viewport.aboutWindow && viewport.aboutWindow.destroy) {
                     viewport.aboutWindow.destroy();
@@ -349,7 +442,7 @@ Ext.onReady( function() {
 
         var centerRegion = Ext.create('Ext.panel.Panel', {
             region: 'center',
-            //map: gis.olmap,
+            mapApi: gis.api,
             fullSize: true,
             cmp: [defaultButton],
             trash: [],
@@ -702,7 +795,24 @@ Ext.onReady( function() {
 
                     return a;
                 }()
+            },
+
+            afterRender: function() {
+                this.superclass.afterRender.apply(this, arguments);
+
+                this.map = L.map(this.body.dom).setView([8.6, -11.9], 8);
+
+                L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
+                    subdomains: '1234',
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/">OpenStreetMap</a> and contributors, under an <a href="http://www.openstreetmap.org/copyright" title="ODbL">open license</a>. Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">',
+                    maxZoom: 17
+                }).addTo(this.map);
+            },
+
+            afterLayout: function() {
+                this.map.invalidateSize();
             }
+
         });
 
         var eastRegion = Ext.create('Ext.panel.Panel', {

@@ -18,6 +18,22 @@ Ext.onReady( function() {
         logg: []
     };
 
+    GIS.core.getMapApi = function(gis) {
+        //console.log("getMap", gis);
+
+        //var map = L.map();
+
+        //.setView([51.505, -0.09], 13);
+
+        /*
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        */
+
+        return L;
+    };
+
 
     GIS.core.getLayers = function(gis) {
         var layers = {},
@@ -1294,7 +1310,7 @@ Ext.onReady( function() {
         gis.api = api;
         gis.store = store;
 
-        //gis.olmap = GIS.core.getOLMap(gis); // TODO
+        gis.api = GIS.core.getMapApi(gis);
         gis.layer = GIS.core.getLayers(gis);
         gis.thematicLayers = [gis.layer.thematic1, gis.layer.thematic2, gis.layer.thematic3, gis.layer.thematic4];
 

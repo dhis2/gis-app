@@ -59,6 +59,7 @@ GIS.core.getLayers = function(gis) {
      */
     layers.event = {
         id: 'event',
+        name: GIS.i18n.event_layer,
         features: [] // TODO: Originally created by OL
     };
 

@@ -595,8 +595,8 @@ GIS.app.extendInstance = function(gis) {
     // layer
     (function() {
         layer = gis.layer.event;
-        layer.menu = GIS.app.LayerMenu(gis, layer, 'gis-toolbar-btn-menu-first', gis);
-        layer.widget = GIS.app.LayerWidgetEvent(layer, gis);
+        layer.menu = GIS.app.LayerMenu(gis, layer, 'gis-toolbar-btn-menu-first');
+        layer.widget = GIS.app.LayerWidgetEvent(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer, gis.conf.layout.widget.window_width + 150, 1);
         layer.window.widget = layer.widget;
         // GIS.core.createSelectHandlers(gis, layer); // TODO

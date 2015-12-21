@@ -1,4 +1,6 @@
-GIS.app.LayerWidgetEvent = function(layer, gis) {
+// Returns event layer panel
+
+GIS.app.LayerWidgetEvent = function(gis, layer) {
 
     // stores
     var programStore,

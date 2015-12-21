@@ -3,7 +3,6 @@ GIS.app.WidgetWindow = function(gis, layer, width, padding) {
     padding = padding || 0;
 
     return Ext.create('Ext.window.Window', {
-        //autoShow: true,
         title: layer.name,
         layout: 'fit',
         iconCls: 'gis-window-title-icon-' + layer.id,
@@ -22,7 +21,6 @@ GIS.app.WidgetWindow = function(gis, layer, width, padding) {
                     var view = layer.widget.getView();
 
                     if (view) {
-                        console.log("###", layer);
                         var loader = layer.core.getLoader();
                         loader.compare = (layer.id !== gis.layer.facility.id),
                             loader.zoomToVisibleExtent = true;
@@ -37,11 +35,13 @@ GIS.app.WidgetWindow = function(gis, layer, width, padding) {
                 if (!this.isRendered) {
                     this.isRendered = true;
 
-                    /* TODO: What is this doing?
-                     if (layer.core.view) {
-                     this.widget.setGui(layer.core.view);
-                     }
-                     */
+                    /* TODO: Check mapfish/core/GeoStat/all.js
+                       Set gui state from map view config (favorite)
+
+                    if (layer.core.view) {
+                        this.widget.setGui(layer.core.view);
+                    }
+                    */
                 }
 
                 gis.util.gui.window.setPositionTopLeft(this);

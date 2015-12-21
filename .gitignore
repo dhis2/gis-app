@@ -5,3 +5,7 @@ build
 *.iml
 npm-debug.log
 coverage
+
+api
+scss
+temp

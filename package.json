@@ -2,7 +2,7 @@
   "name": "dhis2-gis",
   "version": "0.0.1",
   "description": "GIS Web App for DHIS 2",
-  "main": "lib/index.js",
+  //"main": "src/app.js",
   "scripts": {
     "validate": "npm ls --depth 0",
     "start": "webpack-dev-server",

@@ -13,7 +13,11 @@ module.exports = {
         loaders: [
             {
                 test: /\.jsx?$/,
-                exclude: /node_modules/,
+                //exclude: /node_modules/,
+                include: [
+                    path.resolve(__dirname, 'src/app.js'),
+                    path.resolve(__dirname, 'node_modules/dhis2-gis-api'),
+                ],
                 loader: 'babel',
                 query: {
                     cacheDirectory: true,

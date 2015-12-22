@@ -1,3 +1,7 @@
+import map from 'dhis2-gis-api';
+
+console.log("map api", map);
+
 Ext.onReady( function() {
     var createViewport,
         initialize,

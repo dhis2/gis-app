@@ -3,9 +3,7 @@ var path = require('path');
 
 module.exports = {
     context: __dirname,
-    entry: {
-        api: './src/api.js',
-    },
+    entry: './src/api.js',
     devtool: 'source-map',
     output: {
         path: __dirname + '/build',

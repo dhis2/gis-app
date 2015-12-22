@@ -1,7 +1,3 @@
-import map from 'dhis2-gis-api';
-
-console.log("map api", map);
-
 Ext.onReady( function() {
     var createViewport,
         initialize,
@@ -789,20 +785,19 @@ Ext.onReady( function() {
                 }()
             },
 
-            afterRender: function() {
-                this.superclass.afterRender.apply(this, arguments);
-
-                this.map = L.map(this.body.dom).setView([8.6, -11.9], 8);
-
-                L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
-                    subdomains: '1234',
-                    attribution: '&copy; <a href="http://www.openstreetmap.org/">OpenStreetMap</a> and contributors, under an <a href="http://www.openstreetmap.org/copyright" title="ODbL">open license</a>. Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">',
-                    maxZoom: 17
-                }).addTo(this.map);
-            },
-
+            // Add/resize map after layout
             afterLayout: function() {
-                this.map.invalidateSize();
+                if (!this.map) {
+                    gis.map = this.map = d2map(this.body.dom, {
+                        layers: [{
+                            type: 'mapQuest',
+                            name: 'OpenStreetMap'
+                        }],
+                        bounds: [[-34.9, -18.7], [35.9, 50.2]]
+                    });
+                } else {
+                    this.map.invalidateSize();
+                }
             }
 
         });

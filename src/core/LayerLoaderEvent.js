@@ -6,6 +6,7 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
         loadData,
         loadLegend,
         afterLoad,
+        getPopupTemplate,
         loader,
         dimConf = gis.conf.finals.dimension;
 
@@ -75,6 +76,7 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
                 }
 
                 // events
+                /*
                 for (var i = 0, row, obj; i < rows.length; i++) {
                     row = rows[i];
                     obj = {};
@@ -91,10 +93,64 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
 
                     events.push(obj);
                 }
+                */
 
                 // features
+                for (var i = 0, row, prop; i < rows.length; i++) {
+                    row = rows[i];
+                    prop = {};
 
-                //console.log('add features', events);
+                    for (var j = 0, value; j < row.length; j++) {
+                        value = row[j];
+                        prop[r.headers[j].name] = booleanNames[value] || r.metaData.optionNames[value] || names[value] || value;
+                    }
+
+                    features.push({
+                        type: 'Feature',
+                        properties: prop,
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [prop.longitude, prop.latitude]
+                        }
+                    })
+                }
+
+                //console.log('popup', features[0], names);
+
+                var popup = '';
+                popup += '<strong>{ouname}</strong><br>';
+                popup += names['eventdate'] + ': {eventdate}<br>';
+                popup += names['longitude'] + ': {longitude}<br>';
+                popup += names['latitude']  + ': {latitude}<br>';
+
+                /*
+                var ignoreKeys = ['label', 'value', 'nameColumnMap', 'psi', 'ps', 'longitude', 'latitude', 'eventdate', 'ou', 'oucode', 'ouname', 'popupText'];
+
+                for (var key in names) {
+                    if (names.hasOwnProperty(key) && !Ext.Array.contains(ignoreKeys, key)) {
+                        //popup += '<tr><td' + titleStyle + '>' + map[key] + '</td><td>' + attributes[key] + '</td></tr>';
+                        popup += names[key] + ': {' + key + '}<br>';
+                    }
+                }
+
+                console.log(popup);
+                */
+
+                if (!layer.instance) {
+                    layer.instance = gis.map.addLayer({
+                        type: 'points',
+                        label: '{ouname}',
+                        popup: popup
+                    });
+                }
+
+                layer.instance.addData(features);
+
+
+                gis.map.fitBounds(layer.instance.getBounds());
+
+                //console.log("instance", layer.instance);
+
 
 
                 /*

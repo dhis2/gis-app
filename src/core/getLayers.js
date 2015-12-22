@@ -57,6 +57,7 @@ GIS.core.getLayers = function(gis) {
      gis: gis
      });
      */
+
     layers.event = {
         id: 'event',
         name: GIS.i18n.event_layer,

@@ -195,6 +195,10 @@ GIS.core.LayerLoaderFacility = function(gis, layer) {
 		if (!layer.instance) {
 			layer.instance = gis.instance.addLayer({
 				type: 'markers',
+				icon: {
+					iconUrl: 'https://play.dhis2.org/dev/images/orgunitgroup/14.png', // TODO
+					iconSize: [16, 16],
+				},
 				label: '{na}',
 				popup: '{na}',
 			});

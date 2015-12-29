@@ -699,7 +699,7 @@ GIS.app.LayerWidgetFacility = function(gis, layer) {
 
         view.areaRadius = areaRadius.getValue() ? areaRadius.getNumber() : null;
 
-        view.opacity = layer.item.getOpacity();
+        // view.opacity = layer.item.getOpacity(); // TODO
 
         return validateView(view);
     };

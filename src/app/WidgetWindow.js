@@ -21,7 +21,7 @@ GIS.app.WidgetWindow = function(gis, layer, width, padding) {
                     var view = layer.widget.getView();
 
                     if (view) {
-                        var loader = layer.getLoader();
+                        var loader = layer.getLoader(gis, layer);
                         loader.compare = (layer.id !== gis.layer.facility.id),
                             loader.zoomToVisibleExtent = true;
                         loader.hideMask = true;

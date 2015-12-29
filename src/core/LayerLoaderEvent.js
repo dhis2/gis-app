@@ -216,7 +216,7 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
 
             if (!rows.length) {
                 gis.alert('No event coordinates found');
-                olmap.mask.hide();
+                gis.mask.hide();
                 return;
             }
 
@@ -224,7 +224,7 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
             getOptionSets();
         };
 
-        console.log('API URL', gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString);
+        //console.log('API URL', gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString);
 
         if (Ext.isObject(GIS.app)) {
             Ext.Ajax.request({
@@ -293,7 +293,6 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
 
         // Mask
         if (loader.hideMask) {
-            //olmap.mask.hide();
             gis.mask.hide();
         }
 

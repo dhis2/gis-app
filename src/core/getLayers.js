@@ -1,6 +1,5 @@
 GIS.core.getLayers = function(gis) {
-    var layers = {},
-        createSelectionHandlers,
+    var createSelectionHandlers,
         layerNumbers = ['1', '2', '3', '4'];
 
     //if (window.google) {
@@ -46,63 +45,46 @@ GIS.core.getLayers = function(gis) {
      }
      });
      */
-    layers.openStreetMap = {}; // TODO
+    //layers.openStreetMap = {}; // TODO
 
-    layers.openStreetMap.id = 'openStreetMap';
-
-    /*
-     layers.event = GIS.core.VectorLayer(gis, 'event', GIS.i18n.event_layer, {opacity: gis.conf.layout.layer.opacity});
-     layers.event.core = new mapfish.GeoStat.Event(gis.olmap, {
-     layer: layers.event,
-     gis: gis
-     });
-     */
-
-    layers.event = {
-        id: 'event',
-        name: GIS.i18n.event_layer
-    };
-
-    layers.event.getLoader = function() {
-        return GIS.core.LayerLoaderEvent(gis, layers.event);
-    };
-
+    //layers.openStreetMap.id = 'openStreetMap';
 
     /*
-    layers.event.core = {
-        getLoader: function() {
-            return GIS.core.LayerLoaderEvent(gis, layers.event);
-        }
-    };
+    layers.event = GIS.core.VectorLayer(gis, 'event', GIS.i18n.event_layer, {opacity: gis.conf.layout.layer.opacity});
+    layers.event.core = new mapfish.GeoStat.Event(gis.olmap, {
+        layer: layers.event,
+        gis: gis
+    });
+
+    layers.facility = GIS.core.VectorLayer(gis, 'facility', GIS.i18n.facility_layer, {opacity: 1});
+    layers.facility.core = new mapfish.GeoStat.Facility(gis.olmap, {
+        layer: layers.facility,
+        gis: gis
+    });
+
+    layers.boundary = GIS.core.VectorLayer(gis, 'boundary', GIS.i18n.boundary_layer, {opacity: 1});
+    layers.boundary.core = new mapfish.GeoStat.Boundary(gis.olmap, {
+        layer: layers.boundary,
+        gis: gis
+    });
     */
 
-    /*
-     layers.facility = GIS.core.VectorLayer(gis, 'facility', GIS.i18n.facility_layer, {opacity: 1});
-     layers.facility.core = new mapfish.GeoStat.Facility(gis.olmap, {
-     layer: layers.facility,
-     gis: gis
-     });
-     */
-    layers.facility = {
-        id: 'facility',
-        features: [] // TODO: Originally created by OL
-    };
-
-    layers.facility.core = {
-        getLoader: function() {
-            return GIS.core.LayerLoaderEvent(gis, layers.event);
+    var layers = {
+        event: {
+            id: 'event',
+            name: GIS.i18n.event_layer,
+            getLoader: GIS.core.LayerLoaderEvent
+        },
+        facility: {
+            id: 'facility',
+            name: GIS.i18n.facility_layer,
+            getLoader: GIS.core.LayerLoaderFacility
+        },
+        boundary: {
+            id: 'boundary',
+            name: GIS.i18n.boundary_layer,
+            getLoader: GIS.core.LayerLoaderBoundary
         }
-    };
-
-    /*
-     layers.boundary = GIS.core.VectorLayer(gis, 'boundary', GIS.i18n.boundary_layer, {opacity: 1});
-     layers.boundary.core = new mapfish.GeoStat.Boundary(gis.olmap, {
-     layer: layers.boundary,
-     gis: gis
-     });
-     */
-    layers.boundary = {
-        id: 'boundary'
     };
 
     for (var i = 0, number; i < layerNumbers.length; i++) {

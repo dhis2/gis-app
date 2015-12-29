@@ -73,14 +73,8 @@ GIS.app.LayerMenu = function(gis, layer, cls) {
         text: GIS.i18n.clear,
         iconCls: 'gis-menu-item-icon-clear',
         handler: function() {
-            console.log("reset", layer, gis);
-
-
             gis.instance.removeLayer(layer.instance);
             layer.widget.reset();
-            //layer.widget.reset();
-
-            //layer.core.reset();
         }
     };
     items.push(item);

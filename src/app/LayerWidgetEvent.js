@@ -1105,10 +1105,10 @@ GIS.app.LayerWidgetEvent = function(gis, layer) {
     reset = function(skipTree) {
 
         // Item
-        layer.item.setValue(false);
+        // layer.item.setValue(false); // TODO
 
         if (!layer.window.isRendered) {
-            layer.core.view = null;
+            layer.view = null;
             return;
         }
 

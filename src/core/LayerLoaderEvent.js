@@ -137,7 +137,7 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
                 */
 
                 if (!layer.instance) {
-                    layer.instance = gis.map.addLayer({
+                    layer.instance = gis.instance.addLayer({
                         type: 'points',
                         label: '{ouname}',
                         popup: popup
@@ -147,7 +147,7 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
                 layer.instance.addData(features);
 
 
-                gis.map.fitBounds(layer.instance.getBounds());
+                gis.instance.fitBounds(layer.instance.getBounds());
 
                 //console.log("instance", layer.instance);
 
@@ -251,7 +251,7 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
     };
 
     loadLegend = function(view) {
-        view = view || layer.core.view;
+        view = view || layer.view;
 
         // classification optionsvar options = {
         var options = {
@@ -264,7 +264,7 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
             maxSize: 5
         };
 
-        layer.core.view = view;
+        layer.view = view;
 
         // layer.core.applyClassification(options); // TODO
 

@@ -788,7 +788,7 @@ Ext.onReady( function() {
             // Add/resize map after layout
             afterLayout: function() {
                 if (!this.map) {
-                    gis.map = this.map = d2map(this.body.dom, {
+                    gis.instance = this.map = d2map(this.body.dom, {
                         layers: [{
                             type: 'mapQuest',
                             name: 'OpenStreetMap'

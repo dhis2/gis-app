@@ -60,15 +60,21 @@ GIS.core.getLayers = function(gis) {
 
     layers.event = {
         id: 'event',
-        name: GIS.i18n.event_layer,
-        features: [] // TODO: Originally created by OL
+        name: GIS.i18n.event_layer
     };
 
+    layers.event.getLoader = function() {
+        return GIS.core.LayerLoaderEvent(gis, layers.event);
+    };
+
+
+    /*
     layers.event.core = {
         getLoader: function() {
             return GIS.core.LayerLoaderEvent(gis, layers.event);
         }
     };
+    */
 
     /*
      layers.facility = GIS.core.VectorLayer(gis, 'facility', GIS.i18n.facility_layer, {opacity: 1});

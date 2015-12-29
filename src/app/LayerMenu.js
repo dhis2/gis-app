@@ -68,11 +68,19 @@ GIS.app.LayerMenu = function(gis, layer, cls) {
         });
     }
 
+
     item = {
         text: GIS.i18n.clear,
         iconCls: 'gis-menu-item-icon-clear',
         handler: function() {
-            layer.core.reset();
+            console.log("reset", layer, gis);
+
+
+            gis.instance.removeLayer(layer.instance);
+            layer.widget.reset();
+            //layer.widget.reset();
+
+            //layer.core.reset();
         }
     };
     items.push(item);
@@ -101,8 +109,7 @@ GIS.app.LayerMenu = function(gis, layer, cls) {
                 }
             },
             show: function() {
-                //console.log("layer features", layer.features);
-                if (layer.features.length) {
+                if (layer.instance) {
                     this.enableItems();
                 }
                 else {

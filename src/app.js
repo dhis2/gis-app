@@ -488,7 +488,7 @@ Ext.onReady( function() {
                     });
                     a.push({
                         iconCls: 'gis-btn-icon-' + gis.layer.boundary.id,
-                        //menu: gis.layer.boundary.menu,
+                        menu: gis.layer.boundary.menu,
                         tooltip: GIS.i18n.boundary_layer,
                         width: 26
                     });

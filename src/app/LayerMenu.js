@@ -1,3 +1,4 @@
+// Top layer dropdown menu
 GIS.app.LayerMenu = function(gis, layer, cls) {
     var items = [],
         item;

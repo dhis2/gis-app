@@ -1,6 +1,5 @@
 GIS.core.getLayers = function(gis) {
-    var createSelectionHandlers,
-        layerNumbers = ['1', '2', '3', '4'];
+    var layerNumbers = ['1', '2', '3', '4'];
 
     //if (window.google) {
     //layers.googleStreets = new OpenLayers.Layer.Google('Google Streets', {
@@ -67,6 +66,17 @@ GIS.core.getLayers = function(gis) {
         layer: layers.boundary,
         gis: gis
     });
+
+    for (var i = 0, number; i < layerNumbers.length; i++) {
+        number = layerNumbers[i];
+
+        layers['thematic' + number] = GIS.core.VectorLayer(gis, 'thematic' + number, GIS.i18n.thematic_layer + ' ' + number, {opacity: gis.conf.layout.layer.opacity});
+        layers['thematic' + number].layerCategory = gis.conf.finals.layer.category_thematic,
+            layers['thematic' + number].core = new mapfish.GeoStat['Thematic' + number](gis.olmap, {
+                layer: layers['thematic' + number],
+                gis: gis
+            });
+    }
     */
 
     var layers = {
@@ -90,19 +100,11 @@ GIS.core.getLayers = function(gis) {
     for (var i = 0, number; i < layerNumbers.length; i++) {
         number = layerNumbers[i];
 
-        //layers['thematic' + number] = GIS.core.VectorLayer(gis, 'thematic' + number, GIS.i18n.thematic_layer + ' ' + number, {opacity: gis.conf.layout.layer.opacity});
         layers['thematic' + number] = {
-            id: 'thematic' + number
+            id: 'thematic' + number,
+            name: GIS.i18n.thematic_layer + ' ' + number,
+            getLoader: GIS.core.LayerLoaderThematic
         };
-
-        layers['thematic' + number].layerCategory = gis.conf.finals.layer.category_thematic,
-            /*
-             layers['thematic' + number].core = new mapfish.GeoStat['Thematic' + number](gis.olmap, {
-             layer: layers['thematic' + number],
-             gis: gis
-             });
-             */
-            layers['thematic' + number].core = {};
     }
 
     return layers;

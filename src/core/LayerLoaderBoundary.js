@@ -215,7 +215,7 @@ GIS.core.LayerLoaderBoundary = function(gis, layer) {
             });
         }
 
-        layer.instance.addData(features);
+        layer.instance.addFeatures(features);
 
         gis.instance.fitBounds(layer.instance.getBounds());
 

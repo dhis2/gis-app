@@ -1881,7 +1881,7 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
         view.colorHigh = colorHigh.getValue();
         view.radiusLow = parseInt(radiusLow.getValue());
         view.radiusHigh = parseInt(radiusHigh.getValue());
-        view.opacity = layer.item.getOpacity();
+        // view.opacity = layer.item.getOpacity(); // TODO
 
         Ext.apply(view, labelPanel.getConfig());
 

@@ -18,7 +18,8 @@ GIS.app.createExtensions = function(gis) {
         setValue: function(value, opacity) {
             this.checkbox.setValue(value);
             this.numberField.setDisabled(!value);
-            this.layer.setVisibility(value);
+
+            this.setLayerVisibility(value);
 
             if (value) {
                 opacity = Ext.isNumber(parseFloat(opacity)) ? parseFloat(opacity) : this.opacity;
@@ -33,41 +34,63 @@ GIS.app.createExtensions = function(gis) {
                 }
             }
         },
+        setLayerVisibility: function(isVisible) {
+            var layer = this.layer;
+
+            if (isVisible) {
+                if (layer.instance) { // Layer instance already exist
+                    gis.instance.addLayer(layer.instance);
+                } else { // Create and add layer instance
+                    layer.instance = gis.instance.addLayer(layer.config);
+                }
+            } else if (layer.instance) { // Remove if layer instance exit
+                gis.instance.removeLayer(layer.instance);
+            }
+        },
         getOpacity: function() {
             return this.opacity;
         },
         setOpacity: function(opacity) {
-            this.opacity = opacity === 0 ? 0.01 : opacity;
-            this.layer.setLayerOpacity(this.opacity);
+            var layer = this.layer;
 
+            if (layer.instance && layer.instance.setOpacity) {
+                layer.instance.setOpacity(opacity);
+            }
+
+            this.opacity = opacity;
+
+            /* TODO - circles around facilities
+             facility layer menu -> options -> circular area
             if (this.layer.circleLayer) {
                 this.layer.circleLayer.setOpacity(this.opacity);
             }
+            */
         },
         disableItem: function() {
             this.checkbox.setValue(false);
             this.numberField.disable();
-            this.layer.setVisibility(false);
+            this.setLayerVisibility(false);
         },
         enableItem: function() {
             this.checkbox.setValue(true);
             this.numberField.enable();
-            this.layer.setVisibility(true);
+            this.setLayerVisibility(true);
         },
         updateItem: function(value) {
             this.numberField.setDisabled(!value);
-            this.layer.setVisibility(value);
 
-            if (value && this.layer.layerType === gis.conf.finals.layer.type_base) {
-                gis.olmap.setBaseLayer(this.layer);
-            }
+            this.setLayerVisibility(value);
 
+            /* TODO - circles around facilities
+             facility layer menu -> options -> circular area
             if (this.layer.circleLayer) {
                 this.layer.circleLayer.setVisibility(value);
             }
+            */
         },
         initComponent: function() {
             var that = this,
+                layer,
                 image;
 
             this.checkbox = Ext.create('Ext.form.field.Checkbox', {
@@ -75,21 +98,28 @@ GIS.app.createExtensions = function(gis) {
                 checked: this.value,
                 listeners: {
                     change: function(chb, value) {
-                        if (value && that.layer.layerType === gis.conf.finals.layer.type_base) {
-                            var layers = gis.util.map.getLayersByType(gis.conf.finals.layer.type_base);
 
-                            for (var i = 0; i < layers.length; i++) {
-                                if (layers[i] !== that.layer) {
-                                    layers[i].item.checkbox.suppressChange = true;
-                                    layers[i].item.disableItem();
+                        // Only allow one base layer
+                        if (value && that.layer.layerType === gis.conf.finals.layer.type_base) {
+                            for (var id in gis.layer) {
+                                if (gis.layer.hasOwnProperty(id)) {
+                                    layer = gis.layer[id];
+
+                                    if (layer.layerType === gis.conf.finals.layer.type_base && layer !== that.layer) {
+                                        layer.item.checkbox.suppressChange = true;
+                                        layer.item.disableItem();
+                                    }
                                 }
                             }
                         }
+
                         that.updateItem(value);
 
+                        /* TODO: Add
                         if (gis.viewport) {
                             gis.viewport.downloadButton.xable();
                         }
+                        */
                     }
                 }
             });
@@ -139,7 +169,7 @@ GIS.app.createExtensions = function(gis) {
                 }
             ];
 
-            this.layer.setOpacity(this.opacity);
+            this.setOpacity(this.opacity);
 
             this.callParent();
         }

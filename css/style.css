@@ -200,10 +200,20 @@ table.padding1 td {
 
 
 /*----------------------------------------------------------------------------
+ * DHIS 2 Leaflet
+ *--------------------------------------------------------------------------*/
+
+.leaflet-dhis2 {
+    height: 100%;
+    background-color: #fff;
+}
+
+/*----------------------------------------------------------------------------
  * Openlayers
  *--------------------------------------------------------------------------*/
 
-.olControlPanel { /* Control panel */
+/*
+.olControlPanel {
     position: absolute;
     top: 0;
     right: 0;
@@ -223,23 +233,6 @@ table.padding1 td {
     font-size: 21px !important;
     text-shadow: 0 0 1px #ddd;
 }
-
-/*
-.olControlPanel.zoomIn {
-	right: 72px;
-}
-.olControlPanel.zoomIn .olControlButtonItemActive {
-	border-bottom-left-radius: 2px;
-}
-
-.olControlPanel.zoomOut {
-	right: 48px;
-}
-
-.olControlPanel.zoomVisible {
-	right: 24px;
-}
-*/
 
 .olControlPanel.zoomIn {
     right: 75px;
@@ -270,11 +263,11 @@ table.padding1 td {
 }
 
 
-.olControlPermalink { /* Perma link */
+.olControlPermalink {
     display: none !important;
 }
 
-.olControlMousePosition { /* Mouse position */
+.olControlMousePosition {
     background: #fff !important;
     opacity: 0.8 !important;
     filter: alpha(opacity=80) !important;
@@ -290,7 +283,7 @@ table.padding1 td {
 .olControlMousePosition * {
     font-size: 10px !important;
 }
-.text-mouseposition-lonlat { /* Mouse position text */
+.text-mouseposition-lonlat {
     color: #555;
 }
 
@@ -309,7 +302,7 @@ table.padding1 td {
     cursor: hand;
 }
 
-/* ScaleLine */
+
 .olControlScaleLine {
     left: 5px !important;
     bottom: 5px !important;
@@ -320,7 +313,7 @@ table.padding1 td {
 .olControlScaleLineTop {
     font-weight: bold;
 }
-
+*/
 
 /*----------------------------------------------------------------------------
  * jQuery calendar

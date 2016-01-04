@@ -318,7 +318,7 @@ GIS.core.getInstance = function(init) {
     (function() {
         util.map = {};
 
-        util.map.getVisibleVectorLayers = function() {
+        util.map.getVisibleVectorLayers = function() { // TODO
             var layers = [];
 
             for (var i = 0, layer; i < gis.olmap.layers.length; i++) {
@@ -1167,6 +1167,7 @@ GIS.core.getInstance = function(init) {
     gis.api = api;
     gis.store = store;
 
+    gis.instance = GIS.core.getMap(gis);
     gis.layer = GIS.core.getLayers(gis);
     gis.thematicLayers = [gis.layer.thematic1, gis.layer.thematic2, gis.layer.thematic3, gis.layer.thematic4];
 
@@ -1184,6 +1185,8 @@ GIS.core.getInstance = function(init) {
 
     //gis.olmap.addLayers(layers);
     */
+
+
 
     GIS.core.instances.push(gis);
 

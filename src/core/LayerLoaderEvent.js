@@ -136,16 +136,16 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
                 console.log(popup);
                 */
 
+                var config = layer.config;
+
+                config.label = '{ouname}';
+                config.popup = popup;
+
                 if (!layer.instance) {
-                    layer.instance = gis.instance.addLayer({
-                        type: 'points',
-                        label: '{ouname}',
-                        popup: popup
-                    });
+                    layer.instance = gis.instance.addLayer(config);
                 }
 
                 layer.instance.addData(features);
-
 
                 gis.instance.fitBounds(layer.instance.getBounds());
 

@@ -86,9 +86,11 @@ Ext.onReady( function() {
         });
 
         // right click handler
+        /* TODO: activate?
         document.body.oncontextmenu = function() {
             return false;
         };
+        */
     }());
 
     createViewport = function() {
@@ -788,13 +790,10 @@ Ext.onReady( function() {
             // Add/resize map after layout
             afterLayout: function() {
                 if (!this.map) {
-                    gis.instance = this.map = d2map(this.body.dom, {
-                        layers: [{
-                            type: 'mapQuest',
-                            name: 'OpenStreetMap'
-                        }],
-                        bounds: [[-34.9, -18.7], [35.9, 50.2]]
-                    });
+                    this.map = gis.instance;
+                    this.body.appendChild(this.map.getContainer());
+                    this.map.invalidateSize();
+                    this.map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
                 } else {
                     this.map.invalidateSize();
                 }
@@ -812,13 +811,13 @@ Ext.onReady( function() {
             items: function() {
                 var a = [];
 
-                //layersPanel = GIS.app.LayersPanel();
+                layersPanel = GIS.app.LayersPanel(gis);
 
                 a.push({
                     title: GIS.i18n.layer_stack_transparency,
                     bodyStyle: 'padding: 3px 2px 2px 5px; border:0 none; border-bottom: 1px solid #d0d0d0; border-top: 1px solid #d0d0d0',
                     style: 'border:0 none',
-                    //items: layersPanel,
+                    items: layersPanel,
                     collapsible: true,
                     animCollapse: false
                 });
@@ -976,8 +975,6 @@ Ext.onReady( function() {
                 // extend instance
                 GIS.app.extendInstance(gis);
 
-                // TODO: Missing Google Maps code
-
                 // viewport
                 gis.viewport = createViewport();
             }
@@ -991,8 +988,6 @@ Ext.onReady( function() {
             adapters: [dhis2.storage.IndexedDBAdapter, dhis2.storage.DomSessionStorageAdapter, dhis2.storage.InMemoryAdapter],
             objectStores: ['optionSets']
         });
-
-        // TODO: Missing Google Maps code
 
         // requests
         Ext.Ajax.request({

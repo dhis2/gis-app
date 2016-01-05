@@ -100,12 +100,12 @@ GIS.app.createExtensions = function(gis) {
                     change: function(chb, value) {
 
                         // Only allow one base layer
-                        if (value && that.layer.layerType === gis.conf.finals.layer.type_base) {
+                        if (value && that.layer.layerType === 'base') {
                             for (var id in gis.layer) {
                                 if (gis.layer.hasOwnProperty(id)) {
                                     layer = gis.layer[id];
 
-                                    if (layer.layerType === gis.conf.finals.layer.type_base && layer !== that.layer) {
+                                    if (layer.layerType === 'base' && layer !== that.layer) {
                                         layer.item.checkbox.suppressChange = true;
                                         layer.item.disableItem();
                                     }

@@ -12,7 +12,7 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.jsx?$/,
+                test: /\.js?$/,
                 //exclude: /node_modules/,
                 include: [
                     path.resolve(__dirname, 'src/api.js'),

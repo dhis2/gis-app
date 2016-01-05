@@ -141,6 +141,10 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
                 config.label = '{ouname}';
                 config.popup = popup;
 
+                config.contextmenu = function(evt, a, b) {
+                    console.log("context", evt, a, b);
+                };
+
                 if (!layer.instance) {
                     layer.instance = gis.instance.addLayer(config);
                 }

@@ -1,4 +1,4 @@
-GIS.core.LayerLoaderBoundary = function(gis, layer) {
+GIS.core.LayerHandlerBoundary = function(gis, layer) {
     var olmap = layer.map,
         compareView,
         loadOrganisationUnits,

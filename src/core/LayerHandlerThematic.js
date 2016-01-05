@@ -1,4 +1,4 @@
-GIS.core.LayerLoaderThematic = function(gis, layer) {
+GIS.core.LayerHandlerThematic = function(gis, layer) {
     var olmap = layer.map,
         compareView,
         loadOrganisationUnits,

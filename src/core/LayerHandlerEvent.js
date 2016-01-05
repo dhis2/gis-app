@@ -1,13 +1,11 @@
-GIS.core.LayerLoaderEvent = function(gis, layer) {
+GIS.core.LayerHandlerEvent = function(gis, layer) {
 
-    var olmap = layer.map,
-        compareView,
+    var compareView,
         loadOrganisationUnits,
         loadData,
-        loadLegend,
         afterLoad,
-        getPopupTemplate,
-        loader,
+        handler,
+        onRightClick,
         dimConf = gis.conf.finals.dimension;
 
     loadOrganisationUnits = function(view) {
@@ -19,7 +17,7 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
             features = [],
             success;
 
-        view = view || layer.core.view;
+        view = view || layer.view;
 
         // stage
         paramString += 'stage=' + view.stage.id;
@@ -41,21 +39,11 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
         // de
         for (var i = 0, element; i < view.dataElements.length; i++) {
             element = view.dataElements[i];
-
             paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
-
-            //if (element.filter) {
-            //if (element.operator) {
-            //paramString += ':' + element.operator;
-            //}
-
-            //paramString += ':' + element.value;
-            //}
         }
 
         success = function(r) {
-            var events = [],
-                features = [],
+            var features = [],
                 rows = [],
                 lonIndex,
                 latIndex,
@@ -66,40 +54,55 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
                     'true': GIS.i18n.yes || 'Yes',
                     'false': GIS.i18n.no || 'No'
                 },
+                popupKeys = [
+                    'ouname',
+                    'eventdate',
+                    'longitude',
+                    'latitude'
+                ],
+                ignoreKeys = [
+                    'eventdate',
+                    'latitude',
+                    'longitude',
+                    'ou',
+                    'oucode',
+                    'ouname',
+                    'psi',
+                    'ps'
+                ],
+                popup,
+                config,
                 updateFeatures;
 
-
             updateFeatures = function() {
+
+                // Find header names and keys
                 for (var i = 0, header; i < r.headers.length; i++) {
                     header = r.headers[i];
                     names[header.name] = header.column;
-                }
 
-                // events
-                /*
-                for (var i = 0, row, obj; i < rows.length; i++) {
-                    row = rows[i];
-                    obj = {};
-
-                    for (var j = 0, value; j < row.length; j++) {
-                        value = row[j];
-                        obj[r.headers[j].name] = booleanNames[value] || r.metaData.optionNames[value] || names[value] || value;
+                    if (!Ext.Array.contains(ignoreKeys, header.name)) {
+                        popupKeys.push(header.name);
                     }
-
-                    obj[gis.conf.finals.widget.value] = 0;
-                    obj.label = obj.ouname;
-                    obj.popupText = obj.ouname;
-                    obj.nameColumnMap = Ext.apply(names, r.metaData.optionNames, r.metaData.booleanNames);
-
-                    events.push(obj);
                 }
-                */
 
-                // features
+                // Shorter header name for popup
+                names['ouname'] = names['ou'];
+
+                // Create popup template
+                popup = '<table>';
+                for (var i = 0, key; i < popupKeys.length; i++) {
+                    key = popupKeys[i];
+                    popup += '<tr><th>' + names[key] + '</th><td>{' + key + '}</td></tr>';
+                }
+                popup += '</table>';
+
+                // Create GeoJSON features
                 for (var i = 0, row, prop; i < rows.length; i++) {
                     row = rows[i];
                     prop = {};
 
+                    // Build property object
                     for (var j = 0, value; j < row.length; j++) {
                         value = row[j];
                         prop[r.headers[j].name] = booleanNames[value] || r.metaData.optionNames[value] || names[value] || value;
@@ -112,65 +115,29 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
                             type: 'Point',
                             coordinates: [prop.longitude, prop.latitude]
                         }
-                    })
+                    });
                 }
 
-                //console.log('popup', features[0], names);
+                // Apply layer config
+                Ext.apply(layer.config, {
+                    data: features,
+                    label: '{ouname}',
+                    popup: popup,
+                    contextmenu: onRightClick
+                });
 
-                var popup = '';
-                popup += '<strong>{ouname}</strong><br>';
-                popup += names['eventdate'] + ': {eventdate}<br>';
-                popup += names['longitude'] + ': {longitude}<br>';
-                popup += names['latitude']  + ': {latitude}<br>';
-
-                /*
-                var ignoreKeys = ['label', 'value', 'nameColumnMap', 'psi', 'ps', 'longitude', 'latitude', 'eventdate', 'ou', 'oucode', 'ouname', 'popupText'];
-
-                for (var key in names) {
-                    if (names.hasOwnProperty(key) && !Ext.Array.contains(ignoreKeys, key)) {
-                        //popup += '<tr><td' + titleStyle + '>' + map[key] + '</td><td>' + attributes[key] + '</td></tr>';
-                        popup += names[key] + ': {' + key + '}<br>';
-                    }
+                // Remove layer instance if already exist
+                if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+                    gis.instance.removeLayer(layer.instance);
                 }
 
-                console.log(popup);
-                */
+                // Create layer instance
+                layer.instance = gis.instance.addLayer(layer.config);
 
-                var config = layer.config;
-
-                config.label = '{ouname}';
-                config.popup = popup;
-
-                config.contextmenu = function(evt, a, b) {
-                    console.log("context", evt, a, b);
-                };
-
-                if (!layer.instance) {
-                    layer.instance = gis.instance.addLayer(config);
-                }
-
-                layer.instance.addData(features);
-
+                // Fit map to layer bounds
                 gis.instance.fitBounds(layer.instance.getBounds());
 
-                //console.log("instance", layer.instance);
-
-
-
-                /*
-                for (var i = 0, event, point; i < events.length; i++) {
-                    event = events[i];
-
-                    point = gis.util.map.getTransformedPointByXY(event.longitude, event.latitude);
-
-                    features.push(new OpenLayers.Feature.Vector(point, event));
-                }
-
-                layer.removeFeatures(layer.features);
-                layer.addFeatures(features);
-                */
-
-                loadLegend(view);
+                afterLoad(view);
             };
 
             getOptionSets = function() {
@@ -228,8 +195,6 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
             getOptionSets();
         };
 
-        //console.log('API URL', gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString);
-
         if (Ext.isObject(GIS.app)) {
             Ext.Ajax.request({
                 url: gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString,
@@ -254,25 +219,8 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
         }
     };
 
-    loadLegend = function(view) {
-        view = view || layer.view;
-
-        // classification optionsvar options = {
-        var options = {
-            indicator: gis.conf.finals.widget.value,
-            method: 2,
-            numClasses: 5,
-            // colors: layer.core.getColors('000000', '222222'), // TODO
-            colors: ['000000', '222222'],
-            minSize: 5,
-            maxSize: 5
-        };
-
-        layer.view = view;
-
-        // layer.core.applyClassification(options); // TODO
-
-        afterLoad(view);
+    onRightClick = function (evt) {
+        console.log("rightclick", evt);
     };
 
     afterLoad = function(view) {
@@ -282,39 +230,34 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
             layer.item.setValue(true, view.opacity);
         }
         else {
-            // layer.setLayerOpacity(view.opacity); // TODO
+            layer.instance.setOpacity(view.opacity);
         }
 
         // Gui
-        if (loader.updateGui && Ext.isObject(layer.widget)) {
+        if (handler.updateGui && Ext.isObject(layer.widget)) {
             layer.widget.setGui(view);
         }
 
         // Zoom
-        if (loader.zoomToVisibleExtent) {
+        if (handler.zoomToVisibleExtent) {
             // olmap.zoomToVisibleExtent(); // TODO
         }
 
         // Mask
-        if (loader.hideMask) {
+        if (handler.hideMask) {
             gis.mask.hide();
         }
 
         // Map callback
-        if (loader.callBack) {
-            loader.callBack(layer);
+        if (handler.callBack) {
+            handler.callBack(layer);
         }
         else {
             gis.map = null;
         }
-
-        // session storage
-        //if (GIS.isSessionStorage) {
-        //gis.util.layout.setSessionStorage('map', gis.util.layout.getAnalytical());
-        //}
     };
 
-    loader = {
+    handler = {
         compare: false,
         updateGui: false,
         zoomToVisibleExtent: false,
@@ -328,9 +271,8 @@ GIS.core.LayerLoaderEvent = function(gis, layer) {
 
             loadOrganisationUnits(view);
         },
-        loadData: loadData,
-        loadLegend: loadLegend
+        loadData: loadData
     };
 
-    return loader;
+    return handler;
 };

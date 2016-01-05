@@ -1,4 +1,4 @@
-GIS.core.LayerLoaderFacility = function(gis, layer) {
+GIS.core.LayerHandlerFacility = function(gis, layer) {
 	var compareView,
 		loadOrganisationUnits,
 		loadData,

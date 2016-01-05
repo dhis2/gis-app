@@ -38,7 +38,7 @@ GIS.core.getLayers = function(gis) {
             config: {
                 type: 'points'
             },
-            getLoader: GIS.core.LayerLoaderEvent
+            getHandler: GIS.core.LayerHandlerEvent
         },
         facility: {
             id: 'facility',
@@ -47,7 +47,7 @@ GIS.core.getLayers = function(gis) {
             config: {
                 type: 'markers'
             },
-            getLoader: GIS.core.LayerLoaderFacility
+            getHandler: GIS.core.LayerHandlerFacility
         },
         boundary: {
             id: 'boundary',
@@ -56,7 +56,7 @@ GIS.core.getLayers = function(gis) {
             config: {
                 type: 'features'
             },
-            getLoader: GIS.core.LayerLoaderBoundary
+            getHandler: GIS.core.LayerHandlerBoundary
         }
     };
 
@@ -70,7 +70,7 @@ GIS.core.getLayers = function(gis) {
             config: {
                 type: 'choropleth'
             },
-            getLoader: GIS.core.LayerLoaderThematic
+            getHandler: GIS.core.LayerHandlerThematic
         };
     }
 

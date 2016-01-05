@@ -208,6 +208,17 @@ table.padding1 td {
     background-color: #fff;
 }
 
+.leaflet-dhis2 .leaflet-popup th,
+.leaflet-dhis2 .leaflet-popup td {
+    white-space: nowrap;
+}
+
+.leaflet-dhis2 .leaflet-popup th {
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+
 /*----------------------------------------------------------------------------
  * Openlayers
  *--------------------------------------------------------------------------*/

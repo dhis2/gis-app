@@ -5,7 +5,7 @@ GIS.core.getLayers = function(gis) {
         openStreetMap: {
             id: 'openStreetMap',
             name: GIS.i18n.openstreetmap,
-            layerType: gis.conf.finals.layer.type_base,
+            layerType: 'base',
             layerOpacity: 1,
             config: {
                 type: 'mapQuest',
@@ -14,7 +14,7 @@ GIS.core.getLayers = function(gis) {
         googleStreets: {
             id: 'googleStreets',
             name: GIS.i18n.google_streets,
-            layerType: gis.conf.finals.layer.type_base,
+            layerType: 'base',
             layerOpacity: 1,
             config: {
                 type: 'googleLayer',
@@ -25,7 +25,7 @@ GIS.core.getLayers = function(gis) {
             id: 'googleHybrid',
             name: GIS.i18n.google_hybrid,
             layerOpacity: 1,
-            layerType: gis.conf.finals.layer.type_base,
+            layerType: 'base',
             config: {
                 type: 'googleLayer',
                 style: 'HYBRID'

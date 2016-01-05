@@ -1,9 +1,5 @@
 GIS.app.LayersPanel = function(gis) {
     var layers = gis.layer,
-        layer,
-        items = [],
-        item,
-        panel,
         orderedLayers = [
             layers.event,
             layers.facility,
@@ -16,6 +12,9 @@ GIS.app.LayersPanel = function(gis) {
             layers.googleHybrid,
             layers.openStreetMap
         ],
+        layer,
+        item,
+        items = [],
         visibleLayer = layers.openStreetMap;
 
     for (var i = 0, layerIsVisibleLayer; i < orderedLayers.length; i++) {
@@ -40,7 +39,7 @@ GIS.app.LayersPanel = function(gis) {
 
     visibleLayer.item.setValue(true);
 
-    panel = Ext.create('Ext.panel.Panel', {
+    return Ext.create('Ext.panel.Panel', {
         layout: 'fit',
         cls: 'gis-container-inner',
         layerItems: items,
@@ -50,5 +49,4 @@ GIS.app.LayersPanel = function(gis) {
         }
     });
 
-    return panel;
 };

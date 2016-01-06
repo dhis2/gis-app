@@ -54,7 +54,7 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
                     'true': GIS.i18n.yes || 'Yes',
                     'false': GIS.i18n.no || 'No'
                 },
-                popupKeys = [
+                popupKeys = [ // Default popup keys
                     'ouname',
                     'eventdate',
                     'longitude',
@@ -110,6 +110,7 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
 
                     features.push({
                         type: 'Feature',
+                        id: prop.psi,
                         properties: prop,
                         geometry: {
                             type: 'Point',
@@ -122,8 +123,7 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
                 Ext.apply(layer.config, {
                     data: features,
                     label: '{ouname}',
-                    popup: popup,
-                    contextmenu: onRightClick
+                    popup: popup
                 });
 
                 // Remove layer instance if already exist
@@ -133,9 +133,6 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
 
                 // Create layer instance
                 layer.instance = gis.instance.addLayer(layer.config);
-
-                // Fit map to layer bounds
-                gis.instance.fitBounds(layer.instance.getBounds());
 
                 afterLoad(view);
             };
@@ -219,9 +216,12 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
         }
     };
 
+    /*
     onRightClick = function (evt) {
-        console.log("rightclick", evt);
+        var menu = GIS.app.ContextMenu(gis, layer, evt.layer.feature);
+        menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     };
+    */
 
     afterLoad = function(view) {
 
@@ -240,7 +240,7 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
 
         // Zoom
         if (handler.zoomToVisibleExtent) {
-            // olmap.zoomToVisibleExtent(); // TODO
+            gis.instance.fitBounds(layer.instance.getBounds());
         }
 
         // Mask

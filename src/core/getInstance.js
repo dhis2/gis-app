@@ -1186,7 +1186,7 @@ GIS.core.getInstance = function(init) {
     //gis.olmap.addLayers(layers);
     */
 
-
+    gis.relocate = {}; // Relocate organisation units
 
     GIS.core.instances.push(gis);
 

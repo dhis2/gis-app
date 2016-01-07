@@ -1,10 +1,14 @@
 GIS.core.LayerHandlerFacility = function(gis, layer) {
 	var compareView,
+		loadOrganisationUnitGroups,
 		loadOrganisationUnits,
 		loadData,
 		loadLegend,
+		updateLegend,
 		addCircles,
 		afterLoad,
+		onRightClick,
+		isValidCoordinate,
 		loader;
 
 	compareView = function(view, doExecute) {
@@ -78,7 +82,20 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		gis.mask.hide();
 	};
 
-	loadOrganisationUnits = function(view) {
+	loadOrganisationUnitGroups = function (view) {
+		var url = gis.init.contextPath + '/api/organisationUnitGroupSets/' + view.organisationUnitGroupSet.id + '.json' + '?fields=organisationUnitGroups[id,' + gis.init.namePropertyUrl + ',symbol]',
+            data;
+
+		Ext.Ajax.request({
+			url: url,
+			success: function(r) {
+                data = Ext.decode(r.responseText);
+                loadOrganisationUnits(view, data.organisationUnitGroups);
+			}
+		});
+	},
+
+	loadOrganisationUnits = function(view, orgUnitGroups) {
 		var items = view.rows[0].items,
 			isPlugin = GIS.plugin && !GIS.app,
 			propertyMap = {
@@ -113,47 +130,54 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 			failure;
 
 		success = function(r) {
+			var indicator = view.organisationUnitGroupSet.id,
+				orgUnitGroupSymbols = {};
+
+			// Easier lookup of unit group symbols
+			for (var i = 0; i < orgUnitGroups.length; i++) {
+				orgUnitGroupSymbols[orgUnitGroups[i].name] = orgUnitGroups[i].symbol;
+			}
+
 			var features = [];
 
-			for (var i = 0, prop; i < r.length; i++) {
+			for (var i = 0, prop, coord, group; i < r.length; i++) {
 				prop = r[i];
 
-				features.push({
-					type: 'Feature',
-					properties: prop,
-					geometry: {
-						type: 'Point',
-						coordinates: JSON.parse(prop.co)
+				if (prop.ty === 1) { // Only add points
+					coord = JSON.parse(prop.co);
+					group = prop.dimensions[indicator];
+
+					if (gis.util.map.isValidCoordinate(coord) && group) {
+						prop.icon = {
+							iconUrl: gis.init.contextPath + '/images/orgunitgroup/' + orgUnitGroupSymbols[group],
+							iconSize: [16, 16]
+						};
+
+						prop.label = prop.na + ' (' + group + ')';
+
+						features.push({
+							type: 'Feature',
+							id: prop.id,
+							properties: prop,
+							geometry: {
+								type: 'Point',
+								coordinates: coord
+							}
+						});
 					}
-				});
+				}
 			}
-
-
-
-
-
-			// console.log(features);
-
-			/*
-			var geojson = layer.core.decode(r),
-				format = new OpenLayers.Format.GeoJSON(),
-				features = gis.util.map.getTransformedFeatureArray(format.read(geojson));
-
-			if (!Ext.isArray(features)) {
-				gis.mask.hide();
-				gis.alert(GIS.i18n.invalid_coordinates);
-				return;
-			}
-			*/
 
 			if (!features.length) {
+				gis.mask.hide();
 				gis.alert(GIS.i18n.no_valid_coordinates_found);
 				return;
 			}
 
-			// TODO
-			// layer.core.featureStore.loadFeatures(features.slice(0));
+			// TODO: Where is the store used?
+			layer.featureStore.loadFeatures(features.slice(0));
 
+			updateLegend(view, orgUnitGroups);
 			addData(view, features);
 		};
 
@@ -162,109 +186,57 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 			gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
 		};
 
-		if (GIS.plugin && !GIS.app) {
-			Ext.data.JsonP.request({
-				url: url,
-				disableCaching: false,
-				success: function(r) {
-					success(r);
-				}
-			});
-		}
-		else {
-			Ext.Ajax.request({
-				url: url,
-				disableCaching: false,
-				success: function(r) {
-					success(Ext.decode(r.responseText));
-				}
-			});
-		}
+		Ext.Ajax.request({
+			url: url,
+			disableCaching: false,
+			success: function(r) {
+				success(Ext.decode(r.responseText));
+			}
+		});
 	};
 
 	addData = function(view, features) {
 		view = view || layer.view;
-		// features = features || layer.core.featureStore.features; // TODO
+		features = features || layer.featureStore.features;
 
-		/*
-		for (var i = 0; i < features.length; i++) {
-			features[i].attributes.popupText = features[i].attributes.name + ' (' + features[i].attributes[view.organisationUnitGroupSet.id] + ')';
-		}
-		*/
+		// Apply layer config
+		Ext.apply(layer.config, {
+			data: features,
+			iconProperty: 'icon',
+			label: '{label}',
+			popup: '{na}'
+		});
 
-		if (!layer.instance) {
-			layer.instance = gis.instance.addLayer({
-				type: 'markers',
-				icon: {
-					iconUrl: 'https://play.dhis2.org/dev/images/orgunitgroup/14.png', // TODO
-					iconSize: [16, 16],
-				},
-				label: '{na}',
-				popup: '{na}',
-			});
-		}
+		// Create layer instance
+		layer.instance = gis.instance.addLayer(layer.config);
 
-		layer.instance.addData(features);
+		//console.log("orgUnitGroups", indicator, orgUnitGroups, features);
+		//gis.store.groupsByGroupSet.loadData(data);
+		//console.log("############", data);
+		//layer.view = view;
 
-		gis.instance.fitBounds(layer.instance.getBounds());
+		//addCircles(view);
 
-		gis.mask.hide();
 
-		// loadLegend(view); // TODO
+
+		afterLoad(view);
 	};
 
-	loadLegend = function(view) {
-		var isPlugin = GIS.plugin && !GIS.app,
-			type = isPlugin ? 'jsonp' : 'json',
-			url = gis.init.contextPath + '/api/organisationUnitGroupSets/' + view.organisationUnitGroupSet.id + '.' + type + '?fields=organisationUnitGroups[id,' + gis.init.namePropertyUrl + ',symbol]',
-			success;
+	updateLegend = function(view, items) {
+		var	element = document.createElement('ul'),
+			child;
 
-		view = view || layer.core.view;
+		element.className = 'legend';
 
-		// labels
-		for (var i = 0, attr; i < layer.features.length; i++) {
-			attr = layer.features[i].attributes;
-			attr.label = view.labels ? attr.name : '';
+		for (var i = 0; i < items.length; i++) {
+			child = document.createElement('li');
+			child.style.backgroundImage = 'url(' + gis.init.contextPath + '/images/orgunitgroup/' + items[i].symbol + ')';
+			child.innerHTML = items[i].name;
+			element.appendChild(child);
 		}
 
-		layer.styleMap = GIS.core.StyleMap(view);
-
-		success = function(r) {
-			var data = r.organisationUnitGroups,
-				options = {
-					indicator: view.organisationUnitGroupSet.id
-				};
-
-			gis.store.groupsByGroupSet.loadData(data);
-
-			layer.core.view = view;
-
-			layer.core.applyClassification({
-				indicator: view.organisationUnitGroupSet.id
-			});
-
-			addCircles(view);
-
-			afterLoad(view);
-		};
-
-		if (isPlugin) {
-			Ext.data.JsonP.request({
-				url: url,
-				success: function(r) {
-					success(r);
-				}
-			});
-		}
-		else {
-			Ext.Ajax.request({
-				url: url,
-				success: function(r) {
-					success(Ext.decode(r.responseText));
-				}
-			});
-		}
-	};
+		layer.legendPanel.update(element.outerHTML);
+	},
 
 	addCircles = function(view) {
 		var radius = view.areaRadius;
@@ -278,6 +250,14 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 			nissa = layer.circleLayer;
 		}
 	};
+
+	/*
+	 onRightClick = function (evt) {
+	 var menu = GIS.app.ContextMenu(gis, layer, evt.layer.feature);
+	 menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
+	 };
+	 */
+
 
 	afterLoad = function(view) {
 
@@ -303,7 +283,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 
 		// Zoom
 		if (loader.zoomToVisibleExtent) {
-			olmap.zoomToVisibleExtent();
+			gis.instance.fitBounds(layer.instance.getBounds());
 		}
 
 		// Mask
@@ -339,7 +319,8 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 				compareView(view, true);
 			}
 			else {
-				loadOrganisationUnits(view);
+				//loadOrganisationUnits(view);
+				loadOrganisationUnitGroups(view);
 			}
 		},
 		loadData: loadData,

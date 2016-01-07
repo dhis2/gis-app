@@ -47,7 +47,29 @@ GIS.core.getLayers = function(gis) {
             config: {
                 type: 'markers'
             },
-            getHandler: GIS.core.LayerHandlerFacility
+            getHandler: GIS.core.LayerHandlerFacility,
+            featureStore: Ext.create('Ext.data.Store', {
+                fields: ['id', 'name'],
+                features: [],
+                loadFeatures: function(features) {
+                    if (features && features.length) {
+                        var data = [];
+                        for (var i = 0; i < features.length; i++) {
+                            data.push([features[i].id, features[i].properties.na]);
+                        }
+                        this.loadData(data);
+                        this.sortStore();
+
+                        this.features = features;
+                    }
+                    else {
+                        this.removeAll();
+                    }
+                },
+                sortStore: function() {
+                    this.sort('name', 'ASC');
+                }
+            })
         },
         boundary: {
             id: 'boundary',

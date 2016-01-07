@@ -98,25 +98,29 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
                 popup += '</table>';
 
                 // Create GeoJSON features
-                for (var i = 0, row, prop; i < rows.length; i++) {
+                for (var i = 0, row, properties, coord; i < rows.length; i++) {
                     row = rows[i];
-                    prop = {};
+                    properties = {};
 
                     // Build property object
                     for (var j = 0, value; j < row.length; j++) {
                         value = row[j];
-                        prop[r.headers[j].name] = booleanNames[value] || r.metaData.optionNames[value] || names[value] || value;
+                        properties[r.headers[j].name] = booleanNames[value] || r.metaData.optionNames[value] || names[value] || value;
                     }
 
-                    features.push({
-                        type: 'Feature',
-                        id: prop.psi,
-                        properties: prop,
-                        geometry: {
-                            type: 'Point',
-                            coordinates: [prop.longitude, prop.latitude]
-                        }
-                    });
+                    coord = [properties.longitude, properties.latitude];
+
+                    if (gis.util.map.isValidCoordinate(coord)) {
+                        features.push({
+                            type: 'Feature',
+                            id: properties.psi,
+                            properties: properties,
+                            geometry: {
+                                type: 'Point',
+                                coordinates: coord
+                            }
+                        });
+                    }
                 }
 
                 // Apply layer config
@@ -192,36 +196,17 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
             getOptionSets();
         };
 
-        if (Ext.isObject(GIS.app)) {
-            Ext.Ajax.request({
-                url: gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString,
-                disableCaching: false,
-                failure: function(r) {
-                    gis.alert(r);
-                },
-                success: function(r) {
-                    success(Ext.decode(r.responseText));
-                }
-            });
-        }
-        else if (Ext.isObject(GIS.plugin)) {
-            Ext.data.JsonP.request({
-                url: gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.jsonp' + paramString,
-                disableCaching: false,
-                scope: this,
-                success: function(r) {
-                    success(r);
-                }
-            });
-        }
+        Ext.Ajax.request({
+            url: gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString,
+            disableCaching: false,
+            failure: function(r) {
+                gis.alert(r);
+            },
+            success: function(r) {
+                success(Ext.decode(r.responseText));
+            }
+        });
     };
-
-    /*
-    onRightClick = function (evt) {
-        var menu = GIS.app.ContextMenu(gis, layer, evt.layer.feature);
-        menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
-    };
-    */
 
     afterLoad = function(view) {
 

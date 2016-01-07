@@ -98,10 +98,6 @@ GIS.app.ContextMenu = function(gis, layer, feature) {
            }
         });
 
-
-
-
-
     };
 
     // Menu

@@ -318,6 +318,16 @@ GIS.core.getInstance = function(init) {
     (function() {
         util.map = {};
 
+        util.map.isValidCoordinate = function(coord) {
+            return Ext.isArray(coord)
+                && coord.length === 2
+                && coord[0] >= -180
+                && coord[0] <= 180
+                && coord[1] >= -90
+                && coord[1] <= 90;
+        };
+
+        /*
         util.map.getVisibleVectorLayers = function() { // TODO
             var layers = [];
 
@@ -329,7 +339,9 @@ GIS.core.getInstance = function(init) {
             }
             return layers;
         };
+        */
 
+        /*
         util.map.getRenderedVectorLayers = function() {
             var layers = [];
 
@@ -341,7 +353,9 @@ GIS.core.getInstance = function(init) {
             }
             return layers;
         };
+        */
 
+        /*
         util.map.getExtendedBounds = function(layers) {
             var bounds = null;
             if (layers.length) {
@@ -354,14 +368,18 @@ GIS.core.getInstance = function(init) {
             }
             return bounds;
         };
+        */
 
+        /*
         util.map.zoomToVisibleExtent = function(olmap) {
             var bounds = util.map.getExtendedBounds(util.map.getVisibleVectorLayers(olmap));
             if (bounds) {
                 olmap.zoomToExtent(bounds);
             }
         };
+        */
 
+        /*
         util.map.getTransformedFeatureArray = function(features) {
             var sourceProjection = new OpenLayers.Projection("EPSG:4326"),
                 destinationProjection = new OpenLayers.Projection("EPSG:900913");
@@ -370,7 +388,9 @@ GIS.core.getInstance = function(init) {
             }
             return features;
         };
+        */
 
+        /*
         util.map.getPointsByFeatures = function(features) {
             var a = [];
             for (var i = 0; i < features.length; i++) {
@@ -380,7 +400,9 @@ GIS.core.getInstance = function(init) {
             }
             return a;
         };
+        */
 
+        /*
         util.map.getLonLatsByPoints = function(points) {
             var lonLat,
                 point,
@@ -392,6 +414,7 @@ GIS.core.getInstance = function(init) {
             }
             return a;
         };
+        */
 
         util.geojson = {};
 

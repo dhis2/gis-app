@@ -5,7 +5,6 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
         loadData,
         afterLoad,
         handler,
-        onRightClick,
         dimConf = gis.conf.finals.dimension;
 
     loadOrganisationUnits = function(view) {

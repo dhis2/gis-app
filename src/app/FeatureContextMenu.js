@@ -1,5 +1,7 @@
-GIS.app.ContextMenu = function(gis, layer, feature) {
-    var isRelocate = !!GIS.app ? !!gis.init.user.isAdmin : false,
+// Moved from GIS.core.createSelectHandlers
+GIS.app.FeatureContextMenu = function(gis, layer) {
+    var feature = layer.feature,
+        isRelocate = !!GIS.app ? !!gis.init.user.isAdmin : false,
         showRelocate,
         stopRelocate,
         onRelocate,

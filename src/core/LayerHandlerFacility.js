@@ -7,7 +7,8 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		updateLegend,
 		addCircles,
 		afterLoad,
-		onRightClick,
+        onFeatureCLick,
+		onFeatureRightClick,
 		isValidCoordinate,
 		loader;
 
@@ -203,12 +204,16 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		Ext.apply(layer.config, {
 			data: features,
 			iconProperty: 'icon',
-			label: '{label}',
-			popup: '{na}'
+			label: '{label}'
 		});
 
 		// Create layer instance
 		layer.instance = gis.instance.addLayer(layer.config);
+
+        // TODO: Remember to remove events
+        layer.instance.on('click', onFeatureClick);
+        layer.instance.on('contextmenu', onFeatureRightClick);
+
 
 		//console.log("orgUnitGroups", indicator, orgUnitGroups, features);
 		//gis.store.groupsByGroupSet.loadData(data);
@@ -251,13 +256,14 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		}
 	};
 
-	/*
-	 onRightClick = function (evt) {
-	 var menu = GIS.app.ContextMenu(gis, layer, evt.layer.feature);
-	 menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
-	 };
-	 */
+    onFeatureClick = function(evt) {
+        GIS.app.FeaturePopup(gis, evt.layer);
+    };
 
+    onFeatureRightClick = function(evt) {
+        var menu = GIS.app.FeatureContextMenu(gis, evt.layer);
+        menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
+    };
 
 	afterLoad = function(view) {
 

@@ -261,7 +261,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
     };
 
     onFeatureRightClick = function(evt) {
-        var menu = GIS.app.FeatureContextMenu(gis, evt.layer);
+        var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer.feature);
         menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     };
 

@@ -1,7 +1,7 @@
 // Moved from GIS.core.createSelectHandlers
-GIS.app.FeaturePopup = function(gis, layer) {
+GIS.app.FeaturePopup = function(gis, marker) {
 
-    var feature = layer.feature,
+    var feature = marker.feature,
         generator = gis.init.periodGenerator,
         periodType = gis.init.systemSettings.infrastructuralPeriodType.name,
         attr = feature.properties,
@@ -65,7 +65,7 @@ GIS.app.FeaturePopup = function(gis, layer) {
                 '<br/><br/>To change groups, please go to general settings.';
         }
 
-        layer.bindPopup(html).openPopup();
+        marker.bindPopup(html).openPopup();
         gis.mask.hide();
     };
 

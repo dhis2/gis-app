@@ -13,7 +13,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		loader;
 
 	compareView = function(view, doExecute) {
-		var src = layer.core.view,
+		var src = layer.view,
 			viewIds,
 			viewDim,
 			srcIds,
@@ -176,8 +176,12 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 				return;
 			}
 
-			// TODO: Where is the store used?
-			layer.featureStore.loadFeatures(features.slice(0));
+
+
+			// Store features for search
+			//layer.featureStore.loadFeatures(features.slice(0));
+            layer.featureStore.loadFeatures(features);
+            layer.features = features;
 
 			updateLegend(orgUnitGroups);
 			addData(view, features);

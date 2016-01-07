@@ -55,7 +55,7 @@ GIS.app.LayerMenu = function(gis, layer, cls) {
                     }
                 }
 
-                layer.searchWindow = GIS.app.SearchWindow(layer);
+                layer.searchWindow = GIS.app.SearchWindow(gis, layer);
                 layer.searchWindow.show();
             }
         };

@@ -1,11 +1,12 @@
-GIS.app.SearchWindow = function(layer) {
+GIS.app.SearchWindow = function(gis, layer) {
     var data = [],
-        store = layer.core.featureStore,
+        store = layer.featureStore,
+        highlight,
         button,
         window;
 
     for (var i = 0; i < layer.features.length; i++) {
-        data.push([layer.features[i].data.id, layer.features[i].data.name]);
+        data.push([layer.features[i].id, layer.features[i].properties.name]);
     }
 
     if (!data.length) {
@@ -14,11 +15,13 @@ GIS.app.SearchWindow = function(layer) {
         return;
     }
 
+    /*
     button = Ext.create('Ext.ux.button.ColorButton', {
         width: gis.conf.layout.tool.item_width - gis.conf.layout.tool.itemlabel_width,
         height: 24,
         value: '0000ff'
     });
+    */
 
     window = Ext.create('Ext.window.Window', {
         title: GIS.i18n.organisationunit_search,
@@ -27,6 +30,7 @@ GIS.app.SearchWindow = function(layer) {
         resizable: false,
         height: 380,
         items: [
+            /*
             {
                 layout: 'column',
                 cls: 'gis-container-inner',
@@ -43,6 +47,7 @@ GIS.app.SearchWindow = function(layer) {
                 xtype: 'container',
                 height: 1
             },
+            */
             {
                 layout: 'column',
                 cls: 'gis-container-inner',
@@ -84,30 +89,14 @@ GIS.app.SearchWindow = function(layer) {
                     sortable: false,
                     width: gis.conf.layout.tool.item_width
                 }],
-                store: layer.core.featureStore,
+                store: store,
                 listeners: {
                     select: function(grid, record) {
-                        var feature = layer.getFeaturesByAttribute('id', record.data.id)[0],
-                            color = button.getValue(),
-                            symbolizer;
+                        highlight = layer.instance.highlight(record.data.id);
 
-                        layer.redraw();
-
-                        if (feature.geometry.CLASS_NAME === gis.conf.finals.openLayers.point_classname) {
-                            symbolizer = new OpenLayers.Symbolizer.Point({
-                                pointRadius: 6,
-                                fillColor: '#' + color,
-                                strokeWidth: 1
-                            });
+                        if (highlight) {
+                            gis.instance.panTo(highlight.getLatLng());
                         }
-                        else {
-                            symbolizer = new OpenLayers.Symbolizer.Polygon({
-                                strokeColor: '#' + color,
-                                fillColor: '#' + color
-                            });
-                        }
-
-                        layer.drawFeature(feature, symbolizer);
                     }
                 }
             }
@@ -118,7 +107,7 @@ GIS.app.SearchWindow = function(layer) {
                 store.sortStore();
             },
             destroy: function() {
-                layer.redraw();
+                layer.instance.removeHighlight();
             }
         }
     });

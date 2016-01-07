@@ -154,7 +154,8 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 							iconSize: [16, 16]
 						};
 
-						prop.label = prop.na + ' (' + group + ')';
+                        prop.name = prop.na;
+                        prop.label = prop.na + ' (' + group + ')';
 
 						features.push({
 							type: 'Feature',
@@ -178,7 +179,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 			// TODO: Where is the store used?
 			layer.featureStore.loadFeatures(features.slice(0));
 
-			updateLegend(view, orgUnitGroups);
+			updateLegend(orgUnitGroups);
 			addData(view, features);
 		};
 
@@ -204,8 +205,17 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		Ext.apply(layer.config, {
 			data: features,
 			iconProperty: 'icon',
-			label: '{label}'
+			label: '{name}',
+            labelStyle: {
+                color: view.labelFontColor,
+                fontSize: view.labelFontSize,
+                fontStyle: view.labelFontStyle,
+                fontWeight: view.labelFontWeight
+            },
+            hoverLabel: '{label}'
 		});
+
+        console.log(view.labelFontColor);
 
 		// Create layer instance
 		layer.instance = gis.instance.addLayer(layer.config);
@@ -215,10 +225,13 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
         layer.instance.on('contextmenu', onFeatureRightClick);
 
 
+        //console.log("view", view);
+
 		//console.log("orgUnitGroups", indicator, orgUnitGroups, features);
 		//gis.store.groupsByGroupSet.loadData(data);
 		//console.log("############", data);
-		//layer.view = view;
+
+        layer.view = view;
 
 		//addCircles(view);
 
@@ -227,7 +240,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		afterLoad(view);
 	};
 
-	updateLegend = function(view, items) {
+	updateLegend = function(items) {
 		var	element = document.createElement('ul'),
 			child;
 
@@ -261,7 +274,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
     };
 
     onFeatureRightClick = function(evt) {
-        var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer.feature);
+        var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer);
         menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     };
 
@@ -325,7 +338,6 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 				compareView(view, true);
 			}
 			else {
-				//loadOrganisationUnits(view);
 				loadOrganisationUnitGroups(view);
 			}
 		},

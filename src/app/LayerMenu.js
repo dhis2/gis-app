@@ -69,12 +69,16 @@ GIS.app.LayerMenu = function(gis, layer, cls) {
         });
     }
 
-
     item = {
         text: GIS.i18n.clear,
         iconCls: 'gis-menu-item-icon-clear',
         handler: function() {
             gis.instance.removeLayer(layer.instance);
+
+            if (layer.areaInstance) { // Facility layer
+                gis.instance.removeLayer(layer.areaInstance);
+            }
+
             layer.widget.reset();
         }
     };

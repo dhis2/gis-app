@@ -205,17 +205,39 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		Ext.apply(layer.config, {
 			data: features,
 			iconProperty: 'icon',
-			label: '{name}',
-            labelStyle: {
-                color: view.labelFontColor,
-                fontSize: view.labelFontSize,
-                fontStyle: view.labelFontStyle,
-                fontWeight: view.labelFontWeight
-            },
             hoverLabel: '{label}'
 		});
 
-        console.log(view.labelFontColor);
+        if (view.labels) {
+            Ext.apply(layer.config, {
+                label: '{name}',
+                labelStyle: {
+                    color: view.labelFontColor,
+                    fontSize: view.labelFontSize,
+                    fontStyle: view.labelFontStyle,
+                    fontWeight: view.labelFontWeight
+                }
+            });
+        }
+
+        // Remove area layer instance if already exist
+        if (layer.areaInstance && gis.instance.hasLayer(layer.areaInstance)) {
+            gis.instance.removeLayer(layer.areaInstance);
+        }
+
+        if (view.areaRadius) {
+            layer.areaInstance = gis.instance.addLayer({
+                type: 'circles',
+                radius: view.areaRadius,
+                highlightStyle: false,
+                data: features
+            });
+        }
+
+        // Remove layer instance if already exist
+        if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+            gis.instance.removeLayer(layer.instance);
+        }
 
 		// Create layer instance
 		layer.instance = gis.instance.addLayer(layer.config);
@@ -224,18 +246,9 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
         layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
 
-
-        //console.log("view", view);
-
-		//console.log("orgUnitGroups", indicator, orgUnitGroups, features);
 		//gis.store.groupsByGroupSet.loadData(data);
-		//console.log("############", data);
 
         layer.view = view;
-
-		//addCircles(view);
-
-
 
 		afterLoad(view);
 	};
@@ -255,19 +268,6 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 
 		layer.legendPanel.update(element.outerHTML);
 	},
-
-	addCircles = function(view) {
-		var radius = view.areaRadius;
-
-		if (layer.circleLayer) {
-			layer.circleLayer.deactivateControls();
-			layer.circleLayer = null;
-		}
-		if (Ext.isDefined(radius) && radius) {
-			layer.circleLayer = GIS.core.CircleLayer(gis, layer.features, radius);
-			nissa = layer.circleLayer;
-		}
-	};
 
     onFeatureClick = function(evt) {
         GIS.app.FeaturePopup(gis, evt.layer);

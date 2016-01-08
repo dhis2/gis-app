@@ -21,7 +21,7 @@ GIS.app.FeaturePopup = function(gis, instance) {
 
 
     success = function(r) {
-        var html = '<h2>Infrastructural data</h2>',
+        var html = '<h2>' + feature.properties.name + '</h2>',
             records = [],
             dxIndex,
             valueIndex,
@@ -59,10 +59,11 @@ GIS.app.FeaturePopup = function(gis, instance) {
             }
         }
         else {
-            html += 'No data found for<br/><br/>Indicators in group: <span style="color:#005aa5">' + iig.name + '</span>' +
-                '<br/>Data elements in group: <span style="color:#005aa5">' + ideg.name + '</span>' +
-                '<br/>Period: <span style="color:#005aa5">' + period.name + '</span>' +
-                '<br/><br/>To change groups, please go to general settings.';
+            html += 'No data found for:<ul>' +
+                '<li>Indicators in group: <em>' + iig.name + '</em></li>' +
+                '<li>Data elements in group: <em>' + ideg.name + '</em></li>' +
+                '<li>Period: <em>' + period.name + '</em></li>' +
+                '<p>To change groups, please go to general settings.</p>';
         }
 
         instance.bindPopup(html).openPopup();

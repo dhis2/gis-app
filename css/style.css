@@ -223,6 +223,21 @@ table.padding1 td {
     padding-right: 10px;
 }
 
+.leaflet-dhis2 .leaflet-popup ul {
+    margin-top: 5px;
+}
+
+.leaflet-dhis2 .leaflet-popup li {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.leaflet-dhis2 .leaflet-popup em {
+    font-weight:bold;
+}
+
+
+
 /*----------------------------------------------------------------------------
  * Legend
  *--------------------------------------------------------------------------*/

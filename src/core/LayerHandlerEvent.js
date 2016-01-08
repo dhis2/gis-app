@@ -4,6 +4,7 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
         loadOrganisationUnits,
         loadData,
         afterLoad,
+        layerConfig,
         handler,
         dimConf = gis.conf.finals.dimension;
 
@@ -122,12 +123,13 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
                     }
                 }
 
+
                 // Apply layer config
-                Ext.apply(layer.config, {
+                layerConfig = Ext.applyIf({
                     data: features,
                     label: '{ouname}',
                     popup: popup
-                });
+                }, layer.config);
 
                 // Remove layer instance if already exist
                 if (layer.instance && gis.instance.hasLayer(layer.instance)) {
@@ -135,7 +137,7 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
                 }
 
                 // Create layer instance
-                layer.instance = gis.instance.addLayer(layer.config);
+                layer.instance = gis.instance.addLayer(layerConfig);
 
                 afterLoad(view);
             };

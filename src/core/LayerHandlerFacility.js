@@ -206,7 +206,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		view = view || layer.view;
 		features = features || layer.featureStore.features;
 
-        layerConfig = Ext.apply({
+        layerConfig = Ext.applyIf({
             data: features,
             iconProperty: 'icon',
             hoverLabel: '{label}'

@@ -7,6 +7,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		updateLegend,
 		addCircles,
 		afterLoad,
+        layerConfig,
         onFeatureCLick,
 		onFeatureRightClick,
 		isValidCoordinate,
@@ -205,15 +206,14 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		view = view || layer.view;
 		features = features || layer.featureStore.features;
 
-		// Apply layer config
-		Ext.apply(layer.config, {
-			data: features,
-			iconProperty: 'icon',
+        layerConfig = Ext.apply({
+            data: features,
+            iconProperty: 'icon',
             hoverLabel: '{label}'
-		});
+        }, layer.config);
 
         if (view.labels) {
-            Ext.apply(layer.config, {
+            Ext.apply(layerConfig, {
                 label: '{name}',
                 labelStyle: {
                     color: view.labelFontColor,
@@ -244,13 +244,11 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
         }
 
 		// Create layer instance
-		layer.instance = gis.instance.addLayer(layer.config);
+		layer.instance = gis.instance.addLayer(layerConfig);
 
         // TODO: Remember to remove events
         layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
-
-		//gis.store.groupsByGroupSet.loadData(data);
 
         layer.view = view;
 

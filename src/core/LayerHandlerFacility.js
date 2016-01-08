@@ -177,8 +177,6 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 				return;
 			}
 
-
-
 			// Store features for search
 			//layer.featureStore.loadFeatures(features.slice(0));
             layer.featureStore.loadFeatures(features);

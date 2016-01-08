@@ -2,14 +2,17 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
     var olmap = layer.map,
         compareView,
         loadOrganisationUnits,
-        loadData,
+        addData,
         loadLegend,
+        applyClassification,
+        getClass,
+        updateMap,
         afterLoad,
         loader,
         dimConf = gis.conf.finals.dimension;
 
     compareView = function(view, doExecute) {
-        var src = layer.view, // TODO: view don't exist here layer.core.view,
+        var src = layer.view,
             viewIds,
             viewDim,
             srcIds,
@@ -139,7 +142,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             return gis.conf.finals.widget.loadtype_legend;
         }
 
-        //gis.olmap.mask.hide();
+        gis.mask.hide();
     };
 
     loadOrganisationUnits = function(view) {
@@ -179,35 +182,25 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         success = function(r) {
             var features = [];
 
-            /*
-            var geojson = gis.util.geojson.decode(r),
-                format = new OpenLayers.Format.GeoJSON(),
-                features = gis.util.map.getTransformedFeatureArray(format.read(geojson));
-            */
-
             // Convert to GeoJSON features
-            for (var i = 0, prop; i < r.length; i++) {
+            for (var i = 0, prop, coord; i < r.length; i++) {
                 prop = r[i];
+                coord = JSON.parse(prop.co);
 
-                features.push({
-                    type: 'Feature',
-                    properties: prop,
-                    geometry: {
-                        type: 'MultiPolygon',
-                        coordinates: JSON.parse(prop.co)
-                    }
-                });
+                if (coord && coord.length) {
+                    prop.name = prop.na;
+
+                    features.push({
+                        type: 'Feature',
+                        id: prop.id,
+                        properties: prop,
+                        geometry: {
+                            type: 'MultiPolygon',
+                            coordinates: coord
+                        }
+                    });
+                }
             }
-
-            //console.log(features);
-
-            /* TODO
-            if (!Ext.isArray(features)) {
-                olmap.mask.hide();
-                gis.alert(GIS.i18n.invalid_coordinates);
-                return;
-            }
-            */
 
             if (!features.length) {
                 gis.mask.hide();
@@ -225,37 +218,21 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
         };
 
-        if (isPlugin) {
-            Ext.data.JsonP.request({
-                url: url,
-                disableCaching: false,
-                success: function(r) {
-                    success(r);
-                }
-            });
-        }
-        else {
-            Ext.Ajax.request({
-                url: url,
-                disableCaching: false,
-                success: function(r) {
-                    success(Ext.decode(r.responseText));
-                },
-                failure: function() {
-                    failure();
-                }
-            });
-        }
+        Ext.Ajax.request({
+            url: url,
+            disableCaching: false,
+            success: function(r) {
+                success(Ext.decode(r.responseText));
+            },
+            failure: function() {
+                failure();
+            }
+        });
     };
 
     loadData = function(view, features) {
-        var success;
-
-        // TODO: Core don't exist
-        view = view || layer.core.view;
-        features = features || layer.core.featureStore.features;
-
-        var dimConf = gis.conf.finals.dimension,
+        var success,
+            dimConf = gis.conf.finals.dimension,
             paramString = '?',
             dxItems = view.columns[0].items,
             isOperand = view.columns[0].dimension === dimConf.operand.objectName,
@@ -318,9 +295,9 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         }
 
         success = function(json) {
-            //console.log("json", json);
+            var layerConfig;
 
-            var response = gis.api.response.Response(json),
+            var response = gis.api.response.Response(json), // validate
                 featureMap = {},
                 valueMap = {},
                 ouIndex,
@@ -347,7 +324,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
             // Feature map
             for (var i = 0, id; i < features.length; i++) {
-                var id = features[i].properties.id;
+                var id = features[i].id;
                 featureMap[id] = true;
             }
 
@@ -361,7 +338,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
             for (var i = 0; i < features.length; i++) {
                 var feature = features[i],
-                    id = feature.properties.id;
+                    id = feature.id;
 
                 if (featureMap.hasOwnProperty(id) && valueMap.hasOwnProperty(id)) {
                     feature.properties.value = valueMap[id];
@@ -377,50 +354,24 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             //layer.removeFeatures(layer.features);
             //layer.addFeatures(newFeatures);
 
-            if (!layer.instance) {
-                layer.instance = gis.instance.addLayer({
-                    type: 'choropleth',
-                    label: '{na} ({value})',
-                    popup: '{na}',
-                });
-            }
 
-            layer.instance.addFeatures(features);
-
-            gis.instance.fitBounds(layer.instance.getBounds());
-
-            gis.mask.hide();
-
-            gis.response = response;
-
-            // loadLegend(view); // TODO
+            loadLegend(view, response.metaData, features);
         };
 
-        if (Ext.isObject(GIS.app)) {
-            Ext.Ajax.request({
-                url: gis.init.contextPath + '/api/analytics.json' + paramString,
-                disableCaching: false,
-                failure: function(r) {
-                    gis.alert(r);
-                },
-                success: function(r) {
-                    success(Ext.decode(r.responseText));
-                }
-            });
-        }
-        else if (Ext.isObject(GIS.plugin)) {
-            Ext.data.JsonP.request({
-                url: gis.init.contextPath + '/api/analytics.jsonp' + paramString,
-                disableCaching: false,
-                scope: this,
-                success: function(r) {
-                    success(r);
-                }
-            });
-        }
+
+        Ext.Ajax.request({
+            url: gis.init.contextPath + '/api/analytics.json' + paramString,
+            disableCaching: false,
+            failure: function(r) {
+                gis.alert(r);
+            },
+            success: function(r) {
+                success(Ext.decode(r.responseText));
+            }
+        });
     };
 
-    loadLegend = function(view) {
+    loadLegend = function(view, metaData, features) {
         var bounds = [],
             colors = [],
             names = [],
@@ -429,21 +380,21 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             addNames,
             fn;
 
-        view = view || layer.core.view;
+        //view = view || layer.core.view;
 
         // labels
+        /*
         for (var i = 0, feature; i < layer.features.length; i++) {
             attr = layer.features[i].attributes;
             attr.label = view.labels ? attr.name + ' (' + attr.value + ')' : '';
         }
+        */
 
-        layer.styleMap = GIS.core.StyleMap(view);
+        // layer.styleMap = GIS.core.StyleMap(view);
 
         addNames = function(response) {
-
             // All dimensions
             var dimensions = Ext.Array.clean([].concat(view.columns || [], view.rows || [], view.filters || [])),
-                metaData = response.metaData,
                 peIds = metaData[dimConf.period.objectName];
 
             for (var i = 0, dimension; i < dimensions.length; i++) {
@@ -462,28 +413,35 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                 }
             }
 
+            //console.log("dimensions", dimensions);
+
             // Period name without changing the id
             view.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]];
         };
 
         fn = function() {
+            //console.log("fn", gis.response);
+
             addNames(gis.response);
 
             // Classification options
             var options = {
                 indicator: gis.conf.finals.widget.value,
-                method: view.legendSet ? mapfish.GeoStat.Distribution.CLASSIFY_WITH_BOUNDS : view.method,
+                // method: view.legendSet ? mapfish.GeoStat.Distribution.CLASSIFY_WITH_BOUNDS : view.method,
                 numClasses: view.classes,
                 bounds: bounds,
-                colors: layer.core.getColors(view.colorLow, view.colorHigh),
+                // colors: layer.core.getColors(view.colorLow, view.colorHigh),
+                colors: colors,
                 minSize: view.radiusLow,
                 maxSize: view.radiusHigh
             };
 
-            layer.core.view = view;
-            layer.core.colorInterpolation = colors;
-            layer.core.applyClassification(options);
+            layer.view = view;
+            //layer.core.colorInterpolation = colors;
+            //layer.core.applyClassification(options);
 
+            applyClassification(options, features);
+            updateMap(features);
             afterLoad(view);
         };
 
@@ -507,8 +465,9 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                             }
                             bounds.push(legends[i].startValue);
                         }
-                        colors.push(new mapfish.ColorRgb());
-                        colors[colors.length - 1].setFromHex(legends[i].color);
+                        //colors.push(new mapfish.ColorRgb());
+                        //colors[colors.length - 1].setFromHex(legends[i].color);
+                        colors.push(legends[i].color);
                         names.push(legends[i].name);
                         bounds.push(legends[i].endValue);
                     }
@@ -516,6 +475,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                     view.legendSet.names = names;
                     view.legendSet.bounds = bounds;
                     view.legendSet.colors = colors;
+
                 },
                 callback: function() {
                     fn();
@@ -527,6 +487,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             loadLegendSet(view);
         }
         else {
+            //console.log("else");
             var elementMap = {
                     'in': 'indicators',
                     'de': 'dataElements',
@@ -565,6 +526,51 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         }
     };
 
+    // Assign color to feature based on value
+    applyClassification = function(options, features) {
+        // TODO: Calculate radius
+
+        for (var i = 0, prop, value; i < features.length; i++) {
+            prop = features[i].properties;
+            value = prop[options.indicator];
+            prop.color = options.colors[getClass(value, options.bounds)-1];
+        }
+    };
+
+    // Returns class number
+    getClass = function(value, bounds) {
+        if (value >= bounds[0]) {
+            for (var i = 1; i < bounds.length; i++) {
+                if (value < bounds[i]) {
+                    return i;
+                }
+            }
+            if (value === bounds[bounds.length - 1]) {
+                return bounds.length - 1;
+            }
+        }
+
+        return null;
+    };
+
+    // Add layer to map
+    updateMap = function(features) {
+        var layerConfig;
+
+        // Remove layer instance if already exist
+        if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+            gis.instance.removeLayer(layer.instance);
+        }
+
+        layerConfig = Ext.applyIf({
+            data: features,
+            label: '{na} ({value})',
+            popup: '{na}',
+        }, layer.config);
+
+        layer.instance = gis.instance.addLayer(layerConfig);
+    };
+
     afterLoad = function(view) {
 
         // Legend
@@ -575,7 +581,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         }
 
         // Layer
-        layer.setLayerOpacity(view.opacity);
+        layer.instance.setOpacity(view.opacity); // TODO
 
         if (layer.item) {
             layer.item.setValue(true);
@@ -593,12 +599,12 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         // Zoom
         if (loader.zoomToVisibleExtent) {
-            olmap.zoomToVisibleExtent();
+            gis.instance.fitBounds(layer.instance.getBounds());
         }
 
         // Mask
         if (loader.hideMask) {
-            olmap.mask.hide();
+            gis.mask.hide();
         }
 
         // Map callback

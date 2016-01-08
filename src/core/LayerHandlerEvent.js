@@ -4,7 +4,6 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
         loadOrganisationUnits,
         loadData,
         afterLoad,
-        layerConfig,
         handler,
         dimConf = gis.conf.finals.dimension;
 
@@ -75,6 +74,7 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
                 updateFeatures;
 
             updateFeatures = function() {
+                var layerConfig;
 
                 // Find header names and keys
                 for (var i = 0, header; i < r.headers.length; i++) {

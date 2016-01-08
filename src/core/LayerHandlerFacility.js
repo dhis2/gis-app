@@ -7,7 +7,6 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		updateLegend,
 		addCircles,
 		afterLoad,
-        layerConfig,
         onFeatureCLick,
 		onFeatureRightClick,
 		isValidCoordinate,
@@ -201,10 +200,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 	};
 
 	addData = function(view, features) {
-		view = view || layer.view;
-		features = features || layer.featureStore.features;
-
-        layerConfig = Ext.applyIf({
+        var layerConfig = Ext.applyIf({
             data: features,
             iconProperty: 'icon',
             hoverLabel: '{label}'

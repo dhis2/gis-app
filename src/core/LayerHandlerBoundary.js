@@ -2,8 +2,8 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
     var olmap = layer.map,
         compareView,
         loadOrganisationUnits,
-        loadData,
         loadLegend,
+        loadData,
         afterLoad,
         loader;
 
@@ -161,7 +161,9 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
             layer.core.featureStore.loadFeatures(features.slice(0));
             */
 
-            addData(view, features);
+            loadData(features);
+            loadLegend(view);
+            afterLoad(view);
         };
 
         failure = function() {
@@ -192,8 +194,8 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
         }
     };
 
-    addData = function(view, features) {
-        view = view || layer.view;
+    loadData = function(features) {
+        //view = view || layer.view;
         // features = features || layer.core.featureStore.features; // TODO
 
         /*
@@ -217,15 +219,14 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
 
         layer.instance.addFeatures(features);
 
-        gis.instance.fitBounds(layer.instance.getBounds());
-
-        gis.mask.hide();
 
 
-        // loadLegend(view);
+
     };
 
     loadLegend = function(view) {
+
+        /*
         view = view || layer.core.view;
 
         // labels
@@ -249,8 +250,7 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
 
         // labels
         layer.core.setFeatureLabelStyle(view.labels, false, view);
-
-        afterLoad(view);
+        */
     };
 
     afterLoad = function(view) {
@@ -260,7 +260,7 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
             layer.item.setValue(true, view.opacity);
         }
         else {
-            layer.setLayerOpacity(view.opacity);
+            layer.setOpacity(view.opacity);
         }
 
         // Gui
@@ -270,12 +270,12 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
 
         // Zoom
         if (loader.zoomToVisibleExtent) {
-            olmap.zoomToVisibleExtent();
+            gis.instance.fitBounds(layer.instance.getBounds());
         }
 
         // Mask
         if (loader.hideMask) {
-            olmap.mask.hide();
+            gis.mask.hide();
         }
 
         // Map callback

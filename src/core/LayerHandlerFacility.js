@@ -5,6 +5,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		loadData,
 		loadLegend,
 		updateLegend,
+		updateMap,
 		addCircles,
 		afterLoad,
         onFeatureCLick,
@@ -182,7 +183,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
             layer.features = features;
 
 			updateLegend(orgUnitGroups);
-			addData(view, features);
+			updateMap(view, features);
 		};
 
 		failure = function() {
@@ -199,7 +200,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 		});
 	};
 
-	addData = function(view, features) {
+	updateMap = function(view, features) {
         var layerConfig = Ext.applyIf({
             data: features,
             iconProperty: 'icon',
@@ -234,6 +235,8 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+			layer.instance.off('click', onFeatureClick);
+			layer.instance.off('contextmenu', onFeatureRightClick);
             gis.instance.removeLayer(layer.instance);
         }
 
@@ -247,6 +250,15 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
         layer.view = view;
 
 		afterLoad(view);
+	};
+
+	onFeatureClick = function(evt) {
+		GIS.app.FeaturePopup(gis, evt.layer);
+	};
+
+	onFeatureRightClick = function(evt) {
+		var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer);
+		menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
 	};
 
 	updateLegend = function(items) {
@@ -264,15 +276,6 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 
 		layer.legendPanel.update(element.outerHTML);
 	},
-
-    onFeatureClick = function(evt) {
-        GIS.app.FeaturePopup(gis, evt.layer);
-    };
-
-    onFeatureRightClick = function(evt) {
-        var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer);
-        menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
-    };
 
 	afterLoad = function(view) {
 

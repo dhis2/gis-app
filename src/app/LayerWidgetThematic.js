@@ -1426,7 +1426,6 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
         }
     });
 
-
     legendType = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.legend_type,
@@ -1440,8 +1439,8 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
         store: Ext.create('Ext.data.ArrayStore', {
             fields: ['id', 'name'],
             data: [
-                [gis.conf.finals.widget.legendtype_automatic, GIS.i18n.automatic],
-                [gis.conf.finals.widget.legendtype_predefined, GIS.i18n.predefined]
+                ['automatic', GIS.i18n.automatic],
+                ['predefined', GIS.i18n.predefined]
             ]
         }),
         listeners: {
@@ -1487,13 +1486,13 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
         valueField: 'id',
         displayField: 'name',
         queryMode: 'local',
-        value: 3,
+        value: 'quantile',
         width: 137,
         store: Ext.create('Ext.data.ArrayStore', {
             fields: ['id', 'name'],
             data: [
-                [2, GIS.i18n.equal_intervals],
-                [3, GIS.i18n.equal_counts]
+                ['equal', GIS.i18n.equal_intervals],
+                ['quantile', GIS.i18n.equal_counts]
             ]
         })
     });

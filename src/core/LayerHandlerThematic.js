@@ -4,9 +4,13 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         loadOrganisationUnits,
         addData,
         loadLegend,
+        classifyWithBounds,
+        classifyByEqIntervals,
+        classifyByQuantils,
         applyClassification,
         getClass,
         updateMap,
+        updateLegend,
         afterLoad,
         loader,
         dimConf = gis.conf.finals.dimension;
@@ -147,7 +151,6 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
     loadOrganisationUnits = function(view) {
         var items = view.rows[0].items,
-            isPlugin = GIS.plugin && !GIS.app,
             propertyMap = {
                 'name': 'name',
                 'displayName': 'name',
@@ -174,7 +177,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                     }
                 }
 
-                return gis.init.contextPath + '/api/geoFeatures.' + (isPlugin ? 'jsonp' : 'json') + params;
+                return gis.init.contextPath + '/api/geoFeatures.json' + params;
             }(),
             success,
             failure;
@@ -301,11 +304,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                 featureMap = {},
                 valueMap = {},
                 ouIndex,
-                dxIndex,
-                valueIndex,
-                newFeatures = [],
-                dimensions,
-                items = [];
+                valueIndex;
 
             if (!response) {
                 gis.mask.hide();
@@ -342,22 +341,11 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
                 if (featureMap.hasOwnProperty(id) && valueMap.hasOwnProperty(id)) {
                     feature.properties.value = valueMap[id];
-
-                    // feature.properties.popupText = feature.properties.name + ' (' + feature.properties.value + ')';
-
-                    newFeatures.push(feature);
                 }
             }
 
-            //console.log("add to map", newFeatures);
-
-            //layer.removeFeatures(layer.features);
-            //layer.addFeatures(newFeatures);
-
-
             loadLegend(view, response.metaData, features);
         };
-
 
         Ext.Ajax.request({
             url: gis.init.contextPath + '/api/analytics.json' + paramString,
@@ -392,8 +380,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         // layer.styleMap = GIS.core.StyleMap(view);
 
-        addNames = function(response) {
-            // All dimensions
+        addNames = function() {
             var dimensions = Ext.Array.clean([].concat(view.columns || [], view.rows || [], view.filters || [])),
                 peIds = metaData[dimConf.period.objectName];
 
@@ -413,16 +400,14 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                 }
             }
 
-            //console.log("dimensions", dimensions);
-
             // Period name without changing the id
             view.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]];
         };
 
         fn = function() {
-            //console.log("fn", gis.response);
+            addNames();
 
-            addNames(gis.response);
+            console.log("###########", view.legendSet, view);
 
             // Classification options
             var options = {
@@ -441,11 +426,15 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             //layer.core.applyClassification(options);
 
             applyClassification(options, features);
+            updateLegend(view, metaData, options);
             updateMap(features);
             afterLoad(view);
         };
 
         loadLegendSet = function(view) {
+            console.log("loadLegendSet", view.legendSet);
+
+
             Ext.Ajax.request({
                 url: gis.init.contextPath + '/api/legendSets/' + view.legendSet.id + '.json?fields=' + gis.conf.url.legendSetFields.join(','),
                 scope: this,
@@ -487,7 +476,6 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             loadLegendSet(view);
         }
         else {
-            //console.log("else");
             var elementMap = {
                     'in': 'indicators',
                     'de': 'dataElements',
@@ -555,21 +543,229 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
     // Add layer to map
     updateMap = function(features) {
-        var layerConfig;
+        var layerConfig = Ext.applyIf({
+            data: features,
+            label: '{na} ({value})'
+        }, layer.config);
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
             gis.instance.removeLayer(layer.instance);
         }
 
-        layerConfig = Ext.applyIf({
-            data: features,
-            label: '{na} ({value})',
-            popup: '{na}',
-        }, layer.config);
-
         layer.instance = gis.instance.addLayer(layerConfig);
+
+        // TODO: Remember to remove events
+        layer.instance.on('click', onFeatureClick);
+        layer.instance.on('contextmenu', onFeatureRightClick);
+
     };
+
+    onFeatureClick = function(evt) {
+        GIS.app.FeaturePopup(gis, evt.layer);
+    };
+
+    onFeatureRightClick = function(evt) {
+        var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer);
+        menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
+    };
+
+    updateLegend = function(view, metaData, options) {
+        var	isPlugin = gis.plugin,
+            bounds = options.bounds,
+            colors = options.colors,
+            element = document.createElement('div'),
+            style = {},
+            legendNames = view.legendSet ? view.legendSet.names || {} : {},
+            child,
+            id,
+            name;
+
+        style.dataLineHeight = isPlugin ? '12px' : '14px';
+        style.dataPaddingBottom = isPlugin ? '1px' : '3px';
+        style.colorWidth = isPlugin ? '15px' : '30px';
+        style.colorHeight = isPlugin ? '13px' : '15px';
+        style.colorMarginRight = isPlugin ? '5px' : '8px';
+        style.fontSize = isPlugin ? '10px' : '11px';
+
+        // data
+        id = view.columns[0].items[0].id;
+        name = view.columns[0].items[0].name;
+        child = document.createElement("div");
+        child.style.lineHeight = style.dataLineHeight;
+        child.style.paddingBottom = style.dataPaddingBottom;
+        child.innerHTML += metaData.names[id] || name || id;
+        child.innerHTML += "<br/>";
+
+        // period
+        id = view.filters[0].items[0].id;
+        name = view.filters[0].items[0].name;
+        child.innerHTML += metaData.names[id] || name || id;
+        element.appendChild(child);
+
+        child = document.createElement("div");
+        child.style.clear = "left";
+        element.appendChild(child);
+
+        console.log(options);
+
+        // legends
+        if (view.legendSet) {
+            for (var i = 0; i < bounds.length - 1; i++) {
+                var name = 'abc';
+
+                child = document.createElement('div');
+                //child.style.backgroundColor = this.colorInterpolation[i].toHexString();
+                child.style.backgroundColor = colors[i];
+                child.style.width = style.colorWidth;
+                //child.style.height = legendNames[i] ? '25px' : style.colorHeight;
+                child.style.height = name ? '25px' : style.colorHeight;
+                child.style.cssFloat = 'left';
+                child.style.marginRight = style.colorMarginRight;
+                element.appendChild(child);
+
+                child = document.createElement('div');
+                //child.style.lineHeight = legendNames[i] ? '12px' : '7px';
+                child.style.lineHeight = name ? '12px' : '7px';
+                //child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (legendNames[i] || '') + '</b><br/>' + this.classification.bins[i].label;
+                child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (name || '') + '</b><br/>' + '123';
+                element.appendChild(child);
+
+                child = document.createElement('div');
+                child.style.clear = 'left';
+                element.appendChild(child);
+            }
+        }
+        else {
+            for (var i = 0; i < this.classification.bins.length; i++) {
+                child = document.createElement('div');
+                child.style.backgroundColor = this.colorInterpolation[i].toHexString();
+                child.style.width = style.colorWidth;
+                child.style.height = style.colorHeight;
+                child.style.cssFloat = 'left';
+                child.style.marginRight = style.colorMarginRight;
+                element.appendChild(child);
+
+                child = document.createElement('div');
+                child.innerHTML = this.classification.bins[i].label;
+                element.appendChild(child);
+
+                child = document.createElement('div');
+                child.style.clear = 'left';
+                element.appendChild(child);
+            }
+        }
+
+        layer.legendPanel.update(element.outerHTML);
+    },
+
+    classifyWithBounds = function(bounds) {
+        var bins = [];
+        var binCount = [];
+        var sortedValues = [];
+
+        for (var i = 0; i < this.values.length; i++) {
+            sortedValues.push(this.values[i]);
+        }
+        sortedValues.sort(function(a,b) {return a-b;});
+        var nbBins = bounds.length - 1;
+
+        for (var j = 0; j < nbBins; j++) {
+            binCount[j] = 0;
+        }
+
+        for (var k = 0; k < nbBins - 1; k) {
+            if (sortedValues[0] < bounds[k + 1]) {
+                binCount[k] = binCount[k] + 1;
+                sortedValues.shift();
+            }
+            else {
+                k++;
+            }
+        }
+
+        binCount[nbBins - 1] = this.nbVal - mapfish.Util.sum(binCount);
+
+        for (var m = 0; m < nbBins; m++) {
+            bins[m] = new mapfish.GeoStat.Bin(binCount[m], bounds[m], bounds[m + 1], m == (nbBins - 1));
+            var labelGenerator = this.labelGenerator || this.defaultLabelGenerator;
+            bins[m].label = labelGenerator(bins[m], m, nbBins);
+        }
+
+        return new mapfish.GeoStat.Classification(bins);
+    };
+
+    classifyByEqIntervals = function(nbBins) {
+        var bounds = [];
+
+        for (var i = 0; i <= nbBins; i++) {
+            bounds[i] = this.minVal + i*(this.maxVal - this.minVal) / nbBins;
+        }
+
+        return this.classifyWithBounds(bounds);
+    };
+
+    classifyByQuantils = function(nbBins) {
+        var values = this.values;
+        values.sort(function(a,b) {return a-b;});
+        var binSize = Math.round(this.values.length / nbBins);
+
+        var bounds = [];
+        var binLastValPos = (binSize === 0) ? 0 : binSize;
+
+        if (values.length > 0) {
+            bounds[0] = values[0];
+            for (i = 1; i < nbBins; i++) {
+                bounds[i] = values[binLastValPos];
+                binLastValPos += binSize;
+
+                if (binLastValPos > values.length - 1) {
+                    binLastValPos = values.length - 1;
+                }
+            }
+            bounds.push(values[values.length - 1]);
+        }
+
+        for (var j = 0; j < bounds.length; j++) {
+            bounds[j] = parseFloat(bounds[j]);
+        }
+
+        return this.classifyWithBounds(bounds);
+    };
+
+    /*
+    classify = function(method, nbBins, bounds) {
+        var classification = null;
+        if (!nbBins) {
+            nbBins = sturgesRule();
+        }
+
+
+
+        switch (parseFloat(method)) {
+            case mapfish.GeoStat.Distribution.CLASSIFY_WITH_BOUNDS :
+                classification = this.classifyWithBounds(bounds);
+                break;
+            case mapfish.GeoStat.Distribution.CLASSIFY_BY_EQUAL_INTERVALS :
+                classification = this.classifyByEqIntervals(nbBins);
+                break;
+            case mapfish.GeoStat.Distribution.CLASSIFY_BY_QUANTILS :
+                classification = this.classifyByQuantils(nbBins);
+                break;
+            default:
+                OpenLayers.Console.error("Unsupported or invalid classification method");
+        }
+        return classification;
+    };
+
+
+    // TODO
+    sturgesRule = function() {
+        return Math.floor(1 + 3.3 * Math.log(this.nbVal, 10));
+    };
+    */
+
+
 
     afterLoad = function(view) {
 

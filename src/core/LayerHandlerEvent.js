@@ -4,6 +4,7 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
         loadOrganisationUnits,
         loadData,
         afterLoad,
+        updateMap,
         handler,
         dimConf = gis.conf.finals.dimension;
 
@@ -123,21 +124,7 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
                     }
                 }
 
-
-                // Apply layer config
-                layerConfig = Ext.applyIf({
-                    data: features,
-                    label: '{ouname}',
-                    popup: popup
-                }, layer.config);
-
-                // Remove layer instance if already exist
-                if (layer.instance && gis.instance.hasLayer(layer.instance)) {
-                    gis.instance.removeLayer(layer.instance);
-                }
-
-                // Create layer instance
-                layer.instance = gis.instance.addLayer(layerConfig);
+                updateMap(features, popup);
 
                 afterLoad(view);
             };
@@ -207,6 +194,23 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
                 success(Ext.decode(r.responseText));
             }
         });
+    };
+
+    // Add layer to map
+    updateMap = function(features, popup) {
+        var layerConfig = Ext.applyIf({
+            data: features,
+            label: '{ouname}',
+            popup: popup
+        }, layer.config);
+
+        // Remove layer instance if already exist
+        if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+            gis.instance.removeLayer(layer.instance);
+        }
+
+        // Create layer instance
+        layer.instance = gis.instance.addLayer(layerConfig);
     };
 
     afterLoad = function(view) {

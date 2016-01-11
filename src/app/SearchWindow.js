@@ -94,7 +94,7 @@ GIS.app.SearchWindow = function(gis, layer) {
                     select: function(grid, record) {
                         highlight = layer.instance.highlight(record.data.id);
 
-                        if (highlight) {
+                        if (highlight && highlight.getLatLng) {
                             gis.instance.panTo(highlight.getLatLng());
                         }
                     }

@@ -76,9 +76,31 @@ GIS.core.getLayers = function(gis) {
             name: GIS.i18n.boundary_layer,
             layerOpacity: 1,
             config: {
-                type: 'features'
+                type: 'boundary'
             },
-            getHandler: GIS.core.LayerHandlerBoundary
+            getHandler: GIS.core.LayerHandlerBoundary,
+            featureStore: Ext.create('Ext.data.Store', {
+                fields: ['id', 'name'],
+                features: [],
+                loadFeatures: function(features) {
+                    if (features && features.length) {
+                        var data = [];
+                        for (var i = 0; i < features.length; i++) {
+                            data.push([features[i].id, features[i].properties.na]);
+                        }
+                        this.loadData(data);
+                        this.sortStore();
+
+                        this.features = features;
+                    }
+                    else {
+                        this.removeAll();
+                    }
+                },
+                sortStore: function() {
+                    this.sort('name', 'ASC');
+                }
+            })
         }
     };
 

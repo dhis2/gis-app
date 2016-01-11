@@ -57,12 +57,11 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
             return gis.conf.finals.widget.loadtype_organisationunit;
         }
 
-        gis.olmap.mask.hide();
+        gis.mask.hide();
     };
 
     loadOrganisationUnits = function(view) {
         var items = view.rows[0].items,
-            isPlugin = GIS.plugin && !GIS.app,
             propertyMap = {
                 'name': 'name',
                 'displayName': 'name',
@@ -89,15 +88,16 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
                     }
                 }
 
-                return gis.init.contextPath + '/api/geoFeatures.' + (isPlugin ? 'jsonp' : 'json') + params;
+                return gis.init.contextPath + '/api/geoFeatures.json' + params;
             }(),
             success,
             failure;
 
         success = function(r) {
-            var //colors = ['black', 'blue', 'red', 'green', 'yellow'],
-                //levels = [],
-                //levelObjectMap = {},
+            var colors = ['black', 'blue', 'red', 'green', 'yellow'],
+                weights = [2, 1, 0.75, 0.5, 0.5],
+                levels = [],
+                levelStyle = {},
                 features = [];
 
             if (!r.length) {
@@ -106,151 +106,111 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
                 return;
             }
 
-            /* TODO
-            if (!Ext.isArray(features)) {
-                olmap.mask.hide();
-                gis.alert(GIS.i18n.invalid_coordinates);
-                return;
-            }
-            */
-
-            // Convert to GeoJSON features
-            for (var i = 0, prop; i < r.length; i++) {
-                prop = r[i];
-
-                features.push({
-                    type: 'Feature',
-                    properties: prop,
-                    geometry: {
-                        type: 'MultiPolygon',
-                        coordinates: JSON.parse(prop.co)
-                    }
-                });
-            }
-
-            // get levels, colors, map
-            /*
-            for (var i = 0; i < features.length; i++) {
-                levels.push(parseFloat(features[i].properties.level));
+            for (var i = 0; i < r.length; i++) {
+                levels.push(parseInt(r[i].le));
             }
 
             levels = Ext.Array.unique(levels).sort();
 
             for (var i = 0; i < levels.length; i++) {
-                levelObjectMap[levels[i]] = {
-                    strokeColor: colors[i]
+                levelStyle[levels[i]] = {
+                    color: colors[i],
+                    weight: (levels.length === 1 ? 1 : weights[i])
                 };
             }
 
-            // style
-            for (var i = 0, feature, obj, strokeWidth; i < features.length; i++) {
-                feature = features[i];
-                obj = levelObjectMap[feature.attributes.level];
-                strokeWidth = levels.length === 1 ? 1 : feature.attributes.level == 2 ? 2 : 1;
+            // Convert to GeoJSON features
+            for (var i = 0, prop, coord; i < r.length; i++) {
+                prop = r[i];
+                coord = JSON.parse(prop.co);
 
-                feature.style = {
-                    strokeColor: obj.strokeColor || 'black',
-                    strokeWidth: strokeWidth,
-                    fillOpacity: 0,
-                    pointRadius: 5,
-                    labelAlign: 'cr',
-                    labelYOffset: 13
-                };
+                if (coord) {
+                    prop.name = prop.na;
+                    prop.style = levelStyle[prop.le];
+                    prop.labelStyle = {
+                        paddingTop: (prop.ty === 1 ? '15px' : '0')
+                    };
+
+                    features.push({
+                        type: 'Feature',
+                        id: prop.id,
+                        properties: prop,
+                        geometry: {
+                            type: (prop.ty === 1 ? 'Point' : 'MultiPolygon'),
+                            coordinates: JSON.parse(prop.co)
+                        }
+                    });
+                }
             }
 
-            layer.core.featureStore.loadFeatures(features.slice(0));
-            */
+            layer.featureStore.loadFeatures(features);
+            layer.features = features;
 
-            loadData(features);
-            loadLegend(view);
+            loadData(view, features);
+            //loadLegend(view);
             afterLoad(view);
         };
 
         failure = function() {
-            olmap.mask.hide();
+            gi.mask.hide();
             gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
         };
 
-        if (isPlugin) {
-            Ext.data.JsonP.request({
-                url: url,
-                disableCaching: false,
-                success: function(r) {
-                    success(r);
-                }
-            });
-        }
-        else {
-            Ext.Ajax.request({
-                url: url,
-                disableCaching: false,
-                success: function(r) {
-                    success(Ext.decode(r.responseText));
-                },
-                failure: function() {
-                    failure();
-                }
-            });
-        }
+        Ext.Ajax.request({
+            url: url,
+            disableCaching: false,
+            success: function(r) {
+                success(Ext.decode(r.responseText));
+            },
+            failure: function() {
+                failure();
+            }
+        });
     };
 
-    loadData = function(features) {
-        //view = view || layer.view;
-        // features = features || layer.core.featureStore.features; // TODO
+    loadData = function(view, features) {
+        var layerConfig = Ext.applyIf({
+            data: features,
+            hoverLabel: '{name}',
+        }, layer.config);
 
-        /*
-        for (var i = 0; i < features.length; i++) {
-            features[i].attributes.value = 0;
-            features[i].attributes.popupText = features[i].attributes.name;
-        }
-
-        layer.removeFeatures(layer.features);
-        layer.addFeatures(features);
-        */
-
-
-        if (!layer.instance) {
-            layer.instance = gis.instance.addLayer({
-                type: 'features',
-                label: '{na}',
-                popup: '{na}',
+        if (view.labels) {
+            Ext.apply(layerConfig, {
+                label: '{name}',
+                labelStyle: {
+                    fontSize: view.labelFontSize,
+                    fontStyle: view.labelFontStyle
+                }
             });
         }
 
-        layer.instance.addFeatures(features);
+        // Remove layer instance if already exist
+        if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+            layer.instance.off('click', onFeatureClick);
+            layer.instance.off('contextmenu', onFeatureRightClick);
+            gis.instance.removeLayer(layer.instance);
+        }
 
+        // Create layer instance
+        layer.instance = gis.instance.addLayer(layerConfig);
 
+        // TODO: Remember to remove events
+        layer.instance.on('click', onFeatureClick);
+        layer.instance.on('contextmenu', onFeatureRightClick);
 
+    };
 
+    onFeatureClick = function(evt) {
+        GIS.app.FeaturePopup(gis, evt.layer);
+    };
+
+    onFeatureRightClick = function(evt) {
+        var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer);
+        menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     };
 
     loadLegend = function(view) {
-
-        /*
-        view = view || layer.core.view;
-
-        // labels
-        for (var i = 0, feature; i < layer.features.length; i++) {
-            attr = layer.features[i].attributes;
-            attr.label = view.labels ? attr.name : '';
-        }
-
-        var options = {
-            indicator: gis.conf.finals.widget.value,
-            method: 2,
-            numClasses: 5,
-            colors: layer.core.getColors('000000', '000000'),
-            minSize: 6,
-            maxSize: 6
-        };
-
-        layer.core.view = view;
-
-        layer.core.applyClassification(options);
-
-        // labels
-        layer.core.setFeatureLabelStyle(view.labels, false, view);
-        */
+        // Boundary layer don't have a legend yet
     };
 
     afterLoad = function(view) {

@@ -203,7 +203,6 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 	updateMap = function(view, features) {
         var layerConfig = Ext.applyIf({
             data: features,
-            iconProperty: 'icon',
             hoverLabel: '{label}'
         }, layer.config);
 

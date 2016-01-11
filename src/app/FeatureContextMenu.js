@@ -319,6 +319,32 @@ GIS.app.FeatureContextMenu = function(gis, layer, instance) {
         });
     };
 
+    // Drill or float
+    drill = function(parentId, parentGraph, level) {
+        var view = Ext.clone(layer.view),
+            handler;
+
+        // parent graph map
+        view.parentGraphMap = {};
+        view.parentGraphMap[parentId] = parentGraph;
+
+        // dimension
+        view.rows = [{
+            dimension: dimConf.organisationUnit.objectName,
+            items: [
+                {id: parentId},
+                {id: 'LEVEL-' + level}
+            ]
+        }];
+
+        if (view) {
+            handler = layer.getHandler(gis, layer);
+            handler.updateGui = true;
+            handler.zoomToVisibleExtent = true;
+            handler.hideMask = true;
+            handler.load(view);
+        }
+    };
 
     // Menu
     var menuItems = [];
@@ -330,7 +356,7 @@ GIS.app.FeatureContextMenu = function(gis, layer, instance) {
             cls: 'gis-plugin',
             disabled: !att.hasCoordinatesUp,
             handler: function() {
-                //drill(att.grandParentId, att.grandParentParentGraph, parseInt(att.level) - 1);
+                drill(att.grandParentId, att.grandParentParentGraph, parseInt(att.level) - 1);
             }
         }));
 
@@ -340,7 +366,7 @@ GIS.app.FeatureContextMenu = function(gis, layer, instance) {
             cls: 'gis-menu-item-first gis-plugin',
             disabled: !att.hasCoordinatesDown,
             handler: function() {
-                //drill(att.id, att.parentGraph, parseInt(att.level) + 1);
+                drill(att.id, att.parentGraph, parseInt(att.level) + 1);
             }
         }));
     }

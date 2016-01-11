@@ -71,7 +71,6 @@ GIS.app.FeaturePopup = function(gis, instance) {
     };
 
     failure = function(r) {
-        console.log(r);
         gis.mask.hide();
     };
 

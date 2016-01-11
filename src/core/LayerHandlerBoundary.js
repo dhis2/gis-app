@@ -98,6 +98,7 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
                 weights = [2, 1, 0.75, 0.5, 0.5],
                 levels = [],
                 levelStyle = {},
+                levelOrder = 'ASC',
                 features = [];
 
             if (!r.length) {
@@ -120,24 +121,51 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
             }
 
             // Convert to GeoJSON features
-            for (var i = 0, prop, coord; i < r.length; i++) {
-                prop = r[i];
-                coord = JSON.parse(prop.co);
+            for (var i = 0, ou, coord, gpid = '', gppg = ''; i < r.length; i++) {
+                ou = r[i];
+                coord = JSON.parse(ou.co);
 
+                // Only add features with coordinates
                 if (coord) {
-                    prop.name = prop.na;
-                    prop.style = levelStyle[prop.le];
-                    prop.labelStyle = {
-                        paddingTop: (prop.ty === 1 ? '15px' : '0')
-                    };
+
+                    // grand parent
+                    if (Ext.isString(ou.pg) && ou.pg.length) {
+                        var ids = Ext.Array.clean(ou.pg.split('/'));
+
+                        // grand parent id
+                        if (ids.length >= 2) {
+                            gpid = ids[ids.length - 2];
+                        }
+
+                        // grand parent parentgraph
+                        if (ids.length > 2) {
+                            gppg = '/' + ids.slice(0, ids.length - 2).join('/');
+                        }
+                    }
 
                     features.push({
                         type: 'Feature',
-                        id: prop.id,
-                        properties: prop,
+                        id: ou.id,
+                        //properties: prop,
                         geometry: {
-                            type: (prop.ty === 1 ? 'Point' : 'MultiPolygon'),
-                            coordinates: JSON.parse(prop.co)
+                            type: (ou.ty === 1 ? 'Point' : 'MultiPolygon'),
+                            coordinates: coord
+                        },
+                        properties: {
+                            id: ou.id,
+                            name: ou.na,
+                            hasCoordinatesDown: ou.hcd,
+                            hasCoordinatesUp: ou.hcu,
+                            level: ou.le,
+                            grandParentParentGraph: gppg,
+                            grandParentId: gpid,
+                            parentGraph: ou.pg,
+                            parentId: ou.pi,
+                            parentName: ou.pn,
+                            style: levelStyle[ou.le],
+                            labelStyle: {
+                                paddingTop: (ou.ty === 1 ? '15px' : '0')
+                            }
                         }
                     });
                 }
@@ -198,6 +226,7 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
         layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
 
+        layer.view = view;
     };
 
     onFeatureClick = function(evt) {

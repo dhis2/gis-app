@@ -22,7 +22,7 @@ GIS.app.WidgetWindow = function(gis, layer, width, padding) {
                     var view = layer.widget.getView();
 
                     if (view) {
-                        var handler = layer.getHandler(gis, layer);
+                        var handler = layer.handler(gis, layer);
                         handler.compare = (layer.id !== gis.layer.facility.id);
                         handler.zoomToVisibleExtent = true;
                         handler.hideMask = true;

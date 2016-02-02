@@ -183,27 +183,48 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             failure;
 
         success = function(r) {
-            var features = [];
+            var features = [],
+                pointFeatures = [];
 
             // Convert to GeoJSON features
-            for (var i = 0, prop, coord; i < r.length; i++) {
+            // TODO: Check util.geojson.decode in map.js
+
+            for (var i = 0, prop, type, coord, feature; i < r.length; i++) {
                 prop = r[i];
                 coord = JSON.parse(prop.co);
 
                 if (coord && coord.length) {
                     prop.name = prop.na;
 
-                    features.push({
+                    type = 'Point';
+                    if (prop.ty === 2) {
+                        type = 'Polygon';
+                        if (prop.co.substring(0, 4) === '[[[[') {
+                            type = 'MultiPolygon';
+                        }
+                    }
+
+                    feature = {
                         type: 'Feature',
                         id: prop.id,
                         properties: prop,
                         geometry: {
-                            type: 'MultiPolygon',
+                            type: type,
                             coordinates: coord
                         }
-                    });
+                    };
+
+                    if (type === 'Point') {
+                        pointFeatures.push(feature);
+                    } else {
+                        features.push(feature);
+                    }
                 }
             }
+
+            // Add points after polygons to make them render on top
+            // TODO: Should also be sorted
+            features.push.apply(features, pointFeatures);
 
             if (!features.length) {
                 gis.mask.hide();
@@ -304,7 +325,8 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                 featureMap = {},
                 valueMap = {},
                 ouIndex,
-                valueIndex;
+                valueIndex,
+                values = [];
 
             if (!response) {
                 gis.mask.hide();
@@ -341,15 +363,25 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
                 if (featureMap.hasOwnProperty(id) && valueMap.hasOwnProperty(id)) {
                     feature.properties.value = valueMap[id];
+                    values.push(valueMap[id]);
+                } else { // Remove feature without value
+                    feature.properties.value = 'No data';
                 }
             }
 
-            loadLegend(view, response.metaData, features);
+            // Sort values in ascending order
+            values.sort(function(a,b) {
+                return a - b;
+            });
+
+            loadLegend(view, response.metaData, features, values);
         };
+
+        // console.log("URL", gis.init.contextPath + '/api/analytics.json' + paramString);
 
         Ext.Ajax.request({
             url: gis.init.contextPath + '/api/analytics.json' + paramString,
-            disableCaching: false,
+            // disableCaching: false, // TODO: remove comment
             failure: function(r) {
                 gis.alert(r);
             },
@@ -359,7 +391,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         });
     };
 
-    loadLegend = function(view, metaData, features) {
+    loadLegend = function(view, metaData, features, values) {
         var bounds = [],
             colors = [],
             names = [],
@@ -410,6 +442,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             //console.log("###########", view.legendSet, view);
 
             // Classification options
+            // TODO: Should min/max value only be from facilities/points?
             var options = {
                 indicator: gis.conf.finals.widget.value,
                 // method: view.legendSet ? mapfish.GeoStat.Distribution.CLASSIFY_WITH_BOUNDS : view.method,
@@ -418,8 +451,12 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                 // colors: layer.core.getColors(view.colorLow, view.colorHigh),
                 colors: colors,
                 minSize: view.radiusLow,
-                maxSize: view.radiusHigh
+                maxSize: view.radiusHigh,
+                minValue: values[0],
+                maxValue: values[values.length - 1]
             };
+
+            //console.log("#######", values);
 
             layer.view = view;
             //layer.core.colorInterpolation = colors;
@@ -433,7 +470,6 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         loadLegendSet = function(view) {
             //console.log("loadLegendSet", view.legendSet);
-
 
             Ext.Ajax.request({
                 url: gis.init.contextPath + '/api/legendSets/' + view.legendSet.id + '.json?fields=' + gis.conf.url.legendSetFields.join(','),
@@ -548,7 +584,9 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
     // Assign color to feature based on value
     applyClassification = function(options, features) {
-        setClassification(options, features);
+        //setClassification(options, features);
+
+        //console.log("options", options);
 
         // TODO: Calculate radius
 
@@ -556,6 +594,9 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             prop = features[i].properties;
             value = prop[options.indicator];
             prop.color = options.colors[getClass(value, options.bounds)-1];
+
+            // TODO: Better way to calaculate radius?
+            prop.radius = (value - options.minValue) / (options.maxValue - options.minValue) * (options.maxSize - options.minSize) + options.minSize;
         }
     };
 
@@ -577,6 +618,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
     // Add layer to map
     updateMap = function(features) {
+
         var layerConfig = Ext.applyIf({
             data: features,
             label: '{na} ({value})'

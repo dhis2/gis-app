@@ -38,7 +38,7 @@ GIS.core.getLayers = function(gis) {
             config: {
                 type: 'points'
             },
-            getHandler: GIS.core.LayerHandlerEvent
+            handler: GIS.core.LayerHandlerEvent
         },
         facility: {
             id: 'facility',
@@ -47,7 +47,7 @@ GIS.core.getLayers = function(gis) {
             config: {
                 type: 'markers'
             },
-            getHandler: GIS.core.LayerHandlerFacility,
+            handler: GIS.core.LayerHandlerFacility,
             featureStore: Ext.create('Ext.data.Store', {
                 fields: ['id', 'name'],
                 features: [],
@@ -78,7 +78,7 @@ GIS.core.getLayers = function(gis) {
             config: {
                 type: 'boundary'
             },
-            getHandler: GIS.core.LayerHandlerBoundary,
+            handler: GIS.core.LayerHandlerBoundary,
             featureStore: Ext.create('Ext.data.Store', {
                 fields: ['id', 'name'],
                 features: [],
@@ -114,7 +114,7 @@ GIS.core.getLayers = function(gis) {
             config: {
                 type: 'choropleth'
             },
-            getHandler: GIS.core.LayerHandlerThematic
+            handler: GIS.core.LayerHandlerThematic
         };
     }
 

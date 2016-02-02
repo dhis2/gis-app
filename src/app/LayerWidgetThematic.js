@@ -1585,7 +1585,7 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
             legendSet,
             methodPanel,
             lowPanel,
-            highPanel,
+            highPanel
         ],
         listeners: {
             added: function() {

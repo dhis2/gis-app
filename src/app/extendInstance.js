@@ -415,6 +415,9 @@ GIS.app.extendInstance = function(gis) {
         };
 
         util.layout.getPluginConfig = function() {
+
+            console.log("#####", gis);
+
             var layers = gis.util.map.getVisibleVectorLayers(),
                 map = {};
 
@@ -599,47 +602,40 @@ GIS.app.extendInstance = function(gis) {
         layer.widget = GIS.app.LayerWidgetEvent(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer, gis.conf.layout.widget.window_width + 150, 1);
         layer.window.widget = layer.widget;
-        // GIS.core.createSelectHandlers(gis, layer); // TODO
 
         layer = gis.layer.facility;
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetFacility(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        // GIS.core.createSelectHandlers(gis, layer); // TODO
 
         layer = gis.layer.thematic1;
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetThematic(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        // GIS.core.createSelectHandlers(gis, layer); // TODO
 
         layer = gis.layer.thematic2;
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetThematic(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        // GIS.core.createSelectHandlers(gis, layer); // TODO
 
         layer = gis.layer.thematic3;
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetThematic(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
-        // GIS.core.createSelectHandlers(gis, layer); // TODO
 
         layer = gis.layer.thematic4;
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetThematic(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        // GIS.core.createSelectHandlers(gis, layer); // TODO
 
         layer = gis.layer.boundary;
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetBoundary(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        // GIS.core.createSelectHandlers(gis, layer); // TODO
     }());
 };

@@ -521,7 +521,7 @@ GIS.app.LayerWidgetBoundary = function(gis, layer) {
         layer.item.setValue(false);
 
         if (!layer.window.isRendered) {
-            layer.core.view = null;
+            layer.view = null;
             return;
         }
 

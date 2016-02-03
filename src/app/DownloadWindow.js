@@ -1,4 +1,4 @@
-GIS.app.DownloadWindow = function() {
+GIS.app.DownloadWindow = function(gis) {
     var window,
         format,
         name,

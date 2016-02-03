@@ -120,8 +120,6 @@ Ext.onReady( function() {
             pressed: true,
             menu: {},
             handler: function(b) {
-                console.log("defaultButton Handler disabled");
-                /*
                 b.menu = Ext.create('Ext.menu.Menu', {
                     closeAction: 'destroy',
                     shadow: false,
@@ -150,7 +148,6 @@ Ext.onReady( function() {
                 });
 
                 b.menu.show();
-                */
             }
         });
 
@@ -184,7 +181,8 @@ Ext.onReady( function() {
             iconCls: 'gis-menu-item-datasource',
             disabled: true,
             xable: function() {
-                if (gis.util.map.hasVisibleFeatures()) {
+                //if (gis.util.map.hasVisibleFeatures()) {
+                if (gis.instance.getLayersBounds().isValid()) {
                     this.enable();
                 }
                 else {
@@ -194,7 +192,6 @@ Ext.onReady( function() {
             handler: function() {
                 console.log('embed handler');
 
-                /*
                 var textArea,
                     window,
                     text = '',
@@ -273,8 +270,6 @@ Ext.onReady( function() {
                 });
 
                 window.show();
-                */
-
             }
         });
 
@@ -293,7 +288,6 @@ Ext.onReady( function() {
             handler: function() {
                 console.log('favorite handler');
 
-                /*
                 var url = gis.init.contextPath + '/dhis-web-mapping/index.html?id=' + gis.map.id,
                     textField,
                     window;
@@ -327,7 +321,6 @@ Ext.onReady( function() {
                 });
 
                 window.show();
-                */
             }
         });
 
@@ -345,7 +338,7 @@ Ext.onReady( function() {
             },
             handler: function() {
                 console.log('api url handler');
-                /*
+
                 var url = gis.init.contextPath + '/api/maps/' + gis.map.id + '/data',
                     textField,
                     window;
@@ -379,7 +372,6 @@ Ext.onReady( function() {
                 });
 
                 window.show();
-                */
             }
         });
 
@@ -417,16 +409,13 @@ Ext.onReady( function() {
             text: GIS.i18n.about,
             menu: {},
             handler: function() {
-                console.log("about handler");
-                /*
                 if (viewport.aboutWindow && viewport.aboutWindow.destroy) {
                     viewport.aboutWindow.destroy();
                     viewport.aboutWindow = null;
                 }
 
-                viewport.aboutWindow = GIS.app.AboutWindow();
+                viewport.aboutWindow = GIS.app.AboutWindow(gis);
                 viewport.aboutWindow.show();
-                */
             }
         });
 
@@ -511,15 +500,12 @@ Ext.onReady( function() {
                             text: GIS.i18n.legends,
                             menu: {},
                             handler: function() {
-                                console.log("legends handler");
-                                /*
                                 if (viewport.legendSetWindow && viewport.legendSetWindow.destroy) {
                                     viewport.legendSetWindow.destroy();
                                 }
 
-                                viewport.legendSetWindow = GIS.app.LegendSetWindow();
+                                viewport.legendSetWindow = GIS.app.LegendSetWindow(gis);
                                 viewport.legendSetWindow.show();
-                                */
                             }
                         });
                     }
@@ -528,23 +514,22 @@ Ext.onReady( function() {
                         height: 18,
                         style: 'border-color: transparent #d1d1d1 transparent transparent; margin-right: 4px',
                     });
+
+                    /* https://github.com/dhis2/dhis2-gis/issues/7
                     a.push({
                         text: GIS.i18n.download,
                         menu: {},
                         disabled: true,
                         handler: function() {
-                            console.log("download handler");
-                            /*
                             if (viewport.downloadWindow && viewport.downloadWindow.destroy) {
                                 viewport.downloadWindow.destroy();
                             }
 
-                            viewport.downloadWindow = GIS.app.DownloadWindow();
+                            viewport.downloadWindow = GIS.app.DownloadWindow(gis);
                             viewport.downloadWindow.show();
-                            */
                         },
                         xable: function() {
-                            if (gis.util.map.hasVisibleFeatures()) {
+                            if (gis.instance.getLayersBounds().isValid()) {
                                 this.enable();
                             }
                             else {
@@ -557,6 +542,8 @@ Ext.onReady( function() {
                             }
                         }
                     });
+                    */
+
                     a.push(shareButton);
                     a.push('->');
 
@@ -566,8 +553,6 @@ Ext.onReady( function() {
                         toggleGroup: 'module',
                         menu: {},
                         handler: function(b) {
-                            console.log("table handler");
-                            /*
                             b.menu = Ext.create('Ext.menu.Menu', {
                                 closeAction: 'destroy',
                                 shadow: false,
@@ -635,7 +620,7 @@ Ext.onReady( function() {
                                 ],
                                 listeners: {
                                     show: function() {
-                                        //gis.util.gui.window.setAnchorPosition(b.menu, b);
+                                        gis.util.gui.window.setAnchorPosition(b.menu, b);
                                     },
                                     hide: function() {
                                         b.menu.destroy();
@@ -648,7 +633,6 @@ Ext.onReady( function() {
                             });
 
                             b.menu.show();
-                            */
                         },
                         listeners: {
                             render: function() {
@@ -663,9 +647,6 @@ Ext.onReady( function() {
                         toggleGroup: 'module',
                         menu: {},
                         handler: function(b) {
-                            console.log('chart handler');
-
-                            /*
                             b.menu = Ext.create('Ext.menu.Menu', {
                                 closeAction: 'destroy',
                                 shadow: false,
@@ -746,7 +727,6 @@ Ext.onReady( function() {
                             });
 
                             b.menu.show();
-                            */
                         },
                         listeners: {
                             render: function() {
@@ -896,10 +876,8 @@ Ext.onReady( function() {
             }
         });
 
-
         onRender = function(vp) {
-            // gis.olmap.mask = Ext.create('Ext.LoadMask', centerRegion, {
-            gis.mask = Ext.create('Ext.LoadMask', centerRegion, { // TODO
+            gis.mask = Ext.create('Ext.LoadMask', centerRegion, {
                 msg: 'Loading'
             });
         };

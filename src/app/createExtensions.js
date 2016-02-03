@@ -115,11 +115,9 @@ GIS.app.createExtensions = function(gis) {
 
                         that.updateItem(value);
 
-                        /* TODO: Add
-                        if (gis.viewport) {
+                        if (gis.viewport && gis.viewport.downloadButton) {
                             gis.viewport.downloadButton.xable();
                         }
-                        */
                     }
                 }
             });

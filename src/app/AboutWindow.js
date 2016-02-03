@@ -1,4 +1,4 @@
-GIS.app.AboutWindow = function() {
+GIS.app.AboutWindow = function(gis) {
     return Ext.create('Ext.window.Window', {
         title: GIS.i18n.about,
         bodyStyle: 'background:#fff; padding:6px',

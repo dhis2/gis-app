@@ -1627,7 +1627,7 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
 
         // Components
         if (!layer.window.isRendered) {
-            layer.core.view = null;
+            layer.view = null;
             return;
         }
 

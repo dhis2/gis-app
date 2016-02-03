@@ -1,4 +1,4 @@
-GIS.app.LegendSetWindow = function() {
+GIS.app.LegendSetWindow = function(gis) {
 
     // Stores
     var legendSetStore,

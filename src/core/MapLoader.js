@@ -1,6 +1,7 @@
 GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 	var getMap,
 		setMap,
+		closeAllLayers,
 		afterLoad,
 		callBack,
 		register = [],
@@ -38,6 +39,7 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 				}
 			}
 
+			console.log("gis.map", r);
 			gis.map = r;
 			setMap();
 		};
@@ -98,7 +100,7 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 		views = Ext.Array.clean(views);
 
 		if (!views.length) {
-			gis.olmap.mask.hide();
+			gis.mask.hide();
 			return;
 		}
 
@@ -106,8 +108,7 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 			gis.viewport.favoriteWindow.destroy();
 		}
 
-		// TODO: Clear current leaflet map
-		//gis.olmap.closeAllLayers();
+		clearAllLayers(); //gis.olmap.closeAllLayers();
 
 		for (var i = 0, layout, layer; i < views.length; i++) {
 			layout = views[i];
@@ -117,6 +118,32 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 			handler.updateGui = !gis.el;
 			handler.callBack = callBack;
 			handler.load(layout);
+		}
+
+	};
+
+	// Replacement for gis.olmap.closeAllLayers()
+	clearAllLayers = function() {
+		var layer;
+
+		for (var type in gis.layer) {
+			if (gis.layer.hasOwnProperty(type)) {
+				layer = gis.layer[type];
+
+				// Only clear vector layers (overlays)
+				if (layer.layerType !== 'base') {
+
+					// Remove layer from map if exist
+					if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+						gis.instance.removeLayer(layer.instance);
+					}
+
+					// Reset layer widget
+					if (layer.widget) {
+						layer.widget.reset();
+					}
+				}
+			}
 		}
 	};
 

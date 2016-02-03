@@ -498,15 +498,12 @@ Ext.onReady( function() {
                         text: GIS.i18n.favorites,
                         menu: {},
                         handler: function() {
-                            console.log("favorites handler");
-                            /*
                             if (viewport.favoriteWindow && viewport.favoriteWindow.destroy) {
                                 viewport.favoriteWindow.destroy();
                             }
 
-                            viewport.favoriteWindow = GIS.app.FavoriteWindow();
+                            viewport.favoriteWindow = GIS.app.FavoriteWindow(gis);
                             viewport.favoriteWindow.show();
-                            */
                         }
                     });
                     if (gis.init.user.isAdmin) {

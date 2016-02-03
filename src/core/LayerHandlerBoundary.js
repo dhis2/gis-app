@@ -1,5 +1,5 @@
 GIS.core.LayerHandlerBoundary = function(gis, layer) {
-    var olmap = layer.map,
+    var //olmap = layer.map,
         compareView,
         loadOrganisationUnits,
         loadLegend,

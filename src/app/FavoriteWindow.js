@@ -1,4 +1,4 @@
-GIS.app.FavoriteWindow = function() {
+GIS.app.FavoriteWindow = function(gis) {
 
     // Objects
     var NameWindow,

@@ -338,7 +338,7 @@ GIS.app.FeatureContextMenu = function(gis, layer, instance) {
         }];
 
         if (view) {
-            handler = layer.getHandler(gis, layer);
+            handler = layer.handler(gis, layer);
             handler.updateGui = true;
             handler.zoomToVisibleExtent = true;
             handler.hideMask = true;

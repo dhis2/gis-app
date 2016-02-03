@@ -36,13 +36,9 @@ GIS.app.WidgetWindow = function(gis, layer, width, padding) {
                 if (!this.isRendered) {
                     this.isRendered = true;
 
-                    /* TODO: Check mapfish/core/GeoStat/all.js
-                       Set gui state from map view config (favorite)
-
-                    if (layer.core.view) {
-                        this.widget.setGui(layer.core.view);
+                    if (layer.view) {
+                        this.widget.setGui(layer.view);
                     }
-                    */
                 }
 
                 gis.util.gui.window.setPositionTopLeft(this);

@@ -1,7 +1,6 @@
 GIS.app.LayerWidgetBoundary = function(gis, layer) {
 
     var infrastructuralDataElementValuesStore,
-
         treePanel,
         userOrganisationUnit,
         userOrganisationUnitChildren,
@@ -12,22 +11,17 @@ GIS.app.LayerWidgetBoundary = function(gis, layer) {
         tool,
         toolPanel,
         organisationUnit,
-
         labelPanel,
         label,
-
         reset,
         setGui,
         getView,
         validateView,
-
         accordionBody,
         accordion,
-
         accordionPanels = [];
 
     // Stores
-
     infrastructuralDataElementValuesStore = Ext.create('Ext.data.Store', {
         fields: ['name', 'value'],
         sorters: [{
@@ -513,6 +507,7 @@ GIS.app.LayerWidgetBoundary = function(gis, layer) {
             }
         }
     });
+
     // Functions
 
     reset = function(skipTree) {
@@ -698,8 +693,6 @@ GIS.app.LayerWidgetBoundary = function(gis, layer) {
             }
         }
     });
-
-    //createSelectHandlers();
 
     return accordion;
 };

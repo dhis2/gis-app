@@ -25,7 +25,9 @@ GIS.app.FavoriteWindow = function(gis) {
         windowWidth = 500,
         windowCmpWidth = windowWidth - 14,
 
-        dimConf = gis.conf.finals.dimension;
+        dimConf = gis.conf.finals.dimension,
+
+        getRenderedVectorLayers;
 
     gis.store.maps.on('load', function(store, records) {
         var pager = store.proxy.reader.jsonData.pager;
@@ -47,6 +49,31 @@ GIS.app.FavoriteWindow = function(gis) {
             nextButton.disable();
         }
     });
+
+    getRenderedVectorLayers = function () {
+
+        // TODO: Support flexible layer ordering
+        var renderedLayers = [],
+            orderedLayers = [
+                gis.layer.boundary,
+                gis.layer.thematic4,
+                gis.layer.thematic3,
+                gis.layer.thematic2,
+                gis.layer.thematic1,
+                gis.layer.facility,
+                gis.layer.event
+            ];
+
+        for (var i = 0, layer; i < orderedLayers.length; i++) {
+            layer = orderedLayers[i];
+
+            if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+                renderedLayers.push(layer);
+            }
+        }
+
+        return renderedLayers;
+    };
 
     NameWindow = function(id) {
         var window,
@@ -70,11 +97,9 @@ GIS.app.FavoriteWindow = function(gis) {
             text: GIS.i18n.create,
             handler: function() {
                 var name = nameTextfield.getValue(),
-                    layers = gis.util.map.getRenderedVectorLayers(),
-                    centerPoint = function() {
-                        var lonlat = gis.olmap.getCenter();
-                        return new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat).transform('EPSG:900913', 'EPSG:4326');
-                    }(),
+                    //layers = gis.util.map.getRenderedVectorLayers(),
+                    layers = getRenderedVectorLayers(),
+                    centerPoint = gis.instance.getCenter(),
                     layer,
                     views = [],
                     view,
@@ -93,9 +118,10 @@ GIS.app.FavoriteWindow = function(gis) {
                 for (var i = 0; i < layers.length; i++) {
                     layer = layers[i];
 
-                    view = Ext.clone(layer.core.view);
+                    view = Ext.clone(layer.view);
 
-                    view.hidden = !layer.visibility;
+                    //view.hidden = !layer.visibility;
+                    view.hidden = !gis.instance.hasLayer(layer.instance);
 
                     // add
                     view.layer = layer.id;
@@ -108,9 +134,9 @@ GIS.app.FavoriteWindow = function(gis) {
 
                 map = {
                     name: name,
-                    longitude: centerPoint.x,
-                    latitude: centerPoint.y,
-                    zoom: gis.olmap.getZoom(),
+                    longitude: centerPoint.lng,
+                    latitude: centerPoint.lat,
+                    zoom: gis.instance.getZoom(),
                     mapViews: views,
                     user: {
                         id: 'currentUser'

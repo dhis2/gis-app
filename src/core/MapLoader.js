@@ -39,7 +39,6 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 				}
 			}
 
-			console.log("gis.map", r);
 			gis.map = r;
 			setMap();
 		};
@@ -108,7 +107,7 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 			gis.viewport.favoriteWindow.destroy();
 		}
 
-		clearAllLayers(); //gis.olmap.closeAllLayers();
+		clearAllLayers();
 
 		for (var i = 0, layout, layer; i < views.length; i++) {
 			layout = views[i];

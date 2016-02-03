@@ -327,6 +327,30 @@ GIS.core.getInstance = function(init) {
                 && coord[1] <= 90;
         };
 
+        // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
+        util.map.orderLayers = function() {
+            var visibleLayers = [];
+
+            // Remove layers
+            for (var i = 0, layer; i < gis.orderedLayers.length; i++) {
+                layer = gis.orderedLayers[i];
+
+                if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+                    gis.instance.removeLayer(layer.instance);
+                    visibleLayers.push(layer);
+                }
+            }
+
+            // Add layers in order
+            for (var i = 0, layer; i < gis.orderedLayers.length; i++) {
+                layer = gis.orderedLayers[i];
+
+                if (visibleLayers.indexOf(layer) !== -1) {
+                    gis.instance.addLayer(layer.instance);
+                }
+            }
+        };
+
         /*
         util.map.getVisibleVectorLayers = function() { // TODO
             var layers = [];
@@ -1193,6 +1217,9 @@ GIS.core.getInstance = function(init) {
     gis.instance = GIS.core.getMap(gis);
     gis.layer = GIS.core.getLayers(gis);
     gis.thematicLayers = [gis.layer.thematic1, gis.layer.thematic2, gis.layer.thematic3, gis.layer.thematic4];
+
+    // https://github.com/dhis2/dhis2-gis/issues/9
+    gis.orderedLayers = [gis.layer.boundary, gis.layer.thematic4, gis.layer.thematic3, gis.layer.thematic2, gis.layer.thematic1, gis.layer.facility, gis.layer.event];
 
     /*
     layers.push(

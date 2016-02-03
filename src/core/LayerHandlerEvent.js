@@ -211,6 +211,9 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
 
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);
+
+        // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
+        gis.util.map.orderLayers();
     };
 
     afterLoad = function(view) {

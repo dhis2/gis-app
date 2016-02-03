@@ -51,21 +51,10 @@ GIS.app.FavoriteWindow = function(gis) {
     });
 
     getRenderedVectorLayers = function () {
+        var renderedLayers = [];
 
-        // TODO: Support flexible layer ordering
-        var renderedLayers = [],
-            orderedLayers = [
-                gis.layer.boundary,
-                gis.layer.thematic4,
-                gis.layer.thematic3,
-                gis.layer.thematic2,
-                gis.layer.thematic1,
-                gis.layer.facility,
-                gis.layer.event
-            ];
-
-        for (var i = 0, layer; i < orderedLayers.length; i++) {
-            layer = orderedLayers[i];
+        for (var i = 0, layer; i < gis.orderedLayers.length; i++) {
+            layer = gis.orderedLayers[i];
 
             if (layer.instance && gis.instance.hasLayer(layer.instance)) {
                 renderedLayers.push(layer);

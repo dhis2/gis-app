@@ -35,6 +35,7 @@ GIS.core.getLayers = function(gis) {
             id: 'event',
             name: GIS.i18n.event_layer,
             layerOpacity: 0.8,
+            zIndex: 160,
             config: {
                 type: 'points'
             },
@@ -44,6 +45,7 @@ GIS.core.getLayers = function(gis) {
             id: 'facility',
             name: GIS.i18n.facility_layer,
             layerOpacity: 1,
+            zIndex: 150,
             config: {
                 type: 'markers'
             },
@@ -75,6 +77,7 @@ GIS.core.getLayers = function(gis) {
             id: 'boundary',
             name: GIS.i18n.boundary_layer,
             layerOpacity: 1,
+            zIndex: 100,
             config: {
                 type: 'boundary'
             },
@@ -111,6 +114,7 @@ GIS.core.getLayers = function(gis) {
             id: 'thematic' + number,
             name: GIS.i18n.thematic_layer + ' ' + number,
             layerOpacity: 0.8,
+            zIndex: 110 + (i * 10),
             config: {
                 type: 'choropleth'
             },

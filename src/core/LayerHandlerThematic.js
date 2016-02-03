@@ -631,6 +631,9 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         layer.instance = gis.instance.addLayer(layerConfig);
 
+        // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
+        gis.util.map.orderLayers();
+
         // TODO: Remember to remove events
         layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);

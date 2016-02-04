@@ -1,6 +1,5 @@
 GIS.core.LayerHandlerBoundary = function(gis, layer) {
-    var //olmap = layer.map,
-        compareView,
+    var compareView,
         loadOrganisationUnits,
         loadLegend,
         loadData,
@@ -171,6 +170,7 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
                 }
             }
 
+            // Store features for search
             layer.featureStore.loadFeatures(features);
             layer.features = features;
 

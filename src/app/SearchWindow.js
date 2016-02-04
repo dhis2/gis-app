@@ -22,7 +22,7 @@ GIS.app.SearchWindow = function(gis, layer) {
         value: '0000ff'
     });
     */
-
+    
     window = Ext.create('Ext.window.Window', {
         title: GIS.i18n.organisationunit_search,
         iconCls: 'gis-window-title-icon-search',

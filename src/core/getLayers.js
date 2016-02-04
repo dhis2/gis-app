@@ -57,7 +57,7 @@ GIS.core.getLayers = function(gis) {
                     if (features && features.length) {
                         var data = [];
                         for (var i = 0; i < features.length; i++) {
-                            data.push([features[i].id, features[i].properties.na]);
+                            data.push([features[i].id, features[i].properties.name]);
                         }
                         this.loadData(data);
                         this.sortStore();
@@ -89,7 +89,7 @@ GIS.core.getLayers = function(gis) {
                     if (features && features.length) {
                         var data = [];
                         for (var i = 0; i < features.length; i++) {
-                            data.push([features[i].id, features[i].properties.na]);
+                            data.push([features[i].id, features[i].properties.name]);
                         }
                         this.loadData(data);
                         this.sortStore();

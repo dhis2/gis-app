@@ -1,4 +1,4 @@
-GIS.app.SharingWindow = function(sharing) {
+GIS.app.SharingWindow = function(gis, sharing) {
 
     // Objects
     var UserGroupRow,

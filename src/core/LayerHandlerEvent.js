@@ -1,5 +1,4 @@
 GIS.core.LayerHandlerEvent = function(gis, layer) {
-
     var compareView,
         loadOrganisationUnits,
         loadData,
@@ -217,6 +216,8 @@ GIS.core.LayerHandlerEvent = function(gis, layer) {
     };
 
     afterLoad = function(view) {
+
+        layer.view = view;
 
         // Layer
         if (layer.item) {

@@ -86,7 +86,6 @@ GIS.app.FavoriteWindow = function(gis) {
             text: GIS.i18n.create,
             handler: function() {
                 var name = nameTextfield.getValue(),
-                    //layers = gis.util.map.getRenderedVectorLayers(),
                     layers = getRenderedVectorLayers(),
                     centerPoint = gis.instance.getCenter(),
                     layer,
@@ -109,7 +108,6 @@ GIS.app.FavoriteWindow = function(gis) {
 
                     view = Ext.clone(layer.view);
 
-                    //view.hidden = !layer.visibility;
                     view.hidden = !gis.instance.hasLayer(layer.instance);
 
                     // add
@@ -346,28 +344,28 @@ GIS.app.FavoriteWindow = function(gis) {
                             var record = this.up('grid').store.getAt(rowIndex),
                                 layers,
                                 layer,
-                                lonlat,
+                                centerPoint,
                                 views,
                                 view,
                                 map,
                                 message;
 
                             if (record.data.access.update) {
-                                layers = gis.util.map.getRenderedVectorLayers();
+                                layers = getRenderedVectorLayers();
                                 message = 'Overwrite favorite?\n\n' + record.data.name;
 
                                 if (layers.length) {
                                     if (confirm(message)) {
-                                        lonlat = gis.olmap.getCenter();
+                                        centerPoint = gis.instance.getCenter(),
                                         views = [];
 
                                         for (var i = 0; i < layers.length; i++) {
                                             layer = layers[i];
-                                            view = layer.core.view;
+                                            view = layer.view;
 
                                             // add
                                             view.layer = layer.id;
-                                            view.hidden = !layer.visibility;
+                                            view.hidden = !gis.instance.hasLayer(layer.instance);
 
                                             // remove
                                             delete view.periodType;
@@ -376,9 +374,9 @@ GIS.app.FavoriteWindow = function(gis) {
                                         }
 
                                         map = {
-                                            longitude: lonlat.lon,
-                                            latitude: lonlat.lat,
-                                            zoom: gis.olmap.getZoom(),
+                                            longitude: centerPoint.lng,
+                                            latitude: centerPoint.lat,
+                                            zoom: gis.instance.getZoom(),
                                             mapViews: views
                                         };
 
@@ -418,7 +416,7 @@ GIS.app.FavoriteWindow = function(gis) {
                                     },
                                     success: function(r) {
                                         var sharing = Ext.decode(r.responseText),
-                                            window = GIS.app.SharingWindow(sharing);
+                                            window = GIS.app.SharingWindow(gis, sharing);
                                         window.show();
                                     }
                                 });

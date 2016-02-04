@@ -366,19 +366,7 @@ GIS.core.getInstance = function(init) {
             return layers;
         };
 
-        /*
-        util.map.getRenderedVectorLayers = function() {
-            var layers = [];
 
-            for (var i = 0, layer; i < gis.olmap.layers.length; i++) {
-                layer = gis.olmap.layers[i];
-                if (layer.layerType === conf.finals.layer.type_vector && layer.features.length) {
-                    layers.push(layer);
-                }
-            }
-            return layers;
-        };
-        */
 
         /*
         util.map.getExtendedBounds = function(layers) {
@@ -443,6 +431,71 @@ GIS.core.getInstance = function(init) {
 
         util.geojson = {};
 
+        // Convert to GeoJSON features
+        util.geojson.decode = function(organisationUnits, levelOrder) {
+            var features = [];
+
+            levelOrder = levelOrder || 'ASC';
+
+            // sort
+            util.array.sort(organisationUnits, levelOrder, 'le');
+
+            for (var i = 0, ou, coord, gpid = '', gppg = '', type; i < organisationUnits.length; i++) {
+                ou = organisationUnits[i];
+                coord = JSON.parse(ou.co);
+
+                // Only add features with coordinates
+                if (coord && coord.length) {
+                    type = 'Point';
+                    if (ou.ty === 2) {
+                        type = 'Polygon';
+                        if (ou.co.substring(0, 4) === '[[[[') {
+                            type = 'MultiPolygon';
+                        }
+                    }
+
+                    // grand parent
+                    if (Ext.isString(ou.pg) && ou.pg.length) {
+                        var ids = Ext.Array.clean(ou.pg.split('/'));
+
+                        // grand parent id
+                        if (ids.length >= 2) {
+                            gpid = ids[ids.length - 2];
+                        }
+
+                        // grand parent parentgraph
+                        if (ids.length > 2) {
+                            gppg = '/' + ids.slice(0, ids.length - 2).join('/');
+                        }
+                    }
+
+                    features.push({
+                        type: 'Feature',
+                        id: ou.id,
+                        geometry: {
+                            type: type,
+                            coordinates: coord
+                        },
+                        properties: {
+                            id: ou.id,
+                            name: ou.na,
+                            hasCoordinatesDown: ou.hcd,
+                            hasCoordinatesUp: ou.hcu,
+                            level: ou.le,
+                            grandParentParentGraph: gppg,
+                            grandParentId: gpid,
+                            parentGraph: ou.pg,
+                            parentId: ou.pi,
+                            parentName: ou.pn
+                        }
+                    });
+                }
+            }
+
+            return features;
+        };
+
+        /*
         util.geojson.decode = function(organisationUnits, levelOrder) {
             var geojson = {
                 type: 'FeatureCollection',
@@ -501,6 +554,7 @@ GIS.core.getInstance = function(init) {
 
             return geojson;
         };
+        */
 
         util.gui = {};
         util.gui.combo = {};

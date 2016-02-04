@@ -93,12 +93,12 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
             failure;
 
         success = function(r) {
-            var colors = ['black', 'blue', 'red', 'green', 'yellow'],
+            var features = gis.util.geojson.decode(r, 'DESC'),
+                colors = ['black', 'blue', 'red', 'green', 'yellow'],
                 weights = [2, 1, 0.75, 0.5, 0.5],
                 levels = [],
                 levelStyle = {},
-                levelOrder = 'ASC',
-                features = [];
+                levelOrder = 'ASC';
 
             if (!r.length) {
                 gis.mask.hide();
@@ -119,55 +119,13 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
                 };
             }
 
-            // Convert to GeoJSON features
-            for (var i = 0, ou, coord, gpid = '', gppg = ''; i < r.length; i++) {
-                ou = r[i];
-                coord = JSON.parse(ou.co);
-
-                // Only add features with coordinates
-                if (coord) {
-
-                    // grand parent
-                    if (Ext.isString(ou.pg) && ou.pg.length) {
-                        var ids = Ext.Array.clean(ou.pg.split('/'));
-
-                        // grand parent id
-                        if (ids.length >= 2) {
-                            gpid = ids[ids.length - 2];
-                        }
-
-                        // grand parent parentgraph
-                        if (ids.length > 2) {
-                            gppg = '/' + ids.slice(0, ids.length - 2).join('/');
-                        }
-                    }
-
-                    features.push({
-                        type: 'Feature',
-                        id: ou.id,
-                        //properties: prop,
-                        geometry: {
-                            type: (ou.ty === 1 ? 'Point' : 'MultiPolygon'),
-                            coordinates: coord
-                        },
-                        properties: {
-                            id: ou.id,
-                            name: ou.na,
-                            hasCoordinatesDown: ou.hcd,
-                            hasCoordinatesUp: ou.hcu,
-                            level: ou.le,
-                            grandParentParentGraph: gppg,
-                            grandParentId: gpid,
-                            parentGraph: ou.pg,
-                            parentId: ou.pi,
-                            parentName: ou.pn,
-                            style: levelStyle[ou.le],
-                            labelStyle: {
-                                paddingTop: (ou.ty === 1 ? '15px' : '0')
-                            }
-                        }
-                    });
-                }
+            // Apply feature styles
+            for (var i = 0, feature; i < features.length; i++) {
+                feature = features[i];
+                feature.properties.style = levelStyle[feature.properties.level];
+                feature.properties.labelStyle = {
+                    paddingTop: (feature.geometry.type === 'Point' ? '15px' : '0')
+                };
             }
 
             // Store features for search

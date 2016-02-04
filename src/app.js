@@ -164,14 +164,12 @@ Ext.onReady( function() {
                 }
             },
             handler: function() {
-                console.log("interpration handler");
-
                 if (viewport.interpretationWindow) {
                     viewport.interpretationWindow.destroy();
                     viewport.interpretationWindow = null;
                 }
 
-                viewport.interpretationWindow = GIS.app.InterpretationWindow();
+                viewport.interpretationWindow = GIS.app.InterpretationWindow(gis);
                 viewport.interpretationWindow.show();
             }
         });
@@ -181,7 +179,6 @@ Ext.onReady( function() {
             iconCls: 'gis-menu-item-datasource',
             disabled: true,
             xable: function() {
-                //if (gis.util.map.hasVisibleFeatures()) {
                 if (gis.instance.getLayersBounds().isValid()) {
                     this.enable();
                 }
@@ -286,8 +283,6 @@ Ext.onReady( function() {
                 }
             },
             handler: function() {
-                console.log('favorite handler');
-
                 var url = gis.init.contextPath + '/dhis-web-mapping/index.html?id=' + gis.map.id,
                     textField,
                     window;
@@ -337,8 +332,6 @@ Ext.onReady( function() {
                 }
             },
             handler: function() {
-                console.log('api url handler');
-
                 var url = gis.init.contextPath + '/api/maps/' + gis.map.id + '/data',
                     textField,
                     window;

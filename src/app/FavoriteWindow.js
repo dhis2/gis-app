@@ -50,20 +50,6 @@ GIS.app.FavoriteWindow = function(gis) {
         }
     });
 
-    getRenderedVectorLayers = function () {
-        var renderedLayers = [];
-
-        for (var i = 0, layer; i < gis.orderedLayers.length; i++) {
-            layer = gis.orderedLayers[i];
-
-            if (layer.instance && gis.instance.hasLayer(layer.instance)) {
-                renderedLayers.push(layer);
-            }
-        }
-
-        return renderedLayers;
-    };
-
     NameWindow = function(id) {
         var window,
             record = gis.store.maps.getById(id);
@@ -86,7 +72,7 @@ GIS.app.FavoriteWindow = function(gis) {
             text: GIS.i18n.create,
             handler: function() {
                 var name = nameTextfield.getValue(),
-                    layers = getRenderedVectorLayers(),
+                    layers = gis.util.map.getVisibleVectorLayers(),
                     centerPoint = gis.instance.getCenter(),
                     layer,
                     views = [],

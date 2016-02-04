@@ -351,19 +351,20 @@ GIS.core.getInstance = function(init) {
             }
         };
 
-        /*
-        util.map.getVisibleVectorLayers = function() { // TODO
+
+        util.map.getVisibleVectorLayers = function() {
             var layers = [];
 
-            for (var i = 0, layer; i < gis.olmap.layers.length; i++) {
-                layer = gis.olmap.layers[i];
-                if (layer.layerType === conf.finals.layer.type_vector && layer.visibility && layer.features.length) {
+            for (var i = 0, layer; i < gis.orderedLayers.length; i++) {
+                layer = gis.orderedLayers[i];
+
+                if (layer.instance && gis.instance.hasLayer(layer.instance)) {
                     layers.push(layer);
                 }
             }
+
             return layers;
         };
-        */
 
         /*
         util.map.getRenderedVectorLayers = function() {

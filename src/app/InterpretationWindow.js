@@ -1,4 +1,4 @@
-GIS.app.InterpretationWindow = function() {
+GIS.app.InterpretationWindow = function(gis) {
     var textArea,
         shareButton,
         window;

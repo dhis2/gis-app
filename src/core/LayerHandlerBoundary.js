@@ -93,7 +93,7 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
             failure;
 
         success = function(r) {
-            var features = gis.util.geojson.decode(r, 'DESC'),
+            var features = gis.util.geojson.decode(r, 'ASC'),
                 colors = ['black', 'blue', 'red', 'green', 'yellow'],
                 weights = [2, 1, 0.75, 0.5, 0.5],
                 levels = [],
@@ -129,7 +129,7 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
             }
 
             // Store features for search
-            layer.featureStore.loadFeatures(features);
+            layer.featureStore.loadFeatures(features.slice(0));
             layer.features = features;
 
             loadData(view, features);

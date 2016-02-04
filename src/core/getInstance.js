@@ -495,67 +495,6 @@ GIS.core.getInstance = function(init) {
             return features;
         };
 
-        /*
-        util.geojson.decode = function(organisationUnits, levelOrder) {
-            var geojson = {
-                type: 'FeatureCollection',
-                crs: {
-                    type: 'EPSG',
-                    properties: {
-                        code: '4326'
-                    }
-                },
-                features: []
-            };
-
-            levelOrder = levelOrder || 'ASC';
-
-            // sort
-            util.array.sort(organisationUnits, levelOrder, 'le');
-
-            for (var i = 0, ou, gpid = '', gppg = ''; i < organisationUnits.length; i++) {
-                ou = organisationUnits[i];
-
-                // grand parent
-                if (Ext.isString(ou.pg) && ou.pg.length) {
-                    var ids = Ext.Array.clean(ou.pg.split('/'));
-
-                    // grand parent id
-                    if (ids.length >= 2) {
-                        gpid = ids[ids.length - 2];
-                    }
-
-                    // grand parent parentgraph
-                    if (ids.length > 2) {
-                        gppg = '/' + ids.slice(0, ids.length - 2).join('/');
-                    }
-                }
-
-                geojson.features.push({
-                    type: 'Feature',
-                    geometry: {
-                        type: parseInt(ou.ty) === 1 ? 'Point' : 'MultiPolygon',
-                        coordinates: JSON.parse(ou.co)
-                    },
-                    properties: {
-                        id: ou.id,
-                        name: ou.na,
-                        hasCoordinatesDown: ou.hcd,
-                        hasCoordinatesUp: ou.hcu,
-                        level: ou.le,
-                        grandParentParentGraph: gppg,
-                        grandParentId: gpid,
-                        parentGraph: ou.pg,
-                        parentId: ou.pi,
-                        parentName: ou.pn
-                    }
-                });
-            }
-
-            return geojson;
-        };
-        */
-
         util.gui = {};
         util.gui.combo = {};
 

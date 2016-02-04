@@ -183,48 +183,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             failure;
 
         success = function(r) {
-            var features = [],
-                pointFeatures = [];
-
-            // Convert to GeoJSON features
-            // TODO: Check util.geojson.decode in map.js
-
-            for (var i = 0, prop, type, coord, feature; i < r.length; i++) {
-                prop = r[i];
-                coord = JSON.parse(prop.co);
-
-                if (coord && coord.length) {
-                    prop.name = prop.na;
-
-                    type = 'Point';
-                    if (prop.ty === 2) {
-                        type = 'Polygon';
-                        if (prop.co.substring(0, 4) === '[[[[') {
-                            type = 'MultiPolygon';
-                        }
-                    }
-
-                    feature = {
-                        type: 'Feature',
-                        id: prop.id,
-                        properties: prop,
-                        geometry: {
-                            type: type,
-                            coordinates: coord
-                        }
-                    };
-
-                    if (type === 'Point') {
-                        pointFeatures.push(feature);
-                    } else {
-                        features.push(feature);
-                    }
-                }
-            }
-
-            // Add points after polygons to make them render on top
-            // TODO: Should also be sorted
-            features.push.apply(features, pointFeatures);
+            var features = gis.util.geojson.decode(r, 'ASC');
 
             if (!features.length) {
                 gis.mask.hide();
@@ -232,7 +191,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                 return;
             }
 
-            // layer.core.featureStore.loadFeatures(features.slice(0)); // TODO
+            layer.featureStore.loadFeatures(features.slice(0));
 
             loadData(view, features);
         };
@@ -621,7 +580,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         var layerConfig = Ext.applyIf({
             data: features,
-            label: '{na} ({value})'
+            label: '{name} ({value})'
         }, layer.config);
 
         // Remove layer instance if already exist

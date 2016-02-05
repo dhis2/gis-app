@@ -1,4 +1,4 @@
-GIS.app.FilterWindow = function(layer) {
+GIS.app.FilterWindow = function(gis, layer) {
     var lowerNumberField,
         greaterNumberField,
         lt,
@@ -10,7 +10,7 @@ GIS.app.FilterWindow = function(layer) {
         cls: 'gis-numberfield',
         fieldLabel: 'Greater than',
         width: 200,
-        value: parseInt(layer.core.minVal),
+        value: layer.minValue,
         listeners: {
             change: function() {
                 gt = this.getValue();
@@ -23,7 +23,7 @@ GIS.app.FilterWindow = function(layer) {
         fieldLabel: 'And/or lower than',
         style: 'margin-bottom: 0',
         width: 200,
-        value: parseInt(layer.core.maxVal) + 1,
+        value: layer.maxValue + 1,
         listeners: {
             change: function() {
                 lt = this.getValue();
@@ -32,7 +32,7 @@ GIS.app.FilterWindow = function(layer) {
     });
 
     filter = function() {
-        var cache = layer.core.featureStore.features.slice(0),
+        var cache = layer.featureStore.features.slice(0),
             features = [];
 
         if (!gt && !lt) {
@@ -40,34 +40,34 @@ GIS.app.FilterWindow = function(layer) {
         }
         else if (gt && lt) {
             for (var i = 0; i < cache.length; i++) {
-                if (gt < lt && (cache[i].attributes.value > gt && cache[i].attributes.value < lt)) {
+                if (gt < lt && (cache[i].properties.value > gt && cache[i].properties.value < lt)) {
                     features.push(cache[i]);
                 }
-                else if (gt > lt && (cache[i].attributes.value > gt || cache[i].attributes.value < lt)) {
+                else if (gt > lt && (cache[i].properties.value > gt || cache[i].properties.value < lt)) {
                     features.push(cache[i]);
                 }
-                else if (gt === lt && cache[i].attributes.value === gt) {
+                else if (gt === lt && cache[i].properties.value === gt) {
                     features.push(cache[i]);
                 }
             }
         }
         else if (gt && !lt) {
             for (var i = 0; i < cache.length; i++) {
-                if (cache[i].attributes.value > gt) {
+                if (cache[i].properties.value > gt) {
                     features.push(cache[i]);
                 }
             }
         }
         else if (!gt && lt) {
             for (var i = 0; i < cache.length; i++) {
-                if (cache[i].attributes.value < lt) {
+                if (cache[i].properties.value < lt) {
                     features.push(cache[i]);
                 }
             }
         }
 
-        layer.removeAllFeatures();
-        layer.addFeatures(features);
+        layer.instance.clearLayers();
+        layer.instance.addData(features);
     };
 
     window = Ext.create('Ext.window.Window', {
@@ -88,36 +88,6 @@ GIS.app.FilterWindow = function(layer) {
             },
             greaterNumberField,
             lowerNumberField
-            //{
-            //layout: 'column',
-            //height: 22,
-            //cls: 'gis-container-inner',
-            //items: [
-            //{
-            //cls: 'gis-panel-html-label',
-            //html: 'Greater than:',
-            //width: gis.conf.layout.tool.item_width - gis.conf.layout.tool.itemlabel_width
-            //},
-            //greaterNumberField
-            //]
-            //},
-            //{
-            //cls: 'gis-panel-html-separator'
-            //},
-            //{
-            //layout: 'column',
-            //height: 22,
-            //cls: 'gis-container-inner',
-            //items: [
-            //{
-            //cls: 'gis-panel-html-label',
-            //html: 'And/or lower than:',
-            //width: gis.conf.layout.tool.item_width - gis.conf.layout.tool.itemlabel_width
-            //},
-            //lowerNumberField
-            //]
-            //}
-            //]
         ],
         bbar: [
             '->',
@@ -134,8 +104,8 @@ GIS.app.FilterWindow = function(layer) {
                 gis.util.gui.window.setPositionTopLeft(this);
             },
             destroy: function() {
-                layer.removeAllFeatures();
-                layer.addFeatures(layer.core.featureStore.features);
+                layer.instance.clearLayers();
+                layer.instance.addData(layer.featureStore.features);
             }
         }
     });

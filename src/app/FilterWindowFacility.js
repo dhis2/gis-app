@@ -1,4 +1,4 @@
-GIS.app.FilterWindowFacility = function(layer) {
+GIS.app.FilterWindowFacility = function(gis, layer) {
     var window,
         multiSelect,
         button,

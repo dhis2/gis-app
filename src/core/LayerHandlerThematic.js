@@ -1,6 +1,5 @@
 GIS.core.LayerHandlerThematic = function(gis, layer) {
-    var olmap = layer.map,
-        compareView,
+    var compareView,
         loadOrganisationUnits,
         addData,
         loadLegend,
@@ -120,25 +119,6 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             return gis.conf.finals.widget.loadtype_organisationunit;
         }
 
-        // legend
-        //if (typeof view.legendSet !== typeof src.legendSet) {
-            //if (doExecute) {
-                //loadLegend(view);
-            //}
-            //return gis.conf.finals.widget.loadtype_legend;
-        //}
-        //else if (view.classes !== src.classes ||
-            //view.method !== src.method ||
-            //view.colorLow !== src.colorLow ||
-            //view.radiusLow !== src.radiusLow ||
-            //view.colorHigh !== src.colorHigh ||
-            //view.radiusHigh !== src.radiusHigh) {
-                //if (doExecute) {
-                    //loadLegend(view);
-                //}
-                //return gis.conf.finals.widget.loadtype_legend;
-        //}
-
         // if no changes - reload legend but do not zoom
         if (doExecute) {
             loader.zoomToVisibleExtent = false;
@@ -192,12 +172,13 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             }
 
             layer.featureStore.loadFeatures(features.slice(0));
+            layer.features = features;
 
             loadData(view, features);
         };
 
         failure = function() {
-            olmap.mask.hide();
+            gis.mask.hide();
             gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
         };
 
@@ -214,8 +195,12 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
     };
 
     loadData = function(view, features) {
-        var success,
-            dimConf = gis.conf.finals.dimension,
+        var success;
+
+        view = view || layer.view;
+        features = features || layer.featureStore.features;
+
+        var dimConf = gis.conf.finals.dimension,
             paramString = '?',
             dxItems = view.columns[0].items,
             isOperand = view.columns[0].dimension === dimConf.operand.objectName,
@@ -278,14 +263,13 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         }
 
         success = function(json) {
-            var layerConfig;
-
             var response = gis.api.response.Response(json), // validate
                 featureMap = {},
                 valueMap = {},
                 ouIndex,
                 valueIndex,
-                values = [];
+                valueFeatures = [], // only include features with values
+                values = []; // to find min and max values
 
             if (!response) {
                 gis.mask.hide();
@@ -322,9 +306,8 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
                 if (featureMap.hasOwnProperty(id) && valueMap.hasOwnProperty(id)) {
                     feature.properties.value = valueMap[id];
+                    valueFeatures.push(feature);
                     values.push(valueMap[id]);
-                } else { // Remove feature without value
-                    feature.properties.value = 'No data';
                 }
             }
 
@@ -333,14 +316,12 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                 return a - b;
             });
 
-            loadLegend(view, response.metaData, features, values);
+            loadLegend(view, response.metaData, valueFeatures, values);
         };
-
-        // console.log("URL", gis.init.contextPath + '/api/analytics.json' + paramString);
 
         Ext.Ajax.request({
             url: gis.init.contextPath + '/api/analytics.json' + paramString,
-            // disableCaching: false, // TODO: remove comment
+            disableCaching: false,
             failure: function(r) {
                 gis.alert(r);
             },
@@ -355,21 +336,11 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             colors = [],
             names = [],
             legends = [],
-
+            count = {}, // number in each class
             addNames,
             fn;
 
-        //view = view || layer.core.view;
-
-        // labels
-        /*
-        for (var i = 0, feature; i < layer.features.length; i++) {
-            attr = layer.features[i].attributes;
-            attr.label = view.labels ? attr.name + ' (' + attr.value + ')' : '';
-        }
-        */
-
-        // layer.styleMap = GIS.core.StyleMap(view);
+        view = view || layer.view;
 
         addNames = function() {
             var dimensions = Ext.Array.clean([].concat(view.columns || [], view.rows || [], view.filters || [])),
@@ -398,26 +369,24 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         fn = function() {
             addNames();
 
-            //console.log("###########", view.legendSet, view);
-
             // Classification options
-            // TODO: Should min/max value only be from facilities/points?
             var options = {
                 indicator: gis.conf.finals.widget.value,
-                // method: view.legendSet ? mapfish.GeoStat.Distribution.CLASSIFY_WITH_BOUNDS : view.method,
+                method: view.legendSet ? 1 : view.method, // 1 = classify with bounds
                 numClasses: view.classes,
                 bounds: bounds,
                 // colors: layer.core.getColors(view.colorLow, view.colorHigh),
                 colors: colors,
+                count: count,
                 minSize: view.radiusLow,
                 maxSize: view.radiusHigh,
                 minValue: values[0],
                 maxValue: values[values.length - 1]
             };
 
-            //console.log("#######", values);
-
             layer.view = view;
+            layer.minValue = options.minValue;
+            layer.maxValue = options.maxValue;
             //layer.core.colorInterpolation = colors;
             //layer.core.applyClassification(options);
 
@@ -428,8 +397,6 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         };
 
         loadLegendSet = function(view) {
-            //console.log("loadLegendSet", view.legendSet);
-
             Ext.Ajax.request({
                 url: gis.init.contextPath + '/api/legendSets/' + view.legendSet.id + '.json?fields=' + gis.conf.url.legendSetFields.join(','),
                 scope: this,
@@ -444,13 +411,11 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                     for (var i = 0; i < legends.length; i++) {
                         if (bounds[bounds.length - 1] !== legends[i].startValue) {
                             if (bounds.length !== 0) {
-                                //colors.push(new mapfish.ColorRgb(240,240,240));
+                                colors.push('#F0F0F0');
                                 names.push('');
                             }
                             bounds.push(legends[i].startValue);
                         }
-                        //colors.push(new mapfish.ColorRgb());
-                        //colors[colors.length - 1].setFromHex(legends[i].color);
                         colors.push(legends[i].color);
                         names.push(legends[i].name);
                         bounds.push(legends[i].endValue);
@@ -459,7 +424,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                     view.legendSet.names = names;
                     view.legendSet.bounds = bounds;
                     view.legendSet.colors = colors;
-
+                    view.legendSet.count = count;
                 },
                 callback: function() {
                     fn();
@@ -511,7 +476,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
     setClassification = function(options, features) {
 
-        //console.log("setClassification", options, features);
+        console.log("setClassification", options, features);
 
         var values = [];
         for (var i = 0; i < features.length; i++) {
@@ -540,22 +505,21 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         */
     };
 
-
     // Assign color to feature based on value
     applyClassification = function(options, features) {
-        //setClassification(options, features);
-
-        //console.log("options", options);
-
-        // TODO: Calculate radius
-
-        for (var i = 0, prop, value; i < features.length; i++) {
+        for (var i = 0, prop, value, classNumber; i < features.length; i++) {
             prop = features[i].properties;
             value = prop[options.indicator];
-            prop.color = options.colors[getClass(value, options.bounds)-1];
-
-            // TODO: Better way to calaculate radius?
+            classNumber = getClass(value, options.bounds);
+            prop.color = options.colors[classNumber - 1];
             prop.radius = (value - options.minValue) / (options.maxValue - options.minValue) * (options.maxSize - options.minSize) + options.minSize;
+
+            // Count features in each class
+            if (!options.count[classNumber]) {
+                options.count[classNumber] = 1;
+            } else {
+                options.count[classNumber]++;
+            }
         }
     };
 
@@ -645,28 +609,23 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         child.style.clear = "left";
         element.appendChild(child);
 
-        //console.log(options, legendNames);
-
         // legends
         if (view.legendSet) {
-            for (var i = 0; i < bounds.length - 1; i++) {
-                var name = 'abc';
+            for (var i = 0, name, label; i < bounds.length - 1; i++) {
+                name = legendNames[i];
+                label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + options.count[i + 1] + ')';
 
                 child = document.createElement('div');
-                //child.style.backgroundColor = this.colorInterpolation[i].toHexString();
                 child.style.backgroundColor = colors[i];
                 child.style.width = style.colorWidth;
-                child.style.height = legendNames[i] ? '25px' : style.colorHeight;
-                //child.style.height = name ? '25px' : style.colorHeight;
+                child.style.height = name ? '25px' : style.colorHeight;
                 child.style.cssFloat = 'left';
                 child.style.marginRight = style.colorMarginRight;
                 element.appendChild(child);
 
                 child = document.createElement('div');
-                child.style.lineHeight = legendNames[i] ? '12px' : '7px';
-                //child.style.lineHeight = name ? '12px' : '7px';
-                child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (legendNames[i] || '') + '</b><br/>' + '123'; // + this.classification.bins[i].label;
-                //child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (name || '') + '</b><br/>' + '123';
+                child.style.lineHeight = name ? '12px' : '7px';
+                child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (name || '') + '</b><br/>' + label;
                 element.appendChild(child);
 
                 child = document.createElement('div');
@@ -807,7 +766,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         }
 
         // Layer
-        layer.instance.setOpacity(view.opacity); // TODO
+        layer.instance.setOpacity(view.opacity);
 
         if (layer.item) {
             layer.item.setValue(true);

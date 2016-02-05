@@ -34,7 +34,7 @@ GIS.app.LayerMenu = function(gis, layer, cls) {
                 }
 
                 layer.filterWindow = layer.id === gis.layer.facility.id ?
-                    GIS.app.FilterWindowFacility(layer) : GIS.app.FilterWindow(layer);
+                    GIS.app.FilterWindowFacility(gis, layer) : GIS.app.FilterWindow(gis, layer);
                 layer.filterWindow.show();
             }
         };

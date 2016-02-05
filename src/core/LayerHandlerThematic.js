@@ -3,18 +3,21 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         loadOrganisationUnits,
         addData,
         loadLegend,
-        classifyWithBounds,
-        classifyByEqIntervals,
-        classifyByQuantils,
+        //classifyWithBounds,
+        //classifyByEqIntervals,
+        //classifyByQuantils,
         applyClassification,
+        rgbToHex,
+        hexToRgb,
         getClass,
+        getColorsByRgbInterpolation,
         updateMap,
         updateLegend,
         afterLoad,
         loader,
         dimConf = gis.conf.finals.dimension;
 
-    compareView = function(view, doExecute) {
+    compareView = function (view, doExecute) {
         var src = layer.view,
             viewIds,
             viewDim,
@@ -129,7 +132,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         gis.mask.hide();
     };
 
-    loadOrganisationUnits = function(view) {
+    loadOrganisationUnits = function (view) {
         var items = view.rows[0].items,
             propertyMap = {
                 'name': 'name',
@@ -139,7 +142,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             },
             keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty,
             displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[view.displayProperty] || 'name',
-            url = function() {
+            url = function () {
                 var params = '?ou=ou:';
 
                 for (var i = 0; i < items.length; i++) {
@@ -162,7 +165,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             success,
             failure;
 
-        success = function(r) {
+        success = function (r) {
             var features = gis.util.geojson.decode(r, 'ASC');
 
             if (!features.length) {
@@ -177,7 +180,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             loadData(view, features);
         };
 
-        failure = function() {
+        failure = function () {
             gis.mask.hide();
             gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
         };
@@ -185,16 +188,16 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         Ext.Ajax.request({
             url: url,
             disableCaching: false,
-            success: function(r) {
+            success: function (r) {
                 success(Ext.decode(r.responseText));
             },
-            failure: function() {
+            failure: function () {
                 failure();
             }
         });
     };
 
-    loadData = function(view, features) {
+    loadData = function (view, features) {
         var success;
 
         view = view || layer.view;
@@ -262,7 +265,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             paramString += '&relativePeriodDate=' + view.relativePeriodDate;
         }
 
-        success = function(json) {
+        success = function (json) {
             var response = gis.api.response.Response(json), // validate
                 featureMap = {},
                 valueMap = {},
@@ -312,7 +315,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             }
 
             // Sort values in ascending order
-            values.sort(function(a,b) {
+            values.sort(function (a, b) {
                 return a - b;
             });
 
@@ -322,16 +325,16 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         Ext.Ajax.request({
             url: gis.init.contextPath + '/api/analytics.json' + paramString,
             disableCaching: false,
-            failure: function(r) {
+            failure: function (r) {
                 gis.alert(r);
             },
-            success: function(r) {
+            success: function (r) {
                 success(Ext.decode(r.responseText));
             }
         });
     };
 
-    loadLegend = function(view, metaData, features, values) {
+    loadLegend = function (view, metaData, features, values) {
         var bounds = [],
             colors = [],
             names = [],
@@ -342,12 +345,12 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         view = view || layer.view;
 
-        addNames = function() {
+        addNames = function () {
             var dimensions = Ext.Array.clean([].concat(view.columns || [], view.rows || [], view.filters || [])),
                 peIds = metaData[dimConf.period.objectName];
 
             for (var i = 0, dimension; i < dimensions.length; i++) {
-                dimension = dimensions[i];
+                dimension = dimensions[i];
 
                 for (var j = 0, item; j < dimension.items.length; j++) {
                     item = dimension.items[j];
@@ -366,7 +369,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             view.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]];
         };
 
-        fn = function() {
+        fn = function () {
             addNames();
 
             // Classification options
@@ -381,7 +384,9 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                 minSize: view.radiusLow,
                 maxSize: view.radiusHigh,
                 minValue: values[0],
-                maxValue: values[values.length - 1]
+                maxValue: values[values.length - 1],
+                colorLow: view.colorLow,
+                colorHigh: view.colorHigh
             };
 
             layer.view = view;
@@ -390,18 +395,20 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             //layer.core.colorInterpolation = colors;
             //layer.core.applyClassification(options);
 
+            //console.log("######", view);
+
             applyClassification(options, features);
             updateLegend(view, metaData, options);
             updateMap(features);
             afterLoad(view);
         };
 
-        loadLegendSet = function(view) {
+        loadLegendSet = function (view) {
             Ext.Ajax.request({
                 url: gis.init.contextPath + '/api/legendSets/' + view.legendSet.id + '.json?fields=' + gis.conf.url.legendSetFields.join(','),
                 scope: this,
                 disableCaching: false,
-                success: function(r) {
+                success: function (r) {
                     legends = Ext.decode(r.responseText).legends;
 
                     Ext.Array.sort(legends, function (a, b) {
@@ -426,7 +433,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                     view.legendSet.colors = colors;
                     view.legendSet.count = count;
                 },
-                callback: function() {
+                callback: function () {
                     fn();
                 }
             });
@@ -451,7 +458,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
             Ext.Ajax.request({
                 url: gis.init.contextPath + '/api/' + elementUrl + '.json?fields=legendSet[id,displayName|rename(name)]&paging=false&filter=id:eq:' + id,
-                success: function(r) {
+                success: function (r) {
                     var elements = Ext.decode(r.responseText)[elementUrl],
                         set;
 
@@ -467,14 +474,15 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                         fn();
                     }
                 },
-                failure: function() {
+                failure: function () {
                     fn();
                 }
             });
         }
     };
 
-    setClassification = function(options, features) {
+    /*
+    setClassification = function (options, features) {
 
         console.log("setClassification", options, features);
 
@@ -484,47 +492,76 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             values.push(features[i].properties.value);
             //values.push(this.layer.features[i].attributes[this.indicator]);
         }
+        */
 
         //console.log("##", values);
         /*
-        var distOptions = {
-            labelGenerator: this.options.labelGenerator
-        };
-        var dist = new mapfish.GeoStat.Distribution(values, distOptions);
+         var distOptions = {
+         labelGenerator: this.options.labelGenerator
+         };
+         var dist = new mapfish.GeoStat.Distribution(values, distOptions);
 
-        this.minVal = dist.minVal;
-        this.maxVal = dist.maxVal;
+         this.minVal = dist.minVal;
+         this.maxVal = dist.maxVal;
 
-        this.classification = dist.classify(
-            this.method,
-            this.numClasses,
-            null
-        );
+         this.classification = dist.classify(
+         this.method,
+         this.numClasses,
+         null
+         );
 
-        this.createColorInterpolation();
-        */
-    };
+         this.createColorInterpolation();
+         */
+    //};
 
     // Assign color to feature based on value
-    applyClassification = function(options, features) {
-        for (var i = 0, prop, value, classNumber; i < features.length; i++) {
-            prop = features[i].properties;
-            value = prop[options.indicator];
-            classNumber = getClass(value, options.bounds);
-            prop.color = options.colors[classNumber - 1];
-            prop.radius = (value - options.minValue) / (options.maxValue - options.minValue) * (options.maxSize - options.minSize) + options.minSize;
+    applyClassification = function (options, features) {
+        var method = options.method,
+            bounds = [],
+            colors = [];
 
-            // Count features in each class
-            if (!options.count[classNumber]) {
-                options.count[classNumber] = 1;
-            } else {
-                options.count[classNumber]++;
+        console.log("classification", method, options);
+
+        if (method === 1) { // predefined bounds
+            bounds = options.bounds;
+            colors = options.colors;
+        } else if (method === 2) { // equal intervals
+            for (var i = 0; i <= options.numClasses; i++) {
+                bounds[i] = options.minValue + i * (options.maxValue - options.minValue) / options.numClasses;
+            }
+            options.bounds = bounds;
+            colors = options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
+        } else if (method === 3) { // quantiles
+            console.log("quantiles");
+
+
+
+
+
+        }
+
+        //console.log("bounds", bounds);
+
+        if (bounds.length) {
+            for (var i = 0, prop, value, classNumber; i < features.length; i++) {
+                prop = features[i].properties;
+                value = prop[options.indicator];
+                classNumber = getClass(value, bounds);
+                prop.color = colors[classNumber - 1];
+                prop.radius = (value - options.minValue) / (options.maxValue - options.minValue) * (options.maxSize - options.minSize) + options.minSize;
+
+                // Count features in each class
+                if (!options.count[classNumber]) {
+                    options.count[classNumber] = 1;
+                } else {
+                    options.count[classNumber]++;
+                }
             }
         }
     };
 
     // Returns class number
-    getClass = function(value, bounds) {
+    getClass = function (value, bounds) {
         if (value >= bounds[0]) {
             for (var i = 1; i < bounds.length; i++) {
                 if (value < bounds[i]) {
@@ -539,8 +576,41 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         return null;
     };
 
+    getColorsByRgbInterpolation = function (firstColor, lastColor, nbColors) {
+        var colors = [],
+            colorA = hexToRgb('#' + firstColor),
+            colorB = hexToRgb('#' + lastColor);
+
+        if (nbColors == 1) {
+            return ['#' + firstColor];
+        }
+        for (var i = 0; i < nbColors; i++) {
+            colors.push(rgbToHex({
+                r: colorA.r + i * (colorB.r - colorA.r) / (nbColors - 1),
+                g: colorA.g + i * (colorB.g - colorA.g) / (nbColors - 1),
+                b: colorA.b + i * (colorB.b - colorA.b) / (nbColors - 1),
+            }));
+        }
+        return colors;
+    };
+
+    // Convert hex color to RGB
+    hexToRgb = function (hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    };
+
+    // Convert RGB color to hex
+    rgbToHex = function (rgb) {
+        return "#" + ((1 << 24) + (rgb.r << 16) + (rgb.g << 8) + rgb.b).toString(16).slice(1);
+    };
+
     // Add layer to map
-    updateMap = function(features) {
+    updateMap = function (features) {
 
         var layerConfig = Ext.applyIf({
             data: features,
@@ -563,17 +633,17 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
     };
 
-    onFeatureClick = function(evt) {
+    onFeatureClick = function (evt) {
         GIS.app.FeaturePopup(gis, evt.layer);
     };
 
-    onFeatureRightClick = function(evt) {
+    onFeatureRightClick = function (evt) {
         var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer);
         menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     };
 
-    updateLegend = function(view, metaData, options) {
-        var	isPlugin = gis.plugin,
+    updateLegend = function (view, metaData, options) {
+        var isPlugin = gis.plugin,
             bounds = options.bounds,
             colors = options.colors,
             element = document.createElement('div'),
@@ -613,7 +683,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         if (view.legendSet) {
             for (var i = 0, name, label; i < bounds.length - 1; i++) {
                 name = legendNames[i];
-                label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + options.count[i + 1] + ')';
+                label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
 
                 child = document.createElement('div');
                 child.style.backgroundColor = colors[i];
@@ -634,28 +704,67 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             }
         }
         else {
-            for (var i = 0; i < this.classification.bins.length; i++) {
-                child = document.createElement('div');
-                child.style.backgroundColor = this.colorInterpolation[i].toHexString();
-                child.style.width = style.colorWidth;
-                child.style.height = style.colorHeight;
-                child.style.cssFloat = 'left';
-                child.style.marginRight = style.colorMarginRight;
-                element.appendChild(child);
+            //console.log("automatic", options);
 
-                child = document.createElement('div');
-                child.innerHTML = this.classification.bins[i].label;
-                element.appendChild(child);
+             for (var i = 0, label; i < bounds.length; i++) {
+                 label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
 
-                child = document.createElement('div');
-                child.style.clear = 'left';
-                element.appendChild(child);
-            }
+                 child = document.createElement('div');
+                 //child.style.backgroundColor = this.colorInterpolation[i].toHexString();
+                 child.style.backgroundColor = colors[i];
+
+                 child.style.width = style.colorWidth;
+                 child.style.height = style.colorHeight;
+                 child.style.cssFloat = 'left';
+                 child.style.marginRight = style.colorMarginRight;
+                 element.appendChild(child);
+
+                 child = document.createElement('div');
+                 child.innerHTML = label;
+                 element.appendChild(child);
+
+                 child = document.createElement('div');
+                 child.style.clear = 'left';
+                 element.appendChild(child);
+             }
         }
 
         layer.legendPanel.update(element.outerHTML);
     },
 
+
+    // The functions below are based on mapfish.GeoStat
+
+    // method: 'bounds', 'equal', 'quantiles'
+        /*
+    classify = function (method, nbBins, bounds) {
+        var classification = null;
+        if (!nbBins) {
+            console.log("TODO: sturgesRule");
+            //nbBins = sturgesRule();
+            //nbBins = Math.floor(1 + 3.3 * Math.log(this.nbVal, 10));
+        }
+
+        switch (method) {
+
+            case 1: // bounds
+                classification = classifyWithBounds(bounds);
+                break;
+            case 2: // equal intervals
+                classification = classifyByEqIntervals(nbBins);
+                break;
+            case 3: // quantiles
+                classification = classifyByQuantils(nbBins);
+                break;
+            default:
+                 console.error("Unsupported or invalid classification method");
+        }
+
+        return classification;
+    };
+    */
+
+    /*
     classifyWithBounds = function(bounds) {
         var bins = [];
         var binCount = [];
@@ -691,7 +800,9 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         return new mapfish.GeoStat.Classification(bins);
     };
+    */
 
+        /*
     classifyByEqIntervals = function(nbBins) {
         var bounds = [];
 
@@ -701,7 +812,9 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         return this.classifyWithBounds(bounds);
     };
+    */
 
+        /*
     classifyByQuantils = function(nbBins) {
         var values = this.values;
         values.sort(function(a,b) {return a-b;});
@@ -729,31 +842,9 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         return this.classifyWithBounds(bounds);
     };
+    */
 
-    // method: 'bounds', 'equal', 'quantiles'
-    classify = function(method, nbBins, bounds) {
-        var classification = null;
-        if (!nbBins) {
-            console.log("TODO: sturgesRule");
-            //nbBins = sturgesRule();
-            //nbBins = Math.floor(1 + 3.3 * Math.log(this.nbVal, 10));
-        }
 
-        switch (method) {
-            case 'bounds':
-                classification = this.classifyWithBounds(bounds);
-                break;
-            case 'equal':
-                classification = this.classifyByEqIntervals(nbBins);
-                break;
-            case 'quantiles':
-                classification = this.classifyByQuantils(nbBins);
-                break;
-            default:
-                console.error("Unsupported or invalid classification method");
-        }
-        return classification;
-    };
 
 
     afterLoad = function(view) {
@@ -816,6 +907,11 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         hideMask: false,
         callBack: null,
         load: function(view) {
+
+            console.log("VIEW", view);
+
+
+
             if (gis.mask && !gis.skipMask) {
                 gis.mask.show();
             }

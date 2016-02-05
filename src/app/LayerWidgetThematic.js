@@ -1486,13 +1486,13 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
         valueField: 'id',
         displayField: 'name',
         queryMode: 'local',
-        value: 'quantile',
+        value: 3,
         width: 137,
         store: Ext.create('Ext.data.ArrayStore', {
             fields: ['id', 'name'],
             data: [
-                ['equal', GIS.i18n.equal_intervals],
-                ['quantile', GIS.i18n.equal_counts]
+                [2, GIS.i18n.equal_intervals],
+                [3, GIS.i18n.equal_counts]
             ]
         })
     });

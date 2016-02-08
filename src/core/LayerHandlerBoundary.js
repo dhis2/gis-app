@@ -38,13 +38,14 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
             if (Ext.Array.difference(viewIds, srcIds).length !== 0) {
                 if (doExecute) {
                     loadOrganisationUnits(view);
+                    console.log('B');
                 }
                 return gis.conf.finals.widget.loadtype_organisationunit;
             }
 
             if (doExecute) {
                 loader.zoomToVisibleExtent = false;
-                loadLegend(view);
+                loadData(view);
             }
 
             return gis.conf.finals.widget.loadtype_legend;
@@ -133,8 +134,6 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
             layer.features = features;
 
             loadData(view, features);
-            //loadLegend(view);
-            afterLoad(view);
         };
 
         failure = function() {
@@ -156,7 +155,7 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
 
     loadData = function(view, features) {
         var layerConfig = Ext.applyIf({
-            data: features,
+            data: features || layer.features,
             hoverLabel: '{name}',
         }, layer.config);
 
@@ -188,6 +187,8 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
         layer.instance.on('contextmenu', onFeatureRightClick);
 
         layer.view = view;
+
+        afterLoad(view);
     };
 
     onFeatureClick = function(evt) {
@@ -199,9 +200,10 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
         menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     };
 
+    /* // Boundary layer don't have a legend yet
     loadLegend = function(view) {
-        // Boundary layer don't have a legend yet
     };
+    */
 
     afterLoad = function(view) {
 
@@ -264,8 +266,7 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
                 loadOrganisationUnits(view);
             }
         },
-        loadData: loadData,
-        loadLegend: loadLegend
+        loadData: loadData
     };
 
     return loader;

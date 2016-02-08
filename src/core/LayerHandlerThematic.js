@@ -371,7 +371,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
             applyClassification(options, features, values);
             updateLegend(view, metaData, options);
-            updateMap(features);
+            updateMap(view, features);
             afterLoad(view);
         };
 
@@ -566,12 +566,22 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
     };
 
     // Add layer to map
-    updateMap = function (features) {
+    updateMap = function (view, features) {
 
         var layerConfig = Ext.applyIf({
             data: features,
-            label: '{name} ({value})'
+            hoverLabel: '{name} ({value})'
         }, layer.config);
+
+        if (view.labels) {
+            Ext.apply(layerConfig, {
+                label: '{name}',
+                labelStyle: {
+                    fontSize: view.labelFontSize,
+                    fontStyle: view.labelFontStyle
+                }
+            });
+        }
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {

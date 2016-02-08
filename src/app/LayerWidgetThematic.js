@@ -1980,7 +1980,5 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
         }
     });
 
-    //createSelectHandlers();
-
     return accordion;
 };

@@ -764,6 +764,16 @@ Ext.onReady( function() {
                     this.body.appendChild(this.map.getContainer());
                     this.map.invalidateSize();
                     this.map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
+
+                    L.control.measure({
+                        position: 'topleft',
+                        primaryLengthUnit: 'kilometers',
+                        secondaryLengthUnit: 'miles',
+                        primaryAreaUnit: 'hectares',
+                        secondaryAreaUnit: 'acres',
+                        activeColor: '#ffa500',
+                        completedColor: '#ffa500'
+                }).addTo(this.map);
                 } else {
                     this.map.invalidateSize();
                 }

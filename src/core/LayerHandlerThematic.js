@@ -3,9 +3,6 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         loadOrganisationUnits,
         addData,
         loadLegend,
-        //classifyWithBounds,
-        //classifyByEqIntervals,
-        //classifyByQuantils,
         applyClassification,
         rgbToHex,
         hexToRgb,
@@ -319,7 +316,11 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
                 return a - b;
             });
 
-            loadLegend(view, response.metaData, valueFeatures, values);
+            this.metaData = response.metaData;
+            this.features = valueFeatures;
+            this.values = values;
+
+            loadLegend(view);
         };
 
         Ext.Ajax.request({
@@ -335,7 +336,10 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
     };
 
     loadLegend = function (view, metaData, features, values) {
-        var bounds = [],
+        var metaData = metaData || this.metaData,
+            features = features || this.features,
+            values = values || this.values,
+            bounds = [],
             colors = [],
             names = [],
             legends = [],
@@ -345,40 +349,12 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         view = view || layer.view;
 
-        addNames = function () {
-            var dimensions = Ext.Array.clean([].concat(view.columns || [], view.rows || [], view.filters || [])),
-                peIds = metaData[dimConf.period.objectName];
-
-            for (var i = 0, dimension; i < dimensions.length; i++) {
-                dimension = dimensions[i];
-
-                for (var j = 0, item; j < dimension.items.length; j++) {
-                    item = dimension.items[j];
-
-                    if (item.id.indexOf('.') !== -1) {
-                        var ids = item.id.split('.');
-                        item.name = metaData.names[ids[0]] + ' ' + metaData.names[ids[1]];
-                    }
-                    else {
-                        item.name = metaData.names[item.id];
-                    }
-                }
-            }
-
-            // Period name without changing the id
-            view.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]];
-        };
-
         fn = function () {
-            addNames();
-
-            // Classification options
-            var options = {
+            var options = { // Classification options
                 indicator: gis.conf.finals.widget.value,
-                method: view.legendSet ? 1 : view.method, // 1 = classify with bounds
+                method: view.method,
                 numClasses: view.classes,
                 bounds: bounds,
-                // colors: layer.core.getColors(view.colorLow, view.colorHigh),
                 colors: colors,
                 count: count,
                 minSize: view.radiusLow,
@@ -392,12 +368,8 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             layer.view = view;
             layer.minValue = options.minValue;
             layer.maxValue = options.maxValue;
-            //layer.core.colorInterpolation = colors;
-            //layer.core.applyClassification(options);
 
-            //console.log("######", view);
-
-            applyClassification(options, features);
+            applyClassification(options, features, values);
             updateLegend(view, metaData, options);
             updateMap(features);
             afterLoad(view);
@@ -481,66 +453,50 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         }
     };
 
-    /*
-    setClassification = function (options, features) {
-
-        console.log("setClassification", options, features);
-
-        var values = [];
-        for (var i = 0; i < features.length; i++) {
-            //console.log("feature", features[i]);
-            values.push(features[i].properties.value);
-            //values.push(this.layer.features[i].attributes[this.indicator]);
-        }
-        */
-
-        //console.log("##", values);
-        /*
-         var distOptions = {
-         labelGenerator: this.options.labelGenerator
-         };
-         var dist = new mapfish.GeoStat.Distribution(values, distOptions);
-
-         this.minVal = dist.minVal;
-         this.maxVal = dist.maxVal;
-
-         this.classification = dist.classify(
-         this.method,
-         this.numClasses,
-         null
-         );
-
-         this.createColorInterpolation();
-         */
-    //};
-
-    // Assign color to feature based on value
-    applyClassification = function (options, features) {
+    // Calculate bounds and assign color to features based on value
+    applyClassification = function (options, features, values) {
         var method = options.method,
             bounds = [],
             colors = [];
 
-        console.log("classification", method, options);
-
         if (method === 1) { // predefined bounds
+
             bounds = options.bounds;
             colors = options.colors;
+
         } else if (method === 2) { // equal intervals
+
             for (var i = 0; i <= options.numClasses; i++) {
                 bounds[i] = options.minValue + i * (options.maxValue - options.minValue) / options.numClasses;
             }
             options.bounds = bounds;
             colors = options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
+
         } else if (method === 3) { // quantiles
-            console.log("quantiles");
 
+            var binSize = Math.round(values.length / options.numClasses),
+                binLastValPos = (binSize === 0) ? 0 : binSize;
 
+            if (values.length > 0) {
+                bounds[0] = values[0];
+                for (i = 1; i < options.numClasses; i++) {
+                    bounds[i] = values[binLastValPos];
+                    binLastValPos += binSize;
 
+                    if (binLastValPos > values.length - 1) {
+                        binLastValPos = values.length - 1;
+                    }
+                }
+                bounds.push(values[values.length - 1]);
+            }
 
+            for (var j = 0; j < bounds.length; j++) {
+                bounds[j] = parseFloat(bounds[j]);
+            }
 
+            options.bounds = bounds;
+            colors = options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
         }
-
-        //console.log("bounds", bounds);
 
         if (bounds.length) {
             for (var i = 0, prop, value, classNumber; i < features.length; i++) {
@@ -586,9 +542,9 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         }
         for (var i = 0; i < nbColors; i++) {
             colors.push(rgbToHex({
-                r: colorA.r + i * (colorB.r - colorA.r) / (nbColors - 1),
-                g: colorA.g + i * (colorB.g - colorA.g) / (nbColors - 1),
-                b: colorA.b + i * (colorB.b - colorA.b) / (nbColors - 1),
+                r: parseInt(colorA.r + i * (colorB.r - colorA.r) / (nbColors - 1)),
+                g: parseInt(colorA.g + i * (colorB.g - colorA.g) / (nbColors - 1)),
+                b: parseInt(colorA.b + i * (colorB.b - colorA.b) / (nbColors - 1)),
             }));
         }
         return colors;
@@ -680,7 +636,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         element.appendChild(child);
 
         // legends
-        if (view.legendSet) {
+        if (view.method === 1 && view.legendSet) {
             for (var i = 0, name, label; i < bounds.length - 1; i++) {
                 name = legendNames[i];
                 label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
@@ -704,13 +660,10 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
             }
         }
         else {
-            //console.log("automatic", options);
-
-             for (var i = 0, label; i < bounds.length; i++) {
-                 label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
+             for (var i = 0, label; i < bounds.length - 1; i++) {
+                 label = bounds[i].toFixed(1) + ' - ' + bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')';
 
                  child = document.createElement('div');
-                 //child.style.backgroundColor = this.colorInterpolation[i].toHexString();
                  child.style.backgroundColor = colors[i];
 
                  child.style.width = style.colorWidth;
@@ -731,121 +684,6 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
 
         layer.legendPanel.update(element.outerHTML);
     },
-
-
-    // The functions below are based on mapfish.GeoStat
-
-    // method: 'bounds', 'equal', 'quantiles'
-        /*
-    classify = function (method, nbBins, bounds) {
-        var classification = null;
-        if (!nbBins) {
-            console.log("TODO: sturgesRule");
-            //nbBins = sturgesRule();
-            //nbBins = Math.floor(1 + 3.3 * Math.log(this.nbVal, 10));
-        }
-
-        switch (method) {
-
-            case 1: // bounds
-                classification = classifyWithBounds(bounds);
-                break;
-            case 2: // equal intervals
-                classification = classifyByEqIntervals(nbBins);
-                break;
-            case 3: // quantiles
-                classification = classifyByQuantils(nbBins);
-                break;
-            default:
-                 console.error("Unsupported or invalid classification method");
-        }
-
-        return classification;
-    };
-    */
-
-    /*
-    classifyWithBounds = function(bounds) {
-        var bins = [];
-        var binCount = [];
-        var sortedValues = [];
-
-        for (var i = 0; i < this.values.length; i++) {
-            sortedValues.push(this.values[i]);
-        }
-        sortedValues.sort(function(a,b) {return a-b;});
-        var nbBins = bounds.length - 1;
-
-        for (var j = 0; j < nbBins; j++) {
-            binCount[j] = 0;
-        }
-
-        for (var k = 0; k < nbBins - 1; k) {
-            if (sortedValues[0] < bounds[k + 1]) {
-                binCount[k] = binCount[k] + 1;
-                sortedValues.shift();
-            }
-            else {
-                k++;
-            }
-        }
-
-        binCount[nbBins - 1] = this.nbVal - mapfish.Util.sum(binCount);
-
-        for (var m = 0; m < nbBins; m++) {
-            bins[m] = new mapfish.GeoStat.Bin(binCount[m], bounds[m], bounds[m + 1], m == (nbBins - 1));
-            var labelGenerator = this.labelGenerator || this.defaultLabelGenerator;
-            bins[m].label = labelGenerator(bins[m], m, nbBins);
-        }
-
-        return new mapfish.GeoStat.Classification(bins);
-    };
-    */
-
-        /*
-    classifyByEqIntervals = function(nbBins) {
-        var bounds = [];
-
-        for (var i = 0; i <= nbBins; i++) {
-            bounds[i] = this.minVal + i*(this.maxVal - this.minVal) / nbBins;
-        }
-
-        return this.classifyWithBounds(bounds);
-    };
-    */
-
-        /*
-    classifyByQuantils = function(nbBins) {
-        var values = this.values;
-        values.sort(function(a,b) {return a-b;});
-        var binSize = Math.round(this.values.length / nbBins);
-
-        var bounds = [];
-        var binLastValPos = (binSize === 0) ? 0 : binSize;
-
-        if (values.length > 0) {
-            bounds[0] = values[0];
-            for (i = 1; i < nbBins; i++) {
-                bounds[i] = values[binLastValPos];
-                binLastValPos += binSize;
-
-                if (binLastValPos > values.length - 1) {
-                    binLastValPos = values.length - 1;
-                }
-            }
-            bounds.push(values[values.length - 1]);
-        }
-
-        for (var j = 0; j < bounds.length; j++) {
-            bounds[j] = parseFloat(bounds[j]);
-        }
-
-        return this.classifyWithBounds(bounds);
-    };
-    */
-
-
-
 
     afterLoad = function(view) {
 
@@ -907,11 +745,6 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
         hideMask: false,
         callBack: null,
         load: function(view) {
-
-            console.log("VIEW", view);
-
-
-
             if (gis.mask && !gis.skipMask) {
                 gis.mask.show();
             }

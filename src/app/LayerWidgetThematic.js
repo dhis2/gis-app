@@ -1757,6 +1757,7 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
                 radiusHigh.setValue(view.radiusHigh);
             }
             else if (lType === gis.conf.finals.widget.legendtype_predefined) {
+                method.setValue(1);
                 legendSet.store.add(view.legendSet);
                 legendSet.setValue(view.legendSet.id);
             }
@@ -1875,7 +1876,7 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
 
         // options
         view.classes = parseInt(classes.getValue());
-        view.method = parseInt(method.getValue());
+        view.method = legendType.getValue() === 'automatic' ? parseInt(method.getValue()) : 1;
         view.colorLow = colorLow.getValue();
         view.colorHigh = colorHigh.getValue();
         view.radiusLow = parseInt(radiusLow.getValue());

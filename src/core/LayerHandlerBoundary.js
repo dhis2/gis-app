@@ -200,19 +200,14 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
         menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     };
 
-    /* // Boundary layer don't have a legend yet
-    loadLegend = function(view) {
-    };
-    */
-
     afterLoad = function(view) {
 
         // Layer
-        if (layer.item) {
+        if (layer.item) { // Layer stack
             layer.item.setValue(true, view.opacity);
         }
         else {
-            layer.setOpacity(view.opacity);
+            layer.instance.setOpacity(view.opacity);
         }
 
         // Gui

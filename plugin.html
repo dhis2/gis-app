@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
     <title>DHIS2 GIS Plugin</title>
+    <link rel="stylesheet" href="css/style.css" />
     <script src="extjs/ext-all.js"></script>
 
     <!-- Imports transpiled map api -->
@@ -34,7 +35,6 @@
         Ext.onReady(function() {
             var url = "http://localhost:8080";
 
-            /*
             GIS.plugin.getMap({
                 url: url,
                 el: "map1",
@@ -44,7 +44,6 @@
                 password: 'district',
                 dashboard: true
             });
-            */
 
             GIS.plugin.getMap({
                 url: url,

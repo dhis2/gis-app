@@ -189,6 +189,7 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 			}
 
 			if (gis.map && gis.map.id) {
+
 				getMap();
 			}
 			else {

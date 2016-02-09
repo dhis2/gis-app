@@ -600,7 +600,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
     };
 
     onFeatureClick = function (evt) {
-        GIS.app.FeaturePopup(gis, evt.layer);
+        GIS.core.FeaturePopup(gis, evt.layer);
     };
 
     onFeatureRightClick = function (evt) {

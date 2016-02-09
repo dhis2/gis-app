@@ -6,7 +6,8 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 		callBack,
 		register = [],
 		loader,
-		applyViews = Ext.isObject(applyConfig) && Ext.Array.from(applyConfig.mapViews).length ? applyConfig.mapViews : null;
+		applyViews = Ext.isObject(applyConfig) && Ext.Array.from(applyConfig.mapViews).length ? applyConfig.mapViews : null,
+		clearAllLayers;
 
 	getMap = function() {
 		var url = gis.init.contextPath + '/api/maps/' + gis.map.id + '.json?fields=' + gis.conf.url.mapFields.join(','),
@@ -42,7 +43,7 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 		};
 
 		failure = function(r) {
-			gis.olmap.mask.hide();
+			gis.mask.hide();
 
 			r = Ext.decode(r.responseText);
 
@@ -74,7 +75,7 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 		}
 
 		if (!(Ext.isArray(views) && views.length)) {
-			gis.olmap.mask.hide();
+			gis.mask.hide();
 			gis.alert(GIS.i18n.favorite_outdated_create_new);
 			return;
 		}

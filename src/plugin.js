@@ -1,6 +1,7 @@
 Ext.onReady(function() {
 
-    var init = {
+    var gis,
+        init = {
             user: {},
             systemInfo: {}
         },
@@ -59,6 +60,8 @@ Ext.onReady(function() {
 
                 init.systemInfo.dateFormat = Ext.isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
                 init.systemInfo.calendar = systemSettings.keyCalendar;
+
+                console.log("systemSettings", systemSettings);
 
                 // user-account
                 userAccountConfig = {

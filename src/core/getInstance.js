@@ -810,6 +810,8 @@ GIS.core.getInstance = function(init) {
     gis.conf = conf;
     gis.util = util;
 
+    console.log("gis.init", gis.init);
+
     // api
     (function() {
         var dimConf = gis.conf.finals.dimension;
@@ -1214,21 +1216,6 @@ GIS.core.getInstance = function(init) {
 
     // https://github.com/dhis2/dhis2-gis/issues/9
     gis.orderedLayers = [gis.layer.boundary, gis.layer.thematic4, gis.layer.thematic3, gis.layer.thematic2, gis.layer.thematic1, gis.layer.facility, gis.layer.event];
-
-    /*
-    layers.push(
-        gis.layer.openStreetMap,
-        gis.layer.boundary,
-        gis.layer.thematic4,
-        gis.layer.thematic3,
-        gis.layer.thematic2,
-        gis.layer.thematic1,
-        gis.layer.facility,
-        gis.layer.event
-    );
-
-    //gis.olmap.addLayers(layers);
-    */
 
     gis.relocate = {}; // Relocate organisation units
 

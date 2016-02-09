@@ -9,9 +9,7 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 		applyViews = Ext.isObject(applyConfig) && Ext.Array.from(applyConfig.mapViews).length ? applyConfig.mapViews : null;
 
 	getMap = function() {
-		var isPlugin = GIS.plugin && !GIS.app,
-			type = 'json',
-			url = gis.init.contextPath + '/api/maps/' + gis.map.id + '.' + type + '?fields=' + gis.conf.url.mapFields.join(','),
+		var url = gis.init.contextPath + '/api/maps/' + gis.map.id + '.json?fields=' + gis.conf.url.mapFields.join(','),
 			success,
 			failure;
 
@@ -55,25 +53,15 @@ GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 			gis.alert(r);
 		};
 
-		if (isPlugin) {
-			Ext.data.JsonP.request({
-				url: url,
-				success: function(r) {
-					success(r);
-				}
-			});
-		}
-		else {
-			Ext.Ajax.request({
-				url: url,
-				success: function(r) {
-					success(Ext.decode(r.responseText));
-				},
-				failure: function(r) {
-					failure(r);
-				}
-			});
-		}
+		Ext.Ajax.request({
+			url: url,
+			success: function(r) {
+				success(Ext.decode(r.responseText));
+			},
+			failure: function(r) {
+				failure(r);
+			}
+		});
 	};
 
 	setMap = function() {

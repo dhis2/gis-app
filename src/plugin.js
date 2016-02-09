@@ -615,18 +615,18 @@ Ext.onReady(function() {
         afterRender = function(vp) {
 
             // base layer
-            if (Ext.isDefined(gis.map.baseLayer)) {
-                var base = Ext.isString(gis.map.baseLayer) ? gis.map.baseLayer.split(' ').join('').toLowerCase() : gis.map.baseLayer;
+            gis.map.baseLayer = gis.map.baseLayer || 'none';
 
-                if (!base || base === 'none' || base === 'off') {
-                    gis.instance.addLayer(gis.layer.openStreetMap.config);
-                }
-                else if (base === 'gs' || base === 'googlestreets') {
-                    gis.instance.addLayer(gis.layer.googleStreets.config);
-                }
-                else if (base === 'gh' || base === 'googlehybrid') {
-                    gis.instance.addLayer(gis.layer.googleHybrid.config);
-                }
+            var base = Ext.isString(gis.map.baseLayer) ? gis.map.baseLayer.split(' ').join('').toLowerCase() : gis.map.baseLayer;
+
+            if (!base || base === 'none' || base === 'off') {
+                gis.instance.addLayer(gis.layer.openStreetMap.config);
+            }
+            else if (base === 'gs' || base === 'googlestreets') {
+                gis.instance.addLayer(gis.layer.googleStreets.config);
+            }
+            else if (base === 'gh' || base === 'googlehybrid') {
+                gis.instance.addLayer(gis.layer.googleHybrid.config);
             }
         };
 

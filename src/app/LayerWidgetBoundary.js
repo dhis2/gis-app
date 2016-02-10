@@ -1,5 +1,5 @@
-GIS.app.LayerWidgetBoundary = function(gis, layer) {
-
+//GIS.app.LayerWidgetBoundary = function(gis, layer) {
+export default function LayerWidgetBoundary(gis, layer) {
     var infrastructuralDataElementValuesStore,
         treePanel,
         userOrganisationUnit,
@@ -19,7 +19,8 @@ GIS.app.LayerWidgetBoundary = function(gis, layer) {
         validateView,
         accordionBody,
         accordion,
-        accordionPanels = [];
+        accordionPanels = [],
+        last;
 
     // Stores
     infrastructuralDataElementValuesStore = Ext.create('Ext.data.Store', {

@@ -1,10 +1,12 @@
-GIS.core.getInstance = function(init) {
+//GIS.core.getInstance = function(init) {
+export default function getInstance(init) {
     var conf = {},
         util = {},
         api = {},
         store = {},
         layers = [],
-        gis = {};
+        gis = {},
+        dimConf;
 
     // tmp
     gis.alert = function() {};
@@ -809,8 +811,6 @@ GIS.core.getInstance = function(init) {
     gis.init = init;
     gis.conf = conf;
     gis.util = util;
-
-    console.log("gis.init", gis.init);
 
     // api
     (function() {

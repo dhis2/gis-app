@@ -1,4 +1,5 @@
-GIS.app.FilterWindowFacility = function(gis, layer) {
+//GIS.app.FilterWindowFacility = function(gis, layer) {
+export default function FilterWindowFacility(gis, layer) {
     var window,
         multiSelect,
         button,

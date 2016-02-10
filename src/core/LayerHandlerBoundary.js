@@ -1,10 +1,13 @@
-GIS.core.LayerHandlerBoundary = function(gis, layer) {
+//GIS.core.LayerHandlerBoundary = function(gis, layer) {
+export default function LayerHandlerBoundary(gis, layer) {
     var compareView,
         loadOrganisationUnits,
         loadLegend,
         loadData,
         afterLoad,
-        loader;
+        loader,
+        onFeatureClick,
+        onFeatureRightClick;
 
     compareView = function(view, doExecute) {
         var src = layer.view,
@@ -196,7 +199,7 @@ GIS.core.LayerHandlerBoundary = function(gis, layer) {
     };
 
     onFeatureRightClick = function(evt) {
-        var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer);
+        var menu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
         menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     };
 

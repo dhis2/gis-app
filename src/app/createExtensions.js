@@ -1,4 +1,5 @@
-GIS.app.createExtensions = function(gis) {
+//GIS.app.createExtensions = function(gis) {
+export default function createExtensions(gis) {
 
     Ext.define('Ext.ux.panel.LayerItemPanel', {
         extend: 'Ext.panel.Panel',
@@ -169,7 +170,8 @@ GIS.app.createExtensions = function(gis) {
 
             this.setOpacity(this.opacity);
 
-            this.callParent();
+            //this.callParent();
+            this.self.superclass.initComponent.call(this);
         }
     });
 
@@ -263,7 +265,8 @@ GIS.app.createExtensions = function(gis) {
             ct.items.push(ct.checkbox);
             ct.items.push(ct.numberField);
 
-            this.callParent();
+            //this.callParent();
+            this.self.superclass.initComponent.call(this);
         }
     });
 
@@ -424,7 +427,8 @@ GIS.app.createExtensions = function(gis) {
                 ct.items.push(ct.colorButton);
             }
 
-            this.callParent();
+            //this.callParent();
+            this.self.superclass.initComponent.call(this);
         }
     });
 

@@ -1,5 +1,6 @@
 // Top layer dropdown menu
-GIS.app.LayerMenu = function(gis, layer, cls) {
+//GIS.app.LayerMenu = function(gis, layer, cls) {
+export default function LayerMenu(gis, layer, cls) {
     var items = [],
         item;
 

@@ -1,4 +1,5 @@
-GIS.app.FavoriteWindow = function(gis) {
+//GIS.app.FavoriteWindow = function(gis) {
+export default function FavoriteWindow(gis) {
 
     // Objects
     var NameWindow,

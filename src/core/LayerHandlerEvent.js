@@ -1,4 +1,5 @@
-GIS.core.LayerHandlerEvent = function(gis, layer) {
+//GIS.core.LayerHandlerEvent = function(gis, layer) {
+export default function LayerHandlerEvent(gis, layer) {
     var compareView,
         loadOrganisationUnits,
         loadData,

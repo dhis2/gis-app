@@ -1,4 +1,5 @@
-GIS.app.InterpretationWindow = function(gis) {
+//GIS.app.InterpretationWindow = function(gis) {
+export default function InterpretationWindow(gis) {
     var textArea,
         shareButton,
         window;

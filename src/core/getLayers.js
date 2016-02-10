@@ -1,4 +1,5 @@
-GIS.core.getLayers = function(gis) {
+//GIS.core.getLayers = function(gis) {
+export default function getLayers(gis) {
     var layerNumbers = ['1', '2', '3', '4'];
 
     var layers = {

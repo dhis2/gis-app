@@ -1,4 +1,5 @@
-GIS.core.LayerHandlerThematic = function(gis, layer) {
+//GIS.core.LayerHandlerThematic = function(gis, layer) {
+export default function LayerHandlerThematic(gis, layer) {
     var compareView,
         loadOrganisationUnits,
         addData,
@@ -604,7 +605,7 @@ GIS.core.LayerHandlerThematic = function(gis, layer) {
     };
 
     onFeatureRightClick = function (evt) {
-        var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer);
+        var menu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
         menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     };
 

@@ -1,5 +1,5 @@
-// Moved from GIS.core.createSelectHandlers
-GIS.app.FeatureContextMenu = function(gis, layer, instance) {
+//GIS.core.FeatureContextMenu = function(gis, layer, instance) {
+export default function FeatureContextMenu(gis, layer, instance) {
     var feature = instance.feature,
         isRelocate = !!GIS.app ? !!gis.init.user.isAdmin : false,
         infrastructuralPeriod,
@@ -89,7 +89,7 @@ GIS.app.FeatureContextMenu = function(gis, layer, instance) {
                         console.log(gis.relocate.feature.properties.name + ' relocated to ' + coordinates);
                     }
                 });
-           }
+            }
         });
 
     };

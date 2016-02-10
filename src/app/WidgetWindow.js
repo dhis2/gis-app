@@ -1,5 +1,6 @@
 // Window container for layer widgets
-GIS.app.WidgetWindow = function(gis, layer, width, padding) {
+//GIS.app.WidgetWindow = function(gis, layer, width, padding) {
+export default function WidgetWindow(gis, layer, width, padding) {
     width = width || gis.conf.layout.widget.window_width;
     padding = padding || 0;
 

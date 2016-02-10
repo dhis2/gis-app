@@ -1,4 +1,5 @@
-GIS.app.SearchWindow = function(gis, layer) {
+//GIS.app.SearchWindow = function(gis, layer) {
+export default function SearchWindow(gis, layer) {
     var data = [],
         store = layer.featureStore,
         highlight,

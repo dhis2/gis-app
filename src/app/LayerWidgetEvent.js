@@ -1,11 +1,10 @@
-// Returns event layer panel
-
-GIS.app.LayerWidgetEvent = function(gis, layer) {
+//GIS.app.LayerWidgetEvent = function(gis, layer) {
+export default function LayerWidgetEvent(gis, layer) {
 
     // stores
     var programStore,
         stagesByProgramStore,
-    //dataElementsByStageStore,
+        dataElementsByStageStore,
 
     // cache
         stageStorage = {},
@@ -30,6 +29,7 @@ GIS.app.LayerWidgetEvent = function(gis, layer) {
         startDate,
         endDate,
         startEndDate,
+        onDateFieldRender,
 
         onPeriodChange,
         onCheckboxAdd,
@@ -63,6 +63,7 @@ GIS.app.LayerWidgetEvent = function(gis, layer) {
         organisationUnitLevel,
         organisationUnitGroup,
         organisationUnitPanel,
+        accordionBody,
         toolMenu,
         tool,
         toolPanel,

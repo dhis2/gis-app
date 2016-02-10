@@ -1,4 +1,5 @@
-GIS.app.extendInstance = function(gis) {
+//GIS.app.extendInstance = function(gis) {
+export default function extendInstance(gis) {
     var conf = gis.conf,
         util = gis.util,
         init = gis.init,
@@ -74,8 +75,8 @@ GIS.app.extendInstance = function(gis) {
 
             delete map.access;
             delete map.created;
-            delete lastUpdated;
-            delete name;
+            //delete lastUpdated;
+            //delete name;
 
             for (var i = 0, dimensions, layout; i < map.mapViews.length; i++) {
                 layout = map.mapViews[i];

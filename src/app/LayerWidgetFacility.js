@@ -1,4 +1,5 @@
-GIS.app.LayerWidgetFacility = function(gis, layer) {
+//GIS.app.LayerWidgetFacility = function(gis, layer) {
+export default function LayerWidgetFacility(gis, layer) {
 
     var infrastructuralDataElementValuesStore,
 
@@ -28,7 +29,9 @@ GIS.app.LayerWidgetFacility = function(gis, layer) {
         accordionBody,
         accordion,
 
-        accordionPanels = [];
+        accordionPanels = [],
+
+        last;
 
     // Stores
 

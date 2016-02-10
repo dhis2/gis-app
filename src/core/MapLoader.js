@@ -1,4 +1,5 @@
-GIS.core.MapLoader = function(gis, isSession, applyConfig) {
+//GIS.core.MapLoader = function(gis, isSession, applyConfig) {
+export default function MapLoader(gis, isSession, applyConfig) {
 	var getMap,
 		setMap,
 		closeAllLayers,

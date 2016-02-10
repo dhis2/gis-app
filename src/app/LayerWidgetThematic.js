@@ -1,4 +1,5 @@
-GIS.app.LayerWidgetThematic = function(gis, layer) {
+//GIS.app.LayerWidgetThematic = function(gis, layer) {
+export default function LayerWidgetThematic(gis, layer) {
 
     var indicatorsByGroupStore,
         dataElementsByGroupStore,
@@ -70,7 +71,9 @@ GIS.app.LayerWidgetThematic = function(gis, layer) {
         accordion,
 
         accordionPanels = [],
-        dimConf = gis.conf.finals.dimension;
+        dimConf = gis.conf.finals.dimension,
+
+        last;
 
     // Stores
 

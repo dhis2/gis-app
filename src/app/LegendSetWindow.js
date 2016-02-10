@@ -1,4 +1,5 @@
-GIS.app.LegendSetWindow = function(gis) {
+//GIS.app.LegendSetWindow = function(gis) {
+export default function LegendSetWindow(gis) {
 
     // Stores
     var legendSetStore,

@@ -1,4 +1,5 @@
-GIS.core.LayerHandlerFacility = function(gis, layer) {
+//GIS.core.LayerHandlerFacility = function(gis, layer) {
+export default function LayerHandlerFacility(gis, layer) {
 	var compareView,
 		loadOrganisationUnitGroups,
 		loadOrganisationUnits,
@@ -258,7 +259,7 @@ GIS.core.LayerHandlerFacility = function(gis, layer) {
 	};
 
 	onFeatureRightClick = function(evt) {
-		var menu = GIS.app.FeatureContextMenu(gis, layer, evt.layer);
+		var menu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
 		menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
 	};
 

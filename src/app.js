@@ -773,7 +773,7 @@ Ext.onReady( function() {
                         secondaryAreaUnit: 'acres',
                         activeColor: '#ffa500',
                         completedColor: '#ffa500'
-                }).addTo(this.map);
+                    }).addTo(this.map);
                 } else {
                     this.map.invalidateSize();
                 }

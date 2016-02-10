@@ -211,7 +211,7 @@ export default function LayerWidgetEvent(gis, layer) {
             //ns.app.aggregateLayoutWindow.resetData();
             //ns.app.queryLayoutWindow.resetData();
 
-            stageId = (layout ? layout.programStage.id : null) || (stages.length === 1 ? stages[0].id : null);
+            var stageId = (layout ? layout.programStage.id : null) || (stages.length === 1 ? stages[0].id : null);
 
             if (stageId) {
                 stage.setValue(stageId);

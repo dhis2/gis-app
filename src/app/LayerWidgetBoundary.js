@@ -82,7 +82,7 @@ export default function LayerWidgetBoundary(gis, layer) {
             }
 
             that.expandPath(path, 'id', '/', function() {
-                record = Ext.clone(that.getRootNode().findChild('id', id, true));
+                var record = Ext.clone(that.getRootNode().findChild('id', id, true));
                 that.recordsToSelect.push(record);
                 that.multipleSelectIf(map, doUpdate);
             });

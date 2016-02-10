@@ -72,7 +72,8 @@ export default function LayerHandlerEvent(gis, layer) {
                 ],
                 popup,
                 config,
-                updateFeatures;
+                updateFeatures,
+                getOptionSets;
 
             updateFeatures = function() {
                 var layerConfig;

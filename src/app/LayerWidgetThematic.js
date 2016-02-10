@@ -1827,8 +1827,8 @@ export default function LayerWidgetThematic(gis, layer) {
             de = dimConf.dataElement.objectName,
             dc = dimConf.operand.objectName,
             ds = dimConf.dataSet.objectName,
-            di = dimConf.eventDataItem.objectName;
-        pi = dimConf.programIndicator.objectName,
+            di = dimConf.eventDataItem.objectName,
+            pi = dimConf.programIndicator.objectName,
             vType = valueType.getValue() === de ? dataElementDetailLevel.getValue() : valueType.getValue(),
             objectNameCmpMap = {},
             view = {};

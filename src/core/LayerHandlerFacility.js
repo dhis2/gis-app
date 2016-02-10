@@ -9,7 +9,7 @@ export default function LayerHandlerFacility(gis, layer) {
 		updateMap,
 		addCircles,
 		afterLoad,
-        onFeatureCLick,
+        onFeatureClick,
 		onFeatureRightClick,
 		isValidCoordinate,
 		loader;

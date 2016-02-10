@@ -868,7 +868,7 @@ export default function getInstance(init) {
                     return;
                 }
 
-                for (var i = 0; i < config.items.length; i++) {
+                for (var i = 0, record; i < config.items.length; i++) {
                     record = api.layout.Record(config.items[i]);
 
                     if (record) {
@@ -999,8 +999,8 @@ export default function getInstance(init) {
                 var a = [],
                     objectNames =   [],
                     dimConf = conf.finals.dimension,
-                    layerConf =
-                        isOu = false,
+                    layerConf,
+                    isOu = false,
                     isOuc = false,
                     isOugc = false;
 

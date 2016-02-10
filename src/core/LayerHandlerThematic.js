@@ -11,9 +11,13 @@ export default function LayerHandlerThematic(gis, layer) {
         getColorsByRgbInterpolation,
         updateMap,
         updateLegend,
+        loadData,
         afterLoad,
+        onFeatureClick,
+        onFeatureRightClick,
         loader,
-        dimConf = gis.conf.finals.dimension;
+        dimConf = gis.conf.finals.dimension,
+        data = {};
 
     compareView = function (view, doExecute) {
         var src = layer.view,
@@ -317,9 +321,9 @@ export default function LayerHandlerThematic(gis, layer) {
                 return a - b;
             });
 
-            this.metaData = response.metaData;
-            this.features = valueFeatures;
-            this.values = values;
+            data.metaData = response.metaData;
+            data.features = valueFeatures;
+            data.values = values;
 
             loadLegend(view);
         };
@@ -337,16 +341,17 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     loadLegend = function (view, metaData, features, values) {
-        var metaData = metaData || this.metaData,
-            features = features || this.features,
-            values = values || this.values,
+        var metaData = metaData || data.metaData,
+            features = features || data.features,
+            values = values || data.values,
             bounds = [],
             colors = [],
             names = [],
             legends = [],
             count = {}, // number in each class
             addNames,
-            fn;
+            fn,
+            loadLegendSet;
 
         view = view || layer.view;
 

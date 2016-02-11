@@ -99,7 +99,8 @@ export default function LegendSetWindow(gis) {
 
     LegendSetPanel = function() {
         var items,
-            addButton;
+            addButton,
+            legendSetGrid;
 
         addButton = Ext.create('Ext.button.Button', {
             text: GIS.i18n.add_new,
@@ -243,8 +244,8 @@ export default function LegendSetWindow(gis) {
             addLegend,
             reset,
             data = [],
-
-            LegendEditWindow;
+            LegendEditWindow,
+            showUpdateLegend;
 
         // edit legend panel
         LegendEditWindow = function(record) {

@@ -192,7 +192,8 @@ export default function FeatureContextMenu(gis, layer, instance) {
                                         data: function() {
                                             var periodType = gis.init.systemSettings.infrastructuralPeriodType.id,
                                                 generator = gis.init.periodGenerator,
-                                                periods = generator.filterFuturePeriodsExceptCurrent(generator.generateReversedPeriods(periodType, this.periodOffset)) || [];
+                                                //periods = generator.filterFuturePeriodsExceptCurrent(generator.generateReversedPeriods(periodType, this.periodOffset)) || [];
+                                                periods = generator.filterFuturePeriodsExceptCurrent(generator.generateReversedPeriods(periodType, undefined)) || [];
 
                                             if (Ext.isArray(periods) && periods.length) {
                                                 for (var i = 0; i < periods.length; i++) {
@@ -234,7 +235,9 @@ export default function FeatureContextMenu(gis, layer, instance) {
                                             Ext.Ajax.request({
                                                 url: url + paramString,
                                                 success: function(r) {
-                                                    var records = [];
+                                                    var records = [],
+                                                        dxIndex,
+                                                        valueIndex;
 
                                                     r = Ext.decode(r.responseText);
 
@@ -329,6 +332,8 @@ export default function FeatureContextMenu(gis, layer, instance) {
         view.parentGraphMap[parentId] = parentGraph;
 
         // dimension
+        console.log(gis);
+
         view.rows = [{
             dimension: dimConf.organisationUnit.objectName,
             items: [

@@ -1,4 +1,5 @@
-import d2map from 'dhis2-gis-api';
+//import d2map from 'dhis2-gis-api';
+import d2map from 'dhis2-gis-api/src/';
 
 //GIS.core.getMap = function(gis) {
 export default function getMap(gis) {

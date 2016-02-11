@@ -69,13 +69,6 @@ export default function LayerHandlerFacility(gis, layer) {
 			return gis.conf.finals.widget.loadtype_organisationunit;
 		}
 
-		//if (view.areaRadius !== src.areaRadius) {
-			//if (doExecute) {
-				//loadLegend(view);
-			//}
-			//return gis.conf.finals.widget.loadtype_legend;
-		//}
-
 		// always reload legend
 		if (doExecute) {
 			loadLegend(view);

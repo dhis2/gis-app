@@ -5,3 +5,4 @@ build
 *.iml
 npm-debug.log
 coverage
+target

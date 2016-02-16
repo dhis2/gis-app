@@ -187,8 +187,6 @@ Ext.onReady( function() {
                 }
             },
             handler: function() {
-                console.log('embed handler');
-
                 var textArea,
                     window,
                     text = '',
@@ -765,6 +763,10 @@ Ext.onReady( function() {
                     this.map.invalidateSize();
                     this.map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
 
+                    L.control.scale({
+                        imperial: false
+                    }).addTo(this.map);
+
                     L.control.measure({
                         position: 'topleft',
                         primaryLengthUnit: 'kilometers',
@@ -887,8 +889,67 @@ Ext.onReady( function() {
 
         afterRender = function() {
 
-            // TODO: Add code
+            // Favorite
+            var id = gis.util.url.getUrlParam('id'),
+                session = gis.util.url.getUrlParam('s'),
+                base = gis.util.url.getUrlParam('base'),
+                layout;
 
+            if (id) {
+                gis.map = {
+                    id: id
+                };
+                GIS.core.MapLoader(gis).load();
+            }
+            else if (Ext.isString(session) && GIS.isSessionStorage && Ext.isObject(JSON.parse(sessionStorage.getItem('dhis2'))) && session in JSON.parse(sessionStorage.getItem('dhis2'))) {
+                layout = gis.api.layout.Layout(JSON.parse(sessionStorage.getItem('dhis2'))[session]);
+
+                if (layout) {
+                    GIS.core.MapLoader(gis, true).load([layout]);
+                }
+            }
+
+            // TODO: Add missing base code
+            /*
+            if (base.length) {
+
+                // hide base layer
+                if (Ext.Array.contains(['false', 'none', 'no', 'off'], base)) {
+                    for (var i = 0, item; i < layersPanel.layerItems.length; i++) {
+                        item = layersPanel.layerItems[i];
+
+                        if (item.layer.layerType === gis.conf.finals.layer.type_base && item.layer.visibility) {
+                            item.disableItem();
+                        }
+                    }
+                }
+                else {
+                    var isEnabled = false;
+
+                    for (var i = 0, item; i < layersPanel.layerItems.length; i++) {
+                        item = layersPanel.layerItems[i];
+
+                        if (item.layer.layerType === gis.conf.finals.layer.type_base) {
+                            if (base === item.layer.id) {
+                                item.enableItem();
+                                isEnabled = true;
+                            }
+                            else {
+                                item.disableItem();
+                            }
+                        }
+                    }
+
+                    if (!isEnabled) {
+                        layersPanel.layerItems[layersPanel.layerItems.length - 1].enableItem();
+                    }
+                }
+            }*/
+
+            // remove params from url
+            if (id || session || base) {
+                history.pushState(null, null, '.')
+            }
 
             var initEl = document.getElementById('init');
             initEl.parentNode.removeChild(initEl);

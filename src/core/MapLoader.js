@@ -1,4 +1,3 @@
-//GIS.core.MapLoader = function(gis, isSession, applyConfig) {
 export default function MapLoader(gis, isSession, applyConfig) {
 	var getMap,
 		setMap,
@@ -153,7 +152,10 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		// gis.el is the element used to render the map (only for plugin)
 		// isSession is true if you select "map -> view this table/chart" as map in pivot/visualizer
 		if (gis.el || isSession || !validLatLng) {
-			gis.instance.fitBounds(gis.instance.getLayersBounds());
+			// Fit bounds not always set without a short delay
+			window.setTimeout(function(){
+				gis.instance.fitBounds(gis.instance.getLayersBounds());
+			}, 500);
 		}
 		else {
 			gis.instance.setView([lat, lon], zoom);

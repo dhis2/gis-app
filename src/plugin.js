@@ -398,6 +398,15 @@ Ext.onReady(function() {
         // alert
         css += '.ns-plugin-alert { width: 90%; padding: 5%; color: #777 } \n';
 
+        // Leaflet
+        css += '.leaflet-dhis2 { height: 100%; background-color: #fff; }';
+        css += '.leaflet-dhis2 .leaflet-popup h2 { padding-bottom: 10px; font-size: 14px; }';
+        css += '.leaflet-dhis2 .leaflet-popup th, .leaflet-dhis2 .leaflet-popup td { white-space: nowrap; }';
+        css += '.leaflet-dhis2 .leaflet-popup th { font-weight: bold; padding-right: 10px; }';
+        css += '.leaflet-dhis2 .leaflet-popup ul { margin-top: 5px; }';
+        css += '.leaflet-dhis2 .leaflet-popup li { list-style-type: disc; margin-left: 20px; }';
+        css += '.leaflet-dhis2 .leaflet-popup em { font-weight:bold; }';
+        
         Ext.util.CSS.createStyleSheet(css);
     };
 

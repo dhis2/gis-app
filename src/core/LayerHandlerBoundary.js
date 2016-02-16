@@ -2,7 +2,6 @@
 export default function LayerHandlerBoundary(gis, layer) {
     var compareView,
         loadOrganisationUnits,
-        loadLegend,
         loadData,
         afterLoad,
         loader,
@@ -59,8 +58,6 @@ export default function LayerHandlerBoundary(gis, layer) {
             }
             return gis.conf.finals.widget.loadtype_organisationunit;
         }
-
-        gis.mask.hide();
     };
 
     loadOrganisationUnits = function(view) {
@@ -101,8 +98,7 @@ export default function LayerHandlerBoundary(gis, layer) {
                 colors = ['black', 'blue', 'red', 'green', 'yellow'],
                 weights = [2, 1, 0.75, 0.5, 0.5],
                 levels = [],
-                levelStyle = {},
-                levelOrder = 'ASC';
+                levelStyle = {};
 
             if (!r.length) {
                 gis.mask.hide();

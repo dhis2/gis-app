@@ -13,8 +13,6 @@ export default function FavoriteWindow(gis) {
         grid,
         prevButton,
         nextButton,
-        tbar,
-        bbar,
         info,
         nameTextfield,
         createButton,
@@ -25,9 +23,6 @@ export default function FavoriteWindow(gis) {
     // Vars
         windowWidth = 500,
         windowCmpWidth = windowWidth - 14,
-
-        dimConf = gis.conf.finals.dimension,
-
         getRenderedVectorLayers;
 
     gis.store.maps.on('load', function(store, records) {

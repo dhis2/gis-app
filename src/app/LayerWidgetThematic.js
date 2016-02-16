@@ -1049,7 +1049,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 map = {};
 
             if (Ext.isArray(selection) && selection.length) {
-                for (var i = 0, pathArray, key; i < selection.length; i++) {
+                for (var i = 0, pathArray; i < selection.length; i++) {
                     pathArray = selection[i].getPath().split('/');
                     map[pathArray.pop()] = pathArray.join('/');
                 }
@@ -1188,8 +1188,6 @@ export default function LayerWidgetThematic(gis, layer) {
         },
         listeners: {
             beforeitemexpand: function() {
-                var rts = treePanel.recordsToSelect;
-
                 if (!treePanel.isPending) {
                     treePanel.recordsToRestore = treePanel.getSelectionModel().getSelection();
                 }
@@ -1682,7 +1680,6 @@ export default function LayerWidgetThematic(gis, layer) {
         var dxDim = view.columns[0],
             peDim = view.filters[0],
             ouDim = view.rows[0],
-            vType = dxDim.dimension === dimConf.operand.objectName ? dimConf.dataElement.objectName : dxDim.dimension,
             lType = Ext.isObject(view.legendSet) && Ext.isString(view.legendSet.id) ? gis.conf.finals.widget.legendtype_predefined : gis.conf.finals.widget.legendtype_automatic,
             itemTypeCmpMap = {},
             objectNameProgramCmpMap = {},
@@ -1962,7 +1959,7 @@ export default function LayerWidgetThematic(gis, layer) {
             //}
         },
         getExpandedPanel: function() {
-            for (var i = 0, panel; i < this.panels.length; i++) {
+            for (var i = 0; i < this.panels.length; i++) {
                 if (!this.panels[i].collapsed) {
                     return this.panels[i];
                 }

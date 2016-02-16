@@ -7,11 +7,9 @@ export default function LayerHandlerFacility(gis, layer) {
 		loadLegend,
 		updateLegend,
 		updateMap,
-		addCircles,
 		afterLoad,
         onFeatureClick,
 		onFeatureRightClick,
-		isValidCoordinate,
 		loader;
 
 	compareView = function(view, doExecute) {

@@ -26,8 +26,7 @@ export default function FeaturePopup(gis, instance) {
             var html = '<h2>' + feature.properties.name + '</h2>',
                 records = [],
                 dxIndex,
-                valueIndex,
-                win;
+                valueIndex;
 
             if (r.rows && r.rows.length) {
 

@@ -1,12 +1,10 @@
 //GIS.core.LayerHandlerEvent = function(gis, layer) {
 export default function LayerHandlerEvent(gis, layer) {
-    var compareView,
-        loadOrganisationUnits,
+    var loadOrganisationUnits,
         loadData,
         afterLoad,
         updateMap,
-        handler,
-        dimConf = gis.conf.finals.dimension;
+        handler;
 
     loadOrganisationUnits = function(view) {
         loadData(view);
@@ -14,7 +12,6 @@ export default function LayerHandlerEvent(gis, layer) {
 
     loadData = function(view) {
         var paramString = '?',
-            features = [],
             success;
 
         view = view || layer.view;
@@ -71,13 +68,10 @@ export default function LayerHandlerEvent(gis, layer) {
                     'ps'
                 ],
                 popup,
-                config,
                 updateFeatures,
                 getOptionSets;
 
             updateFeatures = function() {
-                var layerConfig;
-
                 // Find header names and keys
                 for (var i = 0, header; i < r.headers.length; i++) {
                     header = r.headers[i];

@@ -221,7 +221,6 @@ export default function createExtensions(gis) {
         },
         initComponent: function() {
             var ct = this,
-                padding = 2,
                 onAdded = function(cmp) {
                     ct.components.push(cmp);
                 };

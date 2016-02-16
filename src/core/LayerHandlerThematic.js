@@ -2,7 +2,6 @@
 export default function LayerHandlerThematic(gis, layer) {
     var compareView,
         loadOrganisationUnits,
-        addData,
         loadLegend,
         applyClassification,
         rgbToHex,
@@ -16,7 +15,6 @@ export default function LayerHandlerThematic(gis, layer) {
         onFeatureClick,
         onFeatureRightClick,
         loader,
-        dimConf = gis.conf.finals.dimension,
         data = {};
 
     compareView = function (view, doExecute) {
@@ -349,7 +347,6 @@ export default function LayerHandlerThematic(gis, layer) {
             names = [],
             legends = [],
             count = {}, // number in each class
-            addNames,
             fn,
             loadLegendSet;
 

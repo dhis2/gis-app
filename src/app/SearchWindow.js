@@ -3,7 +3,6 @@ export default function SearchWindow(gis, layer) {
     var data = [],
         store = layer.featureStore,
         highlight,
-        button,
         window;
 
     for (var i = 0; i < layer.features.length; i++) {

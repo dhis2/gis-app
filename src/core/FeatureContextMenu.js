@@ -8,7 +8,6 @@ export default function FeatureContextMenu(gis, layer, instance) {
         onRelocate,
         showInfo,
         drill,
-        selectHandlers,
         isPoint = feature.geometry.type === 'Point',
         att = feature.properties,
         mapContainer = gis.instance.getContainer();

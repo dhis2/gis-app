@@ -23,37 +23,10 @@ export default function LayerWidgetEvent(gis, layer) {
         selectDataElements,
         dataElement,
 
-        periodMode,
-        onPeriodModeSelect,
-        getDateLink,
         startDate,
         endDate,
-        startEndDate,
         onDateFieldRender,
 
-        onPeriodChange,
-        onCheckboxAdd,
-        intervalListeners,
-        relativePeriodCmpMap = {},
-        weeks,
-        months,
-        biMonths,
-        quarters,
-        sixMonths,
-        financialYears,
-        years,
-        relativePeriod,
-        checkboxes = [],
-
-        fixedPeriodAvailable,
-        fixedPeriodSelected,
-        onPeriodTypeSelect,
-        periodType,
-        prevYear,
-        nextYear,
-        fixedPeriodSettings,
-        fixedPeriodAvailableSelected,
-        periods,
         period,
 
         treePanel,
@@ -81,10 +54,7 @@ export default function LayerWidgetEvent(gis, layer) {
         baseWidth = 444,
         toolWidth = 36,
 
-        accBaseWidth = baseWidth - 2,
-
-        namePropertyUrl = gis.init.namePropertyUrl,
-        nameProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty;
+        accBaseWidth = baseWidth - 2;
 
     // stores
 
@@ -228,8 +198,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 success: function(r) {
                     var program = Ext.decode(r.responseText).programs[0],
                         stages,
-                        attributes,
-                        stageId;
+                        attributes;
 
                     if (!program) {
                         return;
@@ -540,7 +509,7 @@ export default function LayerWidgetEvent(gis, layer) {
         }
 
         // panel, store
-        for (var i = 0, element, ux; i < dataElements.length; i++) {
+        for (var i = 0, element; i < dataElements.length; i++) {
             element = dataElements[i];
 
             addUxFromDataElement(element);
@@ -699,7 +668,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 map = {};
 
             if (Ext.isArray(selection) && selection.length) {
-                for (var i = 0, pathArray, key; i < selection.length; i++) {
+                for (var i = 0, pathArray; i < selection.length; i++) {
                     pathArray = selection[i].getPath().split('/');
                     map[pathArray.pop()] = pathArray.join('/');
                 }
@@ -838,8 +807,6 @@ export default function LayerWidgetEvent(gis, layer) {
         },
         listeners: {
             beforeitemexpand: function() {
-                var rts = treePanel.recordsToSelect;
-
                 if (!treePanel.isPending) {
                     treePanel.recordsToRestore = treePanel.getSelectionModel().getSelection();
                 }

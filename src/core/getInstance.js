@@ -4,7 +4,6 @@ export default function getInstance(init) {
         util = {},
         api = {},
         store = {},
-        layers = [],
         gis = {},
         dimConf;
 
@@ -786,7 +785,7 @@ export default function getInstance(init) {
             var types = [];
 
             if (Ext.isArray(dataDimensionItems) && dataDimensionItems.length) {
-                for (var i = 0, obj; i < dataDimensionItems.length; i++) {
+                for (var i = 0; i < dataDimensionItems.length; i++) {
                     if (Ext.isObject(dataDimensionItems[i])) {
                         types.push(dataDimensionItems[i].dataDimensionItemType);
                     }
@@ -996,10 +995,8 @@ export default function getInstance(init) {
             };
 
             return function() {
-                var a = [],
-                    objectNames =   [],
+                var objectNames =   [],
                     dimConf = conf.finals.dimension,
-                    layerConf,
                     isOu = false,
                     isOuc = false,
                     isOugc = false;

@@ -1,12 +1,9 @@
 //GIS.app.extendInstance = function(gis) {
 export default function extendInstance(gis) {
-    var conf = gis.conf,
-        util = gis.util,
+    var util = gis.util,
         init = gis.init,
         store = gis.store,
         layer;
-
-    //console.log("extend", gis);
 
     // util
     (function() {

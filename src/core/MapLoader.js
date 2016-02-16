@@ -1,7 +1,6 @@
 export default function MapLoader(gis, isSession, applyConfig) {
 	var getMap,
 		setMap,
-		closeAllLayers,
 		afterLoad,
 		callBack,
 		register = [],

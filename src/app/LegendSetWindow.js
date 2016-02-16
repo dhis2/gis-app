@@ -79,8 +79,7 @@ export default function LegendSetWindow(gis) {
         deleteLegend: deleteLegend,
         listeners: {
             load: function(store, records) {
-                var data = [],
-                    record;
+                var data = [];
 
                 for (var i = 0; i < records.length; i++) {
                     data.push(records[i].data);
@@ -242,8 +241,6 @@ export default function LegendSetWindow(gis) {
     LegendPanel = function(id) {
         var panel,
             addLegend,
-            reset,
-            data = [],
             LegendEditWindow,
             showUpdateLegend;
 
@@ -255,8 +252,6 @@ export default function LegendSetWindow(gis) {
                 editColor,
                 editCancel,
                 editUpdate,
-                showUpdateLegend,
-                validateForm,
                 editWindow;
 
             editLegendName = Ext.create('Ext.form.field.Text', {

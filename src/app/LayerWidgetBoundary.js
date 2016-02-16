@@ -110,7 +110,7 @@ export default function LayerWidgetBoundary(gis, layer) {
                 map = {};
 
             if (Ext.isArray(selection) && selection.length) {
-                for (var i = 0, pathArray, key; i < selection.length; i++) {
+                for (var i = 0, pathArray; i < selection.length; i++) {
                     pathArray = selection[i].getPath().split('/');
                     map[pathArray.pop()] = pathArray.join('/');
                 }
@@ -249,8 +249,6 @@ export default function LayerWidgetBoundary(gis, layer) {
         },
         listeners: {
             beforeitemexpand: function() {
-                var rts = treePanel.recordsToSelect;
-
                 if (!treePanel.isPending) {
                     treePanel.recordsToRestore = treePanel.getSelectionModel().getSelection();
                 }
@@ -674,7 +672,7 @@ export default function LayerWidgetBoundary(gis, layer) {
 
         infrastructuralDataElementValuesStore: infrastructuralDataElementValuesStore,
         getExpandedPanel: function() {
-            for (var i = 0, panel; i < this.panels.length; i++) {
+            for (var i = 0; i < this.panels.length; i++) {
                 if (!this.panels[i].collapsed) {
                     return this.panels[i];
                 }

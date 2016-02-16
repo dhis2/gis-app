@@ -393,7 +393,7 @@ export default function FavoriteWindow(gis) {
                                     url: gis.init.contextPath + '/api/sharing?type=map&id=' + record.data.id,
                                     method: 'GET',
                                     failure: function(r) {
-                                        gis.olmap.mask.hide();
+                                        gis.mask.hide();
                                         gis.alert(r);
                                     },
                                     success: function(r) {
@@ -473,9 +473,9 @@ export default function FavoriteWindow(gis) {
                         Ext.create('Ext.tip.ToolTip', {
                             target: el,
                             html: GIS.i18n.rename,
-                            'anchor': 'bottom',
+                            anchor: 'bottom',
                             anchorOffset: -14,
-                            showDelay: 1000
+                            showDelay: 500
                         });
                     }
 
@@ -484,9 +484,9 @@ export default function FavoriteWindow(gis) {
                         Ext.create('Ext.tip.ToolTip', {
                             target: el,
                             html: GIS.i18n.overwrite,
-                            'anchor': 'bottom',
+                            anchor: 'bottom',
                             anchorOffset: -14,
-                            showDelay: 1000
+                            showDelay: 500
                         });
                     }
 
@@ -495,9 +495,9 @@ export default function FavoriteWindow(gis) {
                         Ext.create('Ext.tip.ToolTip', {
                             target: el,
                             html: GIS.i18n.share_with_other_people,
-                            'anchor': 'bottom',
+                            anchor: 'bottom',
                             anchorOffset: -14,
-                            showDelay: 1000
+                            showDelay: 500
                         });
                     }
 
@@ -506,9 +506,9 @@ export default function FavoriteWindow(gis) {
                         Ext.create('Ext.tip.ToolTip', {
                             target: el,
                             html: GIS.i18n.add_to_dashboard,
-                            'anchor': 'bottom',
+                            anchor: 'bottom',
                             anchorOffset: -14,
-                            showDelay: 1000
+                            showDelay: 500
                         });
                     }
 
@@ -516,10 +516,10 @@ export default function FavoriteWindow(gis) {
                         el = deleteArray[i];
                         Ext.create('Ext.tip.ToolTip', {
                             target: el,
-                            html: GIS.i18n.delete_,
-                            'anchor': 'bottom',
+                            html: GIS.i18n.delete,
+                            anchor: 'bottom',
                             anchorOffset: -14,
-                            showDelay: 1000
+                            showDelay: 500
                         });
                     }
                 };

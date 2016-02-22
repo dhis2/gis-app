@@ -679,6 +679,8 @@ Ext.onReady(function() {
                         gis.viewport.northRegion.setWidth(width);
                     }
                 };
+
+                gis.instance.scrollWheelZoom.disable();
             }
 
             gis.mask = Ext.create('Ext.LoadMask', gis.viewport.centerRegion.getEl(), {

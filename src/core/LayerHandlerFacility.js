@@ -267,7 +267,24 @@ export default function LayerHandlerFacility(gis, layer) {
 			element.appendChild(child);
 		}
 
-		layer.legendPanel.update(element.outerHTML);
+		if (layer.legendPanel) {
+			layer.legendPanel.update(element.outerHTML);
+		} else { // Plugin
+			var legendControl = gis.instance.legendControl,
+				legendContent;
+
+			if (!legendControl) {
+				legendControl = gis.instance.addLegendControl(element.outerHTML);
+			} else {
+				legendContent = legendControl.getContent();
+
+				if (legendContent) {
+					legendContent += '<br/>';
+				}
+
+				legendControl.setContent(legendContent + element.outerHTML);
+			}
+		}
 	},
 
 	afterLoad = function(view) {

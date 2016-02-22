@@ -415,6 +415,7 @@ export default function LayerHandlerThematic(gis, layer) {
         };
 
         if (view.legendSet) {
+            view.method = 1; // Predefined legend
             loadLegendSet(view);
         }
         else {
@@ -615,26 +616,30 @@ export default function LayerHandlerThematic(gis, layer) {
             bounds = options.bounds,
             colors = options.colors,
             element = document.createElement('div'),
-            style = {},
+            /*
+            style = {
+                dataLineHeight: isPlugin ? '12px' : '14px',
+                dataPaddingBottom: isPlugin ? '1px' : '3px',
+                colorWidth: isPlugin ? '15px' : '30px',
+                colorHeight: isPlugin ? '13px' : '15px',
+                colorMarginRight: isPlugin ? '5px' : '8px',
+                fontSize: isPlugin ? '10px' : '11px'
+            },
+            */
             legendNames = view.legendSet ? view.legendSet.names || {} : {},
             child,
             id,
             name;
 
-        style.dataLineHeight = isPlugin ? '12px' : '14px';
-        style.dataPaddingBottom = isPlugin ? '1px' : '3px';
-        style.colorWidth = isPlugin ? '15px' : '30px';
-        style.colorHeight = isPlugin ? '13px' : '15px';
-        style.colorMarginRight = isPlugin ? '5px' : '8px';
-        style.fontSize = isPlugin ? '10px' : '11px';
+        console.log("##", isPlugin);
 
         // data
         id = view.columns[0].items[0].id;
         name = view.columns[0].items[0].name;
         child = document.createElement("div");
-        child.style.lineHeight = style.dataLineHeight;
-        child.style.paddingBottom = style.dataPaddingBottom;
-        child.innerHTML += metaData.names[id] || name || id;
+        //child.style.lineHeight = style.dataLineHeight;
+        //child.style.paddingBottom = style.dataPaddingBottom;
+        child.innerHTML += (metaData.names[id] || name || id);
         child.innerHTML += "<br/>";
 
         // period
@@ -654,15 +659,16 @@ export default function LayerHandlerThematic(gis, layer) {
                 label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
 
                 child = document.createElement('div');
-                child.style.backgroundColor = colors[i];
-                child.style.width = style.colorWidth;
-                child.style.height = name ? '25px' : style.colorHeight;
-                child.style.cssFloat = 'left';
-                child.style.marginRight = style.colorMarginRight;
+                //child.style.backgroundColor = colors[i];
+                //child.style.width = style.colorWidth;
+                //child.style.height = name ? '25px' : style.colorHeight;
+                //child.style.cssFloat = 'left';
+                //child.style.marginRight = style.colorMarginRight;
                 element.appendChild(child);
 
                 child = document.createElement('div');
-                child.style.lineHeight = name ? '12px' : '7px';
+                //child.style.lineHeight = name ? '12px' : '7px';
+                //child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (name || '') + '</b><br/>' + label;
                 child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (name || '') + '</b><br/>' + label;
                 element.appendChild(child);
 
@@ -678,10 +684,10 @@ export default function LayerHandlerThematic(gis, layer) {
                  child = document.createElement('div');
                  child.style.backgroundColor = colors[i];
 
-                 child.style.width = style.colorWidth;
-                 child.style.height = style.colorHeight;
-                 child.style.cssFloat = 'left';
-                 child.style.marginRight = style.colorMarginRight;
+                 //child.style.width = style.colorWidth;
+                 //child.style.height = style.colorHeight;
+                 //child.style.cssFloat = 'left';
+                 //child.style.marginRight = style.colorMarginRight;
                  element.appendChild(child);
 
                  child = document.createElement('div');
@@ -689,12 +695,29 @@ export default function LayerHandlerThematic(gis, layer) {
                  element.appendChild(child);
 
                  child = document.createElement('div');
-                 child.style.clear = 'left';
+                 //child.style.clear = 'left';
                  element.appendChild(child);
              }
         }
 
-        layer.legendPanel.update(element.outerHTML);
+        if (layer.legendPanel) {
+            layer.legendPanel.update(element.outerHTML);
+        } else { // Plugin
+            var legendControl = gis.instance.legendControl,
+                legendContent;
+
+            if (!legendControl) {
+                legendControl = gis.instance.addLegendControl(element.outerHTML);
+            } else {
+                legendContent = legendControl.getContent();
+
+                if (legendContent) {
+                    legendContent += '<br/>';
+                }
+
+                legendControl.setContent(legendContent + element.outerHTML);
+            }
+        }
     },
 
     afterLoad = function(view) {

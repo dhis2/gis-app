@@ -319,9 +319,12 @@ export default function LayerHandlerThematic(gis, layer) {
                 return a - b;
             });
 
-            data.metaData = response.metaData;
-            data.features = valueFeatures;
-            data.values = values;
+            // TODO: Temporarilty fix
+            gis.data = {
+                metaData: response.metaData,
+                features: valueFeatures,
+                values: values
+            };
 
             loadLegend(view);
         };
@@ -339,9 +342,9 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     loadLegend = function (view, metaData, features, values) {
-        var metaData = metaData || data.metaData,
-            features = features || data.features,
-            values = values || data.values,
+        var metaData = metaData || gis.data.metaData,
+            features = features || gis.data.features,
+            values = values || gis.data.values,
             bounds = [],
             colors = [],
             names = [],
@@ -616,7 +619,6 @@ export default function LayerHandlerThematic(gis, layer) {
             bounds = options.bounds,
             colors = options.colors,
             element = document.createElement('div'),
-            /*
             style = {
                 dataLineHeight: isPlugin ? '12px' : '14px',
                 dataPaddingBottom: isPlugin ? '1px' : '3px',
@@ -625,20 +627,17 @@ export default function LayerHandlerThematic(gis, layer) {
                 colorMarginRight: isPlugin ? '5px' : '8px',
                 fontSize: isPlugin ? '10px' : '11px'
             },
-            */
             legendNames = view.legendSet ? view.legendSet.names || {} : {},
             child,
             id,
             name;
 
-        console.log("##", isPlugin);
-
         // data
         id = view.columns[0].items[0].id;
         name = view.columns[0].items[0].name;
         child = document.createElement("div");
-        //child.style.lineHeight = style.dataLineHeight;
-        //child.style.paddingBottom = style.dataPaddingBottom;
+        child.style.lineHeight = style.dataLineHeight;
+        child.style.paddingBottom = style.dataPaddingBottom;
         child.innerHTML += (metaData.names[id] || name || id);
         child.innerHTML += "<br/>";
 
@@ -659,16 +658,16 @@ export default function LayerHandlerThematic(gis, layer) {
                 label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
 
                 child = document.createElement('div');
-                //child.style.backgroundColor = colors[i];
-                //child.style.width = style.colorWidth;
-                //child.style.height = name ? '25px' : style.colorHeight;
-                //child.style.cssFloat = 'left';
-                //child.style.marginRight = style.colorMarginRight;
+                child.style.backgroundColor = colors[i];
+                child.style.width = style.colorWidth;
+                child.style.height = name ? '25px' : style.colorHeight;
+                child.style.cssFloat = 'left';
+                child.style.marginRight = style.colorMarginRight;
                 element.appendChild(child);
 
                 child = document.createElement('div');
-                //child.style.lineHeight = name ? '12px' : '7px';
-                //child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (name || '') + '</b><br/>' + label;
+                child.style.lineHeight = name ? '12px' : '7px';
+                child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (name || '') + '</b><br/>' + label;
                 child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (name || '') + '</b><br/>' + label;
                 element.appendChild(child);
 
@@ -684,10 +683,10 @@ export default function LayerHandlerThematic(gis, layer) {
                  child = document.createElement('div');
                  child.style.backgroundColor = colors[i];
 
-                 //child.style.width = style.colorWidth;
-                 //child.style.height = style.colorHeight;
-                 //child.style.cssFloat = 'left';
-                 //child.style.marginRight = style.colorMarginRight;
+                 child.style.width = style.colorWidth;
+                 child.style.height = style.colorHeight;
+                 child.style.cssFloat = 'left';
+                 child.style.marginRight = style.colorMarginRight;
                  element.appendChild(child);
 
                  child = document.createElement('div');
@@ -695,7 +694,7 @@ export default function LayerHandlerThematic(gis, layer) {
                  element.appendChild(child);
 
                  child = document.createElement('div');
-                 //child.style.clear = 'left';
+                 child.style.clear = 'left';
                  element.appendChild(child);
              }
         }

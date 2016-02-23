@@ -523,7 +523,8 @@ export default function createExtensions(gis) {
                 this.removeCmp
             ];
 
-            this.callParent();
+            //this.callParent();
+            this.self.superclass.initComponent.call(this);
         }
     });
 
@@ -604,7 +605,8 @@ export default function createExtensions(gis) {
                 this.removeCmp
             ];
 
-            this.callParent();
+            //this.callParent();
+            this.self.superclass.initComponent.call(this);
         }
     });
 
@@ -694,7 +696,8 @@ export default function createExtensions(gis) {
                 this.removeCmp
             ];
 
-            this.callParent();
+            //this.callParent();
+            this.self.superclass.initComponent.call(this);
         }
     });
 
@@ -768,7 +771,8 @@ export default function createExtensions(gis) {
                 this.removeCmp
             ];
 
-            this.callParent();
+            //this.callParent();
+            this.self.superclass.initComponent.call(this);
         }
     });
 

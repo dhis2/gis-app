@@ -461,7 +461,6 @@ export default function LayerWidgetEvent(gis, layer) {
             return 'Ext.ux.panel.DataElementIntegerContainer';
         };
 
-        // add
         ux = dataElementSelected.insert(index, Ext.create(getUxType(element), {
             dataElement: element
         }));
@@ -472,9 +471,6 @@ export default function LayerWidgetEvent(gis, layer) {
             if (!dataElementSelected.hasDataElement(element.id)) {
                 dataElementsByStageStore.add(element);
                 dataElementsByStageStore.sort();
-
-                //ns.app.aggregateLayoutWindow.removeDimension(element.id);
-                //ns.app.queryLayoutWindow.removeDimension(element.id);
             }
         };
 

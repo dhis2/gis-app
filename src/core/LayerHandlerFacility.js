@@ -255,34 +255,26 @@ export default function LayerHandlerFacility(gis, layer) {
 	};
 
 	updateLegend = function(items) {
-		var	element = document.createElement('ul'),
-			child;
-
-		element.className = 'legend';
+		var html = '<div class="dhis2-legend"><dl class="dhis2-legend-image">';
 
 		for (var i = 0; i < items.length; i++) {
-			child = document.createElement('li');
-			child.style.backgroundImage = 'url(' + gis.init.contextPath + '/images/orgunitgroup/' + items[i].symbol + ')';
-			child.innerHTML = items[i].name;
-			element.appendChild(child);
+			html += '<dt style="background-image:url(' + gis.init.contextPath + '/images/orgunitgroup/' + items[i].symbol + ');"></dt>';
+			html += '<dd>' + items[i].name + '</dd>';
 		}
 
+		html += '</dl></div>';
+
 		if (layer.legendPanel) {
-			layer.legendPanel.update(element.outerHTML);
+			layer.legendPanel.update(html);
 		} else { // Plugin
 			var legendControl = gis.instance.legendControl,
 				legendContent;
 
 			if (!legendControl) {
-				legendControl = gis.instance.addLegendControl(element.outerHTML);
+				legendControl = gis.instance.addLegendControl(html);
 			} else {
 				legendContent = legendControl.getContent();
-
-				if (legendContent) {
-					legendContent += '<br/>';
-				}
-
-				legendControl.setContent(legendContent + element.outerHTML);
+				legendControl.setContent(legendContent + html);
 			}
 		}
 	},

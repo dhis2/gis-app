@@ -326,6 +326,8 @@ export default function LayerHandlerThematic(gis, layer) {
                 values: values
             };
 
+            gis.response = response;
+
             loadLegend(view);
         };
 
@@ -342,7 +344,8 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     loadLegend = function (view, metaData, features, values) {
-        var metaData = metaData || gis.data.metaData,
+        var dimConf = gis.conf.finals.dimension,
+            metaData = metaData || gis.data.metaData,
             features = features || gis.data.features,
             values = values || gis.data.values,
             bounds = [],
@@ -350,12 +353,42 @@ export default function LayerHandlerThematic(gis, layer) {
             names = [],
             legends = [],
             count = {}, // number in each class
+            addNames,
             fn,
             loadLegendSet;
 
         view = view || layer.view;
 
+        addNames = function(response) {
+
+            // All dimensions
+            var dimensions = Ext.Array.clean([].concat(view.columns || [], view.rows || [], view.filters || [])),
+                metaData = response.metaData,
+                peIds = metaData[dimConf.period.objectName];
+
+            for (var i = 0, dimension; i < dimensions.length; i++) {
+                dimension = dimensions[i];
+
+                for (var j = 0, item; j < dimension.items.length; j++) {
+                    item = dimension.items[j];
+
+                    if (item.id.indexOf('.') !== -1) {
+                        var ids = item.id.split('.');
+                        item.name = metaData.names[ids[0]] + ' ' + metaData.names[ids[1]];
+                    }
+                    else {
+                        item.name = metaData.names[item.id];
+                    }
+                }
+            }
+
+            // Period name without changing the id
+            view.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]];
+        };
+
         fn = function () {
+            addNames(gis.response);
+
             var options = { // Classification options
                 indicator: gis.conf.finals.widget.value,
                 method: view.method,
@@ -615,106 +648,57 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     updateLegend = function (view, metaData, options) {
-        var isPlugin = gis.plugin,
-            bounds = options.bounds,
+        var bounds = options.bounds,
             colors = options.colors,
-            element = document.createElement('div'),
-            style = {
-                dataLineHeight: isPlugin ? '12px' : '14px',
-                dataPaddingBottom: isPlugin ? '1px' : '3px',
-                colorWidth: isPlugin ? '15px' : '30px',
-                colorHeight: isPlugin ? '13px' : '15px',
-                colorMarginRight: isPlugin ? '5px' : '8px',
-                fontSize: isPlugin ? '10px' : '11px'
-            },
             legendNames = view.legendSet ? view.legendSet.names || {} : {},
-            child,
+            html,
             id,
             name;
 
-        // data
+        // title
         id = view.columns[0].items[0].id;
         name = view.columns[0].items[0].name;
-        child = document.createElement("div");
-        child.style.lineHeight = style.dataLineHeight;
-        child.style.paddingBottom = style.dataPaddingBottom;
-        child.innerHTML += (metaData.names[id] || name || id);
-        child.innerHTML += "<br/>";
+        html = '<div class="dhis2-legend"><h2>' + (metaData.names[id] || name || id);
 
         // period
         id = view.filters[0].items[0].id;
         name = view.filters[0].items[0].name;
-        child.innerHTML += metaData.names[id] || name || id;
-        element.appendChild(child);
+        html += ' <span>' + (metaData.names[id] || name || id) + '</span></h2>';
 
-        child = document.createElement("div");
-        child.style.clear = "left";
-        element.appendChild(child);
-
-        // legends
+        // color legend
         if (view.method === 1 && view.legendSet) {
+            html += '<dl class="dhis2-legend-predefined">';
+
             for (var i = 0, name, label; i < bounds.length - 1; i++) {
                 name = legendNames[i];
                 label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
-
-                child = document.createElement('div');
-                child.style.backgroundColor = colors[i];
-                child.style.width = style.colorWidth;
-                child.style.height = name ? '25px' : style.colorHeight;
-                child.style.cssFloat = 'left';
-                child.style.marginRight = style.colorMarginRight;
-                element.appendChild(child);
-
-                child = document.createElement('div');
-                child.style.lineHeight = name ? '12px' : '7px';
-                child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (name || '') + '</b><br/>' + label;
-                child.innerHTML = '<b style="color:#222; font-size:10px !important">' + (name || '') + '</b><br/>' + label;
-                element.appendChild(child);
-
-                child = document.createElement('div');
-                child.style.clear = 'left';
-                element.appendChild(child);
+                html += '<dt style="background-color:' + colors[i] + ';"></dt>';
+                html += '<dd><strong>' + (name || '') + '</strong>' + label + '</dd>';
             }
         }
         else {
-             for (var i = 0, label; i < bounds.length - 1; i++) {
-                 label = bounds[i].toFixed(1) + ' - ' + bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')';
+            html += '<dl class="dhis2-legend-automatic">';
 
-                 child = document.createElement('div');
-                 child.style.backgroundColor = colors[i];
-
-                 child.style.width = style.colorWidth;
-                 child.style.height = style.colorHeight;
-                 child.style.cssFloat = 'left';
-                 child.style.marginRight = style.colorMarginRight;
-                 element.appendChild(child);
-
-                 child = document.createElement('div');
-                 child.innerHTML = label;
-                 element.appendChild(child);
-
-                 child = document.createElement('div');
-                 child.style.clear = 'left';
-                 element.appendChild(child);
-             }
+            for (var i = 0, label; i < bounds.length - 1; i++) {
+                label = bounds[i].toFixed(1) + ' - ' + bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')';
+                html += '<dt style="background-color:' + colors[i] + ';"></dt>';
+                html += '<dd>' + label + '</dd>';
+            }
         }
 
+        html += '</dl></div>';
+
         if (layer.legendPanel) {
-            layer.legendPanel.update(element.outerHTML);
+            layer.legendPanel.update(html);
         } else { // Plugin
             var legendControl = gis.instance.legendControl,
                 legendContent;
 
             if (!legendControl) {
-                legendControl = gis.instance.addLegendControl(element.outerHTML);
+                legendControl = gis.instance.addLegendControl(html);
             } else {
                 legendContent = legendControl.getContent();
-
-                if (legendContent) {
-                    legendContent += '<br/>';
-                }
-
-                legendControl.setContent(legendContent + element.outerHTML);
+                legendControl.setContent(legendContent + html);
             }
         }
     },

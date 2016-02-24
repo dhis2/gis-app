@@ -1,4 +1,3 @@
-//GIS.app.LayerWidgetBoundary = function(gis, layer) {
 export default function LayerWidgetBoundary(gis, layer) {
     var infrastructuralDataElementValuesStore,
         treePanel,
@@ -597,6 +596,7 @@ export default function LayerWidgetBoundary(gis, layer) {
 
             treePanel.selectGraphMap(view.parentGraphMap);
         }();
+
 
         setLayerGui = function() {
 

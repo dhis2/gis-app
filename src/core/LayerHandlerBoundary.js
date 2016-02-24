@@ -240,6 +240,7 @@ export default function LayerHandlerBoundary(gis, layer) {
         if (layer.unregisterMouseDownEvent) {
             layer.unregisterMouseDownEvent();
         }
+
     };
 
     loader = {

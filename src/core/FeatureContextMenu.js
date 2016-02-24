@@ -323,7 +323,8 @@ export default function FeatureContextMenu(gis, layer, instance) {
 
     // Drill or float
     drill = function(parentId, parentGraph, level) {
-        var view = Ext.clone(layer.view),
+        var dimConf = gis.conf.finals.dimension,
+            view = Ext.clone(layer.view),
             handler;
 
         // parent graph map
@@ -331,8 +332,6 @@ export default function FeatureContextMenu(gis, layer, instance) {
         view.parentGraphMap[parentId] = parentGraph;
 
         // dimension
-        console.log(gis);
-
         view.rows = [{
             dimension: dimConf.organisationUnit.objectName,
             items: [

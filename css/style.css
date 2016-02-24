@@ -716,6 +716,11 @@ gis-combo .x-form-item-label {
     cursor: default !important;
 }
 
+/* Color button */
+.x-btn.x-box-item.x-btn-default-small.gis-colorbutton-disabled {
+    opacity: 0;
+}
+
 
 /*----------------------------------------------------------------------------
  * Toolbar

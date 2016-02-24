@@ -690,15 +690,15 @@ export default function LayerHandlerThematic(gis, layer) {
 
         if (layer.legendPanel) {
             layer.legendPanel.update(html);
-        } else { // Plugin
-            var legendControl = gis.instance.legendControl,
-                legendContent;
-
-            if (!legendControl) {
-                legendControl = gis.instance.addLegendControl(html);
+        } else { // Dashboard map
+            if (!gis.legend) {
+                gis.legend = gis.instance.addControl({
+                    type: 'legend',
+                    offset: [0, -62],
+                    content: html
+                });
             } else {
-                legendContent = legendControl.getContent();
-                legendControl.setContent(legendContent + html);
+                gis.legend.setContent(gis.legend.getContent() + html);
             }
         }
     },

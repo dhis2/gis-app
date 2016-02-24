@@ -5,8 +5,10 @@ module.exports = {
     context: __dirname,
     //entry: './src/api.js',
     entry: {
-        'core': './src/core/core.js',
-        'app': './src/app/app.js',
+        'app': './src/app.js',
+        'map': './src/map.js',
+        //'core': './src/core/core.js',
+        //'app': './src/app/app.js',
     },
     devtool: 'source-map',
     output: {
@@ -21,8 +23,9 @@ module.exports = {
                 include: [
                     //path.resolve(__dirname, 'src/api.js'),
                     //path.resolve(__dirname, 'src/core/core.js'),
-                    path.resolve(__dirname, 'src/core/'),
-                    path.resolve(__dirname, 'src/app/'),
+                    path.resolve(__dirname, 'src/'),
+                    //path.resolve(__dirname, 'src/core/'),
+                    //path.resolve(__dirname, 'src/app/'),
                     path.resolve('/Users/bjornadm/Sites/dhis2-gis-api/src/'),
                 ],
                 loader: 'babel',

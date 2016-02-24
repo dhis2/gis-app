@@ -6,7 +6,7 @@
   "scripts": {
     "validate": "npm ls --depth 0",
     "start": "webpack-dev-server",
-    "build": "webpack --config webpack.config.prod.js && cp -r dhis2 build && cp -r extjs build && mkdir -p build/src/custom && cp -r src/custom build/src && cp index.html build && cp -r css build/css && cp src/app.js build/src/app.js && cp manifest.prod.webapp build/manifest.webapp && cp -r i18n build && cp -r images build && cp src/plugin.js build",
+    "build": "webpack --config webpack.config.prod.js && cp -r dhis2 build && cp -r extjs build && mkdir -p build/src/custom && cp -r src/custom build/src && cp index.html build && cp -r css build/css && cp src/app.js build/src/app.js && cp manifest.prod.webapp build/manifest.webapp && cp -r i18n build && cp -r images build",
     "lint": "./node_modules/eslint/bin/eslint.js src",
     "test": "./node_modules/karma-cli/bin/karma start test/karma.config.js --single-run",
     "test-watch": "./node_modules/karma-cli/bin/karma start test/karma.config.js",

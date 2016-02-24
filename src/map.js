@@ -1,3 +1,5 @@
+import core from './core/index.js';
+
 Ext.onReady(function() {
 
     var gis,
@@ -80,6 +82,7 @@ Ext.onReady(function() {
                                 namePropertyUrl,
                                 contextPath,
                                 keyUiLocale,
+                                keyAnalysisDisplayProperty,
                                 dateFormat,
                                 optionSetVersionConfig;
 
@@ -507,7 +510,15 @@ Ext.onReady(function() {
                     if (!this.map) {
                         this.map = gis.instance;
                         this.body.appendChild(this.map.getContainer());
+
+                        // Add zoom control
+                        this.map.addControl({
+                            type: 'zoom',
+                            position: 'topright'
+                        });
+
                         this.map.invalidateSize();
+                        this.map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
                     } else {
                         this.map.invalidateSize();
                     }
@@ -710,7 +721,7 @@ Ext.onReady(function() {
         }
     };
 
-    DHIS = Ext.isObject(window['DHIS']) ? DHIS : {};
+    var DHIS = Ext.isObject(window['DHIS']) ? window.DHIS : {};
     DHIS.getMap = GIS.plugin.getMap;
 
 });

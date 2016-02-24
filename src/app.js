@@ -1,3 +1,6 @@
+import core from './core/index.js';
+import app from './app/index.js';
+
 Ext.onReady( function() {
     var createViewport,
         initialize,
@@ -9,16 +12,10 @@ Ext.onReady( function() {
         // ext configuration
         Ext.QuickTips.init();
 
-        Ext.override(Ext.LoadMask, {
-            onHide: function() {
-                this.callParent();
-            }
-        });
-
         Ext.override(Ext.grid.Scroller, {
             afterRender: function() {
                 var me = this;
-                me.callParent();
+                me.self.superclass.onHide.call(me);
                 me.mon(me.scrollEl, 'scroll', me.onElScroll, me);
                 Ext.cache[me.el.id].skipGarbageCollection = true;
                 // add another scroll event listener to check, if main listeners is active
@@ -81,16 +78,10 @@ Ext.onReady( function() {
                     node.set('loading', true);
                 }
 
-                return me.callParent([options]);
+                //return me.callParent([options]);
+                return me.self.superclass.load.call(me, [options]);
             }
         });
-
-        // right click handler
-        /* TODO: activate?
-        document.body.oncontextmenu = function() {
-            return false;
-        };
-        */
     }());
 
     createViewport = function() {
@@ -100,6 +91,10 @@ Ext.onReady( function() {
             shareButton,
             aboutButton,
             defaultButton,
+            interpretationItem,
+            pluginItem,
+            favoriteUrlItem,
+            apiUrlItem,
             layersPanel,
             resizeButton,
             viewport,
@@ -760,14 +755,22 @@ Ext.onReady( function() {
                 if (!this.map) {
                     this.map = gis.instance;
                     this.body.appendChild(this.map.getContainer());
-                    this.map.invalidateSize();
-                    this.map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
 
-                    L.control.scale({
+                    // Add zoom control
+                    this.map.addControl({
+                        type: 'zoom',
+                        position: 'topleft'
+                    });
+
+                    // Add scale control
+                    this.map.addControl({
+                        type: 'scale',
                         imperial: false
-                    }).addTo(this.map);
+                    });
 
-                    L.control.measure({
+                    // Add measurement control
+                    this.map.addControl({
+                        type: 'measure',
                         position: 'topleft',
                         primaryLengthUnit: 'kilometers',
                         secondaryLengthUnit: 'miles',
@@ -775,7 +778,11 @@ Ext.onReady( function() {
                         secondaryAreaUnit: 'acres',
                         activeColor: '#ffa500',
                         completedColor: '#ffa500'
-                    }).addTo(this.map);
+                    });
+
+                    this.map.invalidateSize();
+                    this.map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
+
                 } else {
                     this.map.invalidateSize();
                 }
@@ -1075,6 +1082,7 @@ Ext.onReady( function() {
                                             namePropertyUrl,
                                             contextPath,
                                             keyUiLocale,
+                                            keyAnalysisDisplayProperty,
                                             dateFormat;
 
                                         init.userAccount.settings.keyUiLocale = init.userAccount.settings.keyUiLocale || defaultKeyUiLocale;
@@ -1328,7 +1336,8 @@ Ext.onReady( function() {
                                                                         url = '',
                                                                         callbacks = 0,
                                                                         checkOptionSet,
-                                                                        updateStore;
+                                                                        updateStore,
+                                                                        registerOptionSet;
 
                                                                     updateStore = function() {
                                                                         if (++callbacks === optionSets.length) {

@@ -1,4 +1,3 @@
-//GIS.core.getInstance = function(init) {
 export default function getInstance(init) {
     var conf = {},
         util = {},
@@ -1207,7 +1206,6 @@ export default function getInstance(init) {
     gis.api = api;
     gis.store = store;
 
-    gis.instance = GIS.core.getMap(gis);
     gis.layer = GIS.core.getLayers(gis);
     gis.thematicLayers = [gis.layer.thematic1, gis.layer.thematic2, gis.layer.thematic3, gis.layer.thematic4];
 
@@ -1215,6 +1213,8 @@ export default function getInstance(init) {
     gis.orderedLayers = [gis.layer.boundary, gis.layer.thematic4, gis.layer.thematic3, gis.layer.thematic2, gis.layer.thematic1, gis.layer.facility, gis.layer.event];
 
     gis.relocate = {}; // Relocate organisation units
+
+    gis.instance = GIS.core.getMap(gis);
 
     GIS.core.instances.push(gis);
 

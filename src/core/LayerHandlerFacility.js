@@ -1,4 +1,3 @@
-//GIS.core.LayerHandlerFacility = function(gis, layer) {
 export default function LayerHandlerFacility(gis, layer) {
 	var compareView,
 		loadOrganisationUnitGroups,
@@ -91,7 +90,6 @@ export default function LayerHandlerFacility(gis, layer) {
 
 	loadOrganisationUnits = function(view, orgUnitGroups) {
 		var items = view.rows[0].items,
-			isPlugin = GIS.plugin && !GIS.app,
 			propertyMap = {
 				'name': 'name',
 				'displayName': 'name',
@@ -118,7 +116,7 @@ export default function LayerHandlerFacility(gis, layer) {
 					}
 				}
 
-				return gis.init.contextPath + '/api/geoFeatures.' + (isPlugin ? 'jsonp' : 'json') + params + '&includeGroupSets=true';
+				return gis.init.contextPath + '/api/geoFeatures.json' + params + '&includeGroupSets=true';
 			}(),
 			success,
 			failure;
@@ -266,15 +264,15 @@ export default function LayerHandlerFacility(gis, layer) {
 
 		if (layer.legendPanel) {
 			layer.legendPanel.update(html);
-		} else { // Plugin
-			var legendControl = gis.instance.legendControl,
-				legendContent;
-
-			if (!legendControl) {
-				legendControl = gis.instance.addLegendControl(html);
+		} else { // Dashboard map
+			if (!gis.legend) {
+				gis.legend = gis.instance.addControl({
+					type: 'legend',
+					offset: [0, -62],
+					content: html
+				});
 			} else {
-				legendContent = legendControl.getContent();
-				legendControl.setContent(legendContent + html);
+				gis.legend.setContent(gis.legend.getContent() + html);
 			}
 		}
 	},
@@ -293,7 +291,7 @@ export default function LayerHandlerFacility(gis, layer) {
 			layer.item.setValue(true, view.opacity);
 		}
 		else {
-			layer.setLayerOpacity(view.opacity);
+			layer.instance.setOpacity(view.opacity);
 		}
 
 		// Gui

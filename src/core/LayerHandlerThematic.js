@@ -428,9 +428,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 success: function (r) {
                     legends = JSON.parse(r.responseText).legends;
 
-                    arraySort(legends, function (a, b) {
-                        return a.startValue - b.startValue;
-                    });
+                    arraySort(legends, 'ASC', 'startValue');
 
                     for (var i = 0; i < legends.length; i++) {
                         if (bounds[bounds.length - 1] !== legends[i].startValue) {

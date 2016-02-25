@@ -1,4 +1,9 @@
-//GIS.core.LayerHandlerThematic = function(gis, layer) {
+import isArray from 'd2-utilizr/lib/isArray';
+import isObject from 'd2-utilizr/lib/isObject';
+import arrayClean from 'd2-utilizr/lib/arrayClean';
+import arrayFrom from 'd2-utilizr/lib/arrayFrom';
+import arraySort from 'd2-utilizr/lib/arraySort';
+
 export default function LayerHandlerThematic(gis, layer) {
     var compareView,
         loadOrganisationUnits,
@@ -152,7 +157,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
                 params += '&displayProperty=' + displayProperty.toUpperCase();
 
-                if (Ext.isArray(view.userOrgUnit) && view.userOrgUnit.length) {
+                if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
                     params += '&userOrgUnit=';
 
                     for (var i = 0; i < view.userOrgUnit.length; i++) {
@@ -252,7 +257,7 @@ export default function LayerHandlerThematic(gis, layer) {
         // display property
         paramString += '&displayProperty=' + displayProperty.toUpperCase();
 
-        if (Ext.isArray(view.userOrgUnit) && view.userOrgUnit.length) {
+        if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
             paramString += '&userOrgUnit=';
 
             for (var i = 0; i < view.userOrgUnit.length; i++) {
@@ -362,7 +367,7 @@ export default function LayerHandlerThematic(gis, layer) {
         addNames = function(response) {
 
             // All dimensions
-            var dimensions = Ext.Array.clean([].concat(view.columns || [], view.rows || [], view.filters || [])),
+            var dimensions = arrayClean([].concat(view.columns || [], view.rows || [], view.filters || [])),
                 metaData = response.metaData,
                 peIds = metaData[dimConf.period.objectName];
 
@@ -422,7 +427,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 success: function (r) {
                     legends = Ext.decode(r.responseText).legends;
 
-                    Ext.Array.sort(legends, function (a, b) {
+                    arraySort(legends, function (a, b) {
                         return a.startValue - b.startValue;
                     });
 
@@ -474,8 +479,8 @@ export default function LayerHandlerThematic(gis, layer) {
                     var elements = Ext.decode(r.responseText)[elementUrl],
                         set;
 
-                    if (Ext.Array.from(elements).length) {
-                        set = Ext.isObject(elements[0]) ? elements[0].legendSet || null : null;
+                    if (arrayFrom(elements).length) {
+                        set = isObject(elements[0]) ? elements[0].legendSet || null : null;
                     }
 
                     if (set) {
@@ -725,7 +730,7 @@ export default function LayerHandlerThematic(gis, layer) {
         }
 
         // Gui
-        if (loader.updateGui && Ext.isObject(layer.widget)) {
+        if (loader.updateGui && isObject(layer.widget)) {
             layer.widget.setGui(view);
         }
 

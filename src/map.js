@@ -1,4 +1,9 @@
 import core from './core/index.js';
+import isBoolean from 'd2-utilizr/lib/isBoolean';
+import isObject from 'd2-utilizr/lib/isObject';
+import isString from 'd2-utilizr/lib/isString';
+import arrayClean from 'd2-utilizr/lib/arrayClean';
+import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 
 Ext.onReady(function() {
 
@@ -60,7 +65,7 @@ Ext.onReady(function() {
                 var systemSettings = r.responseText ? Ext.decode(r.responseText) : r,
                     userAccountConfig;
 
-                init.systemInfo.dateFormat = Ext.isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
+                init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
                 init.systemInfo.calendar = systemSettings.keyCalendar;
 
                 // user-account
@@ -152,7 +157,7 @@ Ext.onReady(function() {
 
                                     registerOptionSet = function(optionSet) {
                                         store.get('optionSets', optionSet.id).done(function(obj) {
-                                            if (!Ext.isObject(obj) || obj.version !== optionSet.version) {
+                                            if (!isObject(obj) || obj.version !== optionSet.version) {
                                                 ids.push(optionSet.id);
                                             }
 
@@ -214,7 +219,7 @@ Ext.onReady(function() {
                         ou.push(org.id);
 
                         if (org.children) {
-                            ouc = Ext.Array.clean(ouc.concat(Ext.Array.pluck(org.children, 'id') || []));
+                            ouc = arrayClean(ouc.concat(arrayPluck(org.children, 'id') || []));
                         }
                     }
 
@@ -422,7 +427,7 @@ Ext.onReady(function() {
             gis;
 
         validateConfig = function() {
-            if (!Ext.isString(config.url)) {
+            if (!isString(config.url)) {
                 alert('Invalid url (' + config.el + ')');
                 return;
             }
@@ -431,14 +436,14 @@ Ext.onReady(function() {
                 config.url = config.url.substr(0, config.url.length - 1);
             }
 
-            if (!Ext.isString(config.el)) {
+            if (!isString(config.el)) {
                 alert('Invalid html element id (' + config.el + ')');
                 return;
             }
 
             config.id = config.id || config.uid;
 
-            if (config.id && !Ext.isString(config.id)) {
+            if (config.id && !isString(config.id)) {
                 alert('Invalid map id (' + config.el + ')');
                 return;
             }
@@ -638,7 +643,7 @@ Ext.onReady(function() {
             // base layer
             gis.map.baseLayer = gis.map.baseLayer || 'none';
 
-            var base = Ext.isString(gis.map.baseLayer) ? gis.map.baseLayer.split(' ').join('').toLowerCase() : gis.map.baseLayer;
+            var base = isString(gis.map.baseLayer) ? gis.map.baseLayer.split(' ').join('').toLowerCase() : gis.map.baseLayer;
 
             if (!base || base === 'none' || base === 'off') {
                 gis.instance.addLayer(gis.layer.openStreetMap.config);
@@ -661,13 +666,13 @@ Ext.onReady(function() {
 
             appConfig = {
                 plugin: true,
-                dashboard: Ext.isBoolean(config.dashboard) ? config.dashboard : false,
-                crossDomain: Ext.isBoolean(config.crossDomain) ? config.crossDomain : true,
-                skipMask: Ext.isBoolean(config.skipMask) ? config.skipMask : false,
-                skipFade: Ext.isBoolean(config.skipFade) ? config.skipFade : false,
-                el: Ext.isString(config.el) ? config.el : null,
-                username: Ext.isString(config.username) ? config.username : null,
-                password: Ext.isString(config.password) ? config.password : null
+                dashboard: isBoolean(config.dashboard) ? config.dashboard : false,
+                crossDomain: isBoolean(config.crossDomain) ? config.crossDomain : true,
+                skipMask: isBoolean(config.skipMask) ? config.skipMask : false,
+                skipFade: isBoolean(config.skipFade) ? config.skipFade : false,
+                el: isString(config.el) ? config.el : null,
+                username: isString(config.username) ? config.username : null,
+                password: isString(config.password) ? config.password : null
             };
 
             // css
@@ -703,7 +708,7 @@ Ext.onReady(function() {
     };
 
     GIS.plugin.getMap = function(config) {
-        if (Ext.isString(config.url) && config.url.split('').pop() === '/') {
+        if (isString(config.url) && config.url.split('').pop() === '/') {
             config.url = config.url.substr(0, config.url.length - 1);
         }
 
@@ -721,7 +726,7 @@ Ext.onReady(function() {
         }
     };
 
-    var DHIS = Ext.isObject(window['DHIS']) ? window.DHIS : {};
+    var DHIS = isObject(window['DHIS']) ? window.DHIS : {};
     DHIS.getMap = GIS.plugin.getMap;
 
 });

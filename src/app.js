@@ -1,5 +1,7 @@
 import core from './core/index.js';
 import app from './app/index.js';
+import isObject from 'd2-utilizr/lib/isObject';
+import isString from 'd2-utilizr/lib/isString';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
 import arrayContains from 'd2-utilizr/lib/arrayContains';
 import arrayPluck from 'd2-utilizr/lib/arrayPluck';
@@ -911,7 +913,7 @@ Ext.onReady( function() {
                 };
                 GIS.core.MapLoader(gis).load();
             }
-            else if (Ext.isString(session) && GIS.isSessionStorage && Ext.isObject(JSON.parse(sessionStorage.getItem('dhis2'))) && session in JSON.parse(sessionStorage.getItem('dhis2'))) {
+            else if (isString(session) && GIS.isSessionStorage && isObject(JSON.parse(sessionStorage.getItem('dhis2'))) && session in JSON.parse(sessionStorage.getItem('dhis2'))) {
                 layout = gis.api.layout.Layout(JSON.parse(sessionStorage.getItem('dhis2'))[session]);
 
                 if (layout) {
@@ -1064,7 +1066,7 @@ Ext.onReady( function() {
                             url: init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat',
                             success: function(r) {
                                 var systemSettings = Ext.decode(r.responseText);
-                                init.systemInfo.dateFormat = Ext.isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
+                                init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
                                 init.systemInfo.calendar = systemSettings.keyCalendar;
 
                                 // user-account
@@ -1252,9 +1254,9 @@ Ext.onReady( function() {
                                             url: init.contextPath + '/api/configuration/infrastructuralIndicators.json',
                                             success: function(r) {
                                                 var obj = Ext.decode(r.responseText);
-                                                init.systemSettings.infrastructuralIndicatorGroup = Ext.isObject(obj) ? obj : null;
+                                                init.systemSettings.infrastructuralIndicatorGroup = isObject(obj) ? obj : null;
 
-                                                if (!Ext.isObject(obj)) {
+                                                if (!isObject(obj)) {
                                                     Ext.Ajax.request({
                                                         url: init.contextPath + '/api/indicatorGroups.json?fields=id,displayName|rename(name),indicators[id,' + namePropertyUrl + ']&pageSize=1',
                                                         success: function(r) {
@@ -1275,9 +1277,9 @@ Ext.onReady( function() {
                                             url: init.contextPath + '/api/configuration/infrastructuralDataElements.json',
                                             success: function(r) {
                                                 var obj = Ext.decode(r.responseText);
-                                                init.systemSettings.infrastructuralDataElementGroup = Ext.isObject(obj) ? obj : null;
+                                                init.systemSettings.infrastructuralDataElementGroup = isObject(obj) ? obj : null;
 
-                                                if (!Ext.isObject(obj)) {
+                                                if (!isObject(obj)) {
                                                     Ext.Ajax.request({
                                                         url: init.contextPath + '/api/dataElementGroups.json?fields=id,' + namePropertyUrl + ',dataElements[id,' + namePropertyUrl + ']&pageSize=1',
                                                         success: function(r) {
@@ -1299,7 +1301,7 @@ Ext.onReady( function() {
                                             success: function(r) {
                                                 var obj = Ext.decode(r.responseText);
 
-                                                init.systemSettings.infrastructuralPeriodType = Ext.isObject(obj) ? obj : {id: 'Yearly', code: 'Yearly', name: 'Yearly'};
+                                                init.systemSettings.infrastructuralPeriodType = isObject(obj) ? obj : {id: 'Yearly', code: 'Yearly', name: 'Yearly'};
                                                 fn();
                                             }
                                         });
@@ -1366,7 +1368,7 @@ Ext.onReady( function() {
 
                                                                     registerOptionSet = function(optionSet) {
                                                                         store.get('optionSets', optionSet.id).done( function(obj) {
-                                                                            if (!Ext.isObject(obj) || obj.version !== optionSet.version) {
+                                                                            if (!isObject(obj) || obj.version !== optionSet.version) {
                                                                                 ids.push(optionSet.id);
                                                                             }
 

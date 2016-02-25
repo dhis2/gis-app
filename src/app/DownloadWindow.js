@@ -1,4 +1,3 @@
-//GIS.app.DownloadWindow = function(gis) {
 export default function DownloadWindow(gis) {
     var window,
         format,

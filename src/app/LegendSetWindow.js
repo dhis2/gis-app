@@ -1,4 +1,7 @@
-//GIS.app.LegendSetWindow = function(gis) {
+import arraySort from 'd2-utilizr/lib/arraySort';
+import isDefined from 'd2-utilizr/lib/isDefined';
+import isNumber from 'd2-utilizr/lib/isNumber';
+
 export default function LegendSetWindow(gis) {
 
     // Stores
@@ -85,7 +88,7 @@ export default function LegendSetWindow(gis) {
                     data.push(records[i].data);
                 }
 
-                Ext.Array.sort(data, function (a, b) {
+                arraySort(data, function (a, b) {
                     return a.startValue - b.startValue;
                 });
 
@@ -169,7 +172,7 @@ export default function LegendSetWindow(gis) {
                         height;
 
                     this.store.on('load', function() {
-                        if (Ext.isDefined(that.setHeight)) {
+                        if (isDefined(that.setHeight)) {
                             height = 1 + that.store.getCount() * gis.conf.layout.grid.row_height;
                             that.setHeight(height > maxHeight ? maxHeight : height);
                             window.doLayout();
@@ -288,7 +291,7 @@ export default function LegendSetWindow(gis) {
             });
 
             validateEditLegendForm = function() {
-                if (!(editLegendName.getValue() && Ext.isNumber(editStartValue.getValue()) && Ext.isNumber(editEndValue.getValue()) && editColor.getValue())) {
+                if (!(editLegendName.getValue() && isNumber(editStartValue.getValue()) && isNumber(editEndValue.getValue()) && editColor.getValue())) {
                     return;
                 }
 
@@ -449,7 +452,7 @@ export default function LegendSetWindow(gis) {
                         color: '#' + co
                     });
 
-                    Ext.Array.sort(data, function (a, b) {
+                    arraySort(data, function (a, b) {
                         return a.startValue - b.startValue;
                     });
 

@@ -1,4 +1,3 @@
-//GIS.app.FilterWindow = function(gis, layer) {
 export default function FilterWindow(gis, layer) {
     var lowerNumberField,
         greaterNumberField,

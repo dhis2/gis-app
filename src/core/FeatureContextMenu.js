@@ -1,4 +1,7 @@
-//GIS.core.FeatureContextMenu = function(gis, layer, instance) {
+import isArray from 'd2-utilizr/lib/isArray';
+import isNumeric from 'd2-utilizr/lib/isNumeric';
+import isString from 'd2-utilizr/lib/isString';
+
 export default function FeatureContextMenu(gis, layer, instance) {
     var feature = instance.feature,
         isRelocate = !!GIS.app ? !!gis.init.user.isAdmin : false,
@@ -144,12 +147,12 @@ export default function FeatureContextMenu(gis, layer, instance) {
                                     a.push({html: GIS.i18n.phone_number, cls: 'gis-panel-html-title'}, {html: ou.phoneNumber, cls: 'gis-panel-html'}, {cls: 'gis-panel-html-separator'});
                                 }
 
-                                if (Ext.isString(ou.coordinates)) {
+                                if (isString(ou.coordinates)) {
                                     var co = ou.coordinates.replace("[","").replace("]","").replace(",",", ");
                                     a.push({html: GIS.i18n.coordinates, cls: 'gis-panel-html-title'}, {html: co, cls: 'gis-panel-html'}, {cls: 'gis-panel-html-separator'});
                                 }
 
-                                if (Ext.isArray(ou.organisationUnitGroups) && ou.organisationUnitGroups.length) {
+                                if (isArray(ou.organisationUnitGroups) && ou.organisationUnitGroups.length) {
                                     var html = '';
 
                                     for (var i = 0; i < ou.organisationUnitGroups.length; i++) {
@@ -194,7 +197,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
                                                 //periods = generator.filterFuturePeriodsExceptCurrent(generator.generateReversedPeriods(periodType, this.periodOffset)) || [];
                                                 periods = generator.filterFuturePeriodsExceptCurrent(generator.generateReversedPeriods(periodType, undefined)) || [];
 
-                                            if (Ext.isArray(periods) && periods.length) {
+                                            if (isArray(periods) && periods.length) {
                                                 for (var i = 0; i < periods.length; i++) {
                                                     periods[i].id = periods[i].iso;
                                                 }
@@ -261,7 +264,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
 
                                                             records.push({
                                                                 name: r.metaData.names[r.rows[i][dxIndex]],
-                                                                value: Ext.isNumeric(value) ? parseFloat(value) : value
+                                                                value: isNumeric(value) ? parseFloat(value) : value
                                                             });
                                                         }
 

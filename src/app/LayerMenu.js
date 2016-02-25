@@ -1,5 +1,4 @@
 // Top layer dropdown menu
-//GIS.app.LayerMenu = function(gis, layer, cls) {
 export default function LayerMenu(gis, layer, cls) {
     var items = [],
         item;
@@ -94,7 +93,7 @@ export default function LayerMenu(gis, layer, cls) {
             });
         },
         disableItems: function() {
-            Ext.Array.each(this.items.items, function(item) {
+            this.items.items.forEach(function(item) {
                 if (!item.alwaysEnabled) {
                     item.disable();
                 }

@@ -1,4 +1,7 @@
-//GIS.core.LayerHandlerBoundary = function(gis, layer) {
+import isArray from 'd2-utilizr/lib/isArray';
+import isObject from 'd2-utilizr/lib/isObject';
+import arrayUnique from 'd2-utilizr/lib/arrayUnique';
+
 export default function LayerHandlerBoundary(gis, layer) {
     var compareView,
         loadOrganisationUnits,
@@ -80,7 +83,7 @@ export default function LayerHandlerBoundary(gis, layer) {
 
                 params += '&displayProperty=' + displayProperty.toUpperCase();
 
-                if (Ext.isArray(view.userOrgUnit) && view.userOrgUnit.length) {
+                if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
                     params += '&userOrgUnit=';
 
                     for (var i = 0; i < view.userOrgUnit.length; i++) {
@@ -110,7 +113,7 @@ export default function LayerHandlerBoundary(gis, layer) {
                 levels.push(parseInt(r[i].le));
             }
 
-            levels = Ext.Array.unique(levels).sort();
+            levels = arrayUnique(levels).sort();
 
             for (var i = 0; i < levels.length; i++) {
                 levelStyle[levels[i]] = {
@@ -210,7 +213,7 @@ export default function LayerHandlerBoundary(gis, layer) {
         }
 
         // Gui
-        if (loader.updateGui && Ext.isObject(layer.widget)) {
+        if (loader.updateGui && isObject(layer.widget)) {
             layer.widget.setGui(view);
         }
 

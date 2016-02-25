@@ -1,3 +1,8 @@
+import isArray from 'd2-utilizr/lib/isArray';
+import isObject from 'd2-utilizr/lib/isObject';
+import isString from 'd2-utilizr/lib/isString';
+import arrayContains from 'd2-utilizr/lib/arrayContains';
+
 export default function LayerHandlerEvent(gis, layer) {
     var loadOrganisationUnits,
         loadData,
@@ -23,7 +28,7 @@ export default function LayerHandlerEvent(gis, layer) {
         paramString += '&endDate=' + view.endDate;
 
         // ou
-        if (Ext.isArray(view.organisationUnits)) {
+        if (isArray(view.organisationUnits)) {
             paramString += '&dimension=ou:';
 
             for (var i = 0; i < view.organisationUnits.length; i++) {
@@ -76,7 +81,7 @@ export default function LayerHandlerEvent(gis, layer) {
                     header = r.headers[i];
                     names[header.name] = header.column;
 
-                    if (!Ext.Array.contains(ignoreKeys, header.name)) {
+                    if (!arrayContains(ignoreKeys, header.name)) {
                         popupKeys.push(header.name);
                     }
                 }
@@ -151,14 +156,14 @@ export default function LayerHandlerEvent(gis, layer) {
                     latIndex = i;
                 }
 
-                if (Ext.isString(header.optionSet) && header.optionSet.length) {
+                if (isString(header.optionSet) && header.optionSet.length) {
                     optionSetIndex = i;
                     optionSetHeader = header;
                 }
             }
 
             // get events with coordinates
-            if (Ext.isArray(r.rows) && r.rows.length) {
+            if (isArray(r.rows) && r.rows.length) {
                 for (var i = 0, row; i < r.rows.length; i++) {
                     row = r.rows[i];
 
@@ -224,7 +229,7 @@ export default function LayerHandlerEvent(gis, layer) {
         }
 
         // Gui
-        if (handler.updateGui && Ext.isObject(layer.widget)) {
+        if (handler.updateGui && isObject(layer.widget)) {
             layer.widget.setGui(view);
         }
 

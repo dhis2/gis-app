@@ -1,3 +1,6 @@
+import isArray from 'd2-utilizr/lib/isArray';
+import isObject from 'd2-utilizr/lib/isObject';
+
 export default function LayerHandlerFacility(gis, layer) {
 	var compareView,
 		loadOrganisationUnitGroups,
@@ -108,7 +111,7 @@ export default function LayerHandlerFacility(gis, layer) {
 
 				params += '&displayProperty=' + displayProperty.toUpperCase();
 
-				if (Ext.isArray(view.userOrgUnit) && view.userOrgUnit.length) {
+				if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
 					params += '&userOrgUnit=';
 
 					for (var i = 0; i < view.userOrgUnit.length; i++) {
@@ -295,7 +298,7 @@ export default function LayerHandlerFacility(gis, layer) {
 		}
 
 		// Gui
-		if (loader.updateGui && Ext.isObject(layer.widget)) {
+		if (loader.updateGui && isObject(layer.widget)) {
 			layer.widget.setGui(view);
 		}
 

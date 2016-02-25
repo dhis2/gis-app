@@ -1,3 +1,13 @@
+import isArray from 'd2-utilizr/lib/isArray';
+import isEmpty from 'd2-utilizr/lib/isEmpty';
+import isBoolean from 'd2-utilizr/lib/isBoolean';
+import isNumber from 'd2-utilizr/lib/isNumber';
+import isObject from 'd2-utilizr/lib/isObject';
+import isString from 'd2-utilizr/lib/isString';
+import arrayClean from 'd2-utilizr/lib/arrayClean';
+import arrayContains from 'd2-utilizr/lib/arrayContains';
+import arrayFrom from 'd2-utilizr/lib/arrayFrom';
+
 export default function getInstance(init) {
     var conf = {},
         util = {},
@@ -319,7 +329,7 @@ export default function getInstance(init) {
         util.map = {};
 
         util.map.isValidCoordinate = function(coord) {
-            return Ext.isArray(coord)
+            return isArray(coord)
                 && coord.length === 2
                 && coord[0] >= -180
                 && coord[0] <= 180
@@ -455,8 +465,8 @@ export default function getInstance(init) {
                     }
 
                     // grand parent
-                    if (Ext.isString(ou.pg) && ou.pg.length) {
-                        var ids = Ext.Array.clean(ou.pg.split('/'));
+                    if (isString(ou.pg) && ou.pg.length) {
+                        var ids = arrayClean(ou.pg.split('/'));
 
                         // grand parent id
                         if (ids.length >= 2) {
@@ -521,7 +531,7 @@ export default function getInstance(init) {
         util.array = {};
 
         util.array.getLength = function(array, suppressWarning) {
-            if (!Ext.isArray(array)) {
+            if (!isArray(array)) {
                 if (!suppressWarning) {
                     console.log('support.prototype.array.getLength: not an array');
                 }
@@ -539,24 +549,24 @@ export default function getInstance(init) {
                 return;
             }
 
-            key = !!key || Ext.isNumber(key) ? key : 'name';
+            key = !!key || isNumber(key) ? key : 'name';
 
             array.sort( function(a, b) {
 
                 // if object, get the property values
-                if (Ext.isObject(a) && Ext.isObject(b)) {
+                if (isObject(a) && isObject(b)) {
                     a = a[key];
                     b = b[key];
                 }
 
                 // if array, get from the right index
-                if (Ext.isArray(a) && Ext.isArray(b)) {
+                if (isArray(a) && isArray(b)) {
                     a = a[key];
                     b = b[key];
                 }
 
                 // string
-                if (Ext.isString(a) && Ext.isString(b)) {
+                if (isString(a) && isString(b)) {
                     a = a.toLowerCase();
                     b = b.toLowerCase();
 
@@ -568,7 +578,7 @@ export default function getInstance(init) {
                     }
                 }
                 // number
-                else if (Ext.isNumber(a) && Ext.isNumber(b)) {
+                else if (isNumber(a) && isNumber(b)) {
                     return direction === 'DESC' ? b - a : a - b;
                 }
 
@@ -587,7 +597,7 @@ export default function getInstance(init) {
         };
 
         util.array.getObjectMap = function(array, idProperty, nameProperty, namePrefix) {
-            if (!(Ext.isArray(array) && array.length)) {
+            if (!(isArray(array) && array.length)) {
                 return {};
             }
 
@@ -611,7 +621,7 @@ export default function getInstance(init) {
             var layout,
                 layer;
 
-            if (Ext.isObject(map) && Ext.isArray(map.mapViews) && map.mapViews.length) {
+            if (isObject(map) && isArray(map.mapViews) && map.mapViews.length) {
                 for (var i = 0, view, id; i < map.mapViews.length; i++) {
                     view = map.mapViews[i];
                     id = view.layer;
@@ -674,19 +684,19 @@ export default function getInstance(init) {
                 dhis2[session] = obj;
                 sessionStorage.setItem('dhis2', JSON.stringify(dhis2));
 
-                if (Ext.isString(url)) {
+                if (isString(url)) {
                     window.location.href = url;
                 }
             }
         };
 
         util.layout.getDataDimensionsFromLayout = function(layout) {
-            var dimensions = Ext.Array.clean([].concat(layout.columns || [], layout.rows || [], layout.filters || [])),
+            var dimensions = arrayClean([].concat(layout.columns || [], layout.rows || [], layout.filters || [])),
                 ignoreKeys = ['pe', 'ou'],
                 dataDimensions = [];
 
             for (var i = 0; i < dimensions.length; i++) {
-                if (!Ext.Array.contains(ignoreKeys, dimensions[i].dimension)) {
+                if (!arrayContains(ignoreKeys, dimensions[i].dimension)) {
                     dataDimensions.push(dimensions[i]);
                 }
             }
@@ -697,7 +707,7 @@ export default function getInstance(init) {
         util.date = {};
 
         util.date.getYYYYMMDD = function(param) {
-            if (!Ext.isString(param)) {
+            if (!isString(param)) {
                 if (!(Object.prototype.toString.call(param) === '[object Date]' && param.toString() !== 'Invalid date')) {
                     return null;
                 }
@@ -720,17 +730,17 @@ export default function getInstance(init) {
                 type,
                 window;
 
-            if (!obj || (Ext.isObject(obj) && !obj.message && !obj.responseText)) {
+            if (!obj || (isObject(obj) && !obj.message && !obj.responseText)) {
                 return;
             }
 
             // if response object
-            if (Ext.isObject(obj) && obj.responseText && !obj.message) {
+            if (isObject(obj) && obj.responseText && !obj.message) {
                 obj = Ext.decode(obj.responseText);
             }
 
             // if string
-            if (Ext.isString(obj)) {
+            if (isString(obj)) {
                 obj = {
                     status: 'ERROR',
                     message: obj
@@ -783,9 +793,9 @@ export default function getInstance(init) {
         util.dhis.getDataDimensionItemTypes = function(dataDimensionItems) {
             var types = [];
 
-            if (Ext.isArray(dataDimensionItems) && dataDimensionItems.length) {
+            if (isArray(dataDimensionItems) && dataDimensionItems.length) {
                 for (var i = 0; i < dataDimensionItems.length; i++) {
-                    if (Ext.isObject(dataDimensionItems[i])) {
+                    if (isObject(dataDimensionItems[i])) {
                         types.push(dataDimensionItems[i].dataDimensionItemType);
                     }
                 }
@@ -797,8 +807,8 @@ export default function getInstance(init) {
         util.connection = {};
 
         util.connection.ajax = function(requestConfig, authConfig) {
-            if (authConfig.crossDomain && Ext.isString(authConfig.username) && Ext.isString(authConfig.password)) {
-                requestConfig.headers = Ext.isObject(authConfig.headers) ? authConfig.headers : {};
+            if (authConfig.crossDomain && isString(authConfig.username) && isString(authConfig.password)) {
+                requestConfig.headers = isObject(authConfig.headers) ? authConfig.headers : {};
                 requestConfig.headers['Authorization'] = 'Basic ' + btoa(authConfig.username + ':' + authConfig.password);
             }
 
@@ -822,19 +832,19 @@ export default function getInstance(init) {
 
             // id: string
 
-            if (!Ext.isObject(config)) {
+            if (!isObject(config)) {
                 console.log('Record config is not an object', config);
                 return;
             }
 
-            if (!Ext.isString(config.id)) {
+            if (!isString(config.id)) {
                 console.log('Record id is not text', config);
                 return;
             }
 
             record = Ext.clone(config);
 
-            if (Ext.isString(config.name)) {
+            if (isString(config.name)) {
                 record.name = config.name;
             }
 
@@ -848,12 +858,12 @@ export default function getInstance(init) {
 
             // items: [Record]
 
-            if (!Ext.isObject(config)) {
+            if (!isObject(config)) {
                 //console.log('Dimension config is not an object: ' + config);
                 return;
             }
 
-            if (!Ext.isString(config.dimension)) {
+            if (!isString(config.dimension)) {
                 console.log('Dimension name is not text', config);
                 return;
             }
@@ -861,7 +871,7 @@ export default function getInstance(init) {
             if (config.dimension !== conf.finals.dimension.category.objectName) {
                 var records = [];
 
-                if (!Ext.isArray(config.items)) {
+                if (!isArray(config.items)) {
                     console.log('Dimension items is not an array', config);
                     return;
                 }
@@ -934,7 +944,7 @@ export default function getInstance(init) {
             getValidatedDimensionArray = function(dimensionArray) {
                 var dimensions = [];
 
-                if (!(dimensionArray && Ext.isArray(dimensionArray) && dimensionArray.length)) {
+                if (!(dimensionArray && isArray(dimensionArray) && dimensionArray.length)) {
                     return;
                 }
 
@@ -952,7 +962,7 @@ export default function getInstance(init) {
             };
 
             validateSpecialCases = function(config) {
-                var dimensions = Ext.Array.clean([].concat(config.columns || [], config.rows || [], config.filters || [])),
+                var dimensions = arrayClean([].concat(config.columns || [], config.rows || [], config.filters || [])),
                     map = conf.period.integratedRelativePeriodsMap,
                     dxDim,
                     peDim,
@@ -1020,25 +1030,25 @@ export default function getInstance(init) {
                 //return;
                 //}
 
-                if (Ext.Array.contains([gis.layer.thematic1.id, gis.layer.thematic2.id, gis.layer.thematic3.id, gis.layer.thematic4.id], config.layer)) {
+                if (arrayContains([gis.layer.thematic1.id, gis.layer.thematic2.id, gis.layer.thematic3.id, gis.layer.thematic4.id], config.layer)) {
                     if (!config.columns) {
                         return;
                     }
                 }
 
                 // Collect object names and user orgunits
-                for (var i = 0, dim, dims = Ext.Array.clean([].concat(config.columns, config.rows, config.filters)); i < dims.length; i++) {
+                for (var i = 0, dim, dims = arrayClean([].concat(config.columns, config.rows, config.filters)); i < dims.length; i++) {
                     dim = dims[i];
 
                     if (dim) {
 
                         // Object names
-                        if (Ext.isString(dim.dimension)) {
+                        if (isString(dim.dimension)) {
                             objectNames.push(dim.dimension);
                         }
 
                         // user orgunits
-                        if (dim.dimension === dimConf.organisationUnit.objectName && Ext.isArray(dim.items)) {
+                        if (dim.dimension === dimConf.organisationUnit.objectName && isArray(dim.items)) {
                             for (var j = 0; j < dim.items.length; j++) {
                                 if (dim.items[j].id === 'USER_ORGUNIT') {
                                     isOu = true;
@@ -1060,19 +1070,19 @@ export default function getInstance(init) {
                 layout.filters = config.filters;
 
                 // program
-                if (Ext.isObject(config.program) && config.program.id) {
+                if (isObject(config.program) && config.program.id) {
                     layout.program = config.program;
                 }
 
                 // Properties
-                layout.layer = Ext.isString(config.layer) && !Ext.isEmpty(config.layer) ? config.layer : 'thematic1';
-                layout.classes = Ext.isNumber(config.classes) && !Ext.isEmpty(config.classes) ? config.classes : 5;
-                layout.method = Ext.isNumber(config.method) && !Ext.isEmpty(config.method) ? config.method : 2;
-                layout.colorLow = Ext.isString(config.colorLow) && !Ext.isEmpty(config.colorLow) ? config.colorLow : 'ff0000';
-                layout.colorHigh = Ext.isString(config.colorHigh) && !Ext.isEmpty(config.colorHigh) ? config.colorHigh : '00ff00';
-                layout.radiusLow = Ext.isNumber(config.radiusLow) && !Ext.isEmpty(config.radiusLow) ? config.radiusLow : 5;
-                layout.radiusHigh = Ext.isNumber(config.radiusHigh) && !Ext.isEmpty(config.radiusHigh) ? config.radiusHigh : 15;
-                layout.opacity = Ext.isNumber(config.opacity) && !Ext.isEmpty(config.opacity) ? config.opacity : gis.conf.layout.layer.opacity;
+                layout.layer = isString(config.layer) && !isEmpty(config.layer) ? config.layer : 'thematic1';
+                layout.classes = isNumber(config.classes) && !isEmpty(config.classes) ? config.classes : 5;
+                layout.method = isNumber(config.method) && !isEmpty(config.method) ? config.method : 2;
+                layout.colorLow = isString(config.colorLow) && !isEmpty(config.colorLow) ? config.colorLow : 'ff0000';
+                layout.colorHigh = isString(config.colorHigh) && !isEmpty(config.colorHigh) ? config.colorHigh : '00ff00';
+                layout.radiusLow = isNumber(config.radiusLow) && !isEmpty(config.radiusLow) ? config.radiusLow : 5;
+                layout.radiusHigh = isNumber(config.radiusHigh) && !isEmpty(config.radiusHigh) ? config.radiusHigh : 15;
+                layout.opacity = isNumber(config.opacity) && !isEmpty(config.opacity) ? config.opacity : gis.conf.layout.layer.opacity;
                 layout.areaRadius = config.areaRadius;
 
                 layout.labels = !!config.labels;
@@ -1080,14 +1090,14 @@ export default function getInstance(init) {
                 layout.labelFontSize = config.labelFontSize || '11px';
                 layout.labelFontSize = parseInt(layout.labelFontSize) + 'px';
 
-                layout.labelFontWeight = Ext.isString(config.labelFontWeight) || Ext.isNumber(config.labelFontWeight) ? config.labelFontWeight : 'normal';
-                layout.labelFontWeight = Ext.Array.contains(['normal', 'bold', 'bolder', 'lighter'], layout.labelFontWeight) ? layout.labelFontWeight : 'normal';
-                layout.labelFontWeight = Ext.isNumber(parseInt(layout.labelFontWeight)) && parseInt(layout.labelFontWeight) <= 1000 ? layout.labelFontWeight.toString() : layout.labelFontWeight;
+                layout.labelFontWeight = isString(config.labelFontWeight) || isNumber(config.labelFontWeight) ? config.labelFontWeight : 'normal';
+                layout.labelFontWeight = arrayContains(['normal', 'bold', 'bolder', 'lighter'], layout.labelFontWeight) ? layout.labelFontWeight : 'normal';
+                layout.labelFontWeight = isNumber(parseInt(layout.labelFontWeight)) && parseInt(layout.labelFontWeight) <= 1000 ? layout.labelFontWeight.toString() : layout.labelFontWeight;
 
-                layout.labelFontStyle = Ext.Array.contains(['normal', 'italic', 'oblique'], config.labelFontStyle) ? config.labelFontStyle : 'normal';
+                layout.labelFontStyle = arrayContains(['normal', 'italic', 'oblique'], config.labelFontStyle) ? config.labelFontStyle : 'normal';
 
-                layout.labelFontColor = Ext.isString(config.labelFontColor) || Ext.isNumber(config.labelFontColor) ? config.labelFontColor : 'normal';
-                layout.labelFontColor = Ext.isNumber(layout.labelFontColor) ? layout.labelFontColor.toString() : layout.labelFontColor;
+                layout.labelFontColor = isString(config.labelFontColor) || isNumber(config.labelFontColor) ? config.labelFontColor : 'normal';
+                layout.labelFontColor = isNumber(layout.labelFontColor) ? layout.labelFontColor.toString() : layout.labelFontColor;
                 layout.labelFontColor = layout.labelFontColor.charAt(0) !== '#' ? '#' + layout.labelFontColor : layout.labelFontColor;
 
                 layout.hidden = !!config.hidden;
@@ -1096,7 +1106,7 @@ export default function getInstance(init) {
                 layout.userOrganisationUnitChildren = isOuc;
                 layout.userOrganisationUnitGrandChildren = isOugc;
 
-                layout.parentGraphMap = Ext.isObject(config.parentGraphMap) ? config.parentGraphMap : null;
+                layout.parentGraphMap = isObject(config.parentGraphMap) ? config.parentGraphMap : null;
 
                 layout.legendSet = config.legendSet;
 
@@ -1104,8 +1114,8 @@ export default function getInstance(init) {
 
                 layout.dataDimensionItems = config.dataDimensionItems;
 
-                if (Ext.Array.from(config.userOrgUnit).length) {
-                    layout.userOrgUnit = Ext.Array.from(config.userOrgUnit);
+                if (arrayFrom(config.userOrgUnit).length) {
+                    layout.userOrgUnit = arrayFrom(config.userOrgUnit);
                 }
 
                 // relative period date
@@ -1125,17 +1135,17 @@ export default function getInstance(init) {
             // meta: boolean
 
             return function() {
-                if (!Ext.isObject(config)) {
+                if (!isObject(config)) {
                     console.log('Header is not an object', config);
                     return;
                 }
 
-                if (!Ext.isString(config.name)) {
+                if (!isString(config.name)) {
                     console.log('Header name is not text', config);
                     return;
                 }
 
-                if (!Ext.isBoolean(config.meta)) {
+                if (!isBoolean(config.meta)) {
                     console.log('Header meta is not boolean', config);
                     return;
                 }
@@ -1155,12 +1165,12 @@ export default function getInstance(init) {
             return function() {
                 var headers = [];
 
-                if (!(config && Ext.isObject(config))) {
+                if (!(config && isObject(config))) {
                     gis.alert('Data response invalid', config);
                     return false;
                 }
 
-                if (!(config.headers && Ext.isArray(config.headers))) {
+                if (!(config.headers && isArray(config.headers))) {
                     gis.alert('Data response invalid', config);
                     return false;
                 }
@@ -1180,7 +1190,7 @@ export default function getInstance(init) {
                     return;
                 }
 
-                if (!(Ext.isArray(config.rows) && config.rows.length > 0)) {
+                if (!(isArray(config.rows) && config.rows.length > 0)) {
                     gis.alert('No values found', config);
                     return false;
                 }

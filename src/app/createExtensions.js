@@ -1,3 +1,8 @@
+import isArray from 'd2-utilizr/lib/isArray';
+import isBoolean from 'd2-utilizr/lib/isBoolean';
+import isNumber from 'd2-utilizr/lib/isNumber';
+import isObject from 'd2-utilizr/lib/isObject';
+import isString from 'd2-utilizr/lib/isString';
 import arrayContains from 'd2-utilizr/lib/arrayContains';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 
@@ -25,7 +30,7 @@ export default function createExtensions(gis) {
             this.setLayerVisibility(value);
 
             if (value) {
-                opacity = Ext.isNumber(parseFloat(opacity)) ? parseFloat(opacity) : this.opacity;
+                opacity = isNumber(parseFloat(opacity)) ? parseFloat(opacity) : this.opacity;
 
                 if (opacity === 0) {
                     this.numberField.setValue(0);
@@ -307,10 +312,10 @@ export default function createExtensions(gis) {
         },
         setConfig: function(config) {
             this.numberField.setValue(parseInt(config.labelFontSize));
-            this.italicButton.toggle(Ext.Array.contains(['italic', 'oblique'], config.labelFontStyle));
+            this.italicButton.toggle(arrayContains(['italic', 'oblique'], config.labelFontStyle));
 
             if (!this.skipBoldButton) {
-                this.boldButton.toggle(Ext.Array.contains(['bold', 'bolder'], config.labelFontWeight) || (Ext.isNumber(parseInt(config.labelFontWeight)) && parseInt(config.labelFontWeight) >= 700));
+                this.boldButton.toggle(arrayContains(['bold', 'bolder'], config.labelFontWeight) || (isNumber(parseInt(config.labelFontWeight)) && parseInt(config.labelFontWeight) >= 700));
             }
 
             if (!this.skipColorButton) {
@@ -631,7 +636,7 @@ export default function createExtensions(gis) {
             return record;
         },
         setRecord: function(record) {
-            if (record.filter && Ext.isString(record.filter)) {
+            if (record.filter && isString(record.filter)) {
                 var a = record.filter.split(':');
 
                 this.operatorCmp.setValue(a[0]);
@@ -799,7 +804,7 @@ export default function createExtensions(gis) {
 
             // array or object
             for (var i = 0; i < items.length; i++) {
-                if (Ext.isObject(items[i])) {
+                if (isObject(items[i])) {
                     items[i] = items[i].code;
                 }
             }
@@ -811,7 +816,7 @@ export default function createExtensions(gis) {
             return record;
         },
         setRecord: function(record) {
-            if (Ext.isString(record.filter) && record.filter.length) {
+            if (isString(record.filter) && record.filter.length) {
                 var a = record.filter.split(':');
                 this.valueCmp.setOptionValues(a[1].split(';'));
             }
@@ -868,7 +873,7 @@ export default function createExtensions(gis) {
                     pageSize = pageSize || 100;
 
                     dhis2.gis.store.get('optionSets', optionSetId).done( function(obj) {
-                        if (Ext.isObject(obj) && Ext.isArray(obj.options) && obj.options.length) {
+                        if (isObject(obj) && isArray(obj.options) && obj.options.length) {
                             store.removeAll();
                             store.loadData(obj.options.slice(0, pageSize));
                         }
@@ -890,7 +895,7 @@ export default function createExtensions(gis) {
                 container.searchStore.clearFilter();
 
                 container.searchStore.filterBy(function(record) {
-                    return !Ext.Array.contains(selected, record.data[idProperty]);
+                    return !arrayContains(selected, record.data[idProperty]);
                 });
             };
 
@@ -919,13 +924,13 @@ export default function createExtensions(gis) {
                             container.searchStore.loadOptionSet(optionSetId, value);
 
                             // trigger
-                            if (!value || (Ext.isString(value) && value.length === 1)) {
+                            if (!value || (isString(value) && value.length === 1)) {
                                 container.triggerCmp.setDisabled(!!value);
                             }
                         }
                     },
                     select: function() {
-                        var id = Ext.Array.from(this.getValue())[0];
+                        var id = arrayFrom(this.getValue())[0];
 
                         // value
                         if (container.valueStore.findExact(idProperty, id) === -1) {
@@ -988,7 +993,7 @@ export default function createExtensions(gis) {
                         records = [];
 
                     dhis2.gis.store.get('optionSets', container.dataElement.optionSet.id).done( function(obj) {
-                        if (Ext.isObject(obj) && Ext.isArray(obj.options) && obj.options.length) {
+                        if (isObject(obj) && isArray(obj.options) && obj.options.length) {
                             records = container.getRecordsByCode(obj.options, codeArray);
 
                             container.valueStore.removeAll();
@@ -1000,8 +1005,8 @@ export default function createExtensions(gis) {
                 },
                 listeners: {
                     change: function(cmp, newVal, oldVal) {
-                        newVal = Ext.Array.from(newVal);
-                        oldVal = Ext.Array.from(oldVal);
+                        newVal = arrayFrom(newVal);
+                        oldVal = arrayFrom(oldVal);
 
                         if (newVal.length < oldVal.length) {
                             var id = Ext.Array.difference(oldVal, newVal)[0];

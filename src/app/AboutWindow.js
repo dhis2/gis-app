@@ -1,4 +1,5 @@
-//GIS.app.AboutWindow = function(gis) {
+import isObject from 'd2-utilizr/lib/isObject';
+
 export default function AboutWindow(gis) {
     return Ext.create('Ext.window.Window', {
         title: GIS.i18n.about,
@@ -15,7 +16,7 @@ export default function AboutWindow(gis) {
                             divStyle = 'padding:3px',
                             html = '<div class="user-select">';
 
-                        if (Ext.isObject(info)) {
+                        if (isObject(info)) {
                             html += '<div style="' + divStyle + '"><b>' + GIS.i18n.time_since_last_data_update + ': </b>' + info.intervalSinceLastAnalyticsTableSuccess + '</div>';
                             html += '<div style="' + divStyle + '"><b>' + GIS.i18n.version + ': </b>' + info.version + '</div>';
                             html += '<div style="' + divStyle + '"><b>' + GIS.i18n.revision + ': </b>' + info.revision + '</div>';

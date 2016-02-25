@@ -1,4 +1,3 @@
-//GIS.app.LayersPanel = function(gis) {
 export default function LayersPanel(gis) {
     var layers = gis.layer,
         orderedLayers = [

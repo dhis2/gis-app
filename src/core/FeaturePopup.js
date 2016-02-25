@@ -1,4 +1,3 @@
-//GIS.core.FeaturePopup = function(gis, instance) {
 export default function FeaturePopup(gis, instance) {
 
     // systemSettings is currently not set for plugins

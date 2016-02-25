@@ -1,4 +1,6 @@
-//GIS.app.LayerWidgetEvent = function(gis, layer) {
+import arrayClean from 'd2-utilizr/lib/arrayClean';
+import arrayPluck from 'd2-utilizr/lib/arrayPluck';
+
 export default function LayerWidgetEvent(gis, layer) {
 
     // stores
@@ -205,7 +207,7 @@ export default function LayerWidgetEvent(gis, layer) {
                     }
 
                     stages = program.programStages;
-                    attributes = Ext.Array.pluck(program.programTrackedEntityAttributes, 'trackedEntityAttribute');
+                    attributes = arrayPluck(program.programTrackedEntityAttributes, 'trackedEntityAttribute');
 
                     // mark as attribute
                     for (var i = 0; i < attributes.length; i++) {
@@ -275,7 +277,7 @@ export default function LayerWidgetEvent(gis, layer) {
 
         load = function(dataElements) {
             var attributes = attributeStorage[programId],
-                data = Ext.Array.clean([].concat(attributes || [], dataElements || []));
+                data = arrayClean([].concat(attributes || [], dataElements || []));
 
             dataElementsByStageStore.loadData(data);
 
@@ -312,7 +314,7 @@ export default function LayerWidgetEvent(gis, layer) {
                         return;
                     }
 
-                    dataElements = Ext.Array.pluck(objects[0].programStageDataElements, 'dataElement');
+                    dataElements = arrayPluck(objects[0].programStageDataElements, 'dataElement');
 
                     // data elements cache
                     dataElementStorage[stageId] = dataElements;
@@ -712,7 +714,7 @@ export default function LayerWidgetEvent(gis, layer) {
             },
             listeners: {
                 load: function(store, node, records) {
-                    Ext.Array.each(records, function(record) {
+                    records.forEach(function(record) {
                         if (Ext.isBoolean(record.data.hasChildren)) {
                             record.set('leaf', !record.data.hasChildren);
                         }

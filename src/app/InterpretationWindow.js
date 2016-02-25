@@ -1,10 +1,11 @@
-//GIS.app.InterpretationWindow = function(gis) {
+import isString from 'd2-utilizr/lib/isString';
+
 export default function InterpretationWindow(gis) {
     var textArea,
         shareButton,
         window;
 
-    if (Ext.isString(gis.map.id)) {
+    if (isString(gis.map.id)) {
         textArea = Ext.create('Ext.form.field.TextArea', {
             cls: 'gis-textarea',
             height: 130,

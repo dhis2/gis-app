@@ -1,4 +1,8 @@
-//GIS.app.extendInstance = function(gis) {
+import isArray from 'd2-utilizr/lib/isArray';
+import isObject from 'd2-utilizr/lib/isObject';
+import isString from 'd2-utilizr/lib/isString';
+import arrayClean from 'd2-utilizr/lib/arrayClean';
+
 export default function extendInstance(gis) {
     var util = gis.util,
         init = gis.init,
@@ -78,7 +82,7 @@ export default function extendInstance(gis) {
             for (var i = 0, dimensions, layout; i < map.mapViews.length; i++) {
                 layout = map.mapViews[i];
 
-                dimensions = Ext.Array.clean([].concat(layout.columns || [], layout.rows || [], layout.filters || []));dimension = dimensions[i];
+                dimensions = arrayClean([].concat(layout.columns || [], layout.rows || [], layout.filters || []));dimension = dimensions[i];
 
                 for (var j = 0, dimension; j < dimensions.length; j++) {
                     dimension = dimensions[j];
@@ -305,7 +309,7 @@ export default function extendInstance(gis) {
         util.json = util.json || {};
 
         util.json.encodeString = function(str) {
-            return Ext.isString(str) ? str.replace(/[^a-zA-Z 0-9(){}<>_!+;:?*&%#-]+/g,'') : str;
+            return isString(str) ? str.replace(/[^a-zA-Z 0-9(){}<>_!+;:?*&%#-]+/g,'') : str;
         };
 
         util.json.decodeAggregatedValues = function(responseText) {
@@ -378,7 +382,7 @@ export default function extendInstance(gis) {
             var layout,
                 layer;
 
-            if (Ext.isObject(map) && Ext.isArray(map.mapViews) && map.mapViews.length) {
+            if (isObject(map) && isArray(map.mapViews) && map.mapViews.length) {
                 for (var i = 0, view, id; i < map.mapViews.length; i++) {
                     view = map.mapViews[i];
                     id = view.layer;
@@ -441,7 +445,7 @@ export default function extendInstance(gis) {
                 dhis2[session] = obj;
                 sessionStorage.setItem('dhis2', JSON.stringify(dhis2));
 
-                if (Ext.isString(url)) {
+                if (isString(url)) {
                     window.location.href = url;
                 }
             }

@@ -1,4 +1,8 @@
-//GIS.app.LayerWidgetFacility = function(gis, layer) {
+import isArray from 'd2-utilizr/lib/isArray';
+import isBoolean from 'd2-utilizr/lib/isBoolean';
+import isObject from 'd2-utilizr/lib/isObject';
+import isString from 'd2-utilizr/lib/isString';
+
 export default function LayerWidgetFacility(gis, layer) {
 
     var infrastructuralDataElementValuesStore,
@@ -150,7 +154,7 @@ export default function LayerWidgetFacility(gis, layer) {
             var selection = this.getSelectionModel().getSelection(),
                 map = {};
 
-            if (Ext.isArray(selection) && selection.length) {
+            if (isArray(selection) && selection.length) {
                 for (var i = 0, pathArray; i < selection.length; i++) {
                     pathArray = selection[i].getPath().split('/');
                     map[pathArray.pop()] = pathArray.join('/');
@@ -199,8 +203,8 @@ export default function LayerWidgetFacility(gis, layer) {
             },
             listeners: {
                 load: function(store, node, records) {
-                    Ext.Array.each(records, function(record) {
-                        if (Ext.isBoolean(record.data.hasChildren)) {
+                    records.forEach(function(record) {
+                        if (isBoolean(record.data.hasChildren)) {
                             record.set('leaf', !record.data.hasChildren);
                         }
                     });
@@ -706,13 +710,13 @@ export default function LayerWidgetFacility(gis, layer) {
     };
 
     validateView = function(view) {
-        if (!(Ext.isObject(view.organisationUnitGroupSet) && Ext.isString(view.organisationUnitGroupSet.id))) {
+        if (!(isObject(view.organisationUnitGroupSet) && isString(view.organisationUnitGroupSet.id))) {
             GIS.logg.push([view.organisationUnitGroupSet.id, layer.id + '.organisationUnitGroupSet.id: string']);
             alert(GIS.i18n.no_groupset_selected);
             return false;
         }
 
-        if (!(Ext.isArray(view.rows) && view.rows.length && Ext.isString(view.rows[0].dimension) && Ext.isArray(view.rows[0].items) && view.rows[0].items.length)) {
+        if (!(isArray(view.rows) && view.rows.length && isString(view.rows[0].dimension) && isArray(view.rows[0].items) && view.rows[0].items.length)) {
             GIS.logg.push([view.rows, layer.id + '.rows: dimension array']);
             alert('No organisation units selected');
             return false;

@@ -1,3 +1,7 @@
+import isArray from 'd2-utilizr/lib/isArray';
+import isBoolean from 'd2-utilizr/lib/isBoolean';
+import isString from 'd2-utilizr/lib/isString';
+
 export default function LayerWidgetBoundary(gis, layer) {
     var infrastructuralDataElementValuesStore,
         treePanel,
@@ -108,7 +112,7 @@ export default function LayerWidgetBoundary(gis, layer) {
             var selection = this.getSelectionModel().getSelection(),
                 map = {};
 
-            if (Ext.isArray(selection) && selection.length) {
+            if (isArray(selection) && selection.length) {
                 for (var i = 0, pathArray; i < selection.length; i++) {
                     pathArray = selection[i].getPath().split('/');
                     map[pathArray.pop()] = pathArray.join('/');
@@ -157,8 +161,8 @@ export default function LayerWidgetBoundary(gis, layer) {
             },
             listeners: {
                 load: function(store, node, records) {
-                    Ext.Array.each(records, function(record) {
-                        if (Ext.isBoolean(record.data.hasChildren)) {
+                    records.forEach(function(record) {
+                        if (isBoolean(record.data.hasChildren)) {
                             record.set('leaf', !record.data.hasChildren);
                         }
                     });
@@ -619,7 +623,7 @@ export default function LayerWidgetBoundary(gis, layer) {
     };
 
     validateView = function(view) {
-        if (!(Ext.isArray(view.rows) && view.rows.length && Ext.isString(view.rows[0].dimension) && Ext.isArray(view.rows[0].items) && view.rows[0].items.length)) {
+        if (!(isArray(view.rows) && view.rows.length && isString(view.rows[0].dimension) && isArray(view.rows[0].items) && view.rows[0].items.length)) {
             GIS.logg.push([view.rows, layer.id + '.rows: dimension array']);
             alert('No organisation units selected');
             return false;

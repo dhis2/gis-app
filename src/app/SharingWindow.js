@@ -1,4 +1,5 @@
-//GIS.app.SharingWindow = function(gis, sharing) {
+import isArray from 'd2-utilizr/lib/isArray';
+
 export default function SharingWindow(gis, sharing) {
 
     // Objects
@@ -207,7 +208,7 @@ export default function SharingWindow(gis, sharing) {
         access: sharing.object.publicAccess
     }, true, !sharing.meta.allowPublicAccess));
 
-    if (Ext.isArray(sharing.object.userGroupAccesses)) {
+    if (isArray(sharing.object.userGroupAccesses)) {
         for (var i = 0, userGroupRow; i < sharing.object.userGroupAccesses.length; i++) {
             userGroupRow = UserGroupRow(sharing.object.userGroupAccesses[i]);
             userGroupRowContainer.add(userGroupRow);

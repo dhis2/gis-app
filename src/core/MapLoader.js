@@ -1,3 +1,9 @@
+import isArray from 'd2-utilizr/lib/isArray';
+import isObject from 'd2-utilizr/lib/isObject';
+import arrayClean from 'd2-utilizr/lib/arrayClean';
+import arrayContains from 'd2-utilizr/lib/arrayContains';
+import arrayFrom from 'd2-utilizr/lib/arrayFrom';
+
 export default function MapLoader(gis, isSession, applyConfig) {
 	var getMap,
 		setMap,
@@ -5,7 +11,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		callBack,
 		register = [],
 		loader,
-		applyViews = Ext.isObject(applyConfig) && Ext.Array.from(applyConfig.mapViews).length ? applyConfig.mapViews : null,
+		applyViews = isObject(applyConfig) && arrayFrom(applyConfig.mapViews).length ? applyConfig.mapViews : null,
 		clearAllLayers;
 
 	getMap = function() {
@@ -16,12 +22,12 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		success = function(r) {
 
 			// operand
-			if (Ext.isArray(r.mapViews)) {
+			if (isArray(r.mapViews)) {
 				for (var i = 0, view, objectName; i < r.mapViews.length; i++) {
 					view = r.mapViews[i];
 
 					// TODO, TMP
-					if (Ext.isArray(view.dataDimensionItems) && view.dataDimensionItems.length && Ext.isObject(view.dataDimensionItems[0])) {
+					if (isArray(view.dataDimensionItems) && view.dataDimensionItems.length && isObject(view.dataDimensionItems[0])) {
 						var item = view.dataDimensionItems[0];
 
 						if (item.hasOwnProperty('dataElement')) {
@@ -46,7 +52,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 
 			r = Ext.decode(r.responseText);
 
-			if (Ext.Array.contains([403], parseInt(r.httpStatusCode))) {
+			if (arrayContains([403], parseInt(r.httpStatusCode))) {
 				r.message = GIS.i18n.you_do_not_have_access_to_all_items_in_this_favorite || r.message;
 			}
 
@@ -73,7 +79,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 			gis.viewport.northRegion.update(gis.map.name);
 		}
 
-		if (!(Ext.isArray(views) && views.length)) {
+		if (!(isArray(views) && views.length)) {
 			gis.mask.hide();
 			gis.alert(GIS.i18n.favorite_outdated_create_new);
 			return;
@@ -84,7 +90,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 			views[i] = gis.api.layout.Layout(views[i], applyView);
 		}
 
-		views = Ext.Array.clean(views);
+		views = arrayClean(views);
 
 		if (!views.length) {
 			gis.mask.hide();

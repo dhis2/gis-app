@@ -62,7 +62,7 @@ Ext.onReady(function() {
             url: init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat',
             disableCaching: false,
             success: function(r) {
-                var systemSettings = r.responseText ? Ext.decode(r.responseText) : r,
+                var systemSettings = r.responseText ? JSON.parse(r.responseText) : r,
                     userAccountConfig;
 
                 init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
@@ -73,7 +73,7 @@ Ext.onReady(function() {
                     url: init.contextPath + '/api/me/user-account.json',
                     disableCaching: false,
                     success: function(r) {
-                        init.userAccount = r.responseText ? Ext.decode(r.responseText) : r;
+                        init.userAccount = r.responseText ? JSON.parse(r.responseText) : r;
 
                         var onScriptReady = function() {
                             var defaultKeyUiLocale = 'en',
@@ -116,7 +116,7 @@ Ext.onReady(function() {
                                 url: contextPath + '/api/optionSets.json?fields=id,version&paging=false',
                                 disableCaching: false,
                                 success: function(r) {
-                                    var optionSets = (r.responseText ? Ext.decode(r.responseText).optionSets : r.optionSets) || [],
+                                    var optionSets = (r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets) || [],
                                         store = dhis2.gis.store,
                                         ids = [],
                                         url = '',
@@ -134,7 +134,7 @@ Ext.onReady(function() {
                                         url: contextPath + '/api/optionSets.json?fields=id,name,version,options[code,name]&paging=false' + url,
                                         disableCaching: false,
                                         success: function(r) {
-                                            var sets = r.responseText ? Ext.decode(r.responseText).optionSets : r.optionSets;
+                                            var sets = r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets;
 
                                             store.setAll('optionSets', sets).done(fn);
                                         }
@@ -208,7 +208,7 @@ Ext.onReady(function() {
             url: init.contextPath + '/api/organisationUnits.json?userOnly=true&fields=id,' + init.namePropertyUrl + ',children[id,' + init.namePropertyUrl + ']&paging=false',
             disableCaching: false,
             success: function(r) {
-                var organisationUnits = (r.responseText ? Ext.decode(r.responseText).organisationUnits : r) || [],
+                var organisationUnits = (r.responseText ? JSON.parse(r.responseText).organisationUnits : r) || [],
                     ou = [],
                     ouc = [];
 
@@ -239,7 +239,7 @@ Ext.onReady(function() {
             url: init.contextPath + '/api/dimensions.json?fields=id,displayName|rename(name)&paging=false',
             disableCaching: false,
             success: function(r) {
-                init.dimensions = r.responseText ? Ext.decode(r.responseText).dimensions : r.dimensions;
+                init.dimensions = r.responseText ? JSON.parse(r.responseText).dimensions : r.dimensions;
                 fn();
             }
         });

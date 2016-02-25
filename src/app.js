@@ -1044,7 +1044,7 @@ Ext.onReady( function() {
         Ext.Ajax.request({
             url: 'manifest.webapp',
             success: function(r) {
-                var context = Ext.decode(r.responseText).activities.dhis;
+                var context = JSON.parse(r.responseText).activities.dhis;
 
                 init.contextPath = context.href;
 
@@ -1058,14 +1058,14 @@ Ext.onReady( function() {
                 Ext.Ajax.request({
                     url: init.contextPath + '/api/system/info.json',
                     success: function(r) {
-                        init.systemInfo = Ext.decode(r.responseText);
+                        init.systemInfo = JSON.parse(r.responseText);
                         init.contextPath = init.systemInfo.contextPath || init.contextPath;
 
                         // date, calendar
                         Ext.Ajax.request({
                             url: init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat',
                             success: function(r) {
-                                var systemSettings = Ext.decode(r.responseText);
+                                var systemSettings = JSON.parse(r.responseText);
                                 init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
                                 init.systemInfo.calendar = systemSettings.keyCalendar;
 
@@ -1073,7 +1073,7 @@ Ext.onReady( function() {
                                 Ext.Ajax.request({
                                     url: init.contextPath + '/api/me/user-account.json',
                                     success: function (r) {
-                                        init.userAccount = Ext.decode(r.responseText);
+                                        init.userAccount = JSON.parse(r.responseText);
 
                                         // init
                                         var defaultKeyUiLocale = 'en',
@@ -1172,7 +1172,7 @@ Ext.onReady( function() {
                                         requests.push({
                                             url: contextPath + '/api/organisationUnits.json?userDataViewFallback=true&paging=false&fields=id,' + namePropertyUrl + ',children[id,' + namePropertyUrl + ']',
                                             success: function(r) {
-                                                init.rootNodes = Ext.decode(r.responseText).organisationUnits || [];
+                                                init.rootNodes = JSON.parse(r.responseText).organisationUnits || [];
                                                 fn();
                                             }
                                         });
@@ -1181,7 +1181,7 @@ Ext.onReady( function() {
                                         requests.push({
                                             url: contextPath + '/api/organisationUnitLevels.json?fields=id,displayName|rename(name),level&paging=false',
                                             success: function(r) {
-                                                init.organisationUnitLevels = Ext.decode(r.responseText).organisationUnitLevels || [];
+                                                init.organisationUnitLevels = JSON.parse(r.responseText).organisationUnitLevels || [];
 
                                                 if (!init.organisationUnitLevels.length) {
                                                     alert('No organisation unit levels');
@@ -1195,7 +1195,7 @@ Ext.onReady( function() {
                                         requests.push({
                                             url: contextPath + '/api/organisationUnits.json?userOnly=true&fields=id,' + namePropertyUrl + ',children[id,' + namePropertyUrl + ']&paging=false',
                                             success: function(r) {
-                                                var organisationUnits = Ext.decode(r.responseText).organisationUnits || [],
+                                                var organisationUnits = JSON.parse(r.responseText).organisationUnits || [],
                                                     ou = [],
                                                     ouc = [];
 
@@ -1235,7 +1235,7 @@ Ext.onReady( function() {
                                         requests.push({
                                             url: init.contextPath + '/api/indicatorGroups.json?fields=id,displayName|rename(name)&paging=false',
                                             success: function(r) {
-                                                init.indicatorGroups = Ext.decode(r.responseText).indicatorGroups || [];
+                                                init.indicatorGroups = JSON.parse(r.responseText).indicatorGroups || [];
                                                 fn();
                                             }
                                         });
@@ -1244,7 +1244,7 @@ Ext.onReady( function() {
                                         requests.push({
                                             url: init.contextPath + '/api/dataElementGroups.json?fields=id,' + namePropertyUrl + '&paging=false',
                                             success: function(r) {
-                                                init.dataElementGroups = Ext.decode(r.responseText).dataElementGroups || [];
+                                                init.dataElementGroups = JSON.parse(r.responseText).dataElementGroups || [];
                                                 fn();
                                             }
                                         });
@@ -1253,14 +1253,14 @@ Ext.onReady( function() {
                                         requests.push({
                                             url: init.contextPath + '/api/configuration/infrastructuralIndicators.json',
                                             success: function(r) {
-                                                var obj = Ext.decode(r.responseText);
+                                                var obj = JSON.parse(r.responseText);
                                                 init.systemSettings.infrastructuralIndicatorGroup = isObject(obj) ? obj : null;
 
                                                 if (!isObject(obj)) {
                                                     Ext.Ajax.request({
                                                         url: init.contextPath + '/api/indicatorGroups.json?fields=id,displayName|rename(name),indicators[id,' + namePropertyUrl + ']&pageSize=1',
                                                         success: function(r) {
-                                                            r = Ext.decode(r.responseText);
+                                                            r = JSON.parse(r.responseText);
                                                             init.systemSettings.infrastructuralIndicatorGroup = r.indicatorGroups ? r.indicatorGroups[0] : null;
                                                         },
                                                         callback: fn
@@ -1276,14 +1276,14 @@ Ext.onReady( function() {
                                         requests.push({
                                             url: init.contextPath + '/api/configuration/infrastructuralDataElements.json',
                                             success: function(r) {
-                                                var obj = Ext.decode(r.responseText);
+                                                var obj = JSON.parse(r.responseText);
                                                 init.systemSettings.infrastructuralDataElementGroup = isObject(obj) ? obj : null;
 
                                                 if (!isObject(obj)) {
                                                     Ext.Ajax.request({
                                                         url: init.contextPath + '/api/dataElementGroups.json?fields=id,' + namePropertyUrl + ',dataElements[id,' + namePropertyUrl + ']&pageSize=1',
                                                         success: function(r) {
-                                                            r = Ext.decode(r.responseText);
+                                                            r = JSON.parse(r.responseText);
                                                             init.systemSettings.infrastructuralDataElementGroup = r.dataElementGroups ? r.dataElementGroups[0] : null;
                                                         },
                                                         callback: fn
@@ -1299,7 +1299,7 @@ Ext.onReady( function() {
                                         requests.push({
                                             url: init.contextPath + '/api/configuration/infrastructuralPeriodType.json',
                                             success: function(r) {
-                                                var obj = Ext.decode(r.responseText);
+                                                var obj = JSON.parse(r.responseText);
 
                                                 init.systemSettings.infrastructuralPeriodType = isObject(obj) ? obj : {id: 'Yearly', code: 'Yearly', name: 'Yearly'};
                                                 fn();
@@ -1321,7 +1321,7 @@ Ext.onReady( function() {
                                                             Ext.Ajax.request({
                                                                 url: contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false',
                                                                 success: function(r) {
-                                                                    var sets = Ext.decode(r.responseText).optionSets;
+                                                                    var sets = JSON.parse(r.responseText).optionSets;
 
                                                                     if (sets.length) {
                                                                         store.setAll('optionSets', sets).done(fn);
@@ -1336,7 +1336,7 @@ Ext.onReady( function() {
                                                             Ext.Ajax.request({
                                                                 url: contextPath + '/api/optionSets.json?fields=id,version&paging=false',
                                                                 success: function(r) {
-                                                                    var optionSets = Ext.decode(r.responseText).optionSets || [],
+                                                                    var optionSets = JSON.parse(r.responseText).optionSets || [],
                                                                         ids = [],
                                                                         url = '',
                                                                         callbacks = 0,
@@ -1358,7 +1358,7 @@ Ext.onReady( function() {
                                                                             Ext.Ajax.request({
                                                                                 url: contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false' + url,
                                                                                 success: function(r) {
-                                                                                    var sets = Ext.decode(r.responseText).optionSets;
+                                                                                    var sets = JSON.parse(r.responseText).optionSets;
 
                                                                                     store.setAll('optionSets', sets).done(fn);
                                                                                 }

@@ -12,7 +12,7 @@ export default function AboutWindow(gis) {
                 Ext.Ajax.request({
                     url: gis.init.contextPath + '/api/system/info.json',
                     success: function(r) {
-                        var info = Ext.decode(r.responseText),
+                        var info = JSON.parse(r.responseText),
                             divStyle = 'padding:3px',
                             html = '<div class="user-select">';
 

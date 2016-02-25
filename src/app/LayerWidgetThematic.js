@@ -528,7 +528,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 Ext.Ajax.request({
                     url: gis.init.contextPath + '/api/indicators.json?fields=legendSet[id]&paging=false&filter=id:eq:' + this.getValue(),
                     success: function(r) {
-                        var set = Ext.decode(r.responseText).indicators[0].legendSet;
+                        var set = JSON.parse(r.responseText).indicators[0].legendSet;
 
                         if (isObject(set) && set.id) {
                             legendType.setValue(gis.conf.finals.widget.legendtype_predefined);
@@ -616,7 +616,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 Ext.Ajax.request({
                     url: gis.init.contextPath + '/api/dataElements.json?fields=legendSet[id]&paging=false&filter=id:eq:' + id,
                     success: function(r) {
-                        var set = Ext.decode(r.responseText).dataElements[0].legendSet;
+                        var set = JSON.parse(r.responseText).dataElements[0].legendSet;
 
                         if (isObject(set) && set.id) {
                             legendType.setValue(gis.conf.finals.widget.legendtype_predefined);
@@ -695,7 +695,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 Ext.Ajax.request({
                     url: gis.init.contextPath + '/api/dataSets.json?fields=legendSet[id]&paging=false&filter=id:eq:' + this.getValue(),
                     success: function(r) {
-                        var set = Ext.decode(r.responseText).dataSets[0].legendSet;
+                        var set = JSON.parse(r.responseText).dataSets[0].legendSet;
 
                         if (isObject(set) && set.id) {
                             legendType.setValue(gis.conf.finals.widget.legendtype_predefined);
@@ -726,7 +726,7 @@ export default function LayerWidgetThematic(gis, layer) {
         Ext.Ajax.request({
             url: gis.init.contextPath + '/api/programs.json?paging=false&fields=programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType]],programStages[programStageDataElements[dataElement[id,' + namePropertyUrl + ',valueType]]]&filter=id:eq:' + programId,
             success: function(r) {
-                r = Ext.decode(r.responseText);
+                r = JSON.parse(r.responseText);
 
                 var isA = isArray,
                     isO = isObject,
@@ -807,7 +807,7 @@ export default function LayerWidgetThematic(gis, layer) {
         Ext.Ajax.request({
             url: gis.init.contextPath + '/api/programs.json?paging=false&fields=programIndicators[id,displayName|rename(name)]&filter=id:eq:' + programId,
             success: function(r) {
-                r = Ext.decode(r.responseText);
+                r = JSON.parse(r.responseText);
 
                 var isA = isArray,
                     isO = isObject,
@@ -1051,7 +1051,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 params: params,
                 scope: this,
                 success: function(r) {
-                    var a = Ext.decode(r.responseText).organisationUnits;
+                    var a = JSON.parse(r.responseText).organisationUnits;
                     this.numberOfRecords = a.length;
                     for (var i = 0; i < a.length; i++) {
                         this.multipleExpand(a[i].id, a[i].path);

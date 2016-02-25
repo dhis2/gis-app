@@ -1,5 +1,6 @@
 import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
+import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 import arrayUnique from 'd2-utilizr/lib/arrayUnique';
 
 export default function LayerHandlerBoundary(gis, layer) {
@@ -40,7 +41,7 @@ export default function LayerHandlerBoundary(gis, layer) {
                 srcIds.push(srcDim.items[i].id);
             }
 
-            if (Ext.Array.difference(viewIds, srcIds).length !== 0) {
+            if (arrayDifference(viewIds, srcIds).length !== 0) {
                 if (doExecute) {
                     loadOrganisationUnits(view);
                     console.log('B');
@@ -147,7 +148,7 @@ export default function LayerHandlerBoundary(gis, layer) {
             url: url,
             disableCaching: false,
             success: function(r) {
-                success(Ext.decode(r.responseText));
+                success(JSON.parse(r.responseText));
             },
             failure: function() {
                 failure();

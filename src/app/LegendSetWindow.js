@@ -758,7 +758,7 @@ export default function LegendSetWindow(gis) {
                     return;
                 }
 
-                var body = Ext.encode(getRequestBody());
+                var body = JSON.stringify(getRequestBody());
 
                 Ext.Ajax.request({
                     url: gis.init.contextPath + '/api/legendSets/',
@@ -782,7 +782,7 @@ export default function LegendSetWindow(gis) {
                 var body = getRequestBody(),
                     id = legendPanel.legendSetId;
                 body.id = id;
-                body = Ext.encode(getRequestBody());
+                body = JSON.stringify(getRequestBody());
 
                 Ext.Ajax.request({
                     url: gis.init.contextPath + '/api/legendSets/' + id,

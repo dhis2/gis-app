@@ -1,5 +1,6 @@
 import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
+import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerFacility(gis, layer) {
 	var compareView,
@@ -45,7 +46,7 @@ export default function LayerHandlerFacility(gis, layer) {
 				srcIds.push(srcDim.items[i].id);
 			}
 
-			if (Ext.Array.difference(viewIds, srcIds).length !== 0) {
+			if (arrayDifference(viewIds, srcIds).length !== 0) {
 				if (doExecute) {
 					loadOrganisationUnits(view);
 				}
@@ -85,7 +86,7 @@ export default function LayerHandlerFacility(gis, layer) {
 		Ext.Ajax.request({
 			url: url,
 			success: function(r) {
-                data = Ext.decode(r.responseText);
+                data = JSON.parse(r.responseText);
                 loadOrganisationUnits(view, data.organisationUnitGroups);
 			}
 		});
@@ -187,7 +188,7 @@ export default function LayerHandlerFacility(gis, layer) {
 			url: url,
 			disableCaching: false,
 			success: function(r) {
-				success(Ext.decode(r.responseText));
+				success(JSON.parse(r.responseText));
 			}
 		});
 	};

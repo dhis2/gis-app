@@ -50,7 +50,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		failure = function(r) {
 			gis.mask.hide();
 
-			r = Ext.decode(r.responseText);
+			r = JSON.parse(r.responseText);
 
 			if (arrayContains([403], parseInt(r.httpStatusCode))) {
 				r.message = GIS.i18n.you_do_not_have_access_to_all_items_in_this_favorite || r.message;
@@ -62,7 +62,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		Ext.Ajax.request({
 			url: url,
 			success: function(r) {
-				success(Ext.decode(r.responseText));
+				success(JSON.parse(r.responseText));
 			},
 			failure: function(r) {
 				failure(r);

@@ -100,7 +100,7 @@ export default function LayerWidgetBoundary(gis, layer) {
                 params: params,
                 scope: this,
                 success: function(r) {
-                    var a = Ext.decode(r.responseText).organisationUnits;
+                    var a = JSON.parse(r.responseText).organisationUnits;
                     this.numberOfRecords = a.length;
                     for (var i = 0; i < a.length; i++) {
                         this.multipleExpand(a[i].id, a[i].path);

@@ -198,7 +198,7 @@ export default function LayerWidgetEvent(gis, layer) {
             Ext.Ajax.request({
                 url: gis.init.contextPath + '/api/programs.json?filter=id:eq:' + programId + '&fields=programStages[id,displayName|rename(name)],programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType,optionSet[id,displayName|rename(name)]]]&paging=false',
                 success: function(r) {
-                    var program = Ext.decode(r.responseText).programs[0],
+                    var program = JSON.parse(r.responseText).programs[0],
                         stages,
                         attributes;
 
@@ -306,7 +306,7 @@ export default function LayerWidgetEvent(gis, layer) {
             Ext.Ajax.request({
                 url: gis.init.contextPath + '/api/programStages.json?filter=id:eq:' + stageId + '&fields=programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',type,optionSet[id,displayName|rename(name)]]]',
                 success: function(r) {
-                    var objects = Ext.decode(r.responseText).programStages,
+                    var objects = JSON.parse(r.responseText).programStages,
                         dataElements;
 
                     if (!objects.length) {
@@ -653,7 +653,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 params: params,
                 scope: this,
                 success: function(r) {
-                    var a = Ext.decode(r.responseText).organisationUnits;
+                    var a = JSON.parse(r.responseText).organisationUnits;
                     this.numberOfRecords = a.length;
                     for (var i = 0; i < a.length; i++) {
                         this.multipleExpand(a[i].id, a[i].path);

@@ -736,7 +736,7 @@ export default function getInstance(init) {
 
             // if response object
             if (isObject(obj) && obj.responseText && !obj.message) {
-                obj = Ext.decode(obj.responseText);
+                obj = JSON.parse(obj.responseText);
             }
 
             // if string

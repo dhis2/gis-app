@@ -4,6 +4,7 @@ import isNumber from 'd2-utilizr/lib/isNumber';
 import isObject from 'd2-utilizr/lib/isObject';
 import isString from 'd2-utilizr/lib/isString';
 import arrayContains from 'd2-utilizr/lib/arrayContains';
+import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 
 export default function createExtensions(gis) {
@@ -1009,7 +1010,7 @@ export default function createExtensions(gis) {
                         oldVal = arrayFrom(oldVal);
 
                         if (newVal.length < oldVal.length) {
-                            var id = Ext.Array.difference(oldVal, newVal)[0];
+                            var id = arrayDifference(oldVal, newVal)[0];
                             container.valueStore.removeAt(container.valueStore.findExact(idProperty, id));
                         }
                     }

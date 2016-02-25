@@ -254,7 +254,7 @@ export default function SharingWindow(gis, sharing) {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        params: Ext.encode(getBody())
+                        params: JSON.stringify(getBody())
                     });
 
                     window.destroy();

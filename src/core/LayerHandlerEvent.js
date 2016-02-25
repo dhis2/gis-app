@@ -2,6 +2,7 @@ import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
 import isString from 'd2-utilizr/lib/isString';
 import arrayContains from 'd2-utilizr/lib/arrayContains';
+import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerEvent(gis, layer) {
     var loadOrganisationUnits,
@@ -190,8 +191,7 @@ export default function LayerHandlerEvent(gis, layer) {
                 gis.alert(r);
             },
             success: function(r) {
-                console.log("success");
-                success(Ext.decode(r.responseText));
+                success(JSON.parse(r.responseText));
             }
         });
     };

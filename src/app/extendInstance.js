@@ -313,7 +313,7 @@ export default function extendInstance(gis) {
         };
 
         util.json.decodeAggregatedValues = function(responseText) {
-            responseText = Ext.decode(responseText);
+            responseText = JSON.parse(responseText);
             var values = [];
 
             for (var i = 0; i < responseText.length; i++) {

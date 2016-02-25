@@ -1,6 +1,7 @@
 import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
+import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 import arraySort from 'd2-utilizr/lib/arraySort';
 
@@ -53,7 +54,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 srcIds.push(srcDim.items[i].id);
             }
 
-            if (Ext.Array.difference(viewIds, srcIds).length !== 0) {
+            if (arrayDifference(viewIds, srcIds).length !== 0) {
                 if (doExecute) {
                     loadOrganisationUnits(view);
                 }
@@ -84,7 +85,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 srcIds.push(srcDim.items[i].id);
             }
 
-            if (Ext.Array.difference(viewIds, srcIds).length !== 0) {
+            if (arrayDifference(viewIds, srcIds).length !== 0) {
                 if (doExecute) {
                     loadData(view);
                 }
@@ -113,7 +114,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 srcIds.push(srcDim.items[i].id);
             }
 
-            if (Ext.Array.difference(viewIds, srcIds).length !== 0) {
+            if (arrayDifference(viewIds, srcIds).length !== 0) {
                 if (doExecute) {
                     loadData(view);
                 }
@@ -194,7 +195,7 @@ export default function LayerHandlerThematic(gis, layer) {
             url: url,
             disableCaching: false,
             success: function (r) {
-                success(Ext.decode(r.responseText));
+                success(JSON.parse(r.responseText));
             },
             failure: function () {
                 failure();
@@ -343,7 +344,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 gis.alert(r);
             },
             success: function (r) {
-                success(Ext.decode(r.responseText));
+                success(JSON.parse(r.responseText));
             }
         });
     };
@@ -425,7 +426,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 scope: this,
                 disableCaching: false,
                 success: function (r) {
-                    legends = Ext.decode(r.responseText).legends;
+                    legends = JSON.parse(r.responseText).legends;
 
                     arraySort(legends, function (a, b) {
                         return a.startValue - b.startValue;
@@ -476,7 +477,7 @@ export default function LayerHandlerThematic(gis, layer) {
             Ext.Ajax.request({
                 url: gis.init.contextPath + '/api/' + elementUrl + '.json?fields=legendSet[id,displayName|rename(name)]&paging=false&filter=id:eq:' + id,
                 success: function (r) {
-                    var elements = Ext.decode(r.responseText)[elementUrl],
+                    var elements = JSON.parse(r.responseText)[elementUrl],
                         set;
 
                     if (arrayFrom(elements).length) {

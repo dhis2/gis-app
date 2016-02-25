@@ -76,7 +76,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
         Ext.Ajax.request({
             url: gis.init.contextPath + '/api/organisationUnits/' + id + '.json?links=false',
             success: function(r) {
-                var orgUnit = Ext.decode(r.responseText);
+                var orgUnit = JSON.parse(r.responseText);
 
                 orgUnit.coordinates = coordinates;
 
@@ -84,7 +84,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
                     url: gis.init.contextPath + '/api/metaData?preheatCache=false',
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    params: Ext.encode({organisationUnits: [orgUnit]}),
+                    params: JSON.stringify({organisationUnits: [orgUnit]}),
                     success: function(r) {
                         instance.setLatLng(latlng);
                         stopRelocate();
@@ -101,7 +101,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
         Ext.Ajax.request({
             url: gis.init.contextPath + '/api/organisationUnits/' + att.id + '.json?fields=id,' + gis.init.namePropertyUrl + ',code,address,email,phoneNumber,coordinates,parent[id,' + gis.init.namePropertyUrl + '],organisationUnitGroups[id,' + gis.init.namePropertyUrl + ']',
             success: function(r) {
-                var ou = Ext.decode(r.responseText);
+                var ou = JSON.parse(r.responseText);
 
                 if (layer.infrastructuralWindow) {
                     layer.infrastructuralWindow.destroy();
@@ -241,7 +241,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
                                                         dxIndex,
                                                         valueIndex;
 
-                                                    r = Ext.decode(r.responseText);
+                                                    r = JSON.parse(r.responseText);
 
                                                     if (!r.rows && r.rows.length) {
                                                         return;
@@ -408,7 +408,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
                     Ext.Ajax.request({
                         url: gis.init.contextPath + '/api/organisationUnits/' + id + '.json?links=false',
                         success: function(r) {
-                            var orgUnit = Ext.decode(r.responseText);
+                            var orgUnit = JSON.parse(r.responseText);
 
                             orgUnit.coordinates = '[' + coords[1].toFixed(6) + ',' + coords[0].toFixed(6) + ']';
 
@@ -416,7 +416,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
                                 url: gis.init.contextPath + '/api/metaData?preheatCache=false',
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
-                                params: Ext.encode({organisationUnits: [orgUnit]}),
+                                params: JSON.stringify({organisationUnits: [orgUnit]}),
                                 success: function(r) {
                                     instance.setLatLng(coords);
                                     feature.geometry.coordinates = coords.reverse();

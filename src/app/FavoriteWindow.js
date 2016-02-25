@@ -118,7 +118,7 @@ export default function FavoriteWindow(gis) {
                     url: gis.init.contextPath + '/api/maps/',
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    params: Ext.encode(map),
+                    params: JSON.stringify(map),
                     success: function(r) {
                         var id = r.getAllResponseHeaders().location.split('/').pop();
 
@@ -144,7 +144,7 @@ export default function FavoriteWindow(gis) {
                 Ext.Ajax.request({
                     url: gis.init.contextPath + '/api/maps/' + id + '.json?fields=' + gis.conf.url.mapFields.join(','),
                     success: function(r) {
-                        map = Ext.decode(r.responseText);
+                        map = JSON.parse(r.responseText);
 
                         map.name = name;
 
@@ -152,7 +152,7 @@ export default function FavoriteWindow(gis) {
                             url: gis.init.contextPath + '/api/maps/' + id,
                             method: 'PUT',
                             headers: {'Content-Type': 'application/json'},
-                            params: Ext.encode(map),
+                            params: JSON.stringify(map),
                             success: function() {
                                 gis.store.maps.loadStore();
 
@@ -368,7 +368,7 @@ export default function FavoriteWindow(gis) {
                                             url: gis.init.contextPath + '/api/maps/' + record.data.id,
                                             method: 'PUT',
                                             headers: {'Content-Type': 'application/json'},
-                                            params: Ext.encode(map),
+                                            params: JSON.stringify(map),
                                             success: function() {
                                                 gis.map = map;
                                                 gis.store.maps.loadStore();
@@ -399,7 +399,7 @@ export default function FavoriteWindow(gis) {
                                         gis.alert(r);
                                     },
                                     success: function(r) {
-                                        var sharing = Ext.decode(r.responseText),
+                                        var sharing = JSON.parse(r.responseText),
                                             window = GIS.app.SharingWindow(gis, sharing);
                                         window.show();
                                     }

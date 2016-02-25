@@ -81,7 +81,7 @@ export default function FeaturePopup(gis, instance) {
                 url: gis.init.contextPath + '/api/analytics.json' + paramString,
                 disableCaching: false,
                 success: function(r) {
-                    success(Ext.decode(r.responseText));
+                    success(JSON.parse(r.responseText));
                 },
                 failure: failure
             });

@@ -1,4 +1,3 @@
-//GIS.core.LayerHandlerEvent = function(gis, layer) {
 export default function LayerHandlerEvent(gis, layer) {
     var loadOrganisationUnits,
         loadData,
@@ -186,6 +185,7 @@ export default function LayerHandlerEvent(gis, layer) {
                 gis.alert(r);
             },
             success: function(r) {
+                console.log("success");
                 success(Ext.decode(r.responseText));
             }
         });

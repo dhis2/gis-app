@@ -1,5 +1,8 @@
 import core from './core/index.js';
 import app from './app/index.js';
+import arrayClean from 'd2-utilizr/lib/arrayClean';
+import arrayContains from 'd2-utilizr/lib/arrayContains';
+import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 
 Ext.onReady( function() {
     var createViewport,
@@ -554,7 +557,7 @@ Ext.onReady( function() {
                                                         if (e.button === 0 && !e.ctrlKey) {
                                                             window.location.href = gis.init.contextPath + '/dhis-web-pivot';
                                                         }
-                                                        else if ((e.ctrlKey && Ext.Array.contains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
+                                                        else if ((e.ctrlKey && arrayContains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
                                                             window.open(gis.init.contextPath + '/dhis-web-pivot', '_blank');
                                                         }
                                                     }
@@ -576,7 +579,7 @@ Ext.onReady( function() {
                                                         if (e.button === 0 && !e.ctrlKey) {
                                                             window.location.href = gis.init.contextPath + '/dhis-web-pivot/index.html?s=analytical';
                                                         }
-                                                        else if ((e.ctrlKey && Ext.Array.contains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
+                                                        else if ((e.ctrlKey && arrayContains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
                                                             window.open(gis.init.contextPath + '/dhis-web-pivot/index.html?s=analytical', '_blank');
                                                         }
                                                     }
@@ -595,7 +598,7 @@ Ext.onReady( function() {
                                                         if (e.button === 0 && !e.ctrlKey) {
                                                             window.location.href = gis.init.contextPath + '/dhis-web-pivot/index.html?s=table';
                                                         }
-                                                        else if ((e.ctrlKey && Ext.Array.contains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
+                                                        else if ((e.ctrlKey && arrayContains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
                                                             window.open(gis.init.contextPath + '/dhis-web-pivot/index.html?s=table', '_blank');
                                                         }
                                                     }
@@ -648,7 +651,7 @@ Ext.onReady( function() {
                                                         if (e.button === 0 && !e.ctrlKey) {
                                                             window.location.href = gis.init.contextPath + '/dhis-web-visualizer';
                                                         }
-                                                        else if ((e.ctrlKey && Ext.Array.contains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
+                                                        else if ((e.ctrlKey && arrayContains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
                                                             window.open(gis.init.contextPath + '/dhis-web-visualizer', '_blank');
                                                         }
                                                     }
@@ -670,7 +673,7 @@ Ext.onReady( function() {
                                                         if (e.button === 0 && !e.ctrlKey) {
                                                             window.location.href = gis.init.contextPath + '/dhis-web-visualizer/index.html?s=analytical';
                                                         }
-                                                        else if ((e.ctrlKey && Ext.Array.contains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
+                                                        else if ((e.ctrlKey && arrayContains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
                                                             window.open(gis.init.contextPath + '/dhis-web-visualizer/index.html?s=analytical', '_blank');
                                                         }
                                                     }
@@ -689,7 +692,7 @@ Ext.onReady( function() {
                                                         if (e.button === 0 && !e.ctrlKey) {
                                                             window.location.href = gis.init.contextPath + '/dhis-web-visualizer/index.html?s=chart';
                                                         }
-                                                        else if ((e.ctrlKey && Ext.Array.contains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
+                                                        else if ((e.ctrlKey && arrayContains([0,1], e.button)) || (!e.ctrlKey && e.button === 1)) {
                                                             window.open(gis.init.contextPath + '/dhis-web-visualizer/index.html?s=chart', '_blank');
                                                         }
                                                     }
@@ -921,7 +924,7 @@ Ext.onReady( function() {
             if (base.length) {
 
                 // hide base layer
-                if (Ext.Array.contains(['false', 'none', 'no', 'off'], base)) {
+                if (arrayContains(['false', 'none', 'no', 'off'], base)) {
                     for (var i = 0, item; i < layersPanel.layerItems.length; i++) {
                         item = layersPanel.layerItems[i];
 
@@ -1113,7 +1116,7 @@ Ext.onReady( function() {
                                                 init.periodGenerator = new dhis2.period.PeriodGenerator(init.calendar, init.systemInfo.dateFormat);
                                             };
 
-                                            if (Ext.Array.contains(calendarIds, calendarId)) {
+                                            if (arrayContains(calendarIds, calendarId)) {
                                                 calendarScriptUrl = 'dhis2/jquery.calendars.' + calendarId + '.min.js';
 
                                                 Ext.Loader.injectScriptElement(calendarScriptUrl, function() {
@@ -1201,7 +1204,7 @@ Ext.onReady( function() {
                                                         ou.push(org.id);
 
                                                         if (org.children) {
-                                                            ouc = Ext.Array.clean(ouc.concat(Ext.Array.pluck(org.children, 'id') || []));
+                                                            ouc = arrayClean(ouc.concat(arrayPluck(org.children, 'id') || []));
                                                         }
                                                     }
 

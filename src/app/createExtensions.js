@@ -1,4 +1,6 @@
-//GIS.app.createExtensions = function(gis) {
+import arrayContains from 'd2-utilizr/lib/arrayContains';
+import arrayFrom from 'd2-utilizr/lib/arrayFrom';
+
 export default function createExtensions(gis) {
 
     Ext.define('Ext.ux.panel.LayerItemPanel', {

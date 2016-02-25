@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/dhis2/dhis2-gis#readme",
   "dependencies": {
+    "d2-utilizr": "^0.2.1",
     "whatwg-fetch": "0.10.1"
   },
   "devDependencies": {

@@ -1,4 +1,13 @@
-//GIS.app.LayerWidgetThematic = function(gis, layer) {
+import isArray from 'd2-utilizr/lib/isArray';
+import isBoolean from 'd2-utilizr/lib/isBoolean';
+import isFunction from 'd2-utilizr/lib/isFunction';
+import isObject from 'd2-utilizr/lib/isObject';
+import isString from 'd2-utilizr/lib/isString';
+import arrayClean from 'd2-utilizr/lib/arrayClean';
+import arrayContains from 'd2-utilizr/lib/arrayContains';
+import arrayFrom from 'd2-utilizr/lib/arrayFrom';
+import arrayPluck from 'd2-utilizr/lib/arrayPluck';
+
 export default function LayerWidgetThematic(gis, layer) {
 
     var indicatorsByGroupStore,
@@ -91,7 +100,7 @@ export default function LayerWidgetThematic(gis, layer) {
         },
         isLoaded: false,
         loadFn: function(fn) {
-            if (Ext.isFunction(fn)) {
+            if (isFunction(fn)) {
                 if (this.isLoaded) {
                     fn.call();
                 }
@@ -137,7 +146,7 @@ export default function LayerWidgetThematic(gis, layer) {
         setTotalsProxy: function(uid, preventLoad, callbackFn) {
             var path;
 
-            if (Ext.isString(uid)) {
+            if (isString(uid)) {
                 path = '/dataElements.json?fields=id,' + gis.init.namePropertyUrl + '&domainType=aggregate&paging=false&filter=dataElementGroups.id:eq:' + uid;
             }
             else if (uid === 0) {
@@ -164,7 +173,7 @@ export default function LayerWidgetThematic(gis, layer) {
                     callback: function() {
                         this.sortStore();
 
-                        if (Ext.isFunction(callbackFn)) {
+                        if (isFunction(callbackFn)) {
                             callbackFn();
                         }
                     }
@@ -172,7 +181,7 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         },
         setDetailsProxy: function(uid, preventLoad, callbackFn) {
-            if (Ext.isString(uid)) {
+            if (isString(uid)) {
                 this.setProxy({
                     type: 'ajax',
                     url: gis.init.contextPath + '/api/dataElementOperands.json?fields=id,' + gis.init.namePropertyUrl + '&paging=false&filter=dataElement.dataElementGroups.id:eq:' + uid,
@@ -188,7 +197,7 @@ export default function LayerWidgetThematic(gis, layer) {
                         callback: function() {
                             this.sortStore();
 
-                            if (Ext.isFunction(callbackFn)) {
+                            if (isFunction(callbackFn)) {
                                 callbackFn();
                             }
                         }
@@ -259,7 +268,7 @@ export default function LayerWidgetThematic(gis, layer) {
         getRecordsByIds: function(ids) {
             var records = [];
 
-            ids = Ext.Array.from(ids);
+            ids = arrayFrom(ids);
 
             for (var i = 0, index; i < ids.length; i++) {
                 index = this.findExact('id', ids[i]);
@@ -277,7 +286,7 @@ export default function LayerWidgetThematic(gis, layer) {
             this.clearFilter();
 
             this.filterBy(function(record) {
-                return !Ext.Array.contains(selectedStoreIds, record.data.id);
+                return !arrayContains(selectedStoreIds, record.data.id);
             });
         }
     });
@@ -296,7 +305,7 @@ export default function LayerWidgetThematic(gis, layer) {
         getRecordsByIds: function(ids) {
             var records = [];
 
-            ids = Ext.Array.from(ids);
+            ids = arrayFrom(ids);
 
             for (var i = 0, index; i < ids.length; i++) {
                 index = this.findExact('id', ids[i]);
@@ -314,7 +323,7 @@ export default function LayerWidgetThematic(gis, layer) {
             this.clearFilter();
 
             this.filterBy(function(record) {
-                return !Ext.Array.contains(selectedStoreIds, record.data.id);
+                return !arrayContains(selectedStoreIds, record.data.id);
             });
         }
     });
@@ -521,7 +530,7 @@ export default function LayerWidgetThematic(gis, layer) {
                     success: function(r) {
                         var set = Ext.decode(r.responseText).indicators[0].legendSet;
 
-                        if (Ext.isObject(set) && set.id) {
+                        if (isObject(set) && set.id) {
                             legendType.setValue(gis.conf.finals.widget.legendtype_predefined);
                             legendTypeToggler(gis.conf.finals.widget.legendtype_predefined);
 
@@ -609,7 +618,7 @@ export default function LayerWidgetThematic(gis, layer) {
                     success: function(r) {
                         var set = Ext.decode(r.responseText).dataElements[0].legendSet;
 
-                        if (Ext.isObject(set) && set.id) {
+                        if (isObject(set) && set.id) {
                             legendType.setValue(gis.conf.finals.widget.legendtype_predefined);
                             legendTypeToggler(gis.conf.finals.widget.legendtype_predefined);
 
@@ -688,7 +697,7 @@ export default function LayerWidgetThematic(gis, layer) {
                     success: function(r) {
                         var set = Ext.decode(r.responseText).dataSets[0].legendSet;
 
-                        if (Ext.isObject(set) && set.id) {
+                        if (isObject(set) && set.id) {
                             legendType.setValue(gis.conf.finals.widget.legendtype_predefined);
                             legendTypeToggler(gis.conf.finals.widget.legendtype_predefined);
 
@@ -719,11 +728,11 @@ export default function LayerWidgetThematic(gis, layer) {
             success: function(r) {
                 r = Ext.decode(r.responseText);
 
-                var isA = Ext.isArray,
-                    isO = Ext.isObject,
+                var isA = isArray,
+                    isO = isObject,
                     program = isA(r.programs) && r.programs.length ? r.programs[0] : null,
                     stages = isO(program) && isA(program.programStages) && program.programStages.length ? program.programStages : [],
-                    teas = isO(program) && isA(program.programTrackedEntityAttributes) ? Ext.Array.pluck(program.programTrackedEntityAttributes, 'trackedEntityAttribute') : [],
+                    teas = isO(program) && isA(program.programTrackedEntityAttributes) ? arrayPluck(program.programTrackedEntityAttributes, 'trackedEntityAttribute') : [],
                     dataElements = [],
                     attributes = [],
                     types = gis.conf.valueType.aggregateTypes,
@@ -734,10 +743,10 @@ export default function LayerWidgetThematic(gis, layer) {
                     stage = stages[i];
 
                     if (isA(stage.programStageDataElements) && stage.programStageDataElements.length) {
-                        elements = Ext.Array.pluck(stage.programStageDataElements, 'dataElement') || [];
+                        elements = arrayPluck(stage.programStageDataElements, 'dataElement') || [];
 
                         for (var j = 0; j < elements.length; j++) {
-                            if (Ext.Array.contains(types, elements[j].valueType)) {
+                            if (arrayContains(types, elements[j].valueType)) {
                                 dataElements.push(elements[j]);
                             }
                         }
@@ -746,12 +755,12 @@ export default function LayerWidgetThematic(gis, layer) {
 
                 // attributes
                 for (i = 0; i < teas.length; i++) {
-                    if (Ext.Array.contains(types, teas[i].valueType)) {
+                    if (arrayContains(types, teas[i].valueType)) {
                         attributes.push(teas[i]);
                     }
                 }
 
-                data = gis.util.array.sort(Ext.Array.clean([].concat(dataElements, attributes))) || [];
+                data = gis.util.array.sort(arrayClean([].concat(dataElements, attributes))) || [];
 
                 eventDataItemAvailableStore.loadData(data);
             }
@@ -800,11 +809,11 @@ export default function LayerWidgetThematic(gis, layer) {
             success: function(r) {
                 r = Ext.decode(r.responseText);
 
-                var isA = Ext.isArray,
-                    isO = Ext.isObject,
+                var isA = isArray,
+                    isO = isObject,
                     program = isA(r.programs) && r.programs.length ? r.programs[0] : null,
                     programIndicators = isO(program) && isA(program.programIndicators) && program.programIndicators.length ? program.programIndicators : [],
-                    data = gis.util.array.sort(Ext.Array.clean(programIndicators)) || [];
+                    data = gis.util.array.sort(arrayClean(programIndicators)) || [];
 
                 programIndicatorAvailableStore.loadData(data);
             }
@@ -1054,7 +1063,7 @@ export default function LayerWidgetThematic(gis, layer) {
             var selection = this.getSelectionModel().getSelection(),
                 map = {};
 
-            if (Ext.isArray(selection) && selection.length) {
+            if (isArray(selection) && selection.length) {
                 for (var i = 0, pathArray; i < selection.length; i++) {
                     pathArray = selection[i].getPath().split('/');
                     map[pathArray.pop()] = pathArray.join('/');
@@ -1103,8 +1112,8 @@ export default function LayerWidgetThematic(gis, layer) {
             },
             listeners: {
                 load: function(store, node, records) {
-                    Ext.Array.each(records, function(record) {
-                        if (Ext.isBoolean(record.data.hasChildren)) {
+                    records.forEach(function(record){
+                        if (isBoolean(record.data.hasChildren)) {
                             record.set('leaf', !record.data.hasChildren);
                         }
                     });
@@ -1690,7 +1699,7 @@ export default function LayerWidgetThematic(gis, layer) {
         var dxDim = view.columns[0],
             peDim = view.filters[0],
             ouDim = view.rows[0],
-            lType = Ext.isObject(view.legendSet) && Ext.isString(view.legendSet.id) ? gis.conf.finals.widget.legendtype_predefined : gis.conf.finals.widget.legendtype_automatic,
+            lType = isObject(view.legendSet) && isString(view.legendSet.id) ? gis.conf.finals.widget.legendtype_predefined : gis.conf.finals.widget.legendtype_automatic,
             itemTypeCmpMap = {},
             objectNameProgramCmpMap = {},
             isOu = false,

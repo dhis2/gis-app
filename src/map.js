@@ -40,11 +40,15 @@ Ext.onReady(function() {
             fn;
 
         init.contextPath = config.url;
+        init.defaultHeaders = {};
 
         if (config.username && config.password) {
+
             Ext.Ajax.defaultHeaders = {
                 'Authorization': 'Basic ' + btoa(config.username + ':' + config.password)
             };
+
+            init.defaultHeaders['Authorization'] = 'Basic ' + btoa(config.username + ':' + config.password);
         }
 
         fn = function() {
@@ -476,7 +480,7 @@ Ext.onReady(function() {
             gis.el = appConfig.el;
             gis.username = appConfig.username;
             gis.password = appConfig.password;
-            gis.ajax = util.connection.ajax;
+            //gis.ajax = util.connection.ajax;
 
             // store
             store.groupsByGroupSet = Ext.create('Ext.data.Store', {

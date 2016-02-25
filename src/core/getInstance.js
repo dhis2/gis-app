@@ -804,6 +804,7 @@ export default function getInstance(init) {
             return types;
         };
 
+        /*
         util.connection = {};
 
         util.connection.ajax = function(requestConfig, authConfig) {
@@ -814,6 +815,7 @@ export default function getInstance(init) {
 
             Ext.Ajax.request(requestConfig);
         };
+        */
     }());
 
     gis.init = init;

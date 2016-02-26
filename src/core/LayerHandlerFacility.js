@@ -272,7 +272,7 @@ export default function LayerHandlerFacility(gis, layer) {
 			if (!gis.legend) {
 				gis.legend = gis.instance.addControl({
 					type: 'legend',
-					offset: [0, -62],
+					offset: [0, -64],
 					content: html
 				});
 			} else {
@@ -284,7 +284,9 @@ export default function LayerHandlerFacility(gis, layer) {
 	afterLoad = function(view) {
 
 		// Legend
-		gis.viewport.eastRegion.doLayout();
+		if (gis.viewport) {
+			gis.viewport.eastRegion.doLayout();
+		}
 
 		if (layer.legendPanel) {
 			layer.legendPanel.expand();

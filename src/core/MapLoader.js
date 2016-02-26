@@ -75,7 +75,12 @@ export default function MapLoader(gis, isSession, applyConfig) {
 			handler;
 
 		// title
-		if (gis.dashboard && gis.viewport.northRegion && gis.map && gis.map.name) {
+		if (gis.dashboard && gis.container && gis.map && gis.map.name) {
+			gis.container.childNodes[0].innerText = gis.map.name;
+		}
+
+		// TODO: Remove
+		if (gis.dashboard && gis.viewport && gis.viewport.northRegion && gis.map && gis.map.name) {
 			gis.viewport.northRegion.update(gis.map.name);
 		}
 
@@ -167,7 +172,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		}
 
 		// interpretation button
-		if (gis.viewport.shareButton) {
+		if (gis.viewport && gis.viewport.shareButton) {
 			gis.viewport.shareButton.enable();
 		}
 
@@ -176,7 +181,9 @@ export default function MapLoader(gis, isSession, applyConfig) {
 			gis.util.layout.setSessionStorage('map', gis.util.layout.getAnalytical());
 		}
 
-		gis.mask.hide();
+		if (gis.mask) {
+			gis.mask.hide();
+		}
 	};
 
 	loader = {

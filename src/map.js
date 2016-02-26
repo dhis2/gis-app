@@ -418,14 +418,18 @@ Ext.onReady(function() {
         css += '.leaflet-dhis2 .leaflet-popup ul { margin-top: 5px; }';
         css += '.leaflet-dhis2 .leaflet-popup li { list-style-type: disc; margin-left: 20px; }';
         css += '.leaflet-dhis2 .leaflet-popup em { font-weight:bold; }';
-        
+
+        css += '.dhis2-map-widget-container { height: 100% }';
+        css += '.dhis2-map-widget-container .dhis2-map-title { height: 19px; font-weight: bold; font-size: 12px; font-family: LiberationSans, arial, sans-serif; color: rgb(51, 51, 51); text-align: center; line-height: 14px; letter-spacing: -0.1px; }';
+        css += '.dhis2-map-widget-container .leaflet-container { height: calc(100% - 19px); border: 1px solid rgb(208, 208, 208); }';
+
         Ext.util.CSS.createStyleSheet(css);
     };
 
     execute = function(config) {
         var validateConfig,
             extendInstance,
-            createViewport,
+            initLayout,
             afterRender,
             initialize,
             gis;
@@ -480,7 +484,6 @@ Ext.onReady(function() {
             gis.el = appConfig.el;
             gis.username = appConfig.username;
             gis.password = appConfig.password;
-            //gis.ajax = util.connection.ajax;
 
             // store
             store.groupsByGroupSet = Ext.create('Ext.data.Store', {
@@ -488,161 +491,26 @@ Ext.onReady(function() {
             });
         };
 
-        createViewport = function(appConfig) {
-            var viewport,
-                items = [],
-                northRegion,
-                centerRegion,
-                eastRegion,
-                el = Ext.get(gis.el),
-                eastWidth = gis.map.hideLegend ? 0 : (appConfig.plugin ? 120 : 200),
-                trash = [];
+        initLayout = function(appConfig) {
+            var container = document.getElementById(appConfig.el),
+                titleEl = document.createElement('div'),
+                map = gis.instance;
 
-            // north
-            if (appConfig.dashboard) {
-                items.push(northRegion = Ext.create('Ext.panel.Panel', {
-                    region: 'north',
-                    width: el.getWidth(),
-                    height: 19,
-                    bodyStyle: 'background-color: #fff; border: 0 none; font: bold 12px LiberationSans, arial, sans-serif; color: #333; text-align: center; line-height: 14px; letter-spacing: -0.1px',
-                    html: ''
-                }));
-            }
+            container.className = 'dhis2-map-widget-container';
+            titleEl.className = 'dhis2-map-title';
 
-            // center
-            //items.push(centerRegion = new GeoExt.MapPanel({
-            items.push(centerRegion = Ext.create('Ext.panel.Panel', {
-                region: 'center',
-                bodyStyle: 'border: 1px solid #d0d0d0',
-                width: el.getWidth() - eastWidth,
-                afterLayout: function() {
-                    if (!this.map) {
-                        this.map = gis.instance;
-                        this.body.appendChild(this.map.getContainer());
+            container.appendChild(titleEl);
+            container.appendChild(map.getContainer());
 
-                        // Add zoom control
-                        this.map.addControl({
-                            type: 'zoom',
-                            position: 'topright'
-                        });
+            container.titleEl = titleEl;
 
-                        this.map.invalidateSize();
-                        this.map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
-                    } else {
-                        this.map.invalidateSize();
-                    }
-                }
-            }));
-
-            // east
-            if (appConfig.dashboard) {
-                items.push(eastRegion = Ext.create('Ext.panel.Panel', {
-                    width: 0,
-                    height: 0
-                }));
-            }
-            else {
-                items.push(eastRegion = Ext.create('Ext.panel.Panel', {
-                    region: 'east',
-                    layout: 'anchor',
-                    bodyStyle: 'border-top:0 none; border-bottom:0 none',
-                    width: eastWidth,
-                    preventHeader: true,
-                    defaults: {
-                        bodyStyle: 'padding: 6px; border: 0 none',
-                        collapsible: true,
-                        collapsed: true,
-                        animCollapse: false
-                    },
-                    items: [
-                        {
-                            title: GIS.i18n.thematic_layer_1_legend,
-                            cls: 'gis-panel-legend',
-                            bodyStyle: 'padding:3px 0 4px 5px; border-width:1px 0 1px 0; border-color:#d0d0d0;',
-                            listeners: {
-                                added: function() {
-                                    gis.layer.thematic1.legendPanel = this;
-                                }
-                            }
-                        },
-                        {
-                            title: GIS.i18n.thematic_layer_2_legend,
-                            cls: 'gis-panel-legend',
-                            bodyStyle: 'padding:3px 0 4px 5px; border-width:1px 0 1px 0; border-color:#d0d0d0;',
-                            listeners: {
-                                added: function() {
-                                    gis.layer.thematic2.legendPanel = this;
-                                }
-                            }
-                        },
-                        {
-                            title: GIS.i18n.thematic_layer_3_legend,
-                            cls: 'gis-panel-legend',
-                            bodyStyle: 'padding:3px 0 4px 5px; border-width:1px 0 1px 0; border-color:#d0d0d0;',
-                            listeners: {
-                                added: function() {
-                                    gis.layer.thematic3.legendPanel = this;
-                                }
-                            }
-                        },
-                        {
-                            title: GIS.i18n.thematic_layer_4_legend,
-                            cls: 'gis-panel-legend',
-                            bodyStyle: 'padding:3px 0 4px 5px; border-width:1px 0 1px 0; border-color:#d0d0d0;',
-                            listeners: {
-                                added: function() {
-                                    gis.layer.thematic4.legendPanel = this;
-                                }
-                            }
-                        },
-                        {
-                            title: GIS.i18n.facility_layer_legend,
-                            cls: 'gis-panel-legend',
-                            bodyStyle: 'padding:3px 0 4px 5px; border-width:1px 0 1px 0; border-color:#d0d0d0;',
-                            listeners: {
-                                added: function() {
-                                    gis.layer.facility.legendPanel = this;
-                                }
-                            }
-                        }
-                    ]
-                }));
-            }
-
-            viewport = Ext.create('Ext.panel.Panel', {
-                renderTo: el,
-                width: el.getWidth(),
-                height: el.getHeight(),
-                cls: 'gis-plugin',
-                layout: 'border',
-                bodyStyle: 'border: 0 none',
-                items: items,
-                listeners: {
-                    afterrender: function() {
-                        afterRender();
-                    }
-                }
+            map.addControl({
+                type: 'zoom',
+                position: 'topright'
             });
 
-            viewport.northRegion = northRegion;
-            viewport.centerRegion = centerRegion;
-            viewport.eastRegion = eastRegion;
-
-            viewport.centerRegion.trash = trash;
-            viewport.centerRegion.getEl().on('mouseleave', function() {
-                for (var i = 0, cmp; i < trash.length; i++) {
-                    cmp = viewport.centerRegion.trash[i];
-
-                    if (cmp && cmp.destroy) {
-                        cmp.destroy();
-                    }
-                }
-            });
-
-            return viewport;
-        };
-
-        afterRender = function(vp) {
+            map.invalidateSize();
+            map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
 
             // base layer
             gis.map.baseLayer = gis.map.baseLayer || 'none';
@@ -650,19 +518,20 @@ Ext.onReady(function() {
             var base = isString(gis.map.baseLayer) ? gis.map.baseLayer.split(' ').join('').toLowerCase() : gis.map.baseLayer;
 
             if (!base || base === 'none' || base === 'off') {
-                gis.instance.addLayer(gis.layer.openStreetMap.config);
+                map.addLayer(gis.layer.openStreetMap.config);
             }
             else if (base === 'gs' || base === 'googlestreets') {
-                gis.instance.addLayer(gis.layer.googleStreets.config);
+                map.addLayer(gis.layer.googleStreets.config);
             }
             else if (base === 'gh' || base === 'googlehybrid') {
-                gis.instance.addLayer(gis.layer.googleHybrid.config);
+                map.addLayer(gis.layer.googleHybrid.config);
             }
-        };
+
+            return container;
+        },
 
         initialize = function() {
-            var el = Ext.get(config.el),
-                appConfig;
+            var appConfig;
 
             if (!validateConfig()) {
                 return;
@@ -687,27 +556,18 @@ Ext.onReady(function() {
             extendInstance(gis, appConfig);
 
             gis.map = config;
-            gis.viewport = createViewport(appConfig);
+            gis.container = initLayout(appConfig);
 
-            // dashboard element
-            if (el) {
-                el.setViewportWidth = function(width) {
-                    gis.viewport.setWidth(width);
-                    gis.viewport.centerRegion.setWidth(width);
-
-                    if (gis.viewport.northRegion) {
-                        gis.viewport.northRegion.setWidth(width);
-                    }
-                };
-
-                gis.instance.scrollWheelZoom.disable();
-            }
-
+            /* TODO
             gis.mask = Ext.create('Ext.LoadMask', gis.viewport.centerRegion.getEl(), {
                 msg: 'Loading'
             });
+            */
+
+            gis.instance.scrollWheelZoom.disable();
 
             GIS.core.MapLoader(gis, config).load();
+
         }();
     };
 

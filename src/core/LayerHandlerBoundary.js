@@ -140,18 +140,21 @@ export default function LayerHandlerBoundary(gis, layer) {
         };
 
         failure = function() {
-            gis.mask.hide();
+            if (gis.mask) {
+                gis.mask.hide();
+            }
             gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
         };
 
+        /*
         fetch(url, {
             headers: gis.init.defaultHeaders,
             cache: 'default'
         }).then(function(response) {
             return response.json()
         }).then(success).catch(failure);
+        */
 
-        /*
         Ext.Ajax.request({
             url: url,
             disableCaching: false,
@@ -162,7 +165,6 @@ export default function LayerHandlerBoundary(gis, layer) {
                 failure();
             }
         });
-        */
     };
 
     loadData = function(view, features) {

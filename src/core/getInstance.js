@@ -748,7 +748,7 @@ export default function getInstance(init) {
             }
 
             // dashboard
-            if (gis.dashboard) {
+            if (gis.dashboard && gis.viewport && gis.viewport.centerRegion) { // TODO
                 gis.viewport.centerRegion.update('<div class="ns-plugin-alert">' + obj.message + '</div>');
                 return;
             }
@@ -766,7 +766,8 @@ export default function getInstance(init) {
             config.html += obj.message + (obj.message.substr(obj.message.length - 1) === '.' ? '' : '.');
 
             // bodyStyle
-            config.bodyStyle = 'padding: 12px; background: #fff; max-width: 600px; max-height: ' + gis.viewport.centerRegion.getHeight() / 2 + 'px';
+            // TODO
+            //config.bodyStyle = 'padding: 12px; background: #fff; max-width: 600px; max-height: ' + gis.viewport.centerRegion.getHeight() / 2 + 'px';
 
             // destroy handler
             config.modal = true;

@@ -36,6 +36,12 @@ Ext.onReady(function() {
     getInit = function(config) {
         var isInit = false,
             requests = [],
+            onSystemSettingsLoad,
+            onOrgUnitsLoad,
+            onDimensionsLoad,
+            onUserAccountLoad,
+            onOptionSetsLoad,
+            onScriptReady,
             callbacks = 0,
             fn;
 
@@ -61,191 +67,202 @@ Ext.onReady(function() {
             }
         };
 
+        onSystemSettingsLoad = function (r) {
+            var systemSettings = r.responseText ? JSON.parse(r.responseText) : r,
+                userAccountConfig;
+
+            init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
+            init.systemInfo.calendar = systemSettings.keyCalendar;
+
+            // user-account
+            userAccountConfig = {
+                url: init.contextPath + '/api/me/user-account.json',
+                disableCaching: false,
+                success: onUserAccountLoad
+            };
+
+            Ext.Ajax.request(userAccountConfig);
+        };
+
+        onOrgUnitsLoad = function (r) {
+            var organisationUnits = (r.responseText ? JSON.parse(r.responseText).organisationUnits : r) || [],
+                ou = [],
+                ouc = [];
+
+            if (organisationUnits.length) {
+                for (var i = 0, org; i < organisationUnits.length; i++) {
+                    org = organisationUnits[i];
+
+                    ou.push(org.id);
+
+                    if (org.children) {
+                        ouc = arrayClean(ouc.concat(arrayPluck(org.children, 'id') || []));
+                    }
+                }
+
+                init.user = init.user || {};
+                init.user.ou = ou;
+                init.user.ouc = ouc;
+            } else {
+                gis.alert('User is not assigned to any organisation units');
+            }
+
+            fn();
+        };
+
+        onDimensionsLoad = function (r) {
+            init.dimensions = r.responseText ? JSON.parse(r.responseText).dimensions : r.dimensions;
+            fn();
+        };
+
+        onUserAccountLoad = function (r) {
+            init.userAccount = r.responseText ? JSON.parse(r.responseText) : r;
+
+            // init
+            if (window['dhis2'] && window['jQuery']) {
+                onScriptReady();
+            }
+            else {
+                Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/jQuery/jquery.min.js', function() {
+                    Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.util.js', function() {
+                        Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.js', function() {
+                            Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.idb.js', function() {
+                                Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.ss.js', function() {
+                                    Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.memory.js', function() {
+                                        console.log(onScriptReady);
+                                        onScriptReady();
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            }
+        };
+
+        onOptionSetsLoad = function (r) {
+            var optionSets = (r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets) || [],
+                store = dhis2.gis.store,
+                ids = [],
+                url = '',
+                callbacks = 0,
+                registerOptionSet,
+                updateStore,
+                optionSetConfig;
+
+            if (!optionSets.length) {
+                fn();
+                return;
+            }
+
+            optionSetConfig = {
+                url: init.contextPath + '/api/optionSets.json?fields=id,name,version,options[code,name]&paging=false' + url,
+                disableCaching: false,
+                success: function(r) {
+                    var sets = r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets;
+
+                    store.setAll('optionSets', sets).done(fn);
+                }
+            };
+
+            updateStore = function() {
+                if (++callbacks === optionSets.length) {
+                    if (!ids.length) {
+                        fn();
+                        return;
+                    }
+
+                    for (var i = 0; i < ids.length; i++) {
+                        url += '&filter=id:eq:' + ids[i];
+                    }
+
+                    Ext.Ajax.request(optionSetConfig);
+                }
+            };
+
+            registerOptionSet = function(optionSet) {
+                store.get('optionSets', optionSet.id).done(function(obj) {
+                    if (!isObject(obj) || obj.version !== optionSet.version) {
+                        ids.push(optionSet.id);
+                    }
+
+                    updateStore();
+                });
+            };
+
+            store.open().done(function() {
+                for (var i = 0; i < optionSets.length; i++) {
+                    registerOptionSet(optionSets[i]);
+                }
+            });
+        };
+
+        onScriptReady = function () {
+            var defaultKeyUiLocale = 'en',
+                defaultKeyAnalysisDisplayProperty = 'displayName',
+                displayPropertyMap = {
+                    'name': 'displayName',
+                    'displayName': 'displayName',
+                    'shortName': 'displayShortName',
+                    'displayShortName': 'displayShortName'
+                },
+                namePropertyUrl,
+                contextPath,
+                keyUiLocale,
+                keyAnalysisDisplayProperty,
+                dateFormat,
+                optionSetVersionConfig;
+
+            init.userAccount.settings.keyUiLocale = init.userAccount.settings.keyUiLocale || defaultKeyUiLocale;
+            init.userAccount.settings.keyAnalysisDisplayProperty = displayPropertyMap[init.userAccount.settings.keyAnalysisDisplayProperty] || defaultKeyAnalysisDisplayProperty;
+
+            // local vars
+            contextPath = init.contextPath;
+            keyUiLocale = init.userAccount.settings.keyUiLocale;
+            keyAnalysisDisplayProperty = init.userAccount.settings.keyAnalysisDisplayProperty;
+            namePropertyUrl = keyAnalysisDisplayProperty + '|rename(name)';
+            dateFormat = init.systemInfo.dateFormat;
+
+            init.namePropertyUrl = namePropertyUrl;
+
+            // dhis2
+            dhis2.util.namespace('dhis2.gis');
+
+            dhis2.gis.store = dhis2.gis.store || new dhis2.storage.Store({
+                    name: 'dhis2',
+                    adapters: [dhis2.storage.IndexedDBAdapter, dhis2.storage.DomSessionStorageAdapter, dhis2.storage.InMemoryAdapter],
+                    objectStores: ['optionSets']
+                });
+
+            optionSetVersionConfig = {
+                url: contextPath + '/api/optionSets.json?fields=id,version&paging=false',
+                disableCaching: false,
+                success: onOptionSetsLoad
+            };
+
+            // option sets
+            Ext.Ajax.request(optionSetVersionConfig);
+        };
+
         // dhis2
         requests.push({
             url: init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat',
             disableCaching: false,
-            success: function(r) {
-                var systemSettings = r.responseText ? JSON.parse(r.responseText) : r,
-                    userAccountConfig;
-
-                init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
-                init.systemInfo.calendar = systemSettings.keyCalendar;
-
-                // user-account
-                userAccountConfig = {
-                    url: init.contextPath + '/api/me/user-account.json',
-                    disableCaching: false,
-                    success: function(r) {
-                        init.userAccount = r.responseText ? JSON.parse(r.responseText) : r;
-
-                        var onScriptReady = function() {
-                            var defaultKeyUiLocale = 'en',
-                                defaultKeyAnalysisDisplayProperty = 'displayName',
-                                displayPropertyMap = {
-                                    'name': 'displayName',
-                                    'displayName': 'displayName',
-                                    'shortName': 'displayShortName',
-                                    'displayShortName': 'displayShortName'
-                                },
-                                namePropertyUrl,
-                                contextPath,
-                                keyUiLocale,
-                                keyAnalysisDisplayProperty,
-                                dateFormat,
-                                optionSetVersionConfig;
-
-                            init.userAccount.settings.keyUiLocale = init.userAccount.settings.keyUiLocale || defaultKeyUiLocale;
-                            init.userAccount.settings.keyAnalysisDisplayProperty = displayPropertyMap[init.userAccount.settings.keyAnalysisDisplayProperty] || defaultKeyAnalysisDisplayProperty;
-
-                            // local vars
-                            contextPath = init.contextPath;
-                            keyUiLocale = init.userAccount.settings.keyUiLocale;
-                            keyAnalysisDisplayProperty = init.userAccount.settings.keyAnalysisDisplayProperty;
-                            namePropertyUrl = keyAnalysisDisplayProperty + '|rename(name)';
-                            dateFormat = init.systemInfo.dateFormat;
-
-                            init.namePropertyUrl = namePropertyUrl;
-
-                            // dhis2
-                            dhis2.util.namespace('dhis2.gis');
-
-                            dhis2.gis.store = dhis2.gis.store || new dhis2.storage.Store({
-                                    name: 'dhis2',
-                                    adapters: [dhis2.storage.IndexedDBAdapter, dhis2.storage.DomSessionStorageAdapter, dhis2.storage.InMemoryAdapter],
-                                    objectStores: ['optionSets']
-                                });
-
-                            optionSetVersionConfig = {
-                                url: contextPath + '/api/optionSets.json?fields=id,version&paging=false',
-                                disableCaching: false,
-                                success: function(r) {
-                                    var optionSets = (r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets) || [],
-                                        store = dhis2.gis.store,
-                                        ids = [],
-                                        url = '',
-                                        callbacks = 0,
-                                        registerOptionSet,
-                                        updateStore,
-                                        optionSetConfig;
-
-                                    if (!optionSets.length) {
-                                        fn();
-                                        return;
-                                    }
-
-                                    optionSetConfig = {
-                                        url: contextPath + '/api/optionSets.json?fields=id,name,version,options[code,name]&paging=false' + url,
-                                        disableCaching: false,
-                                        success: function(r) {
-                                            var sets = r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets;
-
-                                            store.setAll('optionSets', sets).done(fn);
-                                        }
-                                    };
-
-                                    updateStore = function() {
-                                        if (++callbacks === optionSets.length) {
-                                            if (!ids.length) {
-                                                fn();
-                                                return;
-                                            }
-
-                                            for (var i = 0; i < ids.length; i++) {
-                                                url += '&filter=id:eq:' + ids[i];
-                                            }
-
-                                            Ext.Ajax.request(optionSetConfig);
-                                        }
-                                    };
-
-                                    registerOptionSet = function(optionSet) {
-                                        store.get('optionSets', optionSet.id).done(function(obj) {
-                                            if (!isObject(obj) || obj.version !== optionSet.version) {
-                                                ids.push(optionSet.id);
-                                            }
-
-                                            updateStore();
-                                        });
-                                    };
-
-                                    store.open().done(function() {
-                                        for (var i = 0; i < optionSets.length; i++) {
-                                            registerOptionSet(optionSets[i]);
-                                        }
-                                    });
-                                }
-                            };
-
-                            // option sets
-                            Ext.Ajax.request(optionSetVersionConfig);
-                        };
-
-                        // init
-                        if (window['dhis2'] && window['jQuery']) {
-                            onScriptReady();
-                        }
-                        else {
-                            Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/jQuery/jquery.min.js', function() {
-                                Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.util.js', function() {
-                                    Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.js', function() {
-                                        Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.idb.js', function() {
-                                            Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.ss.js', function() {
-                                                Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.memory.js', function() {
-                                                    onScriptReady();
-                                                });
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        }
-                    }
-                };
-
-                Ext.Ajax.request(userAccountConfig);
-            }
+            success: onSystemSettingsLoad
         });
 
         // user orgunit
         requests.push({
             url: init.contextPath + '/api/organisationUnits.json?userOnly=true&fields=id,' + init.namePropertyUrl + ',children[id,' + init.namePropertyUrl + ']&paging=false',
             disableCaching: false,
-            success: function(r) {
-                var organisationUnits = (r.responseText ? JSON.parse(r.responseText).organisationUnits : r) || [],
-                    ou = [],
-                    ouc = [];
-
-                if (organisationUnits.length) {
-                    for (var i = 0, org; i < organisationUnits.length; i++) {
-                        org = organisationUnits[i];
-
-                        ou.push(org.id);
-
-                        if (org.children) {
-                            ouc = arrayClean(ouc.concat(arrayPluck(org.children, 'id') || []));
-                        }
-                    }
-
-                    init.user = init.user || {};
-                    init.user.ou = ou;
-                    init.user.ouc = ouc;
-                } else {
-                    gis.alert('User is not assigned to any organisation units');
-                }
-
-                fn();
-            }
+            success: onOrgUnitsLoad
         });
 
         // dimensions
         requests.push({
             url: init.contextPath + '/api/dimensions.json?fields=id,displayName|rename(name)&paging=false',
             disableCaching: false,
-            success: function(r) {
-                init.dimensions = r.responseText ? JSON.parse(r.responseText).dimensions : r.dimensions;
-                fn();
-            }
+            success: onDimensionsLoad
         });
 
         for (var i = 0; i < requests.length; i++) {

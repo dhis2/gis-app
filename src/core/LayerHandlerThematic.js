@@ -655,6 +655,7 @@ export default function LayerHandlerThematic(gis, layer) {
         var bounds = options.bounds,
             colors = options.colors,
             legendNames = view.legendSet ? view.legendSet.names || {} : {},
+            //imageLegendConfig = [],
             html,
             id,
             name;
@@ -678,6 +679,13 @@ export default function LayerHandlerThematic(gis, layer) {
                 label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
                 html += '<dt style="background-color:' + colors[i] + ';"></dt>';
                 html += '<dd><strong>' + (name || '') + '</strong>' + label + '</dd>';
+
+                /*
+                imageLegendConfig.push({
+                    color: colors[i],
+                    label: label
+                });
+                */
             }
         }
         else {
@@ -687,6 +695,13 @@ export default function LayerHandlerThematic(gis, layer) {
                 label = bounds[i].toFixed(1) + ' - ' + bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')';
                 html += '<dt style="background-color:' + colors[i] + ';"></dt>';
                 html += '<dd>' + label + '</dd>';
+
+                /*
+                imageLegendConfig.push({
+                    color: colors[i],
+                    label: label
+                });
+                */
             }
         }
 
@@ -705,6 +720,8 @@ export default function LayerHandlerThematic(gis, layer) {
                 gis.legend.setContent(gis.legend.getContent() + html);
             }
         }
+
+        //layer.imageLegendConfig = imageLegendConfig;
     },
 
     afterLoad = function(view) {

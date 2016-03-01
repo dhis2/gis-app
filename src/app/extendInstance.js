@@ -239,28 +239,30 @@ export default function extendInstance(gis) {
             }
 
             for (var i = 0; i < layers.length; i++) {
+                console.log("legend", layers[i]);
+
                 var layer = layers[i],
                     id = layer.id,
-                    imageLegendConfig = layer.core.getImageLegendConfig(),
+                    imageLegendConfig = layer.imageLegendConfig || [],
                     what,
                     when,
                     where,
                     legend;
 
                 // SVG
-                svgArray.push(layer.div.innerHTML);
+                //svgArray.push(layer.div.innerHTML);
 
                 // Legend
                 if (id !== gis.layer.boundary.id && id !== gis.layer.facility.id && id !== gis.layer.event.id) {
                     what = '<g id="indicator" style="display: block; visibility: visible;">' +
                         '<text id="indicator" x="' + x + '" y="' + y + '" font-size="12">' +
-                        '<tspan>' + Ext.htmlEncode(layer.core.view.columns[0].items[0].name) + '</tspan></text></g>';
+                        '<tspan>' + Ext.htmlEncode(layer.view.columns[0].items[0].name) + '</tspan></text></g>';
 
                     y += 15;
 
                     when = '<g id="period" style="display: block; visibility: visible;">' +
                         '<text id="period" x="' + x + '" y="' + y + '" font-size="12">' +
-                        '<tspan>' + Ext.htmlEncode(layer.core.view.filters[0].items[0].name) + '</tspan></text></g>';
+                        '<tspan>' + Ext.htmlEncode(layer.view.filters[0].items[0].name) + '</tspan></text></g>';
 
                     y += 8;
 
@@ -287,6 +289,7 @@ export default function extendInstance(gis) {
             }
 
             // Scale line
+            /*
             scalelineSVG = '<text x="' + (x + 3) + '" y="' + y + '" fill="#000">' + scalelineEl.dom.innerHTML + '</text>';
 
             y += 3;
@@ -295,6 +298,7 @@ export default function extendInstance(gis) {
 
             y += 3;
             scalelineSVG += '<line x1="' + x + '" y1="' + y + '" x2="' + (x + scalelineEl.getWidth()) + '" y2="' + y + '" style="stroke:#000;stroke-width:1" />';
+            */
 
             // Map
             if (svgArray.length) {

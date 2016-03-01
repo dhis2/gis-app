@@ -160,6 +160,13 @@ export default function LayerWidgetBoundary(gis, layer) {
                 children: gis.init.rootNodes
             },
             listeners: {
+                beforeload: function(store, operation) {
+                    if (!store.proxy._url) {
+                        store.proxy._url = store.proxy.url;
+                    }
+                    
+                    store.proxy.url = store.proxy._url + '/' + operation.node.data.id;
+                },
                 load: function(store, node, records) {
                     records.forEach(function(record) {
                         if (isBoolean(record.data.hasChildren)) {
@@ -251,7 +258,7 @@ export default function LayerWidgetBoundary(gis, layer) {
             return config.items.length ? config : null;
         },
         listeners: {
-            beforeitemexpand: function() {
+            beforeitemexpand: function() {                
                 if (!treePanel.isPending) {
                     treePanel.recordsToRestore = treePanel.getSelectionModel().getSelection();
                 }

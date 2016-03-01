@@ -713,6 +713,13 @@ export default function LayerWidgetEvent(gis, layer) {
                 children: gis.init.rootNodes
             },
             listeners: {
+                beforeload: function(store, operation) {
+                    if (!store.proxy._url) {
+                        store.proxy._url = store.proxy.url;
+                    }
+                    
+                    store.proxy.url = store.proxy._url + '/' + operation.node.data.id;
+                },
                 load: function(store, node, records) {
                     records.forEach(function(record) {
                         if (Ext.isBoolean(record.data.hasChildren)) {

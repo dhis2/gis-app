@@ -638,7 +638,7 @@ export default function LayerHandlerThematic(gis, layer) {
         gis.util.map.orderLayers();
 
         layer.instance.on('click', onFeatureClick);
-        //layer.instance.on('contextmenu', onFeatureRightClick); // TODO: Fix bug with drill down for thematic layers
+        layer.instance.on('contextmenu', onFeatureRightClick);
 
     };
 

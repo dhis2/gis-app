@@ -86,6 +86,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
         last;
 
+
     // Stores
 
     indicatorsByGroupStore = Ext.create('Ext.data.Store', {
@@ -1029,7 +1030,8 @@ export default function LayerWidgetThematic(gis, layer) {
         multipleExpand: function(id, map, doUpdate) {
             var that = this,
                 rootId = gis.conf.finals.root.id,
-                path = map[id];
+                path = map[id],
+                record;
 
             if (path.substr(0, rootId.length + 1) !== ('/' + rootId)) {
                 path = '/' + rootId + path;
@@ -1735,6 +1737,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
             // dx type
             dxItemType = gis.util.dhis.getDataDimensionItemTypes(view.dataDimensionItems)[0];
+
             dxObjectName = dimConf.itemTypeMap[dxItemType].objectName;
 
             // Value type
@@ -1960,22 +1963,6 @@ export default function LayerWidgetThematic(gis, layer) {
         infrastructuralDataElementValuesStore: infrastructuralDataElementValuesStore,
         setThisHeight: function(mx) {
             return 450;
-            //var panelHeight = this.panels.length * 28,
-            //height;
-
-            //mx = mx || 0;
-
-            //if (westRegion.hasScrollbar) {
-            //height = panelHeight + mx;
-            //this.setHeight(viewport.getHeight() - 2);
-            //accordionBody.setHeight(height - 2);
-            //}
-            //else {
-            //height = westRegion.getHeight() - ns.core.conf.layout.west_fill;
-            //mx += panelHeight;
-            //accordion.setHeight((height > mx ? mx : height) - 2);
-            //accordionBody.setHeight((height > mx ? mx : height) - 2);
-            //}
         },
         getExpandedPanel: function() {
             for (var i = 0; i < this.panels.length; i++) {

@@ -79,13 +79,10 @@ export default function MapLoader(gis, isSession, applyConfig) {
 			gis.container.childNodes[0].innerText = gis.map.name;
 		}
 
-		// TODO: Remove
-		if (gis.dashboard && gis.viewport && gis.viewport.northRegion && gis.map && gis.map.name) {
-			gis.viewport.northRegion.update(gis.map.name);
-		}
-
 		if (!(isArray(views) && views.length)) {
-			gis.mask.hide();
+			if (gis.mask) {
+				gis.mask.hide();
+			}
 			gis.alert(GIS.i18n.favorite_outdated_create_new);
 			return;
 		}
@@ -98,7 +95,9 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		views = arrayClean(views);
 
 		if (!views.length) {
-			gis.mask.hide();
+			if (gis.mask) {
+				gis.mask.hide();
+			}
 			return;
 		}
 

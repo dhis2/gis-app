@@ -43,6 +43,7 @@ export default function LayerWidgetEvent(gis, layer) {
         tool,
         toolPanel,
         organisationUnit,
+        optionsPanel,
 
         panel,
 
@@ -1052,6 +1053,16 @@ export default function LayerWidgetEvent(gis, layer) {
         }
     });
 
+    optionsPanel = Ext.create('Ext.panel.Panel', {
+        title: '<div class="ns-panel-title-data">' + 'Options' + '</div>',
+        hideCollapseTool: true,
+        width: accBaseWidth,
+        items: [{
+            xtype: 'checkbox',
+            boxLabel: 'Group nearby events (clustering)'
+        }]
+    });
+
     // accordion
     accordionBody = Ext.create('Ext.panel.Panel', {
         layout: 'accordion',
@@ -1062,10 +1073,12 @@ export default function LayerWidgetEvent(gis, layer) {
         items: [
             dataElement,
             period,
-            organisationUnit
+            organisationUnit,
+            optionsPanel
         ],
         listeners: {
             afterrender: function() { // nasty workaround
+                optionsPanel.expand();
                 organisationUnit.expand();
                 period.expand();
                 dataElement.expand();
@@ -1197,6 +1210,9 @@ export default function LayerWidgetEvent(gis, layer) {
         }
 
         view.organisationUnits = treePanel.getDimension().items;
+
+        // TODO
+        view.cluster = true;
 
         return view;
     };

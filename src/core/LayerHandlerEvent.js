@@ -9,6 +9,7 @@ export default function LayerHandlerEvent(gis, layer) {
         loadData,
         afterLoad,
         updateMap,
+        updateClusterMap, // TODO
         handler;
 
     loadOrganisationUnits = function(view) {
@@ -45,6 +46,9 @@ export default function LayerHandlerEvent(gis, layer) {
         }
 
         success = function(r) {
+            console.log('success', r);
+
+
             var features = [],
                 rows = [],
                 lonIndex,
@@ -184,16 +188,21 @@ export default function LayerHandlerEvent(gis, layer) {
             getOptionSets();
         };
 
-        Ext.Ajax.request({
-            url: gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString,
-            disableCaching: false,
-            failure: function(r) {
-                gis.alert(r);
-            },
-            success: function(r) {
-                success(JSON.parse(r.responseText));
-            }
-        });
+        if (view.cluster) {
+            updateClusterMap('url');
+            afterLoad(view);
+        } else {
+            Ext.Ajax.request({
+                url: gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString,
+                disableCaching: false,
+                failure: function(r) {
+                    gis.alert(r);
+                },
+                success: function(r) {
+                    success(JSON.parse(r.responseText));
+                }
+            });
+        }
     };
 
     // Add layer to map
@@ -203,6 +212,25 @@ export default function LayerHandlerEvent(gis, layer) {
             label: '{ouname}',
             popup: popup
         }, layer.config);
+
+        // Remove layer instance if already exist
+        if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+            gis.instance.removeLayer(layer.instance);
+        }
+
+        // Create layer instance
+        layer.instance = gis.instance.addLayer(layerConfig);
+
+        // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
+        gis.util.map.orderLayers();
+    };
+
+    updateClusterMap = function (url) {
+        console.log('map', url, layer.config);
+
+        var layerConfig = {
+            type: 'serverCluster'
+        };
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
@@ -234,7 +262,7 @@ export default function LayerHandlerEvent(gis, layer) {
         }
 
         // Zoom
-        if (handler.zoomToVisibleExtent) {
+        if (handler.zoomToVisibleExtent && layer.instance.getBounds) {
             gis.instance.fitBounds(layer.instance.getBounds());
         }
 

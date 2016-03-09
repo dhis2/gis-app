@@ -245,6 +245,7 @@ export default function LegendSetWindow(gis) {
         var panel,
             addLegend,
             LegendEditWindow,
+            validateEditLegendForm,
             showUpdateLegend;
 
         // edit legend panel

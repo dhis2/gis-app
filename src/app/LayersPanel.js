@@ -10,6 +10,7 @@ export default function LayersPanel(gis) {
             layers.boundary,
             layers.googleStreets,
             layers.googleHybrid,
+            layers.osmLight,
             layers.openStreetMap
         ],
         layer,

@@ -11,6 +11,17 @@ export default function getLayers(gis) {
                 type: 'mapQuest',
             }
         },
+        osmLight: {
+            id: 'osmLight',
+            name: GIS.i18n.osm_light,
+            layerType: 'base',
+            layerOpacity: 1,
+            config: {
+                type: 'tileLayer',
+                url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+            }
+        },
         googleStreets: {
             id: 'googleStreets',
             name: GIS.i18n.google_streets,

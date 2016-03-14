@@ -226,10 +226,15 @@ export default function LayerHandlerEvent(gis, layer) {
     };
 
     updateClusterMap = function (url) {
-        console.log('map', url, layer.config);
-
         var layerConfig = {
-            type: 'serverCluster'
+            //type: 'serverCluster',
+            type: 'cluster',
+            //clustering: 'server',
+            api: 'http://dhis2.cartodb.com/api/v2/sql?q=',
+            query: 'SELECT count(*), ST_Extent(the_geom) AS extent FROM {table}',
+            table: 'programstageinstance',
+            //opacity: 0.2,
+            color: 'red'
         };
 
         // Remove layer instance if already exist

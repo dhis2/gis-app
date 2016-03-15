@@ -46,9 +46,6 @@ export default function LayerHandlerEvent(gis, layer) {
         }
 
         success = function(r) {
-            console.log('success', r);
-
-
             var features = [],
                 rows = [],
                 lonIndex,
@@ -128,7 +125,7 @@ export default function LayerHandlerEvent(gis, layer) {
                     }
                 }
 
-                updateMap(features, popup);
+                updateMap(view, features, popup);
 
                 afterLoad(view);
             };
@@ -189,7 +186,7 @@ export default function LayerHandlerEvent(gis, layer) {
         };
 
         if (view.cluster) {
-            updateClusterMap('url');
+            updateClusterMap(view);
             afterLoad(view);
         } else {
             Ext.Ajax.request({
@@ -206,11 +203,20 @@ export default function LayerHandlerEvent(gis, layer) {
     };
 
     // Add layer to map
-    updateMap = function(features, popup) {
+    updateMap = function(view, features, popup) {
+        console.log('view', view);
+
         var layerConfig = Ext.applyIf({
             data: features,
             label: '{ouname}',
-            popup: popup
+            popup: popup,
+            style: {
+                radius: view.radius,
+                fillColor: '#' + view.color,
+                fillOpacity: 1,
+                color: '#fff',
+                weight: 1
+            }
         }, layer.config);
 
         // Remove layer instance if already exist
@@ -225,7 +231,7 @@ export default function LayerHandlerEvent(gis, layer) {
         gis.util.map.orderLayers();
     };
 
-    updateClusterMap = function (url) {
+    updateClusterMap = function (view) {
         var layerConfig = {
             //type: 'serverCluster',
             type: 'cluster',
@@ -234,7 +240,8 @@ export default function LayerHandlerEvent(gis, layer) {
             query: 'SELECT count(*), ST_Extent(the_geom) AS extent FROM {table}',
             table: 'programstageinstance',
             //opacity: 0.2,
-            color: 'red'
+            color: '#' + view.color,
+            radius: view.radius
         };
 
         // Remove layer instance if already exist

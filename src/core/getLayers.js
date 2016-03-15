@@ -45,7 +45,7 @@ export default function getLayers(gis) {
         event: {
             id: 'event',
             name: GIS.i18n.event_layer,
-            layerOpacity: 0.8,
+            layerOpacity: 1,
             zIndex: 160,
             config: {
                 type: 'points'

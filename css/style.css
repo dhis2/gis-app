@@ -589,9 +589,11 @@ gis-combo .x-form-item-label {
 
 .gis-panel-title-data,
 .gis-panel-title-period,
-.gis-panel-title-organisationunit {
+.gis-panel-title-organisationunit,
+.gis-panel-title-options {
     background-repeat: no-repeat;
     padding-left: 20px;
+    padding-top: 1px;
     font-weight: bold;
     height: 17px;
 }
@@ -606,6 +608,9 @@ gis-combo .x-form-item-label {
     background-image: url(../images/organisationunit.png);
 }
 
+.gis-panel-title-options {
+    background-image: url(../images/options.png);
+}
 
 /*----------------------------------------------------------------------------
  * GIS form
@@ -1386,4 +1391,21 @@ label.x-form-cb-label-alt1 {
     font-family: monospace, consolas, courier new !important;
     padding: 4px;
     border: 0 none;
+}
+
+
+/*----------------------------------------------------------------------------
+ * Event layer
+ *--------------------------------------------------------------------------*/
+
+.gis-event-clustering-checkbox{
+    padding-left: 6px;
+    font-size: 11px;
+    position: relative;
+    top: -2px;
+}
+
+.gis-event-clustering-checkbox label {
+    position: relative;
+    top: -2px;
 }

@@ -43,6 +43,9 @@ export default function LayerWidgetEvent(gis, layer) {
         tool,
         toolPanel,
         organisationUnit,
+        eventColor,
+        eventRadius,
+        eventCluster,
         optionsPanel,
 
         panel,
@@ -1030,7 +1033,6 @@ export default function LayerWidgetEvent(gis, layer) {
 
     organisationUnit = Ext.create('Ext.panel.Panel', {
         title: '<div class="gis-panel-title-organisationunit">' + GIS.i18n.organisation_units + '</div>',
-        cls: 'gis-accordion-last',
         bodyStyle: 'padding:1px',
         hideCollapseTool: true,
         items: [
@@ -1053,14 +1055,72 @@ export default function LayerWidgetEvent(gis, layer) {
         }
     });
 
+    eventColor = Ext.create('Ext.ux.button.ColorButton', {
+        xtype: 'colorbutton',
+        height: 24,
+        width: 80,
+        value: '333333'
+    })
+
+    eventRadius = Ext.create('Ext.form.field.Number', {
+        cls: 'gis-numberfield',
+        width: 80,
+        allowDecimals: false,
+        minValue: 1,
+        maxValue: 20,
+        value: 6
+    });
+
+    eventCluster = Ext.create('Ext.form.field.Checkbox', {
+        boxLabel: 'Group nearby events',
+        cls: 'gis-event-clustering-checkbox'
+    });
+
     optionsPanel = Ext.create('Ext.panel.Panel', {
-        title: '<div class="ns-panel-title-data">' + 'Options' + '</div>',
+        title: '<div class="gis-panel-title-options">' + 'Options' + '</div>', // TODO: i18n
+        cls: 'gis-accordion-last',
+        bodyStyle: 'padding:6px 8px;',
         hideCollapseTool: true,
         width: accBaseWidth,
-        items: [{
-            xtype: 'checkbox',
-            boxLabel: 'Group nearby events (clustering)'
-        }]
+        items: [
+            {
+                xtype: 'container',
+                html: 'Clustering',
+                style: 'padding-bottom:3px;font-weight:bold;font-size:12px;'
+            },
+            eventCluster,
+            {
+                xtype: 'container',
+                html: 'Style',
+                style: 'padding:10px 0 3px;font-weight:bold;font-size:12px;'
+            },
+            {
+                xtype: 'container',
+                layout: 'hbox',
+                items: [
+                    {
+                        xtype: 'container',
+                        html: 'Point color:',
+                        width: 80,
+                        style: 'padding:5px;font-size:11px;'
+                    },
+                    eventColor
+                ]
+            },
+            {
+                xtype: 'container',
+                layout: 'hbox',
+                items: [
+                    {
+                        xtype: 'container',
+                        html: 'Point radius:',
+                        width: 80,
+                        style: 'padding:5px;font-size:11px;'
+                    },
+                    eventRadius
+                ]
+            }
+        ]
     });
 
     // accordion
@@ -1211,8 +1271,9 @@ export default function LayerWidgetEvent(gis, layer) {
 
         view.organisationUnits = treePanel.getDimension().items;
 
-        // TODO
-        view.cluster = true;
+        view.cluster = eventCluster.getValue();
+        view.color = eventColor.getValue();
+        view.radius = eventRadius.getValue();
 
         return view;
     };

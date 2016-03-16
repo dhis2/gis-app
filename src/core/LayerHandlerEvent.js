@@ -45,6 +45,9 @@ export default function LayerHandlerEvent(gis, layer) {
             paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
         }
 
+        // Only events with coordinates
+        paramString += '&coordinatesOnly=true';
+
         success = function(r) {
             var features = [],
                 rows = [],

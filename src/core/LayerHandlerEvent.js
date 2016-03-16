@@ -5,7 +5,8 @@ import arrayContains from 'd2-utilizr/lib/arrayContains';
 import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerEvent(gis, layer) {
-    var loadOrganisationUnits,
+    var spatialSupport = gis.init.systemInfo.databaseInfo.spatialSupport,
+        loadOrganisationUnits,
         loadData,
         afterLoad,
         updateMap,
@@ -18,6 +19,8 @@ export default function LayerHandlerEvent(gis, layer) {
 
     loadData = function(view) {
         var paramString = '?',
+            loadEvents,
+            onEventCountSuccess,
             success;
 
         view = view || layer.view;
@@ -129,8 +132,6 @@ export default function LayerHandlerEvent(gis, layer) {
                 }
 
                 updateMap(view, features, popup);
-
-                afterLoad(view);
             };
 
             getOptionSets = function() {
@@ -188,10 +189,8 @@ export default function LayerHandlerEvent(gis, layer) {
             getOptionSets();
         };
 
-        if (view.cluster) {
-            updateClusterMap(view);
-            afterLoad(view);
-        } else {
+        // Used if no spatial support and for client cluster
+        loadEvents = function() {
             Ext.Ajax.request({
                 url: gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString,
                 disableCaching: false,
@@ -202,25 +201,86 @@ export default function LayerHandlerEvent(gis, layer) {
                     success(JSON.parse(r.responseText));
                 }
             });
+        };
+
+        onEventCountSuccess = function(r) {
+            var extent = r.extent.match(/([-\d\.]+)/g),
+                bounds = [[extent[1], extent[0]],[extent[3], extent[2]]];
+
+            gis.instance.fitBounds(bounds);
+
+            // if (r.count < 2000) { // Client clustering
+            if (r.count < 20) { // Client clustering
+                loadEvents();
+            } else { // Server clustering
+                console.log("use server cluster");
+                var url = gis.init.contextPath + '/api/analytics/events/cluster/' + view.program.id + '.json' + paramString
+
+                updateMap(view, url, 'Popup');
+            }
+        };
+
+
+        if (spatialSupport && view.cluster) { // Get event count to decide on client vs server cluster
+            Ext.Ajax.request({
+                url: gis.init.contextPath + '/api/analytics/events/count/' + view.program.id + '.json' + paramString,
+                disableCaching: false,
+                failure: function(r) {
+                    gis.alert(r);
+                },
+                success: function(r) {
+                    onEventCountSuccess(JSON.parse(r.responseText));
+                }
+            });
+        } else {
+            loadEvents();
         }
     };
 
     // Add layer to map
     updateMap = function(view, features, popup) {
-        console.log('view', view);
+        var layerConfig;
 
-        var layerConfig = Ext.applyIf({
-            data: features,
-            label: '{ouname}',
-            popup: popup,
-            style: {
+        if (typeof features === 'string') { // Server cluster
+            layerConfig = Ext.applyIf({
+                type: 'serverCluster',
+                popup: popup,
+                color: '#' + view.color,
                 radius: view.radius,
-                fillColor: '#' + view.color,
-                fillOpacity: 1,
-                color: '#fff',
-                weight: 1
-            }
-        }, layer.config);
+                load: function(params, callback){
+                    Ext.Ajax.request({
+                        url: features + '&bbox=' + params.bbox + '&clusterSize=' + params.clusterSize + '&includeClusterPoints=' + params.includeClusterPoints,
+                        disableCaching: false,
+                        failure: function(r) {
+                            gis.alert(r);
+                        },
+                        success: function(r) {
+                            callback(params.tileId, JSON.parse(r.responseText));
+                        }
+                    });
+                }
+            }, layer.config);
+        } else if (view.cluster) { // Client cluster
+            layerConfig = Ext.applyIf({
+                type: 'clientCluster',
+                data: features,
+                popup: popup,
+                color: '#' + view.color,
+                radius: view.radius,
+            }, layer.config);
+        } else {
+            layerConfig = Ext.applyIf({
+                data: features,
+                popup: popup,
+                style: {
+                    radius: view.radius,
+                    fillColor: '#' + view.color,
+                    fillOpacity: 1,
+                    color: '#fff',
+                    weight: 1
+                }
+            }, layer.config);
+        }
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
@@ -232,6 +292,8 @@ export default function LayerHandlerEvent(gis, layer) {
 
         // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
         gis.util.map.orderLayers();
+
+        afterLoad(view);
     };
 
     updateClusterMap = function (view) {

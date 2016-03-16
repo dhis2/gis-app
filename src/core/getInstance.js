@@ -749,7 +749,8 @@ export default function getInstance(init) {
 
             // dashboard
             if (gis.dashboard && gis.viewport && gis.viewport.centerRegion) { // TODO
-                gis.viewport.centerRegion.update('<div class="ns-plugin-alert">' + obj.message + '</div>');
+                console.log('alert', obj.message);
+                //gis.viewport.centerRegion.update('<div class="ns-plugin-alert">' + obj.message + '</div>');
                 return;
             }
 
@@ -779,14 +780,17 @@ export default function getInstance(init) {
                     w.setPosition(w.getPosition()[0], w.getPosition()[1] / 2);
 
                     if (!w.hasDestroyOnBlurHandler) {
-                        gis.util.gui.window.addDestroyOnBlurHandler(w);
+                        //gis.util.gui.window.addDestroyOnBlurHandler(w); // TODO: Gives bug on dashboard?
                     }
                 }
             };
 
-            window = Ext.create('Ext.window.Window', config);
+            console.log('alert config', config);
 
-            window.show();
+            // TODO: Add ExtJS alternative
+            //window = Ext.create('Ext.window.Window', config);
+
+            //window.show();
         };
 
         util.dhis = {};

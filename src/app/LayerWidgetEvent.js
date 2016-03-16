@@ -1073,7 +1073,8 @@ export default function LayerWidgetEvent(gis, layer) {
 
     eventCluster = Ext.create('Ext.form.field.Checkbox', {
         boxLabel: 'Group nearby events',
-        cls: 'gis-event-clustering-checkbox'
+        cls: 'gis-event-clustering-checkbox',
+        checked: true
     });
 
     optionsPanel = Ext.create('Ext.panel.Panel', {

@@ -210,7 +210,7 @@ export default function LayerHandlerEvent(gis, layer) {
 
             gis.instance.fitBounds(bounds);
 
-            // if (r.count < 2000) { // Client clustering
+            //if (r.count < 2000) { // Client clustering
             if (r.count < 20) { // Client clustering
                 loadEvents();
             } else { // Server clustering

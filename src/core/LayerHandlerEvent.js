@@ -9,6 +9,7 @@ export default function LayerHandlerEvent(gis, layer) {
         loadOrganisationUnits,
         loadData,
         afterLoad,
+        toGeoJson,
         updateMap,
         updateClusterMap, // TODO
         handler;
@@ -213,13 +214,10 @@ export default function LayerHandlerEvent(gis, layer) {
             if (r.count < 20) { // Client clustering
                 loadEvents();
             } else { // Server clustering
-                console.log("use server cluster");
                 var url = gis.init.contextPath + '/api/analytics/events/cluster/' + view.program.id + '.json' + paramString
-
                 updateMap(view, url, 'Popup');
             }
         };
-
 
         if (spatialSupport && view.cluster) { // Get event count to decide on client vs server cluster
             Ext.Ajax.request({
@@ -237,6 +235,39 @@ export default function LayerHandlerEvent(gis, layer) {
         }
     };
 
+    // Convert from DHIS 2 format to GeoJSON
+    toGeoJson = function(data) {
+        var header = {},
+            features = [];
+
+        // Convert headers to object for easier lookup
+        for (var i = 0; i < data.headers.length; i++) {
+            header[data.headers[i].name] = i;
+        }
+
+        if (isArray(data.rows)) {
+            for (var i = 0, row, extent; i < data.rows.length; i++) {
+                row = data.rows[i];
+                extent = row[header.extent].match(/([-\d\.]+)/g);
+
+                features.push({
+                    type: 'Feature',
+                    id: row[header.points],
+                    geometry: {
+                        type: 'Point',
+                        coordinates: row[header.center].match(/([-\d\.]+)/g)
+                    },
+                    properties: {
+                        count: parseInt(row[header.count], 10),
+                        bounds: [[extent[1], extent[0]], [extent[3], extent[2]]]
+                    }
+                });
+            }
+        }
+
+        return features;
+    };
+
     // Add layer to map
     updateMap = function(view, features, popup) {
         var layerConfig;
@@ -244,10 +275,10 @@ export default function LayerHandlerEvent(gis, layer) {
         if (typeof features === 'string') { // Server cluster
             layerConfig = Ext.applyIf({
                 type: 'serverCluster',
-                popup: popup,
+                //popup: popup,
                 color: '#' + view.color,
                 radius: view.radius,
-                load: function(params, callback){
+                load: function(params, callback){ // Called for every tile load
                     Ext.Ajax.request({
                         url: features + '&bbox=' + params.bbox + '&clusterSize=' + params.clusterSize + '&includeClusterPoints=' + params.includeClusterPoints,
                         disableCaching: false,
@@ -255,7 +286,20 @@ export default function LayerHandlerEvent(gis, layer) {
                             gis.alert(r);
                         },
                         success: function(r) {
-                            callback(params.tileId, JSON.parse(r.responseText));
+                            callback(params.tileId, toGeoJson(JSON.parse(r.responseText)));
+                        }
+                    });
+                },
+                popup: function(feature, callback) { // Called for every single marker click
+                    Ext.Ajax.request({
+                        url: gis.init.contextPath + '/api/events/' + feature.id + '.json',
+                        disableCaching: false,
+                        failure: function(r) {
+                            gis.alert(r);
+                        },
+                        success: function(r) {
+                            var data = JSON.parse(r.responseText);
+                            callback(feature.id);
                         }
                     });
                 }

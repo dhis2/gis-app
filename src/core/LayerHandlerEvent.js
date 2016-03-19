@@ -209,6 +209,7 @@ export default function LayerHandlerEvent(gis, layer) {
                 bounds = [[extent[1], extent[0]],[extent[3], extent[2]]];
 
             gis.instance.fitBounds(bounds);
+            view.bounds = bounds;
 
             //if (r.count < 2000) { // Client clustering
             if (r.count < 20) { // Client clustering
@@ -276,6 +277,7 @@ export default function LayerHandlerEvent(gis, layer) {
             layerConfig = Ext.applyIf({
                 type: 'serverCluster',
                 //popup: popup,
+                bounds: view.bounds,
                 color: '#' + view.color,
                 radius: view.radius,
                 load: function(params, callback){ // Called for every tile load
@@ -335,7 +337,7 @@ export default function LayerHandlerEvent(gis, layer) {
         layer.instance = gis.instance.addLayer(layerConfig);
 
         // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
-        gis.util.map.orderLayers();
+        //gis.util.map.orderLayers();
 
         afterLoad(view);
     };
@@ -362,7 +364,7 @@ export default function LayerHandlerEvent(gis, layer) {
         layer.instance = gis.instance.addLayer(layerConfig);
 
         // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
-        gis.util.map.orderLayers();
+        //gis.util.map.orderLayers();
     };
 
     afterLoad = function(view) {

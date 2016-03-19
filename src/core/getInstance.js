@@ -337,7 +337,7 @@ export default function getInstance(init) {
                 && coord[1] <= 90;
         };
 
-        // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
+        // Put map layers in correct order
         util.map.orderLayers = function() {
             var visibleLayers = [];
 
@@ -354,6 +354,8 @@ export default function getInstance(init) {
             // Add layers in order
             for (var i = 0, layer; i < gis.orderedLayers.length; i++) {
                 layer = gis.orderedLayers[i];
+
+                // console.log('order', gis.orderedLayers[i]);
 
                 if (visibleLayers.indexOf(layer) !== -1) {
                     gis.instance.addLayer(layer.instance);

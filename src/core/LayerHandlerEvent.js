@@ -26,8 +26,16 @@ export default function LayerHandlerEvent(gis, layer) {
 
         view = view || layer.view;
 
+        if (!view.stage) {
+            // TODO: Add error message
+            gis.mask.hide();
+            return;
+        }
+
         // stage
         paramString += 'stage=' + view.stage.id;
+
+        // console.log('stage id', view.stage.id, view.program.id);
 
         // dates
         paramString += '&startDate=' + view.startDate;

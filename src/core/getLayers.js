@@ -47,7 +47,7 @@ export default function getLayers(gis) {
             name: GIS.i18n.event_layer,
             layerOpacity: 1,
             config: {
-                type: 'points'
+                type: 'dots'
             },
             handler: GIS.core.LayerHandlerEvent
         },

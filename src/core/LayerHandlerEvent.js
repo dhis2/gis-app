@@ -11,8 +11,9 @@ export default function LayerHandlerEvent(gis, layer) {
         afterLoad,
         toGeoJson,
         updateMap,
-        updateClusterMap, // TODO
-        handler;
+        handler,
+        onFeaturePopup,
+        displayElements = {}; // Data elements to display in event popup
 
     loadOrganisationUnits = function(view) {
         loadData(view);
@@ -70,6 +71,7 @@ export default function LayerHandlerEvent(gis, layer) {
                     'true': GIS.i18n.yes || 'Yes',
                     'false': GIS.i18n.no || 'No'
                 },
+                /*
                 popupKeys = [ // Default popup keys
                     'ouname',
                     'eventdate',
@@ -87,6 +89,7 @@ export default function LayerHandlerEvent(gis, layer) {
                     'ps'
                 ],
                 popup,
+                */
                 updateFeatures,
                 getOptionSets;
 
@@ -96,11 +99,14 @@ export default function LayerHandlerEvent(gis, layer) {
                     header = r.headers[i];
                     names[header.name] = header.column;
 
+                    /*
                     if (!arrayContains(ignoreKeys, header.name)) {
                         popupKeys.push(header.name);
                     }
+                    */
                 }
 
+                /*
                 // Shorter header name for popup
                 names['ouname'] = names['ou'];
 
@@ -112,10 +118,15 @@ export default function LayerHandlerEvent(gis, layer) {
                 }
                 popup += '</table>';
 
+                popup = '';
+                */
+
                 // Create GeoJSON features
                 for (var i = 0, row, properties, coord; i < rows.length; i++) {
                     row = rows[i];
                     properties = {};
+
+                    // console.log(row);
 
                     // Build property object
                     for (var j = 0, value; j < row.length; j++) {
@@ -138,7 +149,7 @@ export default function LayerHandlerEvent(gis, layer) {
                     }
                 }
 
-                updateMap(view, features, popup);
+                updateMap(view, features);
             };
 
             getOptionSets = function() {
@@ -222,7 +233,7 @@ export default function LayerHandlerEvent(gis, layer) {
                 loadEvents();
             } else { // Server clustering
                 var url = gis.init.contextPath + '/api/analytics/events/cluster/' + view.program.id + '.json' + paramString
-                updateMap(view, url, 'Popup');
+                updateMap(view, url);
             }
         };
 
@@ -240,6 +251,28 @@ export default function LayerHandlerEvent(gis, layer) {
         } else {
             loadEvents();
         }
+
+        // Load data elements that should be displayed in popups
+        Ext.Ajax.request({
+            url: encodeURI(gis.init.contextPath + '/api/programStages/' + view.stage.id + '.json?fields=programStageDataElements[displayInReports,dataElement[id,name]]'),
+            disableCaching: false,
+            failure: function(r) {
+                gis.alert(r);
+            },
+            success: function(r) {
+                var data = JSON.parse(r.responseText);
+
+                if (data.programStageDataElements) {
+                    for (var i = 0, el; i < data.programStageDataElements.length; i++) {
+                        el = data.programStageDataElements[i];
+                        if (el.displayInReports) {
+                            displayElements[el.dataElement.id] = el.dataElement.name;
+                        }
+                    }
+                }
+            }
+        });
+
     };
 
     // Convert from DHIS 2 format to GeoJSON
@@ -275,8 +308,81 @@ export default function LayerHandlerEvent(gis, layer) {
         return features;
     };
 
+    // Called for every single marker click
+    onFeaturePopup = function(feature, callback) {
+        Ext.Ajax.request({
+            url: encodeURI(gis.init.contextPath + '/api/events/' + feature.id + '.json'),
+            disableCaching: false,
+            failure: function(r) {
+                gis.alert(r);
+            },
+            success: function(r) {
+                var data = JSON.parse(r.responseText),
+                    dataValues = data.dataValues,
+                    content = '<table><tbody>';
+
+                if (isArray(dataValues)) {
+                    for (var i = 0, el, name; i < dataValues.length; i++) {
+                        el = dataValues[i];
+                        name = displayElements[el.dataElement];
+
+                        if (name) {
+                            content += '<tr><th>' + name + '</th><td>' + el.value + '</td></tr>';
+                        }
+                    }
+                }
+
+                //console.log(data);
+
+                content += '<tr><th>&nbsp;</th><td>&nbsp;</td></tr>';
+                content += '<tr><th>Organisation unit</th><td>' + data.orgUnit + '</td></tr>';
+                content += '<tr><th>Event date</th><td>' + data.eventDate + '</td></tr>';
+                content += '<tr><th>Longitude</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
+                content += '<tr><th>Latitude</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
+
+                /*
+                for (var i = 0, header; i < r.headers.length; i++) {
+                    header = r.headers[i];
+                    names[header.name] = header.column;
+
+
+                     if (!arrayContains(ignoreKeys, header.name)) {
+                     popupKeys.push(header.name);
+                     }
+                }
+
+
+                 // Shorter header name for popup
+                 names['ouname'] = names['ou'];
+
+                 // Create popup template
+                 popup = '<table>';
+                 for (var i = 0, key; i < popupKeys.length; i++) {
+                 key = popupKeys[i];
+                 popup += '<tr><th>' + names[key] + '</th><td>{' + key + '}</td></tr>';
+                 }
+                 popup += '</table>';
+
+                 popup = '';
+                 */
+
+
+
+
+
+
+
+
+                content += '</tbody></table>';
+
+                callback(content);
+            }
+        });
+    };
+
     // Add layer to map
-    updateMap = function(view, features, popup) {
+    updateMap = function(view, features) {
+    //updateMap = function(view, features, popup) {
         var layerConfig;
 
         if (typeof features === 'string') { // Server cluster
@@ -298,39 +404,22 @@ export default function LayerHandlerEvent(gis, layer) {
                         }
                     });
                 },
-                popup: function(feature, callback) { // Called for every single marker click
-                    Ext.Ajax.request({
-                        url: encodeURI(gis.init.contextPath + '/api/events/' + feature.id + '.json'),
-                        disableCaching: false,
-                        failure: function(r) {
-                            gis.alert(r);
-                        },
-                        success: function(r) {
-                            var data = JSON.parse(r.responseText);
-                            callback(feature.id);
-                        }
-                    });
-                }
+                popup: onFeaturePopup
             }, layer.config);
         } else if (view.cluster) { // Client cluster
             layerConfig = Ext.applyIf({
                 type: 'clientCluster',
                 data: features,
-                popup: popup,
+                popup: onFeaturePopup,
                 color: '#' + view.color,
                 radius: view.radius,
             }, layer.config);
         } else {
-            layerConfig = Ext.applyIf({
+            layerConfig = Ext.applyIf({ // Client dot density map
                 data: features,
-                popup: popup,
-                style: {
-                    radius: view.radius,
-                    fillColor: '#' + view.color,
-                    fillOpacity: 1,
-                    color: '#fff',
-                    weight: 1
-                }
+                popup: onFeaturePopup,
+                radius: view.radius,
+                color: '#' + view.color
             }, layer.config);
         }
 
@@ -346,31 +435,6 @@ export default function LayerHandlerEvent(gis, layer) {
         //gis.util.map.orderLayers();
 
         afterLoad(view);
-    };
-
-    updateClusterMap = function (view) {
-        var layerConfig = {
-            //type: 'serverCluster',
-            type: 'cluster',
-            //clustering: 'server',
-            api: 'http://dhis2.cartodb.com/api/v2/sql?q=',
-            query: 'SELECT count(*), ST_Extent(the_geom) AS extent FROM {table}',
-            table: 'programstageinstance',
-            //opacity: 0.2,
-            color: '#' + view.color,
-            radius: view.radius
-        };
-
-        // Remove layer instance if already exist
-        if (layer.instance && gis.instance.hasLayer(layer.instance)) {
-            gis.instance.removeLayer(layer.instance);
-        }
-
-        // Create layer instance
-        layer.instance = gis.instance.addLayer(layerConfig);
-
-        // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
-        //gis.util.map.orderLayers();
     };
 
     afterLoad = function(view) {

@@ -35,8 +35,6 @@ export default function LayerHandlerEvent(gis, layer) {
         // stage
         paramString += 'stage=' + view.stage.id;
 
-        // console.log('stage id', view.stage.id, view.program.id);
-
         // dates
         paramString += '&startDate=' + view.startDate;
         paramString += '&endDate=' + view.endDate;
@@ -201,7 +199,7 @@ export default function LayerHandlerEvent(gis, layer) {
         // Used if no spatial support and for client cluster
         loadEvents = function() {
             Ext.Ajax.request({
-                url: gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString,
+                url: encodeURI(gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString),
                 disableCaching: false,
                 failure: function(r) {
                     gis.alert(r);
@@ -230,7 +228,7 @@ export default function LayerHandlerEvent(gis, layer) {
 
         if (spatialSupport && view.cluster) { // Get event count to decide on client vs server cluster
             Ext.Ajax.request({
-                url: gis.init.contextPath + '/api/analytics/events/count/' + view.program.id + '.json' + paramString,
+                url: encodeURI(gis.init.contextPath + '/api/analytics/events/count/' + view.program.id + '.json' + paramString),
                 disableCaching: false,
                 failure: function(r) {
                     gis.alert(r);
@@ -290,7 +288,7 @@ export default function LayerHandlerEvent(gis, layer) {
                 radius: view.radius,
                 load: function(params, callback){ // Called for every tile load
                     Ext.Ajax.request({
-                        url: features + '&bbox=' + params.bbox + '&clusterSize=' + params.clusterSize + '&includeClusterPoints=' + params.includeClusterPoints,
+                        url: encodeURI(features + '&bbox=' + params.bbox + '&clusterSize=' + params.clusterSize + '&includeClusterPoints=' + params.includeClusterPoints),
                         disableCaching: false,
                         failure: function(r) {
                             gis.alert(r);
@@ -302,7 +300,7 @@ export default function LayerHandlerEvent(gis, layer) {
                 },
                 popup: function(feature, callback) { // Called for every single marker click
                     Ext.Ajax.request({
-                        url: gis.init.contextPath + '/api/events/' + feature.id + '.json',
+                        url: encodeURI(gis.init.contextPath + '/api/events/' + feature.id + '.json'),
                         disableCaching: false,
                         failure: function(r) {
                             gis.alert(r);

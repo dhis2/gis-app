@@ -60,7 +60,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		};
 
 		Ext.Ajax.request({
-			url: url,
+			url: encodeURI(url),
 			success: function(r) {
 				success(JSON.parse(r.responseText));
 			},

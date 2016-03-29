@@ -192,7 +192,7 @@ export default function LayerHandlerThematic(gis, layer) {
         };
 
         Ext.Ajax.request({
-            url: url,
+            url: encodeURI(url),
             disableCaching: false,
             success: function (r) {
                 success(JSON.parse(r.responseText));
@@ -338,7 +338,7 @@ export default function LayerHandlerThematic(gis, layer) {
         };
 
         Ext.Ajax.request({
-            url: gis.init.contextPath + '/api/analytics.json' + paramString,
+            url: encodeURI(gis.init.contextPath + '/api/analytics.json' + paramString),
             disableCaching: false,
             failure: function (r) {
                 gis.alert(r);
@@ -422,7 +422,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
         loadLegendSet = function (view) {
             Ext.Ajax.request({
-                url: gis.init.contextPath + '/api/legendSets/' + view.legendSet.id + '.json?fields=' + gis.conf.url.legendSetFields.join(','),
+                url: encodeURI(gis.init.contextPath + '/api/legendSets/' + view.legendSet.id + '.json?fields=' + gis.conf.url.legendSetFields.join(',')),
                 scope: this,
                 disableCaching: false,
                 success: function (r) {
@@ -473,7 +473,7 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
             Ext.Ajax.request({
-                url: gis.init.contextPath + '/api/' + elementUrl + '.json?fields=legendSet[id,displayName|rename(name)]&paging=false&filter=id:eq:' + id,
+                url: encodeURI(gis.init.contextPath + '/api/' + elementUrl + '.json?fields=legendSet[id,displayName|rename(name)]&paging=false&filter=id:eq:' + id),
                 success: function (r) {
                     var elements = JSON.parse(r.responseText)[elementUrl],
                         set;

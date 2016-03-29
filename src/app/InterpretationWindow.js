@@ -28,7 +28,7 @@ export default function InterpretationWindow(gis) {
             handler: function() {
                 if (textArea.getValue()) {
                     Ext.Ajax.request({
-                        url: gis.init.contextPath + '/api/interpretations/map/' + gis.map.id,
+                        url: encodeURI(gis.init.contextPath + '/api/interpretations/map/' + gis.map.id),
                         method: 'POST',
                         params: textArea.getValue(),
                         headers: {'Content-Type': 'text/html'},

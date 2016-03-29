@@ -155,7 +155,7 @@ Ext.onReady(function() {
             }
 
             optionSetConfig = {
-                url: init.contextPath + '/api/optionSets.json?fields=id,name,version,options[code,name]&paging=false' + url,
+                url: encodeURI(init.contextPath + '/api/optionSets.json?fields=id,name,version,options[code,name]&paging=false' + url),
                 disableCaching: false,
                 success: function(r) {
                     var sets = r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets;
@@ -234,7 +234,7 @@ Ext.onReady(function() {
                 });
 
             optionSetVersionConfig = {
-                url: contextPath + '/api/optionSets.json?fields=id,version&paging=false',
+                url: encodeURI(contextPath + '/api/optionSets.json?fields=id,version&paging=false'),
                 disableCaching: false,
                 success: onOptionSetsLoad
             };
@@ -245,21 +245,21 @@ Ext.onReady(function() {
 
         // dhis2
         requests.push({
-            url: init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat',
+            url: encodeURI(init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat'),
             disableCaching: false,
             success: onSystemSettingsLoad
         });
 
         // user orgunit
         requests.push({
-            url: init.contextPath + '/api/organisationUnits.json?userOnly=true&fields=id,' + init.namePropertyUrl + ',children[id,' + init.namePropertyUrl + ']&paging=false',
+            url: encodeURI(init.contextPath + '/api/organisationUnits.json?userOnly=true&fields=id,' + init.namePropertyUrl + ',children[id,' + init.namePropertyUrl + ']&paging=false'),
             disableCaching: false,
             success: onOrgUnitsLoad
         });
 
         // dimensions
         requests.push({
-            url: init.contextPath + '/api/dimensions.json?fields=id,displayName|rename(name)&paging=false',
+            url: encodeURI(init.contextPath + '/api/dimensions.json?fields=id,displayName|rename(name)&paging=false'),
             disableCaching: false,
             success: onDimensionsLoad
         });

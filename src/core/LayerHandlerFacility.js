@@ -84,7 +84,7 @@ export default function LayerHandlerFacility(gis, layer) {
             data;
 
 		Ext.Ajax.request({
-			url: url,
+			url: encodeURI(url),
 			success: function(r) {
                 data = JSON.parse(r.responseText);
                 loadOrganisationUnits(view, data.organisationUnitGroups);

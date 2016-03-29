@@ -137,7 +137,7 @@ export default function LayerWidgetFacility(gis, layer) {
                 params = {};
             }
             Ext.Ajax.request({
-                url: url,
+                url: encodeURI(url),
                 method: 'GET',
                 params: params,
                 scope: this,

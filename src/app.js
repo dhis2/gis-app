@@ -244,7 +244,7 @@ Ext.onReady( function() {
                 }
             },
             handler: function() {
-                var url = gis.init.contextPath + '/dhis-web-mapping/index.html?id=' + gis.map.id,
+                var url = encodeURI(gis.init.contextPath + '/dhis-web-mapping/index.html?id=' + gis.map.id),
                     textField,
                     window;
 
@@ -1005,7 +1005,7 @@ Ext.onReady( function() {
 
         // requests
         Ext.Ajax.request({
-            url: 'manifest.webapp',
+            url: encodeURI('manifest.webapp'),
             success: function(r) {
                 var context = JSON.parse(r.responseText).activities.dhis;
 
@@ -1019,14 +1019,14 @@ Ext.onReady( function() {
 
                 // system info
                 Ext.Ajax.request({
-                    url: init.contextPath + '/api/system/info.json',
+                    url: encodeURI(init.contextPath + '/api/system/info.json'),
                     success: function(r) {
                         init.systemInfo = JSON.parse(r.responseText);
                         init.contextPath = init.systemInfo.contextPath || init.contextPath;
 
                         // date, calendar
                         Ext.Ajax.request({
-                            url: init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat',
+                            url: encodeURI(init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat'),
                             success: function(r) {
                                 var systemSettings = JSON.parse(r.responseText);
                                 init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
@@ -1034,7 +1034,7 @@ Ext.onReady( function() {
 
                                 // user-account
                                 Ext.Ajax.request({
-                                    url: init.contextPath + '/api/me/user-account.json',
+                                    url: encodeURI(init.contextPath + '/api/me/user-account.json'),
                                     success: function (r) {
                                         init.userAccount = JSON.parse(r.responseText);
 
@@ -1095,7 +1095,7 @@ Ext.onReady( function() {
 
                                         // i18n
                                         requests.push({
-                                            url: 'i18n/i18n_app.properties',
+                                            url: encodeURI('i18n/i18n_app.properties'),
                                             success: function(r) {
                                                 GIS.i18n = dhis2.util.parseJavaProperties(r.responseText);
 
@@ -1104,7 +1104,7 @@ Ext.onReady( function() {
                                                 }
                                                 else {
                                                     Ext.Ajax.request({
-                                                        url: 'i18n/i18n_app_' + keyUiLocale + '.properties',
+                                                        url: encodeURI('i18n/i18n_app_' + keyUiLocale + '.properties'),
                                                         success: function(r) {
                                                             Ext.apply(GIS.i18n, dhis2.util.parseJavaProperties(r.responseText));
                                                         },
@@ -1119,7 +1119,7 @@ Ext.onReady( function() {
                                             },
                                             failure: function() {
                                                 Ext.Ajax.request({
-                                                    url: 'i18n/i18n_app_' + keyUiLocale + '.properties',
+                                                    url: encodeURI('i18n/i18n_app_' + keyUiLocale + '.properties'),
                                                     success: function(r) {
                                                         GIS.i18n = dhis2.util.parseJavaProperties(r.responseText);
                                                     },
@@ -1133,7 +1133,7 @@ Ext.onReady( function() {
 
                                         // root nodes
                                         requests.push({
-                                            url: contextPath + '/api/organisationUnits.json?userDataViewFallback=true&paging=false&fields=id,' + namePropertyUrl + ',children[id,' + namePropertyUrl + ']',
+                                            url: encodeURI(contextPath + '/api/organisationUnits.json?userDataViewFallback=true&paging=false&fields=id,' + namePropertyUrl + ',children[id,' + namePropertyUrl + ']'),
                                             success: function(r) {
                                                 init.rootNodes = JSON.parse(r.responseText).organisationUnits || [];
                                                 fn();
@@ -1142,7 +1142,7 @@ Ext.onReady( function() {
 
                                         // organisation unit levels
                                         requests.push({
-                                            url: contextPath + '/api/organisationUnitLevels.json?fields=id,displayName|rename(name),level&paging=false',
+                                            url: encodeURI(contextPath + '/api/organisationUnitLevels.json?fields=id,displayName|rename(name),level&paging=false'),
                                             success: function(r) {
                                                 init.organisationUnitLevels = JSON.parse(r.responseText).organisationUnitLevels || [];
 
@@ -1156,7 +1156,7 @@ Ext.onReady( function() {
 
                                         // user orgunits and children
                                         requests.push({
-                                            url: contextPath + '/api/organisationUnits.json?userOnly=true&fields=id,' + namePropertyUrl + ',children[id,' + namePropertyUrl + ']&paging=false',
+                                            url: encodeURI(contextPath + '/api/organisationUnits.json?userOnly=true&fields=id,' + namePropertyUrl + ',children[id,' + namePropertyUrl + ']&paging=false'),
                                             success: function(r) {
                                                 var organisationUnits = JSON.parse(r.responseText).organisationUnits || [],
                                                     ou = [],
@@ -1196,7 +1196,7 @@ Ext.onReady( function() {
 
                                         // indicator groups
                                         requests.push({
-                                            url: init.contextPath + '/api/indicatorGroups.json?fields=id,displayName|rename(name)&paging=false',
+                                            url: encodeURI(init.contextPath + '/api/indicatorGroups.json?fields=id,displayName|rename(name)&paging=false'),
                                             success: function(r) {
                                                 init.indicatorGroups = JSON.parse(r.responseText).indicatorGroups || [];
                                                 fn();
@@ -1205,7 +1205,7 @@ Ext.onReady( function() {
 
                                         // data element groups
                                         requests.push({
-                                            url: init.contextPath + '/api/dataElementGroups.json?fields=id,' + namePropertyUrl + '&paging=false',
+                                            url: encodeURI(init.contextPath + '/api/dataElementGroups.json?fields=id,' + namePropertyUrl + '&paging=false'),
                                             success: function(r) {
                                                 init.dataElementGroups = JSON.parse(r.responseText).dataElementGroups || [];
                                                 fn();
@@ -1214,14 +1214,14 @@ Ext.onReady( function() {
 
                                         // infrastructural indicator group
                                         requests.push({
-                                            url: init.contextPath + '/api/configuration/infrastructuralIndicators.json',
+                                            url: encodeURI(init.contextPath + '/api/configuration/infrastructuralIndicators.json'),
                                             success: function(r) {
                                                 var obj = JSON.parse(r.responseText);
                                                 init.systemSettings.infrastructuralIndicatorGroup = isObject(obj) ? obj : null;
 
                                                 if (!isObject(obj)) {
                                                     Ext.Ajax.request({
-                                                        url: init.contextPath + '/api/indicatorGroups.json?fields=id,displayName|rename(name),indicators[id,' + namePropertyUrl + ']&pageSize=1',
+                                                        url: encodeURI(init.contextPath + '/api/indicatorGroups.json?fields=id,displayName|rename(name),indicators[id,' + namePropertyUrl + ']&pageSize=1'),
                                                         success: function(r) {
                                                             r = JSON.parse(r.responseText);
                                                             init.systemSettings.infrastructuralIndicatorGroup = r.indicatorGroups ? r.indicatorGroups[0] : null;
@@ -1237,14 +1237,14 @@ Ext.onReady( function() {
 
                                         // infrastructural data element group
                                         requests.push({
-                                            url: init.contextPath + '/api/configuration/infrastructuralDataElements.json',
+                                            url: encodeURI(init.contextPath + '/api/configuration/infrastructuralDataElements.json'),
                                             success: function(r) {
                                                 var obj = JSON.parse(r.responseText);
                                                 init.systemSettings.infrastructuralDataElementGroup = isObject(obj) ? obj : null;
 
                                                 if (!isObject(obj)) {
                                                     Ext.Ajax.request({
-                                                        url: init.contextPath + '/api/dataElementGroups.json?fields=id,' + namePropertyUrl + ',dataElements[id,' + namePropertyUrl + ']&pageSize=1',
+                                                        url: encodeURI(init.contextPath + '/api/dataElementGroups.json?fields=id,' + namePropertyUrl + ',dataElements[id,' + namePropertyUrl + ']&pageSize=1'),
                                                         success: function(r) {
                                                             r = JSON.parse(r.responseText);
                                                             init.systemSettings.infrastructuralDataElementGroup = r.dataElementGroups ? r.dataElementGroups[0] : null;
@@ -1260,7 +1260,7 @@ Ext.onReady( function() {
 
                                         // infrastructural period type
                                         requests.push({
-                                            url: init.contextPath + '/api/configuration/infrastructuralPeriodType.json',
+                                            url: encodeURI(init.contextPath + '/api/configuration/infrastructuralPeriodType.json'),
                                             success: function(r) {
                                                 var obj = JSON.parse(r.responseText);
 
@@ -1282,7 +1282,7 @@ Ext.onReady( function() {
                                                     store.getKeys('optionSets').done( function(keys) {
                                                         if (keys.length === 0) {
                                                             Ext.Ajax.request({
-                                                                url: contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false',
+                                                                url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false'),
                                                                 success: function(r) {
                                                                     var sets = JSON.parse(r.responseText).optionSets;
 
@@ -1297,7 +1297,7 @@ Ext.onReady( function() {
                                                         }
                                                         else {
                                                             Ext.Ajax.request({
-                                                                url: contextPath + '/api/optionSets.json?fields=id,version&paging=false',
+                                                                url: encodeURI(contextPath + '/api/optionSets.json?fields=id,version&paging=false'),
                                                                 success: function(r) {
                                                                     var optionSets = JSON.parse(r.responseText).optionSets || [],
                                                                         ids = [],
@@ -1319,7 +1319,7 @@ Ext.onReady( function() {
                                                                             }
 
                                                                             Ext.Ajax.request({
-                                                                                url: contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false' + url,
+                                                                                url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false' + url),
                                                                                 success: function(r) {
                                                                                     var sets = JSON.parse(r.responseText).optionSets;
 

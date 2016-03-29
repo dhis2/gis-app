@@ -225,8 +225,8 @@ export default function FavoriteWindow(gis) {
                         this.currentValue = this.getValue();
 
                         var value = this.getValue(),
-                            url = value ? encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
-                        store = gis.store.maps;
+                            url = value ? encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
+                            store = gis.store.maps;
 
                         store.page = 1;
                         store.loadStore(url);
@@ -241,8 +241,8 @@ export default function FavoriteWindow(gis) {
         text: GIS.i18n.prev,
         handler: function() {
             var value = searchTextfield.getValue(),
-                url = value ? encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
-            store = gis.store.maps;
+                url = value ? encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
+                store = gis.store.maps;
 
             store.page = store.page <= 1 ? 1 : store.page - 1;
             store.loadStore(url);
@@ -253,8 +253,8 @@ export default function FavoriteWindow(gis) {
         text: GIS.i18n.next,
         handler: function() {
             var value = searchTextfield.getValue(),
-                url = value ? encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
-            store = gis.store.maps;
+                url = value ? encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
+                store = gis.store.maps;
 
             store.page = store.page + 1;
             store.loadStore(url);

@@ -71,25 +71,6 @@ export default function LayerHandlerEvent(gis, layer) {
                     'true': GIS.i18n.yes || 'Yes',
                     'false': GIS.i18n.no || 'No'
                 },
-                /*
-                popupKeys = [ // Default popup keys
-                    'ouname',
-                    'eventdate',
-                    'longitude',
-                    'latitude'
-                ],
-                ignoreKeys = [
-                    'eventdate',
-                    'latitude',
-                    'longitude',
-                    'ou',
-                    'oucode',
-                    'ouname',
-                    'psi',
-                    'ps'
-                ],
-                popup,
-                */
                 updateFeatures,
                 getOptionSets;
 
@@ -98,35 +79,12 @@ export default function LayerHandlerEvent(gis, layer) {
                 for (var i = 0, header; i < r.headers.length; i++) {
                     header = r.headers[i];
                     names[header.name] = header.column;
-
-                    /*
-                    if (!arrayContains(ignoreKeys, header.name)) {
-                        popupKeys.push(header.name);
-                    }
-                    */
                 }
-
-                /*
-                // Shorter header name for popup
-                names['ouname'] = names['ou'];
-
-                // Create popup template
-                popup = '<table>';
-                for (var i = 0, key; i < popupKeys.length; i++) {
-                    key = popupKeys[i];
-                    popup += '<tr><th>' + names[key] + '</th><td>{' + key + '}</td></tr>';
-                }
-                popup += '</table>';
-
-                popup = '';
-                */
 
                 // Create GeoJSON features
                 for (var i = 0, row, properties, coord; i < rows.length; i++) {
                     row = rows[i];
                     properties = {};
-
-                    // console.log(row);
 
                     // Build property object
                     for (var j = 0, value; j < row.length; j++) {
@@ -332,57 +290,33 @@ export default function LayerHandlerEvent(gis, layer) {
                     }
                 }
 
-                //console.log(data);
+                // Fetch org unit name (might be possible to get in the same request later)
+                // https://blueprints.launchpad.net/dhis2/+spec/tracked-entity-instance-endpoint
+                Ext.Ajax.request({
+                    url: encodeURI(gis.init.contextPath + '/api/organisationUnits/' + data.orgUnit + '.json?fields=displayName'),
+                    disableCaching: false,
+                    failure: function(r) {
+                        gis.alert(r);
+                    },
+                    success: function(r) {
+                        var orgUnit = JSON.parse(r.responseText);
 
-                content += '<tr><th>&nbsp;</th><td>&nbsp;</td></tr>';
-                content += '<tr><th>Organisation unit</th><td>' + data.orgUnit + '</td></tr>';
-                content += '<tr><th>Event date</th><td>' + data.eventDate + '</td></tr>';
-                content += '<tr><th>Longitude</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
-                content += '<tr><th>Latitude</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
+                        content += '<tr><th>&nbsp;</th><td>&nbsp;</td></tr>';
+                        content += '<tr><th>Organisation unit</th><td>' + orgUnit.displayName + '</td></tr>';
+                        content += '<tr><th>Event date</th><td>' + data.eventDate + '</td></tr>';
+                        content += '<tr><th>Longitude</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
+                        content += '<tr><th>Latitude</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
+                        content += '</tbody></table>';
 
-                /*
-                for (var i = 0, header; i < r.headers.length; i++) {
-                    header = r.headers[i];
-                    names[header.name] = header.column;
-
-
-                     if (!arrayContains(ignoreKeys, header.name)) {
-                     popupKeys.push(header.name);
-                     }
-                }
-
-
-                 // Shorter header name for popup
-                 names['ouname'] = names['ou'];
-
-                 // Create popup template
-                 popup = '<table>';
-                 for (var i = 0, key; i < popupKeys.length; i++) {
-                 key = popupKeys[i];
-                 popup += '<tr><th>' + names[key] + '</th><td>{' + key + '}</td></tr>';
-                 }
-                 popup += '</table>';
-
-                 popup = '';
-                 */
-
-
-
-
-
-
-
-
-                content += '</tbody></table>';
-
-                callback(content);
+                        callback(content);
+                    }
+                });
             }
         });
     };
 
     // Add layer to map
     updateMap = function(view, features) {
-    //updateMap = function(view, features, popup) {
         var layerConfig;
 
         if (typeof features === 'string') { // Server cluster

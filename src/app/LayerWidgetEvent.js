@@ -1272,9 +1272,15 @@ export default function LayerWidgetEvent(gis, layer) {
 
         view.organisationUnits = treePanel.getDimension().items;
 
+        /*
         view.cluster = eventCluster.getValue();
         view.color = eventColor.getValue();
         view.radius = eventRadius.getValue();
+        */
+
+        view.eventClustering = eventCluster.getValue();
+        view.eventPointColor = eventColor.getValue();
+        view.eventPointRadius = eventRadius.getValue();
 
         return view;
     };

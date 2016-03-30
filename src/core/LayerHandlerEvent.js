@@ -195,7 +195,7 @@ export default function LayerHandlerEvent(gis, layer) {
             }
         };
 
-        if (spatialSupport && view.cluster) { // Get event count to decide on client vs server cluster
+        if (spatialSupport && view.eventClustering) { // Get event count to decide on client vs server cluster
             Ext.Ajax.request({
                 url: encodeURI(gis.init.contextPath + '/api/analytics/events/count/' + view.program.id + '.json' + paramString),
                 disableCaching: false,
@@ -324,8 +324,8 @@ export default function LayerHandlerEvent(gis, layer) {
                 type: 'serverCluster',
                 //popup: popup,
                 bounds: view.bounds,
-                color: '#' + view.color,
-                radius: view.radius,
+                color: '#' + view.eventPointColor,
+                radius:view.eventPointRadius,
                 load: function(params, callback){ // Called for every tile load
                     Ext.Ajax.request({
                         url: encodeURI(features + '&bbox=' + params.bbox + '&clusterSize=' + params.clusterSize + '&includeClusterPoints=' + params.includeClusterPoints),
@@ -340,20 +340,20 @@ export default function LayerHandlerEvent(gis, layer) {
                 },
                 popup: onFeaturePopup
             }, layer.config);
-        } else if (view.cluster) { // Client cluster
+        } else if (view.eventClustering) { // Client cluster
             layerConfig = Ext.applyIf({
                 type: 'clientCluster',
                 data: features,
                 popup: onFeaturePopup,
-                color: '#' + view.color,
-                radius: view.radius,
+                color: '#' + view.eventPointColor,
+                radius: view.eventPointRadius
             }, layer.config);
         } else {
             layerConfig = Ext.applyIf({ // Client dot density map
                 data: features,
                 popup: onFeaturePopup,
-                radius: view.radius,
-                color: '#' + view.color
+                color: '#' + view.eventPointColor,
+                radius: view.eventPointRadius
             }, layer.config);
         }
 

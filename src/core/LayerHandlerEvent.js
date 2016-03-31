@@ -288,6 +288,7 @@ export default function LayerHandlerEvent(gis, layer) {
                             content += '<tr><th>' + name + '</th><td>' + el.value + '</td></tr>';
                         }
                     }
+                    content += '<tr><th>&nbsp;</th><td>&nbsp;</td></tr>';
                 }
 
                 // Fetch org unit name (might be possible to get in the same request later)
@@ -301,13 +302,15 @@ export default function LayerHandlerEvent(gis, layer) {
                     success: function(r) {
                         var orgUnit = JSON.parse(r.responseText);
 
-                        content += '<tr><th>&nbsp;</th><td>&nbsp;</td></tr>';
                         content += '<tr><th>Organisation unit</th><td>' + orgUnit.displayName + '</td></tr>';
                         content += '<tr><th>Event date</th><td>' + data.eventDate + '</td></tr>';
-                        content += '<tr><th>Longitude</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
-                        content += '<tr><th>Latitude</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
-                        content += '</tbody></table>';
 
+                        if (data.coordinate) {
+                            content += '<tr><th>Longitude</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
+                            content += '<tr><th>Latitude</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
+                        }
+
+                        content += '</tbody></table>';
                         callback(content);
                     }
                 });

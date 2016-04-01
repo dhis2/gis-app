@@ -16,6 +16,12 @@
     height: calc(100% - 19px);
     border: 1px solid rgb(208, 208, 208);
   }
+
+  .dhis2-map-widget-alert {
+    font-size: 11px;
+    padding-left: 20px;
+  }
+
 }
 
 // needs parent class to avoid conflict

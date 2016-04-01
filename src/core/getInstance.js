@@ -378,69 +378,6 @@ export default function getInstance(init) {
             return layers;
         };
 
-
-
-        /*
-        util.map.getExtendedBounds = function(layers) {
-            var bounds = null;
-            if (layers.length) {
-                bounds = layers[0].getDataExtent();
-                if (layers.length > 1) {
-                    for (var i = 1; i < layers.length; i++) {
-                        bounds.extend(layers[i].getDataExtent());
-                    }
-                }
-            }
-            return bounds;
-        };
-        */
-
-        /*
-        util.map.zoomToVisibleExtent = function(olmap) {
-            var bounds = util.map.getExtendedBounds(util.map.getVisibleVectorLayers(olmap));
-            if (bounds) {
-                olmap.zoomToExtent(bounds);
-            }
-        };
-        */
-
-        /*
-        util.map.getTransformedFeatureArray = function(features) {
-            var sourceProjection = new OpenLayers.Projection("EPSG:4326"),
-                destinationProjection = new OpenLayers.Projection("EPSG:900913");
-            for (var i = 0; i < features.length; i++) {
-                features[i].geometry.transform(sourceProjection, destinationProjection);
-            }
-            return features;
-        };
-        */
-
-        /*
-        util.map.getPointsByFeatures = function(features) {
-            var a = [];
-            for (var i = 0; i < features.length; i++) {
-                if (features[i].geometry.CLASS_NAME === gis.conf.finals.openLayers.point_classname) {
-                    a.push(features[i]);
-                }
-            }
-            return a;
-        };
-        */
-
-        /*
-        util.map.getLonLatsByPoints = function(points) {
-            var lonLat,
-                point,
-                a = [];
-            for (var i = 0; i < points.length; i++) {
-                point = points[i];
-                lonLat = new OpenLayers.LonLat(point.geometry.x, point.geometry.y);
-                a.push(lonLat);
-            }
-            return a;
-        };
-        */
-
         util.geojson = {};
 
         // Convert to GeoJSON features
@@ -730,7 +667,7 @@ export default function getInstance(init) {
         util.message.alert = function(obj) {
             var config = {},
                 type,
-                window;
+                html;
 
             if (!obj || (isObject(obj) && !obj.message && !obj.responseText)) {
                 return;
@@ -749,50 +686,28 @@ export default function getInstance(init) {
                 };
             }
 
-            // dashboard
-            if (gis.dashboard && gis.viewport && gis.viewport.centerRegion) { // TODO
-                console.log('alert', obj.message);
-                //gis.viewport.centerRegion.update('<div class="ns-plugin-alert">' + obj.message + '</div>');
+            // dashboard message
+            if (gis.dashboard && gis.viewport && gis.viewport.centerRegion) {
+                gis.viewport.centerRegion.update('<div class="ns-plugin-alert">' + obj.message + '</div>');
                 return;
             }
 
-            // web message
-            type = (obj.status || 'INFO').toLowerCase();
+            // plugin message
+            html = obj.status + '<br><br>';
+            html += obj.httpStatusCode ? 'Code: ' + obj.httpStatusCode + '<br>' : '';
+            html += obj.httpStatus ? 'Status: ' + obj.httpStatus + '<br><br>' : '';
+            html += obj.message + (obj.message.substr(obj.message.length - 1) === '.' ? '' : '.');
 
-            config.title = obj.status;
-            config.iconCls = 'gis-window-title-messagebox ' + type;
+            if (gis.instance) { // Hide leaflet map
+                gis.instance.getContainer().style.display = 'none';
+            }
 
-            // html
-            config.html = '';
-            config.html += obj.httpStatusCode ? 'Code: ' + obj.httpStatusCode + '<br>' : '';
-            config.html += obj.httpStatus ? 'Status: ' + obj.httpStatus + '<br><br>' : '';
-            config.html += obj.message + (obj.message.substr(obj.message.length - 1) === '.' ? '' : '.');
-
-            // bodyStyle
-            // TODO
-            //config.bodyStyle = 'padding: 12px; background: #fff; max-width: 600px; max-height: ' + gis.viewport.centerRegion.getHeight() / 2 + 'px';
-
-            // destroy handler
-            config.modal = true;
-            config.destroyOnBlur = true;
-
-            // listeners
-            config.listeners = {
-                show: function(w) {
-                    w.setPosition(w.getPosition()[0], w.getPosition()[1] / 2);
-
-                    if (!w.hasDestroyOnBlurHandler) {
-                        //gis.util.gui.window.addDestroyOnBlurHandler(w); // TODO: Gives bug on dashboard?
-                    }
-                }
-            };
-
-            console.log('alert config', config);
-
-            // TODO: Add ExtJS alternative
-            //window = Ext.create('Ext.window.Window', config);
-
-            //window.show();
+            if (gis.container) {
+                var alertDiv = document.createElement('div');
+                alertDiv.className = 'dhis2-map-widget-alert';
+                alertDiv.innerHTML = html;
+                gis.container.appendChild(alertDiv);
+            }
         };
 
         util.dhis = {};

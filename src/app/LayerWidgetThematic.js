@@ -725,7 +725,7 @@ export default function LayerWidgetThematic(gis, layer) {
         eventDataItem.clearValue();
 
         Ext.Ajax.request({
-            url: encodeURI(gis.init.contextPath + '/api/programs.json?paging=false&fields=programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType]],programStages[programStageDataElements[dataElement[id,' + namePropertyUrl + ',valueType]]]&filter=id:eq:' + programId),
+            url: encodeURI(gis.init.contextPath + '/api/programs.json?paging=false&fields=programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType]],programStages[programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType]]]&filter=id:eq:' + programId),
             success: function(r) {
                 r = JSON.parse(r.responseText);
 

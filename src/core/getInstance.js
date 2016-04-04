@@ -686,23 +686,29 @@ export default function getInstance(init) {
                 };
             }
 
-            // dashboard message
-            if (gis.dashboard && gis.viewport && gis.viewport.centerRegion) {
-                gis.viewport.centerRegion.update('<div class="ns-plugin-alert">' + obj.message + '</div>');
-                return;
-            }
-
             // plugin message
-            html = obj.status + '<br><br>';
-            html += obj.httpStatusCode ? 'Code: ' + obj.httpStatusCode + '<br>' : '';
+            html = obj.httpStatusCode ? 'Code: ' + obj.httpStatusCode + '<br>' : '';
             html += obj.httpStatus ? 'Status: ' + obj.httpStatus + '<br><br>' : '';
             html += obj.message + (obj.message.substr(obj.message.length - 1) === '.' ? '' : '.');
 
-            if (gis.instance) { // Hide leaflet map
+            if (gis.viewport && gis.viewport.centerRegion) {
+                Ext.create('Ext.window.Window', {
+                    title: obj.status,
+                    modal: true,
+                    destroyOnBlur: true,
+                    html: html,
+                    bodyStyle: 'padding: 12px; background: #fff; max-width: 600px; max-height: ' + gis.viewport.centerRegion.getHeight() / 2 + 'px',
+                    listeners: {
+                        show: function (win) {
+                            win.setPosition(win.getPosition()[0], win.getPosition()[1] / 2);
+                            if (!win.hasDestroyOnBlurHandler) {
+                                gis.util.gui.window.addDestroyOnBlurHandler(win);
+                            }
+                        }
+                    }
+                }).show();
+            } else if (gis.container) { // Dashboard
                 gis.instance.getContainer().style.display = 'none';
-            }
-
-            if (gis.container) {
                 var alertDiv = document.createElement('div');
                 alertDiv.className = 'dhis2-map-widget-alert';
                 alertDiv.innerHTML = html;

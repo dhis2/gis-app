@@ -1923,6 +1923,8 @@ export default function LayerWidgetThematic(gis, layer) {
             };
         }
 
+        var test = gis.api.layout.Layout(view);
+
         return gis.api.layout.Layout(view);
     };
 

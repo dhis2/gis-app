@@ -1276,8 +1276,6 @@ export default function LayerWidgetEvent(gis, layer) {
         view.eventPointColor = eventColor.getValue();
         view.eventPointRadius = eventRadius.getValue();
 
-        console.log('event layer view', view);
-
         return view;
     };
 

@@ -664,6 +664,8 @@ export default function LayerHandlerThematic(gis, layer) {
         name = view.columns[0].items[0].name;
         html = '<div class="dhis2-legend"><h2>' + (metaData.names[id] || name || id);
 
+        // console.log("title", id, metaData.names[id], name, id, metaData.names);
+
         // period
         id = view.filters[0].items[0].id;
         name = view.filters[0].items[0].name;

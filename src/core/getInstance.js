@@ -880,6 +880,7 @@ export default function getInstance(init) {
                     return;
                 }
 
+
                 for (var i = 0, dimension; i < dimensionArray.length; i++) {
                     dimension = api.layout.Dimension(dimensionArray[i]);
 
@@ -887,6 +888,7 @@ export default function getInstance(init) {
                         dimensions.push(dimension);
                     }
                 }
+                //console.log("C", dimensionArray);
 
                 dimensionArray = dimensions;
 
@@ -957,11 +959,6 @@ export default function getInstance(init) {
                     return;
                 }
 
-                //if (!config.filters) {
-                //console.log('Please select a valid period', config.filters);
-                //return;
-                //}
-
                 if (arrayContains([gis.layer.thematic1.id, gis.layer.thematic2.id, gis.layer.thematic3.id, gis.layer.thematic4.id], config.layer)) {
                     if (!config.columns) {
                         return;
@@ -1006,6 +1003,14 @@ export default function getInstance(init) {
                     layout.program = config.program;
                 }
 
+                if (config.valueType) {
+                    layout.valueType = config.valueType;
+                }
+
+                if (config.columns) {
+                    layout.columns = config.columns;
+                }
+
                 // Properties
                 layout.layer = isString(config.layer) && !isEmpty(config.layer) ? config.layer : 'thematic1';
                 layout.classes = isNumber(config.classes) && !isEmpty(config.classes) ? config.classes : 5;
@@ -1045,8 +1050,6 @@ export default function getInstance(init) {
                 layout.organisationUnitGroupSet = config.organisationUnitGroupSet;
 
                 layout.dataDimensionItems = config.dataDimensionItems;
-
-                layout.valueType = config.valueType;
 
                 if (arrayFrom(config.userOrgUnit).length) {
                     layout.userOrgUnit = arrayFrom(config.userOrgUnit);

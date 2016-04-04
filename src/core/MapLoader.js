@@ -116,7 +116,6 @@ export default function MapLoader(gis, isSession, applyConfig) {
 			handler.callBack = callBack;
 			handler.load(layout);
 		}
-
 	};
 
 	// Replacement for gis.olmap.closeAllLayers()

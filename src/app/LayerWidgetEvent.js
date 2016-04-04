@@ -1255,32 +1255,28 @@ export default function LayerWidgetEvent(gis, layer) {
         var view = {};
 
         view.program = program.getRecord();
-        view.stage = stage.getRecord();
+        view.programStage = stage.getRecord();
 
-        //view.startDate = startDate.getSubmitValue();
-        //view.endDate = endDate.getSubmitValue();
         view.startDate = startDate.getValue();
         view.endDate = endDate.getValue();
 
-        view.dataElements = [];
+        view.columns = [];
 
         for (var i = 0, panel; i < dataElementSelected.items.items.length; i++) {
             panel = dataElementSelected.items.items[i];
-
-            view.dataElements.push(panel.getRecord());
+            view.columns.push(panel.getRecord());
         }
 
-        view.organisationUnits = treePanel.getDimension().items;
-
-        /*
-        view.cluster = eventCluster.getValue();
-        view.color = eventColor.getValue();
-        view.radius = eventRadius.getValue();
-        */
+        view.rows = [{
+            dimension: 'ou',
+            items: treePanel.getDimension().items
+        }];
 
         view.eventClustering = eventCluster.getValue();
         view.eventPointColor = eventColor.getValue();
         view.eventPointRadius = eventRadius.getValue();
+
+        console.log('event layer view', view);
 
         return view;
     };

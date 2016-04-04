@@ -1869,6 +1869,9 @@ export default function LayerWidgetThematic(gis, layer) {
         // id
         view.layer = layer.id;
 
+        // value type
+        view.valueType = vType;
+
         // dx
         if (objectNameCmpMap[vType].getValue()) {
             view.columns = [{
@@ -1910,7 +1913,7 @@ export default function LayerWidgetThematic(gis, layer) {
         view.colorHigh = colorHigh.getValue();
         view.radiusLow = parseInt(radiusLow.getValue());
         view.radiusHigh = parseInt(radiusHigh.getValue());
-        // view.opacity = layer.item.getOpacity(); // TODO
+        view.opacity = layer.layerOpacity;
 
         Ext.apply(view, labelPanel.getConfig());
 

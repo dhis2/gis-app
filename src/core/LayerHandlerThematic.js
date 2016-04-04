@@ -235,7 +235,7 @@ export default function LayerHandlerThematic(gis, layer) {
         paramString += '&dimension=dx:';
 
         // program
-        if (view.program) {
+        if (view.valueType === 'di' && view.program) {
             paramString += view.program.id + '.';
         }
 

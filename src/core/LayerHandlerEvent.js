@@ -21,38 +21,40 @@ export default function LayerHandlerEvent(gis, layer) {
 
     loadData = function(view) {
         var paramString = '?',
+            organisationUnits,
             loadEvents,
             onEventCountSuccess,
             success;
 
         view = view || layer.view;
 
-        if (!view.stage) {
+        if (!view.programStage) {
             // TODO: Add error message
             gis.mask.hide();
             return;
         }
 
-        // stage
-        paramString += 'stage=' + view.stage.id;
+        // program stage
+        paramString += 'stage=' + view.programStage.id;
 
         // dates
         paramString += '&startDate=' + view.startDate;
         paramString += '&endDate=' + view.endDate;
 
-        // ou
-        if (isArray(view.organisationUnits)) {
+        // organisation units
+        if (view.rows[0] && view.rows[0].dimension === 'ou' && isArray(view.rows[0].items)) {
+            organisationUnits = view.rows[0].items;
             paramString += '&dimension=ou:';
 
-            for (var i = 0; i < view.organisationUnits.length; i++) {
-                paramString += view.organisationUnits[i].id;
-                paramString += i < view.organisationUnits.length - 1 ? ';' : '';
+            for (var i = 0; i < organisationUnits.length; i++) {
+                paramString += organisationUnits[i].id;
+                paramString += i < organisationUnits.length - 1 ? ';' : '';
             }
         }
 
         // de
-        for (var i = 0, element; i < view.dataElements.length; i++) {
-            element = view.dataElements[i];
+        for (var i = 0, element; i < view.columns.length; i++) {
+            element = view.columns[i];
             paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
         }
 
@@ -212,7 +214,7 @@ export default function LayerHandlerEvent(gis, layer) {
 
         // Load data elements that should be displayed in popups
         Ext.Ajax.request({
-            url: encodeURI(gis.init.contextPath + '/api/programStages/' + view.stage.id + '.json?fields=programStageDataElements[displayInReports,dataElement[id,name]]'),
+            url: encodeURI(gis.init.contextPath + '/api/programStages/' + view.programStage.id + '.json?fields=programStageDataElements[displayInReports,dataElement[id,name]]'),
             disableCaching: false,
             failure: function(r) {
                 gis.alert(r);

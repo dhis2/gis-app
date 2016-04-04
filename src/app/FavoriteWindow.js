@@ -111,7 +111,7 @@ export default function FavoriteWindow(gis) {
                     }
                 };
 
-                console.log('favorite', map);
+                console.log('favorite event layer', JSON.stringify(map.mapViews[0]));
 
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.contextPath + '/api/maps/'),

@@ -1046,6 +1046,8 @@ export default function getInstance(init) {
 
                 layout.dataDimensionItems = config.dataDimensionItems;
 
+                layout.valueType = config.valueType;
+
                 if (arrayFrom(config.userOrgUnit).length) {
                     layout.userOrgUnit = arrayFrom(config.userOrgUnit);
                 }

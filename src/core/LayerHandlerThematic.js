@@ -234,14 +234,14 @@ export default function LayerHandlerThematic(gis, layer) {
         // dx
         paramString += '&dimension=dx:';
 
+        // program
+        if (view.program) {
+            paramString += view.program.id + '.';
+        }
+
         for (var i = 0; i < dxItems.length; i++) {
             paramString += isOperand ? dxItems[i].id.split('.')[0] : dxItems[i].id;
             paramString += i < dxItems.length - 1 ? ';' : '';
-        }
-
-        // program
-        if (view.program) {
-            paramString += '&program=' + view.program.id;
         }
 
         paramString += isOperand ? '&dimension=co' : '';

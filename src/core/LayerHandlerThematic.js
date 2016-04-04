@@ -20,8 +20,7 @@ export default function LayerHandlerThematic(gis, layer) {
         afterLoad,
         onFeatureClick,
         onFeatureRightClick,
-        loader,
-        data = {};
+        loader;
 
     compareView = function (view, doExecute) {
         var src = layer.view,

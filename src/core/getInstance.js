@@ -665,9 +665,7 @@ export default function getInstance(init) {
         util.message = {};
 
         util.message.alert = function(obj) {
-            var config = {},
-                type,
-                html;
+            var html;
 
             if (!obj || (isObject(obj) && !obj.message && !obj.responseText)) {
                 return;

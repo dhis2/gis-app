@@ -8,7 +8,6 @@ import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 
 Ext.onReady( function() {
     var createViewport,
-        initialize,
         gis;
 
     // set app config
@@ -1303,7 +1302,6 @@ Ext.onReady( function() {
                                                                         ids = [],
                                                                         url = '',
                                                                         callbacks = 0,
-                                                                        checkOptionSet,
                                                                         updateStore,
                                                                         registerOptionSet;
 

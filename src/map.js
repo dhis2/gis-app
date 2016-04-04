@@ -16,7 +16,6 @@ Ext.onReady(function() {
         configs = [],
         isInitStarted = false,
         isInitComplete = false,
-        isInitGM = false,
         getInit,
         execute;
 
@@ -34,8 +33,7 @@ Ext.onReady(function() {
     GIS.plugin = {};
 
     getInit = function(config) {
-        var isInit = false,
-            requests = [],
+        var requests = [],
             onSystemSettingsLoad,
             onOrgUnitsLoad,
             onDimensionsLoad,
@@ -273,7 +271,6 @@ Ext.onReady(function() {
         var validateConfig,
             extendInstance,
             initLayout,
-            afterRender,
             initialize,
             gis;
 
@@ -304,18 +301,7 @@ Ext.onReady(function() {
 
         extendInstance = function(gis, appConfig) {
             var init = gis.init,
-                api = gis.api,
-                conf = gis.conf,
-                store = gis.store,
-                util = gis.util,
-                type = 'json',
-                headerMap = {
-                    json: 'application/json'
-                },
-                headers = {
-                    'Content-Type': headerMap[type],
-                    'Accepts': headerMap[type]
-                };
+                store = gis.store;
 
             init.el = config.el;
 

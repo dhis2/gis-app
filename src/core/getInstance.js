@@ -712,6 +712,10 @@ export default function getInstance(init) {
                 alertDiv.innerHTML = html;
                 gis.container.appendChild(alertDiv);
             }
+
+            if (gis.mask) {
+                gis.mask.hide();
+            }
         };
 
         util.dhis = {};

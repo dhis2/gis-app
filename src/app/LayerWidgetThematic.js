@@ -1627,7 +1627,7 @@ export default function LayerWidgetThematic(gis, layer) {
     labelPanel = Ext.create('Ext.ux.panel.LabelPanel');
 
     label = Ext.create('Ext.panel.Panel', {
-        title: '<div class="ns-panel-title-data">Options</div>',
+        title: '<div class="ns-panel-title-data">' + GIS.i18n.options + '</div>',
         hideCollapseTool: true,
         items: labelPanel,
         listeners: {

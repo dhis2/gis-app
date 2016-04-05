@@ -324,7 +324,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 return a - b;
             });
 
-            // TODO: Temporarilty fix
+            // TODO: Temporarily
             gis.data = {
                 metaData: response.metaData,
                 features: valueFeatures,

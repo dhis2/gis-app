@@ -29,8 +29,7 @@ export default function LayerHandlerEvent(gis, layer) {
         view = view || layer.view;
 
         if (!view.programStage) {
-            // TODO: Add error message
-            gis.mask.hide();
+            gis.alert('No program selected');
             return;
         }
 

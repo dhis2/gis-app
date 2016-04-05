@@ -1078,7 +1078,7 @@ export default function LayerWidgetEvent(gis, layer) {
     });
 
     optionsPanel = Ext.create('Ext.panel.Panel', {
-        title: '<div class="gis-panel-title-options">' + 'Options' + '</div>', // TODO: i18n
+        title: '<div class="gis-panel-title-options">' + GIS.i18n.options + '</div>',
         cls: 'gis-accordion-last',
         bodyStyle: 'padding:6px 8px;',
         hideCollapseTool: true,
@@ -1151,8 +1151,8 @@ export default function LayerWidgetEvent(gis, layer) {
 
     reset = function(skipTree) {
 
-        // Item
-        // layer.item.setValue(false); // TODO
+        // Uncheck in layers list
+        layer.item.setValue(false);
 
         if (!layer.window.isRendered) {
             layer.view = null;

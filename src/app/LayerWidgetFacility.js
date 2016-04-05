@@ -710,8 +710,7 @@ export default function LayerWidgetFacility(gis, layer) {
         Ext.apply(view, labelPanel.getConfig());
 
         view.areaRadius = areaRadius.getValue() ? areaRadius.getNumber() : null;
-
-        // view.opacity = layer.item.getOpacity(); // TODO
+        view.opacity = layer.layerOpacity;
 
         return validateView(view);
     };

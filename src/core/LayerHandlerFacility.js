@@ -166,7 +166,6 @@ export default function LayerHandlerFacility(gis, layer) {
 			}
 
 			if (!features.length) {
-				gis.mask.hide();
 				gis.alert(GIS.i18n.no_valid_coordinates_found);
 				return;
 			}

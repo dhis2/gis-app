@@ -420,7 +420,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
                                 success: function(r) {
                                     instance.setLatLng(coords);
                                     feature.geometry.coordinates = coords.reverse();
-                                    console.log(feature.properties.name + ' relocated to ' + orgUnit.coordinates);
+                                    // console.log(feature.properties.name + ' relocated to ' + orgUnit.coordinates);
                                 }
                             });
                         }

@@ -80,6 +80,9 @@ export default function LayerMenu(gis, layer, cls) {
             }
 
             layer.widget.reset();
+
+            layer.legendPanel.update('');
+            layer.legendPanel.collapse();
         }
     };
     items.push(item);

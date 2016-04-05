@@ -731,6 +731,8 @@ export default function getInstance(init) {
                 }
             }
 
+            console.log("##", dataDimensionItems, types);
+
             return types;
         };
 
@@ -791,7 +793,7 @@ export default function getInstance(init) {
             // items: [Record]
 
             if (!isObject(config)) {
-                //console.log('Dimension config is not an object: ' + config);
+                console.log('Dimension config is not an object: ' + config);
                 return;
             }
 
@@ -818,10 +820,12 @@ export default function getInstance(init) {
 
                 config.items = records;
 
-                if (!config.items.length) {
+                /* TODO: Breaks loading of event favorite
+                 if (!config.items.length) {
                     console.log('Dimension has no valid items', config);
                     return;
                 }
+                */
             }
 
             dimension.dimension = config.dimension;
@@ -888,7 +892,6 @@ export default function getInstance(init) {
                         dimensions.push(dimension);
                     }
                 }
-                //console.log("C", dimensionArray);
 
                 dimensionArray = dimensions;
 
@@ -930,9 +933,17 @@ export default function getInstance(init) {
                     peDim.items[0].id = map[peDim.items[0].id] ? map[peDim.items[0].id] : peDim.items[0].id;
                 }
 
-                config.columns = [dxDim];
-                config.rows = [ouDim];
-                config.filters = [peDim];
+                if (!config.columns) {
+                    config.columns = [dxDim];
+                }
+
+                if (!config.rows) {
+                    config.rows = [ouDim];
+                }
+
+                if (!config.filters) {
+                    config.filters = [peDim];
+                }
 
                 return config;
             };
@@ -1003,12 +1014,33 @@ export default function getInstance(init) {
                     layout.program = config.program;
                 }
 
+                // program stage
+                if (isObject(config.programStage) && config.programStage.id) {
+                    layout.programStage = config.programStage;
+                }
+
+                if (config.startDate) {
+                    layout.startDate = config.startDate.substring(0, 10);
+                }
+
+                if (config.endDate) {
+                    layout.endDate = config.endDate.substring(0, 10);
+                }
+
                 if (config.valueType) {
                     layout.valueType = config.valueType;
                 }
 
-                if (config.columns) {
-                    layout.columns = config.columns;
+                if (config.eventClustering) {
+                    layout.eventClustering = config.eventClustering;
+                }
+
+                if (config.eventPointColor) {
+                    layout.eventPointColor = config.eventPointColor;
+                }
+
+                if (config.eventPointRadius) {
+                    layout.eventPointRadius = config.eventPointRadius;
                 }
 
                 // Properties

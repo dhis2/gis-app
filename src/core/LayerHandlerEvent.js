@@ -6,7 +6,7 @@ import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerEvent(gis, layer) {
     var spatialSupport = gis.init.systemInfo.databaseInfo.spatialSupport,
-        loadOrganisationUnits,
+        compareView,
         loadData,
         afterLoad,
         toGeoJson,
@@ -14,10 +14,6 @@ export default function LayerHandlerEvent(gis, layer) {
         handler,
         onFeaturePopup,
         displayElements = {}; // Data elements to display in event popup
-
-    loadOrganisationUnits = function(view) {
-        loadData(view);
-    };
 
     loadData = function(view) {
         var paramString = '?',
@@ -181,14 +177,16 @@ export default function LayerHandlerEvent(gis, layer) {
         };
 
         onEventCountSuccess = function(r) {
-            var extent = r.extent.match(/([-\d\.]+)/g),
-                bounds = [[extent[1], extent[0]],[extent[3], extent[2]]];
+            if (r.extent && r.extent !== 'null') {
+                var extent = r.extent.match(/([-\d\.]+)/g),
+                    bounds = [[extent[1], extent[0]],[extent[3], extent[2]]];
 
-            gis.instance.fitBounds(bounds);
-            view.bounds = bounds;
+                gis.instance.fitBounds(bounds);
+                view.bounds = bounds;
+            }
 
-            if (r.count < 2000) { // Client clustering
-            //if (r.count < 20) { // Client clustering
+
+            if (r.count < 2000) { // Client clustering if less than 2000 events
                 loadEvents();
             } else { // Server clustering
                 var url = gis.init.contextPath + '/api/analytics/events/cluster/' + view.program.id + '.json' + paramString
@@ -418,12 +416,11 @@ export default function LayerHandlerEvent(gis, layer) {
         hideMask: false,
         callBack: null,
         load: function(view) {
-
             if (gis.mask && !gis.skipMask) {
                 gis.mask.show();
             }
 
-            loadOrganisationUnits(view);
+            loadData(view);
         },
         loadData: loadData
     };

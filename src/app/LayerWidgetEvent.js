@@ -642,7 +642,7 @@ export default function LayerWidgetEvent(gis, layer) {
             }
 
             that.expandPath(path, 'id', '/', function() {
-                record = Ext.clone(that.getRootNode().findChild('id', id, true));
+                var record = Ext.clone(that.getRootNode().findChild('id', id, true));
                 that.recordsToSelect.push(record);
                 that.multipleSelectIf(map, doUpdate);
             });
@@ -1183,7 +1183,7 @@ export default function LayerWidgetEvent(gis, layer) {
         organisationUnitGroup.clearValue();
     };
 
-    setGui = function(view) { //todo
+    setGui = function(view) {
         var ouDim = view.rows[0],
             isOu = false,
             isOuc = false,
@@ -1201,6 +1201,28 @@ export default function LayerWidgetEvent(gis, layer) {
             }
 
             reset(true);
+
+            // Program
+            program.setValue(view.program.id); // Not working
+
+            // Program stage
+            stage.setValue(view.programStage.id); // Not working
+
+
+            // Available data items
+
+
+            // Selected data items
+
+
+            // Periods
+            if (view.startDate) {
+                startDate.setValue(view.startDate)
+            }
+
+            if (view.endDate) {
+                endDate.setValue(view.endDate)
+            }
 
             // Organisation units
             for (var i = 0, item; i < ouDim.items.length; i++) {
@@ -1239,6 +1261,22 @@ export default function LayerWidgetEvent(gis, layer) {
             }
 
             treePanel.selectGraphMap(view.parentGraphMap);
+
+            // Options
+            if (view.eventClustering !== undefined) {
+                eventCluster.setValue(view.eventClustering);
+            }
+
+            if (view.eventPointColor) {
+                eventColor.setValue(view.eventPointColor);
+            }
+
+            if (view.eventPointRadius !== undefined) {
+                eventRadius.setValue(view.eventPointRadius);
+            }
+
+            console.log("view", view);
+
         }();
 
         setLayerGui = function() {

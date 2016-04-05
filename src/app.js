@@ -723,10 +723,18 @@ Ext.onReady( function() {
                     this.map = gis.instance;
                     this.body.appendChild(this.map.getContainer());
 
+                    // Needed to fix bug when toggling client cluster on google maps layer
+                    this.map.options.maxZoom = 18;
+
                     // Add zoom control
                     this.map.addControl({
                         type: 'zoom',
                         position: 'topleft'
+                    });
+
+                    // Add fit bounds control
+                    this.map.addControl({
+                        type: 'fitBounds'
                     });
 
                     // Add scale control
@@ -749,7 +757,6 @@ Ext.onReady( function() {
 
                     this.map.invalidateSize();
                     this.map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
-
                 } else {
                     this.map.invalidateSize();
                 }

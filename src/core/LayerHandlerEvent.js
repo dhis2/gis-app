@@ -20,8 +20,6 @@ export default function LayerHandlerEvent(gis, layer) {
     };
 
     loadData = function(view) {
-        console.log("loadData", view);
-
         var paramString = '?',
             organisationUnits,
             loadEvents,

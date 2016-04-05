@@ -67,13 +67,6 @@ export default function createExtensions(gis) {
             }
 
             this.opacity = opacity;
-
-            /* TODO - circles around facilities
-             facility layer menu -> options -> circular area
-            if (this.layer.circleLayer) {
-                this.layer.circleLayer.setOpacity(this.opacity);
-            }
-            */
         },
         disableItem: function() {
             this.checkbox.setValue(false);
@@ -89,13 +82,6 @@ export default function createExtensions(gis) {
             this.numberField.setDisabled(!value);
 
             this.setLayerVisibility(value);
-
-            /* TODO - circles around facilities
-             facility layer menu -> options -> circular area
-            if (this.layer.circleLayer) {
-                this.layer.circleLayer.setVisibility(value);
-            }
-            */
         },
         initComponent: function() {
             var that = this,

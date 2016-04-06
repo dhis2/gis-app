@@ -94,6 +94,8 @@ export default function FavoriteWindow(gis) {
                     // add
                     view.layer = layer.id;
 
+                    view.opacity = layer.layerOpacity;
+
                     // remove
                     delete view.dataDimensionItems;
 

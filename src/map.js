@@ -74,8 +74,6 @@ Ext.onReady(function() {
 
             init.systemInfo.databaseInfo = systemSettings.databaseInfo;
 
-            console.log('systemSettings', systemSettings);
-
             // user-account
             userAccountConfig = {
                 url: init.contextPath + '/api/me/user-account.json',
@@ -339,7 +337,6 @@ Ext.onReady(function() {
 
             container.setViewportWidth = function() {
                 map.invalidateSize();
-                console.log('resize');
             };
 
             map.addControl({

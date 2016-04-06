@@ -731,7 +731,7 @@ export default function getInstance(init) {
                 }
             }
 
-            console.log("##", dataDimensionItems, types);
+            // console.log("##", dataDimensionItems, types);
 
             return types;
         };
@@ -935,7 +935,7 @@ export default function getInstance(init) {
 
                 if (config.layer !== 'event') {
                     config.columns = [dxDim];
-                    console.log(dxDim);
+                    //console.log(dxDim);
                 }
 
                 if (config.layer !== 'event') {

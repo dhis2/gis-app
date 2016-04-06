@@ -19,6 +19,7 @@ export default function LayerHandlerEvent(gis, layer) {
         var paramString = '?',
             organisationUnits,
             loadEvents,
+            getDataElementOptionSets,
             onEventCountSuccess,
             success;
 
@@ -211,9 +212,21 @@ export default function LayerHandlerEvent(gis, layer) {
             loadEvents();
         }
 
+        // Get option sets by id (used for data elements i popup)
+        getDataElementOptionSets = function(dataElement){
+            if (dataElement.optionSet && dataElement.optionSet.id) {
+                dhis2.gis.store.get('optionSets', dataElement.optionSet.id).done(function(optionSet) {
+                    for (var i = 0, option; i < optionSet.options.length; i++) {
+                        option = optionSet.options[i];
+                        dataElement.optionSet[option.code] = option.name;
+                    }
+                });
+            }
+        };
+
         // Load data elements that should be displayed in popups
         Ext.Ajax.request({
-            url: encodeURI(gis.init.contextPath + '/api/programStages/' + view.programStage.id + '.json?fields=programStageDataElements[displayInReports,dataElement[id,name]]'),
+            url: encodeURI(gis.init.contextPath + '/api/programStages/' + view.programStage.id + '.json?fields=programStageDataElements[displayInReports,dataElement[id,name,optionSet]]'),
             disableCaching: false,
             failure: function(r) {
                 gis.alert(r);
@@ -224,8 +237,10 @@ export default function LayerHandlerEvent(gis, layer) {
                 if (data.programStageDataElements) {
                     for (var i = 0, el; i < data.programStageDataElements.length; i++) {
                         el = data.programStageDataElements[i];
+
                         if (el.displayInReports) {
-                            displayElements[el.dataElement.id] = el.dataElement.name;
+                            displayElements[el.dataElement.id] = el.dataElement;
+                            getDataElementOptionSets(el.dataElement);
                         }
                     }
                 }
@@ -281,12 +296,19 @@ export default function LayerHandlerEvent(gis, layer) {
                     content = '<table><tbody>';
 
                 if (isArray(dataValues)) {
-                    for (var i = 0, el, name; i < dataValues.length; i++) {
-                        el = dataValues[i];
-                        name = displayElements[el.dataElement];
 
-                        if (name) {
-                            content += '<tr><th>' + name + '</th><td>' + el.value + '</td></tr>';
+                    for (var i = 0, dataValue, displayEl, value; i < dataValues.length; i++) {
+                        dataValue = dataValues[i];
+                        displayEl = displayElements[dataValue.dataElement];
+
+                        if (displayEl) {
+                            value = dataValue.value;
+
+                            if (displayEl.optionSet) {
+                                value = displayEl.optionSet[value];
+                            }
+
+                            content += '<tr><th>' + displayEl.name + '</th><td>' + value + '</td></tr>';
                         }
                     }
                     content += '<tr><th>&nbsp;</th><td>&nbsp;</td></tr>';

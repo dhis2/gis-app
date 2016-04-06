@@ -90,6 +90,8 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		for (var i = 0, applyView; i < views.length; i++) {
 			applyView = applyViews ? applyViews[i] : null;
 			views[i] = gis.api.layout.Layout(views[i], applyView);
+			console.log("#", views[i]);
+
 		}
 
 		views = arrayClean(views);

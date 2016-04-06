@@ -661,6 +661,13 @@ export default function LayerHandlerThematic(gis, layer) {
 
         // title
         id = view.columns[0].items[0].id;
+
+        // event data items
+        if (view.valueType === 'di') {
+            id = view.program.id + '.' + id;
+        }
+        console.log(id, view);
+
         name = view.columns[0].items[0].name;
         html = '<div class="dhis2-legend"><h2>' + (metaData.names[id] || name || id);
 

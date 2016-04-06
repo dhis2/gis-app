@@ -66,6 +66,8 @@ export default function createExtensions(gis) {
                 layer.instance.setOpacity(opacity);
             }
 
+            layer.layerOpacity = opacity;
+
             this.opacity = opacity;
         },
         disableItem: function() {

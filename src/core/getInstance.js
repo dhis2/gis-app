@@ -737,17 +737,17 @@ export default function getInstance(init) {
         };
 
         /*
-        util.connection = {};
+         util.connection = {};
 
-        util.connection.ajax = function(requestConfig, authConfig) {
-            if (authConfig.crossDomain && isString(authConfig.username) && isString(authConfig.password)) {
-                requestConfig.headers = isObject(authConfig.headers) ? authConfig.headers : {};
-                requestConfig.headers['Authorization'] = 'Basic ' + btoa(authConfig.username + ':' + authConfig.password);
-            }
+         util.connection.ajax = function(requestConfig, authConfig) {
+         if (authConfig.crossDomain && isString(authConfig.username) && isString(authConfig.password)) {
+         requestConfig.headers = isObject(authConfig.headers) ? authConfig.headers : {};
+         requestConfig.headers['Authorization'] = 'Basic ' + btoa(authConfig.username + ':' + authConfig.password);
+         }
 
-            Ext.Ajax.request(requestConfig);
-        };
-        */
+         Ext.Ajax.request(requestConfig);
+         };
+         */
     }());
 
     gis.init = init;
@@ -822,10 +822,10 @@ export default function getInstance(init) {
 
                 /* TODO: Breaks loading of event favorite
                  if (!config.items.length) {
-                    console.log('Dimension has no valid items', config);
-                    return;
-                }
-                */
+                 console.log('Dimension has no valid items', config);
+                 return;
+                 }
+                 */
             }
 
             dimension.dimension = config.dimension;
@@ -933,15 +933,16 @@ export default function getInstance(init) {
                     peDim.items[0].id = map[peDim.items[0].id] ? map[peDim.items[0].id] : peDim.items[0].id;
                 }
 
-                if (!config.columns) {
+                if (config.layer !== 'event') {
                     config.columns = [dxDim];
+                    console.log(dxDim);
                 }
 
-                if (!config.rows) {
+                if (config.layer !== 'event') {
                     config.rows = [ouDim];
                 }
 
-                if (!config.filters) {
+                if (config.layer !== 'event') {
                     config.filters = [peDim];
                 }
 
@@ -1091,6 +1092,9 @@ export default function getInstance(init) {
                 if (util.date.getYYYYMMDD(config.relativePeriodDate)) {
                     layout.relativePeriodDate = support.prototype.date.getYYYYMMDD(config.relativePeriodDate);
                 }
+
+
+
 
                 return Ext.apply(layout, forceApplyConfig);
             }();

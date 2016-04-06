@@ -337,6 +337,11 @@ Ext.onReady(function() {
 
             container.titleEl = titleEl;
 
+            container.setViewportWidth = function() {
+                map.invalidateSize();
+                console.log('resize');
+            };
+
             map.addControl({
                 type: 'zoom',
                 position: 'topright'

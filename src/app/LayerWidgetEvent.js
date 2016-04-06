@@ -555,7 +555,7 @@ export default function LayerWidgetEvent(gis, layer) {
         labelSeparator: '',
         columnWidth: 0.5,
         height: 41,
-        value: gis.init.calendar.formatDate(gis.init.systemInfo.dateFormat, gis.init.calendar.today().add(-3, 'm')),
+        value: gis.init.calendar.formatDate(gis.init.systemInfo.dateFormat, gis.init.calendar.today().add(-12, 'm')),
         listeners: {
             render: function(c) {
                 onDateFieldRender(c);
@@ -1313,6 +1313,7 @@ export default function LayerWidgetEvent(gis, layer) {
         view.eventClustering = eventCluster.getValue();
         view.eventPointColor = eventColor.getValue();
         view.eventPointRadius = eventRadius.getValue();
+        view.opacity = layer.layerOpacity;
 
         return view;
     };

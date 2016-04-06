@@ -48,9 +48,11 @@ export default function LayerHandlerEvent(gis, layer) {
         }
 
         // de
-        for (var i = 0, element; i < view.columns.length; i++) {
-            element = view.columns[i];
-            paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
+        if (view.columns) {
+            for (var i = 0, element; i < view.columns.length; i++) {
+                element = view.columns[i];
+                paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
+            }
         }
 
         // Only events with coordinates
@@ -376,6 +378,7 @@ export default function LayerHandlerEvent(gis, layer) {
     afterLoad = function(view) {
 
         layer.view = view;
+
 
         // Layer
         if (layer.item) {

@@ -392,6 +392,7 @@ Ext.onReady( function() {
                 defaults: {
                     height: 26
                 },
+                style: 'padding-left:5px;',
                 items: function() {
                     var a = [];
                     a.push({

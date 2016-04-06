@@ -588,7 +588,7 @@ export default function extendInstance(gis) {
     // layer
     (function() {
         layer = gis.layer.event;
-        layer.menu = GIS.app.LayerMenu(gis, layer, 'gis-toolbar-btn-menu-first');
+        layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetEvent(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer, gis.conf.layout.widget.window_width + 150, 1);
         layer.window.widget = layer.widget;

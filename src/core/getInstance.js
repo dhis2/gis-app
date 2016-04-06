@@ -1093,9 +1093,6 @@ export default function getInstance(init) {
                     layout.relativePeriodDate = support.prototype.date.getYYYYMMDD(config.relativePeriodDate);
                 }
 
-
-
-
                 return Ext.apply(layout, forceApplyConfig);
             }();
         };

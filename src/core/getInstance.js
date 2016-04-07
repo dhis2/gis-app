@@ -835,6 +835,10 @@ export default function getInstance(init) {
                 dimension.objectName = config.objectName;
             }
 
+            if (config.filter) {
+                dimension.filter = config.filter;
+            }
+
             return Ext.clone(dimension);
         };
 

@@ -1275,8 +1275,6 @@ export default function LayerWidgetEvent(gis, layer) {
                 eventRadius.setValue(view.eventPointRadius);
             }
 
-            console.log("view", view);
-
         }();
 
         setLayerGui = function() {

@@ -208,6 +208,11 @@ table.padding1 td {
     background-color: #fff;
 }
 
+.leaflet-dhis2 .leaflet-popup-content {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
 .leaflet-dhis2 .leaflet-popup h2 {
     padding-bottom: 10px;
     font-size: 14px;

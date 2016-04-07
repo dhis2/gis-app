@@ -20,7 +20,6 @@ export default function MapLoader(gis, isSession, applyConfig) {
 			failure;
 
 		success = function(r) {
-
 			// operand
 			if (isArray(r.mapViews)) {
 				for (var i = 0, view, objectName; i < r.mapViews.length; i++) {
@@ -90,8 +89,6 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		for (var i = 0, applyView; i < views.length; i++) {
 			applyView = applyViews ? applyViews[i] : null;
 			views[i] = gis.api.layout.Layout(views[i], applyView);
-			//console.log("#", views[i]);
-
 		}
 
 		views = arrayClean(views);
@@ -196,7 +193,6 @@ export default function MapLoader(gis, isSession, applyConfig) {
 			}
 
 			if (gis.map && gis.map.id) {
-
 				getMap();
 			}
 			else {

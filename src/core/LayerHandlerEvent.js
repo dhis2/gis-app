@@ -311,7 +311,7 @@ export default function LayerHandlerEvent(gis, layer) {
                             content += '<tr><th>' + displayEl.name + '</th><td>' + value + '</td></tr>';
                         }
                     }
-                    content += '<tr><th>&nbsp;</th><td>&nbsp;</td></tr>';
+                    content += '<tr style="height:5px;"><th></th><td></td></tr>';
                 }
 
                 // Fetch org unit name (might be possible to get in the same request later)

@@ -20,6 +20,7 @@ export default function LayerHandlerEvent(gis, layer) {
             organisationUnits,
             loadEvents,
             getDataElementOptionSets,
+            loadDataElements,
             onEventCountSuccess,
             success;
 
@@ -225,27 +226,29 @@ export default function LayerHandlerEvent(gis, layer) {
         };
 
         // Load data elements that should be displayed in popups
-        Ext.Ajax.request({
-            url: encodeURI(gis.init.contextPath + '/api/programStages/' + view.programStage.id + '.json?fields=programStageDataElements[displayInReports,dataElement[id,name,optionSet]]'),
-            disableCaching: false,
-            failure: function(r) {
-                gis.alert(r);
-            },
-            success: function(r) {
-                var data = JSON.parse(r.responseText);
+        loadDataElements = function() {
+            Ext.Ajax.request({
+                url: encodeURI(gis.init.contextPath + '/api/programStages/' + view.programStage.id + '.json?fields=programStageDataElements[displayInReports,dataElement[id,' + gis.init.namePropertyUrl + ',optionSet]]'),
+                disableCaching: false,
+                failure: function(r) {
+                    gis.alert(r);
+                },
+                success: function(r) {
+                    var data = JSON.parse(r.responseText);
 
-                if (data.programStageDataElements) {
-                    for (var i = 0, el; i < data.programStageDataElements.length; i++) {
-                        el = data.programStageDataElements[i];
+                    if (data.programStageDataElements) {
+                        for (var i = 0, el; i < data.programStageDataElements.length; i++) {
+                            el = data.programStageDataElements[i];
 
-                        if (el.displayInReports) {
-                            displayElements[el.dataElement.id] = el.dataElement;
-                            getDataElementOptionSets(el.dataElement);
+                            if (el.displayInReports) {
+                                displayElements[el.dataElement.id] = el.dataElement;
+                                getDataElementOptionSets(el.dataElement);
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }();
 
     };
 
@@ -348,7 +351,6 @@ export default function LayerHandlerEvent(gis, layer) {
         if (typeof features === 'string') { // Server cluster
             layerConfig = Ext.applyIf({
                 type: 'serverCluster',
-                //popup: popup,
                 bounds: view.bounds,
                 color: '#' + view.eventPointColor,
                 radius:view.eventPointRadius,

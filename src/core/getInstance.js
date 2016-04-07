@@ -274,7 +274,7 @@ export default function getInstance(init) {
             'rows[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
             'filters[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
             'program[id,' + init.namePropertyUrl + ']',
-            'programStage[id,' + init.namePropertyUrl + ']',
+            'programStage[id,displayName|rename(name)]',
             '!lastUpdated',
             '!href',
             '!created',

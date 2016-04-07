@@ -273,6 +273,8 @@ export default function getInstance(init) {
             'columns[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
             'rows[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
             'filters[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
+            'program[id,' + init.namePropertyUrl + ']',
+            'programStage[id,' + init.namePropertyUrl + ']',
             '!lastUpdated',
             '!href',
             '!created',
@@ -730,8 +732,6 @@ export default function getInstance(init) {
                     }
                 }
             }
-
-            // console.log("##", dataDimensionItems, types);
 
             return types;
         };

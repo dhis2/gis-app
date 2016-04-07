@@ -171,6 +171,8 @@ export default function LayerWidgetEvent(gis, layer) {
     onProgramSelect = function(programId, layout) {
         var load;
 
+        console.log("layout", layout);
+
         programId = layout ? layout.program.id : programId;
         stage.clearValue();
 
@@ -1188,6 +1190,7 @@ export default function LayerWidgetEvent(gis, layer) {
             isOu = false,
             isOuc = false,
             isOugc = false,
+            isTopOu = false,
             levels = [],
             groups = [],
             setWidgetGui,
@@ -1203,17 +1206,10 @@ export default function LayerWidgetEvent(gis, layer) {
             reset(true);
 
             // Program
-            program.setValue(view.program.id); // Not working
+            program.store.add(view.program);
+            program.setValue(view.program.id);
 
-            // Program stage
-            stage.setValue(view.programStage.id); // Not working
-
-
-            // Available data items
-
-
-            // Selected data items
-
+            onProgramSelect(null, view);
 
             // Periods
             if (view.startDate) {
@@ -1242,6 +1238,8 @@ export default function LayerWidgetEvent(gis, layer) {
                 }
                 else if (item.id.substr(0,8) === 'OU_GROUP') {
                     groups.push(parseInt(item.id.split('-')[1]));
+                } else {
+                    isTopOu = true;
                 }
             }
 
@@ -1253,7 +1251,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 toolMenu.clickHandler('group');
                 organisationUnitGroup.setValue(groups);
             }
-            else {
+            else if (!isTopOu) {
                 toolMenu.clickHandler('orgunit');
                 userOrganisationUnit.setValue(isOu);
                 userOrganisationUnitChildren.setValue(isOuc);
@@ -1261,6 +1259,7 @@ export default function LayerWidgetEvent(gis, layer) {
             }
 
             treePanel.selectGraphMap(view.parentGraphMap);
+
 
             // Options
             if (view.eventClustering !== undefined) {

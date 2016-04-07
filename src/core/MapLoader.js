@@ -162,10 +162,13 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		// gis.el is the element used to render the map (only for plugin)
 		// isSession is true if you select "map -> view this table/chart" as map in pivot/visualizer
 		if (gis.el || isSession || !validLatLng) {
-			// Fit bounds not always set without a short delay
+			// Fit bounds not always set without a delay
 			window.setTimeout(function(){
-				gis.instance.fitBounds(gis.instance.getLayersBounds());
-			}, 500);
+				var layersBounds = gis.instance.getLayersBounds();
+				if (layersBounds)  {
+					gis.instance.fitBounds(layersBounds);
+				}
+			}, 2000);
 		}
 		else {
 			gis.instance.setView([lat, lon], zoom);

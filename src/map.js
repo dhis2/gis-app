@@ -34,6 +34,7 @@ Ext.onReady(function() {
 
     getInit = function(config) {
         var requests = [],
+            onSystemInfoLoad,
             onSystemSettingsLoad,
             onOrgUnitsLoad,
             onDimensionsLoad,
@@ -65,14 +66,18 @@ Ext.onReady(function() {
             }
         };
 
+        onSystemInfoLoad = function (r) {
+            var systemInfo = r.responseText ? JSON.parse(r.responseText) : r;
+            init.systemInfo.databaseInfo = systemInfo.databaseInfo;
+            fn();
+        };
+
         onSystemSettingsLoad = function (r) {
             var systemSettings = r.responseText ? JSON.parse(r.responseText) : r,
                 userAccountConfig;
 
             init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
             init.systemInfo.calendar = systemSettings.keyCalendar;
-
-            init.systemInfo.databaseInfo = systemSettings.databaseInfo;
 
             // user-account
             userAccountConfig = {
@@ -242,6 +247,13 @@ Ext.onReady(function() {
             // option sets
             Ext.Ajax.request(optionSetVersionConfig);
         };
+
+        // system info
+        requests.push({
+            url: encodeURI(init.contextPath + '/api/system/info.json'),
+            disableCaching: false,
+            success: onSystemInfoLoad
+        });
 
         // dhis2
         requests.push({

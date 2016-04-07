@@ -213,12 +213,13 @@ table.padding1 td {
     font-size: 14px;
 }
 
-.leaflet-dhis2 .leaflet-popup th {
-    white-space: nowrap;
-    vertical-align: top;
+.leaflet-dhis2 .leaflet-popup table {
+    font-size: 12px;
 }
 
 .leaflet-dhis2 .leaflet-popup th {
+    white-space: nowrap;
+    vertical-align: top;
     font-weight: bold;
     padding-right: 10px;
 }

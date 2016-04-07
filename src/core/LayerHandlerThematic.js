@@ -244,6 +244,10 @@ export default function LayerHandlerThematic(gis, layer) {
             paramString += i < dxItems.length - 1 ? ';' : '';
         }
 
+        if (view.valueType === 'ds') {
+            paramString += '.REPORTING_RATE';
+        }
+
         paramString += isOperand ? '&dimension=co' : '';
 
         // pe
@@ -335,6 +339,8 @@ export default function LayerHandlerThematic(gis, layer) {
 
             loadLegend(view);
         };
+
+        console.log(paramString);
 
         Ext.Ajax.request({
             url: encodeURI(gis.init.contextPath + '/api/analytics.json' + paramString),
@@ -670,8 +676,6 @@ export default function LayerHandlerThematic(gis, layer) {
         name = view.columns[0].items[0].name;
         html = '<div class="dhis2-legend"><h2>' + (metaData.names[id] || name || id);
 
-        // console.log("title", id, metaData.names[id], name, id, metaData.names);
-
         // period
         id = view.filters[0].items[0].id;
         name = view.filters[0].items[0].name;
@@ -686,13 +690,6 @@ export default function LayerHandlerThematic(gis, layer) {
                 label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
                 html += '<dt style="background-color:' + colors[i] + ';"></dt>';
                 html += '<dd><strong>' + (name || '') + '</strong>' + label + '</dd>';
-
-                /*
-                imageLegendConfig.push({
-                    color: colors[i],
-                    label: label
-                });
-                */
             }
         }
         else {
@@ -702,13 +699,6 @@ export default function LayerHandlerThematic(gis, layer) {
                 label = bounds[i].toFixed(1) + ' - ' + bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')';
                 html += '<dt style="background-color:' + colors[i] + ';"></dt>';
                 html += '<dd>' + label + '</dd>';
-
-                /*
-                imageLegendConfig.push({
-                    color: colors[i],
-                    label: label
-                });
-                */
             }
         }
 
@@ -727,8 +717,6 @@ export default function LayerHandlerThematic(gis, layer) {
                 gis.legend.setContent(gis.legend.getContent() + html);
             }
         }
-
-        //layer.imageLegendConfig = imageLegendConfig;
     },
 
     afterLoad = function(view) {

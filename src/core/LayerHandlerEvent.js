@@ -328,12 +328,12 @@ export default function LayerHandlerEvent(gis, layer) {
                     success: function(r) {
                         var orgUnit = JSON.parse(r.responseText);
 
-                        content += '<tr><th>Organisation unit</th><td>' + orgUnit.displayName + '</td></tr>';
-                        content += '<tr><th>Event date</th><td>' + data.eventDate + '</td></tr>';
+                        content += '<tr><th>' + GIS.i18n.organisation_unit + '</th><td>' + orgUnit.displayName + '</td></tr>';
+                        content += '<tr><th>' + GIS.i18n.event_date + '</th><td>' + data.eventDate + '</td></tr>';
 
                         if (data.coordinate) {
-                            content += '<tr><th>Longitude</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
-                            content += '<tr><th>Latitude</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
+                            content += '<tr><th>' + GIS.i18n.longitude + '</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
+                            content += '<tr><th>' + GIS.i18n.latitude + '</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
                         }
 
                         content += '</tbody></table>';

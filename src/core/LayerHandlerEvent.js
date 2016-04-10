@@ -22,7 +22,8 @@ export default function LayerHandlerEvent(gis, layer) {
             getDataElementOptionSets,
             loadDataElements,
             onEventCountSuccess,
-            success;
+            success,
+            dimConf = gis.conf.finals.dimension;
 
         view = view || layer.view;
 
@@ -34,9 +35,13 @@ export default function LayerHandlerEvent(gis, layer) {
         // program stage
         paramString += 'stage=' + view.programStage.id;
 
-        // dates
-        paramString += '&startDate=' + view.startDate;
-        paramString += '&endDate=' + view.endDate;
+        // period
+        if (view.filters) {
+            paramString += '&filter=pe:' + view.filters[0].items[0].id;
+        } else {
+            paramString += '&startDate=' + view.startDate;
+            paramString += '&endDate=' + view.endDate;
+        }
 
         // organisation units
         if (view.rows[0] && view.rows[0].dimension === 'ou' && isArray(view.rows[0].items)) {

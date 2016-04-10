@@ -28,7 +28,8 @@ export default function LayerWidgetEvent(gis, layer) {
         startDate,
         endDate,
         onDateFieldRender,
-
+        periodsStore,
+        periods,
         period,
 
         treePanel,
@@ -60,7 +61,8 @@ export default function LayerWidgetEvent(gis, layer) {
         baseWidth = 444,
         toolWidth = 36,
 
-        accBaseWidth = baseWidth - 2;
+        accBaseWidth = baseWidth - 2,
+        dimConf = gis.conf.finals.dimension;
 
     // stores
 
@@ -170,8 +172,6 @@ export default function LayerWidgetEvent(gis, layer) {
 
     onProgramSelect = function(programId, layout) {
         var load;
-
-        console.log("layout", layout);
 
         programId = layout ? layout.program.id : programId;
         stage.clearValue();
@@ -581,15 +581,66 @@ export default function LayerWidgetEvent(gis, layer) {
         }
     });
 
+    periodsStore = Ext.create('Ext.data.Store', {
+        fields: ['id', 'name', 'index'],
+        data: [{id: 'CUSTOM', name: 'Custom'}].concat(gis.conf.period.relativePeriods)/*,
+        setIndex: function(periods) {
+            for (var i = 0; i < periods.length; i++) {
+                periods[i].index = i;
+            }
+        },
+        sortStore: function() {
+            this.sort('index', 'ASC');
+        }*/
+    });
+
+    // Relative periods
+    periods = Ext.create('Ext.form.field.ComboBox', {
+        cls: 'gis-combo',
+        fieldLabel: GIS.i18n.period,
+        editable: false,
+        valueField: 'id',
+        displayField: 'name',
+        queryMode: 'local',
+        forceSelection: true,
+        width: 220,
+        labelWidth: gis.conf.layout.widget.itemlabel_width,
+        labelAlign: 'top',
+        labelCls: 'gis-form-item-label-top',
+        style: 'padding-bottom:5px;',
+        store: periodsStore,
+        selectFirst: function() {
+            this.setValue(this.store.getAt(0).data.id);
+        },
+        listeners: {
+            select: function () {
+                var id = this.getValue();
+
+                if (id === 'CUSTOM') {
+                    startDate.enable();
+                    endDate.enable();
+                } else {
+                    startDate.disable();
+                    endDate.disable();
+                }
+            }
+        }
+    });
+
     period = Ext.create('Ext.panel.Panel', {
         title: '<div class="gis-panel-title-period">Periods</div>',
         bodyStyle: 'padding:4px 1px 2px',
         hideCollapseTool: true,
-        layout: 'column',
         width: accBaseWidth,
         items: [
-            startDate,
-            endDate
+            periods, {
+                xtype: 'container',
+                layout: 'column',
+                items: [
+                    startDate,
+                    endDate
+                ]
+            }
         ]
     });
 
@@ -1145,6 +1196,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 organisationUnit.expand();
                 period.expand();
                 dataElement.expand();
+                periods.selectFirst();
             }
         }
     });
@@ -1168,6 +1220,7 @@ export default function LayerWidgetEvent(gis, layer) {
         dataElementsByStageStore.removeAll();
         dataElementSelected.removeAll();
 
+        periods.selectFirst();
         startDate.reset();
         endDate.reset();
 
@@ -1211,13 +1264,21 @@ export default function LayerWidgetEvent(gis, layer) {
 
             onProgramSelect(null, view);
 
-            // Periods
             if (view.startDate) {
-                startDate.setValue(view.startDate)
+                startDate.setValue(view.startDate);
+                startDate.enable();
             }
 
             if (view.endDate) {
-                endDate.setValue(view.endDate)
+                endDate.setValue(view.endDate);
+                endDate.enable();
+            }
+
+            // Periods
+            if (view.filters && view.filters[0] && view.filters[0].dimension === dimConf.period.objectName && view.filters[0].items) {
+                periods.select(view.filters[0].items[0].id);
+                startDate.disable();
+                endDate.disable();
             }
 
             // Organisation units
@@ -1292,8 +1353,18 @@ export default function LayerWidgetEvent(gis, layer) {
         view.program = program.getRecord();
         view.programStage = stage.getRecord();
 
-        view.startDate = startDate.getValue();
-        view.endDate = endDate.getValue();
+        if (periods.getValue() === 'CUSTOM') {
+            view.startDate = startDate.getValue();
+            view.endDate = endDate.getValue();
+        } else {
+            // pe
+            view.filters = [{
+                dimension: dimConf.period.objectName,
+                items: [{
+                    id: periods.getValue()
+                }]
+            }];
+        }
 
         view.columns = [];
 

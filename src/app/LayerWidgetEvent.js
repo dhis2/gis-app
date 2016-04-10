@@ -36,13 +36,13 @@ export default function LayerWidgetEvent(gis, layer) {
         userOrganisationUnit,
         userOrganisationUnitChildren,
         userOrganisationUnitGrandChildren,
-        organisationUnitLevel,
-        organisationUnitGroup,
+        // organisationUnitLevel,
+        // organisationUnitGroup,
         organisationUnitPanel,
         accordionBody,
-        toolMenu,
-        tool,
-        toolPanel,
+        // toolMenu,
+        // tool,
+        // toolPanel,
         organisationUnit,
         eventColor,
         eventRadius,
@@ -581,11 +581,6 @@ export default function LayerWidgetEvent(gis, layer) {
         }
     });
 
-    periodsStore = Ext.create('Ext.data.Store', {
-        fields: ['id', 'name', 'index'],
-        data: [{id: 'CUSTOM', name: GIS.i18n.start_end_dates}].concat(gis.conf.period.relativePeriods)
-    });
-
     // Relative periods
     periods = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
@@ -600,7 +595,10 @@ export default function LayerWidgetEvent(gis, layer) {
         labelAlign: 'top',
         labelCls: 'gis-form-item-label-top',
         style: 'padding-bottom:5px;',
-        store: periodsStore,
+        store: Ext.create('Ext.data.Store', {
+            fields: ['id', 'name', 'index'],
+            data: [{id: 'CUSTOM', name: GIS.i18n.start_end_dates}].concat(gis.conf.period.relativePeriods)
+        }),
         selectFirst: function() {
             this.setValue(this.store.getAt(0).data.id);
         },
@@ -795,7 +793,7 @@ export default function LayerWidgetEvent(gis, layer) {
                     items: []
                 };
 
-            if (toolMenu.menuValue === 'orgunit') {
+            //if (toolMenu.menuValue === 'orgunit') {
                 if (userOrganisationUnit.getValue() || userOrganisationUnitChildren.getValue() || userOrganisationUnitGrandChildren.getValue()) {
                     if (userOrganisationUnit.getValue()) {
                         config.items.push({
@@ -821,7 +819,8 @@ export default function LayerWidgetEvent(gis, layer) {
                         config.items.push({id: r[i].data.id});
                     }
                 }
-            }
+            //}
+            /*
             else if (toolMenu.menuValue === 'level') {
                 var levels = organisationUnitLevel.getValue();
 
@@ -856,6 +855,7 @@ export default function LayerWidgetEvent(gis, layer) {
                     });
                 }
             }
+            */
 
             return config.items.length ? config : null;
         },
@@ -909,7 +909,7 @@ export default function LayerWidgetEvent(gis, layer) {
     });
 
     userOrganisationUnit = Ext.create('Ext.form.field.Checkbox', {
-        columnWidth: 0.25,
+        columnWidth: 0.33, // 0.25,
         style: 'padding-top: 2px; padding-left: 5px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.user_organisation_unit,
@@ -920,7 +920,7 @@ export default function LayerWidgetEvent(gis, layer) {
     });
 
     userOrganisationUnitChildren = Ext.create('Ext.form.field.Checkbox', {
-        columnWidth: 0.26,
+        columnWidth: 0.33, // 0.26,
         style: 'padding-top: 2px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.user_sub_units,
@@ -931,7 +931,7 @@ export default function LayerWidgetEvent(gis, layer) {
     });
 
     userOrganisationUnitGrandChildren = Ext.create('Ext.form.field.Checkbox', {
-        columnWidth: 0.4,
+        columnWidth: 0.33, //0.4,
         style: 'padding-top: 2px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.user_sub_x2_units,
@@ -941,6 +941,7 @@ export default function LayerWidgetEvent(gis, layer) {
         }
     });
 
+    /*
     organisationUnitLevel = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         multiSelect: true,
@@ -955,7 +956,9 @@ export default function LayerWidgetEvent(gis, layer) {
             data: gis.init.organisationUnitLevels
         }
     });
+    */
 
+    /*
     organisationUnitGroup = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         multiSelect: true,
@@ -967,20 +970,23 @@ export default function LayerWidgetEvent(gis, layer) {
         editable: false,
         store: gis.store.organisationUnitGroup
     });
+    */
 
     organisationUnitPanel = Ext.create('Ext.panel.Panel', {
-        width: accBaseWidth - toolWidth - 2,
+        // width: accBaseWidth - toolWidth - 2,
+        width: accBaseWidth,
         layout: 'column',
         bodyStyle: 'border:0 none',
         items: [
             userOrganisationUnit,
             userOrganisationUnitChildren,
-            userOrganisationUnitGrandChildren,
-            organisationUnitLevel,
-            organisationUnitGroup
+            userOrganisationUnitGrandChildren
+            //organisationUnitLevel,
+            //organisationUnitGroup
         ]
     });
 
+    /*
     toolMenu = Ext.create('Ext.menu.Menu', {
         shadow: false,
         showSeparator: false,
@@ -1060,7 +1066,9 @@ export default function LayerWidgetEvent(gis, layer) {
             }
         }
     });
+    */
 
+    /*
     tool = Ext.create('Ext.button.Button', {
         cls: 'gis-button-organisationunitselection',
         iconCls: 'gis-button-icon-gear',
@@ -1068,13 +1076,16 @@ export default function LayerWidgetEvent(gis, layer) {
         height: 24,
         menu: toolMenu
     });
+    */
 
+    /*
     toolPanel = Ext.create('Ext.panel.Panel', {
         width: toolWidth,
         bodyStyle: 'border:0 none; text-align:right',
         style: 'margin-right:1px',
         items: tool
     });
+    */
 
     organisationUnit = Ext.create('Ext.panel.Panel', {
         title: '<div class="gis-panel-title-organisationunit">' + GIS.i18n.organisation_units + '</div>',
@@ -1087,17 +1098,19 @@ export default function LayerWidgetEvent(gis, layer) {
                 bodyStyle: 'border:0 none',
                 style: 'padding-bottom:1px',
                 items: [
-                    toolPanel,
+                    //toolPanel,
                     organisationUnitPanel
                 ]
             },
             treePanel
-        ],
+        ]
+        /*
         listeners: {
             render: function() {
                 toolMenu.clickHandler();
             }
         }
+        */
     });
 
     eventColor = Ext.create('Ext.ux.button.ColorButton', {
@@ -1105,7 +1118,7 @@ export default function LayerWidgetEvent(gis, layer) {
         height: 24,
         width: 80,
         value: '333333'
-    })
+    });
 
     eventRadius = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
@@ -1216,7 +1229,7 @@ export default function LayerWidgetEvent(gis, layer) {
         startDate.reset();
         endDate.reset();
 
-        toolMenu.clickHandler(toolMenu.menuValue);
+        // toolMenu.clickHandler(toolMenu.menuValue);
 
         if (!skipTree) {
             treePanel.reset();
@@ -1226,8 +1239,8 @@ export default function LayerWidgetEvent(gis, layer) {
         userOrganisationUnitChildren.setValue(false);
         userOrganisationUnitGrandChildren.setValue(false);
 
-        organisationUnitLevel.clearValue();
-        organisationUnitGroup.clearValue();
+        // organisationUnitLevel.clearValue();
+        // organisationUnitGroup.clearValue();
     };
 
     setGui = function(view) {
@@ -1285,17 +1298,18 @@ export default function LayerWidgetEvent(gis, layer) {
                 }
                 else if (item.id === 'USER_ORGUNIT_GRANDCHILDREN') {
                     isOugc = true;
-                }
+                } /*
                 else if (item.id.substr(0,5) === 'LEVEL') {
                     levels.push(parseInt(item.id.split('-')[1]));
                 }
                 else if (item.id.substr(0,8) === 'OU_GROUP') {
                     groups.push(parseInt(item.id.split('-')[1]));
-                } else {
+                }*/ else {
                     isTopOu = true;
                 }
             }
 
+            /*
             if (levels.length) {
                 toolMenu.clickHandler('level');
                 organisationUnitLevel.setValue(levels);
@@ -1304,8 +1318,9 @@ export default function LayerWidgetEvent(gis, layer) {
                 toolMenu.clickHandler('group');
                 organisationUnitGroup.setValue(groups);
             }
-            else if (!isTopOu) {
-                toolMenu.clickHandler('orgunit');
+            else */
+            if (!isTopOu) {
+                // toolMenu.clickHandler('orgunit');
                 userOrganisationUnit.setValue(isOu);
                 userOrganisationUnitChildren.setValue(isOuc);
                 userOrganisationUnitGrandChildren.setValue(isOugc);

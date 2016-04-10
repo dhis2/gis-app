@@ -583,15 +583,7 @@ export default function LayerWidgetEvent(gis, layer) {
 
     periodsStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name', 'index'],
-        data: [{id: 'CUSTOM', name: 'Custom'}].concat(gis.conf.period.relativePeriods)/*,
-        setIndex: function(periods) {
-            for (var i = 0; i < periods.length; i++) {
-                periods[i].index = i;
-            }
-        },
-        sortStore: function() {
-            this.sort('index', 'ASC');
-        }*/
+        data: [{id: 'CUSTOM', name: GIS.i18n.start_end_dates}].concat(gis.conf.period.relativePeriods)
     });
 
     // Relative periods

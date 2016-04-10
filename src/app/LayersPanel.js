@@ -3,11 +3,11 @@ export default function LayersPanel(gis) {
         orderedLayers = [
             layers.event,
             layers.facility,
+            layers.boundary,
             layers.thematic1,
             layers.thematic2,
             layers.thematic3,
             layers.thematic4,
-            layers.boundary,
             layers.openStreetMap,
             layers.osmLight,
             layers.googleStreets,

@@ -1194,7 +1194,7 @@ export default function getInstance(init) {
     gis.thematicLayers = [gis.layer.thematic1, gis.layer.thematic2, gis.layer.thematic3, gis.layer.thematic4];
 
     // https://github.com/dhis2/dhis2-gis/issues/9
-    gis.orderedLayers = [gis.layer.boundary, gis.layer.thematic4, gis.layer.thematic3, gis.layer.thematic2, gis.layer.thematic1, gis.layer.facility, gis.layer.event];
+    gis.orderedLayers = [gis.layer.thematic4, gis.layer.thematic3, gis.layer.thematic2, gis.layer.thematic1, gis.layer.boundary, gis.layer.facility, gis.layer.event];
 
     gis.relocate = {}; // Relocate organisation units
 

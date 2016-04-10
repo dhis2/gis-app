@@ -340,8 +340,6 @@ export default function LayerHandlerThematic(gis, layer) {
             loadLegend(view);
         };
 
-        console.log(paramString);
-
         Ext.Ajax.request({
             url: encodeURI(gis.init.contextPath + '/api/analytics.json' + paramString),
             disableCaching: false,

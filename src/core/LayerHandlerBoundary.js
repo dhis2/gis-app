@@ -44,7 +44,6 @@ export default function LayerHandlerBoundary(gis, layer) {
             if (arrayDifference(viewIds, srcIds).length !== 0) {
                 if (doExecute) {
                     loadOrganisationUnits(view);
-                    console.log('B');
                 }
                 return gis.conf.finals.widget.loadtype_organisationunit;
             }

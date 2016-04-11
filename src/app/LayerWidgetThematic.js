@@ -964,7 +964,7 @@ export default function LayerWidgetThematic(gis, layer) {
     });
 
     data = Ext.create('Ext.panel.Panel', {
-        title: '<div class="ns-panel-title-data">' + 'Data and periods' + '</div>',
+        title: '<div class="ns-panel-title-data">' + GIS.i18n.data_and_periods + '</div>',
         hideCollapseTool: true,
         items: [
             valueType,

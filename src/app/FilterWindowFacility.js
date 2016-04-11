@@ -48,7 +48,7 @@ export default function FilterWindowFacility(gis, layer) {
     });
 
     window = Ext.create('Ext.window.Window', {
-        title: 'Filter by value',
+        title: GIS.i18n.filter_by_value,
         iconCls: 'gis-window-title-icon-filter',
         cls: 'gis-container-default',
         resizable: false,

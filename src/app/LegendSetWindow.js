@@ -304,14 +304,14 @@ export default function LegendSetWindow(gis) {
             };
 
             editCancel = Ext.create('Ext.button.Button', {
-                text: 'Cancel',
+                text: GIS.i18n.cancel,
                 handler: function() {
                     editWindow.destroy();
                 }
             });
 
             editUpdate = Ext.create('Ext.button.Button', {
-                text: 'Update',
+                text: GIS.i18n.update,
                 handler: function() {
                     if (!validateEditLegendForm()) {
                         return;
@@ -329,7 +329,7 @@ export default function LegendSetWindow(gis) {
             });
 
             editWindow = Ext.create('Ext.window.Window', {
-                title: 'Edit legend (' + record.data.name + ')',
+                title: GIS.i18n.edit_legend + ' (' + record.data.name + ')',
                 width: windowWidth,
                 modal: true,
                 shadow: true,

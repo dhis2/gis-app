@@ -42,7 +42,7 @@ export default function InterpretationWindow(gis) {
         });
 
         window = Ext.create('Ext.window.Window', {
-            title: 'Write interpretation' + '<span style="font-weight:normal">&nbsp;|&nbsp;&nbsp;' + gis.map.name + '</span>',
+            title: GIS.i18n.write_interpretation + '<span style="font-weight:normal">&nbsp;|&nbsp;&nbsp;' + gis.map.name + '</span>',
             layout: 'fit',
             iconCls: 'gis-window-title-icon-interpretation',
             cls: 'gis-container-default',

@@ -1263,7 +1263,7 @@ export default function LayerWidgetThematic(gis, layer) {
         columnWidth: 0.3,
         style: 'padding-top: 2px; padding-left: 3px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
-        boxLabel: 'User OU',
+        boxLabel: GIS.i18n.user_ou,
         labelWidth: gis.conf.layout.form_label_width,
         handler: function(chb, checked) {
             treePanel.xable([checked, userOrganisationUnitChildren.getValue(), userOrganisationUnitGrandChildren.getValue()]);
@@ -1274,7 +1274,7 @@ export default function LayerWidgetThematic(gis, layer) {
         columnWidth: 0.33,
         style: 'padding-top: 2px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
-        boxLabel: 'Sub-units',
+        boxLabel: GIS.i18n.sub_units,
         labelWidth: gis.conf.layout.form_label_width,
         handler: function(chb, checked) {
             treePanel.xable([checked, userOrganisationUnit.getValue(), userOrganisationUnitGrandChildren.getValue()]);
@@ -1285,7 +1285,7 @@ export default function LayerWidgetThematic(gis, layer) {
         columnWidth: 0.34,
         style: 'padding-top: 2px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
-        boxLabel: 'Sub-x2-units',
+        boxLabel: GIS.i18n.sub_x2_units,
         labelWidth: gis.conf.layout.form_label_width,
         handler: function(chb, checked) {
             treePanel.xable([checked, userOrganisationUnit.getValue(), userOrganisationUnitChildren.getValue()]);
@@ -1375,7 +1375,7 @@ export default function LayerWidgetThematic(gis, layer) {
         items: [
             {
                 xtype: 'label',
-                text: 'Selection mode',
+                text: GIS.i18n.selection_mode,
                 style: 'padding:7px 5px 5px 7px; font-weight:bold; border:0 none'
             },
             {
@@ -1384,12 +1384,12 @@ export default function LayerWidgetThematic(gis, layer) {
                 iconCls: 'gis-menu-item-selected'
             },
             {
-                text: 'Select levels' + '&nbsp;&nbsp;',
+                text: GIS.i18n.select_levels + '&nbsp;&nbsp;',
                 param: 'level',
                 iconCls: 'gis-menu-item-unselected'
             },
             {
-                text: 'Select groups' + '&nbsp;&nbsp;',
+                text: GIS.i18n.select_groups + '&nbsp;&nbsp;',
                 param: 'group',
                 iconCls: 'gis-menu-item-unselected'
             }

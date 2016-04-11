@@ -8,7 +8,7 @@ export default function FilterWindow(gis, layer) {
 
     greaterNumberField = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
-        fieldLabel: 'Greater than',
+        fieldLabel: GIS.i18n.greater_than,
         width: 200,
         value: layer.minValue,
         listeners: {
@@ -20,7 +20,7 @@ export default function FilterWindow(gis, layer) {
 
     lowerNumberField = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
-        fieldLabel: 'And/or lower than',
+        fieldLabel: GIS.i18n.and_or_lower_than,
         style: 'margin-bottom: 0',
         width: 200,
         value: layer.maxValue + 1,
@@ -71,7 +71,7 @@ export default function FilterWindow(gis, layer) {
     };
 
     window = Ext.create('Ext.window.Window', {
-        title: 'Filter by value',
+        title: GIS.i18n.filter_by_value,
         iconCls: 'gis-window-title-icon-filter',
         bodyStyle: 'background-color: #fff; padding: 1px',
         resizable: false,

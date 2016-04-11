@@ -22,7 +22,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
         }
 
         gis.relocate.window = Ext.create('Ext.window.Window', {
-            title: 'Relocate facility',
+            title: GIS.i18n.relocate_facility,
             layout: 'fit',
             iconCls: 'gis-window-title-icon-relocate',
             cls: 'gis-container-default',
@@ -284,14 +284,14 @@ export default function FeatureContextMenu(gis, layer, instance) {
                                     columns: [
                                         {
                                             id: 'name',
-                                            text: 'Data element',
+                                            text: GIS.i18n.dataelement,
                                             dataIndex: 'name',
                                             sortable: true,
                                             width: 200
                                         },
                                         {
                                             id: 'value',
-                                            header: 'Value',
+                                            header: GIS.i18n.value,
                                             dataIndex: 'value',
                                             sortable: true,
                                             width: 150
@@ -357,7 +357,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
 
     if (layer.id !== 'facility') {
         menuItems.push(Ext.create('Ext.menu.Item', {
-            text: 'Float up',
+            text: GIS.i18n.float_up,
             iconCls: 'gis-menu-item-icon-float',
             cls: 'gis-plugin',
             disabled: !att.hasCoordinatesUp,
@@ -367,7 +367,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
         }));
 
         menuItems.push(Ext.create('Ext.menu.Item', {
-            text: 'Drill down',
+            text: GIS.i18n.drill_down,
             iconCls: 'gis-menu-item-icon-drill',
             cls: 'gis-menu-item-first gis-plugin',
             disabled: !att.hasCoordinatesDown,
@@ -397,7 +397,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
         }));
 
         menuItems.push( Ext.create('Ext.menu.Item', {
-            text: 'Swap lon/lat',
+            text: GIS.i18n.swap_lon_lat,
             iconCls: 'gis-menu-item-icon-relocate',
             disabled: !gis.init.user.isAdmin,
             handler: function(item) {

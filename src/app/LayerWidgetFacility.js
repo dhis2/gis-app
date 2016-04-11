@@ -51,11 +51,11 @@ export default function LayerWidgetFacility(gis, layer) {
 
     groupSet = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
-        fieldLabel: 'Group set',
+        fieldLabel: GIS.i18n.groupset,
         editable: false,
         valueField: 'id',
         displayField: 'name',
-        emptyText: 'Organisation unit group set',
+        emptyText: GIS.i18n.organisationunit_groupset,
         mode: 'remote',
         forceSelection: true,
         width: gis.conf.layout.widget.item_width,
@@ -65,7 +65,7 @@ export default function LayerWidgetFacility(gis, layer) {
     });
 
     icons = Ext.create('Ext.panel.Panel', {
-        title: '<div class="ns-panel-title-data">' + 'Organisation unit group icons' + '</div>',
+        title: '<div class="ns-panel-title-data">' + GIS.i18n.organisation_unit_group_icons + '</div>',
         hideCollapseTool: true,
         items: [
             groupSet
@@ -352,7 +352,7 @@ export default function LayerWidgetFacility(gis, layer) {
         columnWidth: 0.3,
         style: 'padding-top: 2px; padding-left: 3px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
-        boxLabel: 'User OU',
+        boxLabel: GIS.i18n.user_ou,
         labelWidth: gis.conf.layout.form_label_width,
         handler: function(chb, checked) {
             treePanel.xable([checked, userOrganisationUnitChildren.getValue(), userOrganisationUnitGrandChildren.getValue()]);
@@ -363,7 +363,7 @@ export default function LayerWidgetFacility(gis, layer) {
         columnWidth: 0.33,
         style: 'padding-top: 2px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
-        boxLabel: 'Sub-units',
+        boxLabel: GIS.i18n.sub_units,
         labelWidth: gis.conf.layout.form_label_width,
         handler: function(chb, checked) {
             treePanel.xable([checked, userOrganisationUnit.getValue(), userOrganisationUnitGrandChildren.getValue()]);
@@ -374,7 +374,7 @@ export default function LayerWidgetFacility(gis, layer) {
         columnWidth: 0.34,
         style: 'padding-top: 2px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
-        boxLabel: 'Sub-x2-units',
+        boxLabel: GIS.i18n.sub_x2_units,
         labelWidth: gis.conf.layout.form_label_width,
         handler: function(chb, checked) {
             treePanel.xable([checked, userOrganisationUnit.getValue(), userOrganisationUnitChildren.getValue()]);
@@ -464,7 +464,7 @@ export default function LayerWidgetFacility(gis, layer) {
         items: [
             {
                 xtype: 'label',
-                text: 'Selection mode',
+                text: GIS.i18n.selection_mode,
                 style: 'padding:7px 5px 5px 7px; font-weight:bold; border:0 none'
             },
             {
@@ -473,12 +473,12 @@ export default function LayerWidgetFacility(gis, layer) {
                 iconCls: 'gis-menu-item-selected'
             },
             {
-                text: 'Select levels' + '&nbsp;&nbsp;',
+                text: GIS.i18n.select_levels + '&nbsp;&nbsp;',
                 param: 'level',
                 iconCls: 'gis-menu-item-unselected'
             },
             {
-                text: 'Select groups' + '&nbsp;&nbsp;',
+                text: GIS.i18n.select_groups + '&nbsp;&nbsp;',
                 param: 'group',
                 iconCls: 'gis-menu-item-unselected'
             }
@@ -549,7 +549,7 @@ export default function LayerWidgetFacility(gis, layer) {
     });
 
     options = Ext.create('Ext.panel.Panel', {
-        title: '<div class="ns-panel-title-data">' + 'Options' + '</div>',
+        title: '<div class="ns-panel-title-data">' + GIS.i18n.options + '</div>',
         hideCollapseTool: true,
         items: [
             labelPanel,

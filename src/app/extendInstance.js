@@ -120,11 +120,11 @@ export default function extendInstance(gis) {
                         delete layout.classes;
                     }
 
-                    if (layout.colorLow === "ff0000") {
+                    if (layout.colorLow === 'ff0000') {
                         delete layout.colorLow;
                     }
 
-                    if (layout.colorHigh === "00ff00") {
+                    if (layout.colorHigh === '00ff00') {
                         delete layout.colorHigh;
                     }
 

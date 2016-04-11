@@ -216,7 +216,7 @@ export default function SharingWindow(gis, sharing) {
     }
 
     window = Ext.create('Ext.window.Window', {
-        title: 'Sharing settings',
+        title: GIS.i18n.sharing_settings,
         bodyStyle: 'padding:5px 5px 3px; background-color:#fff',
         resizable: false,
         modal: true,

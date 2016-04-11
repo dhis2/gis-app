@@ -83,7 +83,7 @@ export default function SearchWindow(gis, layer) {
                 hideHeaders: true,
                 columns: [{
                     id: 'name',
-                    text: 'Organisation units',
+                    text: GIS.i18n.organisation_units,
                     dataIndex: 'name',
                     sortable: false,
                     width: gis.conf.layout.tool.item_width

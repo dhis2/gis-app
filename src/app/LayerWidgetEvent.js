@@ -142,15 +142,14 @@ export default function LayerWidgetEvent(gis, layer) {
 
     // data element
     program = Ext.create('Ext.form.field.ComboBox', {
-        fieldLabel: GIS.i18n.programs,
+        fieldLabel: GIS.i18n.program,
         editable: false,
         valueField: 'id',
         displayField: 'name',
-        fieldLabel: 'Program',
         labelAlign: 'top',
         labelCls: 'gis-form-item-label-top',
         labelSeparator: '',
-        emptyText: 'Select program',
+        emptyText: GIS.i18n.select_program,
         forceSelection: true,
         queryMode: 'remote',
         columnWidth: 0.5,
@@ -238,15 +237,14 @@ export default function LayerWidgetEvent(gis, layer) {
     };
 
     stage = Ext.create('Ext.form.field.ComboBox', {
-        fieldLabel: GIS.i18n.indicator,
         editable: false,
         valueField: 'id',
         displayField: 'name',
-        fieldLabel: 'Stage',
+        fieldLabel: GIS.i18n.stage,
         labelAlign: 'top',
         labelCls: 'gis-form-item-label-top',
         labelSeparator: '',
-        emptyText: 'Select stage',
+        emptyText: GIS.i18n.select_stage,
         queryMode: 'local',
         forceSelection: true,
         columnWidth: 0.5,
@@ -521,7 +519,7 @@ export default function LayerWidgetEvent(gis, layer) {
     };
 
     dataElement = Ext.create('Ext.panel.Panel', {
-        title: '<div class="gis-panel-title-data">Data</div>',
+        title: '<div class="gis-panel-title-data">' + GIS.i18n.data + '</div>',
         bodyStyle: 'padding:1px',
         hideCollapseTool: true,
         items: [
@@ -551,7 +549,7 @@ export default function LayerWidgetEvent(gis, layer) {
     };
 
     startDate = Ext.create('Ext.form.field.Text', {
-        fieldLabel: 'Start date',
+        fieldLabel: GIS.i18n.start_date,
         labelAlign: 'top',
         labelCls: 'gis-form-item-label-top',
         labelSeparator: '',
@@ -566,7 +564,7 @@ export default function LayerWidgetEvent(gis, layer) {
     });
 
     endDate = Ext.create('Ext.form.field.Text', {
-        fieldLabel: 'End date',
+        fieldLabel: GIS.i18n.end_date,
         labelAlign: 'top',
         labelCls: 'gis-form-item-label-top',
         labelSeparator: '',

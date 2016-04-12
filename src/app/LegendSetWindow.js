@@ -88,10 +88,8 @@ export default function LegendSetWindow(gis) {
                     data.push(records[i].data);
                 }
 
-                arraySort(data, function (a, b) {
-                    return a.startValue - b.startValue;
-                });
-
+                data = arraySort(data, 'ASC', 'startValue');
+                
                 tmpLegendStore.add(data);
 
                 info.setText(records.length + ' legend sets available');
@@ -453,9 +451,7 @@ export default function LegendSetWindow(gis) {
                         color: '#' + co
                     });
 
-                    arraySort(data, function (a, b) {
-                        return a.startValue - b.startValue;
-                    });
+                    data = arraySort(data, 'ASC', 'startValue');
 
                     tmpLegendStore.removeAll();
                     tmpLegendStore.add(data);

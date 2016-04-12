@@ -629,7 +629,8 @@ export default function LegendSetWindow(gis) {
                     xtype: 'container',
                     cls: 'gis-container-inner',
                     style: 'padding:' + gridPadding + 'px',
-                    items: legendGrid
+                    items: legendGrid,
+                    layout: 'fit'
                 }
             ]
         });

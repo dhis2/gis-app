@@ -75,12 +75,12 @@ export default function FavoriteWindow(gis) {
                     map;
 
                 if (!layers.length) {
-                    alert('Please create a map first');
+                    gis.alert('Please create a map first');
                     return;
                 }
 
                 if (!name) {
-                    alert('Please enter a name');
+                    gis.alert('Please enter a name');
                     return;
                 }
 
@@ -376,7 +376,7 @@ export default function FavoriteWindow(gis) {
                                     }
                                 }
                                 else {
-                                    alert(GIS.i18n.no_map_to_save);
+                                    gis.alert(GIS.i18n.no_map_to_save);
                                 }
                             }
                         }
@@ -424,6 +424,9 @@ export default function FavoriteWindow(gis) {
                                         method: 'DELETE',
                                         success: function() {
                                             gis.store.maps.loadStore();
+                                        },
+                                        failure: function(r) {
+                                            gis.alert(r);
                                         }
                                     });
                                 }

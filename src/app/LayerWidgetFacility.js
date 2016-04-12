@@ -120,7 +120,8 @@ export default function LayerWidgetFacility(gis, layer) {
         multipleExpand: function(id, map, doUpdate) {
             var that = this,
                 rootId = gis.conf.finals.root.id,
-                path = map[id];
+                path = map[id],
+                record;
 
             if (path.substr(0, rootId.length + 1) !== ('/' + rootId)) {
                 path = '/' + rootId + path;

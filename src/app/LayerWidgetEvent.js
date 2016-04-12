@@ -513,7 +513,6 @@ export default function LayerWidgetEvent(gis, layer) {
         // panel, store
         for (var i = 0, element; i < dataElements.length; i++) {
             element = dataElements[i];
-
             addUxFromDataElement(element);
         }
     };

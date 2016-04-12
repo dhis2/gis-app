@@ -89,7 +89,7 @@ export default function LegendSetWindow(gis) {
                 }
 
                 data = arraySort(data, 'ASC', 'startValue');
-                
+
                 tmpLegendStore.add(data);
 
                 info.setText(records.length + ' legend sets available');
@@ -462,6 +462,10 @@ export default function LegendSetWindow(gis) {
                     color.reset();
 
                     window.isDirty = true;
+                } else if (!ln) {
+                    gis.alert(GIS.i18n.legend_name_is_required);
+                } else {
+                    gis.alert(GIS.i18n.end_value_should_be_bigger_than_start_value);
                 }
             }
         });
@@ -714,7 +718,7 @@ export default function LegendSetWindow(gis) {
             prevItem;
 
         if (items.length === 0) {
-            alert('At least one legend is required');
+            gis.alert('At least one legend is required');
             return false;
         }
 
@@ -726,7 +730,7 @@ export default function LegendSetWindow(gis) {
                 var msg = 'Overlapping legends not allowed!\n\n' +
                     prevItem.name + ' (' + prevItem.startValue + ' - ' + prevItem.endValue + ')\n' +
                     item.name + ' (' + item.startValue + ' - ' + item.endValue + ')';
-                alert(msg);
+                gis.alert(msg);
                 return false;
             }
 
@@ -751,7 +755,7 @@ export default function LegendSetWindow(gis) {
         handler: function() {
             if (legendSetName.getValue() && validateLegends()) {
                 if (legendSetStore.findExact('name', legendSetName.getValue()) !== -1) {
-                    alert('Name already in use');
+                    gis.alert('Name already in use');
                     return;
                 }
 

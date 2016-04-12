@@ -578,15 +578,14 @@ export default function getInstance(init) {
             }
             else {
                 for (var key in gis.layer) {
-                    if (gis.layer.hasOwnProperty(key) && gis.layer[key].layerCategory === gis.conf.finals.layer.category_thematic && gis.layer[key].core.view) {
+                    if (gis.layer.hasOwnProperty(key) && key.substring(0, 8) === gis.conf.finals.layer.category_thematic && gis.layer[key].view) {
                         layer = gis.layer[key];
-                        layout = gis.api.layout.Layout(layer.core.view);
+                        layout = gis.api.layout.Layout(layer.view);
 
                         if (layout) {
                             if (!layout.parentGraphMap && layer.widget) {
                                 layout.parentGraphMap = layer.widget.getParentGraphMap();
                             }
-
                             return layout;
                         }
                     }

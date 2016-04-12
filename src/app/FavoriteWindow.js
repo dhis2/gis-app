@@ -21,8 +21,7 @@ export default function FavoriteWindow(gis) {
 
     // Vars
         windowWidth = 500,
-        windowCmpWidth = windowWidth - 14,
-        getRenderedVectorLayers;
+        windowCmpWidth = windowWidth - 14;
 
     gis.store.maps.on('load', function(store, records) {
         var pager = store.proxy.reader.jsonData.pager;
@@ -334,7 +333,8 @@ export default function FavoriteWindow(gis) {
                                 message;
 
                             if (record.data.access.update) {
-                                layers = getRenderedVectorLayers();
+                                layers = gis.util.map.getVisibleVectorLayers();
+
                                 message = 'Overwrite favorite?\n\n' + record.data.name;
 
                                 if (layers.length) {

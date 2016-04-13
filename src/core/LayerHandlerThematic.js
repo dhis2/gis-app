@@ -134,7 +134,9 @@ export default function LayerHandlerThematic(gis, layer) {
             return gis.conf.finals.widget.loadtype_legend;
         }
 
-        gis.mask.hide();
+        if (gis.mask) {
+            gis.mask.hide();
+        }
     };
 
     loadOrganisationUnits = function (view) {
@@ -174,7 +176,9 @@ export default function LayerHandlerThematic(gis, layer) {
             var features = gis.util.geojson.decode(r, 'ASC');
 
             if (!features.length) {
-                gis.mask.hide();
+                if (gis.mask) {
+                    gis.mask.hide();
+                }
                 gis.alert(GIS.i18n.no_valid_coordinates_found);
                 return;
             }
@@ -186,7 +190,9 @@ export default function LayerHandlerThematic(gis, layer) {
         };
 
         failure = function () {
-            gis.mask.hide();
+            if (gis.mask) {
+                gis.mask.hide();
+            }
             gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
         };
 
@@ -742,7 +748,9 @@ export default function LayerHandlerThematic(gis, layer) {
 
         // Mask
         if (loader.hideMask) {
-            gis.mask.hide();
+            if (gis.mask) {
+                gis.mask.hide();
+            }
         }
 
         // Map callback

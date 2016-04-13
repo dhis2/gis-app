@@ -177,14 +177,26 @@ export default function SharingWindow(gis, sharing) {
         disabled: true,
         height: 26,
         handler: function(b) {
-            userGroupRowContainer.add(UserGroupRow({
-                id: userGroupField.getValue(),
-                name: userGroupField.getRawValue(),
-                access: 'r-------'
-            }));
+            var id = userGroupField.getValue(),
+                name = userGroupField.getRawValue(),
+                userGroupAccesses = getBody().object.userGroupAccesses;
 
             userGroupField.clearValue();
             b.disable();
+
+            // Only allow user groups to be added once
+            for (var i = 0; i < userGroupAccesses.length; i++) {
+                if (userGroupAccesses[i].id === id) {
+                    gis.alert(name + ' already added');
+                    return;
+                }
+            }
+
+            userGroupRowContainer.add(UserGroupRow({
+                id: id,
+                name: name,
+                access: 'r-------'
+            }));
         }
     });
 

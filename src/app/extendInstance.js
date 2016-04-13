@@ -238,8 +238,6 @@ export default function extendInstance(gis) {
             }
 
             for (var i = 0; i < layers.length; i++) {
-                console.log("legend", layers[i]);
-
                 var layer = layers[i],
                     id = layer.id,
                     imageLegendConfig = layer.imageLegendConfig || [],

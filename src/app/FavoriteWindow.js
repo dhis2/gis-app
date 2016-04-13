@@ -21,8 +21,7 @@ export default function FavoriteWindow(gis) {
 
     // Vars
         windowWidth = 500,
-        windowCmpWidth = windowWidth - 14,
-        getRenderedVectorLayers;
+        windowCmpWidth = windowWidth - 14;
 
     gis.store.maps.on('load', function(store, records) {
         var pager = store.proxy.reader.jsonData.pager;
@@ -75,12 +74,12 @@ export default function FavoriteWindow(gis) {
                     map;
 
                 if (!layers.length) {
-                    alert('Please create a map first');
+                    gis.alert('Please create a map first');
                     return;
                 }
 
                 if (!name) {
-                    alert('Please enter a name');
+                    gis.alert('Please enter a name');
                     return;
                 }
 
@@ -334,7 +333,8 @@ export default function FavoriteWindow(gis) {
                                 message;
 
                             if (record.data.access.update) {
-                                layers = getRenderedVectorLayers();
+                                layers = gis.util.map.getVisibleVectorLayers();
+
                                 message = 'Overwrite favorite?\n\n' + record.data.name;
 
                                 if (layers.length) {
@@ -376,7 +376,7 @@ export default function FavoriteWindow(gis) {
                                     }
                                 }
                                 else {
-                                    alert(GIS.i18n.no_map_to_save);
+                                    gis.alert(GIS.i18n.no_map_to_save);
                                 }
                             }
                         }
@@ -424,6 +424,9 @@ export default function FavoriteWindow(gis) {
                                         method: 'DELETE',
                                         success: function() {
                                             gis.store.maps.loadStore();
+                                        },
+                                        failure: function(r) {
+                                            gis.alert(r);
                                         }
                                     });
                                 }

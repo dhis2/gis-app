@@ -284,7 +284,9 @@ export default function LayerHandlerThematic(gis, layer) {
                 values = []; // to find min and max values
 
             if (!response) {
-                gis.mask.hide();
+                if (gis.mask) {
+                    gis.mask.hide();
+                }
                 return;
             }
 

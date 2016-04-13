@@ -47,7 +47,9 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		};
 
 		failure = function(r) {
-			gis.mask.hide();
+			if (gis.mask) {
+				gis.mask.hide();
+			}
 
 			r = JSON.parse(r.responseText);
 

@@ -27,7 +27,9 @@ Ext.onReady(function() {
         measure_distance: 'Measure distance',
         coordinates_could_not_be_loaded: 'Coordinates could not be loaded',
         invalid_coordinates: 'Invalid coordinates',
-        no_valid_coordinates_found: 'No valid coordinates found'
+        no_valid_coordinates_found: 'No valid coordinates found',
+        drill_down: 'Drill down',
+        float_up: 'Float up'
     };
 
     GIS.plugin = {};

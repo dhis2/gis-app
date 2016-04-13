@@ -759,7 +759,7 @@ export default function LayerHandlerThematic(gis, layer) {
         }
         else {
             gis.map = null;
-            if (gis.viewport.shareButton) {
+            if (gis.viewport && gis.viewport.shareButton) {
                 gis.viewport.shareButton.enable();
             }
         }

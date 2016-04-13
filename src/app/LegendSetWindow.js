@@ -474,7 +474,7 @@ export default function LegendSetWindow(gis) {
             cls: 'gis-grid',
             bodyStyle: 'border-top: 0 none',
             width: windowWidth - windowBorder - bodyPadding - (2 * gridPadding),
-            height: 235,
+            height: 350,
             scroll: 'vertical',
             hideHeaders: true,
             currentItem: null,

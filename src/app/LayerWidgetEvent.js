@@ -491,7 +491,7 @@ export default function LayerWidgetEvent(gis, layer) {
         return ux;
     };
 
-    selectDataElements = function(items) {
+    selectDataElements = function(items, layout) {
         var dataElements = [];
 
         // data element objects
@@ -512,9 +512,14 @@ export default function LayerWidgetEvent(gis, layer) {
         }
 
         // panel, store
-        for (var i = 0, element; i < dataElements.length; i++) {
+        for (var i = 0, element, ux; i < dataElements.length; i++) {
             element = dataElements[i];
-            addUxFromDataElement(element);
+
+            ux = addUxFromDataElement(element);
+            
+            if (layout) {
+                ux.setRecord(element);
+            }
         }
     };
 

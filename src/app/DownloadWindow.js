@@ -1,5 +1,5 @@
 export default function DownloadWindow(gis) {
-    var window,
+    var downloadWindow,
         format,
         name,
         button;
@@ -35,6 +35,23 @@ export default function DownloadWindow(gis) {
     button = Ext.create('Ext.button.Button', {
         text: GIS.i18n.download,
         handler: function() {
+
+            console.log("####", gis.instance.getContainer());
+
+
+            html2canvas(gis.instance.getContainer(), {
+                logging: true,
+                useCORS: true,
+                width: 1000,
+                height: 800,
+                onrendered: function(canvas) {
+                    window.open(canvas.toDataURL());
+                }
+            });
+
+
+
+            /*
             var type = format.getValue(),
                 title = name.getValue(),
                 svg = gis.util.svg.getString(title, gis.util.map.getVisibleVectorLayers()),
@@ -51,10 +68,11 @@ export default function DownloadWindow(gis) {
             exportForm.submit();
 
             window.destroy();
+            */
         }
     });
 
-    window = Ext.create('Ext.window.Window', {
+    downloadWindow = Ext.create('Ext.window.Window', {
         title: GIS.i18n.download_map_as_png,
         layout: 'column',
         iconCls: 'gis-window-title-icon-download',
@@ -82,5 +100,5 @@ export default function DownloadWindow(gis) {
         }
     });
 
-    return window;
+    return downloadWindow;
 };

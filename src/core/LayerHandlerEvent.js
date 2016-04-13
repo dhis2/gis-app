@@ -186,7 +186,7 @@ export default function LayerHandlerEvent(gis, layer) {
         };
 
         onEventCountSuccess = function(r) {
-            if (r.extent && r.extent !== 'null') {
+            if (r.extent) {
                 var extent = r.extent.match(/([-\d\.]+)/g),
                     bounds = [[extent[1], extent[0]],[extent[3], extent[2]]];
 

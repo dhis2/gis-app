@@ -234,11 +234,6 @@ export default function LayerHandlerThematic(gis, layer) {
         // dx
         paramString += '&dimension=dx:';
 
-        // program
-        if (view.valueType === 'di' && view.program) {
-            paramString += view.program.id + '.';
-        }
-
         for (var i = 0; i < dxItems.length; i++) {
             paramString += isOperand ? dxItems[i].id.split('.')[0] : dxItems[i].id;
             paramString += i < dxItems.length - 1 ? ';' : '';
@@ -380,14 +375,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
                 for (var j = 0, item; j < dimension.items.length; j++) {
                     item = dimension.items[j];
-
-                    if (item.id.indexOf('.') !== -1) {
-                        var ids = item.id.split('.');
-                        item.name = metaData.names[ids[0]] + ' ' + metaData.names[ids[1]];
-                    }
-                    else {
-                        item.name = metaData.names[item.id];
-                    }
+                    item.name = metaData.names[item.id];
                 }
             }
 
@@ -742,7 +730,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
         // Gui
         if (loader.updateGui && isObject(layer.widget)) {
-            layer.widget.setGui(view);
+            layer.widget.setGui(view, loader.isDrillDown);
         }
 
         // Zoom
@@ -778,6 +766,7 @@ export default function LayerHandlerThematic(gis, layer) {
         zoomToVisibleExtent: false,
         hideMask: false,
         callBack: null,
+        isDrillDown: false,
         load: function(view) {
             if (gis.mask && !gis.skipMask) {
                 gis.mask.show();

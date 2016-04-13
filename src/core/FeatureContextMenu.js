@@ -348,6 +348,7 @@ export default function FeatureContextMenu(gis, layer, instance) {
             handler.updateGui = true;
             handler.zoomToVisibleExtent = true;
             handler.hideMask = true;
+            handler.isDrillDown = true;
             handler.load(view);
         }
     };

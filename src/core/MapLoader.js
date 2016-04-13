@@ -21,26 +21,26 @@ export default function MapLoader(gis, isSession, applyConfig) {
 
 		success = function(r) {
 			// operand
-			if (isArray(r.mapViews)) {
-				for (var i = 0, view, objectName; i < r.mapViews.length; i++) {
-					view = r.mapViews[i];
+			//if (isArray(r.mapViews)) {
+				//for (var i = 0, view, objectName; i < r.mapViews.length; i++) {
+					//view = r.mapViews[i];
 
-					// TODO, TMP
-					if (isArray(view.dataDimensionItems) && view.dataDimensionItems.length && isObject(view.dataDimensionItems[0])) {
-						var item = view.dataDimensionItems[0];
+					//// TODO, TMP
+					//if (isArray(view.dataDimensionItems) && view.dataDimensionItems.length && isObject(view.dataDimensionItems[0])) {
+						//var item = view.dataDimensionItems[0];
 
-						if (item.hasOwnProperty('dataElement')) {
-							objectName = 'de';
-						}
-						else if (item.hasOwnProperty('dataSet')) {
-							objectName = 'ds';
-						}
-						else {
-							objectName = 'in';
-						}
-					}
-				}
-			}
+						//if (item.hasOwnProperty('dataElement')) {
+							//objectName = 'de';
+						//}
+						//else if (item.hasOwnProperty('dataSet')) {
+							//objectName = 'ds';
+						//}
+						//else {
+							//objectName = 'in';
+						//}
+					//}
+				//}
+			//}
 
 			gis.map = r;
 			setMap();

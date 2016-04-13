@@ -5,6 +5,7 @@ import isObject from 'd2-utilizr/lib/isObject';
 import isString from 'd2-utilizr/lib/isString';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
 import arrayContains from 'd2-utilizr/lib/arrayContains';
+import arraySort from 'd2-utilizr/lib/arraySort';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 
@@ -148,10 +149,10 @@ export default function LayerWidgetThematic(gis, layer) {
             var path;
 
             if (isString(uid)) {
-                path = '/dataElements.json?fields=id,' + gis.init.namePropertyUrl + '&domainType=aggregate&paging=false&filter=dataElementGroups.id:eq:' + uid;
+                path = '/dataElements.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&domainType=aggregate&paging=false&filter=dataElementGroups.id:eq:' + uid;
             }
             else if (uid === 0) {
-                path = '/dataElements.json?fields=id,' + gis.init.namePropertyUrl + '&domainType=aggregate&paging=false';
+                path = '/dataElements.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&domainType=aggregate&paging=false';
             }
 
             if (!path) {
@@ -223,7 +224,7 @@ export default function LayerWidgetThematic(gis, layer) {
         fields: ['id', 'name'],
         proxy: {
             type: 'ajax',
-            url: encodeURI(gis.init.contextPath + '/api/dataSets.json?fields=id,' + gis.init.namePropertyUrl + '&paging=false'),
+            url: encodeURI(gis.init.contextPath + '/api/dataSets.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&paging=false'),
             reader: {
                 type: 'json',
                 root: 'dataSets'
@@ -506,7 +507,7 @@ export default function LayerWidgetThematic(gis, layer) {
             select: function() {
                 indicator.clearValue();
 
-                indicator.store.proxy.url = encodeURI(gis.init.contextPath + '/api/indicators.json?fields=id,' + gis.init.namePropertyUrl + '&paging=false&filter=indicatorGroups.id:eq:' + this.getValue());
+                indicator.store.proxy.url = encodeURI(gis.init.contextPath + '/api/indicators.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&paging=false&filter=indicatorGroups.id:eq:' + this.getValue());
                 indicator.store.load();
             }
         }
@@ -725,47 +726,75 @@ export default function LayerWidgetThematic(gis, layer) {
         eventDataItem.clearValue();
 
         Ext.Ajax.request({
-            url: encodeURI(gis.init.contextPath + '/api/programs.json?paging=false&fields=programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType]],programStages[programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType]]]&filter=id:eq:' + programId),
+            url: encodeURI(gis.init.contextPath + '/api/programDataElements.json?program=' + programId + '&fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + ',valueType&paging=false'),
+            disableCaching: false,
             success: function(r) {
-                r = JSON.parse(r.responseText);
+                var types = gis.conf.valueType.aggregateTypes,
+                    elements = Ext.decode(r.responseText).programDataElements.filter(function(item) {
+                        return arrayContains(types, (item || {}).valueType);
+                    });
 
-                var isA = isArray,
-                    isO = isObject,
-                    program = isA(r.programs) && r.programs.length ? r.programs[0] : null,
-                    stages = isO(program) && isA(program.programStages) && program.programStages.length ? program.programStages : [],
-                    teas = isO(program) && isA(program.programTrackedEntityAttributes) ? arrayPluck(program.programTrackedEntityAttributes, 'trackedEntityAttribute') : [],
-                    dataElements = [],
-                    attributes = [],
-                    types = gis.conf.valueType.aggregateTypes,
-                    data;
+                Ext.Ajax.request({
+                    url: encodeURI(gis.init.contextPath + '/api/programs.json?filter=id:eq:' + programId + '&fields=programTrackedEntityAttributes[dimensionItem|rename(id),' + gis.init.namePropertyUrl + ',valueType]&paging=false'),
+                    disableCaching: false,
+                    success: function(r) {
+                        var attributes = ((Ext.decode(r.responseText).programs[0] || {}).programTrackedEntityAttributes || []).filter(function(item) {
+                                return arrayContains(types, (item || {}).valueType);
+                            }),
+                            data = arraySort(arrayClean([].concat(elements, attributes))) || [];
 
-                // data elements
-                for (var i = 0, stage, elements; i < stages.length; i++) {
-                    stage = stages[i];
-
-                    if (isA(stage.programStageDataElements) && stage.programStageDataElements.length) {
-                        elements = arrayPluck(stage.programStageDataElements, 'dataElement') || [];
-
-                        for (var j = 0; j < elements.length; j++) {
-                            if (arrayContains(types, elements[j].valueType)) {
-                                dataElements.push(elements[j]);
-                            }
-                        }
+                        eventDataItemAvailableStore.loadData(data);
                     }
-                }
-
-                // attributes
-                for (i = 0; i < teas.length; i++) {
-                    if (arrayContains(types, teas[i].valueType)) {
-                        attributes.push(teas[i]);
-                    }
-                }
-
-                data = gis.util.array.sort(arrayClean([].concat(dataElements, attributes))) || [];
-
-                eventDataItemAvailableStore.loadData(data);
+                });
             }
         });
+
+
+
+      
+
+        //Ext.Ajax.request({
+            //url: encodeURI(gis.init.contextPath + '/api/programs.json?paging=false&fields=programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType]],programStages[programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType]]]&filter=id:eq:' + programId),
+            //success: function(r) {
+                //r = JSON.parse(r.responseText);
+
+                //var isA = isArray,
+                    //isO = isObject,
+                    //program = isA(r.programs) && r.programs.length ? r.programs[0] : null,
+                    //stages = isO(program) && isA(program.programStages) && program.programStages.length ? program.programStages : [],
+                    //teas = isO(program) && isA(program.programTrackedEntityAttributes) ? arrayPluck(program.programTrackedEntityAttributes, 'trackedEntityAttribute') : [],
+                    //dataElements = [],
+                    //attributes = [],
+                    //types = gis.conf.valueType.aggregateTypes,
+                    //data;
+
+                //// data elements
+                //for (var i = 0, stage, elements; i < stages.length; i++) {
+                    //stage = stages[i];
+
+                    //if (isA(stage.programStageDataElements) && stage.programStageDataElements.length) {
+                        //elements = arrayPluck(stage.programStageDataElements, 'dataElement') || [];
+
+                        //for (var j = 0; j < elements.length; j++) {
+                            //if (arrayContains(types, elements[j].valueType)) {
+                                //dataElements.push(elements[j]);
+                            //}
+                        //}
+                    //}
+                //}
+
+                //// attributes
+                //for (i = 0; i < teas.length; i++) {
+                    //if (arrayContains(types, teas[i].valueType)) {
+                        //attributes.push(teas[i]);
+                    //}
+                //}
+
+                //data = gis.util.array.sort(arrayClean([].concat(dataElements, attributes))) || [];
+
+                //eventDataItemAvailableStore.loadData(data);
+            //}
+        //});
 
     };
 
@@ -806,7 +835,7 @@ export default function LayerWidgetThematic(gis, layer) {
         programIndicator.clearValue();
 
         Ext.Ajax.request({
-            url: encodeURI(gis.init.contextPath + '/api/programs.json?paging=false&fields=programIndicators[id,displayName|rename(name)]&filter=id:eq:' + programId),
+            url: encodeURI(gis.init.contextPath + '/api/programs.json?paging=false&fields=programIndicators[dimensionItem|rename(id),displayName|rename(name)]&filter=id:eq:' + programId),
             success: function(r) {
                 r = JSON.parse(r.responseText);
 
@@ -1704,94 +1733,83 @@ export default function LayerWidgetThematic(gis, layer) {
         organisationUnitGroup.clearValue();
     };
 
-    setGui = function(view) {
+    setGui = function(view, isDrillDown) {
         var dxDim = view.columns[0],
             peDim = view.filters[0],
             ouDim = view.rows[0],
-            lType = isObject(view.legendSet) && isString(view.legendSet.id) ? gis.conf.finals.widget.legendtype_predefined : gis.conf.finals.widget.legendtype_automatic,
-            itemTypeCmpMap = {},
-            objectNameProgramCmpMap = {},
+            itemTypeCmpMap = {
+                'INDICATOR': indicator,
+                'DATA_ELEMENT': dataElement,
+                'DATA_ELEMENT_OPERAND': dataElement,
+                'REPORTING_RATE': dataSet,
+                'PROGRAM_DATA_ELEMENT': eventDataItem,
+                'PROGRAM_ATTRIBUTE': eventDataItem,
+                'PROGRAM_INDICATOR': programIndicator
+            },
+            itemTypeObjectNameMap = {
+                'INDICATOR': dimConf.indicator.objectName,
+                'DATA_ELEMENT': dimConf.dataElement.objectName,
+                'DATA_ELEMENT_OPERAND': dimConf.operand.objectName,
+                'REPORTING_RATE': dimConf.dataSet.objectName,
+                'PROGRAM_DATA_ELEMENT': dimConf.eventDataItem.objectName,
+                'PROGRAM_ATTRIBUTE': dimConf.eventDataItem.objectName,
+                'PROGRAM_INDICATOR': dimConf.programIndicator.objectName
+            },
+            objectNameMap = {},                
+            legendtype_predefined = gis.conf.finals.widget.legendtype_predefined,
+            legendtype_automatic = gis.conf.finals.widget.legendtype_automatic,
             isOu = false,
             isOuc = false,
             isOugc = false,
             levels = [],
             groups = [],
+            objectNameProgramCmpMap = {},
             setLayerGui,
-            setWidgetGui,
-            dxItemType,
-            dxObjectName;
+            setDxGui,
+            setPeGui,
+            setOuGui,
+            setLegendGui,
+            setLayer,
+            init;
 
-        itemTypeCmpMap[dimConf.indicator.itemType] = indicator;
-        itemTypeCmpMap[dimConf.dataElement.itemType] = dataElement;
-        itemTypeCmpMap[dimConf.operand.itemType] = dataElement;
-        itemTypeCmpMap[dimConf.dataSet.itemType] = dataSet;
-        itemTypeCmpMap[dimConf.programDataElement.itemType] = eventDataItem;
-        itemTypeCmpMap[dimConf.programAttribute.itemType] = eventDataItem;
-        itemTypeCmpMap[dimConf.programIndicator.itemType] = programIndicator;
+        objectNameMap[dimConf.indicator.objectName] = dimConf.indicator.objectName;
+        objectNameMap[dimConf.dataElement.objectName] = dimConf.dataElement.objectName;
+        objectNameMap[dimConf.operand.objectName] = dimConf.dataElement.objectName;
+        objectNameMap[dimConf.dataSet.objectName] = dimConf.dataSet.objectName;
+        objectNameMap[dimConf.eventDataItem.objectName] = dimConf.eventDataItem.objectName;
+        objectNameMap[dimConf.programIndicator.objectName] = dimConf.programIndicator.objectName;
 
+        var dxItemType = dxDim.items[0].dimensionItemType,
+            legType = isObject(view.legendSet) && isString(view.legendSet.id) ? legendtype_predefined : legendtype_automatic;
+
+        var dxCmp = itemTypeCmpMap[dxItemType],
+            dxObjectName = itemTypeObjectNameMap[dxItemType];              
+            
+            //itemTypeCmpMap = {},
         objectNameProgramCmpMap[dimConf.eventDataItem.objectName] = eventDataItemProgram;
         objectNameProgramCmpMap[dimConf.programIndicator.objectName] = programIndicatorProgram;
 
-        setWidgetGui = function() {
+        setDxGui = function() {
 
-            // Components
-            if (!layer.window.isRendered) {
-                return;
-            }
-
-            // Reset
-            reset(true);
-
-            // dx type
-            dxItemType = gis.util.dhis.getDataDimensionItemTypes(view.dataDimensionItems)[0];
-
-            dxObjectName = dimConf.itemTypeMap[dxItemType].objectName;
-
-            // Value type
-            valueType.setValue(dxObjectName);
+            // value type
+            valueType.setValue(objectNameMap[dxObjectName]);
             valueTypeToggler(dxObjectName);
 
-            if (dxObjectName === dimConf.dataElement.objectName) {
+            if (dxCmp === dataElement) {
                 dataElementDetailLevel.setValue(dxObjectName);
             }
 
-            // Data
-            itemTypeCmpMap[dxItemType].store.add(dxDim.items[0]);
-            itemTypeCmpMap[dxItemType].setValue(dxDim.items[0].id);
+            // data
+            dxCmp.store.add(dxDim.items[0]);
+            dxCmp.setValue(dxDim.items[0].id);
+        };
 
-            // program
-            if (dxObjectName === dimConf.eventDataItem.objectName && view.program) {
-                objectNameProgramCmpMap[dimConf.eventDataItem.objectName].store.add(view.program);
-                objectNameProgramCmpMap[dimConf.eventDataItem.objectName].setValue(view.program.id);
-            }
-            else if (dxObjectName === dimConf.programIndicator.objectName && view.program) {
-                objectNameProgramCmpMap[dimConf.programIndicator.objectName].store.add(view.program);
-                objectNameProgramCmpMap[dimConf.programIndicator.objectName].setValue(view.program.id);
-            }
-
-            // Period
+        setPeGui = function() {
             period.store.add(gis.conf.period.relativePeriodRecordsMap[peDim.items[0].id] ? gis.conf.period.relativePeriodRecordsMap[peDim.items[0].id] : peDim.items[0]);
             period.setValue(peDim.items[0].id);
+        };
 
-            // Legend
-            legendType.setValue(lType);
-            legendTypeToggler(lType);
-
-            if (lType === gis.conf.finals.widget.legendtype_automatic) {
-                classes.setValue(view.classes);
-                method.setValue(view.method);
-                colorLow.setValue(view.colorLow);
-                colorHigh.setValue(view.colorHigh);
-                radiusLow.setValue(view.radiusLow);
-                radiusHigh.setValue(view.radiusHigh);
-            }
-            else if (lType === gis.conf.finals.widget.legendtype_predefined) {
-                method.setValue(1);
-                legendSet.store.add(view.legendSet);
-                legendSet.setValue(view.legendSet.id);
-            }
-
-            // Organisation units
+        setOuGui = function() {
             for (var i = 0, item; i < ouDim.items.length; i++) {
                 item = ouDim.items[i];
 
@@ -1828,12 +1846,28 @@ export default function LayerWidgetThematic(gis, layer) {
             }
 
             treePanel.selectGraphMap(view.parentGraphMap);
+        };
 
-            // labels
-            labelPanel.setConfig(view);
-        }();
+        setLegendGui = function() {
+            legendType.setValue(legType);
+            legendTypeToggler(legType);
 
-        setLayerGui = function() {
+            if (legType === gis.conf.finals.widget.legendtype_automatic) {
+                classes.setValue(view.classes);
+                method.setValue(view.method);
+                colorLow.setValue(view.colorLow);
+                colorHigh.setValue(view.colorHigh);
+                radiusLow.setValue(view.radiusLow);
+                radiusHigh.setValue(view.radiusHigh);
+            }
+            else if (legType === gis.conf.finals.widget.legendtype_predefined) {
+                method.setValue(1);
+                legendSet.store.add(view.legendSet);
+                legendSet.setValue(view.legendSet.id);
+            }
+        };
+
+        setLayer = function() {
 
             // Layer item
             layer.item.setValue(!view.hidden, view.opacity);
@@ -1845,6 +1879,25 @@ export default function LayerWidgetThematic(gis, layer) {
             if (layer.filterWindow && layer.filterWindow.isVisible()) {
                 layer.filterWindow.filter();
             }
+        };
+
+        init = function() {
+            if (!layer.window.isRendered) {
+                return;
+            }
+
+            if (!isDrillDown) {
+                reset(true);
+                setDxGui();
+                setPeGui();
+                setLegendGui();
+            }
+
+            setOuGui();
+            setLayer();
+
+            // labels
+            labelPanel.setConfig(view);
         }();
     };
 
@@ -1855,9 +1908,12 @@ export default function LayerWidgetThematic(gis, layer) {
             ds = dimConf.dataSet.objectName,
             di = dimConf.eventDataItem.objectName,
             pi = dimConf.programIndicator.objectName,
-            vType = valueType.getValue() === de ? dataElementDetailLevel.getValue() : valueType.getValue(),
             objectNameCmpMap = {},
+            objectNameItemTypeMap = {},
             view = {};
+
+        var dxObjectName = valueType.getValue() === de ? dataElementDetailLevel.getValue() : valueType.getValue(),
+            dxItemType;
 
         objectNameCmpMap[in_] = indicator;
         objectNameCmpMap[de] = dataElement;
@@ -1866,28 +1922,37 @@ export default function LayerWidgetThematic(gis, layer) {
         objectNameCmpMap[di] = eventDataItem;
         objectNameCmpMap[pi] = programIndicator;
 
+        objectNameItemTypeMap[dimConf.indicator.objectName] = 'INDICATOR';
+        objectNameItemTypeMap[dimConf.dataElement.objectName] = 'DATA_ELEMENT';
+        objectNameItemTypeMap[dimConf.dataSet.objectName] = 'REPORTING_RATE';
+        objectNameItemTypeMap[dimConf.eventDataItem.objectName] = 'PROGRAM_DATA_ELEMENT';
+        objectNameItemTypeMap[dimConf.programIndicator.objectName] = 'PROGRAM_ATTRIBUTE';
+
+        dxItemType = objectNameItemTypeMap[dxObjectName];
+
         // id
         view.layer = layer.id;
 
-        // value type
-        view.valueType = vType;
+        // value type TODO?
+        view.valueType = dxObjectName;
 
         // dx
-        if (objectNameCmpMap[vType].getValue()) {
+        if (objectNameCmpMap[dxObjectName].getValue()) {
             view.columns = [{
                 dimension: 'dx',
-                objectName: vType,
+                objectName: dxObjectName,
                 items: [{
-                    id: objectNameCmpMap[vType].getValue()
+                    id: objectNameCmpMap[dxObjectName].getValue(),
+                    dimensionItemType: dxItemType
                 }]
             }];
         }
 
         // program
-        if (vType === di && eventDataItemProgram.getValue()) {
+        if (dxObjectName === di && eventDataItemProgram.getValue()) {
             view.program = {id: eventDataItemProgram.getValue()};
         }
-        else if (vType === pi && programIndicatorProgram.getValue()) {
+        else if (dxObjectName === pi && programIndicatorProgram.getValue()) {
             view.program = {id: programIndicatorProgram.getValue()};
         }
 
@@ -1917,6 +1982,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
         Ext.apply(view, labelPanel.getConfig());
 
+        // legend
         if (legendType.getValue() === gis.conf.finals.widget.legendtype_predefined && legendSet.getValue()) {
             view.legendSet = {
                 id: legendSet.getValue()

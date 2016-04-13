@@ -268,13 +268,23 @@ export default function getInstance(init) {
 
         conf.url = {};
 
+        conf.url.baseFields = [
+            'id',
+            'displayName|rename(name)',
+            'longitude',
+            'latitude',
+            'zoom'
+        ];
+
         conf.url.analysisFields = [
             '*',
-            'columns[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
-            'rows[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
-            'filters[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
+            'columns[dimension,filter,items[dimensionItem|rename(id),dimensionItemType,' + init.namePropertyUrl + ']]',
+            'rows[dimension,filter,items[dimensionItem|rename(id),dimensionItemType,' + init.namePropertyUrl + ']]',
+            'filters[dimension,filter,items[dimensionItem|rename(id),dimensionItemType,' + init.namePropertyUrl + ']]',
+            'dataDimensionItems',
             'program[id,' + init.namePropertyUrl + ']',
             'programStage[id,displayName|rename(name)]',
+            'legendSet[id,displayName|rename(name)]',
             '!lastUpdated',
             '!href',
             '!created',
@@ -301,13 +311,12 @@ export default function getInstance(init) {
             '!periods',
             '!organisationUnitLevels',
             '!organisationUnits',
-
             '!sortOrder',
             '!topLimit'
         ];
 
         conf.url.mapFields = [
-            conf.url.analysisFields.join(','),
+            conf.url.baseFields.join(','),
             'mapViews[' + conf.url.analysisFields.join(',') + ']'
         ];
 

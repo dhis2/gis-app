@@ -618,6 +618,19 @@ gis-combo .x-form-item-label {
     background-image: url(../images/options.png);
 }
 
+
+/*----------------------------------------------------------------------------
+ * GIS Data Selector
+ *--------------------------------------------------------------------------*/
+
+.ns-dxselector .x-mask {
+    background: transparent;
+}
+
+.ns-dxselector.x-item-disabled {
+    opacity: 0.6;
+}
+
 /*----------------------------------------------------------------------------
  * GIS form
  *--------------------------------------------------------------------------*/
@@ -730,6 +743,31 @@ gis-combo .x-form-item-label {
 /* Color button */
 .x-btn.x-box-item.x-btn-default-small.gis-colorbutton-disabled {
     opacity: 0;
+}
+
+.ns-button-combotrigger {
+    background-image: url('../images/trigger.gif');
+    background-position: 0 0;
+    width: 17px;
+    border-top-right-radius: 2px;
+}
+.ns-button-combotrigger-disabled,
+.ns-button-combotrigger-disabled * {
+    opacity: 0.8;
+    cursor: default !important;
+}
+
+	/* Link button */
+.ns-linkbutton.x-btn-default-small {
+    border: 1px solid transparent;
+    background: transparent;
+}
+.ns-linkbutton .x-btn-inner {
+    color: #3162c5;
+    padding: 0;
+}
+.ns-linkbutton.x-btn-over .x-btn-inner {
+    text-decoration: underline;
 }
 
 

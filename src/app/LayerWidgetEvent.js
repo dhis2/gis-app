@@ -380,8 +380,9 @@ export default function LayerWidgetEvent(gis, layer) {
 
     dataElementSelected = Ext.create('Ext.panel.Panel', {
         width: accBaseWidth - 4,
-        height: 204,
-        bodyStyle: 'padding:2px 0 1px 3px; overflow-y: scroll',
+        height: 176,
+        bodyStyle: 'padding-left:1px',
+        autoScroll: true,
         tbar: {
             height: 27,
             items: [
@@ -582,6 +583,7 @@ export default function LayerWidgetEvent(gis, layer) {
     periods = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.period,
+        labelSeparator: '',
         editable: false,
         valueField: 'id',
         displayField: 'name',

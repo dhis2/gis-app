@@ -1212,9 +1212,16 @@ export default function LayerWidgetThematic(gis, layer) {
                     });
                 }
 
-                for (var i = 0; i < r.length; i++) {
+                for (var i = 0, item; i < r.length; i++) {
+                    item = r[i].data;
+
+                    if (levels.length && levels.indexOf(item.depth) === -1) {
+                        gis.alert(item.name + ' ' + GIS.i18n.is_not_part_of_selected_organisation_unit_levels);
+                        return null;
+                    }
+
                     config.items.push({
-                        id: r[i].data.id,
+                        id: item.id,
                         name: ''
                     });
                 }
@@ -1959,6 +1966,8 @@ export default function LayerWidgetThematic(gis, layer) {
         // ou
         if (treePanel.getDimension()) {
             view.rows = [treePanel.getDimension()];
+        } else {
+            return;
         }
 
         // pe
@@ -1988,8 +1997,6 @@ export default function LayerWidgetThematic(gis, layer) {
                 id: legendSet.getValue()
             };
         }
-
-        var test = gis.api.layout.Layout(view);
 
         return gis.api.layout.Layout(view);
     };

@@ -369,7 +369,7 @@ export default function createExtensions(gis) {
                 width: ct.numberFieldWidth,
                 height: 21,
                 minValue: 0,
-                maxValue: 9999999,
+                maxValue: 100,
                 allowBlank: false,
                 disabled: true,
                 value: ct.numberFieldValue,

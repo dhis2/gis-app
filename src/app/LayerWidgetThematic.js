@@ -5,6 +5,7 @@ import isObject from 'd2-utilizr/lib/isObject';
 import isString from 'd2-utilizr/lib/isString';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
 import arrayContains from 'd2-utilizr/lib/arrayContains';
+import arrayMax from 'd2-utilizr/lib/arrayMax';
 import arraySort from 'd2-utilizr/lib/arraySort';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 import arrayPluck from 'd2-utilizr/lib/arrayPluck';
@@ -1203,7 +1204,8 @@ export default function LayerWidgetThematic(gis, layer) {
                 }
             }
             else if (toolMenu.menuValue === 'level') {
-                var levels = organisationUnitLevel.getValue();
+                var levels = organisationUnitLevel.getValue(),
+                    maxLevel = arrayMax(levels);
 
                 for (var i = 0; i < levels.length; i++) {
                     config.items.push({
@@ -1215,7 +1217,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 for (var i = 0, item; i < r.length; i++) {
                     item = r[i].data;
 
-                    if (levels.length && levels.indexOf(item.depth) === -1) {
+                    if (maxLevel && item.depth > maxLevel) {
                         gis.alert(item.name + ' ' + GIS.i18n.is_not_part_of_selected_organisation_unit_levels);
                         return null;
                     }

@@ -1025,7 +1025,11 @@ export default function LayerWidgetThematic(gis, layer) {
         displayField: 'name',
         width: gis.conf.layout.widget.item_width,
         rootVisible: false,
-        autoScroll: true,
+        autoScroll: false, // https://www.sencha.com/forum/archive/index.php/t-144780.html?s=b3a72bbd82e5cc20417f0b5779439b97
+        scroll:false,
+        viewConfig: {
+            style: 'overflow-y:auto'
+        },
         multiSelect: true,
         rendered: false,
         reset: function() {

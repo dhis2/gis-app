@@ -647,7 +647,11 @@ export default function LayerWidgetEvent(gis, layer) {
         style: 'border-top: 1px solid #ddd; padding-top: 1px;',
         displayField: 'name',
         rootVisible: false,
-        autoScroll: true,
+        autoScroll: false, // https://www.sencha.com/forum/archive/index.php/t-144780.html?s=b3a72bbd82e5cc20417f0b5779439b97
+        scroll:false,
+        viewConfig: {
+            style: 'overflow-y:auto'
+        },
         multiSelect: true,
         rendered: false,
         reset: function() {
@@ -925,15 +929,7 @@ export default function LayerWidgetEvent(gis, layer) {
         bodyStyle: 'padding:1px',
         hideCollapseTool: true,
         items: [
-            {
-                layout: 'column',
-                width: accBaseWidth,
-                bodyStyle: 'border:0 none',
-                style: 'padding-bottom:1px',
-                items: [
-                    organisationUnitPanel
-                ]
-            },
+            organisationUnitPanel,
             treePanel
         ]
     });
@@ -1054,8 +1050,6 @@ export default function LayerWidgetEvent(gis, layer) {
         startDate.reset();
         endDate.reset();
 
-        // toolMenu.clickHandler(toolMenu.menuValue);
-
         if (!skipTree) {
             treePanel.reset();
         }
@@ -1063,9 +1057,6 @@ export default function LayerWidgetEvent(gis, layer) {
         userOrganisationUnit.setValue(false);
         userOrganisationUnitChildren.setValue(false);
         userOrganisationUnitGrandChildren.setValue(false);
-
-        // organisationUnitLevel.clearValue();
-        // organisationUnitGroup.clearValue();
     };
 
     setGui = function(view) {
@@ -1123,36 +1114,18 @@ export default function LayerWidgetEvent(gis, layer) {
                 }
                 else if (item.id === 'USER_ORGUNIT_GRANDCHILDREN') {
                     isOugc = true;
-                } /*
-                else if (item.id.substr(0,5) === 'LEVEL') {
-                    levels.push(parseInt(item.id.split('-')[1]));
-                }
-                else if (item.id.substr(0,8) === 'OU_GROUP') {
-                    groups.push(parseInt(item.id.split('-')[1]));
-                }*/ else {
+                } else {
                     isTopOu = true;
                 }
             }
 
-            /*
-            if (levels.length) {
-                toolMenu.clickHandler('level');
-                organisationUnitLevel.setValue(levels);
-            }
-            else if (groups.length) {
-                toolMenu.clickHandler('group');
-                organisationUnitGroup.setValue(groups);
-            }
-            else */
             if (!isTopOu) {
-                // toolMenu.clickHandler('orgunit');
                 userOrganisationUnit.setValue(isOu);
                 userOrganisationUnitChildren.setValue(isOuc);
                 userOrganisationUnitGrandChildren.setValue(isOugc);
             }
 
             treePanel.selectGraphMap(view.parentGraphMap);
-
 
             // Options
             if (view.eventClustering !== undefined) {

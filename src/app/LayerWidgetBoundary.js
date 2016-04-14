@@ -236,7 +236,7 @@ export default function LayerWidgetBoundary(gis, layer) {
                     item = r[i].data;
 
                     if (maxLevel && item.depth > maxLevel) {
-                        gis.alert(item.name + ' ' + GIS.i18n.is_not_part_of_selected_organisation_unit_levels);
+                        gis.alert(GIS.i18n.you_can_not_select_organisation_units_below_the_selected_level + ' (' + item.name + ')');
                         return null;
                     }
 

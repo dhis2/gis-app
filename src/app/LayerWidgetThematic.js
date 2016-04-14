@@ -1980,6 +1980,9 @@ export default function LayerWidgetThematic(gis, layer) {
                     id: period.getValue()
                 }]
             }];
+        } else {
+            gis.alert(GIS.i18n.no_period_selected);
+            return;
         }
 
         // options

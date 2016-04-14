@@ -882,6 +882,8 @@ export default function LayerWidgetEvent(gis, layer) {
                 this.getSelectionModel().select(0);
             },
             itemcontextmenu: function(v, r, h, i, e) {
+                e.stopEvent();
+
                 v.getSelectionModel().select(r, false);
 
                 if (v.menu) {

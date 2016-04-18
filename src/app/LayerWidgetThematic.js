@@ -1650,30 +1650,22 @@ export default function LayerWidgetThematic(gis, layer) {
         ]
     });
 
+    labelPanel = Ext.create('Ext.ux.panel.LabelPanel', {
+        bodyStyle: 'border: 0 none; padding-top: 10px;',
+        height: 34,
+    });
+
     legend = Ext.create('Ext.panel.Panel', {
-        title: '<div class="ns-panel-title-data">' + GIS.i18n.legend + '</div>',
+        title: '<div class="ns-panel-title-data">' + GIS.i18n.options + '</div>',
         hideCollapseTool: true,
         items: [
             legendType,
             legendSet,
             methodPanel,
             lowPanel,
-            highPanel
+            highPanel,
+            labelPanel
         ],
-        listeners: {
-            added: function() {
-                accordionPanels.push(this);
-            }
-        }
-    });
-
-
-    labelPanel = Ext.create('Ext.ux.panel.LabelPanel');
-
-    label = Ext.create('Ext.panel.Panel', {
-        title: '<div class="ns-panel-title-data">' + GIS.i18n.options + '</div>',
-        hideCollapseTool: true,
-        items: labelPanel,
         listeners: {
             added: function() {
                 accordionPanels.push(this);
@@ -2022,8 +2014,7 @@ export default function LayerWidgetThematic(gis, layer) {
             var panels = [
                 data,
                 organisationUnit,
-                legend,
-                label
+                legend
             ];
 
             last = panels[panels.length - 1];

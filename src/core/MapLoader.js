@@ -139,6 +139,12 @@ export default function MapLoader(gis, isSession, applyConfig) {
 					if (layer.widget) {
 						layer.widget.reset();
 					}
+
+					// Clear legend
+					if (layer.legendPanel) {
+						layer.legendPanel.update('');
+						layer.legendPanel.collapse();
+					}
 				}
 			}
 		}

@@ -1,10 +1,14 @@
-import core from './core/index.js';
+import GIS from './core/index.js';
 import app from './app/index.js';
 import isObject from 'd2-utilizr/lib/isObject';
 import isString from 'd2-utilizr/lib/isString';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
 import arrayContains from 'd2-utilizr/lib/arrayContains';
 import arrayPluck from 'd2-utilizr/lib/arrayPluck';
+
+window.GIS = GIS;
+
+GIS.app = app;
 
 Ext.onReady( function() {
     var createViewport,

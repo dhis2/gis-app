@@ -431,12 +431,9 @@ export default function createExtensions(gis) {
 
     var scrollbarWidth = /\bchrome\b/.test(navigator.userAgent.toLowerCase()) ? 8 : 17,
         nameCmpWidth = 440 - 12 - scrollbarWidth,
-        buttonCmpWidth = 20,
         operatorCmpWidth = 70,
-        searchCmpWidth = 70,
         triggerCmpWidth = 17,
         valueCmpWidth = 350,
-        rangeSetWidth = 135,
         namePadding = '3px 3px',
         margin = '3px 0 1px',
         removeCmpStyle = 'padding: 0; margin-left: 3px';
@@ -468,10 +465,7 @@ export default function createExtensions(gis) {
             }
         },
         initComponent: function() {
-            var container = this,
-                idProperty = 'id',
-                nameProperty = 'name',
-                displayProperty = 'displayName';
+            var container = this;
 
             this.nameCmp = Ext.create('Ext.form.Label', {
                 text: this.dataElement.name,

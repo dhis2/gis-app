@@ -6,7 +6,6 @@ import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerEvent(gis, layer) {
     var spatialSupport = gis.init.systemInfo.databaseInfo.spatialSupport,
-        compareView,
         loadData,
         afterLoad,
         toGeoJson,
@@ -22,8 +21,7 @@ export default function LayerHandlerEvent(gis, layer) {
             getDataElementOptionSets,
             loadDataElements,
             onEventCountSuccess,
-            success,
-            dimConf = gis.conf.finals.dimension;
+            success;
 
         view = view || layer.view;
 

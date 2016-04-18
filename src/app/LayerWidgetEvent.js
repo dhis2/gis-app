@@ -28,7 +28,6 @@ export default function LayerWidgetEvent(gis, layer) {
         startDate,
         endDate,
         onDateFieldRender,
-        periodsStore,
         periods,
         period,
 
@@ -59,7 +58,6 @@ export default function LayerWidgetEvent(gis, layer) {
 
     // constants
         baseWidth = 444,
-        toolWidth = 36,
 
         accBaseWidth = baseWidth - 2,
         dimConf = gis.conf.finals.dimension;
@@ -1065,8 +1063,6 @@ export default function LayerWidgetEvent(gis, layer) {
             isOuc = false,
             isOugc = false,
             isTopOu = false,
-            levels = [],
-            groups = [],
             setWidgetGui,
             setLayerGui;
 

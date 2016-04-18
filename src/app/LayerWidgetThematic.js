@@ -74,7 +74,6 @@ export default function LayerWidgetThematic(gis, layer) {
         legend,
 
         labelPanel,
-        label,
 
         reset,
         setGui,
@@ -1771,7 +1770,6 @@ export default function LayerWidgetThematic(gis, layer) {
             levels = [],
             groups = [],
             objectNameProgramCmpMap = {},
-            setLayerGui,
             setDxGui,
             setPeGui,
             setOuGui,

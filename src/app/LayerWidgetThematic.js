@@ -1019,7 +1019,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
     treePanel = Ext.create('Ext.tree.Panel', {
         cls: 'gis-tree',
-        height: 277,
+        height: 304,
         style: 'border-top: 1px solid #ddd; padding-top: 1px',
         displayField: 'name',
         width: gis.conf.layout.widget.item_width,

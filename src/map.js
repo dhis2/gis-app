@@ -372,7 +372,7 @@ Ext.onReady(function() {
             return container;
         };
 
-        initialize = (function() {
+        (function() {
             var appConfig;
 
             if (!validateConfig()) {

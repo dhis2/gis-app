@@ -221,7 +221,6 @@ Ext.onReady(function() {
 
             // local vars
             contextPath = init.contextPath;
-            keyUiLocale = init.userAccount.settings.keyUiLocale;
             keyAnalysisDisplayProperty = init.userAccount.settings.keyAnalysisDisplayProperty;
             namePropertyUrl = keyAnalysisDisplayProperty + '|rename(name)';
             dateFormat = init.systemInfo.dateFormat;

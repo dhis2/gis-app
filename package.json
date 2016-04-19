@@ -30,7 +30,8 @@
   "homepage": "https://github.com/dhis2/dhis2-gis#readme",
   "dependencies": {
     "d2-utilizr": "^0.2.7",
-    "whatwg-fetch": "^0.10.1"
+    "whatwg-fetch": "^0.10.1",
+    "dhis2-gis-api": "0.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.3.13",

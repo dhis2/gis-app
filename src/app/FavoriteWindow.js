@@ -71,6 +71,7 @@ export default function FavoriteWindow(gis) {
                     layer,
                     views = [],
                     view,
+                    basemap = 'none',
                     map;
 
                 if (!layers.length) {
@@ -106,6 +107,7 @@ export default function FavoriteWindow(gis) {
                     longitude: centerPoint.lng,
                     latitude: centerPoint.lat,
                     zoom: gis.instance.getZoom(),
+                    basemap: gis.util.map.getBasemap(),
                     mapViews: views,
                     user: {
                         id: 'currentUser'

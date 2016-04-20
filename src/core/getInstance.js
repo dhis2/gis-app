@@ -273,7 +273,8 @@ export default function getInstance(init) {
             'displayName|rename(name)',
             'longitude',
             'latitude',
-            'zoom'
+            'zoom',
+            'basemap'
         ];
 
         conf.url.analysisFields = [
@@ -374,6 +375,22 @@ export default function getInstance(init) {
             }
         };
 
+        // Returns the current basemap
+        util.map.getBasemap = function() {
+            var layer;
+
+            for (var layerId in gis.layer) {
+                if (gis.layer.hasOwnProperty(layerId)) {
+                    layer = gis.layer[layerId];
+
+                    if (layer.layerType === 'base' && layer.instance && gis.instance.hasLayer(layer.instance)) {
+                        return layerId;
+                    }
+                }
+            }
+
+            return 'none';
+        };
 
         util.map.getVisibleVectorLayers = function() {
             var layers = [];

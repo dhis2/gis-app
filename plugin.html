@@ -24,6 +24,7 @@
         Ext.onReady(function() {
             var url = "http://localhost:8080";
 
+            /*
             GIS.plugin.getMap({
                 url: url,
                 el: "map1",
@@ -31,6 +32,28 @@
                 crossDomain: true,
                 username: 'admin',
                 password: 'district'
+            });
+            */
+
+            GIS.plugin.getMap({
+                url: url,
+                el: "map1",
+                crossDomain: true,
+                username: 'admin',
+                password: 'district',
+                dashboard: true,
+                hideLegend: true,
+                basemap: 'googleStreets',
+                mapViews: [
+                    {
+                        layer: 'boundary',
+                        rows: [{dimension: 'ou', items: [{id: 'LEVEL-2'}, {id: 'ImspTQPwCqd'}]}],
+                        labels: {
+                            fontSize: 14,
+                            color: '#00f'
+                        }
+                    }
+                ]
             });
 
             GIS.plugin.getMap({
@@ -41,7 +64,7 @@
                 password: 'district',
                 dashboard: true,
                 hideLegend: true,
-                baseLayer: 'none',
+                basemap: 'googleStreets',
                 mapViews: [
                     {
                         layer: 'boundary',

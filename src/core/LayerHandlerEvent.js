@@ -196,7 +196,6 @@ export default function LayerHandlerEvent(gis, layer) {
                 }
             }
 
-
             if (r.count < 2000) { // Client clustering if less than 2000 events
                 loadEvents();
             } else { // Server clustering

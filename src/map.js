@@ -223,7 +223,6 @@ Ext.onReady(function() {
             contextPath = init.contextPath;
             keyAnalysisDisplayProperty = init.userAccount.settings.keyAnalysisDisplayProperty;
             namePropertyUrl = keyAnalysisDisplayProperty + '|rename(name)';
-            dateFormat = init.systemInfo.dateFormat;
 
             init.namePropertyUrl = namePropertyUrl;
 
@@ -356,18 +355,8 @@ Ext.onReady(function() {
             map.invalidateSize();
             map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
 
-            // base layer
-            gis.map.baseLayer = gis.map.baseLayer || 'none';
-
-            var base = isString(gis.map.baseLayer) ? gis.map.baseLayer.split(' ').join('').toLowerCase() : gis.map.baseLayer;
-
-            if (!base || base === 'none' || base === 'off') {
-                map.addLayer(gis.layer.openStreetMap.config);
-            } else if (base === 'gs' || base === 'googlestreets') {
-                map.addLayer(gis.layer.googleStreets.config);
-            } else if (base === 'gh' || base === 'googlehybrid') {
-                map.addLayer(gis.layer.googleHybrid.config);
-            }
+            // basemap
+            gis.map.basemap = gis.map.basemap || 'openStreetMap';
 
             return container;
         };

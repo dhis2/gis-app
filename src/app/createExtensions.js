@@ -168,7 +168,6 @@ export default function createExtensions(gis) {
 
             this.setOpacity(this.opacity);
 
-            //this.callParent();
             this.self.superclass.initComponent.call(this);
         }
     });

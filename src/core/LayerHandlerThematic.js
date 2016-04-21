@@ -21,7 +21,6 @@ export default function LayerHandlerThematic(gis, layer) {
         contextMenu,
         onFeatureClick,
         onFeatureRightClick,
-        onMapClick,
         loader;
 
     compareView = function (view, doExecute) {
@@ -640,9 +639,6 @@ export default function LayerHandlerThematic(gis, layer) {
 
         layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
-
-        gis.instance.on('click', onMapClick);
-
     };
 
     onFeatureClick = function (evt) {
@@ -652,14 +648,6 @@ export default function LayerHandlerThematic(gis, layer) {
     onFeatureRightClick = function (evt) {
         contextMenu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
         contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
-    };
-
-    // Remove context menu on map click
-    onMapClick = function() {
-        if (contextMenu) {
-            contextMenu.destroy();
-        }
-        contextMenu = null;
     };
 
     updateLegend = function (view, metaData, options) {

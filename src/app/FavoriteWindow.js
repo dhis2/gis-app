@@ -71,7 +71,6 @@ export default function FavoriteWindow(gis) {
                     layer,
                     views = [],
                     view,
-                    basemap = 'none',
                     map;
 
                 if (!layers.length) {
@@ -147,7 +146,6 @@ export default function FavoriteWindow(gis) {
                         map = JSON.parse(r.responseText);
 
                         map.name = name;
-                        map.basemap = gis.util.map.getBasemap();
 
                         Ext.Ajax.request({
                             url: encodeURI(gis.init.contextPath + '/api/maps/' + id),
@@ -363,7 +361,8 @@ export default function FavoriteWindow(gis) {
                                             longitude: centerPoint.lng,
                                             latitude: centerPoint.lat,
                                             zoom: gis.instance.getZoom(),
-                                            mapViews: views
+                                            mapViews: views,
+                                            basemap: gis.util.map.getBasemap()
                                         };
 
                                         Ext.Ajax.request({

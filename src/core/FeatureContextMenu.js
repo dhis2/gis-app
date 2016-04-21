@@ -452,11 +452,11 @@ export default function FeatureContextMenu(gis, layer, instance) {
         },
         items: menuItems,
         listeners: {
-            open: function() {
-                console.log('open');;
+            afterrender: function() {
+                console.log('afterrender');
             },
-            close: function() {
-                console.log('close');
+            destroy: function() {
+                console.log('destroy');
             }
         }
     });

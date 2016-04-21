@@ -450,7 +450,15 @@ export default function FeatureContextMenu(gis, layer, instance) {
         defaults: {
             bodyStyle: 'padding-right:6px'
         },
-        items: menuItems
+        items: menuItems,
+        listeners: {
+            open: function() {
+                console.log('open');;
+            },
+            close: function() {
+                console.log('close');
+            }
+        }
     });
 
 };

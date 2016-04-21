@@ -57,7 +57,7 @@ export default function LayerHandlerEvent(gis, layer) {
             for (var i = 0, element; i < view.columns.length; i++) {
                 element = view.columns[i];
 
-                if (!(element.dimension === 'dx' && !element.filter)) { // Don't allow empty dx dimension
+                if (element.dimension !== 'dx') { // API sometimes returns empty dx filter
                     paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
                 }
             }

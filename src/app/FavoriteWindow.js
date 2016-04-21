@@ -147,6 +147,7 @@ export default function FavoriteWindow(gis) {
                         map = JSON.parse(r.responseText);
 
                         map.name = name;
+                        map.basemap = gis.util.map.getBasemap();
 
                         Ext.Ajax.request({
                             url: encodeURI(gis.init.contextPath + '/api/maps/' + id),

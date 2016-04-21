@@ -347,6 +347,9 @@ Ext.onReady(function() {
                 map.invalidateSize();
             };
 
+            // Needed to fix bug with client cluster on google maps layer
+            map.options.maxZoom = 18;
+
             map.addControl({
                 type: 'zoom',
                 position: 'topright'

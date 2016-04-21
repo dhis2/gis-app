@@ -240,8 +240,6 @@ export default function LayerHandlerFacility(gis, layer) {
         layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
 
-        layer.view = view;
-
 		afterLoad(view);
 	};
 

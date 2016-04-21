@@ -88,6 +88,11 @@ export default function FavoriteWindow(gis) {
 
                     view = Ext.clone(layer.view);
 
+                    // TODO temp fix: https://github.com/dhis2/dhis2-gis/issues/108
+                    if (view.method && view.method === 2 && view.legendSet) {
+                        delete view.legendSet;
+                    }
+
                     view.hidden = !gis.instance.hasLayer(layer.instance);
 
                     // add
@@ -112,6 +117,9 @@ export default function FavoriteWindow(gis) {
                         id: 'currentUser'
                     }
                 };
+
+
+                console.log("map", map);
 
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.contextPath + '/api/maps/'),

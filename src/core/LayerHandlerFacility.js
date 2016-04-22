@@ -279,6 +279,8 @@ export default function LayerHandlerFacility(gis, layer) {
 
 	afterLoad = function(view) {
 
+		layer.view = view;
+
 		// Legend
 		if (gis.viewport) {
 			gis.viewport.eastRegion.doLayout();

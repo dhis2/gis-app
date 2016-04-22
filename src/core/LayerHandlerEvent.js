@@ -419,7 +419,6 @@ export default function LayerHandlerEvent(gis, layer) {
 
         layer.view = view;
 
-
         // Layer
         if (layer.item) {
             layer.item.setValue(true, view.opacity);

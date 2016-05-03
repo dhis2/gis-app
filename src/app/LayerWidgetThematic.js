@@ -1791,6 +1791,11 @@ export default function LayerWidgetThematic(gis, layer) {
 
         setDxGui = function() {
 
+            // TODO, objectName/dimensionItemType must be sorted
+            if (!dxItemType) {
+                return;
+            }
+
             // value type
             valueType.setValue(objectNameMap[dxObjectName]);
             valueTypeToggler(dxObjectName);

@@ -17,7 +17,7 @@ import InterpretationWindow from './InterpretationWindow.js';
 import FilterWindow from './FilterWindow.js';
 import FilterWindowFacility from './FilterWindowFacility.js';
 
-window.GIS.app = {
+export default {
     extendInstance,
     createExtensions,
     LayerMenu,

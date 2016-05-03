@@ -13,7 +13,9 @@ export default function FeatureContextMenu(gis, layer, instance) {
         drill,
         isPoint = feature.geometry.type === 'Point',
         att = feature.properties,
-        mapContainer = gis.instance.getContainer();
+        mapContainer = gis.instance.getContainer(),
+        onMapClick,
+        contextMenu;
 
     // Relocate
     showRelocate = function() {
@@ -443,14 +445,29 @@ export default function FeatureContextMenu(gis, layer, instance) {
         menuItems[menuItems.length - 1].addCls('gis-menu-item-last');
     }
 
-    return new Ext.menu.Menu({
+    // Hide context menu on map click
+    onMapClick = function () {
+        contextMenu.hide();
+    };
+
+    contextMenu = new Ext.menu.Menu({
         baseCls: 'gis-plugin gis-popupmenu',
         shadow: false,
         showSeparator: false,
         defaults: {
             bodyStyle: 'padding-right:6px'
         },
-        items: menuItems
+        items: menuItems,
+        listeners: {
+            show: function() {
+                gis.instance.on('click', onMapClick);
+            },
+            hide: function() {
+                gis.instance.off('click', onMapClick);
+            }
+        }
     });
 
+
+    return contextMenu;
 };

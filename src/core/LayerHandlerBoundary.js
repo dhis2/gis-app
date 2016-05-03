@@ -9,8 +9,10 @@ export default function LayerHandlerBoundary(gis, layer) {
         loadData,
         afterLoad,
         loader,
+        contextMenu,
         onFeatureClick,
-        onFeatureRightClick;
+        onFeatureRightClick,
+        onMapClick;
 
     compareView = function(view, doExecute) {
         var src = layer.view,
@@ -145,15 +147,6 @@ export default function LayerHandlerBoundary(gis, layer) {
             gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
         };
 
-        /*
-        fetch(url, {
-            headers: gis.init.defaultHeaders,
-            cache: 'default'
-        }).then(function(response) {
-            return response.json()
-        }).then(success).catch(failure);
-        */
-
         Ext.Ajax.request({
             url: encodeURI(url),
             disableCaching: false,
@@ -186,6 +179,7 @@ export default function LayerHandlerBoundary(gis, layer) {
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
             layer.instance.off('click', onFeatureClick);
             layer.instance.off('contextmenu', onFeatureRightClick);
+            gis.instance.off('click', onMapClick)
             gis.instance.removeLayer(layer.instance);
         }
 
@@ -198,6 +192,8 @@ export default function LayerHandlerBoundary(gis, layer) {
         layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
 
+        gis.instance.on('click', onMapClick);
+
         layer.view = view;
 
         afterLoad(view);
@@ -208,8 +204,16 @@ export default function LayerHandlerBoundary(gis, layer) {
     };
 
     onFeatureRightClick = function(evt) {
-        var menu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
-        menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
+        contextMenu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
+        contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
+    };
+
+    // Remove context menu on map click
+    onMapClick = function() {
+        if (contextMenu) {
+            contextMenu.destroy();
+        }
+        contextMenu = null;
     };
 
     afterLoad = function(view) {

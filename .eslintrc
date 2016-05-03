@@ -1,3 +1,13 @@
 {
-  "extends": "dhis2"
+  "extends": "dhis2",
+  "rules": {
+    "func-names": 0,
+    "one-var": 0,
+    "no-var": 0,
+    "vars-on-top": 0,
+    "comma-dangle": 0,
+    "dot-notation": 0,
+    "no-shadow": 0,
+    "new-cap": 0
+  }
 }

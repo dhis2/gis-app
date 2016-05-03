@@ -474,8 +474,12 @@ export default function LegendSetWindow(gis) {
             cls: 'gis-grid',
             bodyStyle: 'border-top: 0 none',
             width: windowWidth - windowBorder - bodyPadding - (2 * gridPadding),
-            height: 350,
-            scroll: 'vertical',
+            height: 200,
+            autoScroll: false, // https://www.sencha.com/forum/archive/index.php/t-144780.html?s=b3a72bbd82e5cc20417f0b5779439b97
+            scroll:false,
+            viewConfig: {
+                style: 'overflow-y:auto'
+            },
             hideHeaders: true,
             currentItem: null,
             columns: [

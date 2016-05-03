@@ -16,8 +16,8 @@ Ext.isIE = (/trident/.test(Ext.userAgent));
 
 Ext.isIE11 = Ext.isIE && (/rv:11.0/.test(Ext.userAgent));
 
-// gis
-window.GIS = {
+// GIS
+export default {
     core: {
         instances: [],
         getMap,

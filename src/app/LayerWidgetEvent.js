@@ -28,7 +28,6 @@ export default function LayerWidgetEvent(gis, layer) {
         startDate,
         endDate,
         onDateFieldRender,
-        periodsStore,
         periods,
         period,
 
@@ -59,7 +58,6 @@ export default function LayerWidgetEvent(gis, layer) {
 
     // constants
         baseWidth = 444,
-        toolWidth = 36,
 
         accBaseWidth = baseWidth - 2,
         dimConf = gis.conf.finals.dimension;
@@ -642,12 +640,16 @@ export default function LayerWidgetEvent(gis, layer) {
     treePanel = Ext.create('Ext.tree.Panel', {
         cls: 'gis-tree',
         width: accBaseWidth - 4,
-        height: 333,
+        height: 313,
         bodyStyle: 'border:0 none',
-        style: 'border-top: 1px solid #ddd; padding-top: 1px',
+        style: 'border-top: 1px solid #ddd; padding-top: 1px;',
         displayField: 'name',
         rootVisible: false,
-        autoScroll: true,
+        autoScroll: false, // https://www.sencha.com/forum/archive/index.php/t-144780.html?s=b3a72bbd82e5cc20417f0b5779439b97
+        scroll:false,
+        viewConfig: {
+            style: 'overflow-y:auto'
+        },
         multiSelect: true,
         rendered: false,
         reset: function() {
@@ -797,69 +799,31 @@ export default function LayerWidgetEvent(gis, layer) {
                     items: []
                 };
 
-            //if (toolMenu.menuValue === 'orgunit') {
-                if (userOrganisationUnit.getValue() || userOrganisationUnitChildren.getValue() || userOrganisationUnitGrandChildren.getValue()) {
-                    if (userOrganisationUnit.getValue()) {
-                        config.items.push({
-                            id: 'USER_ORGUNIT',
-                            name: ''
-                        });
-                    }
-                    if (userOrganisationUnitChildren.getValue()) {
-                        config.items.push({
-                            id: 'USER_ORGUNIT_CHILDREN',
-                            name: ''
-                        });
-                    }
-                    if (userOrganisationUnitGrandChildren.getValue()) {
-                        config.items.push({
-                            id: 'USER_ORGUNIT_GRANDCHILDREN',
-                            name: ''
-                        });
-                    }
-                }
-                else {
-                    for (var i = 0; i < r.length; i++) {
-                        config.items.push({id: r[i].data.id});
-                    }
-                }
-            //}
-            /*
-            else if (toolMenu.menuValue === 'level') {
-                var levels = organisationUnitLevel.getValue();
-
-                for (var i = 0; i < levels.length; i++) {
+            if (userOrganisationUnit.getValue() || userOrganisationUnitChildren.getValue() || userOrganisationUnitGrandChildren.getValue()) {
+                if (userOrganisationUnit.getValue()) {
                     config.items.push({
-                        id: 'LEVEL-' + levels[i],
+                        id: 'USER_ORGUNIT',
                         name: ''
                     });
                 }
-
-                for (var i = 0; i < r.length; i++) {
+                if (userOrganisationUnitChildren.getValue()) {
                     config.items.push({
-                        id: r[i].data.id,
+                        id: 'USER_ORGUNIT_CHILDREN',
+                        name: ''
+                    });
+                }
+                if (userOrganisationUnitGrandChildren.getValue()) {
+                    config.items.push({
+                        id: 'USER_ORGUNIT_GRANDCHILDREN',
                         name: ''
                     });
                 }
             }
-            else if (toolMenu.menuValue === 'group') {
-                var groupIds = organisationUnitGroup.getValue();
-
-                for (var i = 0; i < groupIds.length; i++) {
-                    config.items.push({
-                        id: 'OU_GROUP-' + groupIds[i],
-                        name: ''
-                    });
-                }
-
+            else {
                 for (var i = 0; i < r.length; i++) {
-                    config.items.push({
-                        id: r[i].data.id,
-                        name: ''
-                    });
+                    config.items.push({id: r[i].data.id});
                 }
             }
-            */
 
             return config.items.length ? config : null;
         },
@@ -882,6 +846,8 @@ export default function LayerWidgetEvent(gis, layer) {
                 this.getSelectionModel().select(0);
             },
             itemcontextmenu: function(v, r, h, i, e) {
+                e.stopEvent();
+
                 v.getSelectionModel().select(r, false);
 
                 if (v.menu) {
@@ -945,39 +911,7 @@ export default function LayerWidgetEvent(gis, layer) {
         }
     });
 
-    /*
-    organisationUnitLevel = Ext.create('Ext.form.field.ComboBox', {
-        cls: 'gis-combo',
-        multiSelect: true,
-        style: 'margin-bottom:0',
-        width: accBaseWidth - toolWidth - 1 - 4,
-        valueField: 'level',
-        displayField: 'name',
-        emptyText: GIS.i18n.select_organisation_unit_levels,
-        editable: false,
-        store: {
-            fields: ['id', 'name', 'level'],
-            data: gis.init.organisationUnitLevels
-        }
-    });
-    */
-
-    /*
-    organisationUnitGroup = Ext.create('Ext.form.field.ComboBox', {
-        cls: 'gis-combo',
-        multiSelect: true,
-        style: 'margin-bottom:0',
-        width: accBaseWidth - toolWidth - 1 - 4,
-        valueField: 'id',
-        displayField: 'name',
-        emptyText: GIS.i18n.select_organisation_unit_groups,
-        editable: false,
-        store: gis.store.organisationUnitGroup
-    });
-    */
-
     organisationUnitPanel = Ext.create('Ext.panel.Panel', {
-        // width: accBaseWidth - toolWidth - 2,
         width: accBaseWidth,
         layout: 'column',
         bodyStyle: 'border:0 none',
@@ -985,136 +919,17 @@ export default function LayerWidgetEvent(gis, layer) {
             userOrganisationUnit,
             userOrganisationUnitChildren,
             userOrganisationUnitGrandChildren
-            //organisationUnitLevel,
-            //organisationUnitGroup
         ]
     });
-
-    /*
-    toolMenu = Ext.create('Ext.menu.Menu', {
-        shadow: false,
-        showSeparator: false,
-        menuValue: 'level',
-        clickHandler: function(param) {
-            param = param || this.menuValue;
-
-            var items = this.items.items;
-            this.menuValue = param;
-
-            // Menu item icon cls
-            for (var i = 0; i < items.length; i++) {
-                if (items[i].setIconCls) {
-                    if (items[i].param === param) {
-                        items[i].setIconCls('gis-menu-item-selected');
-                    }
-                    else {
-                        items[i].setIconCls('gis-menu-item-unselected');
-                    }
-                }
-            }
-
-            // Gui
-            if (param === 'orgunit') {
-                userOrganisationUnit.show();
-                userOrganisationUnitChildren.show();
-                userOrganisationUnitGrandChildren.show();
-                organisationUnitLevel.hide();
-                organisationUnitGroup.hide();
-
-                if (userOrganisationUnit.getValue() || userOrganisationUnitChildren.getValue()) {
-                    treePanel.disable();
-                }
-            }
-            else if (param === 'level') {
-                userOrganisationUnit.hide();
-                userOrganisationUnitChildren.hide();
-                userOrganisationUnitGrandChildren.hide();
-                organisationUnitLevel.show();
-                organisationUnitGroup.hide();
-                treePanel.enable();
-            }
-            else if (param === 'group') {
-                userOrganisationUnit.hide();
-                userOrganisationUnitChildren.hide();
-                userOrganisationUnitGrandChildren.hide();
-                organisationUnitLevel.hide();
-                organisationUnitGroup.show();
-                treePanel.enable();
-            }
-        },
-        items: [
-            {
-                xtype: 'label',
-                text: 'Selection mode',
-                style: 'padding:7px 5px 5px 7px; font-weight:bold; border:0 none'
-            },
-            {
-                text: GIS.i18n.select_organisation_units + '&nbsp;&nbsp;',
-                param: 'orgunit'
-            },
-            {
-                text: 'Select levels' + '&nbsp;&nbsp;',
-                param: 'level'
-            },
-            {
-                text: 'Select groups' + '&nbsp;&nbsp;',
-                param: 'group'
-            }
-        ],
-        listeners: {
-            afterrender: function() {
-                this.getEl().addCls('gis-btn-menu');
-            },
-            click: function(menu, item) {
-                this.clickHandler(item.param);
-            }
-        }
-    });
-    */
-
-    /*
-    tool = Ext.create('Ext.button.Button', {
-        cls: 'gis-button-organisationunitselection',
-        iconCls: 'gis-button-icon-gear',
-        width: toolWidth,
-        height: 24,
-        menu: toolMenu
-    });
-    */
-
-    /*
-    toolPanel = Ext.create('Ext.panel.Panel', {
-        width: toolWidth,
-        bodyStyle: 'border:0 none; text-align:right',
-        style: 'margin-right:1px',
-        items: tool
-    });
-    */
 
     organisationUnit = Ext.create('Ext.panel.Panel', {
         title: '<div class="gis-panel-title-organisationunit">' + GIS.i18n.organisation_units + '</div>',
         bodyStyle: 'padding:1px',
         hideCollapseTool: true,
         items: [
-            {
-                layout: 'column',
-                width: accBaseWidth,
-                bodyStyle: 'border:0 none',
-                style: 'padding-bottom:1px',
-                items: [
-                    //toolPanel,
-                    organisationUnitPanel
-                ]
-            },
+            organisationUnitPanel,
             treePanel
         ]
-        /*
-        listeners: {
-            render: function() {
-                toolMenu.clickHandler();
-            }
-        }
-        */
     });
 
     eventColor = Ext.create('Ext.ux.button.ColorButton', {
@@ -1233,8 +1048,6 @@ export default function LayerWidgetEvent(gis, layer) {
         startDate.reset();
         endDate.reset();
 
-        // toolMenu.clickHandler(toolMenu.menuValue);
-
         if (!skipTree) {
             treePanel.reset();
         }
@@ -1242,9 +1055,6 @@ export default function LayerWidgetEvent(gis, layer) {
         userOrganisationUnit.setValue(false);
         userOrganisationUnitChildren.setValue(false);
         userOrganisationUnitGrandChildren.setValue(false);
-
-        // organisationUnitLevel.clearValue();
-        // organisationUnitGroup.clearValue();
     };
 
     setGui = function(view) {
@@ -1253,8 +1063,6 @@ export default function LayerWidgetEvent(gis, layer) {
             isOuc = false,
             isOugc = false,
             isTopOu = false,
-            levels = [],
-            groups = [],
             setWidgetGui,
             setLayerGui;
 
@@ -1302,36 +1110,18 @@ export default function LayerWidgetEvent(gis, layer) {
                 }
                 else if (item.id === 'USER_ORGUNIT_GRANDCHILDREN') {
                     isOugc = true;
-                } /*
-                else if (item.id.substr(0,5) === 'LEVEL') {
-                    levels.push(parseInt(item.id.split('-')[1]));
-                }
-                else if (item.id.substr(0,8) === 'OU_GROUP') {
-                    groups.push(parseInt(item.id.split('-')[1]));
-                }*/ else {
+                } else {
                     isTopOu = true;
                 }
             }
 
-            /*
-            if (levels.length) {
-                toolMenu.clickHandler('level');
-                organisationUnitLevel.setValue(levels);
-            }
-            else if (groups.length) {
-                toolMenu.clickHandler('group');
-                organisationUnitGroup.setValue(groups);
-            }
-            else */
             if (!isTopOu) {
-                // toolMenu.clickHandler('orgunit');
                 userOrganisationUnit.setValue(isOu);
                 userOrganisationUnitChildren.setValue(isOuc);
                 userOrganisationUnitGrandChildren.setValue(isOugc);
             }
 
             treePanel.selectGraphMap(view.parentGraphMap);
-
 
             // Options
             if (view.eventClustering !== undefined) {

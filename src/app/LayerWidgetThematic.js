@@ -5,6 +5,7 @@ import isObject from 'd2-utilizr/lib/isObject';
 import isString from 'd2-utilizr/lib/isString';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
 import arrayContains from 'd2-utilizr/lib/arrayContains';
+import arrayMax from 'd2-utilizr/lib/arrayMax';
 import arraySort from 'd2-utilizr/lib/arraySort';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 import arrayPluck from 'd2-utilizr/lib/arrayPluck';
@@ -73,7 +74,6 @@ export default function LayerWidgetThematic(gis, layer) {
         legend,
 
         labelPanel,
-        label,
 
         reset,
         setGui,
@@ -1019,12 +1019,16 @@ export default function LayerWidgetThematic(gis, layer) {
 
     treePanel = Ext.create('Ext.tree.Panel', {
         cls: 'gis-tree',
-        height: 277,
+        height: 304,
         style: 'border-top: 1px solid #ddd; padding-top: 1px',
         displayField: 'name',
         width: gis.conf.layout.widget.item_width,
         rootVisible: false,
-        autoScroll: true,
+        autoScroll: false, // https://www.sencha.com/forum/archive/index.php/t-144780.html?s=b3a72bbd82e5cc20417f0b5779439b97
+        scroll:false,
+        viewConfig: {
+            style: 'overflow-y:auto'
+        },
         multiSelect: true,
         rendered: false,
         reset: function() {
@@ -1203,7 +1207,8 @@ export default function LayerWidgetThematic(gis, layer) {
                 }
             }
             else if (toolMenu.menuValue === 'level') {
-                var levels = organisationUnitLevel.getValue();
+                var levels = organisationUnitLevel.getValue(),
+                    maxLevel = arrayMax(levels);
 
                 for (var i = 0; i < levels.length; i++) {
                     config.items.push({
@@ -1212,9 +1217,16 @@ export default function LayerWidgetThematic(gis, layer) {
                     });
                 }
 
-                for (var i = 0; i < r.length; i++) {
+                for (var i = 0, item; i < r.length; i++) {
+                    item = r[i].data;
+
+                    if (maxLevel && item.depth > maxLevel) {
+                        gis.alert(GIS.i18n.you_can_not_select_organisation_units_below_the_selected_level + ' (' + item.name + ')');
+                        return null;
+                    }
+
                     config.items.push({
-                        id: r[i].data.id,
+                        id: item.id,
                         name: ''
                     });
                 }
@@ -1258,6 +1270,8 @@ export default function LayerWidgetThematic(gis, layer) {
                 this.getSelectionModel().select(0);
             },
             itemcontextmenu: function(v, r, h, i, e) {
+                e.stopEvent();
+
                 v.getSelectionModel().select(r, false);
 
                 if (v.menu) {
@@ -1635,30 +1649,22 @@ export default function LayerWidgetThematic(gis, layer) {
         ]
     });
 
+    labelPanel = Ext.create('Ext.ux.panel.LabelPanel', {
+        bodyStyle: 'border: 0 none; padding-top: 10px;',
+        height: 34,
+    });
+
     legend = Ext.create('Ext.panel.Panel', {
-        title: '<div class="ns-panel-title-data">' + GIS.i18n.legend + '</div>',
+        title: '<div class="ns-panel-title-data">' + GIS.i18n.options + '</div>',
         hideCollapseTool: true,
         items: [
             legendType,
             legendSet,
             methodPanel,
             lowPanel,
-            highPanel
+            highPanel,
+            labelPanel
         ],
-        listeners: {
-            added: function() {
-                accordionPanels.push(this);
-            }
-        }
-    });
-
-
-    labelPanel = Ext.create('Ext.ux.panel.LabelPanel');
-
-    label = Ext.create('Ext.panel.Panel', {
-        title: '<div class="ns-panel-title-data">' + GIS.i18n.options + '</div>',
-        hideCollapseTool: true,
-        items: labelPanel,
         listeners: {
             added: function() {
                 accordionPanels.push(this);
@@ -1764,7 +1770,6 @@ export default function LayerWidgetThematic(gis, layer) {
             levels = [],
             groups = [],
             objectNameProgramCmpMap = {},
-            setLayerGui,
             setDxGui,
             setPeGui,
             setOuGui,
@@ -1964,6 +1969,8 @@ export default function LayerWidgetThematic(gis, layer) {
         // ou
         if (treePanel.getDimension()) {
             view.rows = [treePanel.getDimension()];
+        } else {
+            return;
         }
 
         // pe
@@ -1974,6 +1981,9 @@ export default function LayerWidgetThematic(gis, layer) {
                     id: period.getValue()
                 }]
             }];
+        } else {
+            gis.alert(GIS.i18n.no_period_selected);
+            return;
         }
 
         // options
@@ -1994,8 +2004,6 @@ export default function LayerWidgetThematic(gis, layer) {
             };
         }
 
-        var test = gis.api.layout.Layout(view);
-
         return gis.api.layout.Layout(view);
     };
 
@@ -2009,8 +2017,7 @@ export default function LayerWidgetThematic(gis, layer) {
             var panels = [
                 data,
                 organisationUnit,
-                legend,
-                label
+                legend
             ];
 
             last = panels[panels.length - 1];

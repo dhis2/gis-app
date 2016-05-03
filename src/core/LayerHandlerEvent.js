@@ -6,7 +6,6 @@ import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerEvent(gis, layer) {
     var spatialSupport = gis.init.systemInfo.databaseInfo.spatialSupport,
-        compareView,
         loadData,
         afterLoad,
         toGeoJson,
@@ -22,8 +21,7 @@ export default function LayerHandlerEvent(gis, layer) {
             getDataElementOptionSets,
             loadDataElements,
             onEventCountSuccess,
-            success,
-            dimConf = gis.conf.finals.dimension;
+            success;
 
         view = view || layer.view;
 
@@ -58,7 +56,10 @@ export default function LayerHandlerEvent(gis, layer) {
         if (view.columns) {
             for (var i = 0, element; i < view.columns.length; i++) {
                 element = view.columns[i];
-                paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
+
+                if (element.dimension !== 'dx') { // API sometimes returns empty dx filter
+                    paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
+                }
             }
         }
 
@@ -186,14 +187,17 @@ export default function LayerHandlerEvent(gis, layer) {
         };
 
         onEventCountSuccess = function(r) {
-            if (r.extent && r.extent !== 'null') {
+            if (r.extent) {
                 var extent = r.extent.match(/([-\d\.]+)/g),
                     bounds = [[extent[1], extent[0]],[extent[3], extent[2]]];
 
-                gis.instance.fitBounds(bounds);
                 view.bounds = bounds;
-            }
 
+                // Dont fit to bounds when layer is updated
+                if (!layer.instance) {
+                    gis.instance.fitBounds(bounds);
+                }
+            }
 
             if (r.count < 2000) { // Client clustering if less than 2000 events
                 loadEvents();
@@ -351,7 +355,8 @@ export default function LayerHandlerEvent(gis, layer) {
 
     // Add layer to map
     updateMap = function(view, features) {
-        var layerConfig;
+        var layerConfig,
+            layerUpdate = false;
 
         if (typeof features === 'string') { // Server cluster
             layerConfig = Ext.applyIf({
@@ -393,10 +398,16 @@ export default function LayerHandlerEvent(gis, layer) {
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
             gis.instance.removeLayer(layer.instance);
+            layerUpdate = true;
         }
 
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);
+
+        // Zoom
+        if (!layerUpdate && handler.zoomToVisibleExtent && layer.instance.getBounds) {
+            gis.instance.fitBounds(layer.instance.getBounds());
+        }
 
         // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
         //gis.util.map.orderLayers();
@@ -407,7 +418,6 @@ export default function LayerHandlerEvent(gis, layer) {
     afterLoad = function(view) {
 
         layer.view = view;
-
 
         // Layer
         if (layer.item) {
@@ -420,11 +430,6 @@ export default function LayerHandlerEvent(gis, layer) {
         // Gui
         if (handler.updateGui && isObject(layer.widget)) {
             layer.widget.setGui(view);
-        }
-
-        // Zoom
-        if (handler.zoomToVisibleExtent && layer.instance.getBounds) {
-            gis.instance.fitBounds(layer.instance.getBounds());
         }
 
         // Mask

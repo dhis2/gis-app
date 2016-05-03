@@ -1,4 +1,4 @@
-import core from './core/index.js';
+import GIS from './core/index.js';
 import isBoolean from 'd2-utilizr/lib/isBoolean';
 import isObject from 'd2-utilizr/lib/isObject';
 import isString from 'd2-utilizr/lib/isString';
@@ -6,8 +6,9 @@ import arrayClean from 'd2-utilizr/lib/arrayClean';
 import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 import '../scss/plugin.scss';
 
-Ext.onReady(function() {
+window.GIS = GIS;
 
+Ext.onReady(function() {
     var gis,
         init = {
             user: {},
@@ -50,7 +51,6 @@ Ext.onReady(function() {
         init.defaultHeaders = {};
 
         if (config.username && config.password) {
-
             Ext.Ajax.defaultHeaders = {
                 'Authorization': 'Basic ' + btoa(config.username + ':' + config.password)
             };
@@ -68,13 +68,13 @@ Ext.onReady(function() {
             }
         };
 
-        onSystemInfoLoad = function (r) {
+        onSystemInfoLoad = function(r) {
             var systemInfo = r.responseText ? JSON.parse(r.responseText) : r;
             init.systemInfo.databaseInfo = systemInfo.databaseInfo;
             fn();
         };
 
-        onSystemSettingsLoad = function (r) {
+        onSystemSettingsLoad = function(r) {
             var systemSettings = r.responseText ? JSON.parse(r.responseText) : r,
                 userAccountConfig;
 
@@ -91,7 +91,7 @@ Ext.onReady(function() {
             Ext.Ajax.request(userAccountConfig);
         };
 
-        onOrgUnitsLoad = function (r) {
+        onOrgUnitsLoad = function(r) {
             var organisationUnits = (r.responseText ? JSON.parse(r.responseText).organisationUnits : r) || [],
                 ou = [],
                 ouc = [];
@@ -117,19 +117,18 @@ Ext.onReady(function() {
             fn();
         };
 
-        onDimensionsLoad = function (r) {
+        onDimensionsLoad = function(r) {
             init.dimensions = r.responseText ? JSON.parse(r.responseText).dimensions : r.dimensions;
             fn();
         };
 
-        onUserAccountLoad = function (r) {
+        onUserAccountLoad = function(r) {
             init.userAccount = r.responseText ? JSON.parse(r.responseText) : r;
 
             // init
             if (window['dhis2'] && window['jQuery']) {
                 onScriptReady();
-            }
-            else {
+            } else {
                 Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/jQuery/jquery.min.js', function() {
                     Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.util.js', function() {
                         Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.js', function() {
@@ -146,7 +145,7 @@ Ext.onReady(function() {
             }
         };
 
-        onOptionSetsLoad = function (r) {
+        onOptionSetsLoad = function(r) {
             var optionSets = (r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets) || [],
                 store = dhis2.gis.store,
                 ids = [],
@@ -203,7 +202,7 @@ Ext.onReady(function() {
             });
         };
 
-        onScriptReady = function () {
+        onScriptReady = function() {
             var defaultKeyUiLocale = 'en',
                 defaultKeyAnalysisDisplayProperty = 'displayName',
                 displayPropertyMap = {
@@ -214,9 +213,7 @@ Ext.onReady(function() {
                 },
                 namePropertyUrl,
                 contextPath,
-                keyUiLocale,
                 keyAnalysisDisplayProperty,
-                dateFormat,
                 optionSetVersionConfig;
 
             init.userAccount.settings.keyUiLocale = init.userAccount.settings.keyUiLocale || defaultKeyUiLocale;
@@ -224,10 +221,8 @@ Ext.onReady(function() {
 
             // local vars
             contextPath = init.contextPath;
-            keyUiLocale = init.userAccount.settings.keyUiLocale;
             keyAnalysisDisplayProperty = init.userAccount.settings.keyAnalysisDisplayProperty;
             namePropertyUrl = keyAnalysisDisplayProperty + '|rename(name)';
-            dateFormat = init.systemInfo.dateFormat;
 
             init.namePropertyUrl = namePropertyUrl;
 
@@ -235,10 +230,10 @@ Ext.onReady(function() {
             dhis2.util.namespace('dhis2.gis');
 
             dhis2.gis.store = dhis2.gis.store || new dhis2.storage.Store({
-                    name: 'dhis2',
-                    adapters: [dhis2.storage.IndexedDBAdapter, dhis2.storage.DomSessionStorageAdapter, dhis2.storage.InMemoryAdapter],
-                    objectStores: ['optionSets']
-                });
+                name: 'dhis2',
+                adapters: [dhis2.storage.IndexedDBAdapter, dhis2.storage.DomSessionStorageAdapter, dhis2.storage.InMemoryAdapter],
+                objectStores: ['optionSets']
+            });
 
             optionSetVersionConfig = {
                 url: encodeURI(contextPath + '/api/optionSets.json?fields=id,version&paging=false'),
@@ -287,13 +282,12 @@ Ext.onReady(function() {
         var validateConfig,
             extendInstance,
             initLayout,
-            initialize,
             gis;
 
         validateConfig = function() {
             if (!isString(config.url)) {
-                alert('Invalid url (' + config.el + ')');
-                return;
+                gis.alert('Invalid url (' + config.el + ')');
+                return false;
             }
 
             if (config.url.split('').pop() === '/') {
@@ -301,15 +295,15 @@ Ext.onReady(function() {
             }
 
             if (!isString(config.el)) {
-                alert('Invalid html element id (' + config.el + ')');
-                return;
+                gis.alert('Invalid html element id (' + config.el + ')');
+                return false;
             }
 
             config.id = config.id || config.uid;
 
             if (config.id && !isString(config.id)) {
-                alert('Invalid map id (' + config.el + ')');
-                return;
+                gis.alert('Invalid map id (' + config.el + ')');
+                return false;
             }
 
             return true;
@@ -353,6 +347,9 @@ Ext.onReady(function() {
                 map.invalidateSize();
             };
 
+            // Needed to fix bug with client cluster on google maps layer
+            map.options.maxZoom = 18;
+
             map.addControl({
                 type: 'zoom',
                 position: 'topright'
@@ -361,25 +358,13 @@ Ext.onReady(function() {
             map.invalidateSize();
             map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
 
-            // base layer
-            gis.map.baseLayer = gis.map.baseLayer || 'none';
-
-            var base = isString(gis.map.baseLayer) ? gis.map.baseLayer.split(' ').join('').toLowerCase() : gis.map.baseLayer;
-
-            if (!base || base === 'none' || base === 'off') {
-                map.addLayer(gis.layer.openStreetMap.config);
-            }
-            else if (base === 'gs' || base === 'googlestreets') {
-                map.addLayer(gis.layer.googleStreets.config);
-            }
-            else if (base === 'gh' || base === 'googlehybrid') {
-                map.addLayer(gis.layer.googleHybrid.config);
-            }
+            // basemap
+            gis.map.basemap = gis.map.basemap || 'openStreetMap';
 
             return container;
-        },
+        };
 
-        initialize = function() {
+        (function() {
             var appConfig;
 
             if (!validateConfig()) {
@@ -404,17 +389,10 @@ Ext.onReady(function() {
             gis.map = config;
             gis.container = initLayout(appConfig);
 
-            /* TODO
-            gis.mask = Ext.create('Ext.LoadMask', gis.viewport.centerRegion.getEl(), {
-                msg: 'Loading'
-            });
-            */
-
             gis.instance.scrollWheelZoom.disable();
 
             GIS.core.MapLoader(gis, config).load();
-
-        }();
+        }());
     };
 
     GIS.plugin.getMap = function(config) {
@@ -424,8 +402,7 @@ Ext.onReady(function() {
 
         if (isInitComplete) {
             execute(config);
-        }
-        else {
+        } else {
             configs.push(config);
 
             if (!isInitStarted) {
@@ -438,5 +415,4 @@ Ext.onReady(function() {
 
     var DHIS = isObject(window['DHIS']) ? window.DHIS : {};
     DHIS.getMap = GIS.plugin.getMap;
-
 });

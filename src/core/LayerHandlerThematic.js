@@ -18,6 +18,7 @@ export default function LayerHandlerThematic(gis, layer) {
         updateLegend,
         loadData,
         afterLoad,
+        contextMenu,
         onFeatureClick,
         onFeatureRightClick,
         loader;
@@ -639,6 +640,8 @@ export default function LayerHandlerThematic(gis, layer) {
         layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
 
+        layer.view = view;
+
     };
 
     onFeatureClick = function (evt) {
@@ -646,8 +649,8 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     onFeatureRightClick = function (evt) {
-        var menu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
-        menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
+        contextMenu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
+        contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     };
 
     updateLegend = function (view, metaData, options) {

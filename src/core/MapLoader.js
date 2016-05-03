@@ -43,6 +43,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 			//}
 
 			gis.map = r;
+
 			setMap();
 		};
 
@@ -72,8 +73,10 @@ export default function MapLoader(gis, isSession, applyConfig) {
 	};
 
 	setMap = function() {
-		var views = gis.map.mapViews,
-			handler;
+		var basemap = gis.map.basemap || 'openStreetMap',
+			views = gis.map.mapViews,
+			handler,
+			layer;
 
 		// title
 		if (gis.dashboard && gis.container && gis.map && gis.map.name) {
@@ -108,6 +111,21 @@ export default function MapLoader(gis, isSession, applyConfig) {
 
 		clearAllLayers();
 
+		// Add basemap
+		if (basemap !== 'none' && gis.layer[basemap]) {
+			layer = gis.layer[basemap];
+			if (layer.instance) { // Layer instance already exist
+				gis.instance.addLayer(layer.instance);
+			} else { // Create and add layer instance
+				layer.instance = gis.instance.addLayer(layer.config);
+			}
+
+			if (layer.item) {
+				layer.item.setValue(true, 1);
+			}
+		}
+
+		// Add views/overlays
 		for (var i = 0, layout, layer; i < views.length; i++) {
 			layout = views[i];
 			layer = gis.layer[layout.layer];
@@ -128,7 +146,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 				layer = gis.layer[type];
 
 				// Only clear vector layers (overlays)
-				if (layer.layerType !== 'base') {
+				// if (layer.layerType !== 'base') {
 
 					// Remove layer from map if exist
 					if (layer.instance && gis.instance.hasLayer(layer.instance)) {
@@ -139,7 +157,17 @@ export default function MapLoader(gis, isSession, applyConfig) {
 					if (layer.widget) {
 						layer.widget.reset();
 					}
-				}
+
+					// Clear legend
+					if (layer.legendPanel) {
+						layer.legendPanel.update('');
+						layer.legendPanel.collapse();
+					}
+
+					if (layer.layerType === 'base' && layer.item) {
+						layer.item.checkbox.setValue(false);
+					}
+				// }
 			}
 		}
 	};

@@ -1,6 +1,7 @@
 import isArray from 'd2-utilizr/lib/isArray';
 import isBoolean from 'd2-utilizr/lib/isBoolean';
 import isString from 'd2-utilizr/lib/isString';
+import arrayMax from 'd2-utilizr/lib/arrayMax';
 
 export default function LayerWidgetBoundary(gis, layer) {
     var infrastructuralDataElementValuesStore,
@@ -43,7 +44,11 @@ export default function LayerWidgetBoundary(gis, layer) {
         displayField: 'name',
         width: gis.conf.layout.widget.item_width,
         rootVisible: false,
-        autoScroll: true,
+        autoScroll: false, // https://www.sencha.com/forum/archive/index.php/t-144780.html?s=b3a72bbd82e5cc20417f0b5779439b97
+        scroll:false,
+        viewConfig: {
+            style: 'overflow-y:auto'
+        },
         multiSelect: true,
         rendered: false,
         reset: function() {
@@ -221,7 +226,8 @@ export default function LayerWidgetBoundary(gis, layer) {
                 }
             }
             else if (toolMenu.menuValue === 'level') {
-                var levels = organisationUnitLevel.getValue();
+                var levels = organisationUnitLevel.getValue(),
+                    maxLevel = arrayMax(levels);
 
                 for (var i = 0; i < levels.length; i++) {
                     config.items.push({
@@ -230,9 +236,16 @@ export default function LayerWidgetBoundary(gis, layer) {
                     });
                 }
 
-                for (var i = 0; i < r.length; i++) {
+                for (var i = 0, item; i < r.length; i++) {
+                    item = r[i].data;
+
+                    if (maxLevel && item.depth > maxLevel) {
+                        gis.alert(item.name + ' ' + GIS.i18n.is_not_part_of_selected_organisation_unit_levels);
+                        return null;
+                    }
+
                     config.items.push({
-                        id: r[i].data.id,
+                        id: item.id,
                         name: ''
                     });
                 }
@@ -276,6 +289,8 @@ export default function LayerWidgetBoundary(gis, layer) {
                 this.getSelectionModel().select(0);
             },
             itemcontextmenu: function(v, r, h, i, e) {
+                e.stopEvent();
+
                 v.getSelectionModel().select(r, false);
 
                 if (v.menu) {
@@ -622,7 +637,11 @@ export default function LayerWidgetBoundary(gis, layer) {
     getView = function(config) {
         var view = {};
 
-        view.rows = [treePanel.getDimension()];
+        if (treePanel.getDimension()) {
+            view.rows = [treePanel.getDimension()];
+        } else {
+            return;
+        }
 
         Ext.apply(view, labelPanel.getConfig());
 

@@ -88,6 +88,11 @@ export default function FavoriteWindow(gis) {
 
                     view = Ext.clone(layer.view);
 
+                    // TODO temp fix: https://github.com/dhis2/dhis2-gis/issues/108
+                    if (view.method && view.method === 2 && view.legendSet) {
+                        delete view.legendSet;
+                    }
+
                     view.hidden = !gis.instance.hasLayer(layer.instance);
 
                     // add
@@ -106,6 +111,7 @@ export default function FavoriteWindow(gis) {
                     longitude: centerPoint.lng,
                     latitude: centerPoint.lat,
                     zoom: gis.instance.getZoom(),
+                    basemap: gis.util.map.getBasemap(),
                     mapViews: views,
                     user: {
                         id: 'currentUser'
@@ -360,7 +366,8 @@ export default function FavoriteWindow(gis) {
                                             longitude: centerPoint.lng,
                                             latitude: centerPoint.lat,
                                             zoom: gis.instance.getZoom(),
-                                            mapViews: views
+                                            mapViews: views,
+                                            basemap: gis.util.map.getBasemap()
                                         };
 
                                         Ext.Ajax.request({

@@ -749,6 +749,11 @@ Ext.onReady( function() {
                         imperial: false
                     });
 
+                    L.control.geocoder('search-Se1CFzK', {
+                        attribution: null,
+                        panToPoint: null
+                    }).addTo(this.map);
+
                     // Add measurement control
                     this.map.addControl({
                         type: 'measure',

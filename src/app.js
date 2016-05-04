@@ -750,8 +750,8 @@ Ext.onReady( function() {
                         type: 'scale',
                         imperial: false
                     });
-
-                    L.control.geocoder('search-Se1CFzK', {
+                    
+                    L.control.geocoder(gis.init.systemInfo.mapzenSearchKey, {
                         attribution: null,
                         panToPoint: null
                     }).addTo(this.map);
@@ -1043,13 +1043,15 @@ Ext.onReady( function() {
                         init.systemInfo = JSON.parse(r.responseText);
                         init.contextPath = init.systemInfo.contextPath || init.contextPath;
 
-                        // date, calendar
+                        // date, calendar, mapzen search key
                         Ext.Ajax.request({
-                            url: encodeURI(init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat'),
+                            url: encodeURI(init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyMapzenSearchApiKey'),
                             success: function(r) {
                                 var systemSettings = JSON.parse(r.responseText);
+
                                 init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
                                 init.systemInfo.calendar = systemSettings.keyCalendar;
+                                init.systemInfo.mapzenSearchKey = systemSettings.keyMapzenSearchApiKey;
 
                                 // user-account
                                 Ext.Ajax.request({

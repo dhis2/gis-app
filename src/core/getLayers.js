@@ -42,6 +42,15 @@ export default function getLayers(gis) {
                 style: 'HYBRID'
             }
         },
+        earthEngine: {
+            id: 'earthEngine',
+            name: GIS.i18n.earthengine_layer,
+            layerOpacity: 0.8,
+            config: {
+                type: 'earthEngine'
+            },
+            handler: GIS.core.LayerHandlerEarthEngine
+        },
         event: {
             id: 'event',
             name: GIS.i18n.event_layer,

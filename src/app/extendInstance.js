@@ -551,5 +551,11 @@ export default function extendInstance(gis) {
         layer.widget = GIS.app.LayerWidgetBoundary(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
+
+        layer = gis.layer.earthEngine;
+        layer.menu = GIS.app.LayerMenu(gis, layer);
+        layer.widget = GIS.app.LayerWidgetEarthEngine(gis, layer);
+        layer.window = GIS.app.WidgetWindow(gis, layer);
+        layer.window.widget = layer.widget;
     }());
 };

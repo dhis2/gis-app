@@ -7,6 +7,7 @@ import LayerWidgetEvent from './LayerWidgetEvent.js';
 import LayerWidgetFacility from './LayerWidgetFacility.js';
 import LayerWidgetThematic from './LayerWidgetThematic.js';
 import LayerWidgetBoundary from './LayerWidgetBoundary.js';
+import LayerWidgetEarthEngine from './LayerWidgetEarthEngine.js';
 import FavoriteWindow from './FavoriteWindow.js';
 import SharingWindow from './SharingWindow.js';
 import LegendSetWindow from './LegendSetWindow.js';
@@ -27,6 +28,7 @@ export default {
     LayerWidgetFacility,
     LayerWidgetThematic,
     LayerWidgetBoundary,
+    LayerWidgetEarthEngine,
     FavoriteWindow,
     SharingWindow,
     LegendSetWindow,

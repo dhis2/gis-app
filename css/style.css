@@ -791,6 +791,7 @@ gis-combo .x-form-item-label {
 .x-toolbar .gis-btn-icon-facility,
 .x-toolbar .gis-btn-icon-event,
 .x-toolbar .gis-btn-icon-boundary,
+.x-toolbar .gis-btn-icon-earthEngine,
 .x-toolbar .gis-btn-icon-thematic1,
 .x-toolbar .gis-btn-icon-thematic2,
 .x-toolbar .gis-btn-icon-thematic3,
@@ -806,6 +807,9 @@ gis-combo .x-form-item-label {
 }
 .x-toolbar .gis-btn-icon-boundary {
     background: url('../images/boundary_20.png') no-repeat;
+}
+.x-toolbar .gis-btn-icon-earthEngine {
+    background: url('../images/earthEngine_20.png') no-repeat;
 }
 .x-toolbar .gis-btn-icon-thematic1 {
     background: url('../images/thematic1_20.png') no-repeat;

@@ -582,6 +582,8 @@ export default function LayerWidgetEvent(gis, layer) {
         }
     });
 
+    console.log('periods', gis.conf.period.relativePeriods);
+
     // Relative periods
     periods = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',

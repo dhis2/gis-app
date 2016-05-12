@@ -442,6 +442,12 @@ Ext.onReady( function() {
                         width: 26
                     });
                     a.push({
+                        iconCls: 'gis-btn-icon-' + gis.layer.earthEngine.id,
+                        menu: gis.layer.earthEngine.menu,
+                        tooltip: GIS.i18n.earthengine_layer,
+                        width: 26
+                    });
+                    a.push({
                         text: GIS.i18n.favorites,
                         menu: {},
                         handler: function() {
@@ -750,7 +756,7 @@ Ext.onReady( function() {
                         type: 'scale',
                         imperial: false
                     });
-                    
+
                     L.control.geocoder(gis.init.systemInfo.mapzenSearchKey, {
                         attribution: null,
                         panToPoint: null

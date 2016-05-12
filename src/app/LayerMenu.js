@@ -19,7 +19,7 @@ export default function LayerMenu(gis, layer, cls) {
         alwaysEnabled: true
     });
 
-    if (!(layer.id === gis.layer.boundary.id || layer.id === gis.layer.facility.id || layer.id === gis.layer.event.id)) {
+    if (!(layer.id === gis.layer.boundary.id || layer.id === gis.layer.facility.id || layer.id === gis.layer.event.id || layer.id === gis.layer.earthEngine.id)) {
         item = {
             text: GIS.i18n.filter + '..',
             iconCls: 'gis-menu-item-icon-filter',
@@ -41,7 +41,7 @@ export default function LayerMenu(gis, layer, cls) {
         items.push(item);
     }
 
-    if (!(layer.id === gis.layer.event.id)) {
+    if (!(layer.id === gis.layer.event.id || layer.id === gis.layer.earthEngine.id)) {
         item = {
             text: GIS.i18n.search,
             iconCls: 'gis-menu-item-icon-search',

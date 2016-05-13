@@ -179,7 +179,7 @@ export default function LayerHandlerBoundary(gis, layer) {
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
             layer.instance.off('click', onFeatureClick);
             layer.instance.off('contextmenu', onFeatureRightClick);
-            gis.instance.off('click', onMapClick)
+            gis.instance.off('click', onMapClick);
             gis.instance.removeLayer(layer.instance);
         }
 

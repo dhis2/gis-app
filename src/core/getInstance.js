@@ -395,8 +395,8 @@ export default function getInstance(init) {
         util.map.getVisibleVectorLayers = function() {
             var layers = [];
 
-            for (var i = 0, layer; i < gis.orderedLayers.length; i++) {
-                layer = gis.orderedLayers[i];
+            for (var i = 0, layer; i < gis.overlayLayers.length; i++) {
+                layer = gis.overlayLayers[i];
 
                 if (layer.instance && gis.instance.hasLayer(layer.instance)) {
                     layers.push(layer);
@@ -1219,7 +1219,31 @@ export default function getInstance(init) {
     gis.thematicLayers = [gis.layer.thematic1, gis.layer.thematic2, gis.layer.thematic3, gis.layer.thematic4];
 
     // https://github.com/dhis2/dhis2-gis/issues/9
-    gis.orderedLayers = [gis.layer.thematic4, gis.layer.thematic3, gis.layer.thematic2, gis.layer.thematic1, gis.layer.boundary, gis.layer.facility, gis.layer.event];
+    gis.orderedLayers = [
+        gis.layer.googleHybrid,
+        gis.layer.googleStreets,
+        gis.layer.osmLight,
+        gis.layer.openStreetMap,
+        gis.layer.earthEngine,
+        gis.layer.thematic4,
+        gis.layer.thematic3,
+        gis.layer.thematic2,
+        gis.layer.thematic1,
+        gis.layer.boundary,
+        gis.layer.facility,
+        gis.layer.event
+    ];
+
+    gis.overlayLayers = [
+        gis.layer.earthEngine,
+        gis.layer.thematic4,
+        gis.layer.thematic3,
+        gis.layer.thematic2,
+        gis.layer.thematic1,
+        gis.layer.boundary,
+        gis.layer.facility,
+        gis.layer.event
+    ];
 
     gis.relocate = {}; // Relocate organisation units
 

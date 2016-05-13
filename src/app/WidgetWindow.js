@@ -23,7 +23,7 @@ export default function WidgetWindow(gis, layer, width, padding) {
 
                     if (view) {
                         var handler = layer.handler(gis, layer);
-                        handler.compare = (layer.id !== gis.layer.facility.id);
+                        handler.compare = (layer.id !== gis.layer.facility.id && layer.id !== gis.layer.earthEngine.id);
                         handler.zoomToVisibleExtent = true;
                         handler.hideMask = true;
                         handler.load(view);

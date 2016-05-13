@@ -45,7 +45,7 @@ export default function getLayers(gis) {
         earthEngine: {
             id: 'earthEngine',
             name: GIS.i18n.earthengine_layer,
-            layerOpacity: 0.8,
+            layerOpacity: 0.9,
             config: {
                 type: 'earthEngine'
             },

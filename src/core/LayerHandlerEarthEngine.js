@@ -4,9 +4,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         loader;
 
     createLayer = function(view) {
-        var layerConfig = Ext.applyIf({
-            id: view.id,
-            config: view.config,
+        var layerConfig = Ext.apply({
             accessToken: function(callback) {
                 Ext.Ajax.request({
                     url: gis.init.contextPath + '/api/tokens/google',
@@ -19,7 +17,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                     }
                 });
             }
-        }, layer.config);
+        }, layer.config, view);
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {

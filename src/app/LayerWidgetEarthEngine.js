@@ -12,7 +12,24 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             min: 0,
             max: 2000,
             palette: '6EDC6E, F0FAA0, E6DCAA, DCDCDC, FAFAFA'
-        }
+        },
+        attribution: '<a href="http://srtm.csi.cgiar.org/">NASA / CIGAR</a>'
+    }, {
+        id: 'WorldPop/POP',
+        name: 'Population density',
+        filter: [{
+            type: 'eq',
+            arguments: ['year', 2010]
+        },{
+            type: 'eq',
+            arguments: ['UNadj', 'yes']
+        }],
+        config: {
+            min: 0,
+            max: 250,
+            palette: '#ffffd4, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #8c2d04'
+        },
+        attribution: '<a href="http://www.worldpop.org.uk/">WorldPop</a>'
     }];
 
     combo = Ext.create('Ext.form.field.ComboBox', {
@@ -55,12 +72,15 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             return;
         }
 
+        /*
         var view = {
             id: record.raw.id, // TODO
             config: record.raw.config
         };
+        */
 
-        return view;
+        //return view;
+        return record.raw;
     };
 
     panel = Ext.create('Ext.panel.Panel', {

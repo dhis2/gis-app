@@ -14,7 +14,8 @@ webpackBaseConfig.plugins = [
         compress: {
             warnings: false // Includes many warnings from 3rd party libraries
         },
-        sourceMap: true,
+        mangle: false, // Don't work with ee_api_js_debug.js
+        sourceMap: true, // https://github.com/dhis2/dhis2-gis-api/issues/3
     }),
 ];
 

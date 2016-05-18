@@ -48,17 +48,16 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     });
 
     getView = function() {
-        var id = combo.getValue();
+        var id = combo.getValue(),
+            record = combo.store.findRecord('id', id);
 
-        if (id === null) {
+        if (id === null || record === null) {
             return;
         }
 
-        var data = combo.store.findRecord('id', id).raw;
-
         var view = {
-            id: data.id,
-            config: data.config
+            id: record.raw.id, // TODO
+            config: record.raw.config
         };
 
         return view;

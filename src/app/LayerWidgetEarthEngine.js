@@ -35,12 +35,11 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     combo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.select_earth_engine_layer,
-        // labelSeparator: '',
         editable: false,
         valueField: 'id',
         displayField: 'name',
         queryMode: 'local',
-        // forceSelection: true,
+        forceSelection: true,
         width: 220,
         labelWidth: gis.conf.layout.widget.itemlabel_width,
         labelAlign: 'top',
@@ -59,6 +58,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             */
             afterRender: function() {
                 this.setValue(this.store.getAt(0).data.id);
+            },
+            expand: function() {
+                console.log('expand', this.store.getAt(0).data.id);
             }
         }
     });

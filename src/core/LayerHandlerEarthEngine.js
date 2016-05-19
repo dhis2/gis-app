@@ -19,6 +19,8 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             }
         }, layer.config, view);
 
+        console.log('layerconfig', layerConfig);
+
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
             gis.instance.removeLayer(layer.instance);
@@ -26,9 +28,6 @@ export default function LayerHandlerEarthEngine(gis, layer) {
 
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);
-
-        // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
-        gis.util.map.orderLayers();
 
         layer.view = view;
 

@@ -349,32 +349,6 @@ export default function getInstance(init) {
                 && coord[1] <= 90;
         };
 
-        // Put map layers in correct order
-        util.map.orderLayers = function() {
-            var visibleLayers = [];
-
-            // Remove layers
-            for (var i = 0, layer; i < gis.orderedLayers.length; i++) {
-                layer = gis.orderedLayers[i];
-
-                if (layer.instance && gis.instance.hasLayer(layer.instance)) {
-                    gis.instance.removeLayer(layer.instance);
-                    visibleLayers.push(layer);
-                }
-            }
-
-            // Add layers in order
-            for (var i = 0, layer; i < gis.orderedLayers.length; i++) {
-                layer = gis.orderedLayers[i];
-
-                // console.log('order', gis.orderedLayers[i]);
-
-                if (visibleLayers.indexOf(layer) !== -1) {
-                    gis.instance.addLayer(layer.instance);
-                }
-            }
-        };
-
         // Returns the current basemap
         util.map.getBasemap = function() {
             var layer;

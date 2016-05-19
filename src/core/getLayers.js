@@ -47,7 +47,8 @@ export default function getLayers(gis) {
             name: GIS.i18n.earthengine_layer,
             layerOpacity: 0.9,
             config: {
-                type: 'earthEngine'
+                type: 'earthEngine',
+                pane: 'earthEngine'
             },
             handler: GIS.core.LayerHandlerEarthEngine
         },
@@ -56,7 +57,8 @@ export default function getLayers(gis) {
             name: GIS.i18n.event_layer,
             layerOpacity: 0.95,
             config: {
-                type: 'dots'
+                type: 'dots',
+                pane: 'event'
             },
             handler: GIS.core.LayerHandlerEvent
         },
@@ -66,7 +68,8 @@ export default function getLayers(gis) {
             layerOpacity: 1,
             zIndex: 150,
             config: {
-                type: 'markers'
+                type: 'markers',
+                pane: 'facility'
             },
             handler: GIS.core.LayerHandlerFacility,
             featureStore: Ext.create('Ext.data.Store', {
@@ -98,7 +101,8 @@ export default function getLayers(gis) {
             layerOpacity: 1,
             zIndex: 100,
             config: {
-                type: 'boundary'
+                type: 'boundary',
+                pane: 'boundary'
             },
             handler: GIS.core.LayerHandlerBoundary,
             featureStore: Ext.create('Ext.data.Store', {
@@ -135,7 +139,8 @@ export default function getLayers(gis) {
             layerOpacity: 0.8,
             zIndex: 110 + (i * 10),
             config: {
-                type: 'choropleth'
+                type: 'choropleth',
+                pane: 'thematic' + number
             },
             handler: GIS.core.LayerHandlerThematic,
             featureStore:  Ext.create('Ext.data.Store', {

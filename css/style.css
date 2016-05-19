@@ -1059,7 +1059,9 @@ gis-combo .x-form-item-label {
 .gis-window-title-icon-thematic4 {
     background: url('../images/thematic4_14.png') no-repeat;
 }
-
+.gis-window-title-icon-earthEngine {
+    background: url('../images/earthEngine_14.png') no-repeat;
+}
 .gis-window-title-icon-labels {
     background: url('../images/labels_14.png') no-repeat;
 }

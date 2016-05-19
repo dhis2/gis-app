@@ -409,9 +409,6 @@ export default function LayerHandlerEvent(gis, layer) {
             gis.instance.fitBounds(layer.instance.getBounds());
         }
 
-        // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
-        //gis.util.map.orderLayers();
-
         afterLoad(view);
     };
 

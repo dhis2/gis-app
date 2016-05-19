@@ -34,14 +34,13 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     combo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
-        //fieldLabel: GIS.i18n.period,
-        fieldLabel: 'Select Earth Engine layer',
-        labelSeparator: '',
-        editable: false,
+        fieldLabel: GIS.i18n.select_earth_engine_layer,
+        // labelSeparator: '',
+        // editable: false,
         valueField: 'id',
         displayField: 'name',
         queryMode: 'local',
-        forceSelection: true,
+        // forceSelection: true,
         width: 220,
         labelWidth: gis.conf.layout.widget.itemlabel_width,
         labelAlign: 'top',

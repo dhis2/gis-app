@@ -4,6 +4,8 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         loader;
 
     createLayer = function(view) {
+        /*
+
         var layerConfig = Ext.apply({
             accessToken: function(callback) {
                 Ext.Ajax.request({
@@ -19,6 +21,8 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             }
         }, layer.config, view);
 
+        console.log('layerconfig', layerConfig);
+
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
             gis.instance.removeLayer(layer.instance);
@@ -27,15 +31,13 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);
 
-        // Put map layers in correct order: https://github.com/dhis2/dhis2-gis/issues/9
-        gis.util.map.orderLayers();
-
         layer.view = view;
 
         // Not possible to se opacity before layer is initalized
         layer.instance.on('initialized', function(){
             afterLoad(view);
         });
+        */
     };
 
     afterLoad = function(view) {

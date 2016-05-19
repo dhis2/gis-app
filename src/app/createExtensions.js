@@ -112,8 +112,6 @@ export default function createExtensions(gis) {
 
                         that.updateItem(value, that.layer.layerType);
 
-                        gis.util.map.orderLayers();
-
                         if (gis.viewport && gis.viewport.downloadButton) {
                             gis.viewport.downloadButton.xable();
                         }

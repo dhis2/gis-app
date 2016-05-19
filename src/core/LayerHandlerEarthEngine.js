@@ -4,6 +4,8 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         loader;
 
     createLayer = function(view) {
+        /*
+
         var layerConfig = Ext.apply({
             accessToken: function(callback) {
                 Ext.Ajax.request({
@@ -35,6 +37,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         layer.instance.on('initialized', function(){
             afterLoad(view);
         });
+        */
     };
 
     afterLoad = function(view) {

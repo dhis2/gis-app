@@ -5,7 +5,6 @@ export default function LayerHandlerEarthEngine(gis, layer) {
 
     createLayer = function(view) {
         /*
-
         var layerConfig = Ext.apply({
             accessToken: function(callback) {
                 Ext.Ajax.request({
@@ -20,8 +19,36 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 });
             }
         }, layer.config, view);
+        */
 
-        console.log('layerconfig', layerConfig);
+        // console.log( layer.config, view);
+
+        var layerConfig = {
+            id: "srtm90_v4",
+            name: "Elevation",
+            type: 'earthEngine',
+            pane: 'earthEngine',
+            config: {
+                min: 0,
+                max: 2000,
+                palette: "6EDC6E, F0FAA0, E6DCAA, DCDCDC, FAFAFA"
+            },
+            accessToken: function(callback) {
+                Ext.Ajax.request({
+                    url: gis.init.contextPath + '/api/tokens/google',
+                    disableCaching: false,
+                    failure: function(r) {
+                        gis.alert(r);
+                    },
+                    success: function(r) {
+                        callback(JSON.parse(r.responseText));
+                    }
+                });
+            }
+        };
+
+
+        // console.log('layerconfig', layer.config, view, layerConfig);
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
@@ -31,13 +58,12 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);
 
-        layer.view = view;
+        // console.log(view);
+        // layer.view = view;
 
-        // Not possible to se opacity before layer is initalized
-        layer.instance.on('initialized', function(){
-            afterLoad(view);
-        });
-        */
+        // afterLoad(view);
+
+        gis.mask.hide();
     };
 
     afterLoad = function(view) {
@@ -53,11 +79,6 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         // Gui
         if (loader.updateGui && isObject(layer.widget)) {
             layer.widget.setGui(view);
-        }
-
-        // Zoom
-        if (loader.zoomToVisibleExtent) {
-            // gis.instance.fitBounds(layer.instance.getBounds());
         }
 
         // Mask

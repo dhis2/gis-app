@@ -36,7 +36,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.select_earth_engine_layer,
         // labelSeparator: '',
-        // editable: false,
+        editable: false,
         valueField: 'id',
         displayField: 'name',
         queryMode: 'local',

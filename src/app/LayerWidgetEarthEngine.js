@@ -6,17 +6,19 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         panel;
 
     datasets = [{
-        id: 'srtm90_v4',
+        id: 'USGS/SRTMGL1_003',
         name: 'Elevation',
         config: {
             min: 0,
-            max: 2000,
-            palette: '6EDC6E, F0FAA0, E6DCAA, DCDCDC, FAFAFA'
+            max: 4000,
+            palette: '#6EDC6E,#F0FAA0,#E6DCAA,#DCDCDC,#FAFAFA'
         },
-        attribution: '<a href="http://srtm.csi.cgiar.org/">NASA / CIGAR</a>'
+        unit: 'm',
+        description: 'Metres above sea level.',
+        attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003">NASA / USGS / JPL-Caltech</a>'
     }, {
         id: 'WorldPop/POP',
-        name: 'Population density',
+        name: 'Population density 2010',
         filter: [{
             type: 'eq',
             arguments: ['year', 2010]
@@ -27,14 +29,15 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         config: {
             min: 0,
             max: 250,
-            palette: '#ffffd4, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #8c2d04'
+            palette: '#ffffd4,#fee391,#fec44f,#fe9929,#ec7014,#cc4c02,#8c2d04'
         },
-        attribution: '<a href="http://www.worldpop.org.uk/">WorldPop</a>'
+        description: 'Population in 100 x 100 m grid cells.',
+        attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP">WorldPop</a>'
     }];
 
     combo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
-        fieldLabel: GIS.i18n.select_earth_engine_layer,
+        fieldLabel: GIS.i18n.select_layer_from_google_earth_engine,
         editable: false,
         valueField: 'id',
         displayField: 'name',
@@ -58,9 +61,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             */
             afterRender: function() {
                 this.setValue(this.store.getAt(0).data.id);
-            },
-            expand: function() {
-                console.log('expand', this.store.getAt(0).data.id);
             }
         }
     });

@@ -154,7 +154,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 					}
 
 					// Reset layer widget
-					if (layer.widget) {
+					if (layer.widget && layer.widget.reset) {
 						layer.widget.reset();
 					}
 

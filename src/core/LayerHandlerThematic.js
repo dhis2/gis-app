@@ -638,7 +638,6 @@ export default function LayerHandlerThematic(gis, layer) {
         layer.instance.on('contextmenu', onFeatureRightClick);
 
         layer.view = view;
-
     };
 
     onFeatureClick = function (evt) {

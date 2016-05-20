@@ -869,6 +869,19 @@ Ext.onReady( function() {
                     }
                 });
 
+                a.push({
+                    title: GIS.i18n.earth_engine_layer_legend,
+                    bodyStyle: 'padding: 4px 6px 6px; border: 0 none',
+                    collapsible: true,
+                    collapsed: true,
+                    animCollapse: false,
+                    listeners: {
+                        added: function() {
+                            gis.layer.earthEngine.legendPanel = this;
+                        }
+                    }
+                });
+
                 return a;
             }(),
             listeners: {

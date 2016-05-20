@@ -1,10 +1,11 @@
 export default function LayerHandlerEarthEngine(gis, layer) {
     var createLayer,
+        hideMask,
         afterLoad,
+        addLegend,
         loader;
 
     createLayer = function(view) {
-        /*
         var layerConfig = Ext.apply({
             accessToken: function(callback) {
                 Ext.Ajax.request({
@@ -19,54 +20,58 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 });
             }
         }, layer.config, view);
-        */
-
-        // console.log( layer.config, view);
-
-        var layerConfig = {
-            id: "srtm90_v4",
-            name: "Elevation",
-            type: 'earthEngine',
-            pane: 'earthEngine',
-            config: {
-                min: 0,
-                max: 2000,
-                palette: "6EDC6E, F0FAA0, E6DCAA, DCDCDC, FAFAFA"
-            },
-            accessToken: function(callback) {
-                Ext.Ajax.request({
-                    url: gis.init.contextPath + '/api/tokens/google',
-                    disableCaching: false,
-                    failure: function(r) {
-                        gis.alert(r);
-                    },
-                    success: function(r) {
-                        callback(JSON.parse(r.responseText));
-                    }
-                });
-            }
-        };
-
-
-        // console.log('layerconfig', layer.config, view, layerConfig);
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+            layer.instance.off('initialized', hideMask);
             gis.instance.removeLayer(layer.instance);
         }
 
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);
+        layer.instance.on('initialized', hideMask);
 
-        // console.log(view);
-        // layer.view = view;
+        addLegend();
+        afterLoad(view);
+    };
 
-        // afterLoad(view);
+    // Hide mask when layer is initialized
+    hideMask = function() {
+        if (gis.mask && loader.hideMask) {
+            gis.mask.hide();
+        }
+    };
 
-        gis.mask.hide();
+    addLegend = function() {
+        var legend = layer.instance.getLegend();
+
+        if (layer.legendPanel) {
+            layer.legendPanel.update(legend);
+        } else { // Dashboard map
+            if (!gis.legend) {
+                gis.legend = gis.instance.addControl({
+                    type: 'legend',
+                    offset: [0, -64],
+                    content: html
+                });
+            } else {
+                gis.legend.setContent(gis.legend.getContent() + legend);
+            }
+        }
     };
 
     afterLoad = function(view) {
+
+        layer.view = view;
+
+        // Legend
+        if (gis.viewport) {
+            gis.viewport.eastRegion.doLayout();
+        }
+
+        if (layer.legendPanel) {
+            layer.legendPanel.expand();
+        }
 
         // Layer
         if (layer.item) { // Layer stack
@@ -79,11 +84,6 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         // Gui
         if (loader.updateGui && isObject(layer.widget)) {
             layer.widget.setGui(view);
-        }
-
-        // Mask
-        if (loader.hideMask) {
-            gis.mask.hide();
         }
 
         // Map callback

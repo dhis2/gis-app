@@ -2,6 +2,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     var panel,
         datasets,
         combo,
+        reset,
         getView,
         panel;
 
@@ -10,8 +11,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         name: 'Elevation',
         config: {
             min: 0,
-            max: 4000,
-            palette: '#6EDC6E,#F0FAA0,#E6DCAA,#DCDCDC,#FAFAFA'
+            max: 5000,
+            // palette: '#349834,#6EDC6E,#F0FAA0,#E6DCAA,#DCDCDC,#FAFAFA',
+            palette: '#538852,#8bc08b,#faf7c7,#e7de8b,#d5ce86,#facbb7,#dbac97,#d8baca,#f4e0e6,#eeeeee,#ffffff'
         },
         unit: 'm',
         description: 'Metres above sea level.',
@@ -28,8 +30,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }],
         config: {
             min: 0,
-            max: 250,
-            palette: '#ffffd4,#fee391,#fec44f,#fe9929,#ec7014,#cc4c02,#8c2d04'
+            max: 100,
+            //palette: '#ffffd4,#fee391,#fec44f,#fe9929,#ec7014,#cc4c02,#8c2d04'
+            palette: '#fffff0,#ffffd4,#fee391,#fec44f,#fe9929,#ec7014,#cc4c02,#b44200,#9a3800,#7f2f00,#642500'
         },
         description: 'Population in 100 x 100 m grid cells.',
         attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP">WorldPop</a>'
@@ -65,6 +68,10 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
     });
 
+    reset = function() {
+
+    };
+
     getView = function() {
         var id = combo.getValue(),
             record = combo.store.findRecord('id', id);
@@ -93,7 +100,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         layer: layer,
         menu: layer.menu,
 
-        //reset: reset,
+        reset: reset,
         //setGui: setGui,
         getView: getView,
 

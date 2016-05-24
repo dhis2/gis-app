@@ -137,7 +137,7 @@ export default function getLayers(gis) {
             id: 'thematic' + number,
             name: GIS.i18n.thematic_layer + ' ' + number,
             layerOpacity: 0.8,
-            zIndex: 110 + (i * 10),
+            zIndex: 450 - (i * 10),
             config: {
                 type: 'choropleth',
                 pane: 'thematic' + number

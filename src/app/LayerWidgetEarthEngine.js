@@ -1,48 +1,27 @@
 export default function LayerWidgetEarthEngine(gis, layer) {
-    var panel,
-        datasets,
-        combo,
+    var layerStore,
+        layerCombo,
         reset,
+        setGui,
         getView,
         panel;
 
-    datasets = [{
-        id: 'USGS/SRTMGL1_003',
-        name: 'Elevation',
-        config: {
-            min: 0,
-            max: 5000,
-            // palette: '#349834,#6EDC6E,#F0FAA0,#E6DCAA,#DCDCDC,#FAFAFA',
-            palette: '#538852,#8bc08b,#faf7c7,#e7de8b,#d5ce86,#facbb7,#dbac97,#d8baca,#f4e0e6,#eeeeee,#ffffff'
-        },
-        unit: 'm',
-        description: 'Metres above sea level.',
-        attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003">NASA / USGS / JPL-Caltech</a>'
-    }, {
-        id: 'WorldPop/POP',
-        name: 'Population density 2010',
-        filter: [{
-            type: 'eq',
-            arguments: ['year', 2010]
+    var layerStore = Ext.create('Ext.data.Store', {
+        fields: ['code', 'name'],
+        data: [{
+            code: 'elevation_srtm_30m',
+            name: 'Elevation'
         },{
-            type: 'eq',
-            arguments: ['UNadj', 'yes']
-        }],
-        config: {
-            min: 0,
-            max: 100,
-            //palette: '#ffffd4,#fee391,#fec44f,#fe9929,#ec7014,#cc4c02,#8c2d04'
-            palette: '#fffff0,#ffffd4,#fee391,#fec44f,#fe9929,#ec7014,#cc4c02,#b44200,#9a3800,#7f2f00,#642500'
-        },
-        description: 'Population in 100 x 100 m grid cells.',
-        attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP">WorldPop</a>'
-    }];
+            code: 'worldpop_2010_un',
+            name: 'Population density 2010'
+        }]
+    });
 
-    combo = Ext.create('Ext.form.field.ComboBox', {
+    layerCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.select_layer_from_google_earth_engine,
         editable: false,
-        valueField: 'id',
+        valueField: 'code',
         displayField: 'name',
         queryMode: 'local',
         forceSelection: true,
@@ -51,57 +30,53 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         labelAlign: 'top',
         labelCls: 'gis-form-item-label-top',
         style: 'padding:5px 5px 10px 5px;',
-        store: Ext.create('Ext.data.Store', {
-            fields: ['id', 'name'],
-            data: datasets
-        }),
+        store: layerStore,
         listeners: {
-            /*
-            select: function () {
-                var id = this.getValue();
-                var data = this.valueModels[0].raw;
-            },
-            */
             afterRender: function() {
-                this.setValue(this.store.getAt(0).data.id);
+                this.reset();
             }
+        },
+        reset: function() { // Set first layer as default
+            this.setValue(this.store.getAt(0).data.code);
         }
     });
 
     reset = function() {
+        layer.item.setValue(false);
 
-    };
-
-    getView = function() {
-        var id = combo.getValue(),
-            record = combo.store.findRecord('id', id);
-
-        if (id === null || record === null) {
+        if (!layer.window.isRendered) {
+            layer.view = null;
             return;
         }
 
-        /*
-        var view = {
-            id: record.raw.id, // TODO
-            config: record.raw.config
-        };
-        */
+        layerCombo.reset();
+    };
 
-        //return view;
-        return record.raw;
+    setGui = function(view) {
+        layerCombo.setValue(view.code);
+    };
+
+    getView = function() {
+        var code = layerCombo.getValue();
+
+        if (code === null) {
+            return;
+        }
+
+        return {
+            code: code
+        };
     };
 
     panel = Ext.create('Ext.panel.Panel', {
         bodyStyle: 'border-style:none; padding:1px; padding-bottom:0',
-        items: [combo],
-        //panels: accordionPanels,
-
+        items: [layerCombo],
         map: layer.map,
         layer: layer,
         menu: layer.menu,
 
         reset: reset,
-        //setGui: setGui,
+        setGui: setGui,
         getView: getView,
 
         listeners: {

@@ -766,7 +766,7 @@ export default function getInstance(init) {
             // id: string
 
             if (!isObject(config)) {
-                console.log('Record config is not an object', config);
+                //console.log('Record config is not an object', config);
                 return;
             }
 
@@ -1087,7 +1087,7 @@ export default function getInstance(init) {
 
                 layout.dataDimensionItems = config.dataDimensionItems;
 
-                layout.code = config.code; // Earth Engine layer
+                layout.key = config.key; // Earth Engine layer
 
                 if (arrayFrom(config.userOrgUnit).length) {
                     layout.userOrgUnit = arrayFrom(config.userOrgUnit);

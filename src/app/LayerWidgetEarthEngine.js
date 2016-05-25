@@ -7,12 +7,12 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         panel;
 
     var layerStore = Ext.create('Ext.data.Store', {
-        fields: ['code', 'name'],
+        fields: ['key', 'name'],
         data: [{
-            code: 'elevation_srtm_30m',
+            key: 'elevation_srtm_30m',
             name: 'Elevation'
         },{
-            code: 'worldpop_2010_un',
+            key: 'worldpop_2010_un',
             name: 'Population density 2010'
         }]
     });
@@ -21,7 +21,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.select_layer_from_google_earth_engine,
         editable: false,
-        valueField: 'code',
+        valueField: 'key',
         displayField: 'name',
         queryMode: 'local',
         forceSelection: true,
@@ -37,7 +37,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             }
         },
         reset: function() { // Set first layer as default
-            this.setValue(this.store.getAt(0).data.code);
+            this.setValue(this.store.getAt(0).data.key);
         }
     });
 
@@ -53,18 +53,18 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     };
 
     setGui = function(view) {
-        layerCombo.setValue(view.code);
+        layerCombo.setValue(view.key);
     };
 
     getView = function() {
-        var code = layerCombo.getValue();
+        var key = layerCombo.getValue();
 
-        if (code === null) {
+        if (key === null) {
             return;
         }
 
         return {
-            code: code
+            key: key
         };
     };
 

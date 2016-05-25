@@ -53,7 +53,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                     }
                 });
             }
-        }, layer.config, datasets[view.code]);
+        }, layer.config, datasets[view.key]);
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
@@ -86,7 +86,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 gis.legend = gis.instance.addControl({
                     type: 'legend',
                     offset: [0, -64],
-                    content: html
+                    content: legend
                 });
             } else {
                 gis.legend.setContent(gis.legend.getContent() + legend);
@@ -96,7 +96,9 @@ export default function LayerHandlerEarthEngine(gis, layer) {
 
     afterLoad = function(view) {
 
-        layer.view = view;
+        layer.view = {
+            key: view.key
+        };
 
         // Legend
         if (gis.viewport) {
@@ -116,7 +118,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         }
 
         // Gui
-        if (loader.updateGui && isObject(layer.widget)) {
+        if (loader.updateGui && layer.widget) {
             layer.widget.setGui(view);
         }
 

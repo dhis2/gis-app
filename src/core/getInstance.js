@@ -792,7 +792,7 @@ export default function getInstance(init) {
             // items: [Record]
 
             if (!isObject(config)) {
-                console.log('Dimension config is not an object: ' + config);
+                //console.log('Dimension config is not an object: ' + config);
                 return;
             }
 
@@ -1086,6 +1086,8 @@ export default function getInstance(init) {
                 layout.organisationUnitGroupSet = config.organisationUnitGroupSet;
 
                 layout.dataDimensionItems = config.dataDimensionItems;
+
+                layout.code = config.code; // Earth Engine layer
 
                 if (arrayFrom(config.userOrgUnit).length) {
                     layout.userOrgUnit = arrayFrom(config.userOrgUnit);

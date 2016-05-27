@@ -92,7 +92,7 @@ export default function LegendSetWindow(gis) {
 
                 tmpLegendStore.add(data);
 
-                info.setText(records.length + ' legend sets available');
+                info.setText(records.length + '' + GIS.i18n.legend_sets_available);
             }
         }
     });

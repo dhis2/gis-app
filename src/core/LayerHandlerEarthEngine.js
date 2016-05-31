@@ -8,18 +8,28 @@ export default function LayerHandlerEarthEngine(gis, layer) {
 
     datasets = {
         elevation_srtm_30m: {
+            type: 'elevation',
             name: 'Elevation',
             id: 'USGS/SRTMGL1_003',
+            /*
             config: {
                 min: 0,
                 max: 5000,
                 palette: '#538852,#8bc08b,#faf7c7,#e7de8b,#d5ce86,#facbb7,#dbac97,#d8baca,#f4e0e6,#eeeeee,#ffffff'
             },
+            */
+            config: {
+                min: 0,
+                max: 1000,
+                palette: '#a50026,#d73027,#f46d43,#fdae61,#fee08b,#ffffbf,#d9ef8b,#a6d96a,#66bd63,#1a9850,#006837'
+            },
+            // elevation: 500,
             unit: 'm',
             description: 'Metres above sea level.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003">NASA / USGS / JPL-Caltech</a>'
         },
         worldpop_2010_un: {
+            type: 'population',
             name: 'Population density 2010',
             id: 'WorldPop/POP',
             filter: [{
@@ -53,13 +63,22 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                     }
                 });
             }
-        }, layer.config, datasets[view.key]);
+        }, layer.config, datasets[view.key], view);
+
+        // TODO
+        if (view.elevation) {
+            layerConfig.elevation = view.elevation;
+            layerConfig.config.min = 0;
+            layerConfig.config.max = view.elevation + view.elevation;
+        }
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
             layer.instance.off('initialized', hideMask);
             gis.instance.removeLayer(layer.instance);
         }
+
+        //console.log('####', layerConfig, view);
 
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);

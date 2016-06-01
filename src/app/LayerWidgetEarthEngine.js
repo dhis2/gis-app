@@ -51,7 +51,8 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // Combo with with supported Earth Engine layers
     layerCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
-        fieldLabel: GIS.i18n.select_layer_from_google_earth_engine,
+        // fieldLabel: GIS.i18n.select_layer_from_google_earth_engine,
+        fieldLabel: 'Select layer form Google Earth Engine',
         editable: false,
         valueField: 'key',
         displayField: 'name',

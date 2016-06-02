@@ -1459,3 +1459,28 @@ label.x-form-cb-label-alt1 {
     position: relative;
     top: -2px;
 }
+
+/*----------------------------------------------------------------------------
+ * Color ramps from ColorBrewer
+ *--------------------------------------------------------------------------*/
+
+.color-ramp {
+    padding: 1px!important;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    vertical-align: middle;
+    width: 202px;
+    position: absolute;
+    pointer-events: none;
+}
+
+.color-ramp ul {
+    display: inline-block;
+}
+
+.color-ramp li {
+    display: inline-block;
+    width: 29px;
+    height: 22px;
+}

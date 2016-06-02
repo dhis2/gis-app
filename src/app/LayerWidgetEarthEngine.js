@@ -1,8 +1,13 @@
 export default function LayerWidgetEarthEngine(gis, layer) {
     var layerStore,
         elevation,
+        minValue,
+        maxValue,
+        minField,
+        maxField,
         elevationField,
         layerCombo,
+        colorsCombo,
         onLayerComboSelect,
         reset,
         setGui,
@@ -21,9 +26,51 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }]
     });
 
-    elevation = Ext.create('Ext.form.field.Number', {
+    minValue = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
         width: 80,
+        allowDecimals: false,
+        //minValue: 1,
+        //maxValue: 8848,
+        //value: 1200,
+        style: 'padding-bottom:10px;'
+    });
+
+    maxValue = Ext.create('Ext.form.field.Number', {
+        cls: 'gis-numberfield',
+        width: 80,
+        allowDecimals: false,
+        //minValue: 1,
+        //maxValue: 8848,
+        //value: 1200,
+        style: 'padding-bottom:10px;'
+    });
+
+    minField = Ext.create('Ext.container.Container', {
+        layout: 'hbox',
+        hidden: true,
+        items: [{
+            xtype: 'container',
+            html: 'Min value:', // TODO: i18n
+            width: 60,
+            style: 'padding-top:5px;font-size:11px;'
+        }, minValue]
+    });
+
+    maxField = Ext.create('Ext.container.Container', {
+        layout: 'hbox',
+        hidden: true,
+        items: [{
+            xtype: 'container',
+            html: 'Max value:', // TODO: i18n
+            width: 60,
+            style: 'padding-top:5px;font-size:11px;'
+        }, maxValue]
+    });
+
+    elevation = Ext.create('Ext.form.field.Number', {
+        cls: 'gis-numberfield',
+        width: 90,
         allowDecimals: false,
         minValue: 1,
         maxValue: 8848,
@@ -45,7 +92,13 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     // Show elevation field when elevation layer is selected
     onLayerComboSelect = function() {
-        elevationField[this.getValue() === 'elevation_srtm_30m' ? 'show' : 'hide']();
+        if (this.getValue() === 'elevation_srtm_30m') {
+            minField.show();
+            maxField.show();
+        } else {
+            minField.hide();
+            maxField.hide();
+        }
     };
 
     // Combo with with supported Earth Engine layers
@@ -67,6 +120,10 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         listeners: {
             select: onLayerComboSelect
         }
+    });
+
+    colorsCombo = Ext.create('Ext.ux.field.ColorRamp', {
+        fieldLabel: 'Select color ramp'
     });
 
     // Reset this widget
@@ -109,7 +166,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // This widget panel
     panel = Ext.create('Ext.panel.Panel', {
         bodyStyle: 'border-style:none; padding:10px; padding-bottom:0',
-        items: [layerCombo, elevationField],
+        items: [layerCombo, minField, maxField, colorsCombo],
         map: layer.map,
         layer: layer,
         menu: layer.menu,

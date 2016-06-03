@@ -32,7 +32,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         allowDecimals: false,
         //minValue: 1,
         //maxValue: 8848,
-        //value: 1200,
+        value: 1500,
         style: 'padding-bottom:10px;'
     });
 
@@ -42,7 +42,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         allowDecimals: false,
         //minValue: 1,
         //maxValue: 8848,
-        //value: 1200,
+        value: 3000,
         style: 'padding-bottom:10px;'
     });
 
@@ -92,6 +92,8 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     // Show elevation field when elevation layer is selected
     onLayerComboSelect = function() {
+        colorsCombo.show();
+
         if (this.getValue() === 'elevation_srtm_30m') {
             minField.show();
             maxField.show();
@@ -123,7 +125,8 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     });
 
     colorsCombo = Ext.create('Ext.ux.field.ColorRamp', {
-        fieldLabel: 'Select color ramp'
+        fieldLabel: 'Select color ramp',
+        hidden: true
     });
 
     // Reset this widget
@@ -153,7 +156,10 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
 
         var view = {
-            key: key
+            key: key,
+            palette: colorsCombo.getValue().join(','),
+            min: minValue.getValue(),
+            max: maxValue.getValue()
         };
 
         if (key === 'elevation_srtm_30m') {
@@ -166,7 +172,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // This widget panel
     panel = Ext.create('Ext.panel.Panel', {
         bodyStyle: 'border-style:none; padding:10px; padding-bottom:0',
-        items: [layerCombo, minField, maxField, colorsCombo],
+        items: [layerCombo, colorsCombo, minField, maxField],
         map: layer.map,
         layer: layer,
         menu: layer.menu,

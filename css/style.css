@@ -1465,22 +1465,25 @@ label.x-form-cb-label-alt1 {
  *--------------------------------------------------------------------------*/
 
 .color-ramp {
-    padding: 1px!important;
-    overflow: hidden;
     white-space: nowrap;
-    cursor: pointer;
-    vertical-align: middle;
-    width: 202px;
-    position: absolute;
-    pointer-events: none;
 }
 
-.color-ramp ul {
-    display: inline-block;
+.x-form-item-body .color-ramp {
+    position: absolute;
+    padding: 1px!important;
+    overflow: hidden;
+    cursor: pointer;
+    vertical-align: middle;
+    pointer-events: none;
+    width: 100%;
 }
 
 .color-ramp li {
     display: inline-block;
-    width: 29px;
     height: 22px;
 }
+
+.color-ramp-7 li {
+    width: 29px;
+}
+

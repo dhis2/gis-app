@@ -1,97 +1,111 @@
+import isArray from 'd2-utilizr/lib/isArray';
 import colorbrewer from '../custom/colorbrewer';
 
+const createColorRamp = function(value, model) {
+    const classes = model.get('classes');
+    const colors = colorbrewer[model.getId()][classes];
+    const ramp = colors.map(color => '<li style="background:' + color + '" />').join('');
+    return '<ul class="color-ramp-' + classes +'">' + ramp + '</ul>';
+};
 
+const colorStore = Ext.create('Ext.data.Store', {
+    fields: ['id', 'classes', {name: 'ramp', convert: createColorRamp}],
+    data: [{
+        id: 'YlGn',
+        classes: 7
+    },{
+        id: 'BuGn',
+        classes: 7
+    },{
+        id: 'PuBu',
+        classes: 7
+    },{
+        id: 'BuPu',
+        classes: 7
+    },{
+        id: 'RdPu',
+        classes: 7
+    },{
+        id: 'PuRd',
+        classes: 7
+    },{
+        id: 'YlOrBr',
+        classes: 7
+    },{
+        id: 'Blues',
+        classes: 7
+    },{
+        id: 'Greens',
+        classes: 7
+    },{
+        id: 'Oranges',
+        classes: 7
+    },{
+        id: 'Reds',
+        classes: 7
+    },{
+        id: 'Greys',
+        classes: 7
+    }]
+})
 
-console.log(colorbrewer);
-
-/* ColorButton */
+// ColorRamp
+// http://docs.sencha.com/extjs/4.0.7/#!/api/Ext.form.field.ComboBox
 Ext.define('Ext.ux.field.ColorRamp', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.colorramp',
     cls: 'gis-combo',
-    // fieldLabel: GIS.i18n.select_layer_from_google_earth_engine,
-    fieldLabel: 'Select layer form Google Earth Engine',
+    fieldLabel: 'Select color scale', // TODO: i18n
     editable: false,
-    valueField: 'key',
-    displayField: 'name',
+    valueField: 'id',
+    displayField: 'ramp',
     queryMode: 'local',
     forceSelection: true,
     width: 220,
-    // labelWidth: gis.conf.layout.widget.itemlabel_width,
     labelAlign: 'top',
     labelCls: 'gis-form-item-label-top',
     style: 'padding-bottom:10px;',
-
-
-    displayTpl: Ext.create('Ext.XTemplate', '<tpl for="."><h1>###</h1></tpl>'),
-
-
-    //tpl:'<div class="x-combo-list-item">###</div>',
-    styleHtmlContent: false,
-    store: Ext.create('Ext.data.Store', {
-        fields: ['key', 'name'],
-        data: [{
-            key: 'elevation_srtm_30m',
-            name: '<h1>Elevation</h1>'
-        },{
-            key: 'worldpop_2010_un',
-            name: 'Population density 2010'
-        }]
-    }),
+    tpl: '<tpl for="."><div class="x-boundlist-item color-ramp">{ramp}</div></tpl>',
+    store: colorStore,
     listeners: {
-        // select: onLayerComboSelect
         afterRender: function() {
-            var div = document.createElement('div');
-            div.className = 'color-ramp';
-
-            // TODO: Create dynamically
-            div.innerHTML = this.createRamp('YlGn', 7);
-
-            this.inputEl.insertSibling(div);
-
             this.reset();
         }
     },
-    reset: function() { // Set first layer as default
-        this.setValue(this.store.getAt(0).data.key);
+    reset: function() { // Set first ramp
+        this.setValue(this.store.getAt(0).data.id, true);
     },
-    createRamp: function(scheme, classes) {
-        console.log('create', colorbrewer[scheme][classes]);
-
-        return '<ul><li style="background:#FFFFB2;"></li><li style="background:#FED976;"></li><li style="background:#FEB24C;"></li><li style="background:#FD8D3C;"></li><li style="background:#FC4E2A;"></li><li style="background:#E31A1C;"></li><li style="background:#B10026;"></li></ul>';
-    }
-
-
-
-    //disabledCls: 'gis-colorramp-disabled',
-    //width: 109,
-    //height: 22,
-    //defaultValue: null,
-    //value: 'f1f1f1',
-
-    /*
     getValue: function() {
-        return this.value;
-    },
-    setValue: function(color) {
-        this.value = color;
-        if (Ext.isDefined(this.getEl())) {
-            this.getEl().dom.style.background = '#' + color;
-        }
-    },
-    reset: function() {
-        this.setValue(this.defaultValue);
-    },
-    */
+        const value = this.self.superclass.getValue.call(this);
 
-    /*
-    initComponent: function() {
-        this.callParent();
-    },
-    listeners: {
-        render: function() {
-            //this.setValue(this.value);
+        if (value) {
+            return colorbrewer[value][this.findRecordByValue(value).get('classes')];
         }
+
+        return value;
+    },
+    setValue: function(value, doSelect) {
+        this.self.superclass.setValue.call(this, value, doSelect);
+
+        if (value) {
+            if (!this.colorEl) {
+                this.colorEl = document.createElement('div');
+                this.colorEl.className = 'color-ramp';
+                this.colorEl.style.width = (this.getWidth() - 18) + 'px';
+                this.inputEl.insertSibling(this.colorEl);
+            }
+
+            if (isArray(value)) {
+                value = value[0];
+            }
+
+            if (typeof value !== 'string') {
+                value = value.getId();
+            }
+
+            this.colorEl.innerHTML = this.findRecordByValue(value).get('ramp');
+        }
+
+        return this;
     }
-    */
 });

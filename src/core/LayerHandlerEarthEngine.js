@@ -68,12 +68,19 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             }
         }, layer.config, datasets[view.key], view);
 
+        layerConfig.config.min = view.min;
+        layerConfig.config.max = view.max;
+        layerConfig.config.palette = view.palette;
+
+
         // TODO
+        /*
         if (view.elevation) {
             layerConfig.elevation = view.elevation;
             layerConfig.config.min = 0;
             layerConfig.config.max = view.elevation + view.elevation;
         }
+        */
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {

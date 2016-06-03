@@ -1475,7 +1475,11 @@ label.x-form-cb-label-alt1 {
     cursor: pointer;
     vertical-align: middle;
     pointer-events: none;
-    width: 100%;
+    /*width: 100%;*/
+}
+
+.color-ramp ul {
+    overflow: hidden;
 }
 
 .color-ramp li {
@@ -1483,7 +1487,14 @@ label.x-form-cb-label-alt1 {
     height: 22px;
 }
 
-.color-ramp-7 li {
-    width: 29px;
+.color-ramp li:last-child  {
+    float: none;
+    overflow: hidden;
 }
 
+
+.color-ramp-7 li { width: 14.3%; }
+.color-ramp-6 li { width: 16.7%; }
+.color-ramp-5 li { width: 20%; }
+.color-ramp-4 li { width: 25%; }
+.color-ramp-3 li { width: 33.4%; }

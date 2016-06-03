@@ -62,6 +62,7 @@ export default function LayerWidgetThematic(gis, layer) {
         legendSet,
         classes,
         method,
+        colorsCombo,
         colorLow,
         colorHigh,
         radiusLow,
@@ -1537,7 +1538,8 @@ export default function LayerWidgetThematic(gis, layer) {
         displayField: 'id',
         queryMode: 'local',
         value: 5,
-        minValue: 1,
+        //minValue: 1,
+        minValue: 3,
         maxValue: 7,
         width: 50,
         fieldStyle: 'height: 24px',
@@ -1545,7 +1547,12 @@ export default function LayerWidgetThematic(gis, layer) {
         store: Ext.create('Ext.data.ArrayStore', {
             fields: ['id'],
             data: [[1], [2], [3], [4], [5], [6], [7]]
-        })
+        }),
+        listeners: {
+            change: function(field, value) {
+                colorsCombo.setClasses(value);
+            }
+        }
     });
 
     method = Ext.create('Ext.form.field.ComboBox', {
@@ -1563,6 +1570,14 @@ export default function LayerWidgetThematic(gis, layer) {
                 [3, GIS.i18n.equal_counts]
             ]
         })
+    });
+
+    colorsCombo = Ext.create('Ext.ux.field.ColorRamp', {
+        classes: 5,
+        // fieldLabel: GIS.i18n.legend_type,
+        fieldLabel: 'Color scale',
+        labelWidth: gis.conf.layout.widget.itemlabel_width,
+        width: gis.conf.layout.widget.item_width,
     });
 
     colorLow = Ext.create('Ext.ux.button.ColorButton', {
@@ -1614,7 +1629,8 @@ export default function LayerWidgetThematic(gis, layer) {
     });
 
     lowPanelLabel = Ext.create('Ext.panel.Panel', {
-        html: GIS.i18n.low_color_size + ':',
+        // html: GIS.i18n.low_color_size + ':',
+        html: 'Low size:',
         width: 100,
         style: 'padding: 4px 0 0 4px',
         bodyStyle: 'border: 0 none'
@@ -1622,6 +1638,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
     highPanelLabel = Ext.create('Ext.panel.Panel', {
         html: GIS.i18n.high_color_size + ':',
+        html: 'High size:',
         width: 100,
         style: 'padding: 4px 0 0 4px',
         bodyStyle: 'border: 0 none'
@@ -1633,7 +1650,7 @@ export default function LayerWidgetThematic(gis, layer) {
         bodyStyle: 'border: 0 none',
         items: [
             lowPanelLabel,
-            colorLow,
+            //colorLow,
             radiusLow
         ]
     });
@@ -1644,7 +1661,7 @@ export default function LayerWidgetThematic(gis, layer) {
         bodyStyle: 'border: 0 none',
         items: [
             highPanelLabel,
-            colorHigh,
+            //colorHigh,
             radiusHigh
         ]
     });
@@ -1661,6 +1678,7 @@ export default function LayerWidgetThematic(gis, layer) {
             legendType,
             legendSet,
             methodPanel,
+            colorsCombo,
             lowPanel,
             highPanel,
             labelPanel

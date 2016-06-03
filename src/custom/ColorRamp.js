@@ -9,45 +9,22 @@ const createColorRamp = function(value, model) {
 };
 
 const colorStore = Ext.create('Ext.data.Store', {
-    fields: ['id', 'classes', {name: 'ramp', convert: createColorRamp}],
-    data: [{
-        id: 'YlGn',
-        classes: 7
-    },{
-        id: 'BuGn',
-        classes: 7
-    },{
-        id: 'PuBu',
-        classes: 7
-    },{
-        id: 'BuPu',
-        classes: 7
-    },{
-        id: 'RdPu',
-        classes: 7
-    },{
-        id: 'PuRd',
-        classes: 7
-    },{
-        id: 'YlOrBr',
-        classes: 7
-    },{
-        id: 'Blues',
-        classes: 7
-    },{
-        id: 'Greens',
-        classes: 7
-    },{
-        id: 'Oranges',
-        classes: 7
-    },{
-        id: 'Reds',
-        classes: 7
-    },{
-        id: 'Greys',
-        classes: 7
-    }]
-})
+    fields: ['id', 'classes', {name: 'ramp', persist: false, convert: createColorRamp}],
+    data: [
+        {id: 'YlGn',    classes: 5},
+        {id: 'BuGn',    classes: 5},
+        {id: 'PuBu',    classes: 5},
+        {id: 'BuPu',    classes: 5},
+        {id: 'RdPu',    classes: 5},
+        {id: 'PuRd',    classes: 5},
+        {id: 'YlOrBr',  classes: 5},
+        {id: 'Blues',   classes: 5},
+        {id: 'Greens',  classes: 5},
+        {id: 'Oranges', classes: 5},
+        {id: 'Reds',    classes: 5},
+        {id: 'Greys',   classes: 5}
+    ]
+});
 
 // ColorRamp
 // http://docs.sencha.com/extjs/4.0.7/#!/api/Ext.form.field.ComboBox
@@ -55,20 +32,22 @@ Ext.define('Ext.ux.field.ColorRamp', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.colorramp',
     cls: 'gis-combo',
-    fieldLabel: 'Select color scale', // TODO: i18n
+    //fieldLabel: 'Select color scale', // TODO: i18n
     editable: false,
     valueField: 'id',
     displayField: 'ramp',
     queryMode: 'local',
     forceSelection: true,
-    width: 220,
-    labelAlign: 'top',
-    labelCls: 'gis-form-item-label-top',
-    style: 'padding-bottom:10px;',
+    // 220,
+    //labelAlign: 'top',
+    //labelCls: 'gis-form-item-label-top',
+    //style: 'padding-bottom:10px;',
     tpl: '<tpl for="."><div class="x-boundlist-item color-ramp">{ramp}</div></tpl>',
     store: colorStore,
+    classes: 5, // Default
     listeners: {
         afterRender: function() {
+            this.setClasses(this.classes);
             this.reset();
         }
     },
@@ -91,7 +70,7 @@ Ext.define('Ext.ux.field.ColorRamp', {
             if (!this.colorEl) {
                 this.colorEl = document.createElement('div');
                 this.colorEl.className = 'color-ramp';
-                this.colorEl.style.width = (this.getWidth() - 18) + 'px';
+                this.colorEl.style.width = this.inputEl.getWidth() + 'px';
                 this.inputEl.insertSibling(this.colorEl);
             }
 
@@ -103,9 +82,20 @@ Ext.define('Ext.ux.field.ColorRamp', {
                 value = value.getId();
             }
 
+            this.scheme = value;
             this.colorEl.innerHTML = this.findRecordByValue(value).get('ramp');
         }
 
         return this;
+    },
+    setClasses: function (classes) {
+        this.store.each(function(model){
+            model.set('classes', classes);
+            model.set('ramp', ''); // Triggers createColorRamp convert function
+        });
+
+        if (this.colorEl) {
+            this.colorEl.innerHTML = this.findRecordByValue(this.scheme).get('ramp');
+        }
     }
 });

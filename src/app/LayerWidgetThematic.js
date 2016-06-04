@@ -444,6 +444,7 @@ export default function LayerWidgetThematic(gis, layer) {
     legendTypeToggler = function(legendType) {
         if (legendType === 'automatic') {
             methodPanel.show();
+            colorsCombo.show();
             colorLow.enable();
             lowPanelLabel.update(GIS.i18n.low_color_size + ':');
             colorHigh.enable();
@@ -452,6 +453,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
         else if (legendType === 'predefined') {
             methodPanel.hide();
+            colorsCombo.hide();
             colorLow.disable();
             lowPanelLabel.update(GIS.i18n.low_size + ':');
             colorHigh.disable();
@@ -1540,7 +1542,7 @@ export default function LayerWidgetThematic(gis, layer) {
         value: 5,
         //minValue: 1,
         minValue: 3,
-        maxValue: 7,
+        maxValue: 9,
         width: 50,
         fieldStyle: 'height: 24px',
         style: 'margin-right: 1px',
@@ -2012,6 +2014,10 @@ export default function LayerWidgetThematic(gis, layer) {
         view.radiusLow = parseInt(radiusLow.getValue());
         view.radiusHigh = parseInt(radiusHigh.getValue());
         view.opacity = layer.layerOpacity;
+
+        if (view.method !== 1) {
+            view.colors = colorsCombo.getValue();
+        }
 
         Ext.apply(view, labelPanel.getConfig());
 

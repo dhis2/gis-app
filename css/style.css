@@ -1492,7 +1492,8 @@ label.x-form-cb-label-alt1 {
     overflow: hidden;
 }
 
-
+.color-ramp-9 li { width: 11.2%; }
+.color-ramp-8 li { width: 12.5%; }
 .color-ramp-7 li { width: 14.3%; }
 .color-ramp-6 li { width: 16.7%; }
 .color-ramp-5 li { width: 20%; }

@@ -1089,6 +1089,10 @@ export default function getInstance(init) {
 
                 layout.key = config.key; // Earth Engine layer
 
+                if (config.colors) { // Thematic layers
+                    layout.colors = config.colors;
+                }
+
                 if (arrayFrom(config.userOrgUnit).length) {
                     layout.userOrgUnit = arrayFrom(config.userOrgUnit);
                 }

@@ -55,13 +55,14 @@ Ext.define('Ext.ux.field.ColorRamp', {
         this.setValue(this.store.getAt(0).data.id, true);
     },
     getValue: function() {
-        const value = this.self.superclass.getValue.call(this);
+        //const value = this.self.superclass.getValue.call(this);
 
-        if (value) {
-            return colorbrewer[value][this.findRecordByValue(value).get('classes')];
+        if (this.scheme) {
+
+            return colorbrewer[this.scheme][this.findRecordByValue(this.scheme).get('classes')];
         }
 
-        return value;
+        //return value;
     },
     setValue: function(value, doSelect) {
         this.self.superclass.setValue.call(this, value, doSelect);

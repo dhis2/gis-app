@@ -400,7 +400,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 method: view.method,
                 numClasses: view.classes,
                 bounds: bounds,
-                colors: colors,
+                colors: view.colors || colors,
                 count: count,
                 minSize: view.radiusLow,
                 maxSize: view.radiusHigh,
@@ -409,6 +409,8 @@ export default function LayerHandlerThematic(gis, layer) {
                 colorLow: view.colorLow,
                 colorHigh: view.colorHigh
             };
+
+            console.log(view.colors);
 
             layer.view = view;
             layer.minValue = options.minValue;
@@ -514,7 +516,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 bounds[i] = options.minValue + i * (options.maxValue - options.minValue) / options.numClasses;
             }
             options.bounds = bounds;
-            colors = options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
+            //colors = options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
 
         } else if (method === 3) { // quantiles
 
@@ -539,7 +541,7 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
             options.bounds = bounds;
-            colors = options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
+            //colors = options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
         }
 
         if (bounds.length) {
@@ -547,7 +549,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 prop = features[i].properties;
                 value = prop[options.indicator];
                 classNumber = getClass(value, bounds);
-                prop.color = colors[classNumber - 1];
+                prop.color = options.colors[classNumber - 1];
                 prop.radius = (value - options.minValue) / (options.maxValue - options.minValue) * (options.maxSize - options.minSize) + options.minSize;
 
                 // Count features in each class

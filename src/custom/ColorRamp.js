@@ -1,4 +1,5 @@
 import isArray from 'd2-utilizr/lib/isArray';
+import isObject from 'd2-utilizr/lib/isObject';
 import colorbrewer from '../custom/colorbrewer';
 
 const createColorRamp = function(value, model) {
@@ -52,22 +53,31 @@ Ext.define('Ext.ux.field.ColorRamp', {
         }
     },
     reset: function() { // Set first ramp
-        this.setValue(this.store.getAt(0).data.id, true);
+        if (this.scheme) {
+            this.setValue(this.scheme, true);
+        } else {
+            this.setValue(this.store.getAt(0).data.id, true);
+        }
     },
     getValue: function() {
-        //const value = this.self.superclass.getValue.call(this);
-
-        if (this.scheme) {
-
+        if (this.scheme && this.findRecordByValue(this.scheme)) {
             return colorbrewer[this.scheme][this.findRecordByValue(this.scheme).get('classes')];
         }
-
-        //return value;
     },
     setValue: function(value, doSelect) {
         this.self.superclass.setValue.call(this, value, doSelect);
 
-        if (value) {
+        if (isArray(value)) {
+            value = value[0];
+        }
+
+        if (isObject(value)) {
+            value = value.getId();
+        }
+
+        this.scheme = value;
+
+        if (value && this.inputEl) {
             if (!this.colorEl) {
                 this.colorEl = document.createElement('div');
                 this.colorEl.className = 'color-ramp';
@@ -75,21 +85,13 @@ Ext.define('Ext.ux.field.ColorRamp', {
                 this.inputEl.insertSibling(this.colorEl);
             }
 
-            if (isArray(value)) {
-                value = value[0];
-            }
-
-            if (typeof value !== 'string') {
-                value = value.getId();
-            }
-
-            this.scheme = value;
             this.colorEl.innerHTML = this.findRecordByValue(value).get('ramp');
         }
 
         return this;
     },
     setClasses: function (classes) {
+        this.classes = classes;
         this.store.each(function(model){
             model.set('classes', classes);
             model.set('ramp', ''); // Triggers createColorRamp convert function

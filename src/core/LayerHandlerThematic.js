@@ -400,7 +400,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 method: view.method,
                 numClasses: view.classes,
                 bounds: bounds,
-                colors: view.colors || colors,
+                colors:  view.colorScale ? view.colorScale.split(',') : colors,
                 count: count,
                 minSize: view.radiusLow,
                 maxSize: view.radiusHigh,
@@ -409,8 +409,6 @@ export default function LayerHandlerThematic(gis, layer) {
                 colorLow: view.colorLow,
                 colorHigh: view.colorHigh
             };
-
-            console.log(view.colors);
 
             layer.view = view;
             layer.minValue = options.minValue;
@@ -516,7 +514,6 @@ export default function LayerHandlerThematic(gis, layer) {
                 bounds[i] = options.minValue + i * (options.maxValue - options.minValue) / options.numClasses;
             }
             options.bounds = bounds;
-            //colors = options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
 
         } else if (method === 3) { // quantiles
 
@@ -541,7 +538,6 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
             options.bounds = bounds;
-            //colors = options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
         }
 
         if (bounds.length) {
@@ -578,6 +574,7 @@ export default function LayerHandlerThematic(gis, layer) {
         return null;
     };
 
+    /*
     getColorsByRgbInterpolation = function (firstColor, lastColor, nbColors) {
         var colors = [],
             colorA = hexToRgb('#' + firstColor),
@@ -595,8 +592,10 @@ export default function LayerHandlerThematic(gis, layer) {
         }
         return colors;
     };
+    */
 
     // Convert hex color to RGB
+    /*
     hexToRgb = function (hex) {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
@@ -605,11 +604,14 @@ export default function LayerHandlerThematic(gis, layer) {
             b: parseInt(result[3], 16)
         } : null;
     };
+    */
 
     // Convert RGB color to hex
+    /*
     rgbToHex = function (rgb) {
         return "#" + ((1 << 24) + (rgb.r << 16) + (rgb.g << 8) + rgb.b).toString(16).slice(1);
     };
+    */
 
     // Add layer to map
     updateMap = function (view, features) {

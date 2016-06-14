@@ -1461,14 +1461,14 @@ label.x-form-cb-label-alt1 {
 }
 
 /*----------------------------------------------------------------------------
- * Color ramps from ColorBrewer
+ * Color scales from ColorBrewer
  *--------------------------------------------------------------------------*/
 
-.color-ramp {
+.color-scale {
     white-space: nowrap;
 }
 
-.x-form-item-body .color-ramp {
+.x-form-item-body .color-scale {
     position: absolute;
     padding: 1px!important;
     overflow: hidden;
@@ -1478,24 +1478,24 @@ label.x-form-cb-label-alt1 {
     /*width: 100%;*/
 }
 
-.color-ramp ul {
+.color-scale ul {
     overflow: hidden;
 }
 
-.color-ramp li {
+.color-scale li {
     display: inline-block;
     height: 22px;
 }
 
-.color-ramp li:last-child  {
+.color-scale li:last-child  {
     float: none;
     overflow: hidden;
 }
 
-.color-ramp-9 li { width: 11.2%; }
-.color-ramp-8 li { width: 12.5%; }
-.color-ramp-7 li { width: 14.3%; }
-.color-ramp-6 li { width: 16.7%; }
-.color-ramp-5 li { width: 20%; }
-.color-ramp-4 li { width: 25%; }
-.color-ramp-3 li { width: 33.4%; }
+.color-scale-9 li { width: 11.2%; }
+.color-scale-8 li { width: 12.5%; }
+.color-scale-7 li { width: 14.3%; }
+.color-scale-6 li { width: 16.7%; }
+.color-scale-5 li { width: 20%; }
+.color-scale-4 li { width: 25%; }
+.color-scale-3 li { width: 33.4%; }

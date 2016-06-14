@@ -62,7 +62,7 @@ export default function LayerWidgetThematic(gis, layer) {
         legendSet,
         classes,
         method,
-        colorsCombo,
+        colorScale,
         colorLow,
         colorHigh,
         radiusLow,
@@ -444,7 +444,7 @@ export default function LayerWidgetThematic(gis, layer) {
     legendTypeToggler = function(legendType) {
         if (legendType === 'automatic') {
             methodPanel.show();
-            colorsCombo.show();
+            colorScale.show();
             colorLow.enable();
             lowPanelLabel.update(GIS.i18n.low_color_size + ':');
             colorHigh.enable();
@@ -453,7 +453,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
         else if (legendType === 'predefined') {
             methodPanel.hide();
-            colorsCombo.hide();
+            colorScale.hide();
             colorLow.disable();
             lowPanelLabel.update(GIS.i18n.low_size + ':');
             colorHigh.disable();
@@ -1552,7 +1552,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }),
         listeners: {
             change: function(field, value) {
-                colorsCombo.setClasses(value);
+                colorScale.setClasses(value);
             }
         }
     });
@@ -1574,7 +1574,7 @@ export default function LayerWidgetThematic(gis, layer) {
         })
     });
 
-    colorsCombo = Ext.create('Ext.ux.field.ColorRamp', {
+    colorScale = Ext.create('Ext.ux.field.ColorScale', {
         classes: 5,
         // fieldLabel: GIS.i18n.legend_type,
         fieldLabel: 'Color scale',
@@ -1680,7 +1680,7 @@ export default function LayerWidgetThematic(gis, layer) {
             legendType,
             legendSet,
             methodPanel,
-            colorsCombo,
+            colorScale,
             lowPanel,
             highPanel,
             labelPanel
@@ -1885,6 +1885,7 @@ export default function LayerWidgetThematic(gis, layer) {
             if (legType === gis.conf.finals.widget.legendtype_automatic) {
                 classes.setValue(view.classes);
                 method.setValue(view.method);
+                colorScale.setScale(view.colorScale);
                 colorLow.setValue(view.colorLow);
                 colorHigh.setValue(view.colorHigh);
                 radiusLow.setValue(view.radiusLow);
@@ -2016,7 +2017,7 @@ export default function LayerWidgetThematic(gis, layer) {
         view.opacity = layer.layerOpacity;
 
         if (view.method !== 1) {
-            view.colors = colorsCombo.getValue();
+            view.colorScale = colorScale.getValue().join();
         }
 
         Ext.apply(view, labelPanel.getConfig());

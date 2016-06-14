@@ -181,7 +181,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
     });
 
-    colorsCombo = Ext.create('Ext.ux.field.ColorRamp', {
+    colorsCombo = Ext.create('Ext.ux.field.ColorScale', {
         fieldLabel: 'Color scale',
         hidden: true,
         value: 'YlOrBr',

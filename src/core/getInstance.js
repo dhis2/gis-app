@@ -1081,16 +1081,18 @@ export default function getInstance(init) {
 
                 layout.parentGraphMap = isObject(config.parentGraphMap) ? config.parentGraphMap : null;
 
-                layout.legendSet = config.legendSet;
-
                 layout.organisationUnitGroupSet = config.organisationUnitGroupSet;
 
                 layout.dataDimensionItems = config.dataDimensionItems;
 
                 layout.key = config.key; // Earth Engine layer
 
-                if (config.colors) { // Thematic layers
-                    layout.colors = config.colors;
+                if (config.legendSet) {
+                    layout.legendSet = config.legendSet;
+                }
+
+                if (config.colorScale) { // Thematic layers
+                    layout.colorScale = config.colorScale;
                 }
 
                 if (arrayFrom(config.userOrgUnit).length) {

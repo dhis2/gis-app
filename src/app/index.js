@@ -1,4 +1,4 @@
-import colorRamp from '../custom/ColorRamp.js';
+import colorRamp from '../custom/ColorScale.js';
 import extendInstance from './extendInstance.js';
 import createExtensions from './createExtensions.js';
 import LayerMenu from './LayerMenu.js';

@@ -89,7 +89,7 @@ export default function FavoriteWindow(gis) {
                     view = Ext.clone(layer.view);
 
                     // TODO temp fix: https://github.com/dhis2/dhis2-gis/issues/108
-                    if (view.method && view.method === 2 && view.legendSet) {
+                    if (view.legendSet && view.method && (view.method === 2 || view.method === 3)) {
                         delete view.legendSet;
                     }
 

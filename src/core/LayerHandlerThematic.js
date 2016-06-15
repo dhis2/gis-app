@@ -515,6 +515,10 @@ export default function LayerHandlerThematic(gis, layer) {
             }
             options.bounds = bounds;
 
+            if (!options.colors.length) { // Backward compability
+                options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
+            }
+
         } else if (method === 3) { // quantiles
 
             var binSize = Math.round(values.length / options.numClasses),
@@ -538,6 +542,10 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
             options.bounds = bounds;
+
+            if (!options.colors.length) { // Backward compability
+                options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
+            }
         }
 
         if (bounds.length) {
@@ -574,7 +582,6 @@ export default function LayerHandlerThematic(gis, layer) {
         return null;
     };
 
-    /*
     getColorsByRgbInterpolation = function (firstColor, lastColor, nbColors) {
         var colors = [],
             colorA = hexToRgb('#' + firstColor),
@@ -592,10 +599,8 @@ export default function LayerHandlerThematic(gis, layer) {
         }
         return colors;
     };
-    */
 
     // Convert hex color to RGB
-    /*
     hexToRgb = function (hex) {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
@@ -604,14 +609,11 @@ export default function LayerHandlerThematic(gis, layer) {
             b: parseInt(result[3], 16)
         } : null;
     };
-    */
 
     // Convert RGB color to hex
-    /*
     rgbToHex = function (rgb) {
         return "#" + ((1 << 24) + (rgb.r << 16) + (rgb.g << 8) + rgb.b).toString(16).slice(1);
     };
-    */
 
     // Add layer to map
     updateMap = function (view, features) {

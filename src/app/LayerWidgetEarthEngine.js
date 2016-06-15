@@ -123,31 +123,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }, stepValue]
     });
 
-    /*
-    elevation = Ext.create('Ext.form.field.Number', {
-        cls: 'gis-numberfield',
-        width: 90,
-        allowDecimals: false,
-        minValue: 1,
-        maxValue: 8848,
-        value: 1200,
-        style: 'padding-bottom:10px;'
-    });
-
-    // Number field to specify elevation (altitude)
-    elevationField = Ext.create('Ext.container.Container', {
-        layout: 'hbox',
-        hidden: true,
-        items: [{
-            xtype: 'container',
-            html: 'Elevation:', // TODO: i18n
-            width: 60,
-            style: 'padding:5px;font-size:11px;'
-        }, elevation]
-    });
-    */
-
-    // Show elevation field when elevation layer is selected
     onLayerComboSelect = function(combo, record) {
         record = record[0];
 
@@ -200,7 +175,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             return;
         }
 
-        console.log('reset');
         layerCombo.reset();
     };
 
@@ -219,16 +193,12 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         var view = {
             key: key,
-            palette: colorsCombo.getValue().join(','),
-            min: minValue.getValue(),
-            max: maxValue.getValue()
+            config: {
+                palette: colorsCombo.getValue().join(','),
+                min: minValue.getValue(),
+                max: maxValue.getValue()
+            }
         };
-
-        /*
-        if (key === 'elevation_srtm_30m') {
-            view.elevation = elevation.getValue();
-        }
-        */
 
         return view;
     };

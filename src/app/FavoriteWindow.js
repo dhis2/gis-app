@@ -103,6 +103,8 @@ export default function FavoriteWindow(gis) {
                     // remove
                     delete view.dataDimensionItems;
 
+                    console.log(view.config);
+
                     views.push(view);
                 }
 
@@ -117,8 +119,6 @@ export default function FavoriteWindow(gis) {
                         id: 'currentUser'
                     }
                 };
-
-                //console.log('save', JSON.stringify(map));
 
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.contextPath + '/api/maps/'),
@@ -138,6 +138,7 @@ export default function FavoriteWindow(gis) {
                         window.destroy();
                     }
                 });
+
             }
         });
 

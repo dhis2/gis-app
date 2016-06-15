@@ -1087,6 +1087,10 @@ export default function getInstance(init) {
 
                 layout.key = config.key; // Earth Engine layer
 
+                if (config.config) { // JSON string config for Earth Engine layers
+                    layout.config = config.config;
+                }
+
                 if (config.legendSet) {
                     layout.legendSet = config.legendSet;
                 }

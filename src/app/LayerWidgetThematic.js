@@ -1885,7 +1885,10 @@ export default function LayerWidgetThematic(gis, layer) {
             if (legType === gis.conf.finals.widget.legendtype_automatic) {
                 classes.setValue(view.classes);
                 method.setValue(view.method);
-                colorScale.setScale(view.colorScale);
+
+                if (view.colorScale) { // Pre 2.24 maps don't have color scale
+                    colorScale.setScale(view.colorScale);
+                }
                 colorLow.setValue(view.colorLow);
                 colorHigh.setValue(view.colorHigh);
                 radiusLow.setValue(view.radiusLow);

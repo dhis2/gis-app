@@ -103,6 +103,8 @@ export default function FavoriteWindow(gis) {
                     // remove
                     delete view.dataDimensionItems;
 
+                    console.log('favorite view', view);
+
                     views.push(view);
                 }
 
@@ -351,14 +353,21 @@ export default function FavoriteWindow(gis) {
 
                                         for (var i = 0; i < layers.length; i++) {
                                             layer = layers[i];
-                                            view = layer.view;
+                                            view = Ext.clone(layer.view);
+
+                                            // TODO temp fix: https://github.com/dhis2/dhis2-gis/issues/108
+                                            if (view.legendSet && view.method && (view.method === 2 || view.method === 3)) {
+                                                delete view.legendSet;
+                                            }
 
                                             // add
                                             view.layer = layer.id;
                                             view.hidden = !gis.instance.hasLayer(layer.instance);
+                                            view.opacity = layer.layerOpacity;
 
                                             // remove
                                             delete view.periodType;
+                                            delete view.dataDimensionItems;
 
                                             views.push(view);
                                         }

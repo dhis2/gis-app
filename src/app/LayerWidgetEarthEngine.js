@@ -27,6 +27,13 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             steps: 5,
             colors: 'YlOrBr'
         },{
+            key: 'worldpop_2015_un',
+            name: 'Population density 2015',
+            min: 0,
+            max: 100,
+            steps: 5,
+            colors: 'YlOrBr'
+        },{
             key: 'worldpop_2010_un',
             name: 'Population density 2010',
             min: 0,

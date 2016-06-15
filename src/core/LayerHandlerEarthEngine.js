@@ -15,6 +15,20 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             description: 'Metres above sea level.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003" target="_blank">NASA / USGS / JPL-Caltech</a>'
         },
+        worldpop_2015_un: {
+            type: 'population',
+            name: 'Population density 2015',
+            id: 'WorldPop/POP',
+            filter: [{
+                type: 'eq',
+                arguments: ['year', 2015]
+            },{
+                type: 'eq',
+                arguments: ['UNadj', 'yes']
+            }],
+            description: 'Population in 100 x 100 m grid cells.',
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>'
+        },
         worldpop_2010_un: {
             type: 'population',
             name: 'Population density 2010',

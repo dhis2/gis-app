@@ -884,7 +884,7 @@ export default function LayerWidgetEvent(gis, layer) {
         columnWidth: 0.33, // 0.25,
         style: 'padding-top: 2px; padding-left: 5px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
-        boxLabel: GIS.i18n.user_organisation_unit,
+        boxLabel: GIS.i18n.user_ou,
         labelWidth: gis.conf.layout.form_label_width,
         handler: function(chb, checked) {
             treePanel.xable([checked, userOrganisationUnitChildren.getValue(), userOrganisationUnitGrandChildren.getValue()]);

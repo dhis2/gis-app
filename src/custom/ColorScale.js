@@ -12,7 +12,7 @@ const createColorScale = function(value, model) {
 const colorStore = Ext.create('Ext.data.Store', {
     fields: ['id', 'classes', {name: 'scale', persist: false, convert: createColorScale}],
     data: [
-        {id: 'YlOrRd',   classes: 5},
+        {id: 'YlOrBr',   classes: 5},
         {id: 'Reds',     classes: 5},
         {id: 'YlGn',     classes: 5},
         {id: 'Greens',   classes: 5},
@@ -89,7 +89,11 @@ Ext.define('Ext.ux.field.ColorScale', {
                 this.inputEl.insertSibling(this.colorEl);
             }
 
-            this.colorEl.innerHTML = this.findRecordByValue(value).get('scale');
+            const model = this.findRecordByValue(value);
+
+            if (model) {
+                this.colorEl.innerHTML = model.get('scale');
+            }
         }
 
         return this;

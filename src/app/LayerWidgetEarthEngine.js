@@ -192,11 +192,13 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
 
         var view = {
-            key: key,
-            config: {
-                palette: colorsCombo.getValue().join(','),
-                min: minValue.getValue(),
-                max: maxValue.getValue()
+            config: { // Config object saved stored as one field
+                key: key,
+                params: {
+                    palette: colorsCombo.getValue().join(','),
+                    min: minValue.getValue(),
+                    max: maxValue.getValue()
+                }
             }
         };
 

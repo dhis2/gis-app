@@ -13,7 +13,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             id: 'USGS/SRTMGL1_003',
             unit: 'm',
             description: 'Metres above sea level.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003">NASA / USGS / JPL-Caltech</a>'
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003" target="_blank">NASA / USGS / JPL-Caltech</a>'
         },
         worldpop_2010_un: {
             type: 'population',
@@ -27,12 +27,16 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 arguments: ['UNadj', 'yes']
             }],
             description: 'Population in 100 x 100 m grid cells.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP">WorldPop</a>'
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>'
         }
     };
 
     createLayer = function(view) {
         const layerConfig = {};
+
+        if (typeof view.config === 'string') { // From database as favorite
+            view.config = JSON.parse(view.config);
+        }
 
         Object.assign(layerConfig, {
             accessToken: function(callback) {
@@ -47,12 +51,8 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                     }
                 });
             }
-        }, layer.config, datasets[view.key], view);
+        }, layer.config, datasets[view.config.key], view.config);
 
-        if (typeof layerConfig.config === 'string') {
-            layerConfig.config = JSON.parse(layerConfig.config);
-        }
-        
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
             layer.instance.off('initialized', hideMask);
@@ -94,8 +94,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
 
     afterLoad = function(view) {
 
-        layer.view = {
-            key: view.key,
+        layer.view = { // simplify view for storage
             config: JSON.stringify(view.config)
         };
 

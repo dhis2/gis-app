@@ -103,8 +103,6 @@ export default function FavoriteWindow(gis) {
                     // remove
                     delete view.dataDimensionItems;
 
-                    console.log(view.config);
-
                     views.push(view);
                 }
 

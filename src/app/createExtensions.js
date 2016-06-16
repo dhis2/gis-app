@@ -49,7 +49,8 @@ export default function createExtensions(gis) {
             if (isVisible) {
                 if (layer.instance) { // Layer instance already exist
                     gis.instance.addLayer(layer.instance);
-                } else { // Create and add layer instance
+                } else if (layer.id !== 'earthEngine') { // Earth Engine layer can't be empty
+                    // Create and add layer instance
                     layer.instance = gis.instance.addLayer(layer.config);
                 }
             } else if (layer.instance) { // Remove if layer instance exit

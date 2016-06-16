@@ -187,17 +187,15 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		var lon = parseFloat(gis.map.longitude) || 0,
 			lat = parseFloat(gis.map.latitude) || 20,
 			zoom = gis.map.zoom || 3,
-			validLatLng = ((lon >= -180 && lon <= 180) && (lat >= -90 && lat <= 90));
+			validLatLng = ((lon >= -180 && lon <= 180) && (lat >= -90 && lat <= 90)),
+			layersBounds = gis.instance.getLayersBounds();
 
 		// gis.el is the element used to render the map (only for plugin)
 		// isSession is true if you select "map -> view this table/chart" as map in pivot/visualizer
-		if (gis.el || isSession || !validLatLng) {
+		if (layersBounds && layersBounds.isValid() && (gis.el || isSession || !validLatLng)) {
 			// Fit bounds not always set without a delay
 			window.setTimeout(function(){
-				var layersBounds = gis.instance.getLayersBounds();
-				if (layersBounds)  {
-					gis.instance.fitBounds(layersBounds);
-				}
+				gis.instance.fitBounds(layersBounds);
 			}, 2000);
 		}
 		else {

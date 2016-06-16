@@ -42,6 +42,14 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             }],
             description: 'Population in 100 x 100 m grid cells.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>'
+        },
+        nightlights_2013: {
+            type: 'nightLights',
+            name: 'Nighttime lights 2013',
+            id: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
+            filterDate: ['2013-01-01', '2014-01-31'],
+            description: 'Lights from cities, towns, and other sites with persistent lighting, including gas flares.',
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>'
         }
     };
 

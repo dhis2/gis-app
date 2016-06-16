@@ -9,7 +9,7 @@ export default function LayersPanel(gis) {
             layers.thematic3,
             layers.thematic4,
             layers.earthEngine,
-            layers.openStreetMap,
+            // layers.openStreetMap,
             layers.osmLight,
             layers.googleStreets,
             layers.googleHybrid
@@ -17,7 +17,8 @@ export default function LayersPanel(gis) {
         layer,
         item,
         items = [],
-        visibleLayer = layers.openStreetMap;
+        // visibleLayer = layers.openStreetMap;
+        visibleLayer = layers.osmLight;
 
     for (var i = 0, layerIsVisibleLayer; i < orderedLayers.length; i++) {
         layer = orderedLayers[i];

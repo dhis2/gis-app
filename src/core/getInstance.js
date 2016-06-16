@@ -1209,7 +1209,7 @@ export default function getInstance(init) {
         gis.layer.googleHybrid,
         gis.layer.googleStreets,
         gis.layer.osmLight,
-        gis.layer.openStreetMap,
+        // gis.layer.openStreetMap,
         gis.layer.earthEngine,
         gis.layer.thematic4,
         gis.layer.thematic3,

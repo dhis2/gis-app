@@ -26,19 +26,26 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             max: 2500,
             steps: 5,
             colors: 'YlOrBr'
-        },{
+        },/*{
             key: 'worldpop_2015_un',
             name: 'Population density 2015',
             min: 0,
             max: 100,
             steps: 5,
             colors: 'YlOrBr'
-        },{
+        },*/{
             key: 'worldpop_2010_un',
             name: 'Population density 2010',
             min: 0,
             max: 100,
             steps: 5,
+            colors: 'YlOrBr'
+        },{
+            key: 'nightlights_2013',
+            name: 'Nighttime lights 2013',
+            min: 0,
+            max: 60,
+            steps: 6,
             colors: 'YlOrBr'
         }]
     });

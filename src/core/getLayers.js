@@ -2,6 +2,7 @@ export default function getLayers(gis) {
     var layerNumbers = ['1', '2', '3', '4'];
 
     var layers = {
+        /*
         openStreetMap: {
             id: 'openStreetMap',
             name: GIS.i18n.openstreetmap,
@@ -11,9 +12,11 @@ export default function getLayers(gis) {
                 type: 'mapQuest',
             }
         },
+        */
         osmLight: {
             id: 'osmLight',
-            name: GIS.i18n.osm_light,
+            // name: GIS.i18n.osm_light,
+            name: GIS.i18n.openstreetmap,
             layerType: 'base',
             layerOpacity: 1,
             config: {

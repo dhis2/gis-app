@@ -73,7 +73,8 @@ export default function MapLoader(gis, isSession, applyConfig) {
 	};
 
 	setMap = function() {
-		var basemap = gis.map.basemap || 'openStreetMap',
+		// var basemap = gis.map.basemap || 'openStreetMap',
+		var basemap = gis.map.basemap || 'osmLight',
 			views = gis.map.mapViews,
 			handler,
 			layer;
@@ -114,8 +115,8 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		clearAllLayers();
 
 		// Add basemap
-		if (basemap !== 'none' && gis.layer[basemap]) {
-			layer = gis.layer[basemap];
+		if (basemap !== 'none') {
+			layer = gis.layer[basemap] || gis.layer['osmLight'];
 			if (layer.instance) { // Layer instance already exist
 				gis.instance.addLayer(layer.instance);
 			} else { // Create and add layer instance

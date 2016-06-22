@@ -4,9 +4,11 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         minValue,
         maxValue,
         stepValue,
-        minField,
-        maxField,
+        minMaxField,
+        //minField,
+        //maxField,
         stepField,
+        descriptionField,
         elevationField,
         layerCombo,
         colorsCombo,
@@ -18,41 +20,49 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     // Store for combo with supported Earth Engine layers
     layerStore = Ext.create('Ext.data.Store', {
-        fields: ['key', 'name', 'min', 'max', 'steps', 'colors'],
+        fields: ['key', 'name', 'min', 'max', 'maxValue', 'steps', 'colors', 'description'],
         data: [{
             key: 'elevation_srtm_30m',
             name: 'Elevation',
-            min: 1000,
-            max: 2500,
+            min: 0,
+            max: 1500,
+            maxValue: Number.MAX_VALUE,
             steps: 5,
-            colors: 'YlOrBr'
+            colors: 'YlOrBr',
+            description: 'Metres above sea level.'
         },/*{
             key: 'worldpop_2015_un',
             name: 'Population density 2015',
             min: 0,
             max: 100,
             steps: 5,
-            colors: 'YlOrBr'
+            colors: 'YlOrBr',
+            description: 'Population in 100 x 100 m grid cells.'
         },*/{
             key: 'worldpop_2010_un',
             name: 'Population density 2010',
             min: 0,
-            max: 100,
+            max: 10,
+            maxValue: Number.MAX_VALUE,
             steps: 5,
-            colors: 'YlOrBr'
+            colors: 'YlOrBr',
+            description: 'Population in 100 x 100 m grid cells.'
         },{
             key: 'nightlights_2013',
             name: 'Nighttime lights 2013',
             min: 0,
-            max: 60,
+            max: 63,
+            maxValue: 63,
             steps: 6,
-            colors: 'YlOrBr'
+            colors: 'YlOrBr',
+            description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.'
         }]
     });
 
     minValue = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
-        width: 80,
+        width: 93,
+        style: 'margin-right:2px',
         allowDecimals: false,
         minValue: 0,
         //maxValue: 8848,
@@ -73,7 +83,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     maxValue = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
-        width: 80,
+        width: 93,
         allowDecimals: false,
         //minValue: 1,
         //maxValue: 8848,
@@ -82,7 +92,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     stepValue = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
-        width: 80,
+        width: 93,
         allowDecimals: false,
         minValue: 1,
         maxValue: 7,
@@ -101,29 +111,46 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
     });
 
-    minField = Ext.create('Ext.container.Container', {
-        layout: 'hbox',
+    descriptionField = Ext.create('Ext.container.Container', {
         hidden: true,
-        style: 'padding:5px 0 0 5px;',
-        items: [{
-            xtype: 'container',
-            html: 'Min value:', // TODO: i18n
-            width: gis.conf.layout.widget.itemlabel_width,
-            style: 'padding-top:5px;font-size:11px;'
-        }, minValue]
+        style: 'padding:10px; color:#444'
     });
 
-    maxField = Ext.create('Ext.container.Container', {
+    minMaxField = Ext.create('Ext.container.Container', {
         layout: 'hbox',
         hidden: true,
         style: 'padding:5px 0 0 5px;',
         items: [{
             xtype: 'container',
-            html: 'Max value:', // TODO: i18n
+            html: 'Min / max value:', // TODO: i18n
             width: gis.conf.layout.widget.itemlabel_width,
             style: 'padding-top:5px;font-size:11px;'
-        }, maxValue]
+        }, minValue, maxValue]
     });
+
+    //minField = Ext.create('Ext.container.Container', {
+        //layout: 'hbox',
+        //hidden: true,
+        //style: 'padding:5px 0 0 5px;',
+        //items: [{
+            //xtype: 'container',
+            //html: 'Min value:', // TODO: i18n
+            //width: gis.conf.layout.widget.itemlabel_width,
+            //style: 'padding-top:5px;font-size:11px;'
+        //}, minValue]
+    //});
+
+    //maxField = Ext.create('Ext.container.Container', {
+        //layout: 'hbox',
+        //hidden: true,
+        //style: 'padding:5px 0 0 5px;',
+        //items: [{
+            //xtype: 'container',
+            //html: 'Max value:', // TODO: i18n
+            //width: gis.conf.layout.widget.itemlabel_width,
+            //style: 'padding-top:5px;font-size:11px;'
+        //}, maxValue]
+    //});
 
     stepField = Ext.create('Ext.container.Container', {
         layout: 'hbox',
@@ -142,12 +169,16 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         colorsCombo.show().setValue(record.get('colors'));
 
-        minField.show();
+        descriptionField.show();
+        descriptionField.update(record.get('description'));
+
+        minMaxField.show();
+        //minField.show();
         minValue.setValue(record.get('min'));
-
-        maxField.show();
+        //maxField.show();
+        maxValue.setMaxValue(record.get('maxValue'));
         maxValue.setValue(record.get('max'));
-
+        
         stepField.show();
         stepValue.setValue(record.get('steps'));
     };
@@ -156,7 +187,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     layerCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         // fieldLabel: GIS.i18n.select_layer_from_google_earth_engine,
-        fieldLabel: 'Select layer',
+        fieldLabel: 'Select dataset',
         editable: false,
         valueField: 'key',
         displayField: 'name',
@@ -221,8 +252,8 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     // This widget panel
     panel = Ext.create('Ext.panel.Panel', {
-        bodyStyle: 'border:0;padding:10px 0;',
-        items: [layerCombo, colorsCombo, minField, maxField, stepField],
+        bodyStyle: 'border:0;padding:5px 1px;',
+        items: [layerCombo, descriptionField, minMaxField, colorsCombo, stepField],
         map: layer.map,
         layer: layer,
         menu: layer.menu,

@@ -48,7 +48,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             name: 'Nighttime lights 2013',
             id: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
             filterDate: ['2013-01-01', '2014-01-31'],
-            description: 'Lights from cities, towns, and other sites with persistent lighting, including gas flares.',
+            description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>'
         }
     };

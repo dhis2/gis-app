@@ -215,6 +215,14 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		if (gis.mask) {
 			gis.mask.hide();
 		}
+
+        // data statistics
+        if (isObject(GIS.app) && !isObject(GIS.plugin)) {
+            Ext.Ajax.request({
+                url: gis.init.contextPath + '/api/dataStatistics?eventType=MAP_VIEW' + (gis.map.id ? '&favorite=' + gis.map.id : ''),
+                method: 'POST'
+            });
+        }
 	};
 
 	loader = {

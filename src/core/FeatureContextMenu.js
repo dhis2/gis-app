@@ -76,26 +76,16 @@ export default function FeatureContextMenu(gis, layer, instance) {
             coordinates = '[' + latlng.lng.toFixed(6) + ',' + latlng.lat.toFixed(6) + ']';
 
         Ext.Ajax.request({
-            url: encodeURI(gis.init.contextPath + '/api/organisationUnits/' + id + '.json?links=false'),
+            url: encodeURI(gis.init.contextPath + '/api/organisationUnits/' + id),
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            params: JSON.stringify({coordinates: coordinates}),
             success: function(r) {
-                var orgUnit = JSON.parse(r.responseText);
-
-                orgUnit.coordinates = coordinates;
-
-                Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/metaData?preheatCache=false'),
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    params: JSON.stringify({organisationUnits: [orgUnit]}),
-                    success: function(r) {
-                        instance.setLatLng(latlng);
-                        stopRelocate();
-                        console.log(gis.relocate.feature.properties.name + ' relocated to ' + coordinates);
-                    }
-                });
+                instance.setLatLng(latlng);
+                stopRelocate();
+                console.log(gis.relocate.feature.properties.name + ' relocated to ' + coordinates);
             }
         });
-
     };
 
     // Infrastructural data
@@ -405,27 +395,19 @@ export default function FeatureContextMenu(gis, layer, instance) {
             disabled: !gis.init.user.isAdmin,
             handler: function(item) {
                 var id = feature.properties.id,
-                    coords = feature.geometry.coordinates;
+                    coordinates = feature.geometry.coordinates;
+
+                var swappedCoordinates = coordinates.slice(0).reverse();
 
                 if (gis.init.user.isAdmin) {
                     Ext.Ajax.request({
-                        url: encodeURI(gis.init.contextPath + '/api/organisationUnits/' + id + '.json?links=false'),
+                        url: encodeURI(gis.init.contextPath + '/api/organisationUnits/' + id),
+                        method: 'PATCH',
+                        headers: {'Content-Type': 'application/json'},
+                        params: '{"coordinates": "' + JSON.stringify(swappedCoordinates) + '"}',
                         success: function(r) {
-                            var orgUnit = JSON.parse(r.responseText);
-
-                            orgUnit.coordinates = '[' + coords[1].toFixed(6) + ',' + coords[0].toFixed(6) + ']';
-
-                            Ext.Ajax.request({
-                                url: encodeURI(gis.init.contextPath + '/api/metaData?preheatCache=false'),
-                                method: 'POST',
-                                headers: {'Content-Type': 'application/json'},
-                                params: JSON.stringify({organisationUnits: [orgUnit]}),
-                                success: function(r) {
-                                    instance.setLatLng(coords);
-                                    feature.geometry.coordinates = coords.reverse();
-                                    // console.log(feature.properties.name + ' relocated to ' + orgUnit.coordinates);
-                                }
-                            });
+                            instance.setLatLng(coordinates);
+                            feature.geometry.coordinates = swappedCoordinates;
                         }
                     });
                 }

@@ -37,6 +37,25 @@ const colorStore = Ext.create('Ext.data.Store', {
     ]
 });
 
+const paletteIdMap = (function() {
+    var cb = colorbrewer;
+    var map = {};
+    var palette;
+
+    for (var id in cb) {
+        if (cb.hasOwnProperty(id)) {
+            for (var key in cb[id]) {
+                if (cb[id].hasOwnProperty(key)) {
+                    palette = cb[id][key].join(',');
+                    map[palette] = id;
+                }
+            }
+        }
+    }
+
+    return map;
+}());
+
 // ColorScale
 Ext.define('Ext.ux.field.ColorScale', {
     extend: 'Ext.form.field.ComboBox',
@@ -56,6 +75,7 @@ Ext.define('Ext.ux.field.ColorScale', {
             this.reset();
         }
     },
+    paletteIdMap: paletteIdMap,
     reset: function() { // Set first scale
         if (this.scheme) {
             this.setValue(this.scheme, true);

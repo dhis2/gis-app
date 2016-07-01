@@ -167,15 +167,20 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     onLayerComboSelect = function(combo, record) {
         record = record[0];
 
-        colorsCombo.show().setValue(record.get('colors'));
+        var paletteString = record.get('palette');
+        
+        if (paletteString) {
+            colorsCombo.show().setValue(colorsCombo.paletteIdMap[paletteString]);
+        }
+        else {
+            colorsCombo.show().setValue(record.get('colors'));
+        }
 
         descriptionField.show();
         descriptionField.update(record.get('description'));
 
         minMaxField.show();
-        //minField.show();
         minValue.setValue(record.get('min'));
-        //maxField.show();
         maxValue.setMaxValue(record.get('maxValue'));
         maxValue.setValue(record.get('max'));
         
@@ -187,7 +192,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     layerCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         // fieldLabel: GIS.i18n.select_layer_from_google_earth_engine,
-        fieldLabel: 'Select dataset',
+        fieldLabel: 'Select dataset', // TODO: i18n
         editable: false,
         valueField: 'key',
         displayField: 'name',
@@ -225,7 +230,20 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     // Poulate the widget from a view (favorite)
     setGui = function(view) {
-        layerCombo.setValue(view.key);
+        var config = view.config;
+        var record = layerStore.getAt(layerStore.findExact('key', config.key));
+
+        if (!record) {
+            alert('Invalid Earth Engine dataset id'); // TODO: i18n
+        }
+        
+        record.set('min', config.params.min);
+        record.set('max', config.params.max);
+        record.set('palette', config.params.palette);
+        record.set('steps', config.params.palette.split(',').length - 1);
+
+        layerCombo.setValue(config.key);
+        onLayerComboSelect(layerCombo, [record]);
     };
 
     // Get the view representation of the layer

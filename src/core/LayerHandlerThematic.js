@@ -652,7 +652,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
     onFeatureRightClick = function (evt) {
         contextMenu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
-        contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
+        contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y]);
     };
 
     updateLegend = function (view, metaData, options) {

@@ -608,10 +608,10 @@ export default function getInstance(init) {
             for (var i = 0, layer; i < layers.length; i++) {
                 layer = layers[i];
 
-                if (layer.core.view) {
-                    layer.core.view.layer = layer.id;
+                if (layer.view) {
+                    layer.view.layer = layer.id;
 
-                    map.mapViews.push(layer.core.view);
+                    map.mapViews.push(layer.view);
                 }
             }
 

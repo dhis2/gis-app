@@ -145,7 +145,7 @@ Ext.onReady( function() {
             iconCls: 'gis-menu-item-datasource',
             disabled: true,
             xable: function() {
-                if (gis.instance.getLayersBounds().isValid()) {
+                if (gis.instance.getLayersBounds().isValid() || (gis.layer.earthEngine.instance && gis.instance.hasLayer(gis.layer.earthEngine.instance))) {
                     this.enable();
                 }
                 else {

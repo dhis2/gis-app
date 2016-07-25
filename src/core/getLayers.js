@@ -8,9 +8,10 @@ export default function getLayers(gis) {
             layerType: 'base',
             layerOpacity: 1,
             config: {
-                type: 'mapQuest',
+                type: 'carto'
             }
         },
+        /*
         osmLight: {
             id: 'osmLight',
             name: GIS.i18n.osm_light,
@@ -22,6 +23,7 @@ export default function getLayers(gis) {
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
             }
         },
+        */
         googleStreets: {
             id: 'googleStreets',
             name: GIS.i18n.google_streets,

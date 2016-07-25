@@ -9,7 +9,7 @@ export default function LayersPanel(gis) {
             layers.thematic3,
             layers.thematic4,
             layers.openStreetMap,
-            layers.osmLight,
+            // layers.osmLight,
             layers.googleStreets,
             layers.googleHybrid
         ],

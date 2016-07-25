@@ -78,6 +78,11 @@ export default function MapLoader(gis, isSession, applyConfig) {
 			handler,
 			layer;
 
+		// OSM Light (Carto Positron) was removed as it is now the default OSM layer
+		if (basemap === 'osmLight') {
+			basemap = 'openStreetMap';
+		}
+
 		// title
 		if (gis.dashboard && gis.container && gis.map && gis.map.name) {
 			gis.container.childNodes[0].innerText = gis.map.name;

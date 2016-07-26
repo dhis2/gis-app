@@ -50,6 +50,13 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             filterDate: ['2013-01-01', '2014-01-31'],
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>'
+        },
+        precipitation: {
+            type: 'precipitation',
+            name: 'Precipitation',
+            id: 'NOAA/GFS0P25',
+            description: 'Description',
+            attribution: 'Attribution'
         }
     };
 

@@ -56,6 +56,15 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             steps: 6,
             colors: 'YlOrBr',
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.'
+        },{
+            key: 'precipitation',
+            name: 'Precipitation',
+            min: 0,
+            max: 100,
+            maxValue: 100,
+            steps: 6,
+            colors: 'Blues',
+            description: 'Precipitation'
         }]
     });
 

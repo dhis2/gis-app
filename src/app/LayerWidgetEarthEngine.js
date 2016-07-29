@@ -1,18 +1,21 @@
 export default function LayerWidgetEarthEngine(gis, layer) {
     var layerStore,
-        elevation,
+        timeStore,
+        // elevation,
         minValue,
         maxValue,
         stepValue,
         minMaxField,
-        //minField,
-        //maxField,
+        // minField,
+        // maxField,
         stepField,
         descriptionField,
-        elevationField,
-        layerCombo,
+        // elevationField,
         colorsCombo,
+        layerCombo,
         onLayerComboSelect,
+        timeCombo,
+        onTimeComboExpand,
         reset,
         setGui,
         getView,
@@ -64,7 +67,15 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             maxValue: 100,
             steps: 6,
             colors: 'Blues',
-            description: 'Precipitation'
+            description: 'Precipitation description'
+        }]
+    });
+
+    timeStore = Ext.create('Ext.data.Store', {
+        fields: ['id', 'name'],
+        data: [{
+            id: 'latest',
+            name: 'Latest' // TODO: i18n
         }]
     });
 
@@ -137,30 +148,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }, minValue, maxValue]
     });
 
-    //minField = Ext.create('Ext.container.Container', {
-        //layout: 'hbox',
-        //hidden: true,
-        //style: 'padding:5px 0 0 5px;',
-        //items: [{
-            //xtype: 'container',
-            //html: 'Min value:', // TODO: i18n
-            //width: gis.conf.layout.widget.itemlabel_width,
-            //style: 'padding-top:5px;font-size:11px;'
-        //}, minValue]
-    //});
-
-    //maxField = Ext.create('Ext.container.Container', {
-        //layout: 'hbox',
-        //hidden: true,
-        //style: 'padding:5px 0 0 5px;',
-        //items: [{
-            //xtype: 'container',
-            //html: 'Max value:', // TODO: i18n
-            //width: gis.conf.layout.widget.itemlabel_width,
-            //style: 'padding-top:5px;font-size:11px;'
-        //}, maxValue]
-    //});
-
     stepField = Ext.create('Ext.container.Container', {
         layout: 'hbox',
         hidden: true,
@@ -188,6 +175,8 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         descriptionField.show();
         descriptionField.update(record.get('description'));
 
+        timeCombo.show();
+
         minMaxField.show();
         minValue.setValue(record.get('min'));
         maxValue.setMaxValue(record.get('maxValue'));
@@ -214,6 +203,60 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             select: onLayerComboSelect
         }
     });
+
+    onTimeComboExpand = function() {
+        console.log('load list first time', layer);
+
+        Ext.Ajax.request({
+            url: gis.init.contextPath + '/api/tokens/google',
+            disableCaching: false,
+            failure: function(r) {
+                gis.alert(r);
+            },
+            success: function(r) {
+                var token = JSON.parse(r.responseText);
+                ee.data.setAuthToken(token.client_id, 'Bearer', token.access_token, token.expires_in, null, null, false);
+
+                var collection = ee.ImageCollection('UCSB-CHG/CHIRPS/PENTAD').sort('system:time_start', false);
+
+                collection.getInfo(function(data) {
+                    var list = data.features.map(feature => {
+                        return {
+                            id: feature.properties['system:index'],
+                            name: feature.properties['system:index'],
+                        };
+                    });
+
+                    console.log('list', list);
+
+                    // Add to time store
+                    timeStore.loadData(list, true);
+
+                });
+            }
+        });
+    };
+
+    // Combo with with supported Earth Engine layers
+    timeCombo = Ext.create('Ext.form.field.ComboBox', {
+        cls: 'gis-combo',
+        fieldLabel: 'Select period', // TODO: i18n
+        hidden: true,
+        editable: false,
+        valueField: 'key',
+        displayField: 'name',
+        queryMode: 'local',
+        mode: 'local',
+        forceSelection: true,
+        labelWidth: gis.conf.layout.widget.itemlabel_width,
+        width: gis.conf.layout.widget.item_width,
+        store: timeStore,
+        listeners: {
+            expand: onTimeComboExpand
+        }
+    });
+
+
 
     colorsCombo = Ext.create('Ext.ux.field.ColorScale', {
         fieldLabel: 'Color scale',
@@ -280,7 +323,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // This widget panel
     panel = Ext.create('Ext.panel.Panel', {
         bodyStyle: 'border:0;padding:5px 1px;',
-        items: [layerCombo, descriptionField, minMaxField, colorsCombo, stepField],
+        items: [layerCombo, descriptionField, timeCombo, minMaxField, colorsCombo, stepField],
         map: layer.map,
         layer: layer,
         menu: layer.menu,

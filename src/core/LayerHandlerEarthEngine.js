@@ -54,8 +54,8 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         precipitation: {
             type: 'precipitation',
             name: 'Precipitation',
-            id: 'NOAA/GFS0P25',
-            description: 'Description',
+            id: 'UCSB-CHG/CHIRPS/PENTAD', // 'NOAA/GFS0P25',
+            description: 'Description description',
             attribution: 'Attribution'
         }
     };

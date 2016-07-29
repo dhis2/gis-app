@@ -1,12 +1,6 @@
 export default function LayerHandlerEarthEngine(gis, layer) {
-    var datasets,
-        createLayer,
-        hideMask,
-        afterLoad,
-        addLegend,
-        loader;
 
-    datasets = {
+    const datasets = {
         'USGS/SRTMGL1_003': {
             name: 'Elevation',
             unit: 'm',
@@ -22,7 +16,6 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {
             name: 'Nighttime lights',
             band: 'stable_lights',
-            // filterDate: ['2013-01-01', '2014-01-31'],
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>'
         },
@@ -33,7 +26,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         }
     };
 
-    createLayer = function(view) {
+    const createLayer = function(view) {
         const layerConfig = {};
 
         if (typeof view.config === 'string') { // From database as favorite
@@ -71,13 +64,13 @@ export default function LayerHandlerEarthEngine(gis, layer) {
     };
 
     // Hide mask when layer is initialized
-    hideMask = function() {
+    const hideMask = function() {
         if (gis.mask && loader.hideMask) {
             gis.mask.hide();
         }
     };
 
-    addLegend = function() {
+    const addLegend = function() {
         var legend = layer.instance.getLegend();
 
         if (layer.legendPanel) {
@@ -95,7 +88,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         }
     };
 
-    afterLoad = function(view) {
+    const afterLoad = function(view) {
 
         layer.view = { // simplify view for storage
             config: JSON.stringify(view.config)
@@ -136,7 +129,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         }
     };
 
-    loader = {
+    const loader = {
         compare: false,
         updateGui: false,
         zoomToVisibleExtent: false,

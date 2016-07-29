@@ -93,47 +93,24 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             steps: 6,
             colors: 'Blues',
             description: 'Precipitation description',
+            filter(index) {
+                return [{
+                    type: 'eq',
+                    arguments: ['system:index', index],
+                }];
+            },
             collection: function(callback) {
-                const collection = ee.ImageCollection(this.get('id')).distinct('year').sort('year', false);
+                const collection = ee.ImageCollection('UCSB-CHG/CHIRPS/PENTAD').sort('system:time_start', false);
 
+                // TODO: More effective way to get this info?
                 collection.getInfo(data => {
                     callback(data.features.map(feature => {
                         return {
-                            id: feature.properties['year'],
-                            name: feature.properties['year']
+                            id: feature.properties['system:index'],
+                            name: feature.properties['system:index'],
                         };
                     }));
                 });
-
-                //collection = collection.distinct('year');
-
-                //console.log('get collection!', this.get('id'));
-
-                //console.log('population', collection.getInfo());
-
-                // distinct('year')
-
-
-                /*
-                 var collection = ee.ImageCollection('UCSB-CHG/CHIRPS/PENTAD').sort('system:time_start', false);
-
-                 collection.getInfo(function(data) {
-                 var list = data.features.map(feature => {
-                 return {
-                 id: feature.properties['system:index'],
-                 name: feature.properties['system:index'],
-                 };
-                 });
-
-                 console.log('list', list);
-
-                 // Add to time store
-                 timeStore.loadData(list, true);
-                 });
-                 */
-
-
-                callback([]);
             }
         },
     };
@@ -249,10 +226,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // Show form fields used by the selected EE dataset
     const onDatasetComboSelect = function(combo) {
         const dataset = datasets[combo.getValue()];
-
-        // record = record[0];
-
-        //console.log(dataset);
 
         /*
         var paletteString = record.get('palette');

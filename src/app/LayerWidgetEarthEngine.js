@@ -1,77 +1,137 @@
-export default function LayerWidgetEarthEngine(gis, layer) {
-    var layerStore,
-        timeStore,
-        // elevation,
-        minValue,
-        maxValue,
-        stepValue,
-        minMaxField,
-        // minField,
-        // maxField,
-        stepField,
-        descriptionField,
-        // elevationField,
-        colorsCombo,
-        layerCombo,
-        onLayerComboSelect,
-        timeCombo,
-        onTimeComboExpand,
-        reset,
-        setGui,
-        getView,
-        panel;
+import isFunction from 'd2-utilizr/lib/isFunction';
 
-    // Store for combo with supported Earth Engine layers
-    layerStore = Ext.create('Ext.data.Store', {
-        fields: ['key', 'name', 'min', 'max', 'maxValue', 'steps', 'colors', 'description'],
-        data: [{
-            key: 'elevation_srtm_30m',
-            name: 'Elevation',
+export default function LayerWidgetEarthEngine(gis, layer) {
+
+    // Supported Earth Engine datasets
+    const datasets = {
+
+        'elevation': {
+            id: 'USGS/SRTMGL1_003',
+            description: 'Metres above sea level.',
             min: 0,
             max: 1500,
             maxValue: Number.MAX_VALUE,
             steps: 5,
             colors: 'YlOrBr',
-            description: 'Metres above sea level.'
-        },/*{
-            key: 'worldpop_2015_un',
-            name: 'Population density 2015',
-            min: 0,
-            max: 100,
-            steps: 5,
-            colors: 'YlOrBr',
-            description: 'Population in 100 x 100 m grid cells.'
-        },*/{
-            key: 'worldpop_2010_un',
-            name: 'Population density 2010',
+        },
+
+        'population': { // Population density
+            id: 'WorldPop/POP',
+            description: 'Population in 100 x 100 m grid cells.',
             min: 0,
             max: 10,
             maxValue: Number.MAX_VALUE,
             steps: 5,
             colors: 'YlOrBr',
-            description: 'Population in 100 x 100 m grid cells.'
-        },{
-            key: 'nightlights_2013',
-            name: 'Nighttime lights 2013',
+            filter(year) {
+                return [{
+                    type: 'eq',
+                    arguments: ['UNadj', 'yes'],
+                }, {
+                    type: 'eq',
+                    arguments: ['year', year],
+                }];
+            },
+            collection(callback) { // Returns available years
+                const collection = ee.ImageCollection(this.id)
+                    .filterMetadata('UNadj', 'equals', 'yes')
+                    .distinct('year')
+                    .sort('year', false);
+
+                // TODO: More effective way to get this info?
+                collection.getInfo(data => {
+                    callback(data.features.map(feature => {
+                        return {
+                            id: feature.properties['year'],
+                            name: feature.properties['year'],
+                        };
+                    }));
+                });
+            },
+        },
+
+        'nightlights': {
+            id: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
+            description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
             min: 0,
             max: 63,
             maxValue: 63,
             steps: 6,
             colors: 'YlOrBr',
-            description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.'
-        },{
-            key: 'precipitation',
-            name: 'Precipitation',
+        },
+
+        'precipitation': {
+            id: 'UCSB-CHG/CHIRPS/PENTAD',
             min: 0,
             max: 100,
             maxValue: 100,
             steps: 6,
             colors: 'Blues',
-            description: 'Precipitation description'
-        }]
+            description: 'Precipitation description',
+            collection: function(callback) {
+                const collection = ee.ImageCollection(this.get('id')).distinct('year').sort('year', false);
+
+                collection.getInfo(data => {
+                    callback(data.features.map(feature => {
+                        return {
+                            id: feature.properties['year'],
+                            name: feature.properties['year']
+                        };
+                    }));
+                });
+
+                //collection = collection.distinct('year');
+
+                //console.log('get collection!', this.get('id'));
+
+                //console.log('population', collection.getInfo());
+
+                // distinct('year')
+
+
+                /*
+                 var collection = ee.ImageCollection('UCSB-CHG/CHIRPS/PENTAD').sort('system:time_start', false);
+
+                 collection.getInfo(function(data) {
+                 var list = data.features.map(feature => {
+                 return {
+                 id: feature.properties['system:index'],
+                 name: feature.properties['system:index'],
+                 };
+                 });
+
+                 console.log('list', list);
+
+                 // Add to time store
+                 timeStore.loadData(list, true);
+                 });
+                 */
+
+
+                callback([]);
+            }
+        },
+    };
+
+    // Store for combo with supported Earth Engine layers
+    const layerStore = Ext.create('Ext.data.Store', {
+        fields: ['id', 'name'],
+        data: [{
+            id: 'elevation',
+            name: 'Elevation',
+        },{
+            id: 'population',
+            name: 'Population density',
+        },{
+            id: 'nightlights',
+            name: 'Nighttime lights 2013',
+        },{
+            id: 'precipitation',
+            name: 'Precipitation',
+        }],
     });
 
-    timeStore = Ext.create('Ext.data.Store', {
+    const collectionStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name'],
         data: [{
             id: 'latest',
@@ -79,7 +139,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }]
     });
 
-    minValue = Ext.create('Ext.form.field.Number', {
+    const minValue = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
         width: 93,
         style: 'margin-right:2px',
@@ -101,7 +161,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
     });
 
-    maxValue = Ext.create('Ext.form.field.Number', {
+    const maxValue = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
         width: 93,
         allowDecimals: false,
@@ -110,7 +170,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         value: 2500
     });
 
-    stepValue = Ext.create('Ext.form.field.Number', {
+    const stepValue = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
         width: 93,
         allowDecimals: false,
@@ -131,12 +191,12 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
     });
 
-    descriptionField = Ext.create('Ext.container.Container', {
+    const descriptionField = Ext.create('Ext.container.Container', {
         hidden: true,
         style: 'padding:10px; color:#444'
     });
 
-    minMaxField = Ext.create('Ext.container.Container', {
+    const minMaxField = Ext.create('Ext.container.Container', {
         layout: 'hbox',
         hidden: true,
         style: 'padding:5px 0 0 5px;',
@@ -148,7 +208,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }, minValue, maxValue]
     });
 
-    stepField = Ext.create('Ext.container.Container', {
+    const stepField = Ext.create('Ext.container.Container', {
         layout: 'hbox',
         hidden: true,
         style: 'padding:5px 0 0 5px;',
@@ -160,9 +220,15 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }, stepValue]
     });
 
-    onLayerComboSelect = function(combo, record) {
-        record = record[0];
+    // Show form fields used by the selected EE dataset
+    const onDatasetComboSelect = function(combo) {
+        const dataset = datasets[combo.getValue()];
 
+        // record = record[0];
+
+        //console.log(dataset);
+
+        /*
         var paletteString = record.get('palette');
         
         if (paletteString) {
@@ -171,28 +237,36 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         else {
             colorsCombo.show().setValue(record.get('colors'));
         }
+        */
+
+        // TODO: What happens if favorite is loaded?
+        colorsCombo.show().setValue(dataset.colors);
 
         descriptionField.show();
-        descriptionField.update(record.get('description'));
+        descriptionField.update(dataset.description);
 
-        timeCombo.show();
+        if (dataset.collection) {
+            collectionCombo.show(); // TODO: Reset
+        } else {
+            collectionCombo.hide();
+        }
 
         minMaxField.show();
-        minValue.setValue(record.get('min'));
-        maxValue.setMaxValue(record.get('maxValue'));
-        maxValue.setValue(record.get('max'));
+        minValue.setValue(dataset.min);
+        maxValue.setMaxValue(dataset.maxValue);
+        maxValue.setValue(dataset.max);
         
         stepField.show();
-        stepValue.setValue(record.get('steps'));
+        stepValue.setValue(dataset.steps);
     };
 
     // Combo with with supported Earth Engine layers
-    layerCombo = Ext.create('Ext.form.field.ComboBox', {
+    const datasetCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         // fieldLabel: GIS.i18n.select_layer_from_google_earth_engine,
         fieldLabel: 'Select dataset', // TODO: i18n
         editable: false,
-        valueField: 'key',
+        valueField: 'id',
         displayField: 'name',
         queryMode: 'local',
         forceSelection: true,
@@ -200,65 +274,57 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         width: gis.conf.layout.widget.item_width,
         store: layerStore,
         listeners: {
-            select: onLayerComboSelect
+            select: onDatasetComboSelect
         }
     });
 
-    onTimeComboExpand = function() {
-        console.log('load list first time', layer);
+    // Load collection items first time combo is expanded
+    const onCollectionComboExpand = function() {
+        const dataset = datasets[datasetCombo.getValue()];
 
-        Ext.Ajax.request({
-            url: gis.init.contextPath + '/api/tokens/google',
-            disableCaching: false,
-            failure: function(r) {
-                gis.alert(r);
-            },
-            success: function(r) {
-                var token = JSON.parse(r.responseText);
-                ee.data.setAuthToken(token.client_id, 'Bearer', token.access_token, token.expires_in, null, null, false);
+        if (isFunction(dataset.collection)) {
+            //console.log('load');
+            Ext.Ajax.request({
+                url: gis.init.contextPath + '/api/tokens/google',
+                disableCaching: false,
+                failure: error => gis.alert(error),
+                success: response => {
+                    const token = JSON.parse(response.responseText);
 
-                var collection = ee.ImageCollection('UCSB-CHG/CHIRPS/PENTAD').sort('system:time_start', false);
+                    ee.data.setAuthToken(token.client_id, 'Bearer', token.access_token, token.expires_in, null, null, false);
+                    ee.initialize();
 
-                collection.getInfo(function(data) {
-                    var list = data.features.map(feature => {
-                        return {
-                            id: feature.properties['system:index'],
-                            name: feature.properties['system:index'],
-                        };
+                    // TODO: Add loading indicator
+                    dataset.collection(list => {
+                        collectionStore.loadData(list);
+                        dataset.collection = list;
                     });
-
-                    console.log('list', list);
-
-                    // Add to time store
-                    timeStore.loadData(list, true);
-
-                });
-            }
-        });
+                }
+            });
+        } else {
+            collectionStore.loadData(dataset.collection);
+        }
     };
 
     // Combo with with supported Earth Engine layers
-    timeCombo = Ext.create('Ext.form.field.ComboBox', {
+    const collectionCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: 'Select period', // TODO: i18n
         hidden: true,
         editable: false,
-        valueField: 'key',
+        valueField: 'id',
         displayField: 'name',
         queryMode: 'local',
-        mode: 'local',
         forceSelection: true,
         labelWidth: gis.conf.layout.widget.itemlabel_width,
         width: gis.conf.layout.widget.item_width,
-        store: timeStore,
+        store: collectionStore,
         listeners: {
-            expand: onTimeComboExpand
+            expand: onCollectionComboExpand
         }
     });
 
-
-
-    colorsCombo = Ext.create('Ext.ux.field.ColorScale', {
+    const colorsCombo = Ext.create('Ext.ux.field.ColorScale', {
         fieldLabel: 'Color scale',
         hidden: true,
         value: 'YlOrBr',
@@ -269,7 +335,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     });
 
     // Reset this widget
-    reset = function() {
+    const reset = function() {
         layer.item.setValue(false);
 
         if (!layer.window.isRendered) {
@@ -277,13 +343,14 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             return;
         }
 
-        layerCombo.reset();
+        datasetCombo.reset();
     };
 
+    // TODO
     // Poulate the widget from a view (favorite)
-    setGui = function(view) {
+    const setGui = function(view) {
         var config = view.config;
-        var record = layerStore.getAt(layerStore.findExact('key', config.key));
+        var record = layerStore.getAt(layerStore.findExact('id', config.id));
 
         if (!record) {
             alert('Invalid Earth Engine dataset id'); // TODO: i18n
@@ -294,21 +361,24 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         record.set('palette', config.params.palette);
         record.set('steps', config.params.palette.split(',').length - 1);
 
-        layerCombo.setValue(config.key);
-        onLayerComboSelect(layerCombo, [record]);
+        datasetCombo.setValue(config.id);
+        onLayerComboSelect(datasetCombo, [record]);
     };
 
     // Get the view representation of the layer
-    getView = function() {
-        var key = layerCombo.getValue();
+    const getView = function() {
+        const id = datasetCombo.getValue();
+        const dataset = datasets[id];
+        const image = collectionCombo.getValue();
 
-        if (key === null) {
+        if (id === null) {
             return;
         }
 
-        var view = {
+        const view = {
             config: { // Config object saved stored as one field
-                key: key,
+                //id: id,
+                id: dataset.id,
                 params: {
                     palette: colorsCombo.getValue().join(','),
                     min: minValue.getValue(),
@@ -317,13 +387,17 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             }
         };
 
+        if (image) {
+            view.config.filter = dataset.filter(image);
+        }
+
         return view;
     };
 
-    // This widget panel
-    panel = Ext.create('Ext.panel.Panel', {
+    // Return widget panel
+    return Ext.create('Ext.panel.Panel', {
         bodyStyle: 'border:0;padding:5px 1px;',
-        items: [layerCombo, descriptionField, timeCombo, minMaxField, colorsCombo, stepField],
+        items: [datasetCombo, descriptionField, collectionCombo, minMaxField, colorsCombo, stepField],
         map: layer.map,
         layer: layer,
         menu: layer.menu,
@@ -339,5 +413,4 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
     });
 
-    return panel;
 };

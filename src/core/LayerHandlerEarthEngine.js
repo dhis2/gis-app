@@ -7,54 +7,25 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         loader;
 
     datasets = {
-        elevation_srtm_30m: {
-            type: 'elevation',
+        'USGS/SRTMGL1_003': {
             name: 'Elevation',
-            id: 'USGS/SRTMGL1_003',
             unit: 'm',
             description: 'Metres above sea level.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003" target="_blank">NASA / USGS / JPL-Caltech</a>'
         },
-        worldpop_2015_un: {
-            type: 'population',
-            name: 'Population density 2015',
-            id: 'WorldPop/POP',
-            filter: [{
-                type: 'eq',
-                arguments: ['year', 2015]
-            },{
-                type: 'eq',
-                arguments: ['UNadj', 'yes']
-            }],
+        'WorldPop/POP': {
+            name: 'Population density',
             description: 'Population in 100 x 100 m grid cells.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>'
         },
-        worldpop_2010_un: {
-            type: 'population',
-            name: 'Population density 2010',
-            id: 'WorldPop/POP',
-            filter: [{
-                type: 'eq',
-                arguments: ['year', 2010]
-            },{
-                type: 'eq',
-                arguments: ['UNadj', 'yes']
-            }],
-            description: 'Population in 100 x 100 m grid cells.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>'
-        },
-        nightlights_2013: {
-            type: 'nightLights',
-            name: 'Nighttime lights 2013',
-            id: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
-            filterDate: ['2013-01-01', '2014-01-31'],
+        'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {
+            name: 'Nighttime lights',
+            // filterDate: ['2013-01-01', '2014-01-31'],
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>'
         },
-        precipitation: {
-            type: 'precipitation',
+        'UCSB-CHG/CHIRPS/PENTAD': {
             name: 'Precipitation',
-            id: 'UCSB-CHG/CHIRPS/PENTAD', // 'NOAA/GFS0P25',
             description: 'Description description',
             attribution: 'Attribution'
         }
@@ -68,6 +39,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         }
 
         Object.assign(layerConfig, {
+            type: 'earthEngine',
             accessToken: function(callback) {
                 Ext.Ajax.request({
                     url: gis.init.contextPath + '/api/tokens/google',
@@ -80,7 +52,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                     }
                 });
             }
-        }, layer.config, datasets[view.config.key], view.config);
+        }, layer.config, datasets[view.config.id], view.config);
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {

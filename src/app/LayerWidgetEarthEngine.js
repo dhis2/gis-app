@@ -5,8 +5,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // Supported Earth Engine datasets
     const datasets = {
 
-        'elevation': {
+        'USGS/SRTMGL1_003': {
             id: 'USGS/SRTMGL1_003',
+            name: 'Elevation',
             description: 'Metres above sea level.',
             min: 0,
             max: 1500,
@@ -15,8 +16,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             colors: 'YlOrBr',
         },
 
-        'population': { // Population density
+        'WorldPop/POP': { // Population density
             id: 'WorldPop/POP',
+            name: 'Population density',
             description: 'Population in 100 x 100 m grid cells.',
             min: 0,
             max: 10,
@@ -50,18 +52,41 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             },
         },
 
-        'nightlights': {
+        'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {
             id: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
+            name: 'Nighttime lights',
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
             min: 0,
             max: 63,
             maxValue: 63,
             steps: 6,
             colors: 'YlOrBr',
+            filter(index) {
+                return [{
+                    type: 'eq',
+                    arguments: ['system:index', index],
+                }];
+            },
+            collection(callback) { // Returns available times
+                const collection = ee.ImageCollection(this.id)
+                    .distinct('system:time_start') // TODO: Why two images for some years?
+                    .sort('system:time_start', false);
+
+                // TODO: More effective way to get this info?
+                collection.getInfo(data => {
+                    callback(data.features.map(feature => {
+                        return {
+                            id: feature.properties['system:index'],
+                            name: new Date(feature.properties['system:time_start']).getFullYear(),
+                        };
+                    }));
+                });
+            },
         },
 
-        'precipitation': {
+        'UCSB-CHG/CHIRPS/PENTAD': {
             id: 'UCSB-CHG/CHIRPS/PENTAD',
+            name: 'Precipitation',
             min: 0,
             max: 100,
             maxValue: 100,
@@ -113,20 +138,21 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         },
     };
 
+    // TODO: genereate from above
     // Store for combo with supported Earth Engine layers
     const layerStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name'],
         data: [{
-            id: 'elevation',
+            id: 'USGS/SRTMGL1_003',
             name: 'Elevation',
         },{
-            id: 'population',
+            id: 'WorldPop/POP',
             name: 'Population density',
         },{
-            id: 'nightlights',
-            name: 'Nighttime lights 2013',
+            id: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
+            name: 'Nighttime lights',
         },{
-            id: 'precipitation',
+            id: 'UCSB-CHG/CHIRPS/PENTAD',
             name: 'Precipitation',
         }],
     });

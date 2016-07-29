@@ -15,11 +15,13 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         },
         'WorldPop/POP': {
             name: 'Population density',
+            aggregation: 'mosaic',
             description: 'Population in 100 x 100 m grid cells.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>'
         },
         'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {
             name: 'Nighttime lights',
+            band: 'stable_lights',
             // filterDate: ['2013-01-01', '2014-01-31'],
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>'

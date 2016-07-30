@@ -23,7 +23,13 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             name: 'Precipitation',
             description: 'Description description',
             attribution: 'Attribution'
-        }
+        },
+        'MODIS/MOD11A2': {
+            name: 'Temperature',
+            band: 'LST_Day_1km',
+            description: 'Temperature description',
+            attribution: 'Attribution'
+        },
     };
 
     const createLayer = function(view) {

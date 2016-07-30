@@ -113,6 +113,38 @@ export default function LayerWidgetEarthEngine(gis, layer) {
                 });
             }
         },
+
+        'MODIS/MOD11A2': {
+            id: 'MODIS/MOD11A2',
+            name: 'Temperature',
+            min: 0,
+            max: 50,
+            maxValue: Number.MAX_VALUE,
+            steps: 6,
+            colors: 'Reds',
+            description: 'Temperature description',
+            filter(index) {
+                return [{
+                    type: 'eq',
+                    arguments: ['system:index', index],
+                }];
+            },
+            collection: function(callback) {
+                const collection = ee.ImageCollection(this.id).sort('system:time_start', false);
+
+                //console.log(collection.getInfo());
+
+                // TODO: More effective way to get this info?
+                collection.getInfo(data => {
+                    callback(data.features.map(feature => {
+                        return {
+                            id: feature.properties['system:index'],
+                            name: feature.properties['system:index'],
+                        };
+                    }));
+                });
+            }
+        },
     };
 
     // TODO: genereate from above
@@ -131,6 +163,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         },{
             id: 'UCSB-CHG/CHIRPS/PENTAD',
             name: 'Precipitation',
+        },{
+            id: 'MODIS/MOD11A2',
+            name: 'Temperature',
         }],
     });
 

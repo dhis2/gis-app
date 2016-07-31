@@ -27,6 +27,11 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         'MODIS/MOD11A2': {
             name: 'Temperature',
             band: 'LST_Day_1km',
+            methods: [{
+                toFloat: [],
+                multiply: [0.02],
+                subtract: [273.15],
+            }],
             description: 'Temperature description',
             attribution: 'Attribution'
         },

@@ -1071,13 +1071,14 @@ Ext.onReady( function() {
 
                         // date, calendar, mapzen search key
                         Ext.Ajax.request({
-                            url: encodeURI(init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyMapzenSearchApiKey'),
+                            url: encodeURI(init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyGoogleMapsApiKey&key=keyMapzenSearchApiKey'),
                             success: function(r) {
                                 var systemSettings = JSON.parse(r.responseText);
 
                                 init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
                                 init.systemInfo.calendar = systemSettings.keyCalendar;
                                 init.systemInfo.mapzenSearchKey = systemSettings.keyMapzenSearchApiKey;
+                                init.systemInfo.googleMapsKey = systemSettings.keyGoogleMapsApiKey;
 
                                 // user-account
                                 Ext.Ajax.request({

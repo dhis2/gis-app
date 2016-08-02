@@ -3,32 +3,36 @@ export default function LayerHandlerEarthEngine(gis, layer) {
     const datasets = {
         'USGS/SRTMGL1_003': {
             name: 'Elevation',
-            unit: 'm',
-            description: 'Metres above sea level.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003" target="_blank">NASA / USGS / JPL-Caltech</a>'
+            unit: 'metres above sea level',
+            description: '',
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003" target="_blank">NASA / USGS / JPL-Caltech</a>',
         },
         'WorldPop/POP': {
             name: 'Population density',
+            unit: 'people per km<sup>2</sup>',
             aggregation: 'mosaic',
             methods: {
                 multiply: [100] // Convert from people/hectare to people/km2
             },
             description: 'Population in 100 x 100 m grid cells.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>'
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>',
         },
         'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {
             name: 'Nighttime lights',
+            unit: 'light intensity',
             band: 'stable_lights',
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>'
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>',
         },
         'UCSB-CHG/CHIRPS/PENTAD': {
             name: 'Precipitation',
+            unit: 'millimeter',
             description: 'Description description',
-            attribution: 'Attribution'
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD" target="_blank">UCSB/CHG</a>',
         },
         'MODIS/MOD11A2': {
             name: 'Temperature',
+            unit: '°C during daytime',
             band: 'LST_Day_1km',
             methods: {
                 toFloat: [],
@@ -36,7 +40,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 subtract: [273.15],
             },
             description: 'Temperature description',
-            attribution: 'Attribution'
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/MODIS%2FMOD11A2" target="_blank">NASA LP DAAC</a>',
         },
     };
 

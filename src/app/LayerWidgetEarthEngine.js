@@ -1,3 +1,4 @@
+import isArray from 'd2-utilizr/lib/isArray';
 import isFunction from 'd2-utilizr/lib/isFunction';
 import {timeFormat} from 'd3-time-format';
 
@@ -9,7 +10,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'USGS/SRTMGL1_003': {
             id: 'USGS/SRTMGL1_003',
             name: 'Elevation',
-            description: 'Metres above sea level.',
+            description: '',
             min: 0,
             max: 1500,
             maxValue: Number.MAX_VALUE,
@@ -27,13 +28,13 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             maxValue: Number.MAX_VALUE,
             steps: 5,
             colors: 'YlOrBr',
-            filter(year) {
+            filter(index) {
                 return [{
                     type: 'eq',
-                    arguments: ['UNadj', 'yes'],
+                    arguments: ['system:index', index],
                 }, {
                     type: 'eq',
-                    arguments: ['year', year],
+                    arguments: ['UNadj', 'yes'],
                 }];
             },
             collection(callback) { // Returns available years
@@ -47,7 +48,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
                 featureCollection.getInfo(data => {
                     callback(data.features.map(feature => ({
-                        id: feature.properties['year'],
+                        id: feature.id,
                         name: feature.properties['year'],
                     })));
                 });
@@ -231,21 +232,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     });
 
     // Show form fields used by the selected EE dataset
-    const onDatasetChange = function(combo) {
+    const onDatasetSelect = function(combo) {
         const dataset = datasets[combo.getValue()];
 
-        /*
-        var paletteString = record.get('palette');
-        
-        if (paletteString) {
-            colorsCombo.show().setValue(colorsCombo.paletteIdMap[paletteString]);
-        }
-        else {
-            colorsCombo.show().setValue(record.get('colors'));
-        }
-        */
-
-        // TODO: What happens if favorite is loaded?
         colorsCombo.show().setValue(dataset.colors);
 
         descriptionField.show();
@@ -286,18 +275,17 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             data: Object.keys(datasets).map(id => datasets[id]),
         }),
         listeners: {
-            change: onDatasetChange
+            select: onDatasetSelect
         }
     });
 
-    // Load collection items first time combo is expanded
-    const onCollectionComboExpand = function(combo) {
-        const dataset = datasets[datasetCombo.getValue()];
+    const loadCollection = function(id, callback) {
+        const dataset = datasets[id];
 
         if (isFunction(dataset.collection)) { // Load image collection from EE
 
-            combo.store.removeAll(); // Clear combo
-            combo.setLoading(true); // Add loading mask
+            collectionCombo.store.removeAll(); // Clear combo
+            collectionCombo.setLoading(true); // Add loading mask
 
             // Fetch EE token - TODO: cache?
             fetch(gis.init.contextPath + '/api/tokens/google', { headers: gis.init.defaultHeaders })
@@ -309,19 +297,26 @@ export default function LayerWidgetEarthEngine(gis, layer) {
                     ee.initialize();
 
                     dataset.collection(list => {
-                        combo.store.loadData(list);
+                        collectionCombo.store.loadData(list);
                         dataset.collection = list;
-                        combo.setLoading(false);
+                        collectionCombo.setLoading(false);
+
+                        if (callback) {
+                            callback(dataset);
+                        }
                     });
                 })
                 .catch(error => gis.alert(error));
 
         } else { // Image collection already loaded
 
-            combo.store.loadData(dataset.collection);
+            collectionCombo.store.loadData(dataset.collection);
 
+            if (callback) {
+                callback(dataset);
+            }
         }
-    };
+    }
 
     // Combo with with supported Earth Engine layers
     const collectionCombo = Ext.create('Ext.form.field.ComboBox', {
@@ -339,7 +334,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             fields: ['id', 'name']
         }),
         listeners: {
-            expand: onCollectionComboExpand
+            expand() {
+                loadCollection(datasetCombo.getValue());
+            }
         }
     });
 
@@ -365,23 +362,44 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         datasetCombo.reset();
     };
 
-    // TODO
     // Poulate the widget from a view (favorite)
     const setGui = function(view) {
-        var config = view.config;
-        //var record = layerStore.getAt(layerStore.findExact('id', config.id));
-
-        if (!record) {
-            alert('Invalid Earth Engine dataset id'); // TODO: i18n
+        if (typeof view.config === 'string') { // TODO: Why needed?
+            view.config = JSON.parse(view.config);
         }
-        
-        record.set('min', config.params.min);
-        record.set('max', config.params.max);
-        record.set('palette', config.params.palette);
-        record.set('steps', config.params.palette.split(',').length - 1);
+
+        const config = view.config;
+        const dataset = datasets[config.id];
+        const params = config.params;
 
         datasetCombo.setValue(config.id);
-        onLayerComboSelect(datasetCombo, [record]);
+
+        descriptionField.show();
+        descriptionField.update(dataset.description);
+
+        if (dataset.collection) {
+            loadCollection(config.id, () => {
+                if (isArray(config.filter)) {
+                    collectionCombo.setValue(config.filter[0].arguments[1]);
+                }
+            });
+            collectionCombo.show();
+
+            if (collectionCombo.labelEl) { // TODO
+                collectionCombo.labelEl.update(dataset.label || 'Select period');
+            }
+        } else {
+            collectionCombo.hide();
+        }
+
+        minMaxField.show();
+        minValue.setValue(params.min);
+        maxValue.setValue(params.max);
+
+        colorsCombo.show().setValue(params.palette);
+
+        stepField.show();
+        stepValue.setValue(params.palette.split(',').length - (params.min === 0 ? 1 : 2));
     };
 
     // Get the view representation of the layer

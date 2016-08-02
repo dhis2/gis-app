@@ -37,16 +37,16 @@ const colorStore = Ext.create('Ext.data.Store', {
     ]
 });
 
+// Mapping between palette strings and ids
 const paletteIdMap = (function() {
-    var cb = colorbrewer;
-    var map = {};
-    var palette;
+    const map = {};
+    let palette;
 
-    for (var id in cb) {
-        if (cb.hasOwnProperty(id)) {
-            for (var key in cb[id]) {
-                if (cb[id].hasOwnProperty(key)) {
-                    palette = cb[id][key].join(',');
+    for (let id in colorbrewer) {
+        if (colorbrewer.hasOwnProperty(id)) {
+            for (let key in colorbrewer[id]) {
+                if (colorbrewer[id].hasOwnProperty(key)) {
+                    palette = colorbrewer[id][key].join(',');
                     map[palette] = id;
                 }
             }
@@ -75,7 +75,6 @@ Ext.define('Ext.ux.field.ColorScale', {
             this.reset();
         }
     },
-    paletteIdMap: paletteIdMap,
     reset: function() { // Set first scale
         if (this.scheme) {
             this.setValue(this.scheme, true);
@@ -97,6 +96,11 @@ Ext.define('Ext.ux.field.ColorScale', {
 
         if (isObject(value)) {
             value = value.getId();
+        }
+
+        // Assume palette string
+        if (typeof value === 'string' && value.includes('#')) {
+            value = paletteIdMap[value];
         }
 
         this.scheme = value;

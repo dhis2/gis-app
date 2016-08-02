@@ -10,6 +10,9 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         'WorldPop/POP': {
             name: 'Population density',
             aggregation: 'mosaic',
+            methods: {
+                multiply: [100] // Convert from people/hectare to people/km2
+            },
             description: 'Population in 100 x 100 m grid cells.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>'
         },
@@ -27,11 +30,11 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         'MODIS/MOD11A2': {
             name: 'Temperature',
             band: 'LST_Day_1km',
-            methods: [{
+            methods: {
                 toFloat: [],
                 multiply: [0.02],
                 subtract: [273.15],
-            }],
+            },
             description: 'Temperature description',
             attribution: 'Attribution'
         },

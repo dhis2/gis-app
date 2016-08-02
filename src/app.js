@@ -1055,11 +1055,14 @@ Ext.onReady( function() {
                 var context = JSON.parse(r.responseText).activities.dhis;
 
                 init.contextPath = context.href;
+                init.defaultHeaders = {};
 
                 if (context.auth) {
                     Ext.Ajax.defaultHeaders = {
                         'Authorization': 'Basic ' + btoa(context.auth)
                     };
+
+                    init.defaultHeaders['Authorization'] = 'Basic ' + btoa(context.auth); // Used by fetch
                 }
 
                 // system info

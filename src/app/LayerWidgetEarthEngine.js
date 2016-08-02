@@ -1,4 +1,5 @@
 import isFunction from 'd2-utilizr/lib/isFunction';
+import {timeFormat} from 'd3-time-format';
 
 export default function LayerWidgetEarthEngine(gis, layer) {
 
@@ -19,9 +20,10 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'WorldPop/POP': { // Population density
             id: 'WorldPop/POP',
             name: 'Population density',
-            description: 'Population in 100 x 100 m grid cells.',
+            description: 'Try a different year if you don\'t see data for your country. Population in 100 x 100 m grid cells.',
+            label: 'Select year', // TODO: i18n
             min: 0,
-            max: 10,
+            max: 1000,
             maxValue: Number.MAX_VALUE,
             steps: 5,
             colors: 'YlOrBr',
@@ -35,19 +37,19 @@ export default function LayerWidgetEarthEngine(gis, layer) {
                 }];
             },
             collection(callback) { // Returns available years
-                const collection = ee.ImageCollection(this.id)
+                const imageCollection = ee.ImageCollection(this.id)
                     .filterMetadata('UNadj', 'equals', 'yes')
                     .distinct('year')
                     .sort('year', false);
 
-                // TODO: More effective way to get this info?
-                collection.getInfo(data => {
-                    callback(data.features.map(feature => {
-                        return {
-                            id: feature.properties['year'],
-                            name: feature.properties['year'],
-                        };
-                    }));
+                const featureCollection = ee.FeatureCollection(imageCollection)
+                    .select(['year'], null, false);
+
+                featureCollection.getInfo(data => {
+                    callback(data.features.map(feature => ({
+                        id: feature.properties['year'],
+                        name: feature.properties['year'],
+                    })));
                 });
             },
         },
@@ -68,18 +70,18 @@ export default function LayerWidgetEarthEngine(gis, layer) {
                 }];
             },
             collection(callback) { // Returns available times
-                const collection = ee.ImageCollection(this.id)
+                const imageCollection = ee.ImageCollection(this.id)
                     .distinct('system:time_start') // TODO: Why two images for some years?
                     .sort('system:time_start', false);
 
-                // TODO: More effective way to get this info?
-                collection.getInfo(data => {
-                    callback(data.features.map(feature => {
-                        return {
-                            id: feature.properties['system:index'],
-                            name: new Date(feature.properties['system:time_start']).getFullYear(),
-                        };
-                    }));
+                const featureCollection = ee.FeatureCollection(imageCollection)
+                    .select(['system:time_start'], null, false);
+
+                featureCollection.getInfo(data => {
+                    callback(data.features.map(feature => ({
+                        id: feature.id,
+                        name: new Date(feature.properties['system:time_start']).getFullYear(),
+                    })));
                 });
             },
         },
@@ -100,16 +102,17 @@ export default function LayerWidgetEarthEngine(gis, layer) {
                 }];
             },
             collection: function(callback) {
-                const collection = ee.ImageCollection('UCSB-CHG/CHIRPS/PENTAD').sort('system:time_start', false);
+                const imageCollection = ee.ImageCollection(this.id)
+                    .sort('system:time_start', false);
 
-                // TODO: More effective way to get this info?
-                collection.getInfo(data => {
-                    callback(data.features.map(feature => {
-                        return {
-                            id: feature.properties['system:index'],
-                            name: feature.properties['system:index'],
-                        };
-                    }));
+                const featureCollection = ee.FeatureCollection(imageCollection)
+                    .select(['system:time_start', 'system:time_end'], null, false);
+
+                featureCollection.getInfo(data => {
+                    callback(data.features.map(feature => ({
+                        id: feature.id,
+                        name: timeFormat('%-d – ')(feature.properties['system:time_start']) + timeFormat('%-d %b %Y')(feature.properties['system:time_end'] - 7200001), // Minus 2 hrs to end the day before
+                    })));
                 });
             }
         },
@@ -129,53 +132,22 @@ export default function LayerWidgetEarthEngine(gis, layer) {
                     arguments: ['system:index', index],
                 }];
             },
-            collection: function(callback) {
-                const collection = ee.ImageCollection(this.id).sort('system:time_start', false);
+            collection(callback) {
+                const imageCollection = ee.ImageCollection(this.id)
+                    .sort('system:time_start', false);
 
-                //console.log(collection.getInfo());
+                const featureCollection = ee.FeatureCollection(imageCollection)
+                    .select(['system:time_start', 'system:time_end'], null, false);
 
-                // TODO: More effective way to get this info?
-                collection.getInfo(data => {
-                    callback(data.features.map(feature => {
-                        return {
-                            id: feature.properties['system:index'],
-                            name: feature.properties['system:index'],
-                        };
-                    }));
+                featureCollection.getInfo(data => {
+                    callback(data.features.map(feature => ({
+                        id: feature.id,
+                        name: timeFormat('%-d %b – ')(feature.properties['system:time_start']) + timeFormat('%-d %b %Y')(feature.properties['system:time_end'] - 7200001), // Minus 2 hrs to end the day before
+                    })));
                 });
             }
         },
     };
-
-    // TODO: genereate from above
-    // Store for combo with supported Earth Engine layers
-    const layerStore = Ext.create('Ext.data.Store', {
-        fields: ['id', 'name'],
-        data: [{
-            id: 'USGS/SRTMGL1_003',
-            name: 'Elevation',
-        },{
-            id: 'WorldPop/POP',
-            name: 'Population density',
-        },{
-            id: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
-            name: 'Nighttime lights',
-        },{
-            id: 'UCSB-CHG/CHIRPS/PENTAD',
-            name: 'Precipitation',
-        },{
-            id: 'MODIS/MOD11A2',
-            name: 'Temperature',
-        }],
-    });
-
-    const collectionStore = Ext.create('Ext.data.Store', {
-        fields: ['id', 'name'],
-        data: [{
-            id: 'latest',
-            name: 'Latest' // TODO: i18n
-        }]
-    });
 
     const minValue = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
@@ -259,7 +231,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     });
 
     // Show form fields used by the selected EE dataset
-    const onDatasetComboSelect = function(combo) {
+    const onDatasetChange = function(combo) {
         const dataset = datasets[combo.getValue()];
 
         /*
@@ -279,8 +251,11 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         descriptionField.show();
         descriptionField.update(dataset.description);
 
+        collectionCombo.clearValue();
+
         if (dataset.collection) {
-            collectionCombo.show(); // TODO: Reset
+            collectionCombo.show();
+            collectionCombo.labelEl.update(dataset.label || 'Select period');
         } else {
             collectionCombo.hide();
         }
@@ -306,37 +281,45 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         forceSelection: true,
         labelWidth: gis.conf.layout.widget.itemlabel_width,
         width: gis.conf.layout.widget.item_width,
-        store: layerStore,
+        store: Ext.create('Ext.data.Store', {
+            fields: ['id', 'name'],
+            data: Object.keys(datasets).map(id => datasets[id]),
+        }),
         listeners: {
-            select: onDatasetComboSelect
+            change: onDatasetChange
         }
     });
 
     // Load collection items first time combo is expanded
-    const onCollectionComboExpand = function() {
+    const onCollectionComboExpand = function(combo) {
         const dataset = datasets[datasetCombo.getValue()];
 
-        if (isFunction(dataset.collection)) {
-            //console.log('load');
-            Ext.Ajax.request({
-                url: gis.init.contextPath + '/api/tokens/google',
-                disableCaching: false,
-                failure: error => gis.alert(error),
-                success: response => {
-                    const token = JSON.parse(response.responseText);
+        if (isFunction(dataset.collection)) { // Load image collection from EE
 
+            combo.store.removeAll(); // Clear combo
+            combo.setLoading(true); // Add loading mask
+
+            // Fetch EE token - TODO: cache?
+            fetch(gis.init.contextPath + '/api/tokens/google', { headers: gis.init.defaultHeaders })
+                .then(response => response.json())
+                .then(token => {
+
+                    // Set token
                     ee.data.setAuthToken(token.client_id, 'Bearer', token.access_token, token.expires_in, null, null, false);
                     ee.initialize();
 
-                    // TODO: Add loading indicator
                     dataset.collection(list => {
-                        collectionStore.loadData(list);
+                        combo.store.loadData(list);
                         dataset.collection = list;
+                        combo.setLoading(false);
                     });
-                }
-            });
-        } else {
-            collectionStore.loadData(dataset.collection);
+                })
+                .catch(error => gis.alert(error));
+
+        } else { // Image collection already loaded
+
+            combo.store.loadData(dataset.collection);
+
         }
     };
 
@@ -352,7 +335,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         forceSelection: true,
         labelWidth: gis.conf.layout.widget.itemlabel_width,
         width: gis.conf.layout.widget.item_width,
-        store: collectionStore,
+        store: Ext.create('Ext.data.Store', {
+            fields: ['id', 'name']
+        }),
         listeners: {
             expand: onCollectionComboExpand
         }
@@ -384,7 +369,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // Poulate the widget from a view (favorite)
     const setGui = function(view) {
         var config = view.config;
-        var record = layerStore.getAt(layerStore.findExact('id', config.id));
+        //var record = layerStore.getAt(layerStore.findExact('id', config.id));
 
         if (!record) {
             alert('Invalid Earth Engine dataset id'); // TODO: i18n
@@ -401,17 +386,21 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     // Get the view representation of the layer
     const getView = function() {
-        const id = datasetCombo.getValue();
-        const dataset = datasets[id];
+        const dataset = datasets[datasetCombo.getValue()];
         const image = collectionCombo.getValue();
 
-        if (id === null) {
+        if (!dataset) {
+            gis.alert('No dataset selected.'); // TODO: i18n
             return;
+        }
+
+        if (dataset.collection && !image) {
+            gis.alert('No period selected.'); // TODO: i18n
+            return
         }
 
         const view = {
             config: { // Config object saved stored as one field
-                //id: id,
                 id: dataset.id,
                 params: {
                     palette: colorsCombo.getValue().join(','),

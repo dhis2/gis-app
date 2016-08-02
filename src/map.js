@@ -80,6 +80,7 @@ Ext.onReady(function() {
 
             init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
             init.systemInfo.calendar = systemSettings.keyCalendar;
+            init.systemInfo.googleMapsKey = systemSettings.keyGoogleMapsApiKey;
 
             // user-account
             userAccountConfig = {
@@ -254,7 +255,7 @@ Ext.onReady(function() {
 
         // dhis2
         requests.push({
-            url: encodeURI(init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat'),
+            url: encodeURI(init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyGoogleMapsApiKey'),
             disableCaching: false,
             success: onSystemSettingsLoad
         });

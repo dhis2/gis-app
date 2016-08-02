@@ -32,7 +32,9 @@ export default function getLayers(gis) {
             layerOpacity: 1,
             config: {
                 type: 'googleLayer',
-                style: 'ROADMAP'
+                style: 'ROADMAP',
+                apiKey: gis.init.systemInfo.googleMapsKey
+
             }
         },
         googleHybrid: {
@@ -42,7 +44,8 @@ export default function getLayers(gis) {
             layerType: 'base',
             config: {
                 type: 'googleLayer',
-                style: 'HYBRID'
+                style: 'HYBRID',
+                apiKey: gis.init.systemInfo.googleMapsKey
             }
         },
         earthEngine: {

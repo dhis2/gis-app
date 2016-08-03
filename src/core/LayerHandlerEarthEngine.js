@@ -4,6 +4,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         'USGS/SRTMGL1_003': {
             name: 'Elevation',
             unit: 'metres above sea level',
+            mask: true,
             description: '',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003" target="_blank">NASA / USGS / JPL-Caltech</a>',
         },
@@ -11,6 +12,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             name: 'Population density',
             unit: 'people per km<sup>2</sup>',
             aggregation: 'mosaic',
+            mask: true,
             methods: {
                 multiply: [100] // Convert from people/hectare to people/km2
             },
@@ -21,12 +23,14 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             name: 'Nighttime lights',
             unit: 'light intensity',
             band: 'stable_lights',
+            mask: true,
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>',
         },
         'UCSB-CHG/CHIRPS/PENTAD': {
             name: 'Precipitation',
             unit: 'millimeter',
+            mask: true,
             description: 'Description description',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD" target="_blank">UCSB/CHG</a>',
         },
@@ -34,6 +38,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             name: 'Temperature',
             unit: '°C during daytime',
             band: 'LST_Day_1km',
+            mask: true,
             methods: {
                 toFloat: [],
                 multiply: [0.02],
@@ -42,6 +47,74 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             description: 'Temperature description',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/MODIS%2FMOD11A2" target="_blank">NASA LP DAAC</a>',
         },
+        'MODIS/051/MCD12Q1': {
+            name: 'Landcover',
+            unit: '',
+            band: 'Land_Cover_Type_1',
+            params: {
+                min: 0,
+                max: 17,
+                palette: 'aec3d6,162103,235123,399b38,38eb38,39723b,6a2424,c3a55f,b76124,d99125,92af1f,10104c,cdb400,cc0202,332808,d7cdcc,f7e174,743411',
+            },
+            mask: false,
+            legend: [{
+                color: '#aec3d6',
+                name: 'Water'
+            },{
+                color: '#162103',
+                name: 'Evergreen Needleleaf forest'
+            },{
+                color: '#235123',
+                name: 'Evergreen Broadleaf forest'
+            },{
+                color: '#399b38',
+                name: 'Deciduous Needleleaf forest'
+            },{
+                color: '#38eb38',
+                name: 'Deciduous Broadleaf forest'
+            },{
+                color: '#39723b',
+                name: 'Mixed forest'
+            },{
+                color: '#6a2424',
+                name: 'Closed shrublands'
+            },{
+                color: '#c3a55f',
+                name: 'Open shrublands'
+            },{
+                color: '#b76124',
+                name: 'Woody savannas'
+            },{
+                color: '#d99125',
+                name: 'Savannas'
+            },{
+                color: '#92af1f',
+                name: 'Grasslands'
+            },{
+                color: '#10104c',
+                name: 'Permanent wetlands'
+            },{
+                color: '#cdb400',
+                name: 'Croplands'
+            },{
+                color: '#cc0202',
+                name: 'Urban and built-up'
+            },{
+                color: '#332808',
+                name: 'Cropland/Natural vegetation mosaic'
+            },{
+                color: '#d7cdcc',
+                name: 'Snow and ice'
+            },{
+                color: '#f7e174',
+                name: 'Barren or sparsely vegetated'
+            },{
+                color: '#743411',
+                name: 'Unclassified'
+            }],
+            description: 'Landcover description',
+            attribution: '<a href="https://code.earthengine.google.com/dataset/MODIS/051/MCD12Q1" target="_blank">NASA LP DAAC</a>'
+        }
     };
 
     const createLayer = function(view) {

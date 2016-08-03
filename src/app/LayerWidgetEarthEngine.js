@@ -23,15 +23,16 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             name: 'Population density',
             description: 'Try a different year if you don\'t see data for your country. Population in 100 x 100 m grid cells.',
             label: 'Select year', // TODO: i18n
+            valueLabel: 'Min / max number of people',
             min: 0,
             max: 1000,
             maxValue: Number.MAX_VALUE,
             steps: 5,
             colors: 'YlOrBr',
-            filter(index) {
+            filter(year) {
                 return [{
                     type: 'eq',
-                    arguments: ['system:index', index],
+                    arguments: ['year', year],
                 }, {
                     type: 'eq',
                     arguments: ['UNadj', 'yes'],
@@ -48,7 +49,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
                 featureCollection.getInfo(data => {
                     callback(data.features.map(feature => ({
-                        id: feature.id,
+                        id: feature.properties['year'],
                         name: feature.properties['year'],
                     })));
                 });
@@ -90,12 +91,13 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'UCSB-CHG/CHIRPS/PENTAD': {
             id: 'UCSB-CHG/CHIRPS/PENTAD',
             name: 'Precipitation',
+            description: 'Rainfall within a five day period.',
+            valueLabel: 'Min/max rainfall in mm',
             min: 0,
             max: 100,
             maxValue: 100,
             steps: 6,
             colors: 'Blues',
-            description: 'Precipitation description',
             filter(index) {
                 return [{
                     type: 'eq',
@@ -203,8 +205,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         cls: 'gis-numberfield',
         width: 93,
         allowDecimals: false,
-        //minValue: 1,
-        //maxValue: 8848,
         value: 2500
     });
 
@@ -234,16 +234,17 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         style: 'padding:10px; color:#444'
     });
 
+    const minMaxLabel = Ext.create('Ext.container.Container', {
+        html: 'Min / max value:', // TODO: i18n
+        width: gis.conf.layout.widget.itemlabel_width,
+        style: 'padding-top:5px;font-size:11px;'
+    });
+
     const minMaxField = Ext.create('Ext.container.Container', {
         layout: 'hbox',
         hidden: true,
         style: 'padding:5px 0 0 5px;',
-        items: [{
-            xtype: 'container',
-            html: 'Min / max value:', // TODO: i18n
-            width: gis.conf.layout.widget.itemlabel_width,
-            style: 'padding-top:5px;font-size:11px;'
-        }, minValue, maxValue]
+        items: [minMaxLabel, minValue, maxValue]
     });
 
     const stepField = Ext.create('Ext.container.Container', {
@@ -276,6 +277,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         if (dataset.min !== undefined) {
             minMaxField.show();
+            minMaxLabel.update(dataset.valueLabel || 'Min/max value');
             minValue.setValue(dataset.min);
             maxValue.setMaxValue(dataset.maxValue);
             maxValue.setValue(dataset.max);

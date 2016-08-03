@@ -31,7 +31,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             name: 'Precipitation',
             unit: 'millimeter',
             mask: true,
-            description: 'Description description',
+            description: '',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD" target="_blank">UCSB/CHG</a>',
         },
         'MODIS/MOD11A2': {
@@ -44,7 +44,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 multiply: [0.02],
                 subtract: [273.15],
             },
-            description: 'Temperature description',
+            description: '',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/MODIS%2FMOD11A2" target="_blank">NASA LP DAAC</a>',
         },
         'MODIS/051/MCD12Q1': {
@@ -112,7 +112,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 color: '#743411',
                 name: 'Unclassified'
             }],
-            description: 'Landcover description',
+            description: '',
             attribution: '<a href="https://code.earthengine.google.com/dataset/MODIS/051/MCD12Q1" target="_blank">NASA LP DAAC</a>'
         }
     };

@@ -427,20 +427,29 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             collectionCombo.show();
 
             if (collectionCombo.labelEl) { // TODO
-                collectionCombo.labelEl.update(dataset.label || 'Select period');
+                collectionCombo.labelEl.update((dataset.imageLabel || 'Select period') + ':');
             }
         } else {
             collectionCombo.hide();
         }
 
-        minMaxField.show();
-        minValue.setValue(params.min);
-        maxValue.setValue(params.max);
+        if (dataset.min !== undefined) {
+            minMaxField.show();
+            minMaxLabel.update((dataset.valueLabel || 'Min/max value') + ':');
+            minValue.setMinValue(dataset.minValue);
+            minValue.setValue(params.min);
+            maxValue.setMaxValue(dataset.maxValue);
+            maxValue.setValue(params.max);
 
-        colorsCombo.show().setValue(params.palette);
+            stepField.show();
+            stepValue.setValue(params.palette.split(',').length - (params.min === 0 ? 1 : 2));
 
-        stepField.show();
-        stepValue.setValue(params.palette.split(',').length - (params.min === 0 ? 1 : 2));
+            colorsCombo.show().setValue(params.palette);
+        } else {
+            minMaxField.hide();
+            stepField.hide();
+            colorsCombo.hide();
+        }
     };
 
     // Get the view representation of the layer

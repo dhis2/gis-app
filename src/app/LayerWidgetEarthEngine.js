@@ -441,6 +441,11 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     const getView = function() {
         const dataset = datasets[datasetCombo.getValue()];
         const image = collectionCombo.getValue();
+        const view = {
+            config: { // Config object saved stored as one field
+                id: dataset.id,
+            },
+        };
 
         if (!dataset) {
             gis.alert('No dataset selected.'); // TODO: i18n
@@ -450,13 +455,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         if (dataset.collection && !image) {
             gis.alert('No period selected.'); // TODO: i18n
             return
+        } else if (image) {
+            view.config.image = collectionCombo.findRecordByValue(image).get('name');
         }
-
-        const view = {
-            config: { // Config object saved stored as one field
-                id: dataset.id,
-            },
-        };
 
         if (dataset.min !== undefined) { // If not fixed palette
             view.config.params = {

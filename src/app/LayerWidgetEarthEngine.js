@@ -11,9 +11,11 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             id: 'USGS/SRTMGL1_003',
             name: 'Elevation',
             description: '',
+            valueLabel: 'Min/max elevation',
             min: 0,
             max: 1500,
-            maxValue: Number.MAX_VALUE,
+            minValue: 0,
+            maxValue: 8848,
             steps: 5,
             colors: 'YlOrBr',
         },
@@ -21,11 +23,12 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'WorldPop/POP': { // Population density
             id: 'WorldPop/POP',
             name: 'Population density',
-            description: 'Try a different year if you don\'t see data for your country. Population in 100 x 100 m grid cells.',
-            label: 'Select year', // TODO: i18n
-            valueLabel: 'Min / max number of people',
+            description: 'Try a different year if you don\'t see data for your country.',
+            imageLabel: 'Select year', // TODO: i18n
+            valueLabel: 'Min/max people',
             min: 0,
             max: 1000,
+            minValue: 0,
             maxValue: Number.MAX_VALUE,
             steps: 5,
             colors: 'YlOrBr',
@@ -60,6 +63,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             id: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
             name: 'Nighttime lights',
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
+            imageLabel: 'Select year', // TODO: i18n
             min: 0,
             max: 63,
             maxValue: 63,
@@ -92,9 +96,10 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             id: 'UCSB-CHG/CHIRPS/PENTAD',
             name: 'Precipitation',
             description: 'Rainfall within a five day period.',
-            valueLabel: 'Min/max rainfall in mm',
+            valueLabel: 'Min/max rainfall',
             min: 0,
             max: 100,
+            minValue: 0,
             maxValue: 100,
             steps: 6,
             colors: 'Blues',
@@ -123,9 +128,11 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'MODIS/MOD11A2': {
             id: 'MODIS/MOD11A2',
             name: 'Temperature',
+            valueLabel: 'Min/max °C',
             min: 0,
             max: 50,
-            maxValue: Number.MAX_VALUE,
+            minValue: -100,
+            maxValue: 100,
             steps: 6,
             colors: 'Reds',
             description: 'Temperature description',
@@ -154,7 +161,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'MODIS/051/MCD12Q1': {
             id: 'MODIS/051/MCD12Q1',
             name: 'Landcover',
-            label: 'Select year', // TODO: i18n
+            imageLabel: 'Select year', // TODO: i18n
             filter(index) {
                 return [{
                     type: 'eq',
@@ -184,8 +191,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         width: 93,
         style: 'margin-right:2px',
         allowDecimals: false,
-        minValue: 0,
-        //maxValue: 8848,
         value: 0,
         listeners: {
             change: function(field, value) {
@@ -270,14 +275,15 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         if (dataset.collection) {
             collectionCombo.show();
-            collectionCombo.labelEl.update(dataset.label || 'Select period');
+            collectionCombo.labelEl.update((dataset.imageLabel || 'Select period') + ':');
         } else {
             collectionCombo.hide();
         }
 
         if (dataset.min !== undefined) {
             minMaxField.show();
-            minMaxLabel.update(dataset.valueLabel || 'Min/max value');
+            minMaxLabel.update((dataset.valueLabel || 'Min/max value') + ':');
+            minValue.setMinValue(dataset.minValue);
             minValue.setValue(dataset.min);
             maxValue.setMaxValue(dataset.maxValue);
             maxValue.setValue(dataset.max);

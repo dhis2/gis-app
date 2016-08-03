@@ -16,7 +16,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             methods: {
                 multiply: [100] // Convert from people/hectare to people/km2
             },
-            description: 'Population in 100 x 100 m grid cells.',
+            description: '',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>',
         },
         'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {

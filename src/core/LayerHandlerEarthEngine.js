@@ -3,9 +3,9 @@ export default function LayerHandlerEarthEngine(gis, layer) {
     const datasets = {
         'USGS/SRTMGL1_003': {
             name: 'Elevation',
-            unit: 'metres above sea level',
+            unit: 'metres',
             mask: true,
-            description: '',
+            description: 'Elevation above sea-level.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003" target="_blank">NASA / USGS / JPL-Caltech</a>',
         },
         'WorldPop/POP': {
@@ -16,7 +16,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             methods: {
                 multiply: [100] // Convert from people/hectare to people/km2
             },
-            description: '',
+            description: 'Population density estimates with national totals adjusted to match UN population division estimates.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>',
         },
         'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {
@@ -31,7 +31,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             name: 'Precipitation',
             unit: 'millimeter',
             mask: true,
-            description: '',
+            description: 'Precipitation collected from satellite and weather stations on the ground.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD" target="_blank">UCSB/CHG</a>',
         },
         'MODIS/MOD11A2': {
@@ -44,7 +44,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 multiply: [0.02],
                 subtract: [273.15],
             },
-            description: '',
+            description: 'Land surface temperatures collected from satellite. Blank spots will appear in areas with a persistent cloud cover.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/MODIS%2FMOD11A2" target="_blank">NASA LP DAAC</a>',
         },
         'MODIS/051/MCD12Q1': {
@@ -112,7 +112,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 color: '#743411',
                 name: 'Unclassified'
             }],
-            description: '',
+            description: 'Distinct landcover types collected from satellites.',
             attribution: '<a href="https://code.earthengine.google.com/dataset/MODIS/051/MCD12Q1" target="_blank">NASA LP DAAC</a>'
         }
     };

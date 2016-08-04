@@ -10,7 +10,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'USGS/SRTMGL1_003': {
             id: 'USGS/SRTMGL1_003',
             name: 'Elevation',
-            description: '',
+            description: 'Elevation above sea-level. You can adjust the min and max values so it better representes the terrain in your region.',
             valueLabel: 'Min/max elevation',
             min: 0,
             max: 1500,
@@ -23,7 +23,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'WorldPop/POP': { // Population density
             id: 'WorldPop/POP',
             name: 'Population density',
-            description: 'Try a different year if you don\'t see data for your country.',
+            description: 'Population density estimates with national totals adjusted to match UN population division estimates. Try a different year if you don\'t see data for your country.',
             imageLabel: 'Select year', // TODO: i18n
             valueLabel: 'Min/max people',
             min: 0,
@@ -95,7 +95,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'UCSB-CHG/CHIRPS/PENTAD': {
             id: 'UCSB-CHG/CHIRPS/PENTAD',
             name: 'Precipitation',
-            description: 'Rainfall within a five day period.',
+            description: 'Precipitation collected from satellite and weather stations on the ground. The values are in millimeters within 5 days periods.',
             valueLabel: 'Min/max rainfall',
             min: 0,
             max: 100,
@@ -128,6 +128,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'MODIS/MOD11A2': {
             id: 'MODIS/MOD11A2',
             name: 'Temperature',
+            description: 'Land surface temperatures collected from satellite in 8 days periods. Blank spots will appear in areas with a persistent cloud cover.',
             valueLabel: 'Min/max °C',
             min: 0,
             max: 50,
@@ -135,7 +136,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             maxValue: 100,
             steps: 6,
             colors: 'Reds',
-            description: 'Temperature description',
             filter(index) {
                 return [{
                     type: 'eq',
@@ -161,6 +161,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'MODIS/051/MCD12Q1': {
             id: 'MODIS/051/MCD12Q1',
             name: 'Landcover',
+            description: '17 distinct landcover types collected from satellites.',
             imageLabel: 'Select year', // TODO: i18n
             filter(index) {
                 return [{

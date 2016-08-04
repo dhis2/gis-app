@@ -124,34 +124,36 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             view.config = JSON.parse(view.config);
         }
 
-        Object.assign(layerConfig, {
-            type: 'earthEngine',
-            accessToken: function(callback) {
-                Ext.Ajax.request({
-                    url: gis.init.contextPath + '/api/tokens/google',
-                    disableCaching: false,
-                    failure: function(r) {
-                        gis.alert(r);
-                    },
-                    success: function(r) {
-                        callback(JSON.parse(r.responseText));
-                    }
-                });
+        if (view.config.id) {
+            Object.assign(layerConfig, {
+                type: 'earthEngine',
+                accessToken: function (callback) {
+                    Ext.Ajax.request({
+                        url: gis.init.contextPath + '/api/tokens/google',
+                        disableCaching: false,
+                        failure: function (r) {
+                            gis.alert(r);
+                        },
+                        success: function (r) {
+                            callback(JSON.parse(r.responseText));
+                        }
+                    });
+                }
+            }, layer.config, datasets[view.config.id], view.config);
+
+            // Remove layer instance if already exist
+            if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+                layer.instance.off('initialized', hideMask);
+                gis.instance.removeLayer(layer.instance);
             }
-        }, layer.config, datasets[view.config.id], view.config);
 
-        // Remove layer instance if already exist
-        if (layer.instance && gis.instance.hasLayer(layer.instance)) {
-            layer.instance.off('initialized', hideMask);
-            gis.instance.removeLayer(layer.instance);
+            // Create layer instance
+            layer.instance = gis.instance.addLayer(layerConfig);
+            layer.instance.on('initialized', hideMask);
+
+            addLegend();
+            afterLoad(view);
         }
-
-        // Create layer instance
-        layer.instance = gis.instance.addLayer(layerConfig);
-        layer.instance.on('initialized', hideMask);
-
-        addLegend();
-        afterLoad(view);
     };
 
     // Hide mask when layer is initialized

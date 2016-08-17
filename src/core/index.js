@@ -7,6 +7,7 @@ import LayerHandlerFacility from './LayerHandlerFacility.js';
 import LayerHandlerThematic from './LayerHandlerThematic.js';
 import LayerHandlerBoundary from './LayerHandlerBoundary.js';
 import LayerHandlerEarthEngine from './LayerHandlerEarthEngine.js';
+import LayerHandlerExternal from './LayerHandlerExternal.js';
 import FeaturePopup from './FeaturePopup.js';
 import FeatureContextMenu from './FeatureContextMenu.js';
 
@@ -30,6 +31,7 @@ export default {
         LayerHandlerThematic,
         LayerHandlerBoundary,
         LayerHandlerEarthEngine,
+        LayerHandlerExternal,
         FeaturePopup,
         FeatureContextMenu,
     },

@@ -455,6 +455,12 @@ Ext.onReady( function() {
                         width: 26
                     });
                     a.push({
+                        iconCls: 'gis-btn-icon-' + gis.layer.external.id,
+                        menu: gis.layer.external.menu,
+                        tooltip: GIS.i18n.external_layer,
+                        width: 26
+                    });
+                    a.push({
                         text: GIS.i18n.favorites,
                         menu: {},
                         handler: function() {
@@ -885,6 +891,19 @@ Ext.onReady( function() {
                     listeners: {
                         added: function() {
                             gis.layer.earthEngine.legendPanel = this;
+                        }
+                    }
+                });
+
+                a.push({
+                    title: GIS.i18n.external_layer_legend,
+                    bodyStyle: 'padding: 4px 6px 6px; border: 0 none',
+                    collapsible: true,
+                    collapsed: true,
+                    animCollapse: false,
+                    listeners: {
+                        added: function() {
+                            gis.layer.external.legendPanel = this;
                         }
                     }
                 });

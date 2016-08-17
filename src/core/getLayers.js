@@ -53,10 +53,18 @@ export default function getLayers(gis) {
             name: GIS.i18n.earthengine_layer,
             layerOpacity: 0.9,
             config: {
-                // type: 'earthEngine',
                 pane: 'earthEngine'
             },
             handler: GIS.core.LayerHandlerEarthEngine
+        },
+        external: {
+            id: 'external',
+            name: GIS.i18n.external_layer,
+            layerOpacity: 0.9,
+            config: {
+                pane: 'external'
+            },
+            handler: GIS.core.LayerHandlerExternal
         },
         event: {
             id: 'event',

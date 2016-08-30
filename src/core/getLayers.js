@@ -2,27 +2,26 @@ export default function getLayers(gis) {
     var layerNumbers = ['1', '2', '3', '4'];
 
     var layers = {
-        /*
-        openStreetMap: {
-            id: 'openStreetMap',
-            name: GIS.i18n.openstreetmap,
-            layerType: 'base',
-            layerOpacity: 1,
-            config: {
-                type: 'mapQuest',
-            }
-        },
-        */
         osmLight: {
             id: 'osmLight',
-            // name: GIS.i18n.osm_light,
-            name: GIS.i18n.openstreetmap,
+            name: GIS.i18n.osm_light,
             layerType: 'base',
             layerOpacity: 1,
             config: {
                 type: 'tileLayer',
                 url: '//cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+            }
+        },
+        openStreetMap: {
+            id: 'openStreetMap',
+            name: GIS.i18n.openstreetmap,
+            layerType: 'base',
+            layerOpacity: 1,
+            config: {
+                type: 'tileLayer',
+                url: '//{s}.tile.osm.org/{z}/{x}/{y}.png',
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }
         },
         googleStreets: {
@@ -34,7 +33,6 @@ export default function getLayers(gis) {
                 type: 'googleLayer',
                 style: 'ROADMAP',
                 apiKey: gis.init.systemInfo.googleMapsKey
-
             }
         },
         googleHybrid: {

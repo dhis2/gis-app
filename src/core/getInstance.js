@@ -1208,8 +1208,8 @@ export default function getInstance(init) {
     gis.orderedLayers = [
         gis.layer.googleHybrid,
         gis.layer.googleStreets,
+        gis.layer.openStreetMap,
         gis.layer.osmLight,
-        // gis.layer.openStreetMap,
         gis.layer.earthEngine,
         gis.layer.thematic4,
         gis.layer.thematic3,

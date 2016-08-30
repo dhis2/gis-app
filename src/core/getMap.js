@@ -29,5 +29,12 @@ export default function getMap() {
     map.createPane('earthEngine');
     map.getPane('earthEngine').style.zIndex = 300;
 
+    map.createPane('external_overlay');
+    map.getPane('external_overlay').style.zIndex = 470; // Above thematic and boundary panes
+    map.getPane('external_overlay').style.pointerEvents = 'none'; // Don't capture clicks and touches
+
+    map.createPane('external_basemap');
+    map.getPane('external_basemap').style.zIndex = 250; // Above other DHIS2 baselayer
+
     return map;
 };

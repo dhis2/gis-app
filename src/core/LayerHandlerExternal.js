@@ -1,10 +1,13 @@
+// Layer handler for external layers (WMS/TMS/XYZ)
 export default function LayerHandlerExternal(gis, layer) {
 
+    // Create new layer for view definition
     const createLayer = function(view) {
         const layerConfig = {
             type: 'tileLayer',
             url: view.url,
-            attribution: view.attribution
+            attribution: view.attribution,
+            pane: 'external_' + view.placement
         };
 
         if (view.service === 'tms') {

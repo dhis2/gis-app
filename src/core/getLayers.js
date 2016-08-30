@@ -61,9 +61,6 @@ export default function getLayers(gis) {
             id: 'external',
             name: GIS.i18n.external_layer,
             layerOpacity: 0.9,
-            // config: {
-                // pane: 'external'
-            // },
             handler: GIS.core.LayerHandlerExternal
         },
         event: {

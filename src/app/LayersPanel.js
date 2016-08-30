@@ -1,3 +1,4 @@
+// Layer stack panel
 export default function LayersPanel(gis) {
     var layers = gis.layer,
         orderedLayers = [
@@ -9,6 +10,7 @@ export default function LayersPanel(gis) {
             layers.thematic3,
             layers.thematic4,
             layers.earthEngine,
+            layers.external,
             // layers.openStreetMap,
             layers.osmLight,
             layers.googleStreets,

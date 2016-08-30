@@ -27,6 +27,26 @@ export default function LayerHandlerExternal(gis, layer) {
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);
 
+        afterLoad(view);
+    }
+
+    const afterLoad = function(view) {
+        // Legend
+        if (gis.viewport) {
+            gis.viewport.eastRegion.doLayout();
+        }
+
+        if (layer.legendPanel) {
+            layer.legendPanel.expand();
+        }
+
+        if (layer.item) { // Layer stack
+            layer.item.setValue(true, view.opacity);
+        }
+        else {
+            layer.instance.setOpacity(view.opacity);
+        }
+
         if (gis.mask && loader.hideMask) {
             gis.mask.hide();
         }

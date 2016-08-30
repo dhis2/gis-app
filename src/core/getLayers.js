@@ -59,7 +59,8 @@ export default function getLayers(gis) {
         },
         external: {
             id: 'external',
-            name: GIS.i18n.external_layer,
+            name: GIS.i18n.external_layer, // TODO
+            name: 'External layer',
             layerOpacity: 0.9,
             config: {
                 pane: 'external'

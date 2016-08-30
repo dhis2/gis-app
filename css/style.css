@@ -792,6 +792,7 @@ gis-combo .x-form-item-label {
 .x-toolbar .gis-btn-icon-event,
 .x-toolbar .gis-btn-icon-boundary,
 .x-toolbar .gis-btn-icon-earthEngine,
+.x-toolbar .gis-btn-icon-external,
 .x-toolbar .gis-btn-icon-thematic1,
 .x-toolbar .gis-btn-icon-thematic2,
 .x-toolbar .gis-btn-icon-thematic3,
@@ -810,6 +811,9 @@ gis-combo .x-form-item-label {
 }
 .x-toolbar .gis-btn-icon-earthEngine {
     background: url('../images/earthEngine_20.png') no-repeat;
+}
+.x-toolbar .gis-btn-icon-external {
+    background: url('../images/external_20.png') no-repeat;
 }
 .x-toolbar .gis-btn-icon-thematic1 {
     background: url('../images/thematic1_20.png') no-repeat;
@@ -1061,6 +1065,9 @@ gis-combo .x-form-item-label {
 }
 .gis-window-title-icon-earthEngine {
     background: url('../images/earthEngine_14.png') no-repeat;
+}
+.gis-window-title-icon-external {
+    background: url('../images/external_14.png') no-repeat;
 }
 .gis-window-title-icon-labels {
     background: url('../images/labels_14.png') no-repeat;

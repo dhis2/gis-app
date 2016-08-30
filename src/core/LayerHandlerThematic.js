@@ -752,10 +752,8 @@ export default function LayerHandlerThematic(gis, layer) {
         }
 
         // Mask
-        if (loader.hideMask) {
-            if (gis.mask) {
-                gis.mask.hide();
-            }
+        if (loader.hideMask && gis.mask) {
+            gis.mask.hide();
         }
 
         // Map callback

@@ -194,9 +194,12 @@ export default function MapLoader(gis, isSession, applyConfig) {
 		// isSession is true if you select "map -> view this table/chart" as map in pivot/visualizer
 		if (layersBounds && layersBounds.isValid() && (gis.el || isSession || !validLatLng)) {
 			// Fit bounds not always set without a delay
+			/*
 			window.setTimeout(function(){
 				gis.instance.fitBounds(layersBounds);
 			}, 2000);
+			*/
+			gis.instance.fitBounds(layersBounds);
 		}
 		else {
 			gis.instance.setView([lat, lon], zoom);

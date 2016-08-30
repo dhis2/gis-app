@@ -1227,6 +1227,7 @@ export default function getInstance(init) {
         gis.layer.thematic2,
         gis.layer.thematic1,
         gis.layer.boundary,
+        gis.layer.external,
         gis.layer.facility,
         gis.layer.event
     ];

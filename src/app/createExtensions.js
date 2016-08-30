@@ -49,7 +49,7 @@ export default function createExtensions(gis) {
             if (isVisible) {
                 if (layer.instance) { // Layer instance already exist
                     gis.instance.addLayer(layer.instance);
-                } else if (layer.id !== 'earthEngine') { // Earth Engine layer can't be empty
+                } else if (layer.id !== 'earthEngine' && layer.id !== 'external') { // Earth Engine and External layer can't be empty
                     // Create and add layer instance
                     layer.instance = gis.instance.addLayer(layer.config);
                 }
@@ -83,7 +83,6 @@ export default function createExtensions(gis) {
         },
         updateItem: function(value) {
             this.numberField.setDisabled(!value);
-
             this.setLayerVisibility(value);
         },
         initComponent: function() {

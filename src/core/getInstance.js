@@ -9,12 +9,13 @@ import arrayContains from 'd2-utilizr/lib/arrayContains';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 
 export default function getInstance(init) {
-    var conf = {},
-        util = {},
-        api = {},
-        store = {},
-        gis = {},
-        dimConf;
+    const conf = {};
+    const util = {};
+    const api = {};
+    const store = {};
+    const gis = {};
+
+    let dimConf;
 
     // tmp
     gis.alert = function() {};
@@ -248,15 +249,13 @@ export default function getInstance(init) {
         };
 
         // relativePeriodsMap / records
-        for (var i = 0, obj; i < conf.period.relativePeriods.length; i++) {
-            obj = conf.period.relativePeriods[i];
-
+        conf.period.relativePeriods.forEach(obj => {
             conf.period.relativePeriodsMap[obj.id] = obj.name;
             conf.period.relativePeriodRecordsMap[obj.id] = {
                 id: obj.id,
                 name: obj.name
             };
-        }
+        });
 
         conf.valueType = {
             numericTypes: ['NUMBER','UNIT_INTERVAL','PERCENTAGE','INTEGER','INTEGER_POSITIVE','INTEGER_NEGATIVE','INTEGER_ZERO_OR_POSITIVE'],
@@ -351,11 +350,9 @@ export default function getInstance(init) {
 
         // Returns the current basemap
         util.map.getBasemap = function() {
-            var layer;
-
-            for (var layerId in gis.layer) {
+            for (let layerId in gis.layer) {
                 if (gis.layer.hasOwnProperty(layerId)) {
-                    layer = gis.layer[layerId];
+                    const layer = gis.layer[layerId];
 
                     if (layer.layerType === 'base' && layer.instance && gis.instance.hasLayer(layer.instance)) {
                         return layerId;
@@ -367,33 +364,25 @@ export default function getInstance(init) {
         };
 
         util.map.getVisibleVectorLayers = function() {
-            var layers = [];
-
-            for (var i = 0, layer; i < gis.overlayLayers.length; i++) {
-                layer = gis.overlayLayers[i];
-
-                if (layer.instance && gis.instance.hasLayer(layer.instance)) {
-                    layers.push(layer);
-                }
-            }
-
-            return layers;
+            return gis.overlayLayers.filter(layer => layer.instance && gis.instance.hasLayer(layer.instance));
         };
 
         util.geojson = {};
 
         // Convert to GeoJSON features
         util.geojson.decode = function(organisationUnits, levelOrder) {
-            var features = [];
+            const features = [];
 
             levelOrder = levelOrder || 'ASC';
 
             // sort
             util.array.sort(organisationUnits, levelOrder, 'le');
 
-            for (var i = 0, ou, coord, gpid = '', gppg = '', type; i < organisationUnits.length; i++) {
-                ou = organisationUnits[i];
-                coord = JSON.parse(ou.co);
+            organisationUnits.forEach(ou => {
+                const coord = JSON.parse(ou.co);
+                let gpid = '';
+                let gppg = '';
+                let type;
 
                 // Only add features with coordinates
                 if (coord && coord.length) {
@@ -407,7 +396,7 @@ export default function getInstance(init) {
 
                     // grand parent
                     if (isString(ou.pg) && ou.pg.length) {
-                        var ids = arrayClean(ou.pg.split('/'));
+                        const ids = arrayClean(ou.pg.split('/'));
 
                         // grand parent id
                         if (ids.length >= 2) {
@@ -441,7 +430,8 @@ export default function getInstance(init) {
                         }
                     });
                 }
-            }
+
+            });
 
             return features;
         };
@@ -450,17 +440,15 @@ export default function getInstance(init) {
         util.gui.combo = {};
 
         util.gui.combo.setQueryMode = function(cmpArray, mode) {
-            for (var i = 0; i < cmpArray.length; i++) {
-                cmpArray[i].queryMode = mode;
-            }
+            cmpArray.forEach(cmp => cmp.queryMode = mode);
         };
 
         util.object = {};
 
         util.object.getLength = function(object) {
-            var size = 0;
+            let size = 0;
 
-            for (var key in object) {
+            for (let key in object) {
                 if (object.hasOwnProperty(key)) {
                     size++;
                 }
@@ -542,16 +530,12 @@ export default function getInstance(init) {
                 return {};
             }
 
-            var o = {};
+            const o = {};
             idProperty = idProperty || 'id';
             nameProperty = nameProperty || 'name';
             namePrefix = namePrefix || '';
 
-            for (var i = 0, obj; i < array.length; i++) {
-                obj = array[i];
-
-                o[namePrefix + obj[idProperty]] = obj[nameProperty];
-            }
+            array.forEach(obj => o[namePrefix + obj[idProperty]] = obj[nameProperty]);
 
             return o;
         };
@@ -559,25 +543,24 @@ export default function getInstance(init) {
         util.layout = {};
 
         util.layout.getAnalytical = function(map) {
-            var layout,
-                layer;
+            let layout;
+            let layer;
 
             if (isObject(map) && isArray(map.mapViews) && map.mapViews.length) {
-                for (var i = 0, view, id; i < map.mapViews.length; i++) {
-                    view = map.mapViews[i];
-                    id = view.layer;
+                map.mapViews.forEach(view => {
+                    const id = view.layer;
 
                     if (gis.layer.hasOwnProperty(id) && gis.layer[id].layerCategory === gis.conf.finals.layer.category_thematic) {
-                        layout = gis.api.layout.Layout(view);
+                        const layout = gis.api.layout.Layout(view);
 
                         if (layout) {
                             return layout;
                         }
                     }
-                }
+                });
             }
             else {
-                for (var key in gis.layer) {
+                for (let key in gis.layer) {
                     if (gis.layer.hasOwnProperty(key) && key.substring(0, 8) === gis.conf.finals.layer.category_thematic && gis.layer[key].view) {
                         layer = gis.layer[key];
                         layout = gis.api.layout.Layout(layer.view);
@@ -596,8 +579,8 @@ export default function getInstance(init) {
         };
 
         util.layout.getPluginConfig = function() {
-            var layers = gis.util.map.getVisibleVectorLayers(),
-                map = {};
+            const layers = gis.util.map.getVisibleVectorLayers();
+            const map = {};
 
             if (gis.map) {
                 return gis.map;
@@ -605,22 +588,19 @@ export default function getInstance(init) {
 
             map.mapViews = [];
 
-            for (var i = 0, layer; i < layers.length; i++) {
-                layer = layers[i];
-
+            layers.forEach(layer => {
                 if (layer.view) {
                     layer.view.layer = layer.id;
-
                     map.mapViews.push(layer.view);
                 }
-            }
+            });
 
             return map;
         };
 
         util.layout.setSessionStorage = function(session, obj, url) {
             if (GIS.isSessionStorage) {
-                var dhis2 = JSON.parse(sessionStorage.getItem('dhis2')) || {};
+                const dhis2 = JSON.parse(sessionStorage.getItem('dhis2')) || {};
                 dhis2[session] = obj;
                 sessionStorage.setItem('dhis2', JSON.stringify(dhis2));
 
@@ -631,17 +611,10 @@ export default function getInstance(init) {
         };
 
         util.layout.getDataDimensionsFromLayout = function(layout) {
-            var dimensions = arrayClean([].concat(layout.columns || [], layout.rows || [], layout.filters || [])),
-                ignoreKeys = ['pe', 'ou'],
-                dataDimensions = [];
+            const dimensions = arrayClean([].concat(layout.columns || [], layout.rows || [], layout.filters || []));
+            const ignoreKeys = ['pe', 'ou'];
 
-            for (var i = 0; i < dimensions.length; i++) {
-                if (!arrayContains(ignoreKeys, dimensions[i].dimension)) {
-                    dataDimensions.push(dimensions[i]);
-                }
-            }
-
-            return dataDimensions;
+            return dimensions.filter(dim => !arrayContains(ignoreKeys, dim.dimension));
         };
 
         util.date = {};
@@ -653,9 +626,9 @@ export default function getInstance(init) {
                 }
             }
 
-            var date = new Date(param),
-                month = '' + (1 + date.getMonth()),
-                day = '' + date.getDate();
+            const date = new Date(param);
+            let month = '' + (1 + date.getMonth());
+            let day = '' + date.getDate();
 
             month = month.length === 1 ? '0' + month : month;
             day = day.length === 1 ? '0' + day : day;
@@ -666,8 +639,6 @@ export default function getInstance(init) {
         util.message = {};
 
         util.message.alert = function(obj) {
-            var html;
-
             if (!obj || (isObject(obj) && !obj.message && !obj.responseText)) {
                 return;
             }
@@ -686,7 +657,7 @@ export default function getInstance(init) {
             }
 
             // plugin message
-            html = obj.httpStatusCode ? 'Code: ' + obj.httpStatusCode + '<br>' : '';
+            let html = obj.httpStatusCode ? 'Code: ' + obj.httpStatusCode + '<br>' : '';
             html += obj.httpStatus ? 'Status: ' + obj.httpStatus + '<br><br>' : '';
             html += obj.message + (obj.message.substr(obj.message.length - 1) === '.' ? '' : '.');
 
@@ -708,7 +679,7 @@ export default function getInstance(init) {
                 }).show();
             } else if (gis.container) { // Dashboard
                 gis.instance.getContainer().style.display = 'none';
-                var alertDiv = document.createElement('div');
+                const alertDiv = document.createElement('div');
                 alertDiv.className = 'dhis2-map-widget-alert';
                 alertDiv.innerHTML = html;
                 gis.container.appendChild(alertDiv);
@@ -722,10 +693,10 @@ export default function getInstance(init) {
         util.dhis = {};
 
         util.dhis.getDataDimensionItemTypes = function(dataDimensionItems) {
-            var types = [];
+            const types = [];
 
             if (isArray(dataDimensionItems) && dataDimensionItems.length) {
-                for (var i = 0; i < dataDimensionItems.length; i++) {
+                for (let i = 0; i < dataDimensionItems.length; i++) {
                     if (isObject(dataDimensionItems[i])) {
                         types.push(dataDimensionItems[i].dataDimensionItemType);
                     }
@@ -734,19 +705,6 @@ export default function getInstance(init) {
 
             return types;
         };
-
-        /*
-         util.connection = {};
-
-         util.connection.ajax = function(requestConfig, authConfig) {
-         if (authConfig.crossDomain && isString(authConfig.username) && isString(authConfig.password)) {
-         requestConfig.headers = isObject(authConfig.headers) ? authConfig.headers : {};
-         requestConfig.headers['Authorization'] = 'Basic ' + btoa(authConfig.username + ':' + authConfig.password);
-         }
-
-         Ext.Ajax.request(requestConfig);
-         };
-         */
     }());
 
     gis.init = init;
@@ -755,14 +713,12 @@ export default function getInstance(init) {
 
     // api
     (function() {
-        var dimConf = gis.conf.finals.dimension;
+        const dimConf = gis.conf.finals.dimension;
 
         api.layout = {};
         api.response = {};
 
         api.layout.Record = function(config) {
-            var record;
-
             // id: string
 
             if (!isObject(config)) {
@@ -775,7 +731,7 @@ export default function getInstance(init) {
                 return;
             }
 
-            record = Ext.clone(config);
+            const record = Ext.clone(config);
 
             if (isString(config.name)) {
                 record.name = config.name;
@@ -785,7 +741,7 @@ export default function getInstance(init) {
         };
 
         api.layout.Dimension = function(config) {
-            var dimension = {};
+            const dimension = {};
 
             // dimension: string
 
@@ -802,14 +758,14 @@ export default function getInstance(init) {
             }
 
             if (config.dimension !== conf.finals.dimension.category.objectName) {
-                var records = [];
+                const records = [];
 
                 if (!isArray(config.items)) {
                     console.log('Dimension items is not an array', config);
                     return;
                 }
 
-                for (var i = 0, record; i < config.items.length; i++) {
+                for (let i = 0, record; i < config.items.length; i++) {
                     record = api.layout.Record(config.items[i]);
 
                     if (record) {
@@ -818,13 +774,6 @@ export default function getInstance(init) {
                 }
 
                 config.items = records;
-
-                /* TODO: Breaks loading of event favorite
-                 if (!config.items.length) {
-                 console.log('Dimension has no valid items', config);
-                 return;
-                 }
-                 */
             }
 
             dimension.dimension = config.dimension;
@@ -844,51 +793,36 @@ export default function getInstance(init) {
         api.layout.Layout = function(config, applyConfig, forceApplyConfig) {
             config = Ext.apply(config, applyConfig);
 
-            var layout = {},
-                getValidatedDimensionArray,
-                validateSpecialCases;
+            const layout = {};
 
-            // layer: string
+            /*
+            layer: string
+            columns: [Dimension]
+            rows: [Dimension]
+            filters: [Dimension]
+            program: object
+            classes: integer (5) - 1-7
+            method: integer (2) - 2, 3 // 2=equal intervals, 3=equal counts
+            colorLow: string ('ff0000')
+            colorHigh: string ('00ff00')
+            radiusLow: integer (5)
+            radiusHigh: integer (15)
+            opacity: integer (0.8) - 0-1
+            legendSet: object
+            areaRadius: integer
+            hidden: boolean (false)
+            dataDimensionItems: array
+            */
 
-            // columns: [Dimension]
-
-            // rows: [Dimension]
-
-            // filters: [Dimension]
-
-            // program: object
-
-            // classes: integer (5) - 1-7
-
-            // method: integer (2) - 2, 3 // 2=equal intervals, 3=equal counts
-
-            // colorLow: string ('ff0000')
-
-            // colorHigh: string ('00ff00')
-
-            // radiusLow: integer (5)
-
-            // radiusHigh: integer (15)
-
-            // opacity: integer (0.8) - 0-1
-
-            // legendSet: object
-
-            // areaRadius: integer
-
-            // hidden: boolean (false)
-
-            // dataDimensionItems: array
-
-            getValidatedDimensionArray = function(dimensionArray) {
-                var dimensions = [];
+            const getValidatedDimensionArray = function(dimensionArray) {
+                const dimensions = [];
 
                 if (!(dimensionArray && isArray(dimensionArray) && dimensionArray.length)) {
                     return;
                 }
 
 
-                for (var i = 0, dimension; i < dimensionArray.length; i++) {
+                for (let i = 0, dimension; i < dimensionArray.length; i++) {
                     dimension = api.layout.Dimension(dimensionArray[i]);
 
                     if (dimension) {
@@ -901,14 +835,15 @@ export default function getInstance(init) {
                 return dimensionArray.length ? dimensionArray : null;
             };
 
-            validateSpecialCases = function(config) {
-                var dimensions = arrayClean([].concat(config.columns || [], config.rows || [], config.filters || [])),
-                    map = conf.period.integratedRelativePeriodsMap,
-                    dxDim,
-                    peDim,
-                    ouDim;
+            const validateSpecialCases = function(config) {
+                const dimensions = arrayClean([].concat(config.columns || [], config.rows || [], config.filters || []));
+                const map = conf.period.integratedRelativePeriodsMap;
 
-                for (var i = 0, dim; i < dimensions.length; i++) {
+                let dxDim;
+                let peDim;
+                let ouDim;
+
+                for (let i = 0, dim; i < dimensions.length; i++) {
                     dim = dimensions[i];
 
                     if (dim.dimension === dimConf.data.objectName) {
@@ -953,13 +888,13 @@ export default function getInstance(init) {
             };
 
             return function() {
-                var objectNames =   [],
-                    dimConf = conf.finals.dimension,
-                    isOu = false,
-                    isOuc = false,
-                    isOugc = false;
+                const objectNames = [];
+                const dimConf = conf.finals.dimension;
+                let isOu = false;
+                let isOuc = false;
+                let isOugc = false;
 
-                config = validateSpecialCases(config);
+                const config = validateSpecialCases(config);
 
                 if (!config) {
                     return;
@@ -981,7 +916,7 @@ export default function getInstance(init) {
                 }
 
                 // Collect object names and user orgunits
-                for (var i = 0, dim, dims = arrayClean([].concat(config.columns, config.rows, config.filters)); i < dims.length; i++) {
+                for (let i = 0, dim, dims = arrayClean([].concat(config.columns, config.rows, config.filters)); i < dims.length; i++) {
                     dim = dims[i];
 
                     if (dim) {
@@ -993,7 +928,7 @@ export default function getInstance(init) {
 
                         // user orgunits
                         if (dim.dimension === dimConf.organisationUnit.objectName && isArray(dim.items)) {
-                            for (var j = 0; j < dim.items.length; j++) {
+                            for (let j = 0; j < dim.items.length; j++) {
                                 if (dim.items[j].id === 'USER_ORGUNIT') {
                                     isOu = true;
                                 }
@@ -1113,7 +1048,7 @@ export default function getInstance(init) {
         };
 
         api.response.Header = function(config) {
-            var header = {};
+            const header = {};
 
             // name: string
 
@@ -1143,12 +1078,12 @@ export default function getInstance(init) {
         };
 
         api.response.Response = function(config) {
-            var response = {};
+            const response = {};
 
             // headers: [Header]
 
             return function() {
-                var headers = [];
+                const headers = [];
 
                 if (!(config && isObject(config))) {
                     gis.alert('Data response invalid', config);
@@ -1160,7 +1095,7 @@ export default function getInstance(init) {
                     return false;
                 }
 
-                for (var i = 0, header; i < config.headers.length; i++) {
+                for (let i = 0, header; i < config.headers.length; i++) {
                     header = api.response.Header(config.headers[i]);
 
                     if (header) {

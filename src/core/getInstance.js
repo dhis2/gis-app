@@ -207,45 +207,32 @@ export default function getInstance(init) {
             relativePeriods: [
                 {id: 'THIS_WEEK', name: GIS.i18n.this_week},
                 {id: 'LAST_WEEK', name: GIS.i18n.last_week},
+                {id: 'LAST_4_WEEKS', name: GIS.i18n.last_4_weeks},
+                {id: 'LAST_12_WEEKS', name: GIS.i18n.last_12_weeks},
+                {id: 'LAST_52_WEEKS', name: GIS.i18n.last_52_weeks},
                 {id: 'THIS_MONTH', name: GIS.i18n.this_month},
                 {id: 'LAST_MONTH', name: GIS.i18n.last_month},
+                {id: 'LAST_3_MONTHS', name: GIS.i18n.last_3_months},
+                {id: 'LAST_6_MONTHS', name: GIS.i18n.last_6_months},
+                {id: 'LAST_12_MONTHS', name: GIS.i18n.last_12_months},
                 {id: 'THIS_BIMONTH', name: GIS.i18n.this_bimonth},
                 {id: 'LAST_BIMONTH', name: GIS.i18n.last_bimonth},
+                {id: 'LAST_6_BIMONTHS', name: GIS.i18n.last_6_bimonths},
                 {id: 'THIS_QUARTER', name: GIS.i18n.this_quarter},
                 {id: 'LAST_QUARTER', name: GIS.i18n.last_quarter},
+                {id: 'LAST_4_QUARTERS', name: GIS.i18n.last_4_quarters},
                 {id: 'THIS_SIX_MONTH', name: GIS.i18n.this_sixmonth},
                 {id: 'LAST_SIX_MONTH', name: GIS.i18n.last_sixmonth},
+                {id: 'LAST_2_SIX_MONTHS', name: GIS.i18n.last_2_sixmonths},
                 {id: 'THIS_FINANCIAL_YEAR', name: GIS.i18n.this_financial_year},
                 {id: 'LAST_FINANCIAL_YEAR', name: GIS.i18n.last_financial_year},
+                {id: 'LAST_5_FINANCIAL_YEARS', name: GIS.i18n.last_5_financial_years},
                 {id: 'THIS_YEAR', name: GIS.i18n.this_year},
-                {id: 'LAST_YEAR', name: GIS.i18n.last_year}
+                {id: 'LAST_YEAR', name: GIS.i18n.last_year},
+                {id: 'LAST_5_YEARS', name: GIS.i18n.last_5_years}
             ],
             relativePeriodsMap: {},
-            relativePeriodRecordsMap: {},
-            integratedRelativePeriodsMap: {
-                'THIS_WEEK': 'THIS_WEEK',
-                'LAST_WEEK': 'LAST_WEEK',
-                'LAST_4_WEEKS': 'LAST_WEEK',
-                'LAST_12_WEEKS': 'LAST_WEEK',
-                'THIS_MONTH': 'THIS_MONTH',
-                'LAST_MONTH': 'LAST_MONTH',
-                'LAST_3_MONTHS': 'LAST_MONTH',
-                'LAST_12_MONTHS': 'LAST_MONTH',
-                'THIS_BIMONTH': 'THIS_BIMONTH',
-                'LAST_BIMONTH': 'LAST_BIMONTH',
-                'LAST_6_BIMONTHS': 'LAST_BIMONTH',
-                'THIS_QUARTER': 'THIS_QUARTER',
-                'LAST_QUARTER': 'LAST_QUARTER',
-                'LAST_4_QUARTERS': 'LAST_QUARTER',
-                'THIS_SIX_MONTH': 'THIS_SIX_MONTH',
-                'LAST_SIX_MONTH': 'LAST_SIX_MONTH',
-                'LAST_2_SIXMONTHS': 'LAST_SIX_MONTH',
-                'LAST_FINANCIAL_YEAR': 'LAST_FINANCIAL_YEAR',
-                'LAST_5_FINANCIAL_YEARS': 'LAST_FINANCIAL_YEAR',
-                'THIS_YEAR': 'THIS_YEAR',
-                'LAST_YEAR': 'LAST_YEAR',
-                'LAST_5_YEARS': 'LAST_YEAR'
-            }
+            relativePeriodRecordsMap: {}
         };
 
         // relativePeriodsMap / records
@@ -795,25 +782,6 @@ export default function getInstance(init) {
 
             const layout = {};
 
-            /*
-            layer: string
-            columns: [Dimension]
-            rows: [Dimension]
-            filters: [Dimension]
-            program: object
-            classes: integer (5) - 1-7
-            method: integer (2) - 2, 3 // 2=equal intervals, 3=equal counts
-            colorLow: string ('ff0000')
-            colorHigh: string ('00ff00')
-            radiusLow: integer (5)
-            radiusHigh: integer (15)
-            opacity: integer (0.8) - 0-1
-            legendSet: object
-            areaRadius: integer
-            hidden: boolean (false)
-            dataDimensionItems: array
-            */
-
             const getValidatedDimensionArray = function(dimensionArray) {
                 const dimensions = [];
 
@@ -837,15 +805,12 @@ export default function getInstance(init) {
 
             const validateSpecialCases = function(config) {
                 const dimensions = arrayClean([].concat(config.columns || [], config.rows || [], config.filters || []));
-                const map = conf.period.integratedRelativePeriodsMap;
 
                 let dxDim;
                 let peDim;
                 let ouDim;
 
-                for (let i = 0, dim; i < dimensions.length; i++) {
-                    dim = dimensions[i];
-
+                dimensions.forEach(dim => {
                     if (dim.dimension === dimConf.data.objectName) {
                         dxDim = dim;
                     }
@@ -855,7 +820,7 @@ export default function getInstance(init) {
                     else if (dim.dimension === dimConf.organisationUnit.objectName) {
                         ouDim = dim;
                     }
-                }
+                });
 
                 if (!ouDim) {
                     gis.alert('No organisation units specified');
@@ -866,14 +831,8 @@ export default function getInstance(init) {
                     dxDim.items = [dxDim.items[0]];
                 }
 
-                if (peDim) {
-                    peDim.items = [peDim.items[0]];
-                    peDim.items[0].id = map[peDim.items[0].id] ? map[peDim.items[0].id] : peDim.items[0].id;
-                }
-
                 if (config.layer !== 'event') {
                     config.columns = [dxDim];
-                    //console.log(dxDim);
                 }
 
                 if (config.layer !== 'event') {
@@ -894,7 +853,7 @@ export default function getInstance(init) {
                 let isOuc = false;
                 let isOugc = false;
 
-                const config = validateSpecialCases(config);
+                config = validateSpecialCases(config);
 
                 if (!config) {
                     return;

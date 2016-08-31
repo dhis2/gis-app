@@ -5,219 +5,172 @@ import arrayContains from 'd2-utilizr/lib/arrayContains';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 
 export default function MapLoader(gis, isSession, applyConfig) {
-	var getMap,
-		setMap,
-		afterLoad,
-		callBack,
-		register = [],
-		loader,
-		applyViews = isObject(applyConfig) && arrayFrom(applyConfig.mapViews).length ? applyConfig.mapViews : null,
-		clearAllLayers;
 
-	getMap = function() {
-		var url = gis.init.contextPath + '/api/maps/' + gis.map.id + '.json?fields=' + gis.conf.url.mapFields.join(','),
-			success,
-			failure;
+    const getMap = function() {
+        const url = gis.init.contextPath + '/api/maps/' + gis.map.id + '.json?fields=' + gis.conf.url.mapFields.join(',');
 
-		success = function(r) {
-			// operand
-			//if (isArray(r.mapViews)) {
-				//for (var i = 0, view, objectName; i < r.mapViews.length; i++) {
-					//view = r.mapViews[i];
+        const success = function(r) {
+            gis.map = r;
+            setMap();
+        };
 
-					//// TODO, TMP
-					//if (isArray(view.dataDimensionItems) && view.dataDimensionItems.length && isObject(view.dataDimensionItems[0])) {
-						//var item = view.dataDimensionItems[0];
+        const failure = function(r) {
+            if (gis.mask) {
+                gis.mask.hide();
+            }
 
-						//if (item.hasOwnProperty('dataElement')) {
-							//objectName = 'de';
-						//}
-						//else if (item.hasOwnProperty('dataSet')) {
-							//objectName = 'ds';
-						//}
-						//else {
-							//objectName = 'in';
-						//}
-					//}
-				//}
-			//}
+            r = JSON.parse(r.responseText);
 
-			gis.map = r;
+            if (arrayContains([403], parseInt(r.httpStatusCode))) {
+                r.message = GIS.i18n.you_do_not_have_access_to_all_items_in_this_favorite || r.message;
+            }
 
-			setMap();
-		};
+            gis.alert(r);
+        };
 
-		failure = function(r) {
-			if (gis.mask) {
-				gis.mask.hide();
-			}
+        Ext.Ajax.request({
+            url: encodeURI(url),
+            success: function(r) {
+                success(JSON.parse(r.responseText));
+            },
+            failure: function(r) {
+                failure(r);
+            }
+        });
+    };
 
-			r = JSON.parse(r.responseText);
+    const setMap = function() {
+        const basemap = gis.map.basemap || 'osmLight';
+        const applyViews = isObject(applyConfig) && arrayFrom(applyConfig.mapViews).length ? applyConfig.mapViews : null;
+        const register = [];
+        let views = gis.map.mapViews;
 
-			if (arrayContains([403], parseInt(r.httpStatusCode))) {
-				r.message = GIS.i18n.you_do_not_have_access_to_all_items_in_this_favorite || r.message;
-			}
+        // title
+        if (gis.dashboard && gis.container && gis.map && gis.map.name) {
+            gis.container.childNodes[0].innerText = gis.map.name;
+        }
 
-			gis.alert(r);
-		};
+        if (!(isArray(views) && views.length)) {
+            if (gis.mask) {
+                gis.mask.hide();
+            }
+            gis.alert(GIS.i18n.favorite_outdated_create_new);
+            return;
+        }
 
-		Ext.Ajax.request({
-			url: encodeURI(url),
-			success: function(r) {
-				success(JSON.parse(r.responseText));
-			},
-			failure: function(r) {
-				failure(r);
-			}
-		});
-	};
+        for (let i = 0, applyView; i < views.length; i++) {
+            applyView = applyViews ? applyViews[i] : null;
 
-	setMap = function() {
-		// var basemap = gis.map.basemap || 'openStreetMap',
-		var basemap = gis.map.basemap || 'osmLight',
-			views = gis.map.mapViews,
-			handler,
-			layer;
+            views[i] = gis.api.layout.Layout(views[i], applyView);
+        }
 
+        views = arrayClean(views);
 
-		// title
-		if (gis.dashboard && gis.container && gis.map && gis.map.name) {
-			gis.container.childNodes[0].innerText = gis.map.name;
-		}
+        if (!views.length) {
+            if (gis.mask) {
+                gis.mask.hide();
+            }
+            return;
+        }
 
-		if (!(isArray(views) && views.length)) {
-			if (gis.mask) {
-				gis.mask.hide();
-			}
-			gis.alert(GIS.i18n.favorite_outdated_create_new);
-			return;
-		}
+        if (gis.viewport && gis.viewport.favoriteWindow && gis.viewport.favoriteWindow.isVisible()) {
+            gis.viewport.favoriteWindow.destroy();
+        }
 
-		for (var i = 0, applyView; i < views.length; i++) {
-			applyView = applyViews ? applyViews[i] : null;
+        clearAllLayers();
 
-			views[i] = gis.api.layout.Layout(views[i], applyView);
-		}
+        // Add basemap
+        if (basemap !== 'none') {
+            const layer = gis.layer[basemap] || gis.layer['osmLight'];
 
-		views = arrayClean(views);
+            if (layer.instance) { // Layer instance already exist
+                gis.instance.addLayer(layer.instance);
+            } else { // Create and add layer instance
+                layer.instance = gis.instance.addLayer(layer.config);
+            }
 
-		if (!views.length) {
-			if (gis.mask) {
-				gis.mask.hide();
-			}
-			return;
-		}
+            if (layer.item) {
+                layer.item.setValue(true, 1);
+            }
+        }
 
-		if (gis.viewport && gis.viewport.favoriteWindow && gis.viewport.favoriteWindow.isVisible()) {
-			gis.viewport.favoriteWindow.destroy();
-		}
+        // Add views/overlays
+        views.forEach(layout => {
+            const layer = gis.layer[layout.layer];
+            const handler = layer.handler(gis, layer);
 
-		clearAllLayers();
+            handler.updateGui = !gis.el;
+            handler.callBack = function(layer) {
+                register.push(layer);
+                if (register.length === gis.map.mapViews.length) {
+                    afterLoad();
+                }
+            };
+            handler.load(layout);
+        });
+    };
 
-		// Add basemap
-		if (basemap !== 'none') {
-			layer = gis.layer[basemap] || gis.layer['osmLight'];
-			if (layer.instance) { // Layer instance already exist
-				gis.instance.addLayer(layer.instance);
-			} else { // Create and add layer instance
-				layer.instance = gis.instance.addLayer(layer.config);
-			}
+    // Remove current layers from map
+    const clearAllLayers = function() {
+        for (let type in gis.layer) {
+            if (gis.layer.hasOwnProperty(type)) {
+                const layer = gis.layer[type];
 
-			if (layer.item) {
-				layer.item.setValue(true, 1);
-			}
-		}
+                // Remove layer from map if exist
+                if (layer.instance && gis.instance.hasLayer(layer.instance)) {
+                    gis.instance.removeLayer(layer.instance);
+                }
 
-		// Add views/overlays
-		for (var i = 0, layout, layer; i < views.length; i++) {
-			layout = views[i];
-			layer = gis.layer[layout.layer];
+                // Reset layer widget
+                if (layer.widget && layer.widget.reset) {
+                    layer.widget.reset();
+                }
 
-			handler = layer.handler(gis, layer);
-			handler.updateGui = !gis.el;
-			handler.callBack = callBack;
-			handler.load(layout);
-		}
-	};
+                // Clear legend
+                if (layer.legendPanel) {
+                    layer.legendPanel.update('');
+                    layer.legendPanel.collapse();
+                }
 
-	// Replacement for gis.olmap.closeAllLayers()
-	clearAllLayers = function() {
-		var layer;
+                // Uncheck in layer stack
+                if (layer.item) {
+                    layer.item.checkbox.setValue(false);
+                }
+            }
+        }
+    };
 
-		for (var type in gis.layer) {
-			if (gis.layer.hasOwnProperty(type)) {
-				layer = gis.layer[type];
+    const afterLoad = function() {
+        const lon = parseFloat(gis.map.longitude) || 0;
+        const lat = parseFloat(gis.map.latitude) || 20;
+        const zoom = gis.map.zoom || 3;
+        const validLatLng = ((lon >= -180 && lon <= 180) && (lat >= -90 && lat <= 90));
+        const layersBounds = gis.instance.getLayersBounds();
 
-				// Only clear vector layers (overlays)
-				// if (layer.layerType !== 'base') {
+        // gis.el is the element used to render the map (only for plugin)
+        // isSession is true if you select "map -> view this table/chart" as map in pivot/visualizer
+        if (layersBounds && layersBounds.isValid() && (gis.el || isSession || !validLatLng)) {
+            // Fit bounds not always set without a delay
+            // window.setTimeout(function(){ gis.instance.fitBounds(layersBounds); }, 2000);
+            gis.instance.fitBounds(layersBounds);
+        }
+        else {
+            gis.instance.setView([lat, lon], zoom);
+        }
 
-					// Remove layer from map if exist
-					if (layer.instance && gis.instance.hasLayer(layer.instance)) {
-						gis.instance.removeLayer(layer.instance);
-					}
+        // interpretation button
+        if (gis.viewport && gis.viewport.shareButton) {
+            gis.viewport.shareButton.enable();
+        }
 
-					// Reset layer widget
-					if (layer.widget && layer.widget.reset) {
-						layer.widget.reset();
-					}
+        // session storage
+        if (GIS.isSessionStorage) {
+            gis.util.layout.setSessionStorage('map', gis.util.layout.getAnalytical());
+        }
 
-					// Clear legend
-					if (layer.legendPanel) {
-						layer.legendPanel.update('');
-						layer.legendPanel.collapse();
-					}
-
-					if (layer.layerType === 'base' && layer.item) {
-						layer.item.checkbox.setValue(false);
-					}
-				// }
-			}
-		}
-	};
-
-	callBack = function(layer) {
-		register.push(layer);
-
-		if (register.length === gis.map.mapViews.length) {
-			afterLoad();
-		}
-	};
-
-	afterLoad = function() {
-		var lon = parseFloat(gis.map.longitude) || 0,
-			lat = parseFloat(gis.map.latitude) || 20,
-			zoom = gis.map.zoom || 3,
-			validLatLng = ((lon >= -180 && lon <= 180) && (lat >= -90 && lat <= 90)),
-			layersBounds = gis.instance.getLayersBounds();
-
-		// gis.el is the element used to render the map (only for plugin)
-		// isSession is true if you select "map -> view this table/chart" as map in pivot/visualizer
-		if (layersBounds && layersBounds.isValid() && (gis.el || isSession || !validLatLng)) {
-			// Fit bounds not always set without a delay
-			/*
-			window.setTimeout(function(){
-				gis.instance.fitBounds(layersBounds);
-			}, 2000);
-			*/
-			gis.instance.fitBounds(layersBounds);
-		}
-		else {
-			gis.instance.setView([lat, lon], zoom);
-		}
-
-		// interpretation button
-		if (gis.viewport && gis.viewport.shareButton) {
-			gis.viewport.shareButton.enable();
-		}
-
-		// session storage
-		if (GIS.isSessionStorage) {
-			gis.util.layout.setSessionStorage('map', gis.util.layout.getAnalytical());
-		}
-
-		if (gis.mask) {
-			gis.mask.hide();
-		}
+        if (gis.mask) {
+            gis.mask.hide();
+        }
 
         // data statistics
         if (isObject(GIS.app) && !isObject(GIS.plugin)) {
@@ -226,28 +179,28 @@ export default function MapLoader(gis, isSession, applyConfig) {
                 method: 'POST'
             });
         }
-	};
+    };
 
-	loader = {
-		load: function(views) {
-			if (gis.mask && !gis.skipMask) {
-				gis.mask.show();
-			}
+    const loader = {
+        load(views) {
+            if (gis.mask && !gis.skipMask) {
+                gis.mask.show();
+            }
 
-			if (gis.map && gis.map.id) {
-				getMap();
-			}
-			else {
-				if (views) {
-					gis.map = {
-						mapViews: views
-					};
-				}
+            if (gis.map && gis.map.id) {
+                getMap();
+            }
+            else {
+                if (views) {
+                    gis.map = {
+                        mapViews: views
+                    };
+                }
 
-				setMap();
-			}
-		}
-	};
+                setMap();
+            }
+        }
+    };
 
-	return loader;
+    return loader;
 };

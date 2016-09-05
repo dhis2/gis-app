@@ -245,7 +245,8 @@ export default function LayerHandlerFacility(gis, layer) {
 	};
 
 	onFeatureRightClick = function(evt) {
-		var menu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
+		L.DomEvent.stopPropagation(evt); // Don't propagate to map right-click
+		var menu = GIS.core.ContextMenu(gis, layer, evt.layer, evt.latlng);
 		menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
 	};
 

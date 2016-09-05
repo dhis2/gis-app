@@ -651,7 +651,8 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     onFeatureRightClick = function (evt) {
-        contextMenu = GIS.core.FeatureContextMenu(gis, layer, evt.layer);
+        L.DomEvent.stopPropagation(evt); // Don't propagate to map right-click
+        contextMenu = GIS.core.ContextMenu(gis, layer, evt.layer, evt.latlng);
         contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y]);
     };
 

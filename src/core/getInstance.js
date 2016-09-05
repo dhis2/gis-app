@@ -1132,5 +1132,10 @@ export default function getInstance(init) {
 
     GIS.core.instances.push(gis);
 
+    gis.instance.on('contextmenu', evt => {
+        var menu = GIS.core.ContextMenu(gis, null, null, evt.latlng);
+        menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
+    });
+
     return gis;
 };

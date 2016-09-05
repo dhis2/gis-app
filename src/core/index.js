@@ -9,7 +9,7 @@ import LayerHandlerBoundary from './LayerHandlerBoundary.js';
 import LayerHandlerEarthEngine from './LayerHandlerEarthEngine.js';
 import LayerHandlerExternal from './LayerHandlerExternal.js';
 import FeaturePopup from './FeaturePopup.js';
-import FeatureContextMenu from './FeatureContextMenu.js';
+import ContextMenu from './ContextMenu.js';
 
 // ext config
 Ext.Ajax.method = 'GET';
@@ -33,7 +33,7 @@ export default {
         LayerHandlerEarthEngine,
         LayerHandlerExternal,
         FeaturePopup,
-        FeatureContextMenu,
+        ContextMenu,
     },
     i18n: {},
     isDebug: false,

@@ -8,7 +8,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
     const isRelocate = !!GIS.app ? !!gis.init.user.isAdmin : false;
     const menuItems = [];
 
-    if (instance) {
+    if (instance) { // layer and instance don't exist when basemap is clicked
         const feature = instance.feature;
         const isPoint = feature.geometry.type === 'Point';
         const att = feature.properties;
@@ -95,6 +95,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
 
                     if (layer.infrastructuralWindow) {
                         layer.infrastructuralWindow.destroy();
+                        layer.widget.infrastructuralDataElementValuesStore.removeAll();
                     }
 
                     layer.infrastructuralWindow = Ext.create('Ext.window.Window', {
@@ -102,8 +103,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
                         layout: 'column',
                         iconCls: 'gis-window-title-icon-information',
                         cls: 'gis-container-default',
-                        //width: 550,
-                        height: 400, //todo
+                        height: 400,
                         period: null,
                         items: [
                             {
@@ -281,20 +281,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
                                     }
                                 ]
                             }
-                        ],
-                        listeners: {
-                            show() {
-                                if (infrastructuralPeriod) { // TODO: Always undefined
-                                    this.down('combo').setValue(infrastructuralPeriod);
-                                    infrastructuralDataElementValuesStore.load({
-                                        params: {
-                                            periodId: infrastructuralPeriod,
-                                            organisationUnitId: att.internalId
-                                        }
-                                    });
-                                }
-                            }
-                        }
+                        ]
                     });
 
                     layer.infrastructuralWindow.show();

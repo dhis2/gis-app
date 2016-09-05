@@ -396,7 +396,7 @@ export default function extendInstance(gis) {
             fields: ['id', 'name'],
             proxy: {
                 type: 'ajax',
-                url: encodeURI(gis.init.contextPath + '/api/organisationUnitGroupSets.json?fields=id,' + gis.init.namePropertyUrl + '&paging=false'),
+                url: encodeURI(gis.init.apiPath + 'organisationUnitGroupSets.json?fields=id,' + gis.init.namePropertyUrl + '&paging=false'),
                 reader: {
                     type: 'json',
                     root: 'organisationUnitGroupSets'
@@ -429,7 +429,7 @@ export default function extendInstance(gis) {
             fields: ['id', 'name'],
             proxy: {
                 type: 'ajax',
-                url: encodeURI(init.contextPath + '/api/organisationUnitGroups.json?fields=id,' + gis.init.namePropertyUrl + '&paging=false'),
+                url: encodeURI(init.apiPath + 'organisationUnitGroups.json?fields=id,' + gis.init.namePropertyUrl + '&paging=false'),
                 reader: {
                     type: 'json',
                     root: 'organisationUnitGroups'
@@ -441,7 +441,7 @@ export default function extendInstance(gis) {
             fields: ['id', 'name'],
             proxy: {
                 type: 'ajax',
-                url: encodeURI(gis.init.contextPath + '/api/legendSets.json?fields=id,displayName|rename(name)&paging=false'),
+                url: encodeURI(gis.init.apiPath + 'legendSets.json?fields=id,displayName|rename(name)&paging=false'),
                 reader: {
                     type: 'json',
                     root: 'legendSets'
@@ -478,7 +478,7 @@ export default function extendInstance(gis) {
             isLoaded: false,
             pageSize: 10,
             page: 1,
-            defaultUrl: encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access'),
+            defaultUrl: encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access'),
             loadStore: function(url) {
                 this.proxy.url = url || this.defaultUrl;
 

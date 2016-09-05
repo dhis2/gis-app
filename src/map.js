@@ -48,6 +48,7 @@ Ext.onReady(function() {
             fn;
 
         init.contextPath = config.url;
+        init.apiPath = init.contextPath + '/api/25/';
         init.defaultHeaders = {};
 
         if (config.username && config.password) {
@@ -162,7 +163,7 @@ Ext.onReady(function() {
             }
 
             optionSetConfig = {
-                url: encodeURI(init.contextPath + '/api/optionSets.json?fields=id,name,version,options[code,name]&paging=false' + url),
+                url: encodeURI(init.apiPath + 'optionSets.json?fields=id,name,version,options[code,name]&paging=false' + url),
                 disableCaching: false,
                 success: function(r) {
                     var sets = r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets;
@@ -248,28 +249,28 @@ Ext.onReady(function() {
 
         // system info
         requests.push({
-            url: encodeURI(init.contextPath + '/api/system/info.json'),
+            url: encodeURI(init.apiPath + 'system/info.json'),
             disableCaching: false,
             success: onSystemInfoLoad
         });
 
         // dhis2
         requests.push({
-            url: encodeURI(init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyGoogleMapsApiKey'),
+            url: encodeURI(init.apiPath + 'systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyGoogleMapsApiKey'),
             disableCaching: false,
             success: onSystemSettingsLoad
         });
 
         // user orgunit
         requests.push({
-            url: encodeURI(init.contextPath + '/api/organisationUnits.json?userOnly=true&fields=id,' + init.namePropertyUrl + ',children[id,' + init.namePropertyUrl + ']&paging=false'),
+            url: encodeURI(init.apiPath + 'organisationUnits.json?userOnly=true&fields=id,' + init.namePropertyUrl + ',children[id,' + init.namePropertyUrl + ']&paging=false'),
             disableCaching: false,
             success: onOrgUnitsLoad
         });
 
         // dimensions
         requests.push({
-            url: encodeURI(init.contextPath + '/api/dimensions.json?fields=id,displayName|rename(name)&paging=false'),
+            url: encodeURI(init.apiPath + 'dimensions.json?fields=id,displayName|rename(name)&paging=false'),
             disableCaching: false,
             success: onDimensionsLoad
         });

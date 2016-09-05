@@ -175,7 +175,7 @@ export default function LayerHandlerEvent(gis, layer) {
         // Used if no spatial support and for client cluster
         loadEvents = function() {
             Ext.Ajax.request({
-                url: encodeURI(gis.init.contextPath + '/api/analytics/events/query/' + view.program.id + '.json' + paramString),
+                url: encodeURI(gis.init.apiPath + 'analytics/events/query/' + view.program.id + '.json' + paramString),
                 disableCaching: false,
                 failure: function(r) {
                     gis.alert(r);
@@ -202,14 +202,14 @@ export default function LayerHandlerEvent(gis, layer) {
             if (r.count < 2000) { // Client clustering if less than 2000 events
                 loadEvents();
             } else { // Server clustering
-                var url = gis.init.contextPath + '/api/analytics/events/cluster/' + view.program.id + '.json' + paramString
+                var url = gis.init.apiPath + 'analytics/events/cluster/' + view.program.id + '.json' + paramString
                 updateMap(view, url);
             }
         };
 
         if (spatialSupport && view.eventClustering) { // Get event count to decide on client vs server cluster
             Ext.Ajax.request({
-                url: encodeURI(gis.init.contextPath + '/api/analytics/events/count/' + view.program.id + '.json' + paramString),
+                url: encodeURI(gis.init.apiPath + 'analytics/events/count/' + view.program.id + '.json' + paramString),
                 disableCaching: false,
                 failure: function(r) {
                     gis.alert(r);
@@ -237,7 +237,7 @@ export default function LayerHandlerEvent(gis, layer) {
         // Load data elements that should be displayed in popups
         loadDataElements = function() {
             Ext.Ajax.request({
-                url: encodeURI(gis.init.contextPath + '/api/programStages/' + view.programStage.id + '.json?fields=programStageDataElements[displayInReports,dataElement[id,' + gis.init.namePropertyUrl + ',optionSet]]'),
+                url: encodeURI(gis.init.apiPath + 'programStages/' + view.programStage.id + '.json?fields=programStageDataElements[displayInReports,dataElement[id,' + gis.init.namePropertyUrl + ',optionSet]]'),
                 disableCaching: false,
                 failure: function(r) {
                     gis.alert(r);
@@ -297,7 +297,7 @@ export default function LayerHandlerEvent(gis, layer) {
     // Called for every single marker click
     onFeaturePopup = function(feature, callback) {
         Ext.Ajax.request({
-            url: encodeURI(gis.init.contextPath + '/api/events/' + feature.id + '.json'),
+            url: encodeURI(gis.init.apiPath + 'events/' + feature.id + '.json'),
             disableCaching: false,
             failure: function(r) {
                 gis.alert(r);
@@ -329,7 +329,7 @@ export default function LayerHandlerEvent(gis, layer) {
                 // Fetch org unit name (might be possible to get in the same request later)
                 // https://blueprints.launchpad.net/dhis2/+spec/tracked-entity-instance-endpoint
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/organisationUnits/' + data.orgUnit + '.json?fields=displayName'),
+                    url: encodeURI(gis.init.apiPath + 'organisationUnits/' + data.orgUnit + '.json?fields=displayName'),
                     disableCaching: false,
                     failure: function(r) {
                         gis.alert(r);

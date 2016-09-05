@@ -74,7 +74,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
             const coordinates = '[' + latlng.lng.toFixed(6) + ',' + latlng.lat.toFixed(6) + ']';
 
             Ext.Ajax.request({
-                url: encodeURI(gis.init.contextPath + '/api/organisationUnits/' + id),
+                url: encodeURI(gis.init.apiPath + 'organisationUnits/' + id),
                 method: 'PATCH',
                 headers: {'Content-Type': 'application/json'},
                 params: JSON.stringify({coordinates: coordinates}),
@@ -89,7 +89,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
         // Infrastructural data
         const showInfo = function() {
             Ext.Ajax.request({
-                url: encodeURI(gis.init.contextPath + '/api/organisationUnits/' + att.id + '.json?fields=id,' + gis.init.namePropertyUrl + ',code,address,email,phoneNumber,coordinates,parent[id,' + gis.init.namePropertyUrl + '],organisationUnitGroups[id,' + gis.init.namePropertyUrl + ']'),
+                url: encodeURI(gis.init.apiPath + 'organisationUnits/' + att.id + '.json?fields=id,' + gis.init.namePropertyUrl + ',code,address,email,phoneNumber,coordinates,parent[id,' + gis.init.namePropertyUrl + '],organisationUnitGroups[id,' + gis.init.namePropertyUrl + ']'),
                 success(r) {
                     const ou = JSON.parse(r.responseText);
 
@@ -197,7 +197,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
                                         listeners: {
                                             select(cmp) {
                                                 const period = cmp.getValue();
-                                                const url = gis.init.contextPath + '/api/analytics.json?';
+                                                const url = gis.init.apiPath + 'analytics.json?';
                                                 const iig = gis.init.systemSettings.infrastructuralIndicatorGroup || {};
                                                 const ideg = gis.init.systemSettings.infrastructuralDataElementGroup || {};
                                                 const indicators = iig.indicators || [];
@@ -370,7 +370,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
 
                     if (gis.init.user.isAdmin) {
                         Ext.Ajax.request({
-                            url: encodeURI(gis.init.contextPath + '/api/organisationUnits/' + id),
+                            url: encodeURI(gis.init.apiPath + 'organisationUnits/' + id),
                             method: 'PATCH',
                             headers: {'Content-Type': 'application/json'},
                             params: '{"coordinates": "' + JSON.stringify(swappedCoordinates) + '"}',

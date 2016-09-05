@@ -78,7 +78,7 @@ export default function FeaturePopup(gis, instance) {
             gis.mask.show();
 
             Ext.Ajax.request({
-                url: encodeURI(gis.init.contextPath + '/api/analytics.json' + paramString),
+                url: encodeURI(gis.init.apiPath + 'analytics.json' + paramString),
                 disableCaching: false,
                 success: function(r) {
                     success(JSON.parse(r.responseText));

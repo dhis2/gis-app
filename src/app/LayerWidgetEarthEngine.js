@@ -332,7 +332,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             // Fetch EE token - TODO: cache?
 
             Ext.Ajax.request({
-                url: encodeURI(gis.init.contextPath + '/api/tokens/google'),
+                url: encodeURI(gis.init.apiPath + 'tokens/google'),
                 success: function(response) {
                     const token = JSON.parse(response.responseText);
 
@@ -354,7 +354,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
 
             /* fetch did not work in production
-            fetch(gis.init.contextPath + '/api/tokens/google', { headers: gis.init.defaultHeaders })
+            fetch(gis.init.apiPath + 'tokens/google', { headers: gis.init.defaultHeaders })
                 .then(response => response.json())
                 .then(token => {
 

@@ -93,7 +93,7 @@ export default function LayerHandlerBoundary(gis, layer) {
                     }
                 }
 
-                return gis.init.contextPath + '/api/geoFeatures.json' + params;
+                return gis.init.apiPath + 'geoFeatures.json' + params;
             }(),
             success,
             failure;

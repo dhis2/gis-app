@@ -129,7 +129,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 type: 'earthEngine',
                 accessToken: function (callback) {
                     Ext.Ajax.request({
-                        url: gis.init.contextPath + '/api/tokens/google',
+                        url: gis.init.apiPath + 'tokens/google',
                         disableCaching: false,
                         failure: function (r) {
                             gis.alert(r);

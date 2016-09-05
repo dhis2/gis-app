@@ -119,7 +119,7 @@ export default function FavoriteWindow(gis) {
                 };
 
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/maps/'),
+                    url: encodeURI(gis.init.apiPath + 'maps/'),
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     params: JSON.stringify(map),
@@ -147,14 +147,14 @@ export default function FavoriteWindow(gis) {
                     map;
 
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/maps/' + id + '.json?fields=' + gis.conf.url.mapFields.join(',')),
+                    url: encodeURI(gis.init.apiPath + 'maps/' + id + '.json?fields=' + gis.conf.url.mapFields.join(',')),
                     success: function(r) {
                         map = JSON.parse(r.responseText);
 
                         map.name = name;
 
                         Ext.Ajax.request({
-                            url: encodeURI(gis.init.contextPath + '/api/maps/' + id),
+                            url: encodeURI(gis.init.apiPath + 'maps/' + id),
                             method: 'PUT',
                             headers: {'Content-Type': 'application/json'},
                             params: JSON.stringify(map),
@@ -233,7 +233,7 @@ export default function FavoriteWindow(gis) {
                         this.currentValue = this.getValue();
 
                         var value = this.getValue(),
-                            url = value ? encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
+                            url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
                             store = gis.store.maps;
 
                         store.page = 1;
@@ -249,7 +249,7 @@ export default function FavoriteWindow(gis) {
         text: GIS.i18n.prev,
         handler: function() {
             var value = searchTextfield.getValue(),
-                url = value ? encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
+                url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
                 store = gis.store.maps;
 
             store.page = store.page <= 1 ? 1 : store.page - 1;
@@ -261,7 +261,7 @@ export default function FavoriteWindow(gis) {
         text: GIS.i18n.next,
         handler: function() {
             var value = searchTextfield.getValue(),
-                url = value ? encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
+                url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
                 store = gis.store.maps;
 
             store.page = store.page + 1;
@@ -379,7 +379,7 @@ export default function FavoriteWindow(gis) {
                                         };
 
                                         Ext.Ajax.request({
-                                            url: encodeURI(gis.init.contextPath + '/api/maps/' + record.data.id),
+                                            url: encodeURI(gis.init.apiPath + 'maps/' + record.data.id),
                                             method: 'PUT',
                                             headers: {'Content-Type': 'application/json'},
                                             params: JSON.stringify(map),
@@ -406,7 +406,7 @@ export default function FavoriteWindow(gis) {
 
                             if (record.data.access.manage) {
                                 Ext.Ajax.request({
-                                    url: encodeURI(gis.init.contextPath + '/api/sharing?type=map&id=' + record.data.id),
+                                    url: encodeURI(gis.init.apiPath + 'sharing?type=map&id=' + record.data.id),
                                     method: 'GET',
                                     failure: function(r) {
                                         gis.mask.hide();
@@ -435,7 +435,7 @@ export default function FavoriteWindow(gis) {
 
                                 if (confirm(message)) {
                                     Ext.Ajax.request({
-                                        url: encodeURI(gis.init.contextPath + '/api/maps/' + record.data.id),
+                                        url: encodeURI(gis.init.apiPath + 'maps/' + record.data.id),
                                         method: 'DELETE',
                                         success: function() {
                                             gis.store.maps.loadStore();

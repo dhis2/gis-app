@@ -7,7 +7,7 @@ import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 export default function MapLoader(gis, isSession, applyConfig) {
 
     const getMap = function() {
-        const url = gis.init.contextPath + '/api/maps/' + gis.map.id + '.json?fields=' + gis.conf.url.mapFields.join(',');
+        const url = gis.init.apiPath + 'maps/' + gis.map.id + '.json?fields=' + gis.conf.url.mapFields.join(',');
 
         const success = function(r) {
             gis.map = r;
@@ -175,7 +175,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
         // data statistics
         if (isObject(GIS.app) && !isObject(GIS.plugin)) {
             Ext.Ajax.request({
-                url: gis.init.contextPath + '/api/dataStatistics?eventType=MAP_VIEW' + (gis.map.id ? '&favorite=' + gis.map.id : ''),
+                url: gis.init.apiPath + 'dataStatistics?eventType=MAP_VIEW' + (gis.map.id ? '&favorite=' + gis.map.id : ''),
                 method: 'POST'
             });
         }

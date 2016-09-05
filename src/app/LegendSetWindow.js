@@ -51,7 +51,7 @@ export default function LegendSetWindow(gis) {
         fields: ['id', 'name'],
         proxy: {
             type: 'ajax',
-            url: encodeURI(gis.init.contextPath + '/api/legendSets.json?fields=id,displayName|rename(name)&paging=false'),
+            url: encodeURI(gis.init.apiPath + 'legendSets.json?fields=id,displayName|rename(name)&paging=false'),
             reader: {
                 type: 'json',
                 root: 'legendSets'
@@ -640,7 +640,7 @@ export default function LegendSetWindow(gis) {
         });
 
         if (id) {
-            legendStore.proxy.url = encodeURI(gis.init.contextPath + '/api/legendSets/' + id + '.json?fields=legends[id,displayName|rename(name),startValue,endValue,color]');
+            legendStore.proxy.url = encodeURI(gis.init.apiPath + 'legendSets/' + id + '.json?fields=legends[id,displayName|rename(name),startValue,endValue,color]');
             legendStore.load();
 
             legendSetName.setValue(legendSetStore.getById(id).data.name);
@@ -667,7 +667,7 @@ export default function LegendSetWindow(gis) {
     deleteLegendSet = function(id) {
         if (id) {
             Ext.Ajax.request({
-                url: encodeURI(gis.init.contextPath + '/api/legendSets/' + id),
+                url: encodeURI(gis.init.apiPath + 'legendSets/' + id),
                 method: 'DELETE',
                 success: function() {
                     legendSetStore.load();
@@ -767,7 +767,7 @@ export default function LegendSetWindow(gis) {
                 var body = JSON.stringify(getRequestBody());
 
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/legendSets/'),
+                    url: encodeURI(gis.init.apiPath + 'legendSets/'),
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     params: body,
@@ -791,7 +791,7 @@ export default function LegendSetWindow(gis) {
                 body = JSON.stringify(getRequestBody());
 
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/legendSets/' + id),
+                    url: encodeURI(gis.init.apiPath + 'legendSets/' + id),
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
                     params: body,

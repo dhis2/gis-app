@@ -303,7 +303,7 @@ Ext.onReady( function() {
                 }
             },
             handler: function() {
-                var url = gis.init.contextPath + '/api/maps/' + gis.map.id + '/data',
+                var url = gis.init.apiPath + 'maps/' + gis.map.id + '/data',
                     textField,
                     window;
 
@@ -1074,7 +1074,10 @@ Ext.onReady( function() {
                 var context = JSON.parse(r.responseText).activities.dhis;
 
                 init.contextPath = context.href;
+                init.apiPath = init.contextPath + '/api/25/';
                 init.defaultHeaders = {};
+
+                console.log(init.apiPath);
 
                 if (context.auth) {
                     Ext.Ajax.defaultHeaders = {
@@ -1086,14 +1089,14 @@ Ext.onReady( function() {
 
                 // system info
                 Ext.Ajax.request({
-                    url: encodeURI(init.contextPath + '/api/system/info.json'),
+                    url: encodeURI(init.apiPath + 'system/info.json'),
                     success: function(r) {
                         init.systemInfo = JSON.parse(r.responseText);
                         init.contextPath = init.systemInfo.contextPath || init.contextPath;
 
                         // date, calendar, mapzen search key
                         Ext.Ajax.request({
-                            url: encodeURI(init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyGoogleMapsApiKey&key=keyMapzenSearchApiKey'),
+                            url: encodeURI(init.apiPath + 'systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyGoogleMapsApiKey&key=keyMapzenSearchApiKey'),
                             success: function(r) {
                                 var systemSettings = JSON.parse(r.responseText);
 
@@ -1266,7 +1269,7 @@ Ext.onReady( function() {
 
                                         // indicator groups
                                         requests.push({
-                                            url: encodeURI(init.contextPath + '/api/indicatorGroups.json?fields=id,displayName|rename(name)&paging=false'),
+                                            url: encodeURI(init.apiPath + 'indicatorGroups.json?fields=id,displayName|rename(name)&paging=false'),
                                             success: function(r) {
                                                 init.indicatorGroups = JSON.parse(r.responseText).indicatorGroups || [];
                                                 fn();
@@ -1275,7 +1278,7 @@ Ext.onReady( function() {
 
                                         // data element groups
                                         requests.push({
-                                            url: encodeURI(init.contextPath + '/api/dataElementGroups.json?fields=id,' + namePropertyUrl + '&paging=false'),
+                                            url: encodeURI(init.apiPath + 'dataElementGroups.json?fields=id,' + namePropertyUrl + '&paging=false'),
                                             success: function(r) {
                                                 init.dataElementGroups = JSON.parse(r.responseText).dataElementGroups || [];
                                                 fn();
@@ -1284,14 +1287,14 @@ Ext.onReady( function() {
 
                                         // infrastructural indicator group
                                         requests.push({
-                                            url: encodeURI(init.contextPath + '/api/configuration/infrastructuralIndicators.json'),
+                                            url: encodeURI(init.apiPath + 'configuration/infrastructuralIndicators.json'),
                                             success: function(r) {
                                                 var obj = JSON.parse(r.responseText);
                                                 init.systemSettings.infrastructuralIndicatorGroup = isObject(obj) ? obj : null;
 
                                                 if (!isObject(obj)) {
                                                     Ext.Ajax.request({
-                                                        url: encodeURI(init.contextPath + '/api/indicatorGroups.json?fields=id,displayName|rename(name),indicators[id,' + namePropertyUrl + ']&pageSize=1'),
+                                                        url: encodeURI(init.apiPath + 'indicatorGroups.json?fields=id,displayName|rename(name),indicators[id,' + namePropertyUrl + ']&pageSize=1'),
                                                         success: function(r) {
                                                             r = JSON.parse(r.responseText);
                                                             init.systemSettings.infrastructuralIndicatorGroup = r.indicatorGroups ? r.indicatorGroups[0] : null;
@@ -1307,14 +1310,14 @@ Ext.onReady( function() {
 
                                         // infrastructural data element group
                                         requests.push({
-                                            url: encodeURI(init.contextPath + '/api/configuration/infrastructuralDataElements.json'),
+                                            url: encodeURI(init.apiPath + 'configuration/infrastructuralDataElements.json'),
                                             success: function(r) {
                                                 var obj = JSON.parse(r.responseText);
                                                 init.systemSettings.infrastructuralDataElementGroup = isObject(obj) ? obj : null;
 
                                                 if (!isObject(obj)) {
                                                     Ext.Ajax.request({
-                                                        url: encodeURI(init.contextPath + '/api/dataElementGroups.json?fields=id,' + namePropertyUrl + ',dataElements[id,' + namePropertyUrl + ']&pageSize=1'),
+                                                        url: encodeURI(init.apiPath + 'dataElementGroups.json?fields=id,' + namePropertyUrl + ',dataElements[id,' + namePropertyUrl + ']&pageSize=1'),
                                                         success: function(r) {
                                                             r = JSON.parse(r.responseText);
                                                             init.systemSettings.infrastructuralDataElementGroup = r.dataElementGroups ? r.dataElementGroups[0] : null;
@@ -1330,7 +1333,7 @@ Ext.onReady( function() {
 
                                         // infrastructural period type
                                         requests.push({
-                                            url: encodeURI(init.contextPath + '/api/configuration/infrastructuralPeriodType.json'),
+                                            url: encodeURI(init.apiPath + 'configuration/infrastructuralPeriodType.json'),
                                             success: function(r) {
                                                 var obj = JSON.parse(r.responseText);
 

@@ -64,7 +64,7 @@ export default function DownloadWindow(gis) {
 
             document.getElementById('filenameField').value = title;
             document.getElementById('svgField').value = svg;
-            exportForm.action = gis.init.contextPath + '/api/svg.' + type;
+            exportForm.action = gis.init.apiPath + 'svg.' + type;
             exportForm.submit();
 
             window.destroy();

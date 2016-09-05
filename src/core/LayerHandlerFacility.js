@@ -80,7 +80,7 @@ export default function LayerHandlerFacility(gis, layer) {
 	};
 
 	loadOrganisationUnitGroups = function (view) {
-		var url = gis.init.contextPath + '/api/organisationUnitGroupSets/' + view.organisationUnitGroupSet.id + '.json' + '?fields=organisationUnitGroups[id,' + gis.init.namePropertyUrl + ',symbol]',
+		var url = gis.init.apiPath + 'organisationUnitGroupSets/' + view.organisationUnitGroupSet.id + '.json' + '?fields=organisationUnitGroups[id,' + gis.init.namePropertyUrl + ',symbol]',
             data;
 
 		Ext.Ajax.request({
@@ -120,7 +120,7 @@ export default function LayerHandlerFacility(gis, layer) {
 					}
 				}
 
-				return gis.init.contextPath + '/api/geoFeatures.json' + params + '&includeGroupSets=true';
+				return gis.init.apiPath + 'geoFeatures.json' + params + '&includeGroupSets=true';
 			}(),
 			success,
 			failure;

@@ -10,7 +10,7 @@ export default function AboutWindow(gis) {
         listeners: {
             show: function(w) {
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/system/info.json'),
+                    url: encodeURI(gis.init.apiPath + 'system/info.json'),
                     success: function(r) {
                         var info = JSON.parse(r.responseText),
                             divStyle = 'padding:3px',

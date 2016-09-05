@@ -134,7 +134,7 @@ export default function SharingWindow(gis, sharing) {
         fields: ['id', 'name'],
         proxy: {
             type: 'ajax',
-            url: encodeURI(gis.init.contextPath + '/api/sharing/search'),
+            url: encodeURI(gis.init.apiPath + 'sharing/search'),
             extraParams: {
                 pageSize: 50
             },
@@ -261,7 +261,7 @@ export default function SharingWindow(gis, sharing) {
                 text: 'Save',
                 handler: function() {
                     Ext.Ajax.request({
-                        url: encodeURI(gis.init.contextPath + '/api/sharing?type=map&id=' + sharing.object.id),
+                        url: encodeURI(gis.init.apiPath + 'sharing?type=map&id=' + sharing.object.id),
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

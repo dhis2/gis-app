@@ -190,7 +190,7 @@ export default function LayerWidgetFacility(gis, layer) {
                 extraParams: {
                     fields: 'children[id,' + gis.init.namePropertyUrl + ',children::isNotEmpty|rename(hasChildren)&paging=false'
                 },
-                url: gis.init.contextPath + '/api/organisationUnits',
+                url: gis.init.apiPath + 'organisationUnits',
                 reader: {
                     type: 'json',
                     root: 'children'

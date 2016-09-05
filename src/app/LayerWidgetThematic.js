@@ -112,7 +112,7 @@ export default function LayerWidgetThematic(gis, layer) {
             if (isString(uid)) {
                 this.setProxy({
                     type: 'ajax',
-                    url: encodeURI(gis.init.contextPath + '/api/dataElementOperands.json?fields=id,' + gis.init.namePropertyUrl + '&paging=false&filter=dataElement.dataElementGroups.id:eq:' + uid),
+                    url: encodeURI(gis.init.apiPath + 'dataElementOperands.json?fields=id,' + gis.init.namePropertyUrl + '&paging=false&filter=dataElement.dataElementGroups.id:eq:' + uid),
                     reader: {
                         type: 'json',
                         root: 'dataElementOperands'
@@ -150,7 +150,7 @@ export default function LayerWidgetThematic(gis, layer) {
         fields: ['id', 'name'],
         proxy: {
             type: 'ajax',
-            url: encodeURI(gis.init.contextPath + '/api/dataSets.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&paging=false'),
+            url: encodeURI(gis.init.apiPath + 'dataSets.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&paging=false'),
             reader: {
                 type: 'json',
                 root: 'dataSets'
@@ -171,7 +171,7 @@ export default function LayerWidgetThematic(gis, layer) {
         fields: ['id', 'name'],
         proxy: {
             type: 'ajax',
-            url: encodeURI(gis.init.contextPath + '/api/programs.json?fields=id,displayName|rename(name)&paging=false'),
+            url: encodeURI(gis.init.apiPath + 'programs.json?fields=id,displayName|rename(name)&paging=false'),
             reader: {
                 type: 'json',
                 root: 'programs'
@@ -435,7 +435,7 @@ export default function LayerWidgetThematic(gis, layer) {
             select: function() {
                 indicator.clearValue();
 
-                indicator.store.proxy.url = encodeURI(gis.init.contextPath + '/api/indicators.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&paging=false&filter=indicatorGroups.id:eq:' + this.getValue());
+                indicator.store.proxy.url = encodeURI(gis.init.apiPath + 'indicators.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&paging=false&filter=indicatorGroups.id:eq:' + this.getValue());
                 indicator.store.load();
             }
         }
@@ -456,7 +456,7 @@ export default function LayerWidgetThematic(gis, layer) {
         listeners: {
             select: function(cb) {
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/indicators.json?fields=legendSet[id]&paging=false&filter=id:eq:' + this.getValue()),
+                    url: encodeURI(gis.init.apiPath + 'indicators.json?fields=legendSet[id]&paging=false&filter=id:eq:' + this.getValue()),
                     success: function(r) {
                         var set = JSON.parse(r.responseText).indicators[0].legendSet;
 
@@ -544,7 +544,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 }
 
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/dataElements.json?fields=legendSet[id]&paging=false&filter=id:eq:' + id),
+                    url: encodeURI(gis.init.apiPath + 'dataElements.json?fields=legendSet[id]&paging=false&filter=id:eq:' + id),
                     success: function(r) {
                         var set = JSON.parse(r.responseText).dataElements[0].legendSet;
 
@@ -623,7 +623,7 @@ export default function LayerWidgetThematic(gis, layer) {
         listeners: {
             select: function(cb) {
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/dataSets.json?fields=legendSet[id]&paging=false&filter=id:eq:' + this.getValue()),
+                    url: encodeURI(gis.init.apiPath + 'dataSets.json?fields=legendSet[id]&paging=false&filter=id:eq:' + this.getValue()),
                     success: function(r) {
                         var set = JSON.parse(r.responseText).dataSets[0].legendSet;
 
@@ -654,7 +654,7 @@ export default function LayerWidgetThematic(gis, layer) {
         eventDataItem.clearValue();
 
         Ext.Ajax.request({
-            url: encodeURI(gis.init.contextPath + '/api/programDataElements.json?program=' + programId + '&fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + ',valueType&paging=false'),
+            url: encodeURI(gis.init.apiPath + 'programDataElements.json?program=' + programId + '&fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + ',valueType&paging=false'),
             disableCaching: false,
             success: function(r) {
                 var types = gis.conf.valueType.aggregateTypes,
@@ -663,7 +663,7 @@ export default function LayerWidgetThematic(gis, layer) {
                     });
 
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.contextPath + '/api/programs.json?filter=id:eq:' + programId + '&fields=programTrackedEntityAttributes[dimensionItem|rename(id),' + gis.init.namePropertyUrl + ',valueType]&paging=false'),
+                    url: encodeURI(gis.init.apiPath + 'programs.json?filter=id:eq:' + programId + '&fields=programTrackedEntityAttributes[dimensionItem|rename(id),' + gis.init.namePropertyUrl + ',valueType]&paging=false'),
                     disableCaching: false,
                     success: function(r) {
                         var attributes = ((Ext.decode(r.responseText).programs[0] || {}).programTrackedEntityAttributes || []).filter(function(item) {
@@ -682,7 +682,7 @@ export default function LayerWidgetThematic(gis, layer) {
       
 
         //Ext.Ajax.request({
-            //url: encodeURI(gis.init.contextPath + '/api/programs.json?paging=false&fields=programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType]],programStages[programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType]]]&filter=id:eq:' + programId),
+            //url: encodeURI(gis.init.apiPath + 'programs.json?paging=false&fields=programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType]],programStages[programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType]]]&filter=id:eq:' + programId),
             //success: function(r) {
                 //r = JSON.parse(r.responseText);
 
@@ -763,7 +763,7 @@ export default function LayerWidgetThematic(gis, layer) {
         programIndicator.clearValue();
 
         Ext.Ajax.request({
-            url: encodeURI(gis.init.contextPath + '/api/programs.json?paging=false&fields=programIndicators[dimensionItem|rename(id),displayName|rename(name)]&filter=id:eq:' + programId),
+            url: encodeURI(gis.init.apiPath + 'programs.json?paging=false&fields=programIndicators[dimensionItem|rename(id),displayName|rename(name)]&filter=id:eq:' + programId),
             success: function(r) {
                 r = JSON.parse(r.responseText);
 
@@ -1057,7 +1057,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 extraParams: {
                     fields: 'children[id,' + gis.init.namePropertyUrl + ',children::isNotEmpty|rename(hasChildren)&paging=false'
                 },
-                url: encodeURI(gis.init.contextPath + '/api/organisationUnits'),
+                url: encodeURI(gis.init.apiPath + 'organisationUnits'),
                 reader: {
                     type: 'json',
                     root: 'children'

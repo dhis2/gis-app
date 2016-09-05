@@ -11,87 +11,12 @@ import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 
 export default function LayerWidgetThematic(gis, layer) {
-
-    var indicatorsByGroupStore,
-        dataElementsByGroupStore,
-        dataSetStore,
-        programStore,
-        eventDataItemAvailableStore,
-        programIndicatorAvailableStore,
-        periodsByTypeStore,
-        infrastructuralDataElementValuesStore,
-        legendsByLegendSetStore,
-
-        valueTypeToggler,
-        legendTypeToggler,
-
-        valueType,
-        indicatorGroup,
-        indicator,
-        dataElementGroup,
-        dataElement,
-        dataElementDetailLevel,
-        dataElementPanel,
-        dataSet,
-        onEventDataItemProgramSelect,
-        eventDataItemProgram,
-        eventDataItem,
-        onProgramIndicatorProgramSelect,
-        programIndicatorProgram,
-        programIndicator,
-        onPeriodTypeSelect,
-        periodType,
-        period,
-        periodPrev,
-        periodNext,
-        periodTypePanel,
-        data,
-
-        treePanel,
-        userOrganisationUnit,
-        userOrganisationUnitChildren,
-        userOrganisationUnitGrandChildren,
-        organisationUnitLevel,
-        organisationUnitGroup,
-        toolMenu,
-        tool,
-        toolPanel,
-        organisationUnit,
-
-        legendType,
-        legendSet,
-        classes,
-        method,
-        colorScale,
-        colorLow,
-        colorHigh,
-        radiusLow,
-        radiusHigh,
-        methodPanel,
-        lowPanelLabel,
-        highPanelLabel,
-        lowPanel,
-        highPanel,
-        legend,
-
-        labelPanel,
-
-        reset,
-        setGui,
-        getView,
-
-        accordionBody,
-        accordion,
-
-        accordionPanels = [],
-        dimConf = gis.conf.finals.dimension,
-
-        last;
-
+    const accordionPanels = [];
+    const dimConf = gis.conf.finals.dimension;
 
     // Stores
 
-    indicatorsByGroupStore = Ext.create('Ext.data.Store', {
+    const indicatorsByGroupStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name', 'legendSet'],
         proxy: {
             type: 'ajax',
@@ -124,7 +49,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    dataElementsByGroupStore = Ext.create('Ext.data.Store', {
+    const dataElementsByGroupStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name'],
         proxy: {
             type: 'ajax',
@@ -221,7 +146,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    dataSetStore = Ext.create('Ext.data.Store', {
+    const dataSetStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name'],
         proxy: {
             type: 'ajax',
@@ -242,7 +167,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    programStore = Ext.create('Ext.data.Store', {
+    const programStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name'],
         proxy: {
             type: 'ajax',
@@ -257,7 +182,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    eventDataItemAvailableStore = Ext.create('Ext.data.Store', {
+    const eventDataItemAvailableStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name'],
         data: [],
         sortStore: function() {
@@ -294,7 +219,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    programIndicatorAvailableStore = Ext.create('Ext.data.Store', {
+    const programIndicatorAvailableStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name'],
         data: [],
         sortStore: function() {
@@ -331,7 +256,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    periodsByTypeStore = Ext.create('Ext.data.Store', {
+    const periodsByTypeStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name', 'index'],
         data: [],
         setIndex: function(periods) {
@@ -344,7 +269,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    infrastructuralDataElementValuesStore = Ext.create('Ext.data.Store', {
+    const infrastructuralDataElementValuesStore = Ext.create('Ext.data.Store', {
         fields: ['name', 'value'],
         sorters: [{
             property: 'name',
@@ -352,7 +277,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }]
     });
 
-    legendsByLegendSetStore = Ext.create('Ext.data.Store', {
+    const legendsByLegendSetStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name', 'startValue', 'endValue', 'color'],
         proxy: {
             type: 'ajax',
@@ -383,7 +308,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
     // Togglers
 
-    valueTypeToggler = function(valueType) {
+    const valueTypeToggler = function(valueType) {
         if (valueType === dimConf.indicator.objectName) {
             indicatorGroup.show();
             indicator.show();
@@ -441,7 +366,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     };
 
-    legendTypeToggler = function(legendType) {
+    const legendTypeToggler = function(legendType) {
         if (legendType === 'automatic') {
             methodPanel.show();
             colorScale.show();
@@ -464,7 +389,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
     // Components
 
-    valueType = Ext.create('Ext.form.field.ComboBox', {
+    const valueType = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.value_type,
         editable: false,
@@ -492,7 +417,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    indicatorGroup = Ext.create('Ext.form.field.ComboBox', {
+    const indicatorGroup = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.indicator_group,
         editable: false,
@@ -516,7 +441,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    indicator = Ext.create('Ext.form.field.ComboBox', {
+    const indicator = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.indicator,
         editable: false,
@@ -558,7 +483,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    dataElementGroup = Ext.create('Ext.form.field.ComboBox', {
+    const dataElementGroup = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.dataelement_group,
         editable: false,
@@ -594,7 +519,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    dataElement = Ext.create('Ext.form.field.ComboBox', {
+    const dataElement = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.dataelement,
         editable: false,
@@ -646,7 +571,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    dataElementDetailLevel = Ext.create('Ext.form.field.ComboBox', {
+    const dataElementDetailLevel = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         style: 'margin-left:1px',
         queryMode: 'local',
@@ -673,7 +598,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    dataElementPanel = Ext.create('Ext.container.Container', {
+    const dataElementPanel = Ext.create('Ext.container.Container', {
         layout: 'column',
         bodyStyle: 'border:0 none',
         hidden: true,
@@ -683,7 +608,7 @@ export default function LayerWidgetThematic(gis, layer) {
         ]
     });
 
-    dataSet = Ext.create('Ext.form.field.ComboBox', {
+    const dataSet = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.dataset,
         editable: false,
@@ -725,7 +650,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    onEventDataItemProgramSelect = function(programId) {
+    const onEventDataItemProgramSelect = function(programId) {
         eventDataItem.clearValue();
 
         Ext.Ajax.request({
@@ -801,7 +726,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
     };
 
-    eventDataItemProgram = Ext.create('Ext.form.field.ComboBox', {
+    const eventDataItemProgram = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.program,
         editable: false,
@@ -819,7 +744,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    eventDataItem = Ext.create('Ext.form.field.ComboBox', {
+    const eventDataItem = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.event_data_item,
         editable: false,
@@ -834,7 +759,7 @@ export default function LayerWidgetThematic(gis, layer) {
         store: eventDataItemAvailableStore
     });
 
-    onProgramIndicatorProgramSelect = function(programId) {
+    const onProgramIndicatorProgramSelect = function(programId) {
         programIndicator.clearValue();
 
         Ext.Ajax.request({
@@ -854,7 +779,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
     };
 
-    programIndicatorProgram = Ext.create('Ext.form.field.ComboBox', {
+    const programIndicatorProgram = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.program,
         editable: false,
@@ -872,7 +797,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    programIndicator = Ext.create('Ext.form.field.ComboBox', {
+    const programIndicator = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.event_data_item,
         editable: false,
@@ -887,7 +812,7 @@ export default function LayerWidgetThematic(gis, layer) {
         store: programIndicatorAvailableStore
     });
 
-    onPeriodTypeSelect = function() {
+    const onPeriodTypeSelect = function() {
         var type = periodType.getValue(),
             periodOffset = periodType.periodOffset,
             generator = gis.init.periodGenerator,
@@ -916,7 +841,7 @@ export default function LayerWidgetThematic(gis, layer) {
         period.selectFirst();
     };
 
-    periodType = Ext.create('Ext.form.field.ComboBox', {
+    const periodType = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         editable: false,
         valueField: 'id',
@@ -934,7 +859,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    period = Ext.create('Ext.form.field.ComboBox', {
+    const period = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.period,
         editable: false,
@@ -950,7 +875,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    periodPrev = Ext.create('Ext.button.Button', {
+    const periodPrev = Ext.create('Ext.button.Button', {
         xtype: 'button',
         text: '<',
         width: 22,
@@ -964,7 +889,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    periodNext = Ext.create('Ext.button.Button', {
+    const periodNext = Ext.create('Ext.button.Button', {
         xtype: 'button',
         text: '>',
         width: 22,
@@ -979,7 +904,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    periodTypePanel = Ext.create('Ext.panel.Panel', {
+    const periodTypePanel = Ext.create('Ext.panel.Panel', {
         layout: 'hbox',
         bodyStyle: 'border:0 none',
         items: [
@@ -995,7 +920,7 @@ export default function LayerWidgetThematic(gis, layer) {
         ]
     });
 
-    data = Ext.create('Ext.panel.Panel', {
+    const data = Ext.create('Ext.panel.Panel', {
         title: '<div class="ns-panel-title-data">' + GIS.i18n.data_and_periods + '</div>',
         hideCollapseTool: true,
         items: [
@@ -1020,7 +945,7 @@ export default function LayerWidgetThematic(gis, layer) {
     });
 
 
-    treePanel = Ext.create('Ext.tree.Panel', {
+    const treePanel = Ext.create('Ext.tree.Panel', {
         cls: 'gis-tree',
         height: 304,
         style: 'border-top: 1px solid #ddd; padding-top: 1px',
@@ -1305,7 +1230,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    userOrganisationUnit = Ext.create('Ext.form.field.Checkbox', {
+    const userOrganisationUnit = Ext.create('Ext.form.field.Checkbox', {
         columnWidth: 0.3,
         style: 'padding-top: 2px; padding-left: 3px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
@@ -1316,7 +1241,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    userOrganisationUnitChildren = Ext.create('Ext.form.field.Checkbox', {
+    const userOrganisationUnitChildren = Ext.create('Ext.form.field.Checkbox', {
         columnWidth: 0.33,
         style: 'padding-top: 2px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
@@ -1327,7 +1252,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    userOrganisationUnitGrandChildren = Ext.create('Ext.form.field.Checkbox', {
+    const userOrganisationUnitGrandChildren = Ext.create('Ext.form.field.Checkbox', {
         columnWidth: 0.34,
         style: 'padding-top: 2px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
@@ -1338,7 +1263,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    organisationUnitLevel = Ext.create('Ext.form.field.ComboBox', {
+    const organisationUnitLevel = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         multiSelect: true,
         style: 'margin-bottom:0',
@@ -1350,10 +1275,19 @@ export default function LayerWidgetThematic(gis, layer) {
         store: {
             fields: ['id', 'name', 'level'],
             data: gis.init.organisationUnitLevels
+        },
+        listeners: {
+            added() { // Set second org.unit level as default
+                const secondLevel = this.getStore().getAt(1);
+
+                if (secondLevel) {
+                    this.setValue(secondLevel);
+                }
+            }
         }
     });
 
-    organisationUnitGroup = Ext.create('Ext.form.field.ComboBox', {
+    const organisationUnitGroup = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         multiSelect: true,
         style: 'margin-bottom:0',
@@ -1365,7 +1299,7 @@ export default function LayerWidgetThematic(gis, layer) {
         store: gis.store.organisationUnitGroup
     });
 
-    toolMenu = Ext.create('Ext.menu.Menu', {
+    const toolMenu = Ext.create('Ext.menu.Menu', {
         shadow: false,
         showSeparator: false,
         menuValue: 'level',
@@ -1450,7 +1384,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    tool = Ext.create('Ext.button.Button', {
+    const tool = Ext.create('Ext.button.Button', {
         cls: 'gis-button-organisationunitselection',
         iconCls: 'gis-button-icon-gear',
         width: 36,
@@ -1458,14 +1392,14 @@ export default function LayerWidgetThematic(gis, layer) {
         menu: toolMenu
     });
 
-    toolPanel = Ext.create('Ext.panel.Panel', {
+    const toolPanel = Ext.create('Ext.panel.Panel', {
         width: 36,
         bodyStyle: 'border:0 none; text-align:right',
         style: 'margin-right:1px',
         items: tool
     });
 
-    organisationUnit = Ext.create('Ext.panel.Panel', {
+    const organisationUnit = Ext.create('Ext.panel.Panel', {
         title: '<div class="ns-panel-title-data">' + GIS.i18n.organisation_units + '</div>',
         hideCollapseTool: true,
         items: [
@@ -1497,7 +1431,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    legendType = Ext.create('Ext.form.field.ComboBox', {
+    const legendType = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.legend_type,
         labelWidth: gis.conf.layout.widget.itemlabel_width,
@@ -1521,7 +1455,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    legendSet = Ext.create('Ext.form.field.ComboBox', {
+    const legendSet = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.legendset,
         editable: false,
@@ -1533,7 +1467,7 @@ export default function LayerWidgetThematic(gis, layer) {
         store: gis.store.legendSets
     });
 
-    classes = Ext.create('Ext.form.field.Number', {
+    const classes = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
         editable: false,
         valueField: 'id',
@@ -1557,7 +1491,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    method = Ext.create('Ext.form.field.ComboBox', {
+    const method = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         editable: false,
         valueField: 'id',
@@ -1574,7 +1508,7 @@ export default function LayerWidgetThematic(gis, layer) {
         })
     });
 
-    colorScale = Ext.create('Ext.ux.field.ColorScale', {
+    const colorScale = Ext.create('Ext.ux.field.ColorScale', {
         classes: 5,
         // fieldLabel: GIS.i18n.legend_type,
         fieldLabel: 'Color scale',
@@ -1582,7 +1516,7 @@ export default function LayerWidgetThematic(gis, layer) {
         width: gis.conf.layout.widget.item_width,
     });
 
-    colorLow = Ext.create('Ext.ux.button.ColorButton', {
+    const colorLow = Ext.create('Ext.ux.button.ColorButton', {
         style: 'margin-right: 1px',
         width: 137,
         height: 24,
@@ -1590,7 +1524,7 @@ export default function LayerWidgetThematic(gis, layer) {
         scope: this
     });
 
-    colorHigh = Ext.create('Ext.ux.button.ColorButton', {
+    const colorHigh = Ext.create('Ext.ux.button.ColorButton', {
         style: 'margin-right: 1px',
         width: 137,
         height: 24,
@@ -1598,7 +1532,7 @@ export default function LayerWidgetThematic(gis, layer) {
         scope: this
     });
 
-    radiusLow = Ext.create('Ext.form.field.Number', {
+    const radiusLow = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
         width: 50,
         allowDecimals: false,
@@ -1606,7 +1540,7 @@ export default function LayerWidgetThematic(gis, layer) {
         value: 5
     });
 
-    radiusHigh = Ext.create('Ext.form.field.Number', {
+    const radiusHigh = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
         width: 50,
         allowDecimals: false,
@@ -1614,7 +1548,7 @@ export default function LayerWidgetThematic(gis, layer) {
         value: 15
     });
 
-    methodPanel = Ext.create('Ext.container.Container', {
+    const methodPanel = Ext.create('Ext.container.Container', {
         layout: 'hbox',
         height: 25,
         bodyStyle: 'border: 0 none; margin-bottom:1px',
@@ -1630,7 +1564,7 @@ export default function LayerWidgetThematic(gis, layer) {
         ]
     });
 
-    lowPanelLabel = Ext.create('Ext.panel.Panel', {
+    const lowPanelLabel = Ext.create('Ext.panel.Panel', {
         // html: GIS.i18n.low_color_size + ':',
         html: 'Low size:',
         width: 100,
@@ -1638,7 +1572,7 @@ export default function LayerWidgetThematic(gis, layer) {
         bodyStyle: 'border: 0 none'
     });
 
-    highPanelLabel = Ext.create('Ext.panel.Panel', {
+    const highPanelLabel = Ext.create('Ext.panel.Panel', {
         html: GIS.i18n.high_color_size + ':',
         html: 'High size:',
         width: 100,
@@ -1646,7 +1580,7 @@ export default function LayerWidgetThematic(gis, layer) {
         bodyStyle: 'border: 0 none'
     });
 
-    lowPanel = Ext.create('Ext.container.Container', {
+    const lowPanel = Ext.create('Ext.container.Container', {
         layout: 'hbox',
         height: 25,
         bodyStyle: 'border: 0 none',
@@ -1657,7 +1591,7 @@ export default function LayerWidgetThematic(gis, layer) {
         ]
     });
 
-    highPanel = Ext.create('Ext.panel.Panel', {
+    const highPanel = Ext.create('Ext.panel.Panel', {
         layout: 'hbox',
         height: 25,
         bodyStyle: 'border: 0 none',
@@ -1668,12 +1602,12 @@ export default function LayerWidgetThematic(gis, layer) {
         ]
     });
 
-    labelPanel = Ext.create('Ext.ux.panel.LabelPanel', {
+    const labelPanel = Ext.create('Ext.ux.panel.LabelPanel', {
         bodyStyle: 'border: 0 none; padding-top: 10px;',
         height: 34,
     });
 
-    legend = Ext.create('Ext.panel.Panel', {
+    const legend = Ext.create('Ext.panel.Panel', {
         title: '<div class="ns-panel-title-data">' + GIS.i18n.options + '</div>',
         hideCollapseTool: true,
         items: [
@@ -1694,7 +1628,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
     // Functions
 
-    reset = function(skipTree) {
+    const reset = function(skipTree) {
 
         // Item
         layer.item.setValue(false);
@@ -1759,7 +1693,7 @@ export default function LayerWidgetThematic(gis, layer) {
         organisationUnitGroup.clearValue();
     };
 
-    setGui = function(view, isDrillDown) {
+    const setGui = function(view, isDrillDown) {
         var dxDim = view.columns[0],
             peDim = view.filters[0],
             ouDim = view.rows[0],
@@ -1935,7 +1869,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }();
     };
 
-    getView = function(config) {
+    const getView = function(config) {
         var in_ = dimConf.indicator.objectName,
             de = dimConf.dataElement.objectName,
             dc = dimConf.operand.objectName,
@@ -2035,21 +1969,20 @@ export default function LayerWidgetThematic(gis, layer) {
         return gis.api.layout.Layout(view);
     };
 
-    accordionBody = Ext.create('Ext.panel.Panel', {
+    const accordionBody = Ext.create('Ext.panel.Panel', {
         layout: 'accordion',
         activeOnTop: true,
         cls: 'ns-accordion',
         bodyStyle: 'border:0 none; margin-bottom:1px',
         height: 410,
         items: function() {
-            var panels = [
+            const panels = [
                 data,
                 organisationUnit,
                 legend
             ];
 
-            last = panels[panels.length - 1];
-            last.cls = 'ns-accordion-last';
+            panels[panels.length - 1].cls = 'ns-accordion-last'; // TODO: Always legend?
 
             return panels;
         }(),
@@ -2062,7 +1995,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
-    accordion = Ext.create('Ext.panel.Panel', {
+    const accordion = Ext.create('Ext.panel.Panel', {
         bodyStyle: 'border-style:none; padding:1px; padding-bottom:0',
         items: accordionBody,
         panels: accordionPanels,

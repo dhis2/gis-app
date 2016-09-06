@@ -72,7 +72,7 @@ export default function LayerWidgetThematic(gis, layer) {
             this.sort('name', 'ASC');
         },
         setTotalsProxy: function(uid, preventLoad, callbackFn) {
-            var path;
+            let path;
 
             if (isString(uid)) {
                 path = '/dataElements.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&domainType=aggregate&paging=false&filter=dataElementGroups.id:eq:' + uid;
@@ -194,11 +194,11 @@ export default function LayerWidgetThematic(gis, layer) {
             this.updateFilter();
         },
         getRecordsByIds: function(ids) {
-            var records = [];
+            const records = [];
 
             ids = arrayFrom(ids);
 
-            for (var i = 0, index; i < ids.length; i++) {
+            for (let i = 0, index; i < ids.length; i++) {
                 index = this.findExact('id', ids[i]);
 
                 if (index !== -1) {
@@ -209,7 +209,7 @@ export default function LayerWidgetThematic(gis, layer) {
             return records;
         },
         updateFilter: function() {
-            var selectedStoreIds = dataSelectedStore.getIds();
+            const selectedStoreIds = dataSelectedStore.getIds();
 
             this.clearFilter();
 
@@ -231,11 +231,11 @@ export default function LayerWidgetThematic(gis, layer) {
             this.updateFilter();
         },
         getRecordsByIds: function(ids) {
-            var records = [];
+            const records = [];
 
             ids = arrayFrom(ids);
 
-            for (var i = 0, index; i < ids.length; i++) {
+            for (let i = 0, index; i < ids.length; i++) {
                 index = this.findExact('id', ids[i]);
 
                 if (index !== -1) {
@@ -246,7 +246,7 @@ export default function LayerWidgetThematic(gis, layer) {
             return records;
         },
         updateFilter: function() {
-            var selectedStoreIds = dataSelectedStore.getIds();
+            const selectedStoreIds = dataSelectedStore.getIds();
 
             this.clearFilter();
 
@@ -260,7 +260,7 @@ export default function LayerWidgetThematic(gis, layer) {
         fields: ['id', 'name', 'index'],
         data: [],
         setIndex: function(periods) {
-            for (var i = 0; i < periods.length; i++) {
+            for (let i = 0; i < periods.length; i++) {
                 periods[i].index = i;
             }
         },
@@ -458,7 +458,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'indicators.json?fields=legendSet[id]&paging=false&filter=id:eq:' + this.getValue()),
                     success: function(r) {
-                        var set = JSON.parse(r.responseText).indicators[0].legendSet;
+                        const set = JSON.parse(r.responseText).indicators[0].legendSet;
 
                         if (isObject(set) && set.id) {
                             legendType.setValue(gis.conf.finals.widget.legendtype_predefined);
@@ -498,9 +498,9 @@ export default function LayerWidgetThematic(gis, layer) {
             data: gis.init.dataElementGroups
         },
         loadAvailable: function(preventLoad) {
-            var store = dataElementsByGroupStore,
-                detailLevel = dataElementDetailLevel.getValue(),
-                value = this.getValue();
+            const store = dataElementsByGroupStore;
+            const detailLevel = dataElementDetailLevel.getValue();
+            const value = this.getValue();
 
             if (value) {
                 if (detailLevel === gis.conf.finals.dimension.dataElement.objectName) {
@@ -536,8 +536,8 @@ export default function LayerWidgetThematic(gis, layer) {
         store: dataElementsByGroupStore,
         listeners: {
             select: function() {
-                var id = this.getValue(),
-                    index = id.indexOf('.');
+                let id = this.getValue();
+                let index = id.indexOf('.');
 
                 if (index !== -1) {
                     id = id.substr(0, index);
@@ -546,7 +546,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'dataElements.json?fields=legendSet[id]&paging=false&filter=id:eq:' + id),
                     success: function(r) {
-                        var set = JSON.parse(r.responseText).dataElements[0].legendSet;
+                        const set = JSON.parse(r.responseText).dataElements[0].legendSet;
 
                         if (isObject(set) && set.id) {
                             legendType.setValue(gis.conf.finals.widget.legendtype_predefined);
@@ -625,7 +625,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'dataSets.json?fields=legendSet[id]&paging=false&filter=id:eq:' + this.getValue()),
                     success: function(r) {
-                        var set = JSON.parse(r.responseText).dataSets[0].legendSet;
+                        const set = JSON.parse(r.responseText).dataSets[0].legendSet;
 
                         if (isObject(set) && set.id) {
                             legendType.setValue(gis.conf.finals.widget.legendtype_predefined);
@@ -657,73 +657,25 @@ export default function LayerWidgetThematic(gis, layer) {
             url: encodeURI(gis.init.apiPath + 'programDataElements.json?program=' + programId + '&fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + ',valueType&paging=false'),
             disableCaching: false,
             success: function(r) {
-                var types = gis.conf.valueType.aggregateTypes,
-                    elements = Ext.decode(r.responseText).programDataElements.filter(function(item) {
-                        return arrayContains(types, (item || {}).valueType);
-                    });
+                const types = gis.conf.valueType.aggregateTypes;
+                const elements = Ext.decode(r.responseText).programDataElements.filter(function(item) {
+                    return arrayContains(types, (item || {}).valueType);
+                });
 
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'programs.json?filter=id:eq:' + programId + '&fields=programTrackedEntityAttributes[dimensionItem|rename(id),' + gis.init.namePropertyUrl + ',valueType]&paging=false'),
                     disableCaching: false,
                     success: function(r) {
-                        var attributes = ((Ext.decode(r.responseText).programs[0] || {}).programTrackedEntityAttributes || []).filter(function(item) {
-                                return arrayContains(types, (item || {}).valueType);
-                            }),
-                            data = arraySort(arrayClean([].concat(elements, attributes))) || [];
+                        const attributes = ((Ext.decode(r.responseText).programs[0] || {}).programTrackedEntityAttributes || []).filter(function(item) {
+                            return arrayContains(types, (item || {}).valueType);
+                        });
+                        const data = arraySort(arrayClean([].concat(elements, attributes))) || [];
 
                         eventDataItemAvailableStore.loadData(data);
                     }
                 });
             }
         });
-
-
-
-      
-
-        //Ext.Ajax.request({
-            //url: encodeURI(gis.init.apiPath + 'programs.json?paging=false&fields=programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType]],programStages[programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType]]]&filter=id:eq:' + programId),
-            //success: function(r) {
-                //r = JSON.parse(r.responseText);
-
-                //var isA = isArray,
-                    //isO = isObject,
-                    //program = isA(r.programs) && r.programs.length ? r.programs[0] : null,
-                    //stages = isO(program) && isA(program.programStages) && program.programStages.length ? program.programStages : [],
-                    //teas = isO(program) && isA(program.programTrackedEntityAttributes) ? arrayPluck(program.programTrackedEntityAttributes, 'trackedEntityAttribute') : [],
-                    //dataElements = [],
-                    //attributes = [],
-                    //types = gis.conf.valueType.aggregateTypes,
-                    //data;
-
-                //// data elements
-                //for (var i = 0, stage, elements; i < stages.length; i++) {
-                    //stage = stages[i];
-
-                    //if (isA(stage.programStageDataElements) && stage.programStageDataElements.length) {
-                        //elements = arrayPluck(stage.programStageDataElements, 'dataElement') || [];
-
-                        //for (var j = 0; j < elements.length; j++) {
-                            //if (arrayContains(types, elements[j].valueType)) {
-                                //dataElements.push(elements[j]);
-                            //}
-                        //}
-                    //}
-                //}
-
-                //// attributes
-                //for (i = 0; i < teas.length; i++) {
-                    //if (arrayContains(types, teas[i].valueType)) {
-                        //attributes.push(teas[i]);
-                    //}
-                //}
-
-                //data = gis.util.array.sort(arrayClean([].concat(dataElements, attributes))) || [];
-
-                //eventDataItemAvailableStore.loadData(data);
-            //}
-        //});
-
     };
 
     const eventDataItemProgram = Ext.create('Ext.form.field.ComboBox', {
@@ -767,11 +719,11 @@ export default function LayerWidgetThematic(gis, layer) {
             success: function(r) {
                 r = JSON.parse(r.responseText);
 
-                var isA = isArray,
-                    isO = isObject,
-                    program = isA(r.programs) && r.programs.length ? r.programs[0] : null,
-                    programIndicators = isO(program) && isA(program.programIndicators) && program.programIndicators.length ? program.programIndicators : [],
-                    data = gis.util.array.sort(arrayClean(programIndicators)) || [];
+                const isA = isArray;
+                const isO = isObject;
+                const program = isA(r.programs) && r.programs.length ? r.programs[0] : null;
+                const programIndicators = isO(program) && isA(program.programIndicators) && program.programIndicators.length ? program.programIndicators : [];
+                const data = gis.util.array.sort(arrayClean(programIndicators)) || [];
 
                 programIndicatorAvailableStore.loadData(data);
             }
@@ -960,14 +912,14 @@ export default function LayerWidgetThematic(gis, layer) {
         multiSelect: true,
         rendered: false,
         reset: function() {
-            var rootNode = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
+            const rootNode = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
             this.collapseAll();
             this.expandPath(rootNode.getPath());
             this.getSelectionModel().select(rootNode);
         },
         selectRootIf: function() {
             if (this.getSelectionModel().getSelection().length < 1) {
-                var node = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
+                const node = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
                 if (this.rendered) {
                     this.getSelectionModel().select(node);
                 }
@@ -989,17 +941,16 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         },
         multipleExpand: function(id, map, doUpdate) {
-            var that = this,
-                rootId = gis.conf.finals.root.id,
-                path = map[id],
-                record;
+            const that = this;
+            const rootId = gis.conf.finals.root.id;
+            let path = map[id];
 
             if (path.substr(0, rootId.length + 1) !== ('/' + rootId)) {
                 path = '/' + rootId + path;
             }
 
             that.expandPath(path, 'id', '/', function() {
-                record = Ext.clone(that.getRootNode().findChild('id', id, true));
+                const record = Ext.clone(that.getRootNode().findChild('id', id, true));
                 that.recordsToSelect.push(record);
                 that.multipleSelectIf(map, doUpdate);
             });
@@ -1014,20 +965,20 @@ export default function LayerWidgetThematic(gis, layer) {
                 params: params,
                 scope: this,
                 success: function(r) {
-                    var a = JSON.parse(r.responseText).organisationUnits;
+                    const a = JSON.parse(r.responseText).organisationUnits;
                     this.numberOfRecords = a.length;
-                    for (var i = 0; i < a.length; i++) {
+                    for (let i = 0; i < a.length; i++) {
                         this.multipleExpand(a[i].id, a[i].path);
                     }
                 }
             });
         },
         getParentGraphMap: function() {
-            var selection = this.getSelectionModel().getSelection(),
-                map = {};
+            const selection = this.getSelectionModel().getSelection();
+            const map = {};
 
             if (isArray(selection) && selection.length) {
-                for (var i = 0, pathArray; i < selection.length; i++) {
+                for (let i = 0, pathArray; i < selection.length; i++) {
                     pathArray = selection[i].getPath().split('/');
                     map[pathArray.pop()] = pathArray.join('/');
                 }
@@ -1042,7 +993,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
             this.isPending = true;
 
-            for (var key in map) {
+            for (let key in map) {
                 if (map.hasOwnProperty(key)) {
                     treePanel.multipleExpand(key, map, update);
                 }
@@ -1091,7 +1042,7 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         }),
         xable: function(values) {
-            for (var i = 0; i < values.length; i++) {
+            for (let i = 0; i < values.length; i++) {
                 if (!!values[i]) {
                     this.disable();
                     return;
@@ -1101,11 +1052,11 @@ export default function LayerWidgetThematic(gis, layer) {
             this.enable();
         },
         getDimension: function() {
-            var r = treePanel.getSelectionModel().getSelection(),
-                config = {
-                    dimension: gis.conf.finals.dimension.organisationUnit.objectName,
-                    items: []
-                };
+            const r = treePanel.getSelectionModel().getSelection();
+            const config = {
+                dimension: gis.conf.finals.dimension.organisationUnit.objectName,
+                items: []
+            };
 
             if (toolMenu.menuValue === 'orgunit') {
                 if (userOrganisationUnit.getValue() || userOrganisationUnitChildren.getValue() || userOrganisationUnitGrandChildren.getValue()) {
@@ -1129,23 +1080,23 @@ export default function LayerWidgetThematic(gis, layer) {
                     }
                 }
                 else {
-                    for (var i = 0; i < r.length; i++) {
+                    for (let i = 0; i < r.length; i++) {
                         config.items.push({id: r[i].data.id});
                     }
                 }
             }
             else if (toolMenu.menuValue === 'level') {
-                var levels = organisationUnitLevel.getValue(),
-                    maxLevel = arrayMax(levels);
+                const levels = organisationUnitLevel.getValue();
+                const maxLevel = arrayMax(levels);
 
-                for (var i = 0; i < levels.length; i++) {
+                for (let i = 0; i < levels.length; i++) {
                     config.items.push({
                         id: 'LEVEL-' + levels[i],
                         name: ''
                     });
                 }
 
-                for (var i = 0, item; i < r.length; i++) {
+                for (let i = 0, item; i < r.length; i++) {
                     item = r[i].data;
 
                     if (maxLevel && item.depth > maxLevel) {
@@ -1160,16 +1111,16 @@ export default function LayerWidgetThematic(gis, layer) {
                 }
             }
             else if (toolMenu.menuValue === 'group') {
-                var groupIds = organisationUnitGroup.getValue();
+                const groupIds = organisationUnitGroup.getValue();
 
-                for (var i = 0; i < groupIds.length; i++) {
+                for (let i = 0; i < groupIds.length; i++) {
                     config.items.push({
                         id: 'OU_GROUP-' + groupIds[i],
                         name: ''
                     });
                 }
 
-                for (var i = 0; i < r.length; i++) {
+                for (let i = 0; i < r.length; i++) {
                     config.items.push({
                         id: r[i].data.id,
                         name: ''
@@ -1626,6 +1577,31 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
+    const aggregationType = Ext.create('Ext.form.field.ComboBox', {
+        cls: 'gis-combo',
+        fieldLabel: GIS.i18n.aggregation_type,
+        labelWidth: gis.conf.layout.widget.itemlabel_width,
+
+        /*
+        editable: false,
+        valueField: 'id',
+        displayField: 'name',
+        queryMode: 'local',
+        value: gis.conf.finals.widget.legendtype_automatic,
+        width: gis.conf.layout.widget.item_width,
+        */
+
+        queryMode: 'local',
+        valueField: 'id',
+        displayField: 'name',
+        editable: false,
+        //value: optionConfig.getAggregationType('def').id,
+        store: Ext.create('Ext.data.Store', {
+            fields: ['id', 'name', 'index'],
+            //data: optionConfig.getAggregationTypeRecords()
+        })
+    });
+
     // Functions
 
     const reset = function(skipTree) {
@@ -1694,42 +1670,41 @@ export default function LayerWidgetThematic(gis, layer) {
     };
 
     const setGui = function(view, isDrillDown) {
-        var dxDim = view.columns[0],
-            peDim = view.filters[0],
-            ouDim = view.rows[0],
-            itemTypeCmpMap = {
-                'INDICATOR': indicator,
-                'DATA_ELEMENT': dataElement,
-                'DATA_ELEMENT_OPERAND': dataElement,
-                'REPORTING_RATE': dataSet,
-                'PROGRAM_DATA_ELEMENT': eventDataItem,
-                'PROGRAM_ATTRIBUTE': eventDataItem,
-                'PROGRAM_INDICATOR': programIndicator
-            },
-            itemTypeObjectNameMap = {
-                'INDICATOR': dimConf.indicator.objectName,
-                'DATA_ELEMENT': dimConf.dataElement.objectName,
-                'DATA_ELEMENT_OPERAND': dimConf.operand.objectName,
-                'REPORTING_RATE': dimConf.dataSet.objectName,
-                'PROGRAM_DATA_ELEMENT': dimConf.eventDataItem.objectName,
-                'PROGRAM_ATTRIBUTE': dimConf.eventDataItem.objectName,
-                'PROGRAM_INDICATOR': dimConf.programIndicator.objectName
-            },
-            objectNameMap = {},                
-            legendtype_predefined = gis.conf.finals.widget.legendtype_predefined,
-            legendtype_automatic = gis.conf.finals.widget.legendtype_automatic,
-            isOu = false,
-            isOuc = false,
-            isOugc = false,
-            levels = [],
-            groups = [],
-            objectNameProgramCmpMap = {},
-            setDxGui,
-            setPeGui,
-            setOuGui,
-            setLegendGui,
-            setLayer,
-            init;
+        const dxDim = view.columns[0];
+        const peDim = view.filters[0];
+        const ouDim = view.rows[0];
+
+        const itemTypeCmpMap = {
+            'INDICATOR': indicator,
+            'DATA_ELEMENT': dataElement,
+            'DATA_ELEMENT_OPERAND': dataElement,
+            'REPORTING_RATE': dataSet,
+            'PROGRAM_DATA_ELEMENT': eventDataItem,
+            'PROGRAM_ATTRIBUTE': eventDataItem,
+            'PROGRAM_INDICATOR': programIndicator
+        };
+
+        const itemTypeObjectNameMap = {
+            'INDICATOR': dimConf.indicator.objectName,
+            'DATA_ELEMENT': dimConf.dataElement.objectName,
+            'DATA_ELEMENT_OPERAND': dimConf.operand.objectName,
+            'REPORTING_RATE': dimConf.dataSet.objectName,
+            'PROGRAM_DATA_ELEMENT': dimConf.eventDataItem.objectName,
+            'PROGRAM_ATTRIBUTE': dimConf.eventDataItem.objectName,
+            'PROGRAM_INDICATOR': dimConf.programIndicator.objectName
+        };
+
+        const objectNameMap = {};
+        const legendtype_predefined = gis.conf.finals.widget.legendtype_predefined;
+        const legendtype_automatic = gis.conf.finals.widget.legendtype_automatic;
+
+        let isOu = false;
+        let isOuc = false;
+        let isOugc = false;
+
+        const levels = [];
+        const groups = [];
+        const objectNameProgramCmpMap = {};
 
         objectNameMap[dimConf.indicator.objectName] = dimConf.indicator.objectName;
         objectNameMap[dimConf.dataElement.objectName] = dimConf.dataElement.objectName;
@@ -1738,17 +1713,17 @@ export default function LayerWidgetThematic(gis, layer) {
         objectNameMap[dimConf.eventDataItem.objectName] = dimConf.eventDataItem.objectName;
         objectNameMap[dimConf.programIndicator.objectName] = dimConf.programIndicator.objectName;
 
-        var dxItemType = dxDim.items[0].dimensionItemType,
-            legType = isObject(view.legendSet) && isString(view.legendSet.id) ? legendtype_predefined : legendtype_automatic;
+        const dxItemType = dxDim.items[0].dimensionItemType;
+        const legType = isObject(view.legendSet) && isString(view.legendSet.id) ? legendtype_predefined : legendtype_automatic;
 
-        var dxCmp = itemTypeCmpMap[dxItemType],
-            dxObjectName = itemTypeObjectNameMap[dxItemType];              
+        const dxCmp = itemTypeCmpMap[dxItemType];
+        const dxObjectName = itemTypeObjectNameMap[dxItemType];
             
             //itemTypeCmpMap = {},
         objectNameProgramCmpMap[dimConf.eventDataItem.objectName] = eventDataItemProgram;
         objectNameProgramCmpMap[dimConf.programIndicator.objectName] = programIndicatorProgram;
 
-        setDxGui = function() {
+        const setDxGui = function() {
 
             // TODO, objectName/dimensionItemType must be sorted
             if (!dxItemType) {
@@ -1768,13 +1743,13 @@ export default function LayerWidgetThematic(gis, layer) {
             dxCmp.setValue(dxDim.items[0].id);
         };
 
-        setPeGui = function() {
+        const setPeGui = function() {
             period.store.add(gis.conf.period.relativePeriodRecordsMap[peDim.items[0].id] ? gis.conf.period.relativePeriodRecordsMap[peDim.items[0].id] : peDim.items[0]);
             period.setValue(peDim.items[0].id);
         };
 
-        setOuGui = function() {
-            for (var i = 0, item; i < ouDim.items.length; i++) {
+        const setOuGui = function() {
+            for (let i = 0, item; i < ouDim.items.length; i++) {
                 item = ouDim.items[i];
 
                 if (item.id === 'USER_ORGUNIT') {
@@ -1812,7 +1787,7 @@ export default function LayerWidgetThematic(gis, layer) {
             treePanel.selectGraphMap(view.parentGraphMap);
         };
 
-        setLegendGui = function() {
+        const setLegendGui = function() {
             legendType.setValue(legType);
             legendTypeToggler(legType);
 
@@ -1835,7 +1810,7 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         };
 
-        setLayer = function() {
+        const setLayer = function() {
 
             // Layer item
             layer.item.setValue(!view.hidden, view.opacity);
@@ -1849,7 +1824,7 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         };
 
-        init = function() {
+        const init = function() {
             if (!layer.window.isRendered) {
                 return;
             }
@@ -1870,18 +1845,17 @@ export default function LayerWidgetThematic(gis, layer) {
     };
 
     const getView = function(config) {
-        var in_ = dimConf.indicator.objectName,
-            de = dimConf.dataElement.objectName,
-            dc = dimConf.operand.objectName,
-            ds = dimConf.dataSet.objectName,
-            di = dimConf.eventDataItem.objectName,
-            pi = dimConf.programIndicator.objectName,
-            objectNameCmpMap = {},
-            objectNameItemTypeMap = {},
-            view = {};
+        const in_ = dimConf.indicator.objectName;
+        const de = dimConf.dataElement.objectName;
+        const dc = dimConf.operand.objectName;
+        const ds = dimConf.dataSet.objectName;
+        const di = dimConf.eventDataItem.objectName;
+        const pi = dimConf.programIndicator.objectName;
+        const objectNameCmpMap = {};
+        const objectNameItemTypeMap = {};
+        const view = {};
 
-        var dxObjectName = valueType.getValue() === de ? dataElementDetailLevel.getValue() : valueType.getValue(),
-            dxItemType;
+        const dxObjectName = valueType.getValue() === de ? dataElementDetailLevel.getValue() : valueType.getValue();
 
         objectNameCmpMap[in_] = indicator;
         objectNameCmpMap[de] = dataElement;
@@ -1896,7 +1870,7 @@ export default function LayerWidgetThematic(gis, layer) {
         objectNameItemTypeMap[dimConf.eventDataItem.objectName] = 'PROGRAM_DATA_ELEMENT';
         objectNameItemTypeMap[dimConf.programIndicator.objectName] = 'PROGRAM_ATTRIBUTE';
 
-        dxItemType = objectNameItemTypeMap[dxObjectName];
+        const dxItemType = objectNameItemTypeMap[dxObjectName];
 
         // id
         view.layer = layer.id;
@@ -1988,7 +1962,7 @@ export default function LayerWidgetThematic(gis, layer) {
         }(),
         listeners: {
             afterrender: function() { // nasty workaround
-                for (var i = accordionPanels.length - 1; i >= 0; i--) {
+                for (let i = accordionPanels.length - 1; i >= 0; i--) {
                     accordionPanels[i].expand();
                 }
             }
@@ -2016,7 +1990,7 @@ export default function LayerWidgetThematic(gis, layer) {
             return 450;
         },
         getExpandedPanel: function() {
-            for (var i = 0; i < this.panels.length; i++) {
+            for (let i = 0; i < this.panels.length; i++) {
                 if (!this.panels[i].collapsed) {
                     return this.panels[i];
                 }

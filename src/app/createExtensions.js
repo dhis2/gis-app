@@ -831,9 +831,9 @@ export default function createExtensions(gis) {
                 var data = [], yes = {}, no = {};
 
                 yes[idProperty] = '1';
-                yes[nameProperty] = NS.i18n.yes;
+                yes[nameProperty] = GIS.i18n.yes;
                 no[idProperty] = '0';
-                no[nameProperty] = NS.i18n.no;
+                no[nameProperty] = GIS.i18n.no;
 
                 for (var i = 0; i < idArray.length; i++) {
                     if (idArray[i] === '1' || idArray[i] === 1) {

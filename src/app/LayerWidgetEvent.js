@@ -840,7 +840,7 @@ export default function LayerWidgetEvent(gis, layer) {
         }
         else {
             Ext.Ajax.request({
-                url: encodeURI(gis.init.apiPath + 'programStages.json?filter=id:eq:' + stageId + '&fields=programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',type,optionSet[id,displayName|rename(name)]]]'),
+                url: encodeURI(gis.init.apiPath + 'programStages.json?filter=id:eq:' + stageId + '&fields=programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType,optionSet[id,displayName|rename(name)]]]'),
                 success: function(r) {
                     const objects = JSON.parse(r.responseText).programStages;
 
@@ -867,19 +867,19 @@ export default function LayerWidgetEvent(gis, layer) {
                 return 'Ext.ux.panel.OrganisationUnitGroupSetContainer';
             }
 
-            if (element.type === 'int' || element.type === 'number') {
+            if (element.type === 'INTEGER' || element.type === 'NUMBER') {
                 return 'Ext.ux.panel.DataElementIntegerContainer';
             }
 
-            if (element.type === 'string') {
+            if (element.type === 'TEXT') {
                 return 'Ext.ux.panel.DataElementStringContainer';
             }
 
-            if (element.type === 'date') {
+            if (element.type === 'DATE') {
                 return 'Ext.ux.panel.DataElementDateContainer';
             }
 
-            if (element.type === 'bool' || element.type === 'trueOnly') {
+            if (element.type === 'BOOLEAN' || element.type === 'TRUE_ONLY') {
                 return 'Ext.ux.panel.DataElementBooleanContainer';
             }
 

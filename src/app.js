@@ -1077,8 +1077,6 @@ Ext.onReady( function() {
                 init.apiPath = init.contextPath + '/api/25/';
                 init.defaultHeaders = {};
 
-                console.log(init.apiPath);
-
                 if (context.auth) {
                     Ext.Ajax.defaultHeaders = {
                         'Authorization': 'Basic ' + btoa(context.auth)

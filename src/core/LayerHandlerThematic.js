@@ -6,175 +6,32 @@ import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 import arraySort from 'd2-utilizr/lib/arraySort';
 
 export default function LayerHandlerThematic(gis, layer) {
-    var compareView,
-        loadOrganisationUnits,
-        loadLegend,
-        applyClassification,
-        rgbToHex,
-        hexToRgb,
-        getClass,
-        getColorsByRgbInterpolation,
-        updateMap,
-        updateLegend,
-        loadData,
-        afterLoad,
-        contextMenu,
-        onFeatureClick,
-        onFeatureRightClick,
-        loader;
 
-    compareView = function (view, doExecute) {
-        var src = layer.view,
-            viewIds,
-            viewDim,
-            srcIds,
-            srcDim;
+    // Load organisation units
+    const loadOrganisationUnits = function (view) {
+        const items = view.rows[0].items;
+        const propertyMap = {
+            'name': 'name',
+            'displayName': 'name',
+            'shortName': 'shortName',
+            'displayShortName': 'shortName'
+        };
+        const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty;
+        const displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[view.displayProperty] || 'name';
+        const url = function () {
+            let params = '?ou=ou:' + items.map(item => item.id).join(';');
 
-        loader.zoomToVisibleExtent = true;
+            params += '&displayProperty=' + displayProperty.toUpperCase();
 
-        if (!src) {
-            if (doExecute) {
-                loadOrganisationUnits(view);
-            }
-            return gis.conf.finals.widget.loadtype_organisationunit;
-        }
-
-        // organisation units
-        viewIds = [];
-        viewDim = view.rows[0];
-        srcIds = [];
-        srcDim = src.rows[0];
-
-        if (viewDim.items.length === srcDim.items.length) {
-            for (var i = 0; i < viewDim.items.length; i++) {
-                viewIds.push(viewDim.items[i].id);
+            if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
+                params += '&userOrgUnit=' + view.userOrgUnit.join(';');
             }
 
-            for (var i = 0; i < srcDim.items.length; i++) {
-                srcIds.push(srcDim.items[i].id);
-            }
+            return gis.init.apiPath + 'geoFeatures.json' + params;
+        }();
 
-            if (arrayDifference(viewIds, srcIds).length !== 0) {
-                if (doExecute) {
-                    loadOrganisationUnits(view);
-                }
-                return gis.conf.finals.widget.loadtype_organisationunit;
-            }
-        }
-        else {
-            if (doExecute) {
-                loadOrganisationUnits(view);
-            }
-            return gis.conf.finals.widget.loadtype_organisationunit;
-        }
-
-        // data
-        loader.zoomToVisibleExtent = false;
-
-        viewIds = [];
-        viewDim = view.columns[0];
-        srcIds = [];
-        srcDim = src.columns[0];
-
-        if (viewDim.items.length === srcDim.items.length) {
-            for (var i = 0; i < viewDim.items.length; i++) {
-                viewIds.push(viewDim.items[i].id);
-            }
-
-            for (var i = 0; i < srcDim.items.length; i++) {
-                srcIds.push(srcDim.items[i].id);
-            }
-
-            if (arrayDifference(viewIds, srcIds).length !== 0) {
-                if (doExecute) {
-                    loadData(view);
-                }
-                return gis.conf.finals.widget.loadtype_organisationunit;
-            }
-        }
-        else {
-            if (doExecute) {
-                loadData(view);
-            }
-            return gis.conf.finals.widget.loadtype_organisationunit;
-        }
-
-        // period
-        viewIds = [];
-        viewDim = view.filters[0];
-        srcIds = [];
-        srcDim = src.filters[0];
-
-        if (viewDim.items.length === srcDim.items.length) {
-            for (var i = 0; i < viewDim.items.length; i++) {
-                viewIds.push(viewDim.items[i].id);
-            }
-
-            for (var i = 0; i < srcDim.items.length; i++) {
-                srcIds.push(srcDim.items[i].id);
-            }
-
-            if (arrayDifference(viewIds, srcIds).length !== 0) {
-                if (doExecute) {
-                    loadData(view);
-                }
-                return gis.conf.finals.widget.loadtype_organisationunit;
-            }
-        }
-        else {
-            if (doExecute) {
-                loadData(view);
-            }
-            return gis.conf.finals.widget.loadtype_organisationunit;
-        }
-
-        // if no changes - reload legend but do not zoom
-        if (doExecute) {
-            loader.zoomToVisibleExtent = false;
-            loadLegend(view);
-            return gis.conf.finals.widget.loadtype_legend;
-        }
-
-        if (gis.mask) {
-            gis.mask.hide();
-        }
-    };
-
-    loadOrganisationUnits = function (view) {
-        var items = view.rows[0].items,
-            propertyMap = {
-                'name': 'name',
-                'displayName': 'name',
-                'shortName': 'shortName',
-                'displayShortName': 'shortName'
-            },
-            keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty,
-            displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[view.displayProperty] || 'name',
-            url = function () {
-                var params = '?ou=ou:';
-
-                for (var i = 0; i < items.length; i++) {
-                    params += items[i].id;
-                    params += i !== items.length - 1 ? ';' : '';
-                }
-
-                params += '&displayProperty=' + displayProperty.toUpperCase();
-
-                if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
-                    params += '&userOrgUnit=';
-
-                    for (var i = 0; i < view.userOrgUnit.length; i++) {
-                        params += view.userOrgUnit[i] + (i < view.userOrgUnit.length - 1 ? ';' : '');
-                    }
-                }
-
-                return gis.init.apiPath + 'geoFeatures.json' + params;
-            }(),
-            success,
-            failure;
-
-        success = function (r) {
-            var features = gis.util.geojson.decode(r, 'ASC');
+        const success = function (r) {
+            const features = gis.util.geojson.decode(r, 'ASC');
 
             if (!features.length) {
                 if (gis.mask) {
@@ -190,61 +47,45 @@ export default function LayerHandlerThematic(gis, layer) {
             loadData(view, features);
         };
 
-        failure = function () {
-            if (gis.mask) {
-                gis.mask.hide();
-            }
-            gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
-        };
-
         Ext.Ajax.request({
             url: encodeURI(url),
             disableCaching: false,
-            success: function (r) {
+            success (r) {
                 success(JSON.parse(r.responseText));
             },
-            failure: function () {
-                failure();
+            failure() {
+                if (gis.mask) {
+                    gis.mask.hide();
+                }
+                gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
             }
         });
     };
 
-    loadData = function (view, features) {
-        var success;
-
+    // Load data
+    const loadData = function (view, features) {
         view = view || layer.view;
         features = features || layer.featureStore.features;
 
-        var dimConf = gis.conf.finals.dimension,
-            paramString = '?',
-            dxItems = view.columns[0].items,
-            isOperand = view.columns[0].dimension === dimConf.operand.objectName,
-            peItems = view.filters[0].items,
-            ouItems = view.rows[0].items,
-            propertyMap = {
-                'name': 'name',
-                'displayName': 'name',
-                'shortName': 'shortName',
-                'displayShortName': 'shortName'
-            },
-            keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty,
-            displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[view.displayProperty] || 'name';
+        const dimConf = gis.conf.finals.dimension;
+        const dxItems = view.columns[0].items;
+        const isOperand = view.columns[0].dimension === dimConf.operand.objectName;
+        const peItems = view.filters[0].items;
+        const ouItems = view.rows[0].items;
+        const propertyMap = {
+            'name': 'name',
+            'displayName': 'name',
+            'shortName': 'shortName',
+            'displayShortName': 'shortName'
+        };
+        const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty;
+        const displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[view.displayProperty] || 'name';
 
         // ou
-        paramString += 'dimension=ou:';
-
-        for (var i = 0; i < ouItems.length; i++) {
-            paramString += ouItems[i].id;
-            paramString += i < ouItems.length - 1 ? ';' : '';
-        }
+        let paramString = '?dimension=ou:' + ouItems.map(item => item.id).join(';');
 
         // dx
-        paramString += '&dimension=dx:';
-
-        for (var i = 0; i < dxItems.length; i++) {
-            paramString += isOperand ? dxItems[i].id.split('.')[0] : dxItems[i].id;
-            paramString += i < dxItems.length - 1 ? ';' : '';
-        }
+        paramString += '&dimension=dx:' + dxItems.map(item => isOperand ? item.id.split('.')[0] : item.id).join(';');
 
         if (view.valueType === 'ds') {
             paramString += '.REPORTING_RATE';
@@ -253,22 +94,13 @@ export default function LayerHandlerThematic(gis, layer) {
         paramString += isOperand ? '&dimension=co' : '';
 
         // pe
-        paramString += '&filter=pe:';
-
-        for (var i = 0; i < peItems.length; i++) {
-            paramString += peItems[i].id;
-            paramString += i < peItems.length - 1 ? ';' : '';
-        }
+        paramString += '&filter=pe:' + peItems.map(item => item.id).join(';');
 
         // display property
         paramString += '&displayProperty=' + displayProperty.toUpperCase();
 
         if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
-            paramString += '&userOrgUnit=';
-
-            for (var i = 0; i < view.userOrgUnit.length; i++) {
-                paramString += view.userOrgUnit[i] + (i < view.userOrgUnit.length - 1 ? ';' : '');
-            }
+            paramString += '&userOrgUnit=' + view.userOrgUnit.join(';');
         }
 
         // relative period date
@@ -276,14 +108,15 @@ export default function LayerHandlerThematic(gis, layer) {
             paramString += '&relativePeriodDate=' + view.relativePeriodDate;
         }
 
-        success = function (json) {
-            var response = gis.api.response.Response(json), // validate
-                featureMap = {},
-                valueMap = {},
-                ouIndex,
-                valueIndex,
-                valueFeatures = [], // only include features with values
-                values = []; // to find min and max values
+        const success = function (json) {
+            const response = gis.api.response.Response(json); // validate
+            const featureMap = {};
+            const valueMap = {};
+            const valueFeatures = []; // only include features with values
+            const values = []; // to find min and max values
+
+            let ouIndex;
+            let valueIndex;
 
             if (!response) {
                 if (gis.mask) {
@@ -293,7 +126,7 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
             // ou index, value index
-            for (var i = 0; i < response.headers.length; i++) {
+            for (let i = 0; i < response.headers.length; i++) {
                 if (response.headers[i].name === dimConf.organisationUnit.dimensionName) {
                     ouIndex = i;
                 }
@@ -303,29 +136,24 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
             // Feature map
-            for (var i = 0, id; i < features.length; i++) {
-                var id = features[i].id;
-                featureMap[id] = true;
-            }
+            features.forEach(feature => {
+                featureMap[feature.id] = true;
+            });
 
             // Value map
-            for (var i = 0; i < response.rows.length; i++) {
-                var id = response.rows[i][ouIndex],
-                    value = parseFloat(response.rows[i][valueIndex]);
+            response.rows.forEach(row => {
+                valueMap[row[ouIndex]] = parseFloat(row[valueIndex]);
+            });
 
-                valueMap[id] = value;
-            }
-
-            for (var i = 0; i < features.length; i++) {
-                var feature = features[i],
-                    id = feature.id;
+            features.forEach(feature => {
+                const id = feature.id;
 
                 if (featureMap.hasOwnProperty(id) && valueMap.hasOwnProperty(id)) {
                     feature.properties.value = valueMap[id];
                     valueFeatures.push(feature);
                     values.push(valueMap[id]);
                 }
-            }
+            });
 
             // Sort values in ascending order
             values.sort(function (a, b) {
@@ -347,42 +175,40 @@ export default function LayerHandlerThematic(gis, layer) {
         Ext.Ajax.request({
             url: encodeURI(gis.init.apiPath + 'analytics.json' + paramString),
             disableCaching: false,
-            failure: function (r) {
+            failure(r) {
                 gis.alert(r);
             },
-            success: function (r) {
+            success(r) {
                 success(JSON.parse(r.responseText));
             }
         });
     };
 
-    loadLegend = function (view, metaData, features, values) {
-        var dimConf = gis.conf.finals.dimension,
-            metaData = metaData || gis.data.metaData,
-            features = features || gis.data.features,
-            values = values || gis.data.values,
-            bounds = [],
-            colors = [],
-            names = [],
-            legends = [],
-            count = {}, // number in each class
-            addNames,
-            fn,
-            loadLegendSet;
-
+    const loadLegend = function (view, metaData, features, values) {
         view = view || layer.view;
+        metaData = metaData || gis.data.metaData;
+        features = features || gis.data.features;
+        values = values || gis.data.values;
 
-        addNames = function(response) {
+        const dimConf = gis.conf.finals.dimension;
+        const bounds = [];
+        const colors = [];
+        const names = [];
+        const count = {}; // number in each class
+
+        let legends = [];
+
+        const addNames = function(response) {
 
             // All dimensions
-            var dimensions = arrayClean([].concat(view.columns || [], view.rows || [], view.filters || [])),
-                metaData = response.metaData,
-                peIds = metaData[dimConf.period.objectName];
+            const dimensions = arrayClean([].concat(view.columns || [], view.rows || [], view.filters || []));
+            const metaData = response.metaData;
+            const peIds = metaData[dimConf.period.objectName];
 
-            for (var i = 0, dimension; i < dimensions.length; i++) {
+            for (let i = 0, dimension; i < dimensions.length; i++) {
                 dimension = dimensions[i];
 
-                for (var j = 0, item; j < dimension.items.length; j++) {
+                for (let j = 0, item; j < dimension.items.length; j++) {
                     item = dimension.items[j];
                     item.name = metaData.names[item.id];
                 }
@@ -392,10 +218,10 @@ export default function LayerHandlerThematic(gis, layer) {
             view.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]];
         };
 
-        fn = function () {
+        const fn = function () {
             addNames(gis.response);
 
-            var options = { // Classification options
+            const options = { // Classification options
                 indicator: gis.conf.finals.widget.value,
                 method: view.method,
                 numClasses: view.classes,
@@ -420,7 +246,7 @@ export default function LayerHandlerThematic(gis, layer) {
             afterLoad(view);
         };
 
-        loadLegendSet = function (view) {
+        const loadLegendSet = function (view) {
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + 'legendSets/' + view.legendSet.id + '.json?fields=' + gis.conf.url.legendSetFields.join(',')),
                 scope: this,
@@ -430,7 +256,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
                     arraySort(legends, 'ASC', 'startValue');
 
-                    for (var i = 0; i < legends.length; i++) {
+                    for (let i = 0; i < legends.length; i++) {
                         if (bounds[bounds.length - 1] !== legends[i].startValue) {
                             if (bounds.length !== 0) {
                                 colors.push('#F0F0F0');
@@ -459,13 +285,13 @@ export default function LayerHandlerThematic(gis, layer) {
             loadLegendSet(view);
         }
         else {
-            var elementMap = {
-                    'in': 'indicators',
-                    'de': 'dataElements',
-                    'ds': 'dataSets'
-                },
-                elementUrl = elementMap[view.columns[0].objectName],
-                id = view.columns[0].items[0].id;
+            const elementMap = {
+                'in': 'indicators',
+                'de': 'dataElements',
+                'ds': 'dataSets'
+            };
+            const elementUrl = elementMap[view.columns[0].objectName];
+            const id = view.columns[0].items[0].id;
 
             if (!elementUrl) {
                 fn();
@@ -475,8 +301,8 @@ export default function LayerHandlerThematic(gis, layer) {
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + '' + elementUrl + '.json?fields=legendSet[id,displayName|rename(name)]&paging=false&filter=id:eq:' + id),
                 success: function (r) {
-                    var elements = JSON.parse(r.responseText)[elementUrl],
-                        set;
+                    const elements = JSON.parse(r.responseText)[elementUrl];
+                    let set;
 
                     if (arrayFrom(elements).length) {
                         set = isObject(elements[0]) ? elements[0].legendSet || null : null;
@@ -498,19 +324,17 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     // Calculate bounds and assign color to features based on value
-    applyClassification = function (options, features, values) {
-        var method = options.method,
-            bounds = [],
-            colors = [];
+    const applyClassification = function (options, features, values) {
+        const method = options.method;
+        let bounds = [];
+        let colors = [];
 
         if (method === 1) { // predefined bounds
-
             bounds = options.bounds;
             colors = options.colors;
 
         } else if (method === 2) { // equal intervals
-
-            for (var i = 0; i <= options.numClasses; i++) {
+            for (let i = 0; i <= options.numClasses; i++) {
                 bounds[i] = options.minValue + i * (options.maxValue - options.minValue) / options.numClasses;
             }
             options.bounds = bounds;
@@ -520,9 +344,8 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
         } else if (method === 3) { // quantiles
-
-            var binSize = Math.round(values.length / options.numClasses),
-                binLastValPos = (binSize === 0) ? 0 : binSize;
+            const binSize = Math.round(values.length / options.numClasses);
+            let binLastValPos = (binSize === 0) ? 0 : binSize;
 
             if (values.length > 0) {
                 bounds[0] = values[0];
@@ -537,7 +360,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 bounds.push(values[values.length - 1]);
             }
 
-            for (var j = 0; j < bounds.length; j++) {
+            for (let j = 0; j < bounds.length; j++) {
                 bounds[j] = parseFloat(bounds[j]);
             }
 
@@ -549,7 +372,7 @@ export default function LayerHandlerThematic(gis, layer) {
         }
 
         if (bounds.length) {
-            for (var i = 0, prop, value, classNumber; i < features.length; i++) {
+            for (let i = 0, prop, value, classNumber; i < features.length; i++) {
                 prop = features[i].properties;
                 value = prop[options.indicator];
                 classNumber = getClass(value, bounds);
@@ -567,9 +390,9 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     // Returns class number
-    getClass = function (value, bounds) {
+    const getClass = function (value, bounds) {
         if (value >= bounds[0]) {
-            for (var i = 1; i < bounds.length; i++) {
+            for (let i = 1; i < bounds.length; i++) {
                 if (value < bounds[i]) {
                     return i;
                 }
@@ -582,15 +405,15 @@ export default function LayerHandlerThematic(gis, layer) {
         return null;
     };
 
-    getColorsByRgbInterpolation = function (firstColor, lastColor, nbColors) {
-        var colors = [],
-            colorA = hexToRgb('#' + firstColor),
-            colorB = hexToRgb('#' + lastColor);
+    const getColorsByRgbInterpolation = function (firstColor, lastColor, nbColors) {
+        const colors = [];
+        const colorA = hexToRgb('#' + firstColor);
+        const colorB = hexToRgb('#' + lastColor);
 
         if (nbColors == 1) {
             return ['#' + firstColor];
         }
-        for (var i = 0; i < nbColors; i++) {
+        for (let i = 0; i < nbColors; i++) {
             colors.push(rgbToHex({
                 r: parseInt(colorA.r + i * (colorB.r - colorA.r) / (nbColors - 1)),
                 g: parseInt(colorA.g + i * (colorB.g - colorA.g) / (nbColors - 1)),
@@ -601,8 +424,8 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     // Convert hex color to RGB
-    hexToRgb = function (hex) {
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    const hexToRgb = function (hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
             r: parseInt(result[1], 16),
             g: parseInt(result[2], 16),
@@ -611,14 +434,13 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     // Convert RGB color to hex
-    rgbToHex = function (rgb) {
+    const rgbToHex = function (rgb) {
         return "#" + ((1 << 24) + (rgb.r << 16) + (rgb.g << 8) + rgb.b).toString(16).slice(1);
     };
 
     // Add layer to map
-    updateMap = function (view, features) {
-
-        var layerConfig = Ext.applyIf({
+    const updateMap = function (view, features) {
+        const layerConfig = Ext.applyIf({
             data: features,
             hoverLabel: '{name} ({value})'
         }, layer.config);
@@ -646,35 +468,31 @@ export default function LayerHandlerThematic(gis, layer) {
         layer.view = view;
     };
 
-    onFeatureClick = function (evt) {
+    const onFeatureClick = function (evt) {
         GIS.core.FeaturePopup(gis, evt.layer);
     };
 
-    onFeatureRightClick = function (evt) {
+    const onFeatureRightClick = function (evt) {
         L.DomEvent.stopPropagation(evt); // Don't propagate to map right-click
-        contextMenu = GIS.core.ContextMenu(gis, layer, evt.layer, evt.latlng);
+        const contextMenu = GIS.core.ContextMenu(gis, layer, evt.layer, evt.latlng);
         contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y]);
     };
 
-    updateLegend = function (view, metaData, options) {
-        var bounds = options.bounds,
-            colors = options.colors,
-            legendNames = view.legendSet ? view.legendSet.names || {} : {},
-            //imageLegendConfig = [],
-            html,
-            id,
-            name;
+    const updateLegend = function (view, metaData, options) {
+        const bounds = options.bounds;
+        const colors = options.colors;
+        const legendNames = view.legendSet ? view.legendSet.names || {} : {};
 
         // title
-        id = view.columns[0].items[0].id;
+        let id = view.columns[0].items[0].id;
 
         // event data items
         if (view.valueType === 'di') {
             id = view.program.id + '.' + id;
         }
 
-        name = view.columns[0].items[0].name;
-        html = '<div class="dhis2-legend"><h2>' + (metaData.names[id] || name || id);
+        let name = view.columns[0].items[0].name;
+        let html = '<div class="dhis2-legend"><h2>' + (metaData.names[id] || name || id);
 
         // period
         id = view.filters[0].items[0].id;
@@ -685,7 +503,7 @@ export default function LayerHandlerThematic(gis, layer) {
         if (view.method === 1 && view.legendSet) {
             html += '<dl class="dhis2-legend-predefined">';
 
-            for (var i = 0, name, label; i < bounds.length - 1; i++) {
+            for (let i = 0, name, label; i < bounds.length - 1; i++) {
                 name = legendNames[i];
                 label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
                 html += '<dt style="background-color:' + colors[i] + ';"></dt>';
@@ -695,7 +513,7 @@ export default function LayerHandlerThematic(gis, layer) {
         else {
             html += '<dl class="dhis2-legend-automatic">';
 
-            for (var i = 0, label; i < bounds.length - 1; i++) {
+            for (let i = 0, label; i < bounds.length - 1; i++) {
                 label = bounds[i].toFixed(1) + ' - ' + bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')';
                 html += '<dt style="background-color:' + colors[i] + ';"></dt>';
                 html += '<dd>' + label + '</dd>';
@@ -717,9 +535,9 @@ export default function LayerHandlerThematic(gis, layer) {
                 gis.legend.setContent(gis.legend.getContent() + html);
             }
         }
-    },
+    };
 
-    afterLoad = function(view) {
+    const afterLoad = function(view) {
 
         // Legend
         if (gis.viewport) {
@@ -774,8 +592,7 @@ export default function LayerHandlerThematic(gis, layer) {
         }
     };
 
-    loader = {
-        compare: false,
+    const loader = {
         updateGui: false,
         zoomToVisibleExtent: false,
         hideMask: false,
@@ -786,12 +603,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 gis.mask.show();
             }
 
-            if (this.compare) {
-                compareView(view, true);
-            }
-            else {
-                loadOrganisationUnits(view);
-            }
+            loadOrganisationUnits(view);
         },
         loadData: loadData,
         loadLegend: loadLegend

@@ -1558,7 +1558,49 @@ export default function LayerWidgetThematic(gis, layer) {
         height: 34,
     });
 
-    const legend = Ext.create('Ext.panel.Panel', {
+    const aggregationType = Ext.create('Ext.form.field.ComboBox', {
+        cls: 'gis-combo',
+        style: 'padding-top: 10px;',
+        fieldLabel: GIS.i18n.aggregation_type,
+        labelWidth: gis.conf.layout.widget.itemlabel_width,
+        editable: false,
+        valueField: 'id',
+        displayField: 'name',
+        queryMode: 'local',
+        width: gis.conf.layout.widget.item_width,
+        // value: optionConfig.getAggregationType('def').id,
+        store: Ext.create('Ext.data.Store', {
+            fields: ['id', 'name'],
+            data: [{
+                id: 'DEFAULT',
+                name: GIS.i18n.by_data_element || 'By data element'
+            },{
+                id: 'COUNT',
+                name: GIS.i18n.count || 'Count'
+            },{
+                id: 'AVERAGE',
+                name: GIS.i18n.average || 'Average'
+            },{
+                id: 'SUM',
+                name: GIS.i18n.sum || 'Sum'
+            },{
+                id: 'STDDEV',
+                name: GIS.i18n.stddev || 'Standard deviation'
+            },{
+                id: 'VARIANCE',
+                name: GIS.i18n.variance || 'Variance'
+            },{
+                id: 'MIN',
+                name: GIS.i18n.min || 'Min'
+            },{
+                id: 'MAX',
+                name: GIS.i18n.max || 'Max'
+            }]
+            //data: optionConfig.getAggregationTypeRecords()
+        })
+    });
+
+    const options = Ext.create('Ext.panel.Panel', {
         title: '<div class="ns-panel-title-data">' + GIS.i18n.options + '</div>',
         hideCollapseTool: true,
         items: [
@@ -1568,38 +1610,14 @@ export default function LayerWidgetThematic(gis, layer) {
             colorScale,
             lowPanel,
             highPanel,
-            labelPanel
+            labelPanel,
+            aggregationType
         ],
         listeners: {
             added: function() {
                 accordionPanels.push(this);
             }
         }
-    });
-
-    const aggregationType = Ext.create('Ext.form.field.ComboBox', {
-        cls: 'gis-combo',
-        fieldLabel: GIS.i18n.aggregation_type,
-        labelWidth: gis.conf.layout.widget.itemlabel_width,
-
-        /*
-        editable: false,
-        valueField: 'id',
-        displayField: 'name',
-        queryMode: 'local',
-        value: gis.conf.finals.widget.legendtype_automatic,
-        width: gis.conf.layout.widget.item_width,
-        */
-
-        queryMode: 'local',
-        valueField: 'id',
-        displayField: 'name',
-        editable: false,
-        //value: optionConfig.getAggregationType('def').id,
-        store: Ext.create('Ext.data.Store', {
-            fields: ['id', 'name', 'index'],
-            //data: optionConfig.getAggregationTypeRecords()
-        })
     });
 
     // Functions
@@ -1926,6 +1944,7 @@ export default function LayerWidgetThematic(gis, layer) {
         view.radiusLow = parseInt(radiusLow.getValue());
         view.radiusHigh = parseInt(radiusHigh.getValue());
         view.opacity = layer.layerOpacity;
+        view.aggregationType = aggregationType.getValue();
 
         if (view.method !== 1) {
             view.colorScale = colorScale.getValue().join();
@@ -1953,7 +1972,7 @@ export default function LayerWidgetThematic(gis, layer) {
             const panels = [
                 data,
                 organisationUnit,
-                legend
+                options
             ];
 
             panels[panels.length - 1].cls = 'ns-accordion-last'; // TODO: Always legend?

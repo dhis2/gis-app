@@ -436,6 +436,8 @@ export default function LayerWidgetThematic(gis, layer) {
                 indicator.clearValue();
 
                 indicator.store.proxy.url = encodeURI(gis.init.apiPath + 'indicators.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&paging=false&filter=indicatorGroups.id:eq:' + this.getValue());
+                console.log(gis.init.apiPath + 'indicators.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&paging=false&filter=indicatorGroups.id:eq:' + this.getValue());
+
                 indicator.store.load();
             }
         }

@@ -1002,6 +1002,11 @@ export default function getInstance(init) {
                     layout.relativePeriodDate = support.prototype.date.getYYYYMMDD(config.relativePeriodDate);
                 }
 
+                // Aggregation type
+                if (config.aggregationType) {
+                    layout.aggregationType = config.aggregationType;
+                }
+
                 return Ext.apply(layout, forceApplyConfig);
             }();
         };

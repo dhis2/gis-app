@@ -9,6 +9,9 @@ export default function LayerHandlerThematic(gis, layer) {
 
     // Load organisation units
     const loadOrganisationUnits = function (view) {
+        console.log('loadOrganisationUnits', view);
+
+
         const items = view.rows[0].items;
         const propertyMap = {
             'name': 'name',
@@ -34,9 +37,6 @@ export default function LayerHandlerThematic(gis, layer) {
             const features = gis.util.geojson.decode(r, 'ASC');
 
             if (!features.length) {
-                if (gis.mask) {
-                    gis.mask.hide();
-                }
                 gis.alert(GIS.i18n.no_valid_coordinates_found);
                 return;
             }
@@ -54,9 +54,6 @@ export default function LayerHandlerThematic(gis, layer) {
                 success(JSON.parse(r.responseText));
             },
             failure() {
-                if (gis.mask) {
-                    gis.mask.hide();
-                }
                 gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
             }
         });
@@ -108,6 +105,10 @@ export default function LayerHandlerThematic(gis, layer) {
             paramString += '&relativePeriodDate=' + view.relativePeriodDate;
         }
 
+        if (view.aggregationType) {
+            paramString += '&aggregationType=' + view.aggregationType;
+        }
+
         const success = function (json) {
             const response = gis.api.response.Response(json); // validate
             const featureMap = {};
@@ -150,6 +151,11 @@ export default function LayerHandlerThematic(gis, layer) {
 
                 if (featureMap.hasOwnProperty(id) && valueMap.hasOwnProperty(id)) {
                     feature.properties.value = valueMap[id];
+
+                    // TODO: better way?
+                    console.log('view', view);
+
+
                     valueFeatures.push(feature);
                     values.push(valueMap[id]);
                 }
@@ -171,6 +177,8 @@ export default function LayerHandlerThematic(gis, layer) {
 
             loadLegend(view);
         };
+
+        console.log(gis.init.apiPath + 'analytics.json' + paramString);
 
         Ext.Ajax.request({
             url: encodeURI(gis.init.apiPath + 'analytics.json' + paramString),
@@ -349,7 +357,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
             if (values.length > 0) {
                 bounds[0] = values[0];
-                for (i = 1; i < options.numClasses; i++) {
+                for (let i = 1; i < options.numClasses; i++) {
                     bounds[i] = values[binLastValPos];
                     binLastValPos += binSize;
 
@@ -469,7 +477,22 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     const onFeatureClick = function (evt) {
-        GIS.core.FeaturePopup(gis, evt.layer);
+
+        // TODO: optimize!
+        const view = layer.view;
+        const indicator = view.columns[0].items[0].name;
+        const period = view.filters[0].items[0].name;
+        const name = evt.layer.feature.properties.name;
+        const value = evt.layer.feature.properties.value;
+        const unit = '';
+        const content = '<strong style="font-weight:bold;">' + name + '</strong><br>' + indicator + '<br>' + period + ': ' + value + ' ' + unit;
+
+        L.popup()
+            .setLatLng(evt.latlng)
+            .setContent(content)
+            .openOn(gis.instance);
+
+        // GIS.core.FeaturePopup(gis, evt.layer);
     };
 
     const onFeatureRightClick = function (evt) {

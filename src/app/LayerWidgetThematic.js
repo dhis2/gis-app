@@ -369,6 +369,7 @@ export default function LayerWidgetThematic(gis, layer) {
     const legendTypeToggler = function(legendType) {
         if (legendType === 'automatic') {
             methodPanel.show();
+            method.setValue(2); // Equal counts as default
             colorScale.show();
             colorLow.enable();
             lowPanelLabel.update(GIS.i18n.low_color_size + ':');
@@ -1391,7 +1392,7 @@ export default function LayerWidgetThematic(gis, layer) {
         valueField: 'id',
         displayField: 'name',
         queryMode: 'local',
-        value: gis.conf.finals.widget.legendtype_automatic,
+        value: 'automatic',
         width: gis.conf.layout.widget.item_width,
         store: Ext.create('Ext.data.ArrayStore', {
             fields: ['id', 'name'],
@@ -1449,8 +1450,8 @@ export default function LayerWidgetThematic(gis, layer) {
         valueField: 'id',
         displayField: 'name',
         queryMode: 'local',
-        value: 3,
         width: 137,
+        value: 3,
         store: Ext.create('Ext.data.ArrayStore', {
             fields: ['id', 'name'],
             data: [
@@ -1663,7 +1664,7 @@ export default function LayerWidgetThematic(gis, layer) {
         period.store.removeAll();
 
         legendType.reset();
-        legendTypeToggler(gis.conf.finals.widget.legendtype_automatic);
+        legendTypeToggler('automatic');
         legendSet.clearValue();
         legendSet.store.removeAll();
 
@@ -1810,7 +1811,7 @@ export default function LayerWidgetThematic(gis, layer) {
             legendType.setValue(legType);
             legendTypeToggler(legType);
 
-            if (legType === gis.conf.finals.widget.legendtype_automatic) {
+            if (legType === 'automatic') {
                 classes.setValue(view.classes);
                 method.setValue(view.method);
 
@@ -1822,7 +1823,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 radiusLow.setValue(view.radiusLow);
                 radiusHigh.setValue(view.radiusHigh);
             }
-            else if (legType === gis.conf.finals.widget.legendtype_predefined) {
+            else if (legType === 'predefined') {
                 method.setValue(1);
                 legendSet.store.add(view.legendSet);
                 legendSet.setValue(view.legendSet.id);
@@ -1894,7 +1895,7 @@ export default function LayerWidgetThematic(gis, layer) {
         // id
         view.layer = layer.id;
 
-        // value type TODO?
+        // value type
         view.valueType = dxObjectName;
 
         // dx
@@ -1939,7 +1940,10 @@ export default function LayerWidgetThematic(gis, layer) {
 
         // options
         view.classes = parseInt(classes.getValue());
-        view.method = legendType.getValue() === 'automatic' ? parseInt(method.getValue()) : 1;
+
+
+        view.method = legendType.getValue() === 'predefined' ? 1 : parseInt(method.getValue());
+
         view.colorLow = colorLow.getValue();
         view.colorHigh = colorHigh.getValue();
         view.radiusLow = parseInt(radiusLow.getValue());

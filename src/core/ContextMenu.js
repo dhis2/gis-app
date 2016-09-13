@@ -88,10 +88,14 @@ export default function ContextMenu(gis, layer, instance, latlng) {
 
         // Infrastructural data
         const showInfo = function() {
+
+            // Load info about organisation unit
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + 'organisationUnits/' + att.id + '.json?fields=id,' + gis.init.namePropertyUrl + ',code,address,email,phoneNumber,coordinates,parent[id,' + gis.init.namePropertyUrl + '],organisationUnitGroups[id,' + gis.init.namePropertyUrl + ']'),
                 success(r) {
                     const ou = JSON.parse(r.responseText);
+
+                    console.log('ou', ou);
 
                     if (layer.infrastructuralWindow) {
                         layer.infrastructuralWindow.destroy();
@@ -137,9 +141,12 @@ export default function ContextMenu(gis, layer, instance, latlng) {
                                         a.push({html: GIS.i18n.phone_number, cls: 'gis-panel-html-title'}, {html: ou.phoneNumber, cls: 'gis-panel-html'}, {cls: 'gis-panel-html-separator'});
                                     }
 
-                                    if (isString(ou.coordinates)) {
-                                        const co = ou.coordinates.replace("[","").replace("]","").replace(",",", ");
-                                        a.push({html: GIS.i18n.coordinates, cls: 'gis-panel-html-title'}, {html: co, cls: 'gis-panel-html'}, {cls: 'gis-panel-html-separator'});
+                                    if (isString(ou.coordinates)) { // TODO: We don't need to download coordinates
+                                        var co = JSON.parse(ou.coordinates);
+
+                                        if (typeof co[0] === 'number') {
+                                            a.push({html: GIS.i18n.coordinates, cls: 'gis-panel-html-title'}, {html: co.join(', '), cls: 'gis-panel-html'}, {cls: 'gis-panel-html-separator'});
+                                        }
                                     }
 
                                     if (isArray(ou.organisationUnitGroups) && ou.organisationUnitGroups.length) {
@@ -383,6 +390,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
                 }
             }));
 
+            /*
             menuItems.push( Ext.create('Ext.menu.Item', {
                 text: GIS.i18n.show_information_sheet,
                 iconCls: 'gis-menu-item-icon-information',
@@ -390,7 +398,15 @@ export default function ContextMenu(gis, layer, instance, latlng) {
                     showInfo();
                 }
             }));
+            */
         }
+
+        menuItems.push( Ext.create('Ext.menu.Item', {
+            text: GIS.i18n.show_information_sheet,
+            iconCls: 'gis-menu-item-icon-information',
+            handler: showInfo
+        }));
+
     }
 
     if (latlng && !(instance && instance.feature.geometry.type === 'Point')) {

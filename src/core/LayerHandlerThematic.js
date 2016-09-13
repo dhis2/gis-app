@@ -9,9 +9,6 @@ export default function LayerHandlerThematic(gis, layer) {
 
     // Load organisation units
     const loadOrganisationUnits = function (view) {
-        console.log('loadOrganisationUnits', view);
-
-
         const items = view.rows[0].items;
         const propertyMap = {
             'name': 'name',
@@ -151,11 +148,6 @@ export default function LayerHandlerThematic(gis, layer) {
 
                 if (featureMap.hasOwnProperty(id) && valueMap.hasOwnProperty(id)) {
                     feature.properties.value = valueMap[id];
-
-                    // TODO: better way?
-                    console.log('view', view);
-
-
                     valueFeatures.push(feature);
                     values.push(valueMap[id]);
                 }
@@ -177,8 +169,6 @@ export default function LayerHandlerThematic(gis, layer) {
 
             loadLegend(view);
         };
-
-        console.log(gis.init.apiPath + 'analytics.json' + paramString);
 
         Ext.Ajax.request({
             url: encodeURI(gis.init.apiPath + 'analytics.json' + paramString),
@@ -492,7 +482,7 @@ export default function LayerHandlerThematic(gis, layer) {
             .setContent(content)
             .openOn(gis.instance);
 
-        // GIS.core.FeaturePopup(gis, evt.layer);
+        GIS.core.FeaturePopup(gis, evt.layer); // TODO: Remove
     };
 
     const onFeatureRightClick = function (evt) {

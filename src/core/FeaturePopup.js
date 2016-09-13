@@ -1,3 +1,5 @@
+// TODO: Remove?
+
 export default function FeaturePopup(gis, instance) {
 
     // systemSettings is currently not set for plugins
@@ -20,6 +22,8 @@ export default function FeaturePopup(gis, instance) {
             getData,
             getParamString;
 
+
+        console.log(period);
 
         success = function(r) {
             var html = '<h2>' + feature.properties.name + '</h2>',
@@ -66,7 +70,7 @@ export default function FeaturePopup(gis, instance) {
                     '<p>To change groups, please go to general settings.</p>';
             }
 
-            instance.bindPopup(html).openPopup();
+            // instance.bindPopup(html).openPopup();
             gis.mask.hide();
         };
 

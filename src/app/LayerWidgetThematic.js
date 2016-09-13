@@ -913,7 +913,7 @@ export default function LayerWidgetThematic(gis, layer) {
         },
         multiSelect: true,
         rendered: false,
-        reset: function() {
+        reset() {
             const rootNode = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
             this.collapseAll();
             this.expandPath(rootNode.getPath());
@@ -1230,12 +1230,14 @@ export default function LayerWidgetThematic(gis, layer) {
             data: gis.init.organisationUnitLevels
         },
         listeners: {
-            added() { // Set second org.unit level as default
-                const secondLevel = this.getStore().getAt(1);
-
-                if (secondLevel) {
-                    this.setValue(secondLevel);
-                }
+            added() {
+                this.reset();
+            }
+        },
+        reset() { // Set second org.unit level as default
+            const secondLevel = this.getStore().getAt(1);
+            if (secondLevel) {
+                this.setValue(secondLevel);
             }
         }
     });
@@ -1685,7 +1687,7 @@ export default function LayerWidgetThematic(gis, layer) {
         userOrganisationUnitChildren.setValue(false);
         userOrganisationUnitGrandChildren.setValue(false);
 
-        organisationUnitLevel.clearValue();
+        organisationUnitLevel.reset();
         organisationUnitGroup.clearValue();
     };
 

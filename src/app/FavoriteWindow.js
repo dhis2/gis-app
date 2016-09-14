@@ -341,6 +341,10 @@ export default function FavoriteWindow(gis) {
                                             basemap: gis.util.map.getBasemap()
                                         };
 
+                                        if (gis.map && gis.map.user) {
+                                            map.user = gis.map.user;
+                                        }
+
                                         Ext.Ajax.request({
                                             url: encodeURI(gis.init.apiPath + 'maps/' + record.data.id),
                                             method: 'PUT',

@@ -256,6 +256,7 @@ export default function getInstance(init) {
 
         conf.url.baseFields = [
             'id',
+            'user',
             'displayName|rename(name)',
             'longitude',
             'latitude',

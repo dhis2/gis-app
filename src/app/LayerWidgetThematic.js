@@ -444,6 +444,7 @@ export default function LayerWidgetThematic(gis, layer) {
     legendTypeToggler = function(legendType) {
         if (legendType === 'automatic') {
             methodPanel.show();
+            method.setValue(2);
             colorScale.show();
             colorLow.enable();
             lowPanelLabel.update(GIS.i18n.low_color_size + ':');

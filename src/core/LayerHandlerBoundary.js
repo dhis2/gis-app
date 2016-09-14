@@ -4,22 +4,11 @@ import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 import arrayUnique from 'd2-utilizr/lib/arrayUnique';
 
 export default function LayerHandlerBoundary(gis, layer) {
-    var compareView,
-        loadOrganisationUnits,
-        loadData,
-        afterLoad,
-        loader,
-        contextMenu,
-        onFeatureClick,
-        onFeatureRightClick,
-        onMapClick;
 
-    compareView = function(view, doExecute) {
-        var src = layer.view,
-            viewIds,
-            viewDim,
-            srcIds,
-            srcDim;
+    let contextMenu;
+
+    const compareView = function(view, doExecute) {
+        const src = layer.view;
 
         if (!src) {
             if (doExecute) {
@@ -28,20 +17,15 @@ export default function LayerHandlerBoundary(gis, layer) {
             return gis.conf.finals.widget.loadtype_organisationunit;
         }
 
-        viewIds = [];
-        viewDim = view.rows[0];
-        srcIds = [];
-        srcDim = src.rows[0];
+        const viewIds = [];
+        const viewDim = view.rows[0];
+        const srcIds = [];
+        const srcDim = src.rows[0];
 
         // organisation units
         if (viewDim.items.length === srcDim.items.length) {
-            for (var i = 0; i < viewDim.items.length; i++) {
-                viewIds.push(viewDim.items[i].id);
-            }
-
-            for (var i = 0; i < srcDim.items.length; i++) {
-                srcIds.push(srcDim.items[i].id);
-            }
+            viewDim.items.forEach(item => viewIds.push(item.id));
+            srcDim.items.forEach(item => srcIds.push(item.id));
 
             if (arrayDifference(viewIds, srcIds).length !== 0) {
                 if (doExecute) {
@@ -65,45 +49,34 @@ export default function LayerHandlerBoundary(gis, layer) {
         }
     };
 
-    loadOrganisationUnits = function(view) {
-        var items = view.rows[0].items,
-            propertyMap = {
-                'name': 'name',
-                'displayName': 'name',
-                'shortName': 'shortName',
-                'displayShortName': 'shortName'
-            },
-            keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty,
-            displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name',
-            url = function() {
-                var params = '?ou=ou:';
+    const loadOrganisationUnits = function(view) {
+        const items = view.rows[0].items;
+        const propertyMap = {
+            'name': 'name',
+            'displayName': 'name',
+            'shortName': 'shortName',
+            'displayShortName': 'shortName'
+        };
+        const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty;
+        const displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name';
+        const url = function() {
+            let params = '?ou=ou:' + items.map(item => item.id).join(';');
 
-                for (var i = 0; i < items.length; i++) {
-                    params += items[i].id;
-                    params += i !== items.length - 1 ? ';' : '';
-                }
+            params += '&displayProperty=' + displayProperty.toUpperCase();
 
-                params += '&displayProperty=' + displayProperty.toUpperCase();
+            if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
+                params += '&userOrgUnit=' + view.userOrgUnit.map(unit => unit).join(';');
+            }
 
-                if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
-                    params += '&userOrgUnit=';
+            return gis.init.apiPath + 'geoFeatures.json' + params;
+        }();
 
-                    for (var i = 0; i < view.userOrgUnit.length; i++) {
-                        params += view.userOrgUnit[i] + (i < view.userOrgUnit.length - 1 ? ';' : '');
-                    }
-                }
-
-                return gis.init.apiPath + 'geoFeatures.json' + params;
-            }(),
-            success,
-            failure;
-
-        success = function(r) {
-            var features = gis.util.geojson.decode(r, 'ASC'),
-                colors = ['black', 'blue', 'red', 'green', 'yellow'],
-                weights = [2, 1, 0.75, 0.5, 0.5],
-                levels = [],
-                levelStyle = {};
+        const success = function(r) {
+            const features = gis.util.geojson.decode(r, 'ASC');
+            const colors = ['black', 'blue', 'red', 'green', 'yellow'];
+            const weights = [2, 1, 0.75, 0.5, 0.5];
+            const levelStyle = {};
+            let levels = [];
 
             if (!r.length) {
                 gis.mask.hide();
@@ -111,13 +84,13 @@ export default function LayerHandlerBoundary(gis, layer) {
                 return;
             }
 
-            for (var i = 0; i < r.length; i++) {
+            for (let i = 0; i < r.length; i++) {
                 levels.push(parseInt(r[i].le));
             }
 
             levels = arrayUnique(levels).sort();
 
-            for (var i = 0; i < levels.length; i++) {
+            for (let i = 0; i < levels.length; i++) {
                 levelStyle[levels[i]] = {
                     color: colors[i],
                     weight: (levels.length === 1 ? 1 : weights[i])
@@ -125,7 +98,7 @@ export default function LayerHandlerBoundary(gis, layer) {
             }
 
             // Apply feature styles
-            for (var i = 0, feature; i < features.length; i++) {
+            for (let i = 0, feature; i < features.length; i++) {
                 feature = features[i];
                 feature.properties.style = levelStyle[feature.properties.level];
                 feature.properties.labelStyle = {
@@ -140,7 +113,7 @@ export default function LayerHandlerBoundary(gis, layer) {
             loadData(view, features);
         };
 
-        failure = function() {
+        const failure = function() {
             if (gis.mask) {
                 gis.mask.hide();
             }
@@ -159,8 +132,8 @@ export default function LayerHandlerBoundary(gis, layer) {
         });
     };
 
-    loadData = function(view, features) {
-        var layerConfig = Ext.applyIf({
+    const loadData = function(view, features) {
+        const layerConfig = Ext.applyIf({
             data: features || layer.features,
             hoverLabel: '{name}',
         }, layer.config);
@@ -173,6 +146,14 @@ export default function LayerHandlerBoundary(gis, layer) {
                     fontStyle: view.labelFontStyle
                 }
             });
+        }
+
+        if (view.radiusLow) {
+            layerConfig.style = {
+                opacity: 1,
+                radius: view.radiusLow,
+                fillOpacity: 0
+            };
         }
 
         // Remove layer instance if already exist
@@ -196,25 +177,25 @@ export default function LayerHandlerBoundary(gis, layer) {
         afterLoad(view);
     };
 
-    onFeatureClick = function(evt) {
+    const onFeatureClick = function(evt) {
         GIS.core.FeaturePopup(gis, evt.layer);
     };
 
-    onFeatureRightClick = function(evt) {
+    const onFeatureRightClick = function(evt) {
         L.DomEvent.stopPropagation(evt); // Don't propagate to map right-click
         contextMenu = GIS.core.ContextMenu(gis, layer, evt.layer, evt.latlng);
         contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y]);
     };
 
     // Remove context menu on map click
-    onMapClick = function() {
+    const onMapClick = function() {
         if (contextMenu) {
             contextMenu.destroy();
         }
         contextMenu = null;
     };
 
-    afterLoad = function(view) {
+    const afterLoad = function(view) {
 
         // Layer
         if (layer.item) { // Layer stack
@@ -258,7 +239,7 @@ export default function LayerHandlerBoundary(gis, layer) {
 
     };
 
-    loader = {
+    const loader = {
         compare: false,
         updateGui: false,
         zoomToVisibleExtent: false,

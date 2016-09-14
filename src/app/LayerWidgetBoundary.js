@@ -499,10 +499,32 @@ export default function LayerWidgetBoundary(gis, layer) {
         skipColorButton: true
     });
 
-    const label = Ext.create('Ext.panel.Panel', {
+    const radius = Ext.create('Ext.form.field.Number', {
+        cls: 'gis-numberfield',
+        width: 75,
+        allowDecimals: false,
+        minValue: 1,
+        maxValue: 50,
+        value: 5
+    });
+
+    const optionsPanel = Ext.create('Ext.panel.Panel', {
         title: '<div class="ns-panel-title-data">' + GIS.i18n.options + '</div>',
         hideCollapseTool: true,
-        items: labelPanel,
+        items: [labelPanel, {
+            xtype: 'container',
+            layout: 'hbox',
+            style: 'margin-top:5px',
+            items: [
+                {
+                    xtype: 'container',
+                    html: 'Point radius:',
+                    width: 100,
+                    style: 'padding:5px;font-size:11px;'
+                },
+                radius
+            ]
+        }],
         listeners: {
             added() {
                 accordionPanels.push(this);
@@ -541,6 +563,8 @@ export default function LayerWidgetBoundary(gis, layer) {
             layer.searchWindow.destroy();
             layer.searchWindow = null;
         }
+
+        radius.setValue(5);
     };
 
     const setGui = function(view) {
@@ -596,6 +620,10 @@ export default function LayerWidgetBoundary(gis, layer) {
             }
 
             treePanel.selectGraphMap(view.parentGraphMap);
+
+            if (view.radiusLow) {
+                radius.setValue(view.radiusLow);
+            }
         }();
 
 
@@ -620,6 +648,8 @@ export default function LayerWidgetBoundary(gis, layer) {
 
         Ext.apply(view, labelPanel.getConfig());
 
+        view.radiusLow = radius.getValue(); // Reusing map view field from thematic layer
+
         return validateView(view);
     };
 
@@ -642,7 +672,7 @@ export default function LayerWidgetBoundary(gis, layer) {
         items: function() {
             const panels = [
                 organisationUnit,
-                label
+                optionsPanel
             ];
 
             last = panels[panels.length - 1];

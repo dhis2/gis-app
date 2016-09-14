@@ -1045,7 +1045,7 @@ export default function LayerWidgetEvent(gis, layer) {
 
         }();
 
-        setLayerGui = function() {
+        const setLayerGui = function() {
 
             // Layer item
             layer.item.setValue(!view.hidden, view.opacity);

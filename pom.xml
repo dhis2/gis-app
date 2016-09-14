@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <name>GIS</name>
     <description>DHIS 2 GIS APP</description>
-    <url>https://github.com/dhis2/dhis2-gis</url>
+    <url>https://github.com/dhis2/gis-app</url>
     <organization>
         <name>DHIS 2</name>
         <url>https://www.dhis2.org</url>
@@ -32,13 +32,13 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git@github.com:dhis2/dhis2-gis.git</connection>
-        <developerConnection>scm:git:git@github.com:dhis2/dhis2-gis.git</developerConnection>
-        <url>git@github.com:dhis2/dhis2-gis.git</url>
+        <connection>scm:git:git@github.com:dhis2/gis-app.git</connection>
+        <developerConnection>scm:git:git@github.com:dhis2/gis-app.git</developerConnection>
+        <url>git@github.com:dhis2/gis-app.git</url>
     </scm>
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/dhis2/dhis2-gis</url>
+        <url>https://github.com/dhis2/gis-app</url>
     </issueManagement>
     <distributionManagement>
         <snapshotRepository>

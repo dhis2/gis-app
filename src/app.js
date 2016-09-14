@@ -756,12 +756,13 @@ Ext.onReady( function() {
                     // Add zoom control
                     this.map.addControl({
                         type: 'zoom',
-                        position: 'topleft'
+                        position: 'topright'
                     });
 
                     // Add fit bounds control
                     this.map.addControl({
-                        type: 'fitBounds'
+                        type: 'fitBounds',
+                        position: 'topright'
                     });
 
                     // Add scale control
@@ -771,6 +772,7 @@ Ext.onReady( function() {
                     });
 
                     L.control.geocoder(gis.init.systemInfo.mapzenSearchKey, {
+                        position: 'topright',
                         attribution: null,
                         panToPoint: null
                     }).addTo(this.map);
@@ -778,7 +780,7 @@ Ext.onReady( function() {
                     // Add measurement control
                     this.map.addControl({
                         type: 'measure',
-                        position: 'topleft',
+                        position: 'topright',
                         primaryLengthUnit: 'kilometers',
                         secondaryLengthUnit: 'miles',
                         primaryAreaUnit: 'hectares',

@@ -1,30 +1,9 @@
 export default function FavoriteWindow(gis) {
+    const windowWidth = 500;
+    const windowCmpWidth = windowWidth - 14;
 
-    // Objects
-    var NameWindow,
-
-    // Instances
-        nameWindow,
-
-    // Components
-        addButton,
-        searchTextfield,
-        grid,
-        prevButton,
-        nextButton,
-        info,
-        nameTextfield,
-        createButton,
-        updateButton,
-        cancelButton,
-        favoriteWindow,
-
-    // Vars
-        windowWidth = 500,
-        windowCmpWidth = windowWidth - 14;
-
-    gis.store.maps.on('load', function(store, records) {
-        var pager = store.proxy.reader.jsonData.pager;
+    gis.store.maps.on('load', (store, records) => {
+        const pager = store.proxy.reader.jsonData.pager;
 
         if (!pager) {
             return;
@@ -44,11 +23,11 @@ export default function FavoriteWindow(gis) {
         }
     });
 
-    NameWindow = function(id) {
-        var window,
-            record = gis.store.maps.getById(id);
+    // Objects
+    const NameWindow = function(id) {
+        const record = gis.store.maps.getById(id);
 
-        nameTextfield = Ext.create('Ext.form.field.Text', {
+        const nameTextfield = Ext.create('Ext.form.field.Text', {
             height: 26,
             width: 371,
             fieldStyle: 'padding-left: 5px; border-radius: 1px; border-color: #bbb; font-size:11px',
@@ -56,22 +35,19 @@ export default function FavoriteWindow(gis) {
             emptyText: 'Favorite name',
             value: id ? record.data.name : '',
             listeners: {
-                afterrender: function() {
+                afterrender() {
                     this.focus();
                 }
             }
         });
 
-        createButton = Ext.create('Ext.button.Button', {
+        const createButton = Ext.create('Ext.button.Button', {
             text: GIS.i18n.create,
-            handler: function() {
-                var name = nameTextfield.getValue(),
-                    layers = gis.util.map.getVisibleVectorLayers(),
-                    centerPoint = gis.instance.getCenter(),
-                    layer,
-                    views = [],
-                    view,
-                    map;
+            handler() {
+                const name = nameTextfield.getValue();
+                const layers = gis.util.map.getVisibleVectorLayers();
+                const centerPoint = gis.instance.getCenter();
+                const views = [];
 
                 if (!layers.length) {
                     gis.alert('Please create a map first');
@@ -83,10 +59,8 @@ export default function FavoriteWindow(gis) {
                     return;
                 }
 
-                for (var i = 0; i < layers.length; i++) {
-                    layer = layers[i];
-
-                    view = Ext.clone(layer.view);
+                layers.forEach(layer => {
+                    const view = Ext.clone(layer.view);
 
                     // TODO temp fix: https://github.com/dhis2/dhis2-gis/issues/108
                     if (view.legendSet && view.method && (view.method === 2 || view.method === 3)) {
@@ -104,28 +78,24 @@ export default function FavoriteWindow(gis) {
                     delete view.dataDimensionItems;
 
                     views.push(view);
-                }
+                });
 
-                map = {
+                const map = {
                     name: name,
                     longitude: centerPoint.lng,
                     latitude: centerPoint.lat,
                     zoom: gis.instance.getZoom(),
                     basemap: gis.util.map.getBasemap(),
-                    mapViews: views,
-                    user: {
-                        id: 'currentUser'
-                    }
+                    mapViews: views
                 };
-
 
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'maps/'),
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     params: JSON.stringify(map),
-                    success: function(r) {
-                        var id = r.getAllResponseHeaders().location.split('/').pop();
+                    success(r) {
+                        const id = r.getAllResponseHeaders().location.split('/').pop();
 
                         gis.map = {
                             id: id,
@@ -141,16 +111,15 @@ export default function FavoriteWindow(gis) {
             }
         });
 
-        updateButton = Ext.create('Ext.button.Button', {
+        const updateButton = Ext.create('Ext.button.Button', {
             text: GIS.i18n.update,
-            handler: function() {
-                var name = nameTextfield.getValue(),
-                    map;
+            handler() {
+                const name = nameTextfield.getValue();
 
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'maps/' + id + '.json?fields=' + gis.conf.url.mapFields.join(',')),
-                    success: function(r) {
-                        map = JSON.parse(r.responseText);
+                    success(r) {
+                        const map = JSON.parse(r.responseText);
 
                         map.name = name;
 
@@ -159,9 +128,8 @@ export default function FavoriteWindow(gis) {
                             method: 'PUT',
                             headers: {'Content-Type': 'application/json'},
                             params: JSON.stringify(map),
-                            success: function() {
+                            success() {
                                 gis.store.maps.loadStore();
-
                                 window.destroy();
                             }
                         });
@@ -170,14 +138,14 @@ export default function FavoriteWindow(gis) {
             }
         });
 
-        cancelButton = Ext.create('Ext.button.Button', {
+        const cancelButton = Ext.create('Ext.button.Button', {
             text: GIS.i18n.cancel,
-            handler: function() {
+            handler() {
                 window.destroy();
             }
         });
 
-        window = Ext.create('Ext.window.Window', {
+        const window = Ext.create('Ext.window.Window', {
             title: id ? 'Rename favorite' : 'Create new favorite',
             iconCls: 'gis-window-title-icon-favorite',
             bodyStyle: 'padding:1px; background:#fff',
@@ -191,7 +159,7 @@ export default function FavoriteWindow(gis) {
                 id ? updateButton : createButton
             ],
             listeners: {
-                show: function(w) {
+                show(w) {
                     this.setPosition(favoriteWindow.x + 14, favoriteWindow.y + 67);
 
                     if (!w.hasDestroyOnBlurHandler) {
@@ -208,19 +176,19 @@ export default function FavoriteWindow(gis) {
         return window;
     };
 
-    addButton = Ext.create('Ext.button.Button', {
+    const addButton = Ext.create('Ext.button.Button', {
         text: GIS.i18n.add_new,
         width: 67,
         height: 26,
         style: 'border-radius: 1px;',
         menu: {},
-        handler: function() {
-            nameWindow = new NameWindow(null, 'create');
+        handler() {
+            const nameWindow = new NameWindow(null, 'create');
             nameWindow.show();
         }
     });
 
-    searchTextfield = Ext.create('Ext.form.field.Text', {
+    const searchTextfield = Ext.create('Ext.form.field.Text', {
         width: windowCmpWidth - addButton.width - 3,
         height: 26,
         fieldStyle: 'padding-right: 0; padding-left: 4px; border-radius: 1px; border-color: #bbb; font-size:11px',
@@ -229,13 +197,13 @@ export default function FavoriteWindow(gis) {
         currentValue: '',
         listeners: {
             keyup: {
-                fn: function() {
+                fn() {
                     if (this.getValue() !== this.currentValue) {
                         this.currentValue = this.getValue();
 
-                        var value = this.getValue(),
-                            url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
-                            store = gis.store.maps;
+                        const value = this.getValue();
+                        const url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
+                        const store = gis.store.maps;
 
                         store.page = 1;
                         store.loadStore(url);
@@ -246,37 +214,37 @@ export default function FavoriteWindow(gis) {
         }
     });
 
-    prevButton = Ext.create('Ext.button.Button', {
+    const prevButton = Ext.create('Ext.button.Button', {
         text: GIS.i18n.prev,
-        handler: function() {
-            var value = searchTextfield.getValue(),
-                url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
-                store = gis.store.maps;
+        handler() {
+            const value = searchTextfield.getValue();
+            const url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
+            const store = gis.store.maps;
 
             store.page = store.page <= 1 ? 1 : store.page - 1;
             store.loadStore(url);
         }
     });
 
-    nextButton = Ext.create('Ext.button.Button', {
+    const nextButton = Ext.create('Ext.button.Button', {
         text: GIS.i18n.next,
-        handler: function() {
-            var value = searchTextfield.getValue(),
-                url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null,
-                store = gis.store.maps;
+        handler() {
+            const value = searchTextfield.getValue();
+            const url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
+            const store = gis.store.maps;
 
             store.page = store.page + 1;
             store.loadStore(url);
         }
     });
 
-    info = Ext.create('Ext.form.Label', {
+    const info = Ext.create('Ext.form.Label', {
         cls: 'gis-label-info',
         width: 300,
         height: 22
     });
 
-    grid = Ext.create('Ext.grid.Panel', {
+    const grid = Ext.create('Ext.grid.Panel', {
         cls: 'gis-grid',
         scroll: false,
         hideHeaders: true,
@@ -285,9 +253,9 @@ export default function FavoriteWindow(gis) {
                 dataIndex: 'name',
                 sortable: false,
                 width: windowCmpWidth - 88,
-                renderer: function(value, metaData, record) {
-                    var fn = function() {
-                        var element = Ext.get(record.data.id);
+                renderer(value, metaData, record) {
+                    const fn = function() {
+                        let element = Ext.get(record.data.id);
 
                         if (element) {
                             element = element.parent('td');
@@ -313,46 +281,39 @@ export default function FavoriteWindow(gis) {
                 items: [
                     {
                         iconCls: 'gis-grid-row-icon-edit',
-                        getClass: function(value, metaData, record) {
+                        getClass(value, metaData, record) {
                             return 'tooltip-favorite-edit' + (!record.data.access.update ? ' disabled' : '');
                         },
-                        handler: function(grid, rowIndex, colIndex, col, event) {
-                            var record = this.up('grid').store.getAt(rowIndex);
+                        handler(grid, rowIndex, colIndex, col, event) {
+                            const record = this.up('grid').store.getAt(rowIndex);
 
                             if (record.data.access.update) {
-                                nameWindow = new NameWindow(record.data.id);
+                                const nameWindow = new NameWindow(record.data.id);
                                 nameWindow.show();
                             }
                         }
                     },
                     {
                         iconCls: 'gis-grid-row-icon-overwrite',
-                        getClass: function(value, metaData, record) {
+                        getClass(value, metaData, record) {
                             return 'tooltip-favorite-overwrite' + (!record.data.access.update ? ' disabled' : '');
                         },
-                        handler: function(grid, rowIndex, colIndex, col, event) {
-                            var record = this.up('grid').store.getAt(rowIndex),
-                                layers,
-                                layer,
-                                centerPoint,
-                                views,
-                                view,
-                                map,
-                                message;
+                        handler(grid, rowIndex, colIndex, col, event) {
+                            const record = this.up('grid').store.getAt(rowIndex);
+                            const name = record.get('name');
 
                             if (record.data.access.update) {
-                                layers = gis.util.map.getVisibleVectorLayers();
+                                const layers = gis.util.map.getVisibleVectorLayers();
 
-                                message = 'Overwrite favorite?\n\n' + record.data.name;
+                                const message = 'Overwrite favorite?\n\n' + record.data.name;
 
                                 if (layers.length) {
                                     if (confirm(message)) {
-                                        centerPoint = gis.instance.getCenter(),
-                                        views = [];
+                                        const centerPoint = gis.instance.getCenter();
+                                        const views = [];
 
-                                        for (var i = 0; i < layers.length; i++) {
-                                            layer = layers[i];
-                                            view = Ext.clone(layer.view);
+                                        layers.forEach(layer => {
+                                            const view = Ext.clone(layer.view);
 
                                             // TODO temp fix: https://github.com/dhis2/dhis2-gis/issues/108
                                             if (view.legendSet && view.method && (view.method === 2 || view.method === 3)) {
@@ -369,9 +330,10 @@ export default function FavoriteWindow(gis) {
                                             delete view.dataDimensionItems;
 
                                             views.push(view);
-                                        }
+                                        });
 
-                                        map = {
+                                        const map = {
+                                            name: name,
                                             longitude: centerPoint.lng,
                                             latitude: centerPoint.lat,
                                             zoom: gis.instance.getZoom(),
@@ -384,7 +346,7 @@ export default function FavoriteWindow(gis) {
                                             method: 'PUT',
                                             headers: {'Content-Type': 'application/json'},
                                             params: JSON.stringify(map),
-                                            success: function() {
+                                            success() {
                                                 gis.map = map;
                                                 gis.store.maps.loadStore();
                                             }
@@ -399,23 +361,24 @@ export default function FavoriteWindow(gis) {
                     },
                     {
                         iconCls: 'gis-grid-row-icon-sharing',
-                        getClass: function(value, metaData, record) {
+                        getClass(value, metaData, record) {
                             return 'tooltip-favorite-sharing' + (!record.data.access.manage ? ' disabled' : '');
                         },
-                        handler: function(grid, rowIndex) {
-                            var record = this.up('grid').store.getAt(rowIndex);
+                        handler(grid, rowIndex) {
+                            const record = this.up('grid').store.getAt(rowIndex);
 
                             if (record.data.access.manage) {
                                 Ext.Ajax.request({
                                     url: encodeURI(gis.init.apiPath + 'sharing?type=map&id=' + record.data.id),
                                     method: 'GET',
-                                    failure: function(r) {
+                                    failure(r) {
                                         gis.mask.hide();
                                         gis.alert(r);
                                     },
-                                    success: function(r) {
-                                        var sharing = JSON.parse(r.responseText),
-                                            window = GIS.app.SharingWindow(gis, sharing);
+                                    success(r) {
+                                        const sharing = JSON.parse(r.responseText);
+                                        const window = GIS.app.SharingWindow(gis, sharing);
+
                                         window.show();
                                     }
                                 });
@@ -424,24 +387,23 @@ export default function FavoriteWindow(gis) {
                     },
                     {
                         iconCls: 'gis-grid-row-icon-delete',
-                        getClass: function(value, metaData, record) {
+                        getClass(value, metaData, record) {
                             return 'tooltip-favorite-delete' + (!record.data.access['delete'] ? ' disabled' : '');
                         },
-                        handler: function(grid, rowIndex, colIndex, col, event) {
-                            var record = this.up('grid').store.getAt(rowIndex),
-                                message;
+                        handler(grid, rowIndex, colIndex, col, event) {
+                            const record = this.up('grid').store.getAt(rowIndex);
 
                             if (record.data.access['delete']) {
-                                message = 'Delete favorite?\n\n' + record.data.name;
+                                const message = 'Delete favorite?\n\n' + record.data.name;
 
                                 if (confirm(message)) {
                                     Ext.Ajax.request({
                                         url: encodeURI(gis.init.apiPath + 'maps/' + record.data.id),
                                         method: 'DELETE',
-                                        success: function() {
+                                        success() {
                                             gis.store.maps.loadStore();
                                         },
-                                        failure: function(r) {
+                                        failure(r) {
                                             gis.alert(r);
                                         }
                                     });
@@ -464,11 +426,11 @@ export default function FavoriteWindow(gis) {
             nextButton
         ],
         listeners: {
-            added: function() {
+            added() {
                 gis.viewport.mapGrid = this;
             },
-            render: function() {
-                var size = Math.floor((gis.viewport.centerRegion.getHeight() - 155) / gis.conf.layout.grid.row_height);
+            render() {
+                const size = Math.floor((gis.viewport.centerRegion.getHeight() - 155) / gis.conf.layout.grid.row_height);
                 this.store.pageSize = size;
                 this.store.page = 1;
                 this.store.loadStore();
@@ -479,87 +441,72 @@ export default function FavoriteWindow(gis) {
                     }
                 }, this);
             },
-            afterrender: function() {
-                var fn = function() {
-                    var editArray = Ext.query('.tooltip-favorite-edit'),
-                        overwriteArray = Ext.query('.tooltip-favorite-overwrite'),
-                        sharingArray = Ext.query('.tooltip-favorite-sharing'),
-                        dashboardArray = Ext.query('.tooltip-favorite-dashboard'),
-                        deleteArray = Ext.query('.tooltip-favorite-delete'),
-                        el;
+            afterrender() {
+                const fn = function() {
+                    const editArray = Ext.query('.tooltip-favorite-edit');
+                    const overwriteArray = Ext.query('.tooltip-favorite-overwrite');
+                    const sharingArray = Ext.query('.tooltip-favorite-sharing');
+                    const dashboardArray = Ext.query('.tooltip-favorite-dashboard');
+                    const deleteArray = Ext.query('.tooltip-favorite-delete');
 
-                    for (var i = 0; i < editArray.length; i++) {
-                        var el = editArray[i];
-                        Ext.create('Ext.tip.ToolTip', {
-                            target: el,
-                            html: GIS.i18n.rename,
-                            anchor: 'bottom',
-                            anchorOffset: -14,
-                            showDelay: 500
-                        });
-                    }
+                    editArray.forEach(el => Ext.create('Ext.tip.ToolTip', {
+                        target: el,
+                        html: GIS.i18n.rename,
+                        anchor: 'bottom',
+                        anchorOffset: -14,
+                        showDelay: 500
+                    }));
 
-                    for (var i = 0; i < overwriteArray.length; i++) {
-                        el = overwriteArray[i];
-                        Ext.create('Ext.tip.ToolTip', {
-                            target: el,
-                            html: GIS.i18n.overwrite,
-                            anchor: 'bottom',
-                            anchorOffset: -14,
-                            showDelay: 500
-                        });
-                    }
+                    overwriteArray.forEach(el => Ext.create('Ext.tip.ToolTip', {
+                        target: el,
+                        html: GIS.i18n.overwrite,
+                        anchor: 'bottom',
+                        anchorOffset: -14,
+                        showDelay: 500
+                    }));
 
-                    for (var i = 0; i < sharingArray.length; i++) {
-                        el = sharingArray[i];
-                        Ext.create('Ext.tip.ToolTip', {
-                            target: el,
-                            html: GIS.i18n.share_with_other_people,
-                            anchor: 'bottom',
-                            anchorOffset: -14,
-                            showDelay: 500
-                        });
-                    }
 
-                    for (var i = 0; i < dashboardArray.length; i++) {
-                        el = dashboardArray[i];
-                        Ext.create('Ext.tip.ToolTip', {
-                            target: el,
-                            html: GIS.i18n.add_to_dashboard,
-                            anchor: 'bottom',
-                            anchorOffset: -14,
-                            showDelay: 500
-                        });
-                    }
+                    sharingArray.forEach(el => Ext.create('Ext.tip.ToolTip', {
+                        target: el,
+                        html: GIS.i18n.share_with_other_people,
+                        anchor: 'bottom',
+                        anchorOffset: -14,
+                        showDelay: 500
+                    }));
 
-                    for (var i = 0; i < deleteArray.length; i++) {
-                        el = deleteArray[i];
-                        Ext.create('Ext.tip.ToolTip', {
-                            target: el,
-                            html: GIS.i18n.delete,
-                            anchor: 'bottom',
-                            anchorOffset: -14,
-                            showDelay: 500
-                        });
-                    }
+                    dashboardArray.forEach(el => Ext.create('Ext.tip.ToolTip', {
+                        target: el,
+                        html: GIS.i18n.add_to_dashboard,
+                        anchor: 'bottom',
+                        anchorOffset: -14,
+                        showDelay: 500
+                    }));
+
+                    deleteArray.forEach(el => Ext.create('Ext.tip.ToolTip', {
+                        target: el,
+                        html: GIS.i18n.delete,
+                        anchor: 'bottom',
+                        anchorOffset: -14,
+                        showDelay: 500
+                    }));
                 };
 
                 Ext.defer(fn, 100);
             },
-            itemmouseenter: function(grid, record, item) {
+            itemmouseenter(grid, record, item) {
                 this.currentItem = Ext.get(item);
                 this.currentItem.removeCls('x-grid-row-over');
             },
-            select: function() {
+            select() {
                 this.currentItem.removeCls('x-grid-row-selected');
             },
-            selectionchange: function() {
+            selectionchange() {
                 this.currentItem.removeCls('x-grid-row-focused');
             }
         }
     });
 
-    favoriteWindow = Ext.create('Ext.window.Window', {
+    const favoriteWindow = Ext.create('Ext.window.Window', {
         title: GIS.i18n.manage_favorites + (gis.map ? '<span style="font-weight:normal">&nbsp;|&nbsp;&nbsp;' + gis.map.name + '</span>' : ''),
         iconCls: 'gis-window-title-icon-favorite',
         cls: 'gis-container-default',
@@ -588,7 +535,7 @@ export default function FavoriteWindow(gis) {
             grid
         ],
         listeners: {
-            show: function(w) {
+            show(w) {
                 this.setPosition(199, 33);
 
                 if (!w.hasDestroyOnBlurHandler) {

@@ -9,6 +9,8 @@ export default function MapLoader(gis, isSession, applyConfig) {
     const getMap = function() {
         const url = gis.init.apiPath + 'maps/' + gis.map.id + '.json?fields=' + gis.conf.url.mapFields.join(',');
 
+        console.log("#", url);
+
         const success = function(r) {
             gis.map = r;
             setMap();

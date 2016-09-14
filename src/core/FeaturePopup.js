@@ -23,7 +23,7 @@ export default function FeaturePopup(gis, instance) {
             getParamString;
 
 
-        console.log(period);
+        // console.log(period);
 
         success = function(r) {
             var html = '<h2>' + feature.properties.name + '</h2>',

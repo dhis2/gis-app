@@ -4,30 +4,11 @@ import isString from 'd2-utilizr/lib/isString';
 import arrayMax from 'd2-utilizr/lib/arrayMax';
 
 export default function LayerWidgetBoundary(gis, layer) {
-    var infrastructuralDataElementValuesStore,
-        treePanel,
-        userOrganisationUnit,
-        userOrganisationUnitChildren,
-        userOrganisationUnitGrandChildren,
-        organisationUnitLevel,
-        organisationUnitGroup,
-        toolMenu,
-        tool,
-        toolPanel,
-        organisationUnit,
-        labelPanel,
-        label,
-        reset,
-        setGui,
-        getView,
-        validateView,
-        accordionBody,
-        accordion,
-        accordionPanels = [],
-        last;
+    const accordionPanels = [];
+    let last;
 
     // Stores
-    infrastructuralDataElementValuesStore = Ext.create('Ext.data.Store', {
+    const infrastructuralDataElementValuesStore = Ext.create('Ext.data.Store', {
         fields: ['name', 'value'],
         sorters: [{
             property: 'name',
@@ -37,7 +18,7 @@ export default function LayerWidgetBoundary(gis, layer) {
 
     // Components
 
-    treePanel = Ext.create('Ext.tree.Panel', {
+    const treePanel = Ext.create('Ext.tree.Panel', {
         cls: 'gis-tree',
         height: 327,
         style: 'border-top: 1px solid #ddd; padding-top: 1px',
@@ -51,15 +32,15 @@ export default function LayerWidgetBoundary(gis, layer) {
         },
         multiSelect: true,
         rendered: false,
-        reset: function() {
-            var rootNode = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
+        reset() {
+            const rootNode = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
             this.collapseAll();
             this.expandPath(rootNode.getPath());
             this.getSelectionModel().select(rootNode);
         },
-        selectRootIf: function() {
+        selectRootIf() {
             if (this.getSelectionModel().getSelection().length < 1) {
-                var node = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
+                const node = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
                 if (this.rendered) {
                     this.getSelectionModel().select(node);
                 }
@@ -69,7 +50,7 @@ export default function LayerWidgetBoundary(gis, layer) {
         isPending: false,
         recordsToSelect: [],
         recordsToRestore: [],
-        multipleSelectIf: function(map, doUpdate) {
+        multipleSelectIf(map, doUpdate) {
             if (this.recordsToSelect.length === gis.util.object.getLength(map)) {
                 this.getSelectionModel().select(this.recordsToSelect);
                 this.recordsToSelect = [];
@@ -80,22 +61,22 @@ export default function LayerWidgetBoundary(gis, layer) {
                 }
             }
         },
-        multipleExpand: function(id, map, doUpdate) {
-            var that = this,
-                rootId = gis.conf.finals.root.id,
-                path = map[id];
+        multipleExpand(id, map, doUpdate) {
+            const that = this;
+            const rootId = gis.conf.finals.root.id;
+            let path = map[id];
 
             if (path.substr(0, rootId.length + 1) !== ('/' + rootId)) {
                 path = '/' + rootId + path;
             }
 
             that.expandPath(path, 'id', '/', function() {
-                var record = Ext.clone(that.getRootNode().findChild('id', id, true));
+                const record = Ext.clone(that.getRootNode().findChild('id', id, true));
                 that.recordsToSelect.push(record);
                 that.multipleSelectIf(map, doUpdate);
             });
         },
-        select: function(url, params) {
+        select(url, params) {
             if (!params) {
                 params = {};
             }
@@ -104,21 +85,19 @@ export default function LayerWidgetBoundary(gis, layer) {
                 method: 'GET',
                 params: params,
                 scope: this,
-                success: function(r) {
-                    var a = JSON.parse(r.responseText).organisationUnits;
+                success(r) {
+                    const a = JSON.parse(r.responseText).organisationUnits;
                     this.numberOfRecords = a.length;
-                    for (var i = 0; i < a.length; i++) {
-                        this.multipleExpand(a[i].id, a[i].path);
-                    }
+                    a.forEach(u => this.multipleExpand(u.id, u.path));
                 }
             });
         },
-        getParentGraphMap: function() {
-            var selection = this.getSelectionModel().getSelection(),
-                map = {};
+        getParentGraphMap() {
+            const selection = this.getSelectionModel().getSelection();
+            const map = {};
 
             if (isArray(selection) && selection.length) {
-                for (var i = 0, pathArray; i < selection.length; i++) {
+                for (let i = 0, pathArray; i < selection.length; i++) {
                     pathArray = selection[i].getPath().split('/');
                     map[pathArray.pop()] = pathArray.join('/');
                 }
@@ -126,14 +105,14 @@ export default function LayerWidgetBoundary(gis, layer) {
 
             return map;
         },
-        selectGraphMap: function(map, update) {
+        selectGraphMap(map, update) {
             if (!gis.util.object.getLength(map)) {
                 return;
             }
 
             this.isPending = true;
 
-            for (var key in map) {
+            for (let key in map) {
                 if (map.hasOwnProperty(key)) {
                     treePanel.multipleExpand(key, map, update);
                 }
@@ -165,14 +144,14 @@ export default function LayerWidgetBoundary(gis, layer) {
                 children: gis.init.rootNodes
             },
             listeners: {
-                beforeload: function(store, operation) {
+                beforeload(store, operation) {
                     if (!store.proxy._url) {
                         store.proxy._url = store.proxy.url;
                     }
                     
                     store.proxy.url = store.proxy._url + '/' + operation.node.data.id;
                 },
-                load: function(store, node, records) {
+                load(store, node, records) {
                     records.forEach(function(record) {
                         if (isBoolean(record.data.hasChildren)) {
                             record.set('leaf', !record.data.hasChildren);
@@ -181,8 +160,8 @@ export default function LayerWidgetBoundary(gis, layer) {
                 }
             }
         }),
-        xable: function(values) {
-            for (var i = 0; i < values.length; i++) {
+        xable(values) {
+            for (let i = 0; i < values.length; i++) {
                 if (!!values[i]) {
                     this.disable();
                     return;
@@ -191,12 +170,12 @@ export default function LayerWidgetBoundary(gis, layer) {
 
             this.enable();
         },
-        getDimension: function() {
-            var r = treePanel.getSelectionModel().getSelection(),
-                config = {
-                    dimension: gis.conf.finals.dimension.organisationUnit.objectName,
-                    items: []
-                };
+        getDimension() {
+            const r = treePanel.getSelectionModel().getSelection();
+            const config = {
+                dimension: gis.conf.finals.dimension.organisationUnit.objectName,
+                items: []
+            };
 
             if (toolMenu.menuValue === 'orgunit') {
                 if (userOrganisationUnit.getValue() || userOrganisationUnitChildren.getValue() || userOrganisationUnitGrandChildren.getValue()) {
@@ -220,23 +199,23 @@ export default function LayerWidgetBoundary(gis, layer) {
                     }
                 }
                 else {
-                    for (var i = 0; i < r.length; i++) {
+                    for (let i = 0; i < r.length; i++) {
                         config.items.push({id: r[i].data.id});
                     }
                 }
             }
             else if (toolMenu.menuValue === 'level') {
-                var levels = organisationUnitLevel.getValue(),
-                    maxLevel = arrayMax(levels);
+                const levels = organisationUnitLevel.getValue();
+                const maxLevel = arrayMax(levels);
 
-                for (var i = 0; i < levels.length; i++) {
+                for (let i = 0; i < levels.length; i++) {
                     config.items.push({
                         id: 'LEVEL-' + levels[i],
                         name: ''
                     });
                 }
 
-                for (var i = 0, item; i < r.length; i++) {
+                for (let i = 0, item; i < r.length; i++) {
                     item = r[i].data;
 
                     if (maxLevel && item.depth > maxLevel) {
@@ -251,16 +230,16 @@ export default function LayerWidgetBoundary(gis, layer) {
                 }
             }
             else if (toolMenu.menuValue === 'group') {
-                var groupIds = organisationUnitGroup.getValue();
+                const groupIds = organisationUnitGroup.getValue();
 
-                for (var i = 0; i < groupIds.length; i++) {
+                for (let i = 0; i < groupIds.length; i++) {
                     config.items.push({
                         id: 'OU_GROUP-' + groupIds[i],
                         name: ''
                     });
                 }
 
-                for (var i = 0; i < r.length; i++) {
+                for (let i = 0; i < r.length; i++) {
                     config.items.push({
                         id: r[i].data.id,
                         name: ''
@@ -271,24 +250,24 @@ export default function LayerWidgetBoundary(gis, layer) {
             return config.items.length ? config : null;
         },
         listeners: {
-            beforeitemexpand: function() {                
+            beforeitemexpand() {
                 if (!treePanel.isPending) {
                     treePanel.recordsToRestore = treePanel.getSelectionModel().getSelection();
                 }
             },
-            itemexpand: function() {
+            itemexpand() {
                 if (!treePanel.isPending && treePanel.recordsToRestore.length) {
                     treePanel.getSelectionModel().select(treePanel.recordsToRestore);
                     treePanel.recordsToRestore = [];
                 }
             },
-            render: function() {
+            render() {
                 this.rendered = true;
             },
-            afterrender: function() {
+            afterrender() {
                 this.getSelectionModel().select(0);
             },
-            itemcontextmenu: function(v, r, h, i, e) {
+            itemcontextmenu(v, r, h, i, e) {
                 e.stopEvent();
 
                 v.getSelectionModel().select(r, false);
@@ -304,7 +283,7 @@ export default function LayerWidgetBoundary(gis, layer) {
                     v.menu.add({
                         text: GIS.i18n.select_sub_units,
                         icon: 'images/node-select-child.png',
-                        handler: function() {
+                        handler() {
                             r.expand(false, function() {
                                 v.getSelectionModel().select(r.childNodes, true);
                                 v.getSelectionModel().deselect(r);
@@ -321,40 +300,40 @@ export default function LayerWidgetBoundary(gis, layer) {
         }
     });
 
-    userOrganisationUnit = Ext.create('Ext.form.field.Checkbox', {
+    const userOrganisationUnit = Ext.create('Ext.form.field.Checkbox', {
         columnWidth: 0.3,
         style: 'padding-top: 2px; padding-left: 3px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.user_ou,
         labelWidth: gis.conf.layout.form_label_width,
-        handler: function(chb, checked) {
+        handler(chb, checked) {
             treePanel.xable([checked, userOrganisationUnitChildren.getValue(), userOrganisationUnitGrandChildren.getValue()]);
         }
     });
 
-    userOrganisationUnitChildren = Ext.create('Ext.form.field.Checkbox', {
+    const userOrganisationUnitChildren = Ext.create('Ext.form.field.Checkbox', {
         columnWidth: 0.33,
         style: 'padding-top: 2px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.sub_units,
         labelWidth: gis.conf.layout.form_label_width,
-        handler: function(chb, checked) {
+        handler(chb, checked) {
             treePanel.xable([checked, userOrganisationUnit.getValue(), userOrganisationUnitGrandChildren.getValue()]);
         }
     });
 
-    userOrganisationUnitGrandChildren = Ext.create('Ext.form.field.Checkbox', {
+    const userOrganisationUnitGrandChildren = Ext.create('Ext.form.field.Checkbox', {
         columnWidth: 0.34,
         style: 'padding-top: 2px; margin-bottom: 0',
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.sub_x2_units,
         labelWidth: gis.conf.layout.form_label_width,
-        handler: function(chb, checked) {
+        handler(chb, checked) {
             treePanel.xable([checked, userOrganisationUnit.getValue(), userOrganisationUnitChildren.getValue()]);
         }
     });
 
-    organisationUnitLevel = Ext.create('Ext.form.field.ComboBox', {
+    const organisationUnitLevel = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         multiSelect: true,
         style: 'margin-bottom:0',
@@ -370,7 +349,7 @@ export default function LayerWidgetBoundary(gis, layer) {
         }
     });
 
-    organisationUnitGroup = Ext.create('Ext.form.field.ComboBox', {
+    const organisationUnitGroup = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         multiSelect: true,
         style: 'margin-bottom:0',
@@ -383,20 +362,20 @@ export default function LayerWidgetBoundary(gis, layer) {
         store: gis.store.organisationUnitGroup
     });
 
-    toolMenu = Ext.create('Ext.menu.Menu', {
+    const toolMenu = Ext.create('Ext.menu.Menu', {
         shadow: false,
         showSeparator: false,
         menuValue: 'level',
-        clickHandler: function(param) {
+        clickHandler(param) {
             if (!param) {
                 return;
             }
 
-            var items = this.items.items;
+            const items = this.items.items;
             this.menuValue = param;
 
             // Menu item icon cls
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 if (items[i].setIconCls) {
                     if (items[i].param === param) {
                         items[i].setIconCls('gis-menu-item-selected');
@@ -459,16 +438,16 @@ export default function LayerWidgetBoundary(gis, layer) {
             }
         ],
         listeners: {
-            afterrender: function() {
+            afterrender() {
                 this.getEl().addCls('gis-btn-menu');
             },
-            click: function(menu, item) {
+            click(menu, item) {
                 this.clickHandler(item.param);
             }
         }
     });
 
-    tool = Ext.create('Ext.button.Button', {
+    const tool = Ext.create('Ext.button.Button', {
         cls: 'gis-button-organisationunitselection',
         iconCls: 'gis-button-icon-gear',
         width: 36,
@@ -476,14 +455,14 @@ export default function LayerWidgetBoundary(gis, layer) {
         menu: toolMenu
     });
 
-    toolPanel = Ext.create('Ext.panel.Panel', {
+    const toolPanel = Ext.create('Ext.panel.Panel', {
         width: 36,
         bodyStyle: 'border:0 none; text-align:right',
         style: 'margin-right:1px',
         items: tool
     });
 
-    organisationUnit = Ext.create('Ext.panel.Panel', {
+    const organisationUnit = Ext.create('Ext.panel.Panel', {
         title: '<div class="ns-panel-title-data">' + GIS.i18n.organisation_units + '</div>',
         hideCollapseTool: true,
         items: [
@@ -509,24 +488,23 @@ export default function LayerWidgetBoundary(gis, layer) {
             treePanel
         ],
         listeners: {
-            added: function() {
+            added() {
                 accordionPanels.push(this);
             }
         }
     });
 
-
-    labelPanel = Ext.create('Ext.ux.panel.LabelPanel', {
+    const labelPanel = Ext.create('Ext.ux.panel.LabelPanel', {
         skipBoldButton: true,
         skipColorButton: true
     });
 
-    label = Ext.create('Ext.panel.Panel', {
+    const label = Ext.create('Ext.panel.Panel', {
         title: '<div class="ns-panel-title-data">' + GIS.i18n.options + '</div>',
         hideCollapseTool: true,
         items: labelPanel,
         listeners: {
-            added: function() {
+            added() {
                 accordionPanels.push(this);
             }
         }
@@ -534,7 +512,7 @@ export default function LayerWidgetBoundary(gis, layer) {
 
     // Functions
 
-    reset = function(skipTree) {
+    const reset = function(skipTree) {
 
         // Item
         layer.item.setValue(false);
@@ -565,17 +543,16 @@ export default function LayerWidgetBoundary(gis, layer) {
         }
     };
 
-    setGui = function(view) {
-        var ouDim = view.rows[0],
-            isOu = false,
-            isOuc = false,
-            isOugc = false,
-            levels = [],
-            groups = [],
-            setWidgetGui,
-            setLayerGui;
+    const setGui = function(view) {
+        const ouDim = view.rows[0];
+        const levels = [];
+        const groups = [];
 
-        setWidgetGui = function() {
+        let isOu = false;
+        let isOuc = false;
+        let isOugc = false;
+
+        const setWidgetGui = function() {
 
             // Components
             if (!layer.window.isRendered) {
@@ -585,9 +562,7 @@ export default function LayerWidgetBoundary(gis, layer) {
             reset(true);
 
             // Organisation units
-            for (var i = 0, item; i < ouDim.items.length; i++) {
-                item = ouDim.items[i];
-
+            ouDim.items.forEach(item => {
                 if (item.id === 'USER_ORGUNIT') {
                     isOu = true;
                 }
@@ -603,7 +578,7 @@ export default function LayerWidgetBoundary(gis, layer) {
                 else if (item.id.substr(0,8) === 'OU_GROUP') {
                     groups.push(parseInt(item.id.split('-')[1]));
                 }
-            }
+            });
 
             if (levels.length) {
                 toolMenu.clickHandler('level');
@@ -624,7 +599,7 @@ export default function LayerWidgetBoundary(gis, layer) {
         }();
 
 
-        setLayerGui = function() {
+        const setLayerGui = function() {
 
             // Layer item
             layer.item.setValue(!view.hidden, view.opacity);
@@ -634,8 +609,8 @@ export default function LayerWidgetBoundary(gis, layer) {
         }();
     };
 
-    getView = function(config) {
-        var view = {};
+    const getView = function(config) {
+        const view = {};
 
         if (treePanel.getDimension()) {
             view.rows = [treePanel.getDimension()];
@@ -648,7 +623,7 @@ export default function LayerWidgetBoundary(gis, layer) {
         return validateView(view);
     };
 
-    validateView = function(view) {
+    const validateView = function(view) {
         if (!(isArray(view.rows) && view.rows.length && isString(view.rows[0].dimension) && isArray(view.rows[0].items) && view.rows[0].items.length)) {
             GIS.logg.push([view.rows, layer.id + '.rows: dimension array']);
             alert('No organisation units selected');
@@ -658,14 +633,14 @@ export default function LayerWidgetBoundary(gis, layer) {
         return view;
     };
 
-    accordionBody = Ext.create('Ext.panel.Panel', {
+    const accordionBody = Ext.create('Ext.panel.Panel', {
         layout: 'accordion',
         activeOnTop: true,
         cls: 'ns-accordion',
         bodyStyle: 'border:0 none; margin-bottom:1px',
         height: 408,
         items: function() {
-            var panels = [
+            const panels = [
                 organisationUnit,
                 label
             ];
@@ -676,15 +651,15 @@ export default function LayerWidgetBoundary(gis, layer) {
             return panels;
         }(),
         listeners: {
-            afterrender: function() { // nasty workaround
-                for (var i = accordionPanels.length - 1; i >= 0; i--) {
+            afterrender() { // nasty workaround
+                for (let i = accordionPanels.length - 1; i >= 0; i--) {
                     accordionPanels[i].expand();
                 }
             }
         }
     });
 
-    accordion = Ext.create('Ext.panel.Panel', {
+    const accordion = Ext.create('Ext.panel.Panel', {
         bodyStyle: 'border-style:none; padding:1px; padding-bottom:0',
         items: accordionBody,
         panels: accordionPanels,
@@ -696,13 +671,13 @@ export default function LayerWidgetBoundary(gis, layer) {
         reset: reset,
         setGui: setGui,
         getView: getView,
-        getParentGraphMap: function() {
+        getParentGraphMap() {
             return treePanel.getParentGraphMap();
         },
 
         infrastructuralDataElementValuesStore: infrastructuralDataElementValuesStore,
-        getExpandedPanel: function() {
-            for (var i = 0; i < this.panels.length; i++) {
+        getExpandedPanel() {
+            for (let i = 0; i < this.panels.length; i++) {
                 if (!this.panels[i].collapsed) {
                     return this.panels[i];
                 }
@@ -710,14 +685,14 @@ export default function LayerWidgetBoundary(gis, layer) {
 
             return null;
         },
-        getFirstPanel: function() {
+        getFirstPanel() {
             return this.panels[0];
         },
         listeners: {
-            added: function() {
+            added() {
                 layer.accordion = this;
             },
-            render: function() {
+            render() {
                 toolMenu.clickHandler('level');
             }
         }

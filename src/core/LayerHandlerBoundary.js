@@ -158,7 +158,7 @@ export default function LayerHandlerBoundary(gis, layer) {
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
-            // layer.instance.off('click', onFeatureClick);
+            layer.instance.off('click', onFeatureClick);
             layer.instance.off('contextmenu', onFeatureRightClick);
             gis.instance.off('click', onMapClick);
             gis.instance.removeLayer(layer.instance);
@@ -167,7 +167,7 @@ export default function LayerHandlerBoundary(gis, layer) {
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);
 
-        // layer.instance.on('click', onFeatureClick);
+        layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
 
         gis.instance.on('click', onMapClick);
@@ -178,7 +178,23 @@ export default function LayerHandlerBoundary(gis, layer) {
     };
 
     const onFeatureClick = function(evt) {
-        GIS.core.FeaturePopup(gis, evt.layer);
+        const attr = evt.layer.feature.properties;
+        let content = '<div style="line-height:19px;"><strong style="font-weight:bold;">' + attr.name + '</strong>';
+
+        if (attr.parentName) {
+            content += '<br/>Parent: ' + attr.parentName;
+        }
+
+        if (attr.level) {
+            content += '<br/>Level: ' + attr.level;
+        }
+
+        content += '</div>';
+
+        L.popup()
+            .setLatLng(evt.latlng)
+            .setContent(content)
+            .openOn(gis.instance);
     };
 
     const onFeatureRightClick = function(evt) {

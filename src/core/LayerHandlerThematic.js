@@ -467,7 +467,6 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     const onFeatureClick = function (evt) {
-
         // TODO: optimize!
         const view = layer.view;
         const indicator = view.columns[0].items[0].name;
@@ -475,14 +474,12 @@ export default function LayerHandlerThematic(gis, layer) {
         const name = evt.layer.feature.properties.name;
         const value = evt.layer.feature.properties.value;
         const unit = '';
-        const content = '<strong style="font-weight:bold;">' + name + '</strong><br>' + indicator + '<br>' + period + ': ' + value + ' ' + unit;
+        const content = '<div style="line-height:19px;"><strong style="font-weight:bold;">' + name + '</strong><br>' + indicator + '<br>' + period + ': ' + value + ' ' + unit + '</div>';
 
         L.popup()
             .setLatLng(evt.latlng)
             .setContent(content)
             .openOn(gis.instance);
-
-        // GIS.core.FeaturePopup(gis, evt.layer); // TODO: Remove
     };
 
     const onFeatureRightClick = function (evt) {

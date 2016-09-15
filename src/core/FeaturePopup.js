@@ -1,4 +1,4 @@
-// TODO: Remove?
+// TODO: Not in use!
 
 export default function FeaturePopup(gis, instance) {
 
@@ -23,7 +23,7 @@ export default function FeaturePopup(gis, instance) {
             getParamString;
 
 
-        // console.log(period);
+        console.log(period);
 
         success = function(r) {
             var html = '<h2>' + feature.properties.name + '</h2>',
@@ -70,7 +70,7 @@ export default function FeaturePopup(gis, instance) {
                     '<p>To change groups, please go to general settings.</p>';
             }
 
-            // instance.bindPopup(html).openPopup();
+            instance.bindPopup(html).openPopup();
             gis.mask.hide();
         };
 
@@ -80,6 +80,8 @@ export default function FeaturePopup(gis, instance) {
 
         getData = function(paramString) {
             gis.mask.show();
+
+            console.log('FeaturePopup', gis.init.apiPath + 'analytics.json' + paramString);
 
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + 'analytics.json' + paramString),

@@ -158,7 +158,7 @@ export default function LayerHandlerBoundary(gis, layer) {
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
-            layer.instance.off('click', onFeatureClick);
+            // layer.instance.off('click', onFeatureClick);
             layer.instance.off('contextmenu', onFeatureRightClick);
             gis.instance.off('click', onMapClick);
             gis.instance.removeLayer(layer.instance);
@@ -167,7 +167,7 @@ export default function LayerHandlerBoundary(gis, layer) {
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);
 
-        layer.instance.on('click', onFeatureClick);
+        // layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
 
         gis.instance.on('click', onMapClick);

@@ -226,7 +226,7 @@ export default function LayerHandlerFacility(gis, layer) {
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
-			layer.instance.off('click', onFeatureClick);
+			// layer.instance.off('click', onFeatureClick);
 			layer.instance.off('contextmenu', onFeatureRightClick);
             gis.instance.removeLayer(layer.instance);
         }
@@ -234,14 +234,10 @@ export default function LayerHandlerFacility(gis, layer) {
 		// Create layer instance
 		layer.instance = gis.instance.addLayer(layerConfig);
 
-        layer.instance.on('click', onFeatureClick);
+        // layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
 
 		afterLoad(view);
-	};
-
-	onFeatureClick = function(evt) {
-		GIS.core.FeaturePopup(gis, evt.layer);
 	};
 
 	onFeatureRightClick = function(evt) {

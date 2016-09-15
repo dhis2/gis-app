@@ -318,7 +318,7 @@ export default function extendInstance(gis) {
         util.gui.window = util.gui.window || {};
 
         util.gui.window.setPositionTopRight = function(window) {
-            window.setPosition(gis.viewport.centerRegion.getWidth() - (window.getWidth() + 3), gis.viewport.centerRegion.y + 64);
+            window.setPosition(gis.viewport.centerRegion.getWidth() - (window.getWidth() + 50), gis.viewport.centerRegion.y + 64);
         };
 
         util.gui.window.setPositionTopLeft = function(window) {

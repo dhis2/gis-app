@@ -8,7 +8,7 @@ import LayerHandlerThematic from './LayerHandlerThematic.js';
 import LayerHandlerBoundary from './LayerHandlerBoundary.js';
 import LayerHandlerEarthEngine from './LayerHandlerEarthEngine.js';
 import LayerHandlerExternal from './LayerHandlerExternal.js';
-import FeaturePopup from './FeaturePopup.js';
+// import FeaturePopup from './FeaturePopup.js';
 import ContextMenu from './ContextMenu.js';
 
 // ext config
@@ -32,7 +32,7 @@ export default {
         LayerHandlerBoundary,
         LayerHandlerEarthEngine,
         LayerHandlerExternal,
-        FeaturePopup,
+        // FeaturePopup,
         ContextMenu,
     },
     i18n: {},

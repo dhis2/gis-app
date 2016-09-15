@@ -482,7 +482,7 @@ export default function LayerHandlerThematic(gis, layer) {
             .setContent(content)
             .openOn(gis.instance);
 
-        GIS.core.FeaturePopup(gis, evt.layer); // TODO: Remove
+        // GIS.core.FeaturePopup(gis, evt.layer); // TODO: Remove
     };
 
     const onFeatureRightClick = function (evt) {

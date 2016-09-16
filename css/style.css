@@ -239,9 +239,12 @@ table.padding1 td {
 }
 
 .leaflet-dhis2 .leaflet-popup em {
-    font-weight:bold;
+    font-weight: bold;
 }
 
+.leaflet-dhis2 .leaflet-popup-orgunit {
+    line-height: 19px;
+}
 
 
 /*----------------------------------------------------------------------------

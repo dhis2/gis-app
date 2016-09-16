@@ -3,169 +3,85 @@ import isObject from 'd2-utilizr/lib/isObject';
 import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerFacility(gis, layer) {
-	var compareView,
-		loadOrganisationUnitGroups,
-		loadOrganisationUnits,
-		loadData,
-		loadLegend,
-		updateLegend,
-		updateMap,
-		afterLoad,
-        onFeatureClick,
-		onFeatureRightClick,
-		loader;
 
-	compareView = function(view, doExecute) {
-		var src = layer.view,
-			viewIds,
-			viewDim,
-			srcIds,
-			srcDim;
-
-		loader.zoomToVisibleExtent = true;
-
-		if (!src) {
-			if (doExecute) {
-				loadOrganisationUnits(view);
-			}
-			return gis.conf.finals.widget.loadtype_organisationunit;
-		}
-
-		// organisation units
-		viewIds = [];
-		viewDim = view.rows[0];
-		srcIds = [];
-		srcDim = src.rows[0];
-
-		if (viewDim.items.length === srcDim.items.length) {
-			for (var i = 0; i < viewDim.items.length; i++) {
-				viewIds.push(viewDim.items[i].id);
-			}
-
-			for (var i = 0; i < srcDim.items.length; i++) {
-				srcIds.push(srcDim.items[i].id);
-			}
-
-			if (arrayDifference(viewIds, srcIds).length !== 0) {
-				if (doExecute) {
-					loadOrganisationUnits(view);
-				}
-				return gis.conf.finals.widget.loadtype_organisationunit;
-			}
-		}
-		else {
-			if (doExecute) {
-				loadOrganisationUnits(view);
-			}
-			return gis.conf.finals.widget.loadtype_organisationunit;
-		}
-
-		// Group set
-		loader.zoomToVisibleExtent = false;
-
-		if (view.organisationUnitGroupSet.id !== src.organisationUnitGroupSet.id) {
-			if (doExecute) {
-				loadOrganisationUnits(view);
-			}
-			return gis.conf.finals.widget.loadtype_organisationunit;
-		}
-
-		// always reload legend
-		if (doExecute) {
-			loadLegend(view);
-			return gis.conf.finals.widget.loadtype_legend;
-		}
-
-		gis.mask.hide();
-	};
-
-	loadOrganisationUnitGroups = function (view) {
-		var url = gis.init.apiPath + 'organisationUnitGroupSets/' + view.organisationUnitGroupSet.id + '.json' + '?fields=organisationUnitGroups[id,' + gis.init.namePropertyUrl + ',symbol]',
-            data;
+	const loadOrganisationUnitGroups = function (view) {
+		const url = gis.init.apiPath + 'organisationUnitGroupSets/' + view.organisationUnitGroupSet.id + '.json' + '?fields=organisationUnitGroups[id,' + gis.init.namePropertyUrl + ',symbol]';
 
 		Ext.Ajax.request({
 			url: encodeURI(url),
 			success: function(r) {
-                data = JSON.parse(r.responseText);
+                const data = JSON.parse(r.responseText);
                 loadOrganisationUnits(view, data.organisationUnitGroups);
 			}
 		});
-	},
+	};
 
-	loadOrganisationUnits = function(view, orgUnitGroups) {
-		var items = view.rows[0].items,
-			propertyMap = {
-				'name': 'name',
-				'displayName': 'name',
-				'shortName': 'shortName',
-				'displayShortName': 'shortName'
-			},
-			keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty,
-			displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name',
-			url = function() {
-				var params = '?ou=ou:';
+	const loadOrganisationUnits = function(view, orgUnitGroups) {
+		const items = view.rows[0].items;
+		const propertyMap = {
+			'name': 'name',
+			'displayName': 'name',
+			'shortName': 'shortName',
+			'displayShortName': 'shortName'
+		};
+		const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty;
+		const displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name';
+		const url = function() {
+			let params = '?ou=ou:' + items.map(item => item.id).join(';');
 
-				for (var i = 0; i < items.length; i++) {
-					params += items[i].id;
-					params += i !== items.length - 1 ? ';' : '';
-				}
+			params += '&displayProperty=' + displayProperty.toUpperCase();
 
-				params += '&displayProperty=' + displayProperty.toUpperCase();
+			if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
+				params += '&userOrgUnit=' + view.userOrgUnit.map(unit => unit).join(';');
+			}
 
-				if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
-					params += '&userOrgUnit=';
+			return gis.init.apiPath + 'geoFeatures.json' + params + '&includeGroupSets=true';
+		}();
 
-					for (var i = 0; i < view.userOrgUnit.length; i++) {
-						params += view.userOrgUnit[i] + (i < view.userOrgUnit.length - 1 ? ';' : '');
-					}
-				}
-
-				return gis.init.apiPath + 'geoFeatures.json' + params + '&includeGroupSets=true';
-			}(),
-			success,
-			failure;
-
-		success = function(r) {
-			var indicator = view.organisationUnitGroupSet.id,
-				orgUnitGroupSymbols = {};
+		const success = function(data) {
+			const indicator = view.organisationUnitGroupSet.id;
+			const orgUnitGroupSymbols = {};
 
 			// Easier lookup of unit group symbols
-			for (var i = 0; i < orgUnitGroups.length; i++) {
-				orgUnitGroupSymbols[orgUnitGroups[i].name] = orgUnitGroups[i].symbol;
-			}
+            orgUnitGroups.forEach((group, index) => {
+                if (!group.symbol) { // Add default symbol
+                    group.symbol = (21 + index) + '.png'; // Symbol 21-25 are coloured circles
+                }
 
-			var features = [];
+                orgUnitGroupSymbols[group.name] = group.symbol;
+            });
 
-			for (var i = 0, prop, coord, group; i < r.length; i++) {
-				prop = r[i];
+			const features = [];
 
-				if (prop.ty === 1) { // Only add points
-					coord = JSON.parse(prop.co);
-					group = prop.dimensions[indicator];
+            data.forEach(facility => {
+                if (facility.ty === 1) { // Only add points
+                    const coord = JSON.parse(facility.co);
+                    const group = facility.dimensions[indicator];
 
-					if (gis.util.map.isValidCoordinate(coord) && group) {
-						prop.icon = {
-							iconUrl: gis.init.contextPath + '/images/orgunitgroup/' + orgUnitGroupSymbols[group],
-							iconSize: [16, 16]
-						};
+                    if (gis.util.map.isValidCoordinate(coord) && group) {
 
-                        prop.name = prop.na;
-                        prop.label = prop.na + ' (' + group + ')';
+                        facility.icon = {
+                            iconUrl: gis.init.contextPath + '/images/orgunitgroup/' + orgUnitGroupSymbols[group],
+                            iconSize: [16, 16]
+                        };
 
-						features.push({
-							type: 'Feature',
-							id: prop.id,
-							properties: prop,
-							geometry: {
-								type: 'Point',
-								coordinates: coord
-							}
-						});
-					}
-				}
-			}
+                        facility.name = facility.na;
+                        facility.label = facility.na + ' (' + group + ')';
 
-			if (!features.length) {
+                        features.push({
+                            type: 'Feature',
+                            id: facility.id,
+                            properties: facility,
+                            geometry: {
+                                type: 'Point',
+                                coordinates: coord
+                            }
+                        });
+                    }
+                }
+            });
+
+            if (!features.length) {
 				gis.alert(GIS.i18n.no_valid_coordinates_found);
 				return;
 			}
@@ -174,26 +90,27 @@ export default function LayerHandlerFacility(gis, layer) {
             layer.featureStore.loadFeatures(features.slice(0));
             layer.features = features;
 
-			updateLegend(orgUnitGroups);
+			updateLegend(orgUnitGroups, orgUnitGroupSymbols);
 			updateMap(view, features);
-		};
-
-		failure = function() {
-			gis.mask.hide();
-			gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
 		};
 
 		Ext.Ajax.request({
 			url: url,
 			disableCaching: false,
-			success: function(r) {
+			success(r) {
 				success(JSON.parse(r.responseText));
-			}
+			},
+            failure() {
+                if (gis.mask) {
+                    gis.mask.hide();
+                }
+                gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
+            }
 		});
 	};
 
-	updateMap = function(view, features) {
-        var layerConfig = Ext.applyIf({
+	const updateMap = function(view, features) {
+        const layerConfig = Ext.applyIf({
             data: features,
             hoverLabel: '{label}'
         }, layer.config);
@@ -240,16 +157,16 @@ export default function LayerHandlerFacility(gis, layer) {
 		afterLoad(view);
 	};
 
-	onFeatureClick = function(evt) {
+	const onFeatureClick = function(evt) {
 		const attr = evt.layer.feature.properties;
-		let content = '<div style="line-height:19px;"><strong style="font-weight:bold;">' + attr.name + '</strong>';
+		let content = '<div class="leaflet-popup-orgunit"><em>' + attr.name + '</em>';
 
 		if (isObject(attr.dimensions)) {
-			content += '<br/>Groups: ' + Object.keys(attr.dimensions).map(id => attr.dimensions[id]).join(', ');
+			content += '<br/>' + GIS.i18n.groups + ': ' + Object.keys(attr.dimensions).map(id => attr.dimensions[id]).join(', ');
 		}
 
 		if (attr.pn) {
-			content += '<br/>District: ' + attr.pn;
+			content += '<br/>' + GIS.i18n.parent_unit + ': ' + attr.pn;
 		}
 
 		content += '</div>';
@@ -260,19 +177,19 @@ export default function LayerHandlerFacility(gis, layer) {
 			.openOn(gis.instance);
 	};
 
-	onFeatureRightClick = function(evt) {
+	const onFeatureRightClick = function(evt) {
 		L.DomEvent.stopPropagation(evt); // Don't propagate to map right-click
-		var menu = GIS.core.ContextMenu(gis, layer, evt.layer, evt.latlng);
+		const menu = GIS.core.ContextMenu(gis, layer, evt.layer, evt.latlng);
 		menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
 	};
 
-	updateLegend = function(items) {
-		var html = '<div class="dhis2-legend"><dl class="dhis2-legend-image">';
+	const updateLegend = function(items, symbols) {
+		let html = '<div class="dhis2-legend"><dl class="dhis2-legend-image">';
 
-		for (var i = 0; i < items.length; i++) {
-			html += '<dt style="background-image:url(' + gis.init.contextPath + '/images/orgunitgroup/' + items[i].symbol + ');"></dt>';
-			html += '<dd>' + items[i].name + '</dd>';
-		}
+        items.forEach(item => {
+            html += '<dt style="background-image:url(' + gis.init.contextPath + '/images/orgunitgroup/' + item.symbol + ');"></dt>';
+            html += '<dd>' + item.name + '</dd>';
+        });
 
 		html += '</dl></div>';
 
@@ -289,10 +206,9 @@ export default function LayerHandlerFacility(gis, layer) {
 				gis.legend.setContent(gis.legend.getContent() + html);
 			}
 		}
-	},
+	};
 
-	afterLoad = function(view) {
-
+	const afterLoad = function(view) {
 		layer.view = view;
 
 		// Legend
@@ -340,26 +256,19 @@ export default function LayerHandlerFacility(gis, layer) {
 		}
 	};
 
-	loader = {
+	const loader = {
 		compare: false,
 		updateGui: false,
 		zoomToVisibleExtent: false,
 		hideMask: false,
 		callBack: null,
-		load: function(view) {
+		load(view) {
 			if (gis.mask && !gis.skipMask) {
 				gis.mask.show();
 			}
 
-			if (this.compare) {
-				compareView(view, true);
-			}
-			else {
-				loadOrganisationUnitGroups(view);
-			}
-		},
-		loadData: loadData,
-		loadLegend: loadLegend
+			loadOrganisationUnitGroups(view);
+		}
 	};
 
 	return loader;

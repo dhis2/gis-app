@@ -1572,35 +1572,33 @@ export default function LayerWidgetThematic(gis, layer) {
         displayField: 'name',
         queryMode: 'local',
         width: gis.conf.layout.widget.item_width,
-        // value: optionConfig.getAggregationType('def').id,
         store: Ext.create('Ext.data.Store', {
             fields: ['id', 'name'],
             data: [{
                 id: 'DEFAULT',
-                name: GIS.i18n.by_data_element || 'By data element'
+                name: GIS.i18n.by_data_element
             },{
                 id: 'COUNT',
-                name: GIS.i18n.count || 'Count'
+                name: GIS.i18n.count
             },{
                 id: 'AVERAGE',
-                name: GIS.i18n.average || 'Average'
+                name: GIS.i18n.average
             },{
                 id: 'SUM',
-                name: GIS.i18n.sum || 'Sum'
+                name: GIS.i18n.sum
             },{
                 id: 'STDDEV',
-                name: GIS.i18n.stddev || 'Standard deviation'
+                name: GIS.i18n.stddev
             },{
                 id: 'VARIANCE',
-                name: GIS.i18n.variance || 'Variance'
+                name: GIS.i18n.variance
             },{
                 id: 'MIN',
-                name: GIS.i18n.min || 'Min'
+                name: GIS.i18n.min
             },{
                 id: 'MAX',
-                name: GIS.i18n.max || 'Max'
+                name: GIS.i18n.max
             }]
-            //data: optionConfig.getAggregationTypeRecords()
         })
     });
 
@@ -1677,6 +1675,8 @@ export default function LayerWidgetThematic(gis, layer) {
         radiusLow.reset();
         radiusHigh.reset();
 
+        aggregationType.reset();
+
         toolMenu.clickHandler(toolMenu.menuValue);
 
         if (!skipTree) {
@@ -1747,7 +1747,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
         const setDxGui = function() {
 
-            // TODO, objectName/dimensionItemType must be sorted
+            // TODO: objectName/dimensionItemType must be sorted
             if (!dxItemType) {
                 return;
             }
@@ -1809,7 +1809,7 @@ export default function LayerWidgetThematic(gis, layer) {
             treePanel.selectGraphMap(view.parentGraphMap);
         };
 
-        const setLegendGui = function() {
+        const setOptionsGui = function() {
             legendType.setValue(legType);
             legendTypeToggler(legType);
 
@@ -1829,6 +1829,10 @@ export default function LayerWidgetThematic(gis, layer) {
                 method.setValue(1);
                 legendSet.store.add(view.legendSet);
                 legendSet.setValue(view.legendSet.id);
+            }
+
+            if (view.aggregationType) {
+                aggregationType.setValue(view.aggregationType);
             }
         };
 
@@ -1855,7 +1859,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 reset(true);
                 setDxGui();
                 setPeGui();
-                setLegendGui();
+                setOptionsGui();
             }
 
             setOuGui();

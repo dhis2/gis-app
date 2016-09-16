@@ -112,6 +112,7 @@ export default function LayerHandlerThematic(gis, layer) {
             const valueMap = {};
             const valueFeatures = []; // only include features with values
             const values = []; // to find min and max values
+            const aggregationType = (GIS.i18n[view.aggregationType.toLowerCase()] || '').toLowerCase();
 
             let ouIndex;
             let valueIndex;
@@ -148,6 +149,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
                 if (featureMap.hasOwnProperty(id) && valueMap.hasOwnProperty(id)) {
                     feature.properties.value = valueMap[id];
+                    feature.properties.aggregationType = aggregationType;
                     valueFeatures.push(feature);
                     values.push(valueMap[id]);
                 }
@@ -162,7 +164,8 @@ export default function LayerHandlerThematic(gis, layer) {
             gis.data = {
                 metaData: response.metaData,
                 features: valueFeatures,
-                values: values
+                values: values,
+                aggregationType: aggregationType
             };
 
             gis.response = response;
@@ -472,8 +475,8 @@ export default function LayerHandlerThematic(gis, layer) {
         const period = view.filters[0].items[0].name;
         const name = evt.layer.feature.properties.name;
         const value = evt.layer.feature.properties.value;
-        const unit = '';
-        const content = '<div class="leaflet-popup-orgunit"><em>' + name + '</em><br>' + indicator + '<br>' + period + ': ' + value + ' ' + unit + '</div>';
+        const aggregationType = evt.layer.feature.properties.aggregationType;
+        const content = '<div class="leaflet-popup-orgunit"><em>' + name + '</em><br>' + indicator + '<br>' + period + ': ' + value + ' ' + (aggregationType ? '(' + aggregationType + ')' : '') + '</div>';
 
         L.popup()
             .setLatLng(evt.latlng)
@@ -491,6 +494,7 @@ export default function LayerHandlerThematic(gis, layer) {
         const bounds = options.bounds;
         const colors = options.colors;
         const legendNames = view.legendSet ? view.legendSet.names || {} : {};
+        const aggregationType = gis.data.aggregationType;
 
         // title
         let id = view.columns[0].items[0].id;
@@ -502,6 +506,10 @@ export default function LayerHandlerThematic(gis, layer) {
 
         let name = view.columns[0].items[0].name;
         let html = '<div class="dhis2-legend"><h2>' + (metaData.names[id] || name || id);
+
+        if (aggregationType) {
+            html += ' (' + aggregationType + ')';
+        }
 
         // period
         id = view.filters[0].items[0].id;

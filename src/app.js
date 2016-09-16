@@ -1076,7 +1076,9 @@ Ext.onReady( function() {
                 var context = JSON.parse(r.responseText).activities.dhis;
 
                 init.contextPath = context.href;
-                init.apiPath = init.contextPath + '/api/25/';
+
+
+                init.apiPath = init.contextPath + '/api/' + GIS.apiVersion + '/';
                 init.defaultHeaders = {};
 
                 if (context.auth) {

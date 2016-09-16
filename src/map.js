@@ -48,7 +48,7 @@ Ext.onReady(function() {
             fn;
 
         init.contextPath = config.url;
-        init.apiPath = init.contextPath + '/api/25/';
+        init.apiPath = init.contextPath + '/api/' + GIS.apiVersion + '/';
         init.defaultHeaders = {};
 
         if (config.username && config.password) {

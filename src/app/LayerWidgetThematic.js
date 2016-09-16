@@ -767,10 +767,9 @@ export default function LayerWidgetThematic(gis, layer) {
     });
 
     const onPeriodTypeSelect = function() {
-        var type = periodType.getValue(),
-            periodOffset = periodType.periodOffset,
-            generator = gis.init.periodGenerator,
-            periods;
+        const type = periodType.getValue();
+        const periodOffset = periodType.periodOffset;
+        const generator = gis.init.periodGenerator;
 
         if (type === 'relativePeriods') {
             periodsByTypeStore.loadData(gis.conf.period.relativePeriods);
@@ -779,9 +778,9 @@ export default function LayerWidgetThematic(gis, layer) {
             periodNext.disable();
         }
         else {
-            periods = generator.generateReversedPeriods(type, type === 'Yearly' ? periodOffset - 5 : periodOffset);
+            const periods = generator.generateReversedPeriods(type, type === 'Yearly' ? periodOffset - 5 : periodOffset);
 
-            for (var i = 0; i < periods.length; i++) {
+            for (let i = 0; i < periods.length; i++) {
                 periods[i].id = periods[i].iso;
             }
 
@@ -1263,11 +1262,12 @@ export default function LayerWidgetThematic(gis, layer) {
                 return;
             }
 
-            var items = this.items.items;
+            const items = this.items.items;
+
             this.menuValue = param;
 
             // Menu item icon cls
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 if (items[i].setIconCls) {
                     if (items[i].param === param) {
                         items[i].setIconCls('gis-menu-item-selected');
@@ -1330,10 +1330,10 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         ],
         listeners: {
-            afterrender: function() {
+            afterrender() {
                 this.getEl().addCls('gis-btn-menu');
             },
-            click: function(menu, item) {
+            click(menu, item) {
                 this.clickHandler(item.param);
             }
         }
@@ -1380,7 +1380,7 @@ export default function LayerWidgetThematic(gis, layer) {
             treePanel
         ],
         listeners: {
-            added: function() {
+            added() {
                 accordionPanels.push(this);
             }
         }
@@ -1404,7 +1404,7 @@ export default function LayerWidgetThematic(gis, layer) {
             ]
         }),
         listeners: {
-            select: function() {
+            select() {
                 legendTypeToggler(this.getValue());
             }
         }
@@ -1440,7 +1440,7 @@ export default function LayerWidgetThematic(gis, layer) {
             data: [[1], [2], [3], [4], [5], [6], [7]]
         }),
         listeners: {
-            change: function(field, value) {
+            change(field, value) {
                 colorScale.setClasses(value);
             }
         }
@@ -1618,7 +1618,7 @@ export default function LayerWidgetThematic(gis, layer) {
             aggregationType
         ],
         listeners: {
-            added: function() {
+            added() {
                 accordionPanels.push(this);
             }
         }
@@ -1987,7 +1987,7 @@ export default function LayerWidgetThematic(gis, layer) {
             return panels;
         }(),
         listeners: {
-            afterrender: function() { // nasty workaround
+            afterrender() { // nasty workaround
                 for (let i = accordionPanels.length - 1; i >= 0; i--) {
                     accordionPanels[i].expand();
                 }
@@ -2007,15 +2007,15 @@ export default function LayerWidgetThematic(gis, layer) {
         reset: reset,
         setGui: setGui,
         getView: getView,
-        getParentGraphMap: function() {
+        getParentGraphMap() {
             return treePanel.getParentGraphMap();
         },
 
         infrastructuralDataElementValuesStore: infrastructuralDataElementValuesStore,
-        setThisHeight: function(mx) {
+        setThisHeight(mx) {
             return 450;
         },
-        getExpandedPanel: function() {
+        getExpandedPanel() {
             for (let i = 0; i < this.panels.length; i++) {
                 if (!this.panels[i].collapsed) {
                     return this.panels[i];
@@ -2024,14 +2024,14 @@ export default function LayerWidgetThematic(gis, layer) {
 
             return null;
         },
-        getFirstPanel: function() {
+        getFirstPanel() {
             return this.panels[0];
         },
         listeners: {
-            added: function() {
+            added() {
                 layer.accordion = this;
             },
-            render: function() {
+            render() {
                 toolMenu.clickHandler('level');
             }
         }

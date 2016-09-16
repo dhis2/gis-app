@@ -39,7 +39,7 @@ export default function LayerWidgetEvent(gis, layer) {
         sortInfo: {field: 'name', direction: 'ASC'},
         isLoaded: false,
         listeners: {
-            load: function() {
+            load() {
                 if (!this.isLoaded) {
                     this.isLoaded = true;
                 }
@@ -59,7 +59,7 @@ export default function LayerWidgetEvent(gis, layer) {
             }
         },
         isLoaded: false,
-        loadFn: function(fn) {
+        loadFn(fn) {
             if (isFunction(fn)) {
                 if (this.isLoaded) {
                     fn.call();
@@ -72,7 +72,7 @@ export default function LayerWidgetEvent(gis, layer) {
             }
         },
         listeners: {
-            load: function() {
+            load() {
                 if (!this.isLoaded) {
                     this.isLoaded = true;
                 }
@@ -116,14 +116,14 @@ export default function LayerWidgetEvent(gis, layer) {
         style: 'margin:1px 1px 1px 0',
         storage: {},
         store: programStore,
-        getRecord: function() {
+        getRecord() {
             return this.getValue ? {
                 id: this.getValue(),
                 name: this.getRawValue()
             } : null;
         },
         listeners: {
-            select: function(cb) {
+            select(cb) {
                 onProgramSelect(cb.getValue());
             }
         }
@@ -146,14 +146,14 @@ export default function LayerWidgetEvent(gis, layer) {
         disabled: true,
         listConfig: {loadMask: false},
         store: stagesByProgramStore,
-        getRecord: function() {
+        getRecord() {
             return this.getValue() ? {
                 id: this.getValue(),
                 name: this.getRawValue()
             } : null;
         },
         listeners: {
-            select: function(cb) {
+            select(cb) {
                 onStageSelect(cb.getValue());
             }
         }
@@ -179,7 +179,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 icon: 'images/arrowdown.png',
                 width: 22,
                 height: 22,
-                handler: function() {
+                handler() {
                     if (dataElementAvailable.getValue().length) {
                         selectDataElements(dataElementAvailable.getValue());
                     }
@@ -190,7 +190,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 icon: 'images/arrowdowndouble.png',
                 width: 22,
                 height: 22,
-                handler: function() {
+                handler() {
                     if (dataElementsByStageStore.getRange().length) {
                         selectDataElements(dataElementsByStageStore.getRange());
                     }
@@ -198,7 +198,7 @@ export default function LayerWidgetEvent(gis, layer) {
             }
         ],
         listeners: {
-            afterrender: function(ms) {
+            afterrender(ms) {
                 this.boundList.on('itemdblclick', function() {
                     if (ms.getValue().length) {
                         selectDataElements(ms.getValue());
@@ -228,13 +228,13 @@ export default function LayerWidgetEvent(gis, layer) {
                     icon: 'images/arrowupdouble.png',
                     width: 22,
                     height: 22,
-                    handler: function() {
+                    handler() {
                         dataElementSelected.removeAllDataElements();
                     }
                 }
             ]
         },
-        getChildIndex: function(child) {
+        getChildIndex(child) {
             const items = this.items.items;
 
             for (let i = 0; i < items.length; i++) {
@@ -245,7 +245,7 @@ export default function LayerWidgetEvent(gis, layer) {
 
             return items.length;
         },
-        hasDataElement: function(dataElementId) {
+        hasDataElement(dataElementId) {
             let hasDataElement = false;
 
             this.items.each(function(item) {
@@ -256,7 +256,7 @@ export default function LayerWidgetEvent(gis, layer) {
 
             return hasDataElement;
         },
-        removeAllDataElements: function() {
+        removeAllDataElements() {
             this.items.items.forEach(item => item.removeDataElement());
         }
     });
@@ -289,7 +289,7 @@ export default function LayerWidgetEvent(gis, layer) {
         height: 41,
         value: gis.init.calendar.formatDate(gis.init.systemInfo.dateFormat, gis.init.calendar.today().add(-12, 'm')),
         listeners: {
-            render: function(c) {
+            render(c) {
                 onDateFieldRender(c);
             }
         }
@@ -305,7 +305,7 @@ export default function LayerWidgetEvent(gis, layer) {
         style: 'margin-left: 1px',
         value: gis.init.calendar.formatDate(gis.init.systemInfo.dateFormat, gis.init.calendar.today()),
         listeners: {
-            render: function(c) {
+            render(c) {
                 onDateFieldRender(c);
             }
         }
@@ -330,11 +330,11 @@ export default function LayerWidgetEvent(gis, layer) {
             fields: ['id', 'name', 'index'],
             data: [{id: 'CUSTOM', name: GIS.i18n.start_end_dates}].concat(gis.conf.period.relativePeriods)
         }),
-        selectFirst: function() {
+        selectFirst() {
             this.setValue(this.store.getAt(0).data.id);
         },
         listeners: {
-            select: function () {
+            select() {
                 const id = this.getValue();
 
                 if (id === 'CUSTOM') {
@@ -381,13 +381,13 @@ export default function LayerWidgetEvent(gis, layer) {
         },
         multiSelect: true,
         rendered: false,
-        reset: function() {
+        reset() {
             const rootNode = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
             this.collapseAll();
             this.expandPath(rootNode.getPath());
             this.getSelectionModel().select(rootNode);
         },
-        selectRootIf: function() {
+        selectRootIf() {
             if (this.getSelectionModel().getSelection().length < 1) {
                 const node = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
                 if (this.rendered) {
@@ -399,7 +399,7 @@ export default function LayerWidgetEvent(gis, layer) {
         isPending: false,
         recordsToSelect: [],
         recordsToRestore: [],
-        multipleSelectIf: function(map, doUpdate) {
+        multipleSelectIf(map, doUpdate) {
             if (this.recordsToSelect.length === gis.util.object.getLength(map)) {
                 this.getSelectionModel().select(this.recordsToSelect);
                 this.recordsToSelect = [];
@@ -410,7 +410,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 }
             }
         },
-        multipleExpand: function(id, map, doUpdate) {
+        multipleExpand(id, map, doUpdate) {
             const that = this;
             const rootId = gis.conf.finals.root.id;
             let path = map[id];
@@ -425,7 +425,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 that.multipleSelectIf(map, doUpdate);
             });
         },
-        select: function(url, params) {
+        select(url, params) {
             if (!params) {
                 params = {};
             }
@@ -434,7 +434,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 method: 'GET',
                 params: params,
                 scope: this,
-                success: function(r) {
+                success(r) {
                     const units = JSON.parse(r.responseText).organisationUnits;
                     this.numberOfRecords = units.length;
 
@@ -444,7 +444,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 }
             });
         },
-        getParentGraphMap: function() {
+        getParentGraphMap() {
             const selection = this.getSelectionModel().getSelection();
             const map = {};
 
@@ -457,7 +457,7 @@ export default function LayerWidgetEvent(gis, layer) {
 
             return map;
         },
-        selectGraphMap: function(map, update) {
+        selectGraphMap(map, update) {
             if (!gis.util.object.getLength(map)) {
                 return;
             }
@@ -496,14 +496,14 @@ export default function LayerWidgetEvent(gis, layer) {
                 children: gis.init.rootNodes
             },
             listeners: {
-                beforeload: function(store, operation) {
+                beforeload(store, operation) {
                     if (!store.proxy._url) {
                         store.proxy._url = store.proxy.url;
                     }
 
                     store.proxy.url = store.proxy._url + '/' + operation.node.data.id;
                 },
-                load: function(store, node, records) {
+                load(store, node, records) {
                     records.forEach(function(record) {
                         if (Ext.isBoolean(record.data.hasChildren)) {
                             record.set('leaf', !record.data.hasChildren);
@@ -512,7 +512,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 }
             }
         }),
-        xable: function(values) {
+        xable(values) {
             for (let i = 0; i < values.length; i++) {
                 if (!!values[i]) {
                     this.disable();
@@ -522,7 +522,7 @@ export default function LayerWidgetEvent(gis, layer) {
 
             this.enable();
         },
-        getDimension: function() {
+        getDimension() {
             const r = treePanel.getSelectionModel().getSelection();
             const config = {
                 dimension: gis.conf.finals.dimension.organisationUnit.objectName,
@@ -556,24 +556,24 @@ export default function LayerWidgetEvent(gis, layer) {
             return config.items.length ? config : null;
         },
         listeners: {
-            beforeitemexpand: function() {
+            beforeitemexpand() {
                 if (!treePanel.isPending) {
                     treePanel.recordsToRestore = treePanel.getSelectionModel().getSelection();
                 }
             },
-            itemexpand: function() {
+            itemexpand() {
                 if (!treePanel.isPending && treePanel.recordsToRestore.length) {
                     treePanel.getSelectionModel().select(treePanel.recordsToRestore);
                     treePanel.recordsToRestore = [];
                 }
             },
-            render: function() {
+            render() {
                 this.rendered = true;
             },
-            afterrender: function() {
+            afterrender() {
                 this.getSelectionModel().select(0);
             },
-            itemcontextmenu: function(v, r, h, i, e) {
+            itemcontextmenu(v, r, h, i, e) {
                 e.stopEvent();
 
                 v.getSelectionModel().select(r, false);
@@ -589,7 +589,7 @@ export default function LayerWidgetEvent(gis, layer) {
                     v.menu.add({
                         text: GIS.i18n.select_sub_units,
                         icon: 'images/node-select-child.png',
-                        handler: function() {
+                        handler() {
                             r.expand(false, function() {
                                 v.getSelectionModel().select(r.childNodes, true);
                                 v.getSelectionModel().deselect(r);
@@ -612,7 +612,7 @@ export default function LayerWidgetEvent(gis, layer) {
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.user_ou,
         labelWidth: gis.conf.layout.form_label_width,
-        handler: function(chb, checked) {
+        handler(chb, checked) {
             treePanel.xable([checked, userOrganisationUnitChildren.getValue(), userOrganisationUnitGrandChildren.getValue()]);
         }
     });
@@ -623,7 +623,7 @@ export default function LayerWidgetEvent(gis, layer) {
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.user_sub_units,
         labelWidth: gis.conf.layout.form_label_width,
-        handler: function(chb, checked) {
+        handler(chb, checked) {
             treePanel.xable([checked, userOrganisationUnit.getValue(), userOrganisationUnitGrandChildren.getValue()]);
         }
     });
@@ -634,7 +634,7 @@ export default function LayerWidgetEvent(gis, layer) {
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.user_sub_x2_units,
         labelWidth: gis.conf.layout.form_label_width,
-        handler: function(chb, checked) {
+        handler(chb, checked) {
             treePanel.xable([checked, userOrganisationUnit.getValue(), userOrganisationUnitChildren.getValue()]);
         }
     });
@@ -760,7 +760,7 @@ export default function LayerWidgetEvent(gis, layer) {
         else {
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + 'programs.json?filter=id:eq:' + programId + '&fields=programStages[id,displayName|rename(name)],programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType,optionSet[id,displayName|rename(name)]]]&paging=false'),
-                success: function(r) {
+                success(r) {
                     const program = JSON.parse(r.responseText).programs[0];
 
                     if (!program) {
@@ -841,7 +841,7 @@ export default function LayerWidgetEvent(gis, layer) {
         else {
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + 'programStages.json?filter=id:eq:' + stageId + '&fields=programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType,optionSet[id,displayName|rename(name)]]]'),
-                success: function(r) {
+                success(r) {
                     const objects = JSON.parse(r.responseText).programStages;
 
                     if (!objects.length) {
@@ -1115,7 +1115,7 @@ export default function LayerWidgetEvent(gis, layer) {
             optionsPanel
         ],
         listeners: {
-            afterrender: function() { // nasty workaround
+            afterrender() { // nasty workaround
                 optionsPanel.expand();
                 organisationUnit.expand();
                 period.expand();
@@ -1133,7 +1133,7 @@ export default function LayerWidgetEvent(gis, layer) {
         reset: reset,
         setGui: setGui,
         getView: getView,
-        getParentGraphMap: function() {
+        getParentGraphMap() {
             return treePanel.getParentGraphMap();
         },
 

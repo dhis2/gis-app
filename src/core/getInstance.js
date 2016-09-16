@@ -657,7 +657,7 @@ export default function getInstance(init) {
                     html: html,
                     bodyStyle: 'padding: 12px; background: #fff; max-width: 600px; max-height: ' + gis.viewport.centerRegion.getHeight() / 2 + 'px',
                     listeners: {
-                        show: function (win) {
+                        show(win) {
                             win.setPosition(win.getPosition()[0], win.getPosition()[1] / 2);
                             if (!win.hasDestroyOnBlurHandler) {
                                 gis.util.gui.window.addDestroyOnBlurHandler(win);
@@ -1139,7 +1139,7 @@ export default function getInstance(init) {
     GIS.core.instances.push(gis);
 
     gis.instance.on('contextmenu', evt => {
-        var menu = GIS.core.ContextMenu(gis, null, null, evt.latlng);
+        const menu = GIS.core.ContextMenu(gis, null, null, evt.latlng);
         menu.showAt([evt.originalEvent.x, evt.originalEvent.y]);
     });
 

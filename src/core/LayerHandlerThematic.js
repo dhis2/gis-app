@@ -154,7 +154,7 @@ export default function LayerHandlerThematic(gis, layer) {
             });
 
             // Sort values in ascending order
-            values.sort(function (a, b) {
+            values.sort((a, b) => {
                 return a - b;
             });
 
@@ -249,7 +249,7 @@ export default function LayerHandlerThematic(gis, layer) {
                 url: encodeURI(gis.init.apiPath + 'legendSets/' + view.legendSet.id + '.json?fields=' + gis.conf.url.legendSetFields.join(',')),
                 scope: this,
                 disableCaching: false,
-                success: function (r) {
+                success(r) {
                     legends = JSON.parse(r.responseText).legends;
 
                     arraySort(legends, 'ASC', 'startValue');
@@ -272,7 +272,7 @@ export default function LayerHandlerThematic(gis, layer) {
                     view.legendSet.colors = colors;
                     view.legendSet.count = count;
                 },
-                callback: function () {
+                callback() {
                     fn();
                 }
             });
@@ -298,7 +298,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + '' + elementUrl + '.json?fields=legendSet[id,displayName|rename(name)]&paging=false&filter=id:eq:' + id),
-                success: function (r) {
+                success(r) {
                     const elements = JSON.parse(r.responseText)[elementUrl];
                     let set;
 
@@ -314,7 +314,7 @@ export default function LayerHandlerThematic(gis, layer) {
                         fn();
                     }
                 },
-                failure: function () {
+                failure() {
                     fn();
                 }
             });
@@ -467,14 +467,13 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     const onFeatureClick = function (evt) {
-        // TODO: optimize!
         const view = layer.view;
         const indicator = view.columns[0].items[0].name;
         const period = view.filters[0].items[0].name;
         const name = evt.layer.feature.properties.name;
         const value = evt.layer.feature.properties.value;
         const unit = '';
-        const content = '<div style="line-height:19px;"><strong style="font-weight:bold;">' + name + '</strong><br>' + indicator + '<br>' + period + ': ' + value + ' ' + unit + '</div>';
+        const content = '<div class="leaflet-popup-orgunit"><em>' + name + '</em><br>' + indicator + '<br>' + period + ': ' + value + ' ' + unit + '</div>';
 
         L.popup()
             .setLatLng(evt.latlng)
@@ -608,7 +607,7 @@ export default function LayerHandlerThematic(gis, layer) {
         hideMask: false,
         callBack: null,
         isDrillDown: false,
-        load: function(view) {
+        load(view) {
             if (gis.mask && !gis.skipMask) {
                 gis.mask.show();
             }

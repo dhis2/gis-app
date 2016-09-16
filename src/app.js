@@ -486,7 +486,7 @@ Ext.onReady( function() {
                         style: 'border-color: transparent #d1d1d1 transparent transparent; margin-right: 4px',
                     });
 
-                    // https://github.com/dhis2/dhis2-gis/issues/7
+                    // https://github.com/dhis2/gis-app/issues/7
                     /*
                     a.push({
                         text: GIS.i18n.download,

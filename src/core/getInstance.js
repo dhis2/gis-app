@@ -1204,7 +1204,7 @@ export default function getInstance(init) {
     gis.layer = GIS.core.getLayers(gis);
     gis.thematicLayers = [gis.layer.thematic1, gis.layer.thematic2, gis.layer.thematic3, gis.layer.thematic4];
 
-    // https://github.com/dhis2/dhis2-gis/issues/9
+    // https://github.com/dhis2/gis-app/issues/9
     gis.orderedLayers = [
         gis.layer.googleHybrid,
         gis.layer.googleStreets,

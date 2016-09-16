@@ -1,5 +1,5 @@
 {
-  "name": "dhis2-gis",
+  "name": "gis-api",
   "version": "23.0.1",
   "description": "GIS Web App for DHIS 2",
   "main": "src/app.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dhis2/dhis2-gis.git"
+    "url": "git+https://github.com/dhis2/gis-api.git"
   },
   "keywords": [
     "DHIS2",
@@ -25,13 +25,13 @@
   "author": "Bjørn Sandvik",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/dhis2/dhis2-gis/issues"
+    "url": "https://github.com/dhis2/gis-api/issues"
   },
-  "homepage": "https://github.com/dhis2/dhis2-gis#readme",
+  "homepage": "https://github.com/dhis2/gis-api#readme",
   "dependencies": {
     "d2-utilizr": "^0.2.7",
     "d3-time-format": "^2.0.1",
-    "dhis2-gis-api": "^23.0.0",
+    "gis-api": "^23.0.0",
     "whatwg-fetch": "^0.10.1"
   },
   "devDependencies": {

@@ -22,7 +22,7 @@ export default function LayerHandlerBoundary(gis, layer) {
         const srcIds = [];
         const srcDim = src.rows[0];
 
-        // organisation units
+        // Organisation units
         if (viewDim.items.length === srcDim.items.length) {
             viewDim.items.forEach(item => viewIds.push(item.id));
             srcDim.items.forEach(item => srcIds.push(item.id));
@@ -113,21 +113,17 @@ export default function LayerHandlerBoundary(gis, layer) {
             loadData(view, features);
         };
 
-        const failure = function() {
-            if (gis.mask) {
-                gis.mask.hide();
-            }
-            gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
-        };
-
         Ext.Ajax.request({
             url: encodeURI(url),
             disableCaching: false,
-            success: function(r) {
+            success(r) {
                 success(JSON.parse(r.responseText));
             },
-            failure: function() {
-                failure();
+            failure() {
+                if (gis.mask) {
+                    gis.mask.hide();
+                }
+                gis.alert(GIS.i18n.coordinates_could_not_be_loaded);
             }
         });
     };
@@ -179,14 +175,14 @@ export default function LayerHandlerBoundary(gis, layer) {
 
     const onFeatureClick = function(evt) {
         const attr = evt.layer.feature.properties;
-        let content = '<div style="line-height:19px;"><strong style="font-weight:bold;">' + attr.name + '</strong>';
-
-        if (attr.parentName) {
-            content += '<br/>Parent: ' + attr.parentName;
-        }
+        let content = '<div class="leaflet-popup-orgunit"><em>' + attr.name + '</em>';
 
         if (attr.level) {
-            content += '<br/>Level: ' + attr.level;
+            content += '<br/>' + GIS.i18n.level + ': ' + attr.level;
+        }
+
+        if (attr.parentName) {
+            content += '<br/>' + GIS.i18n.parent_unit + ': ' + attr.parentName;
         }
 
         content += '</div>';
@@ -261,7 +257,7 @@ export default function LayerHandlerBoundary(gis, layer) {
         zoomToVisibleExtent: false,
         hideMask: false,
         callBack: null,
-        load: function(view) {
+        load(view) {
             if (gis.mask && !gis.skipMask) {
                 gis.mask.show();
             }

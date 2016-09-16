@@ -47,7 +47,7 @@ export default function LayerWidgetFacility(gis, layer) {
             }
         }
     });
-    
+
     const treePanel = Ext.create('Ext.tree.Panel', {
         cls: 'gis-tree',
         height: 307,

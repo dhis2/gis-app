@@ -897,7 +897,7 @@ gis-combo .x-form-item-label {
 .gis-menu-item-icon-float,
 .gis-menu-item-icon-information,
 .gis-menu-item-icon-relocate,
-
+.gis-menu-item-icon-earthengine,
 .gis-menu-item-icon-favorite {
     left: 6px;
 }
@@ -930,7 +930,9 @@ gis-combo .x-form-item-label {
 .gis-menu-item-icon-relocate {
     background: url('../images/relocate_16.png') no-repeat;
 }
-
+.gis-menu-item-icon-earthengine {
+    background: url('../images/earthEngine_16.png') no-repeat;
+}
 .gis-menu-item-icon-favorite {
     background: url('../images/favorite_16.png') no-repeat;
 }

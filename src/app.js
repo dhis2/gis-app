@@ -472,20 +472,6 @@ Ext.onReady( function() {
                             viewport.favoriteWindow.show();
                         }
                     });
-                    if (gis.init.user.isAdmin) {
-                        a.push({
-                            text: GIS.i18n.legends,
-                            menu: {},
-                            handler: function() {
-                                if (viewport.legendSetWindow && viewport.legendSetWindow.destroy) {
-                                    viewport.legendSetWindow.destroy();
-                                }
-
-                                viewport.legendSetWindow = GIS.app.LegendSetWindow(gis);
-                                viewport.legendSetWindow.show();
-                            }
-                        });
-                    }
                     a.push({
                         xtype: 'tbseparator',
                         height: 18,

@@ -483,7 +483,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         const dataset = datasets[datasetCombo.getValue()];
         const image = collectionCombo.getValue();
         const view = {
-            config: { // Config object saved stored as one field
+            config: { // Config object stored as one field in favorite
                 id: dataset.id,
             },
         };

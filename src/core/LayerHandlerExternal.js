@@ -3,20 +3,26 @@ export default function LayerHandlerExternal(gis, layer) {
 
     // Create new layer for view definition
     const createLayer = function(view) {
+        if (typeof view.config === 'string') { // From database as favorite
+            view.config = JSON.parse(view.config);
+        }
+
+        const config = view.config;
+
         const layerConfig = {
             type: 'tileLayer',
-            url: view.url,
-            attribution: view.attribution,
-            pane: 'external_' + view.placement
+            url: config.url,
+            attribution: config.attribution,
+            pane: 'external_' + config.placement
         };
 
-        if (view.service === 'tms') {
+        if (config.service === 'tms') {
             layerConfig.tms = true;
         }
 
-        if (view.service === 'wms') {
+        if (config.service === 'wms') {
             layerConfig.type = 'wmsLayer';
-            layerConfig.layers = view.layers;
+            layerConfig.layers = config.layers;
         }
 
         // Remove layer instance if already exist
@@ -31,6 +37,10 @@ export default function LayerHandlerExternal(gis, layer) {
     }
 
     const afterLoad = function(view) {
+        layer.view = { // simplify view for storage
+            config: JSON.stringify(view.config)
+        };
+
         // Legend
         if (gis.viewport) {
             gis.viewport.eastRegion.doLayout();
@@ -47,8 +57,25 @@ export default function LayerHandlerExternal(gis, layer) {
             layer.instance.setOpacity(view.opacity);
         }
 
+        // Gui
+        if (loader.updateGui && layer.widget) {
+            layer.widget.setGui(view);
+        }
+
         if (gis.mask && loader.hideMask) {
             gis.mask.hide();
+        }
+
+        // Map callback
+        if (loader.callBack) {
+            loader.callBack(layer);
+        }
+        else {
+            gis.map = null;
+
+            if (gis.viewport.shareButton) {
+                gis.viewport.shareButton.enable();
+            }
         }
     }
 

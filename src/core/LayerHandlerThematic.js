@@ -112,7 +112,7 @@ export default function LayerHandlerThematic(gis, layer) {
             const valueMap = {};
             const valueFeatures = []; // only include features with values
             const values = []; // to find min and max values
-            const aggregationType = (GIS.i18n[view.aggregationType.toLowerCase()] || '').toLowerCase();
+            const aggregationType = (GIS.i18n[(view.aggregationType || '').toLowerCase()] || '').toLowerCase();
 
             let ouIndex;
             let valueIndex;
@@ -520,11 +520,17 @@ export default function LayerHandlerThematic(gis, layer) {
         if (view.method === 1 && view.legendSet) {
             html += '<dl class="dhis2-legend-predefined">';
 
-            for (let i = 0, name, label; i < bounds.length - 1; i++) {
+            for (let i = 0, name, label, count; i < bounds.length - 1; i++) {
                 name = legendNames[i];
-                label = bounds[i] + ' - ' + bounds[i + 1] + ' (' + (options.count[i + 1] || 0) + ')';
+                label = bounds[i] + ' - ' + bounds[i + 1];
+                count = ' (' + (options.count[i + 1] || 0) + ')';
                 html += '<dt style="background-color:' + colors[i] + ';"></dt>';
-                html += '<dd><strong>' + (name || '') + '</strong>' + label + '</dd>';
+
+                if (name !== label) {
+                    html += '<dd><strong>' + (name || '') + '</strong>' + label + count + '</dd>';
+                } else {
+                    html += '<dd style="line-height:23px">' + label + count + '</dd>';
+                }
             }
         }
         else {

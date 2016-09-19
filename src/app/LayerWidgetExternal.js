@@ -43,21 +43,7 @@ export default function LayerWidgetExternal(gis, layer) {
                 placement: 'basemap',
                 attribution: 'Natural Earth'
             }]
-        }),
-        listeners: {
-            render() { // Select first record (WMS)
-                // this.select(this.getStore().getAt(2)); // TODO: change to 0
-            },
-            change() { // Show/hide WMS layers field
-                /*
-                if (this.getValue() === 'wms') {
-                    layersField.show();
-                } else {
-                    layersField.hide();
-                }
-                */
-            }
-        }
+        })
     });
 
 
@@ -154,14 +140,20 @@ export default function LayerWidgetExternal(gis, layer) {
         }
     });
 
-    // TODO: Reset this widget
+    // Reset this widget
     const reset = function() {
-        console.log('reset');
+        externalCombo.reset();
     };
 
     // TODO: Poulate the widget from a view (favorite)
     const setGui = function(view) {
-        console.log('setGui');
+        if (typeof view.config === 'string') {
+            view.config = JSON.parse(view.config);
+        }
+
+        if (view.config.id) {
+            externalCombo.setValue(view.config.id);
+        }
     };
 
     // Get the view representation of the layer

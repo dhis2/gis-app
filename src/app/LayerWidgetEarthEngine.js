@@ -431,7 +431,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     // Poulate the widget from a view (favorite)
     const setGui = function(view) {
-        if (typeof view.config === 'string') { // TODO: Why needed?
+        if (typeof view.config === 'string') {
             view.config = JSON.parse(view.config);
         }
 

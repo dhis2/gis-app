@@ -9,16 +9,14 @@ import '../scss/plugin.scss';
 window.GIS = GIS;
 
 Ext.onReady(function() {
-    var gis,
-        init = {
-            user: {},
-            systemInfo: {}
-        },
-        configs = [],
-        isInitStarted = false,
-        isInitComplete = false,
-        getInit,
-        execute;
+    const init = {
+        user: {},
+        systemInfo: {}
+    };
+    const configs = [];
+    let isInitStarted = false;
+    let isInitComplete = false;
+    let gis;
 
     GIS.i18n = {
         event_layer: 'Event layer',
@@ -35,17 +33,9 @@ Ext.onReady(function() {
 
     GIS.plugin = {};
 
-    getInit = function(config) {
-        var requests = [],
-            onSystemInfoLoad,
-            onSystemSettingsLoad,
-            onOrgUnitsLoad,
-            onDimensionsLoad,
-            onUserAccountLoad,
-            onOptionSetsLoad,
-            onScriptReady,
-            callbacks = 0,
-            fn;
+    const getInit = function(config) {
+        const requests = [];
+        let callbacks = 0;
 
         init.contextPath = config.url;
         init.apiPath = init.contextPath + '/api/' + GIS.apiVersion + '/';
@@ -59,32 +49,28 @@ Ext.onReady(function() {
             init.defaultHeaders['Authorization'] = 'Basic ' + btoa(config.username + ':' + config.password);
         }
 
-        fn = function() {
+        const fn = function() {
             if (++callbacks === requests.length) {
                 isInitComplete = true;
-
-                for (var i = 0; i < configs.length; i++) {
-                    execute(configs[i]);
-                }
+                configs.forEach(config => execute(config));
             }
         };
 
-        onSystemInfoLoad = function(r) {
-            var systemInfo = r.responseText ? JSON.parse(r.responseText) : r;
+        const onSystemInfoLoad = function(r) {
+            const systemInfo = r.responseText ? JSON.parse(r.responseText) : r;
             init.systemInfo.databaseInfo = systemInfo.databaseInfo;
             fn();
         };
 
-        onSystemSettingsLoad = function(r) {
-            var systemSettings = r.responseText ? JSON.parse(r.responseText) : r,
-                userAccountConfig;
+        const onSystemSettingsLoad = function(r) {
+            const systemSettings = r.responseText ? JSON.parse(r.responseText) : r;
 
             init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
             init.systemInfo.calendar = systemSettings.keyCalendar;
             init.systemInfo.googleMapsKey = systemSettings.keyGoogleMapsApiKey;
 
             // user-account
-            userAccountConfig = {
+            const userAccountConfig = {
                 url: init.contextPath + '/api/me/user-account.json',
                 disableCaching: false,
                 success: onUserAccountLoad
@@ -93,21 +79,19 @@ Ext.onReady(function() {
             Ext.Ajax.request(userAccountConfig);
         };
 
-        onOrgUnitsLoad = function(r) {
-            var organisationUnits = (r.responseText ? JSON.parse(r.responseText).organisationUnits : r) || [],
-                ou = [],
-                ouc = [];
+        const onOrgUnitsLoad = function(r) {
+            const organisationUnits = (r.responseText ? JSON.parse(r.responseText).organisationUnits : r) || [];
+            const ou = [];
+            let ouc = [];
 
             if (organisationUnits.length) {
-                for (var i = 0, org; i < organisationUnits.length; i++) {
-                    org = organisationUnits[i];
-
+                organisationUnits.forEach(org => {
                     ou.push(org.id);
 
                     if (org.children) {
                         ouc = arrayClean(ouc.concat(arrayPluck(org.children, 'id') || []));
                     }
-                }
+                });
 
                 init.user = init.user || {};
                 init.user.ou = ou;
@@ -119,24 +103,24 @@ Ext.onReady(function() {
             fn();
         };
 
-        onDimensionsLoad = function(r) {
+        const onDimensionsLoad = function(r) {
             init.dimensions = r.responseText ? JSON.parse(r.responseText).dimensions : r.dimensions;
             fn();
         };
 
-        onUserAccountLoad = function(r) {
+        const onUserAccountLoad = function(r) {
             init.userAccount = r.responseText ? JSON.parse(r.responseText) : r;
 
             // init
             if (window['dhis2'] && window['jQuery']) {
                 onScriptReady();
             } else {
-                Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/jQuery/jquery.min.js', function() {
-                    Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.util.js', function() {
-                        Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.js', function() {
-                            Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.idb.js', function() {
-                                Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.ss.js', function() {
-                                    Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.memory.js', function() {
+                Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/jQuery/jquery.min.js', () => {
+                    Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.util.js', () => {
+                        Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.js', () => {
+                            Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.idb.js', () => {
+                                Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.ss.js', () => {
+                                    Ext.Loader.injectScriptElement(init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.storage.memory.js', () => {
                                         onScriptReady();
                                     });
                                 });
@@ -147,48 +131,42 @@ Ext.onReady(function() {
             }
         };
 
-        onOptionSetsLoad = function(r) {
-            var optionSets = (r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets) || [],
-                store = dhis2.gis.store,
-                ids = [],
-                url = '',
-                callbacks = 0,
-                registerOptionSet,
-                updateStore,
-                optionSetConfig;
+        const onOptionSetsLoad = function(r) {
+            const optionSets = (r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets) || [];
+            const store = dhis2.gis.store;
+            const ids = [];
+            let url = '';
+            let callbacks = 0;
 
             if (!optionSets.length) {
                 fn();
                 return;
             }
 
-            optionSetConfig = {
+            const optionSetConfig = {
                 url: encodeURI(init.apiPath + 'optionSets.json?fields=id,name,version,options[code,name]&paging=false' + url),
                 disableCaching: false,
-                success: function(r) {
-                    var sets = r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets;
-
+                success(r) {
+                    const sets = r.responseText ? JSON.parse(r.responseText).optionSets : r.optionSets;
                     store.setAll('optionSets', sets).done(fn);
                 }
             };
 
-            updateStore = function() {
+            const updateStore = function() {
                 if (++callbacks === optionSets.length) {
                     if (!ids.length) {
                         fn();
                         return;
                     }
 
-                    for (var i = 0; i < ids.length; i++) {
-                        url += '&filter=id:eq:' + ids[i];
-                    }
+                    ids.forEach(id => url += '&filter=id:eq:' + id);
 
                     Ext.Ajax.request(optionSetConfig);
                 }
             };
 
-            registerOptionSet = function(optionSet) {
-                store.get('optionSets', optionSet.id).done(function(obj) {
+            const registerOptionSet = function(optionSet) {
+                store.get('optionSets', optionSet.id).done(obj => {
                     if (!isObject(obj) || obj.version !== optionSet.version) {
                         ids.push(optionSet.id);
                     }
@@ -197,34 +175,28 @@ Ext.onReady(function() {
                 });
             };
 
-            store.open().done(function() {
-                for (var i = 0; i < optionSets.length; i++) {
-                    registerOptionSet(optionSets[i]);
-                }
+            store.open().done(() => {
+                optionSets.forEach(optionSet => registerOptionSet(optionSet));
             });
         };
 
-        onScriptReady = function() {
-            var defaultKeyUiLocale = 'en',
-                defaultKeyAnalysisDisplayProperty = 'displayName',
-                displayPropertyMap = {
-                    'name': 'displayName',
-                    'displayName': 'displayName',
-                    'shortName': 'displayShortName',
-                    'displayShortName': 'displayShortName'
-                },
-                namePropertyUrl,
-                contextPath,
-                keyAnalysisDisplayProperty,
-                optionSetVersionConfig;
+        const onScriptReady = function() {
+            const defaultKeyUiLocale = 'en';
+            const defaultKeyAnalysisDisplayProperty = 'displayName';
+            const displayPropertyMap = {
+                'name': 'displayName',
+                'displayName': 'displayName',
+                'shortName': 'displayShortName',
+                'displayShortName': 'displayShortName'
+            };
 
             init.userAccount.settings.keyUiLocale = init.userAccount.settings.keyUiLocale || defaultKeyUiLocale;
             init.userAccount.settings.keyAnalysisDisplayProperty = displayPropertyMap[init.userAccount.settings.keyAnalysisDisplayProperty] || defaultKeyAnalysisDisplayProperty;
 
             // local vars
-            contextPath = init.contextPath;
-            keyAnalysisDisplayProperty = init.userAccount.settings.keyAnalysisDisplayProperty;
-            namePropertyUrl = keyAnalysisDisplayProperty + '|rename(name)';
+            const contextPath = init.contextPath;
+            const keyAnalysisDisplayProperty = init.userAccount.settings.keyAnalysisDisplayProperty;
+            const namePropertyUrl = keyAnalysisDisplayProperty + '|rename(name)';
 
             init.namePropertyUrl = namePropertyUrl;
 
@@ -237,7 +209,7 @@ Ext.onReady(function() {
                 objectStores: ['optionSets']
             });
 
-            optionSetVersionConfig = {
+            const optionSetVersionConfig = {
                 url: encodeURI(contextPath + '/api/optionSets.json?fields=id,version&paging=false'),
                 disableCaching: false,
                 success: onOptionSetsLoad
@@ -275,18 +247,11 @@ Ext.onReady(function() {
             success: onDimensionsLoad
         });
 
-        for (var i = 0; i < requests.length; i++) {
-            Ext.Ajax.request(requests[i]);
-        }
+        requests.forEach(request => Ext.Ajax.request(request));
     };
 
-    execute = function(config) {
-        var validateConfig,
-            extendInstance,
-            initLayout,
-            gis;
-
-        validateConfig = function() {
+    const execute = function(config) {
+        const validateConfig = function() {
             if (!isString(config.url)) {
                 gis.alert('Invalid url (' + config.el + ')');
                 return false;
@@ -311,9 +276,9 @@ Ext.onReady(function() {
             return true;
         };
 
-        extendInstance = function(gis, appConfig) {
-            var init = gis.init,
-                store = gis.store;
+        const extendInstance = function(gis, appConfig) {
+            const init = gis.init;
+            const store = gis.store;
 
             init.el = config.el;
 
@@ -332,10 +297,10 @@ Ext.onReady(function() {
             });
         };
 
-        initLayout = function(appConfig) {
-            var container = document.getElementById(appConfig.el),
-                titleEl = document.createElement('div'),
-                map = gis.instance;
+        const initLayout = function(appConfig) {
+            const container = document.getElementById(appConfig.el);
+            const titleEl = document.createElement('div');
+            const map = gis.instance;
 
             container.className = 'dhis2-map-widget-container';
             titleEl.className = 'dhis2-map-title';
@@ -368,13 +333,11 @@ Ext.onReady(function() {
         };
 
         (function() {
-            var appConfig;
-
             if (!validateConfig()) {
                 return;
             }
 
-            appConfig = {
+            const appConfig = {
                 plugin: true,
                 dashboard: isBoolean(config.dashboard) ? config.dashboard : false,
                 crossDomain: isBoolean(config.crossDomain) ? config.crossDomain : true,
@@ -416,6 +379,6 @@ Ext.onReady(function() {
         }
     };
 
-    var DHIS = isObject(window['DHIS']) ? window.DHIS : {};
+    const DHIS = isObject(window['DHIS']) ? window.DHIS : {};
     DHIS.getMap = GIS.plugin.getMap;
 });

@@ -4,6 +4,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
         'USGS/SRTMGL1_003': {
             name: 'Elevation',
             unit: 'metres',
+            band: 'elevation',
             mask: true,
             description: 'Elevation above sea-level.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003" target="_blank">NASA / USGS / JPL-Caltech</a>',
@@ -16,23 +17,33 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             methods: {
                 multiply: [100] // Convert from people/hectare to people/km2
             },
+            resolution: 100,
+            projection: 'EPSG:4326',
+            value(value) {
+                return Math.round(value);
+            },
             description: 'Population density estimates with national totals adjusted to match UN population division estimates.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>',
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>'
         },
         'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {
             name: 'Nighttime lights',
             unit: 'light intensity',
             band: 'stable_lights',
             mask: true,
+            popup: '{name}: {value}',
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>',
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>'
         },
         'UCSB-CHG/CHIRPS/PENTAD': {
             name: 'Precipitation',
             unit: 'millimeter',
+            band: 'precipitation',
             mask: true,
+            value(value) {
+                return value.toFixed(1);
+            },
             description: 'Precipitation collected from satellite and weather stations on the ground.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD" target="_blank">UCSB/CHG</a>',
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD" target="_blank">UCSB/CHG</a>'
         },
         'MODIS/MOD11A2': {
             name: 'Temperature',
@@ -44,8 +55,12 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 multiply: [0.02],
                 subtract: [273.15],
             },
+            value(value) {
+                return Math.round(value);
+            },
+            popup: '{name}: {value}{unit}',
             description: 'Land surface temperatures collected from satellite. Blank spots will appear in areas with a persistent cloud cover.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/MODIS%2FMOD11A2" target="_blank">NASA LP DAAC</a>',
+            attribution: '<a href="https://explorer.earthengine.google.com/#detail/MODIS%2FMOD11A2" target="_blank">NASA LP DAAC</a>'
         },
         'MODIS/051/MCD12Q1': {
             name: 'Landcover',
@@ -112,9 +127,10 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 color: '#743411',
                 name: 'Unclassified'
             }],
+            popup: '{name}: {value}',
             description: 'Distinct landcover types collected from satellites.',
             attribution: '<a href="https://code.earthengine.google.com/dataset/MODIS/051/MCD12Q1" target="_blank">NASA LP DAAC</a>'
-        }
+        },
     };
 
     const createLayer = function(view) {

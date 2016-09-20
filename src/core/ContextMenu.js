@@ -509,19 +509,13 @@ export default function ContextMenu(gis, layer, instance, latlng) {
 
     // Earth Engine layer
     if (gis.layer.earthEngine.instance && gis.instance.hasLayer(gis.layer.earthEngine.instance)) {
-        //console.log('Earth Engine layer', latlng);
+        const name = gis.layer.earthEngine.instance.options.name.toLowerCase();
 
         menuItems.push(Ext.create('Ext.menu.Item', {
-            text: GIS.i18n.show_value,
+            text: GIS.i18n.show + ' ' + name,
             iconCls: 'gis-menu-item-icon-earthengine',
             handler(item) {
-                gis.layer.earthEngine.instance.getValue(latlng, value => {
-                    L.popup()
-                        .setLatLng(latlng)
-                        .setContent('Value: ' + value)
-                        .openOn(gis.instance);
-
-                });
+                gis.layer.earthEngine.instance.showValue(latlng);
             }
         }));
     }

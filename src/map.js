@@ -28,7 +28,8 @@ Ext.onReady(function() {
         invalid_coordinates: 'Invalid coordinates',
         no_valid_coordinates_found: 'No valid coordinates found',
         drill_down: 'Drill down',
-        float_up: 'Float up'
+        float_up: 'Float up',
+        show_lon_lat: 'Show longitude/latitude'
     };
 
     GIS.plugin = {};

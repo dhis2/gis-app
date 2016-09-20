@@ -5,25 +5,13 @@ import arrayContains from 'd2-utilizr/lib/arrayContains';
 import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerEvent(gis, layer) {
-    var spatialSupport = gis.init.systemInfo.databaseInfo.spatialSupport,
-        loadData,
-        afterLoad,
-        toGeoJson,
-        updateMap,
-        handler,
-        onFeaturePopup,
-        displayElements = {}; // Data elements to display in event popup
+    const spatialSupport = gis.init.systemInfo.databaseInfo.spatialSupport;
+    const displayElements = {}; // Data elements to display in event popup
 
-    loadData = function(view) {
-        var paramString = '?',
-            organisationUnits,
-            loadEvents,
-            getDataElementOptionSets,
-            loadDataElements,
-            onEventCountSuccess,
-            success;
-
+    const loadData = function(view) {
         view = view || layer.view;
+
+        let paramString = '?';
 
         if (!view.programStage) {
             gis.alert('No program stage selected');
@@ -43,63 +31,48 @@ export default function LayerHandlerEvent(gis, layer) {
 
         // organisation units
         if (view.rows[0] && view.rows[0].dimension === 'ou' && isArray(view.rows[0].items)) {
-            organisationUnits = view.rows[0].items;
-            paramString += '&dimension=ou:';
-
-            for (var i = 0; i < organisationUnits.length; i++) {
-                paramString += organisationUnits[i].id;
-                paramString += i < organisationUnits.length - 1 ? ';' : '';
-            }
+            paramString += '&dimension=ou:' + view.rows[0].items.map(ou => ou.id).join(';');
         }
 
         // de
         if (view.columns) {
-            for (var i = 0, element; i < view.columns.length; i++) {
-                element = view.columns[i];
-
+            view.columns.forEach(element => {
                 if (element.dimension !== 'dx') { // API sometimes returns empty dx filter
                     paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
                 }
-            }
+            });
         }
 
         // Only events with coordinates
         paramString += '&coordinatesOnly=true';
 
-        success = function(r) {
-            var features = [],
-                rows = [],
-                lonIndex,
-                latIndex,
-                optionSetIndex,
-                optionSetHeader,
-                names = Ext.clone(r.metaData.names),
-                booleanNames = {
-                    'true': GIS.i18n.yes || 'Yes',
-                    'false': GIS.i18n.no || 'No'
-                },
-                updateFeatures,
-                getOptionSets;
+        const success = function(r) {
+            const features = [];
+            const rows = [];
+            const names = Ext.clone(r.metaData.names);
+            const booleanNames = {
+                'true': GIS.i18n.yes || 'Yes',
+                'false': GIS.i18n.no || 'No'
+            };
+            let lonIndex;
+            let latIndex;
+            // optionSetIndex,
+            // optionSetHeader,
 
-            updateFeatures = function() {
+            const updateFeatures = function() {
                 // Find header names and keys
-                for (var i = 0, header; i < r.headers.length; i++) {
-                    header = r.headers[i];
-                    names[header.name] = header.column;
-                }
+                r.headers.forEach(header => names[header.name] = header.column);
 
                 // Create GeoJSON features
-                for (var i = 0, row, properties, coord; i < rows.length; i++) {
-                    row = rows[i];
-                    properties = {};
+                rows.forEach(row => {
+                    const properties = {};
 
                     // Build property object
-                    for (var j = 0, value; j < row.length; j++) {
-                        value = row[j];
+                    row.forEach(value => {
                         properties[r.headers[j].name] = booleanNames[value] || r.metaData.optionNames[value] || names[value] || value;
-                    }
+                    });
 
-                    coord = [properties.longitude, properties.latitude];
+                    const coord = [properties.longitude, properties.latitude];
 
                     if (gis.util.map.isValidCoordinate(coord)) {
                         features.push({
@@ -112,17 +85,17 @@ export default function LayerHandlerEvent(gis, layer) {
                             }
                         });
                     }
-                }
+                });
 
                 updateMap(view, features);
             };
 
-            getOptionSets = function() {
+            const getOptionSets = function() {
                 if (!optionSetHeader) {
                     updateFeatures();
                 }
                 else {
-                    dhis2.gis.store.get('optionSets', optionSetHeader.optionSet).done( function(obj) {
+                    dhis2.gis.store.get('optionSets', optionSetHeader.optionSet).done(obj => {
                         Ext.apply(r.metaData.optionNames, gis.util.array.getObjectMap(obj.options, 'code', 'name'));
                         updateFeatures();
                     });
@@ -132,9 +105,7 @@ export default function LayerHandlerEvent(gis, layer) {
             r.metaData.optionNames = {};
 
             // name-column map, lonIndex, latIndex, optionSet
-            for (var i = 0, header; i < r.headers.length; i++) {
-                header = r.headers[i];
-
+            headers.forEach(header => {
                 names[header.name] = header.column;
 
                 if (header.name === 'longitude') {
@@ -145,21 +116,21 @@ export default function LayerHandlerEvent(gis, layer) {
                     latIndex = i;
                 }
 
-                if (isString(header.optionSet) && header.optionSet.length) {
-                    optionSetIndex = i;
-                    optionSetHeader = header;
-                }
-            }
+                /* Not in use
+                 if (isString(header.optionSet) && header.optionSet.length) {
+                 optionSetIndex = i;
+                 optionSetHeader = header;
+                 }
+                 */
+            });
 
             // get events with coordinates
             if (isArray(r.rows) && r.rows.length) {
-                for (var i = 0, row; i < r.rows.length; i++) {
-                    row = r.rows[i];
-
+                r.rows.forEach(row => {
                     if (row[lonIndex] && row[latIndex]) {
                         rows.push(row);
                     }
-                }
+                });
             }
 
             if (!rows.length) {
@@ -173,23 +144,23 @@ export default function LayerHandlerEvent(gis, layer) {
         };
 
         // Used if no spatial support and for client cluster
-        loadEvents = function() {
+        const loadEvents = function() {
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + 'analytics/events/query/' + view.program.id + '.json' + paramString),
                 disableCaching: false,
-                failure: function(r) {
+                failure(r) {
                     gis.alert(r);
                 },
-                success: function(r) {
+                success(r) {
                     success(JSON.parse(r.responseText));
                 }
             });
         };
 
-        onEventCountSuccess = function(r) {
+        const onEventCountSuccess = function(r) {
             if (r.extent) {
-                var extent = r.extent.match(/([-\d\.]+)/g),
-                    bounds = [[extent[1], extent[0]],[extent[3], extent[2]]];
+                const extent = r.extent.match(/([-\d\.]+)/g);
+                const bounds = [[extent[1], extent[0]],[extent[3], extent[2]]];
 
                 view.bounds = bounds;
 
@@ -202,7 +173,7 @@ export default function LayerHandlerEvent(gis, layer) {
             if (r.count < 2000) { // Client clustering if less than 2000 events
                 loadEvents();
             } else { // Server clustering
-                var url = gis.init.apiPath + 'analytics/events/cluster/' + view.program.id + '.json' + paramString
+                const url = gis.init.apiPath + 'analytics/events/cluster/' + view.program.id + '.json' + paramString
                 updateMap(view, url);
             }
         };
@@ -211,10 +182,10 @@ export default function LayerHandlerEvent(gis, layer) {
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + 'analytics/events/count/' + view.program.id + '.json' + paramString),
                 disableCaching: false,
-                failure: function(r) {
+                failure(r) {
                     gis.alert(r);
                 },
-                success: function(r) {
+                success(r) {
                     onEventCountSuccess(JSON.parse(r.responseText));
                 }
             });
@@ -223,37 +194,32 @@ export default function LayerHandlerEvent(gis, layer) {
         }
 
         // Get option sets by id (used for data elements i popup)
-        getDataElementOptionSets = function(dataElement){
+        const getDataElementOptionSets = function(dataElement){
             if (dataElement.optionSet && dataElement.optionSet.id) {
-                dhis2.gis.store.get('optionSets', dataElement.optionSet.id).done(function(optionSet) {
-                    for (var i = 0, option; i < optionSet.options.length; i++) {
-                        option = optionSet.options[i];
-                        dataElement.optionSet[option.code] = option.name;
-                    }
+                dhis2.gis.store.get('optionSets', dataElement.optionSet.id).done(optionSet => {
+                    optionSet.options.forEach(option => dataElement.optionSet[option.code] = option.name);
                 });
             }
         };
 
         // Load data elements that should be displayed in popups
-        loadDataElements = function() {
+        const loadDataElements = function() {
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + 'programStages/' + view.programStage.id + '.json?fields=programStageDataElements[displayInReports,dataElement[id,' + gis.init.namePropertyUrl + ',optionSet]]'),
                 disableCaching: false,
-                failure: function(r) {
+                failure(r) {
                     gis.alert(r);
                 },
-                success: function(r) {
-                    var data = JSON.parse(r.responseText);
+                success(r) {
+                    const data = JSON.parse(r.responseText);
 
                     if (data.programStageDataElements) {
-                        for (var i = 0, el; i < data.programStageDataElements.length; i++) {
-                            el = data.programStageDataElements[i];
-
+                        data.programStageDataElements.forEach(el => {
                             if (el.displayInReports) {
                                 displayElements[el.dataElement.id] = el.dataElement;
                                 getDataElementOptionSets(el.dataElement);
                             }
-                        }
+                        });
                     }
                 }
             });
@@ -262,19 +228,16 @@ export default function LayerHandlerEvent(gis, layer) {
     };
 
     // Convert from DHIS 2 format to GeoJSON
-    toGeoJson = function(data) {
-        var header = {},
-            features = [];
+    const toGeoJson = function(data) {
+        const header = {};
+        const features = [];
 
         // Convert headers to object for easier lookup
-        for (var i = 0; i < data.headers.length; i++) {
-            header[data.headers[i].name] = i;
-        }
+        data.headers.forEach((h, i) => header[h.name] = i);
 
         if (isArray(data.rows)) {
-            for (var i = 0, row, extent; i < data.rows.length; i++) {
-                row = data.rows[i];
-                extent = row[header.extent].match(/([-\d\.]+)/g);
+            data.rows.forEach(row => {
+                const extent = row[header.extent].match(/([-\d\.]+)/g);
 
                 features.push({
                     type: 'Feature',
@@ -288,29 +251,27 @@ export default function LayerHandlerEvent(gis, layer) {
                         bounds: [[extent[1], extent[0]], [extent[3], extent[2]]]
                     }
                 });
-            }
+            });
         }
 
         return features;
     };
 
     // Called for every single marker click
-    onFeaturePopup = function(feature, callback) {
+    const onFeaturePopup = function(feature, callback) {
         Ext.Ajax.request({
             url: encodeURI(gis.init.apiPath + 'events/' + feature.id + '.json'),
             disableCaching: false,
-            failure: function(r) {
+            failure(r) {
                 gis.alert(r);
             },
-            success: function(r) {
-                var data = JSON.parse(r.responseText),
-                    dataValues = data.dataValues,
-                    content = '<table><tbody>';
+            success(r) {
+                const data = JSON.parse(r.responseText);
+                const dataValues = data.dataValues;
+                let content = '<table><tbody>';
 
                 if (isArray(dataValues)) {
-
-                    for (var i = 0, dataValue, displayEl, value; i < dataValues.length; i++) {
-                        dataValue = dataValues[i];
+                    dataValues.forEach(dataValue => {
                         displayEl = displayElements[dataValue.dataElement];
 
                         if (displayEl) {
@@ -322,7 +283,8 @@ export default function LayerHandlerEvent(gis, layer) {
 
                             content += '<tr><th>' + displayEl.name + '</th><td>' + value + '</td></tr>';
                         }
-                    }
+                    });
+
                     content += '<tr style="height:5px;"><th></th><td></td></tr>';
                 }
 
@@ -331,11 +293,11 @@ export default function LayerHandlerEvent(gis, layer) {
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'organisationUnits/' + data.orgUnit + '.json?fields=displayName'),
                     disableCaching: false,
-                    failure: function(r) {
+                    failure(r) {
                         gis.alert(r);
                     },
-                    success: function(r) {
-                        var orgUnit = JSON.parse(r.responseText);
+                    success(r) {
+                        const orgUnit = JSON.parse(r.responseText);
 
                         content += '<tr><th>' + GIS.i18n.organisation_unit + '</th><td>' + orgUnit.displayName + '</td></tr>';
                         content += '<tr><th>' + GIS.i18n.event_date + '</th><td>' + data.eventDate + '</td></tr>';
@@ -354,9 +316,9 @@ export default function LayerHandlerEvent(gis, layer) {
     };
 
     // Add layer to map
-    updateMap = function(view, features) {
-        var layerConfig,
-            layerUpdate = false;
+    const updateMap = function(view, features) {
+        let layerConfig;
+        let layerUpdate = false;
 
         if (typeof features === 'string') { // Server cluster
             layerConfig = Ext.applyIf({
@@ -364,14 +326,14 @@ export default function LayerHandlerEvent(gis, layer) {
                 bounds: view.bounds,
                 color: '#' + view.eventPointColor,
                 radius:view.eventPointRadius,
-                load: function(params, callback){ // Called for every tile load
+                load(params, callback) { // Called for every tile load
                     Ext.Ajax.request({
                         url: encodeURI(features + '&bbox=' + params.bbox + '&clusterSize=' + params.clusterSize + '&includeClusterPoints=' + params.includeClusterPoints),
                         disableCaching: false,
-                        failure: function(r) {
+                        failure(r) {
                             gis.alert(r);
                         },
-                        success: function(r) {
+                        success(r) {
                             callback(params.tileId, toGeoJson(JSON.parse(r.responseText)));
                         }
                     });
@@ -412,7 +374,7 @@ export default function LayerHandlerEvent(gis, layer) {
         afterLoad(view);
     };
 
-    afterLoad = function(view) {
+    const afterLoad = function(view) {
 
         layer.view = view;
 
@@ -443,13 +405,13 @@ export default function LayerHandlerEvent(gis, layer) {
         }
     };
 
-    handler = {
+    const handler = {
         compare: false,
         updateGui: false,
         zoomToVisibleExtent: false,
         hideMask: false,
         callBack: null,
-        load: function(view) {
+        load(view) {
             if (gis.mask && !gis.skipMask) {
                 gis.mask.show();
             }

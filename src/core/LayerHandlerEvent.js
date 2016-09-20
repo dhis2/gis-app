@@ -56,8 +56,8 @@ export default function LayerHandlerEvent(gis, layer) {
             };
             let lonIndex;
             let latIndex;
-            // optionSetIndex,
-            // optionSetHeader,
+            let optionSetIndex;
+            let optionSetHeader;
 
             const updateFeatures = function() {
                 // Find header names and keys
@@ -68,8 +68,8 @@ export default function LayerHandlerEvent(gis, layer) {
                     const properties = {};
 
                     // Build property object
-                    row.forEach(value => {
-                        properties[r.headers[j].name] = booleanNames[value] || r.metaData.optionNames[value] || names[value] || value;
+                    row.forEach((value, i) => {
+                        properties[r.headers[i].name] = booleanNames[value] || r.metaData.optionNames[value] || names[value] || value;
                     });
 
                     const coord = [properties.longitude, properties.latitude];
@@ -105,7 +105,7 @@ export default function LayerHandlerEvent(gis, layer) {
             r.metaData.optionNames = {};
 
             // name-column map, lonIndex, latIndex, optionSet
-            headers.forEach(header => {
+            r.headers.forEach((header, i) => {
                 names[header.name] = header.column;
 
                 if (header.name === 'longitude') {
@@ -116,12 +116,10 @@ export default function LayerHandlerEvent(gis, layer) {
                     latIndex = i;
                 }
 
-                /* Not in use
-                 if (isString(header.optionSet) && header.optionSet.length) {
-                 optionSetIndex = i;
-                 optionSetHeader = header;
-                 }
-                 */
+                if (isString(header.optionSet) && header.optionSet.length) {
+                    optionSetIndex = i;
+                    optionSetHeader = header;
+                }
             });
 
             // get events with coordinates
@@ -272,10 +270,10 @@ export default function LayerHandlerEvent(gis, layer) {
 
                 if (isArray(dataValues)) {
                     dataValues.forEach(dataValue => {
-                        displayEl = displayElements[dataValue.dataElement];
+                        const displayEl = displayElements[dataValue.dataElement];
 
                         if (displayEl) {
-                            value = dataValue.value;
+                            let value = dataValue.value;
 
                             if (displayEl.optionSet) {
                                 value = displayEl.optionSet[value];

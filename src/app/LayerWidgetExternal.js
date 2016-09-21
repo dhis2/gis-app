@@ -1,17 +1,34 @@
 // Ext JS widget for external layers (WMS/TMS/XYZ)
 export default function LayerWidgetExternal(gis, layer) {
 
+    // Store for external layers
+    const externalStore = Ext.create('Ext.data.Store', {
+        fields: ['id', 'name', 'mapService', 'url', 'layers', 'attribution', 'mapLayerPosition', 'imageFormat', 'legendSet', 'legendSetUrl'],
+        proxy: {
+            type: 'ajax',
+            url: encodeURI(gis.init.apiPath + 'externalMapLayers.json?fields=id,displayName|rename(name),service,url,attribution,mapService,layers,imageFormat,mapLayerPosition,legendSet,legendSetUrl&paging=false'),
+            reader: {
+                type: 'json',
+                root: 'externalMapLayers'
+            },
+            pageParam: false,
+            startParam: false,
+            limitParam: false
+        }
+    });
+
     const externalCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.select_layer,
         editable: false,
         valueField: 'id',
         displayField: 'name',
-        queryMode: 'local',
+        // queryMode: 'local',
         forceSelection: true,
         labelWidth: 70,
         width: gis.conf.layout.widget.item_width,
-        store: Ext.create('Ext.data.Store', {
+        store: externalStore
+        /*Ext.create('Ext.data.Store', {
             fields: ['id', 'name', 'service', 'url', 'layers', 'attribution', 'placement'],
             data: [{
                 id: '1',
@@ -43,10 +60,8 @@ export default function LayerWidgetExternal(gis, layer) {
                 placement: 'basemap',
                 attribution: 'Natural Earth'
             }]
-        })
+        })*/
     });
-
-
 
     // Combo with with supported web map services (WMS/TMS/XYZ)
     const serviceCombo = Ext.create('Ext.form.field.ComboBox', {
@@ -186,6 +201,9 @@ export default function LayerWidgetExternal(gis, layer) {
         const view = { // Config object stored as one field in favorite
             config: external.data
         };
+
+        // console.log('view', view);
+
         return view;
     };
 

@@ -9,26 +9,34 @@ export default function LayerHandlerExternal(gis, layer) {
 
         const config = view.config;
 
+        // console.log('view.config', config);
+
         const layerConfig = {
             type: 'tileLayer',
             url: config.url,
             attribution: config.attribution,
-            pane: 'external_' + config.placement
+            pane: 'external_' + config.mapLayerPosition.toLowerCase()
         };
 
-        if (config.service === 'tms') {
+        if (config.mapService === 'TMS') {
             layerConfig.tms = true;
         }
 
-        if (config.service === 'wms') {
+        if (config.mapService === 'WMS') {
             layerConfig.type = 'wmsLayer';
             layerConfig.layers = config.layers;
+
+            if (config.imageFormat === 'JPG') { // PNG is default
+                layerConfig.format = 'image/jpeg';
+            }
         }
 
         // Remove layer instance if already exist
         if (layer.instance && gis.instance.hasLayer(layer.instance)) {
             gis.instance.removeLayer(layer.instance);
         }
+
+        // console.log('layerConfig', layerConfig);
 
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);

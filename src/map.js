@@ -19,17 +19,21 @@ Ext.onReady(function() {
     let gis;
 
     GIS.i18n = {
-        event_layer: 'Event layer',
         boundary_layer: 'Boundary layer',
-        facility_layer: 'Facility layer',
-        thematic_layer: 'Thematic layer',
-        measure_distance: 'Measure distance',
         coordinates_could_not_be_loaded: 'Coordinates could not be loaded',
-        invalid_coordinates: 'Invalid coordinates',
-        no_valid_coordinates_found: 'No valid coordinates found',
         drill_down: 'Drill down',
+        event_date: 'Event date',
+        event_layer: 'Event layer',
+        facility_layer: 'Facility layer',
         float_up: 'Float up',
-        show_lon_lat: 'Show longitude/latitude'
+        invalid_coordinates: 'Invalid coordinates',
+        latitude: 'Latitude',
+        longitude: 'Longitude',
+        measure_distance: 'Measure distance',
+        no_valid_coordinates_found: 'No valid coordinates found',
+        organisation_unit: 'Organisation unit',
+        show_lon_lat: 'Show longitude/latitude',
+        thematic_layer: 'Thematic layer'
     };
 
     GIS.plugin = {};

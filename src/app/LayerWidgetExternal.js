@@ -28,39 +28,6 @@ export default function LayerWidgetExternal(gis, layer) {
         labelWidth: 70,
         width: gis.conf.layout.widget.item_width,
         store: externalStore
-        /*Ext.create('Ext.data.Store', {
-            fields: ['id', 'name', 'service', 'url', 'layers', 'attribution', 'placement'],
-            data: [{
-                id: '1',
-                name: 'Carto Dark Matter Basemap',
-                service: 'xyz',
-                url: '//cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
-                placement: 'basemap',
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            }, {
-                id: '12',
-                name: 'Carto Labels Overlay',
-                service: 'xyz',
-                url: '//cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png',
-                placement: 'overlay',
-                attribution: '© OpenStreetMap, © CartoDB</a>',
-            }, {
-                id: '123',
-                name: 'Blue Marble WMS',
-                service: 'wms',
-                layers: 'nasa:bluemarble',
-                url: '//demo.opengeo.org/geoserver/ows',
-                placement: 'basemap',
-                attribution: 'OpenGeo/NASA',
-            }, {
-                id: '1234',
-                name: 'Natural Earth TMS',
-                service: 'tms',
-                url: '//demo.opengeo.org/geoserver/gwc/service/tms/1.0.0/ne:ne@EPSG:900913@png/{z}/{x}/{y}.png',
-                placement: 'basemap',
-                attribution: 'Natural Earth'
-            }]
-        })*/
     });
 
     // Combo with with supported web map services (WMS/TMS/XYZ)
@@ -160,7 +127,7 @@ export default function LayerWidgetExternal(gis, layer) {
         externalCombo.reset();
     };
 
-    // TODO: Poulate the widget from a view (favorite)
+    // Poulate the widget from a view (favorite)
     const setGui = function(view) {
         if (typeof view.config === 'string') {
             view.config = JSON.parse(view.config);
@@ -172,39 +139,12 @@ export default function LayerWidgetExternal(gis, layer) {
     };
 
     // Get the view representation of the layer
-
-    /*
-    const getView = function() {
-        const service = serviceCombo.getValue();
-        const url = urlField.getValue();
-        const layers = layersField.getValue();
-        const attribution = attributionField.getValue();
-        const placement = placementCombo.getValue();
-
-        const view = {
-            service,
-            url,
-            attribution,
-            placement
-        };
-
-        if (layers) {
-            view.layers = layers;
-        }
-
-        return view;
-    };
-    */
-
     const getView = function() {
         const external = externalCombo.getStore().getById(externalCombo.getValue());
-        const view = { // Config object stored as one field in favorite
-            config: external.data
+
+        return {
+            config: external.data // Config object stored as one field in favorite
         };
-
-        // console.log('view', view);
-
-        return view;
     };
 
     // Return widget panel

@@ -1,3 +1,5 @@
+import arraySort from 'd2-utilizr/lib/arraySort';
+
 // Layer handler for external layers (WMS/TMS/XYZ)
 export default function LayerHandlerExternal(gis, layer) {
 
@@ -8,8 +10,6 @@ export default function LayerHandlerExternal(gis, layer) {
         }
 
         const config = view.config;
-
-        // console.log('view.config', config);
 
         const layerConfig = {
             type: 'tileLayer',
@@ -36,12 +36,93 @@ export default function LayerHandlerExternal(gis, layer) {
             gis.instance.removeLayer(layer.instance);
         }
 
-        // console.log('layerConfig', layerConfig);
-
         // Create layer instance
         layer.instance = gis.instance.addLayer(layerConfig);
 
-        afterLoad(view);
+        addLegend(view);
+    }
+
+    const addLegend = function(view, legend) {
+
+        const config = view.config;
+        let html = '<div class="dhis2-legend"><h2>' + config.name + '</h2>';
+
+        createLegend(config, legend => {
+            html += legend;
+
+            if (config.attribution) {
+                html += '<p>Source: ' + config.attribution + '</p>';
+            }
+
+            html += '</div>';
+
+            if (layer.legendPanel) {
+                layer.legendPanel.update(html);
+            } else { // Dashboard map
+                if (!gis.legend) {
+                    gis.legend = gis.instance.addControl({
+                        type: 'legend',
+                        offset: [0, -64],
+                        content: html
+                    });
+                } else { // Append legend
+                    gis.legend.setContent(gis.legend.getContent() + html);
+                }
+            }
+
+            afterLoad(view);
+        });
+    }
+
+    // Show a predefined legend set or image URL
+    const createLegend = function(config, callback) {
+        if (config.legendSet && config.legendSet.id) { // Predefined legend
+            Ext.Ajax.request({
+                url: encodeURI(gis.init.apiPath + 'legendSets/' + config.legendSet.id + '.json?fields=' + gis.conf.url.legendSetFields.join(',')),
+                scope: this,
+                disableCaching: false,
+                success(r) {
+                    const legend = JSON.parse(r.responseText).legends;
+
+                    arraySort(legend, 'ASC', 'startValue');
+
+                    let html = '<dl class="dhis2-legend-predefined">';
+
+                    legend.forEach(item => {
+                        const label = item.startValue + ' - ' + item.endValue;
+
+                        html += '<dt style="background-color:' + item.color + ';"></dt>';
+
+                        if (item.name !== label) {
+                            html += '<dd><strong>' + (item.name || '') + '</strong>' + label + '</dd>';
+                        } else {
+                            html += '<dd style="line-height:23px">' + label + '</dd>';
+                        }
+                    });
+
+                    html += '</dl>';
+
+                    callback(html);
+                }
+            });
+
+        } else if (config.legendSetUrl) { // Legend from URL
+            const externalImage = new Image();
+
+            callback('<img id="dhis2-legend-img" style="padding:5px 0;" />'); // Placeholder image
+
+            // Need to call doLayout after loading the image is loaded
+            externalImage.onload = function(){
+                document.getElementById('dhis2-legend-img').src = this.src;
+
+                if (gis.viewport) {
+                    gis.viewport.eastRegion.doLayout();
+                }
+            };
+            externalImage.src = config.legendSetUrl;
+        } else {
+            callback('<br/>'); // No legend
+        }
     }
 
     const afterLoad = function(view) {

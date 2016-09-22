@@ -487,16 +487,6 @@ export default function ContextMenu(gis, layer, instance, latlng) {
                     }
                 }
             }));
-
-            /*
-            menuItems.push( Ext.create('Ext.menu.Item', {
-                text: GIS.i18n.show_information_sheet,
-                iconCls: 'gis-menu-item-icon-information',
-                handler(item) {
-                    showInfo();
-                }
-            }));
-            */
         }
 
         menuItems.push( Ext.create('Ext.menu.Item', {

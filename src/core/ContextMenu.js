@@ -425,7 +425,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
 
         if (layer.id !== 'facility') {
             menuItems.push(Ext.create('Ext.menu.Item', {
-                text: GIS.i18n.float_up,
+                text: GIS.i18n.drill_up_one_level,
                 iconCls: 'gis-menu-item-icon-float',
                 cls: 'gis-plugin',
                 disabled: !att.hasCoordinatesUp,
@@ -435,7 +435,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
             }));
 
             menuItems.push(Ext.create('Ext.menu.Item', {
-                text: GIS.i18n.drill_down,
+                text: GIS.i18n.drill_down_one_level,
                 iconCls: 'gis-menu-item-icon-drill',
                 cls: 'gis-menu-item-first gis-plugin',
                 disabled: !att.hasCoordinatesDown,

@@ -21,11 +21,11 @@ Ext.onReady(function() {
     GIS.i18n = {
         boundary_layer: 'Boundary layer',
         coordinates_could_not_be_loaded: 'Coordinates could not be loaded',
-        drill_down: 'Drill down',
+        drill_down_one_level: 'Drill down one level',
+        drill_up_one_level: 'Drill up one level',
         event_date: 'Event date',
         event_layer: 'Event layer',
         facility_layer: 'Facility layer',
-        float_up: 'Float up',
         invalid_coordinates: 'Invalid coordinates',
         latitude: 'Latitude',
         longitude: 'Longitude',

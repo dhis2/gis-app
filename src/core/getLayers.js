@@ -20,7 +20,7 @@ export default function getLayers(gis) {
             layerOpacity: 1,
             config: {
                 type: 'tileLayer',
-                url: '//{s}.tile.osm.org/{z}/{x}/{y}.png',
+                url: '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }
         },

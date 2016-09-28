@@ -51,6 +51,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
                     .select(['year'], null, false);
 
                 featureCollection.getInfo(data => {
+                    console.log(data);
+
+
                     callback(data.features.map(feature => ({
                         id: feature.properties['year'],
                         name: feature.properties['year'],
@@ -111,6 +114,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             },
             collection: function(callback) {
                 const imageCollection = ee.ImageCollection(this.id)
+                    .filterDate('2000-01-01', '2025-01-01')
                     .sort('system:time_start', false);
 
                 const featureCollection = ee.FeatureCollection(imageCollection)

@@ -98,7 +98,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         'UCSB-CHG/CHIRPS/PENTAD': {
             id: 'UCSB-CHG/CHIRPS/PENTAD',
             name: 'Precipitation',
-            description: 'Precipitation collected from satellite and weather stations on the ground. The values are in millimeters within 5 days periods.',
+            description: 'Precipitation collected from satellite and weather stations on the ground. The values are in millimeters within 5 days periods. Updated monthly, during the 3rd week of the following month.',
             valueLabel: 'Min/max rainfall',
             min: 0,
             max: 100,

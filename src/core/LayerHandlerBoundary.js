@@ -101,9 +101,6 @@ export default function LayerHandlerBoundary(gis, layer) {
             for (let i = 0, feature; i < features.length; i++) {
                 feature = features[i];
                 feature.properties.style = levelStyle[feature.properties.level];
-                feature.properties.labelStyle = {
-                    paddingTop: (feature.geometry.type === 'Point' ? '15px' : '0')
-                };
             }
 
             // Store features for search
@@ -129,8 +126,16 @@ export default function LayerHandlerBoundary(gis, layer) {
     };
 
     const loadData = function(view, features) {
+        features = features || layer.features;
+
+        features.forEach(feature => {
+            feature.properties.labelStyle = {
+                paddingTop: feature.geometry.type === 'Point' ? 10 + (view.radiusLow || 5) + 'px' : '0'
+            };
+        });
+
         const layerConfig = Ext.applyIf({
-            data: features || layer.features,
+            data: features,
             hoverLabel: '{name}',
         }, layer.config);
 

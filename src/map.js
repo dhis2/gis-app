@@ -386,5 +386,8 @@ Ext.onReady(function() {
     };
 
     const DHIS = isObject(window['DHIS']) ? window.DHIS : {};
+
     DHIS.getMap = GIS.plugin.getMap;
+
+    window.DHIS = DHIS;
 });

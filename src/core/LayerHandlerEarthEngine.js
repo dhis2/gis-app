@@ -42,7 +42,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
             value(value) {
                 return value.toFixed(1);
             },
-            description: 'Precipitation collected from satellite and weather stations on the ground.',
+            description: 'Precipitation collected from satellite and weather stations on the ground. This dataset is updated monthly, during the 3rd week of the following month.',
             attribution: '<a href="https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD" target="_blank">UCSB/CHG</a>'
         },
         'MODIS/MOD11A2': {

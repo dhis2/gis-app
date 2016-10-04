@@ -14,7 +14,7 @@ export default function LayerHandlerEvent(gis, layer) {
         let paramString = '?';
 
         if (!view.programStage) {
-            gis.alert('No program stage selected');
+            gis.alert(GIS.i18n.no_program_stage_selected);
             return;
         }
 
@@ -132,7 +132,7 @@ export default function LayerHandlerEvent(gis, layer) {
             }
 
             if (!rows.length) {
-                gis.alert('No event coordinates found');
+                gis.alert(GIS.i18n.no_event_coordinates_found);
                 gis.mask.hide();
                 return;
             }

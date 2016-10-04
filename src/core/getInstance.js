@@ -824,7 +824,7 @@ export default function getInstance(init) {
                 });
 
                 if (!ouDim) {
-                    gis.alert('No organisation units specified');
+                    gis.alert(GIS.i18n.no_organisation_units_specified);
                     return;
                 }
 

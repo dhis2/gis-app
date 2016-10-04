@@ -36,9 +36,6 @@ export default function DownloadWindow(gis) {
         text: GIS.i18n.download,
         handler: function() {
 
-            console.log("####", gis.instance.getContainer());
-
-
             html2canvas(gis.instance.getContainer(), {
                 logging: true,
                 useCORS: true,

@@ -23,7 +23,6 @@ export default function LayerWidgetExternal(gis, layer) {
         editable: false,
         valueField: 'id',
         displayField: 'name',
-        // queryMode: 'local',
         forceSelection: true,
         labelWidth: 70,
         width: gis.conf.layout.widget.item_width,
@@ -58,7 +57,6 @@ export default function LayerWidgetExternal(gis, layer) {
     // Return widget panel
     return Ext.create('Ext.panel.Panel', {
         bodyStyle: 'border:0;padding:5px 1px;',
-        // items: [serviceCombo, urlField, layersField, attributionField, placementCombo],
         items: [externalCombo],
         map: layer.map,
         layer: layer,

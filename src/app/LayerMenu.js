@@ -21,7 +21,7 @@ export default function LayerMenu(gis, layer, cls) {
 
     if (!(layer.id === gis.layer.boundary.id || layer.id === gis.layer.facility.id || layer.id === gis.layer.event.id || layer.id === gis.layer.earthEngine.id || layer.id === gis.layer.external.id)) {
         item = {
-            text: GIS.i18n.filter + '..',
+            text: GIS.i18n.filter + '...',
             iconCls: 'gis-menu-item-icon-filter',
             handler: function() {
                 if (layer.filterWindow) {

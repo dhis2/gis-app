@@ -27,7 +27,7 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         },
         isLoaded: false,
-        loadFn: function(fn) {
+        loadFn(fn) {
             if (isFunction(fn)) {
                 if (this.isLoaded) {
                     fn.call();
@@ -60,7 +60,7 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         },
         isLoaded: false,
-        loadFn: function(fn) {
+        loadFn(fn) {
             if (this.isLoaded) {
                 fn.call();
             }
@@ -68,10 +68,10 @@ export default function LayerWidgetThematic(gis, layer) {
                 this.load(fn);
             }
         },
-        sortStore: function() {
+        sortStore() {
             this.sort('name', 'ASC');
         },
-        setTotalsProxy: function(uid, preventLoad, callbackFn) {
+        setTotalsProxy(uid, preventLoad, callbackFn) {
             let path;
 
             if (isString(uid)) {
@@ -82,7 +82,7 @@ export default function LayerWidgetThematic(gis, layer) {
             }
 
             if (!path) {
-                alert('Invalid parameter');
+                alert(GIS.i18n.invalid_parameter);
                 return;
             }
 
@@ -108,7 +108,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 });
             }
         },
-        setDetailsProxy: function(uid, preventLoad, callbackFn) {
+        setDetailsProxy(uid, preventLoad, callbackFn) {
             if (isString(uid)) {
                 this.setProxy({
                     type: 'ajax',
@@ -122,7 +122,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 if (!preventLoad) {
                     this.load({
                         scope: this,
-                        callback: function() {
+                        callback() {
                             this.sortStore();
 
                             if (isFunction(callbackFn)) {
@@ -133,11 +133,12 @@ export default function LayerWidgetThematic(gis, layer) {
                 }
             }
             else {
-                alert('Invalid parameter');
+                alert(GIS.i18n.invalid_parameter);
             }
         },
         listeners: {
-            load: function() {
+            load
+                () {
                 if (!this.isLoaded) {
                     this.isLoaded = true;
                 }
@@ -156,12 +157,12 @@ export default function LayerWidgetThematic(gis, layer) {
                 root: 'dataSets'
             }
         },
-        sortStore: function() {
+        sortStore() {
             this.sort('name', 'ASC');
         },
         isLoaded: false,
         listeners: {
-            load: function(s) {
+            load(s) {
                 this.isLoaded = true;
             }
         }
@@ -185,15 +186,15 @@ export default function LayerWidgetThematic(gis, layer) {
     const eventDataItemAvailableStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name'],
         data: [],
-        sortStore: function() {
+        sortStore() {
             this.sort('name', 'ASC');
         },
-        loadDataAndUpdate: function(data, append) {
+        loadDataAndUpdate(data, append) {
             this.clearFilter(); // work around
             this.loadData(data, append);
             this.updateFilter();
         },
-        getRecordsByIds: function(ids) {
+        getRecordsByIds(ids) {
             const records = [];
 
             ids = arrayFrom(ids);
@@ -208,29 +209,26 @@ export default function LayerWidgetThematic(gis, layer) {
 
             return records;
         },
-        updateFilter: function() {
+        updateFilter() {
             const selectedStoreIds = dataSelectedStore.getIds();
 
             this.clearFilter();
-
-            this.filterBy(function(record) {
-                return !arrayContains(selectedStoreIds, record.data.id);
-            });
+            this.filterBy(record => !arrayContains(selectedStoreIds, record.data.id));
         }
     });
 
     const programIndicatorAvailableStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name'],
         data: [],
-        sortStore: function() {
+        sortStore() {
             this.sort('name', 'ASC');
         },
-        loadDataAndUpdate: function(data, append) {
+        loadDataAndUpdate(data, append) {
             this.clearFilter(); // work around
             this.loadData(data, append);
             this.updateFilter();
         },
-        getRecordsByIds: function(ids) {
+        getRecordsByIds(ids) {
             const records = [];
 
             ids = arrayFrom(ids);
@@ -245,21 +243,18 @@ export default function LayerWidgetThematic(gis, layer) {
 
             return records;
         },
-        updateFilter: function() {
+        updateFilter() {
             const selectedStoreIds = dataSelectedStore.getIds();
 
             this.clearFilter();
-
-            this.filterBy(function(record) {
-                return !arrayContains(selectedStoreIds, record.data.id);
-            });
+            this.filterBy(record => !arrayContains(selectedStoreIds, record.data.id));
         }
     });
 
     const periodsByTypeStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name', 'index'],
         data: [],
-        setIndex: function(periods) {
+        setIndex(periods) {
             for (let i = 0; i < periods.length; i++) {
                 periods[i].index = i;
             }
@@ -288,7 +283,7 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         },
         isLoaded: false,
-        loadFn: function(fn) {
+        loadFn(fn) {
             if (this.isLoaded) {
                 fn.call();
             }
@@ -297,7 +292,7 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         },
         listeners: {
-            load: function() {
+            load() {
                 if (!this.isLoaded) {
                     this.isLoaded = true;
                 }
@@ -412,7 +407,7 @@ export default function LayerWidgetThematic(gis, layer) {
             ]
         }),
         listeners: {
-            select: function() {
+            select() {
                 valueTypeToggler(this.getValue());
             }
         }
@@ -433,11 +428,10 @@ export default function LayerWidgetThematic(gis, layer) {
             data: gis.init.indicatorGroups
         },
         listeners: {
-            select: function() {
+            select() {
                 indicator.clearValue();
 
                 indicator.store.proxy.url = encodeURI(gis.init.apiPath + 'indicators.json?fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + '&paging=false&filter=indicatorGroups.id:eq:' + this.getValue());
-
                 indicator.store.load();
             }
         }
@@ -456,7 +450,7 @@ export default function LayerWidgetThematic(gis, layer) {
         listConfig: {loadMask: false},
         store: indicatorsByGroupStore,
         listeners: {
-            select: function(cb) {
+            select(cb) {
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'indicators.json?fields=legendSet[id]&paging=false&filter=id:eq:' + this.getValue()),
                     success: function(r) {
@@ -499,7 +493,7 @@ export default function LayerWidgetThematic(gis, layer) {
             fields: ['id', 'name'],
             data: gis.init.dataElementGroups
         },
-        loadAvailable: function(preventLoad) {
+        loadAvailable(preventLoad) {
             const store = dataElementsByGroupStore;
             const detailLevel = dataElementDetailLevel.getValue();
             const value = this.getValue();
@@ -514,7 +508,7 @@ export default function LayerWidgetThematic(gis, layer) {
             }
         },
         listeners: {
-            select: function(cb) {
+            select(cb) {
                 dataElement.clearValue();
                 cb.loadAvailable();
             }
@@ -537,7 +531,7 @@ export default function LayerWidgetThematic(gis, layer) {
         },
         store: dataElementsByGroupStore,
         listeners: {
-            select: function() {
+            select() {
                 let id = this.getValue();
                 let index = id.indexOf('.');
 
@@ -582,7 +576,7 @@ export default function LayerWidgetThematic(gis, layer) {
         displayField: 'text',
         width: 65 - 1,
         value: dimConf.dataElement.objectName,
-        onSelect: function() {
+        onSelect() {
             dataElementGroup.loadAvailable();
             dataElement.clearValue();
         },
@@ -594,7 +588,7 @@ export default function LayerWidgetThematic(gis, layer) {
             ]
         },
         listeners: {
-            select: function(cb) {
+            select(cb) {
                 cb.onSelect();
             }
         }
@@ -623,7 +617,7 @@ export default function LayerWidgetThematic(gis, layer) {
         listConfig: {loadMask: false},
         store: dataSetStore,
         listeners: {
-            select: function(cb) {
+            select(cb) {
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'dataSets.json?fields=legendSet[id]&paging=false&filter=id:eq:' + this.getValue()),
                     success: function(r) {
@@ -658,7 +652,7 @@ export default function LayerWidgetThematic(gis, layer) {
         Ext.Ajax.request({
             url: encodeURI(gis.init.apiPath + 'programDataElements.json?program=' + programId + '&fields=dimensionItem|rename(id),' + gis.init.namePropertyUrl + ',valueType&paging=false'),
             disableCaching: false,
-            success: function(r) {
+            success(r) {
                 const types = gis.conf.valueType.aggregateTypes;
                 const elements = Ext.decode(r.responseText).programDataElements.filter(function(item) {
                     return arrayContains(types, (item || {}).valueType);
@@ -692,7 +686,7 @@ export default function LayerWidgetThematic(gis, layer) {
         labelWidth: gis.conf.layout.widget.itemlabel_width,
         store: programStore,
         listeners: {
-            select: function(cb) {
+            select(cb) {
                 onEventDataItemProgramSelect(cb.getValue());
             }
         }
@@ -718,7 +712,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
         Ext.Ajax.request({
             url: encodeURI(gis.init.apiPath + 'programs.json?paging=false&fields=programIndicators[dimensionItem|rename(id),displayName|rename(name)]&filter=id:eq:' + programId),
-            success: function(r) {
+            success(r) {
                 r = JSON.parse(r.responseText);
 
                 const isA = isArray;
@@ -745,7 +739,7 @@ export default function LayerWidgetThematic(gis, layer) {
         labelWidth: gis.conf.layout.widget.itemlabel_width,
         store: programStore,
         listeners: {
-            select: function(cb) {
+            select(cb) {
                 onProgramIndicatorProgramSelect(cb.getValue());
             }
         }
@@ -805,7 +799,7 @@ export default function LayerWidgetThematic(gis, layer) {
         store: gis.store.periodTypes,
         periodOffset: 0,
         listeners: {
-            select: function() {
+            select() {
                 periodType.periodOffset = 0;
                 onPeriodTypeSelect();
             }
@@ -823,7 +817,7 @@ export default function LayerWidgetThematic(gis, layer) {
         width: gis.conf.layout.widget.item_width,
         labelWidth: gis.conf.layout.widget.itemlabel_width,
         store: periodsByTypeStore,
-        selectFirst: function() {
+        selectFirst() {
             this.setValue(this.store.getAt(0).data.id);
         }
     });
@@ -834,7 +828,7 @@ export default function LayerWidgetThematic(gis, layer) {
         width: 22,
         height: 24,
         style: 'margin-left: 1px',
-        handler: function() {
+        handler() {
             if (periodType.getValue()) {
                 periodType.periodOffset--;
                 onPeriodTypeSelect();
@@ -849,7 +843,7 @@ export default function LayerWidgetThematic(gis, layer) {
         height: 24,
         style: 'margin-left: 1px',
         scope: this,
-        handler: function() {
+        handler() {
             if (periodType.getValue()) {
                 periodType.periodOffset++;
                 onPeriodTypeSelect();
@@ -891,7 +885,7 @@ export default function LayerWidgetThematic(gis, layer) {
             period,
         ],
         listeners: {
-            added: function() {
+            added() {
                 accordionPanels.push(this);
             }
         }
@@ -918,7 +912,7 @@ export default function LayerWidgetThematic(gis, layer) {
             this.expandPath(rootNode.getPath());
             this.getSelectionModel().select(rootNode);
         },
-        selectRootIf: function() {
+        selectRootIf() {
             if (this.getSelectionModel().getSelection().length < 1) {
                 const node = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
                 if (this.rendered) {
@@ -930,7 +924,7 @@ export default function LayerWidgetThematic(gis, layer) {
         isPending: false,
         recordsToSelect: [],
         recordsToRestore: [],
-        multipleSelectIf: function(map, doUpdate) {
+        multipleSelectIf(map, doUpdate) {
             if (this.recordsToSelect.length === gis.util.object.getLength(map)) {
                 this.getSelectionModel().select(this.recordsToSelect);
                 this.recordsToSelect = [];
@@ -941,7 +935,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 }
             }
         },
-        multipleExpand: function(id, map, doUpdate) {
+        multipleExpand(id, map, doUpdate) {
             const that = this;
             const rootId = gis.conf.finals.root.id;
             let path = map[id];
@@ -956,7 +950,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 that.multipleSelectIf(map, doUpdate);
             });
         },
-        select: function(url, params) {
+        select(url, params) {
             if (!params) {
                 params = {};
             }
@@ -974,7 +968,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 }
             });
         },
-        getParentGraphMap: function() {
+        getParentGraphMap() {
             const selection = this.getSelectionModel().getSelection();
             const map = {};
 
@@ -987,7 +981,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
             return map;
         },
-        selectGraphMap: function(map, update) {
+        selectGraphMap(map, update) {
             if (!gis.util.object.getLength(map)) {
                 return;
             }
@@ -1026,14 +1020,14 @@ export default function LayerWidgetThematic(gis, layer) {
                 children: gis.init.rootNodes
             },
             listeners: {
-                beforeload: function(store, operation) {
+                beforeload(store, operation) {
                     if (!store.proxy._url) {
                         store.proxy._url = store.proxy.url;
                     }
                     
                     store.proxy.url = store.proxy._url + '/' + operation.node.data.id;
                 },
-                load: function(store, node, records) {
+                load(store, node, records) {
                     records.forEach(function(record){
                         if (isBoolean(record.data.hasChildren)) {
                             record.set('leaf', !record.data.hasChildren);
@@ -1042,7 +1036,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 }
             }
         }),
-        xable: function(values) {
+        xable(values) {
             for (let i = 0; i < values.length; i++) {
                 if (!!values[i]) {
                     this.disable();
@@ -1052,7 +1046,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
             this.enable();
         },
-        getDimension: function() {
+        getDimension() {
             const r = treePanel.getSelectionModel().getSelection();
             const config = {
                 dimension: gis.conf.finals.dimension.organisationUnit.objectName,
@@ -1132,24 +1126,24 @@ export default function LayerWidgetThematic(gis, layer) {
             return config.items.length ? config : null;
         },
         listeners: {
-            beforeitemexpand: function() {
+            beforeitemexpand() {
                 if (!treePanel.isPending) {
                     treePanel.recordsToRestore = treePanel.getSelectionModel().getSelection();
                 }
             },
-            itemexpand: function() {
+            itemexpand() {
                 if (!treePanel.isPending && treePanel.recordsToRestore.length) {
                     treePanel.getSelectionModel().select(treePanel.recordsToRestore);
                     treePanel.recordsToRestore = [];
                 }
             },
-            render: function() {
+            render() {
                 this.rendered = true;
             },
-            afterrender: function() {
+            afterrender() {
                 this.getSelectionModel().select(0);
             },
-            itemcontextmenu: function(v, r, h, i, e) {
+            itemcontextmenu(v, r, h, i, e) {
                 e.stopEvent();
 
                 v.getSelectionModel().select(r, false);
@@ -1188,7 +1182,7 @@ export default function LayerWidgetThematic(gis, layer) {
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.user_ou,
         labelWidth: gis.conf.layout.form_label_width,
-        handler: function(chb, checked) {
+        handler(chb, checked) {
             treePanel.xable([checked, userOrganisationUnitChildren.getValue(), userOrganisationUnitGrandChildren.getValue()]);
         }
     });
@@ -1199,7 +1193,7 @@ export default function LayerWidgetThematic(gis, layer) {
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.sub_units,
         labelWidth: gis.conf.layout.form_label_width,
-        handler: function(chb, checked) {
+        handler(chb, checked) {
             treePanel.xable([checked, userOrganisationUnit.getValue(), userOrganisationUnitGrandChildren.getValue()]);
         }
     });
@@ -1210,7 +1204,7 @@ export default function LayerWidgetThematic(gis, layer) {
         boxLabelCls: 'x-form-cb-label-alt1',
         boxLabel: GIS.i18n.sub_x2_units,
         labelWidth: gis.conf.layout.form_label_width,
-        handler: function(chb, checked) {
+        handler(chb, checked) {
             treePanel.xable([checked, userOrganisationUnit.getValue(), userOrganisationUnitChildren.getValue()]);
         }
     });
@@ -1257,7 +1251,7 @@ export default function LayerWidgetThematic(gis, layer) {
         shadow: false,
         showSeparator: false,
         menuValue: 'level',
-        clickHandler: function(param) {
+        clickHandler(param) {
             if (!param) {
                 return;
             }

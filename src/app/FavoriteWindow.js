@@ -9,7 +9,7 @@ export default function FavoriteWindow(gis) {
             return;
         }
 
-        info.setText('Page ' + pager.page + ' of ' + pager.pageCount);
+        info.setText(GIS.i18n.page + ' ' + pager.page + ' / ' + pager.pageCount);
 
         prevButton.enable();
         nextButton.enable();
@@ -32,7 +32,7 @@ export default function FavoriteWindow(gis) {
             width: 371,
             fieldStyle: 'padding-left: 5px; border-radius: 1px; border-color: #bbb; font-size:11px',
             style: 'margin-bottom:0',
-            emptyText: 'Favorite name',
+            emptyText: GIS.i18n.favorite_name,
             value: id ? record.data.name : '',
             listeners: {
                 afterrender() {
@@ -50,12 +50,12 @@ export default function FavoriteWindow(gis) {
                 const views = [];
 
                 if (!layers.length) {
-                    gis.alert('Please create a map first');
+                    gis.alert(GIS.i18n.please_create_map_first);
                     return;
                 }
 
                 if (!name) {
-                    gis.alert('Please enter a name');
+                    gis.alert(GIS.i18n.please_enter_a_name);
                     return;
                 }
 
@@ -305,7 +305,7 @@ export default function FavoriteWindow(gis) {
                             if (record.data.access.update) {
                                 const layers = gis.util.map.getVisibleVectorLayers();
 
-                                const message = 'Overwrite favorite?\n\n' + record.data.name;
+                                const message = GIS.i18n.overwrite_favorite + '\n\n' + record.data.name;
 
                                 if (layers.length) {
                                     if (confirm(message)) {
@@ -398,7 +398,7 @@ export default function FavoriteWindow(gis) {
                             const record = this.up('grid').store.getAt(rowIndex);
 
                             if (record.data.access['delete']) {
-                                const message = 'Delete favorite?\n\n' + record.data.name;
+                                const message = GIS.i18n.delete_favorite + '?\n\n' + record.data.name;
 
                                 if (confirm(message)) {
                                     Ext.Ajax.request({

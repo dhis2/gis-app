@@ -24,7 +24,7 @@ export default function AboutWindow(gis) {
                             html += '</div>';
                         }
                         else {
-                            html += 'No system info found';
+                            html += GIS.i18n.no_system_info_found;
                         }
 
                         w.update(html);

@@ -9,9 +9,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         'USGS/SRTMGL1_003': {
             id: 'USGS/SRTMGL1_003',
-            name: 'Elevation',
+            name: GIS.i18n.elevation,
             description: 'Elevation above sea-level. You can adjust the min and max values so it better representes the terrain in your region.',
-            valueLabel: 'Min/max elevation',
+            valueLabel: GIS.i18n.min_max_elevation,
             min: 0,
             max: 1500,
             minValue: 0,
@@ -22,10 +22,10 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         'WorldPop/POP': { // Population density
             id: 'WorldPop/POP',
-            name: 'Population density',
+            name: GIS.i18n.population_density,
             description: 'Population density estimates with national totals adjusted to match UN population division estimates. Try a different year if you don\'t see data for your country.',
-            imageLabel: 'Select year', // TODO: i18n
-            valueLabel: 'Min/max people',
+            imageLabel: GIS.i18n.select_year,
+            valueLabel: GIS.i18n.min_max_people,
             min: 0,
             max: 1000,
             minValue: 0,
@@ -64,9 +64,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {
             id: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
-            name: 'Nighttime lights',
+            name: GIS.i18n.nighttime_lights,
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
-            imageLabel: 'Select year', // TODO: i18n
+            imageLabel: GIS.i18n.select_year,
             min: 0,
             max: 63,
             maxValue: 63,
@@ -97,9 +97,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         'UCSB-CHG/CHIRPS/PENTAD': {
             id: 'UCSB-CHG/CHIRPS/PENTAD',
-            name: 'Precipitation',
+            name: GIS.i18n.precipitation,
             description: 'Precipitation collected from satellite and weather stations on the ground. The values are in millimeters within 5 days periods. Updated monthly, during the 3rd week of the following month.',
-            valueLabel: 'Min/max rainfall',
+            valueLabel: GIS.i18n.min_max_rainfall,
             min: 0,
             max: 100,
             minValue: 0,
@@ -131,9 +131,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         'MODIS/MOD11A2': {
             id: 'MODIS/MOD11A2',
-            name: 'Temperature',
+            name: GIS.i18n.temperature,
             description: 'Land surface temperatures collected from satellite in 8 days periods. Blank spots will appear in areas with a persistent cloud cover.',
-            valueLabel: 'Min/max °C',
+            valueLabel: GIS.i18n.min_max_c,
             min: 0,
             max: 50,
             minValue: -100,
@@ -164,9 +164,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         'MODIS/051/MCD12Q1': {
             id: 'MODIS/051/MCD12Q1',
-            name: 'Landcover',
+            name: GIS.i18n.landcover,
             description: '17 distinct landcover types collected from satellites.',
-            imageLabel: 'Select year', // TODO: i18n
+            imageLabel: GIS.i18n.select_year,
             filter(index) {
                 return [{
                     type: 'eq',
@@ -245,7 +245,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     });
 
     const minMaxLabel = Ext.create('Ext.container.Container', {
-        html: 'Min / max value:', // TODO: i18n
+        html: GIS.i18n.min_max_value,
         width: gis.conf.layout.widget.itemlabel_width,
         style: 'padding-top:5px;font-size:11px;'
     });
@@ -263,7 +263,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         style: 'padding:5px 0 0 5px;',
         items: [{
             xtype: 'container',
-            html: 'Steps:', // TODO: i18n
+            html: GIS.i18n.steps,
             width: gis.conf.layout.widget.itemlabel_width,
             style: 'padding-top:5px;font-size:11px;'
         }, stepValue]
@@ -280,14 +280,14 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
         if (dataset.collection) {
             collectionCombo.show();
-            collectionCombo.labelEl.update((dataset.imageLabel || 'Select period') + ':');
+            collectionCombo.labelEl.update((dataset.imageLabel || GIS.i18n.select_period) + ':');
         } else {
             collectionCombo.hide();
         }
 
         if (dataset.min !== undefined) {
             minMaxField.show();
-            minMaxLabel.update((dataset.valueLabel || 'Min/max value') + ':');
+            minMaxLabel.update((dataset.valueLabel || GIS.i18n.min_max_value) + ':');
             minValue.setMinValue(dataset.minValue);
             minValue.setValue(dataset.min);
             maxValue.setMaxValue(dataset.maxValue);
@@ -307,8 +307,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // Combo with with supported Earth Engine layers
     const datasetCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
-        // fieldLabel: GIS.i18n.select_layer_from_google_earth_engine,
-        fieldLabel: 'Select dataset', // TODO: i18n
+        fieldLabel: GIS.i18n.select_dataset,
         editable: false,
         valueField: 'id',
         displayField: 'name',
@@ -332,8 +331,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
             collectionCombo.store.removeAll(); // Clear combo
             collectionCombo.setLoading(true); // Add loading mask
-
-            // Fetch EE token - TODO: cache?
 
             Ext.Ajax.request({
                 url: encodeURI(gis.init.apiPath + 'tokens/google'),
@@ -392,7 +389,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // Combo with with supported Earth Engine layers
     const collectionCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
-        fieldLabel: 'Select period', // TODO: i18n
+        fieldLabel: GIS.i18n.select_period,
         hidden: true,
         editable: false,
         valueField: 'id',
@@ -412,7 +409,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     });
 
     const colorsCombo = Ext.create('Ext.ux.field.ColorScale', {
-        fieldLabel: 'Color scale',
+        fieldLabel: GIS.i18n.color_scale,
         hidden: true,
         value: 'YlOrBr',
         classes: 6,

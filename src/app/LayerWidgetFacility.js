@@ -62,7 +62,7 @@ export default function LayerWidgetFacility(gis, layer) {
         },
         multiSelect: true,
         rendered: false,
-        reset: function() {
+        reset() {
             const rootNode = this.getRootNode().findChild('id', gis.init.rootNodes[0].id);
             this.collapseAll();
             this.expandPath(rootNode.getPath());

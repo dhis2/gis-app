@@ -734,7 +734,7 @@ Ext.onReady( function() {
                     this.map = gis.instance;
                     this.body.appendChild(this.map.getContainer());
 
-                    L.Icon.Default.imagePath = 'images';
+                    L.Icon.Default.imagePath = 'images/';
 
                     // Needed to fix bug when toggling client cluster on google maps layer
                     this.map.options.maxZoom = 18;

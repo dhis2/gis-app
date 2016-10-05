@@ -946,7 +946,9 @@ export default function LayerWidgetThematic(gis, layer) {
 
             that.expandPath(path, 'id', '/', function() {
                 const record = Ext.clone(that.getRootNode().findChild('id', id, true));
-                that.recordsToSelect.push(record);
+                if (record) { // Can be null
+                    that.recordsToSelect.push(record);
+                }
                 that.multipleSelectIf(map, doUpdate);
             });
         },

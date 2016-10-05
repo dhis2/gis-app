@@ -62,7 +62,6 @@ export default function LayerWidgetBoundary(gis, layer) {
             }
         },
         multipleExpand(id, map, doUpdate) {
-            const that = this;
             const rootId = gis.conf.finals.root.id;
             let path = map[id];
 
@@ -70,10 +69,12 @@ export default function LayerWidgetBoundary(gis, layer) {
                 path = '/' + rootId + path;
             }
 
-            that.expandPath(path, 'id', '/', function() {
-                const record = Ext.clone(that.getRootNode().findChild('id', id, true));
-                that.recordsToSelect.push(record);
-                that.multipleSelectIf(map, doUpdate);
+            this.expandPath(path, 'id', '/', () => {
+                const record = Ext.clone(this.getRootNode().findChild('id', id, true));
+                if (record) { // Can be null
+                    this.recordsToSelect.push(record);
+                }
+                this.multipleSelectIf(map, doUpdate);
             });
         },
         select(url, params) {

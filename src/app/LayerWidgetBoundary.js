@@ -266,7 +266,9 @@ export default function LayerWidgetBoundary(gis, layer) {
                 this.rendered = true;
             },
             afterrender() {
-                this.getSelectionModel().select(0);
+                if (this.getRootNode().getChildAt(0)) {
+                    this.getSelectionModel().select(0);
+                }
             },
             itemcontextmenu(v, r, h, i, e) {
                 e.stopEvent();

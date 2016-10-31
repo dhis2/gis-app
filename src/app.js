@@ -21,7 +21,7 @@ Ext.onReady( function() {
         Ext.QuickTips.init();
 
         Ext.override(Ext.grid.Scroller, {
-            afterRender: function() {
+            afterRender() {
                 var me = this;
                 me.self.superclass.onHide.call(me);
                 me.mon(me.scrollEl, 'scroll', me.onElScroll, me);
@@ -36,13 +36,13 @@ Ext.onReady( function() {
             wasScrolled: false,
 
             // synchronize the scroller with the bound gridviews
-            onElScroll: function(event, target) {
+            onElScroll(event, target) {
                 this.wasScrolled = true; // change flag -> show that listener is alive
                 this.fireEvent('bodyscroll', event, target);
             },
 
             // executes just after main scroll event listener and check flag state
-            onElScrollCheck: function(event, target, options) {
+            onElScrollCheck(event, target, options) {
                 var me = this;
 
                 if (!me.wasScrolled) {
@@ -85,7 +85,7 @@ Ext.onReady( function() {
             toggleGroup: 'module',
             pressed: true,
             menu: {},
-            handler: function(b) {
+            handler(b) {
                 b.menu = Ext.create('Ext.menu.Menu', {
                     closeAction: 'destroy',
                     shadow: false,
@@ -121,7 +121,7 @@ Ext.onReady( function() {
             text: 'Write interpretation' + '&nbsp;&nbsp;',
             iconCls: 'gis-menu-item-tablelayout',
             disabled: true,
-            xable: function() {
+            xable() {
                 if (gis.map) {
                     this.enable();
                 }
@@ -129,7 +129,7 @@ Ext.onReady( function() {
                     this.disable();
                 }
             },
-            handler: function() {
+            handler() {
                 if (viewport.interpretationWindow) {
                     viewport.interpretationWindow.destroy();
                     viewport.interpretationWindow = null;
@@ -144,7 +144,7 @@ Ext.onReady( function() {
             text: 'Embed in web page' + '&nbsp;&nbsp;',
             iconCls: 'gis-menu-item-datasource',
             disabled: true,
-            xable: function() {
+            xable() {
                 if (gis.instance.getLayersBounds().isValid() || (gis.layer.earthEngine.instance && gis.instance.hasLayer(gis.layer.earthEngine.instance))) {
                     this.enable();
                 }
@@ -152,7 +152,7 @@ Ext.onReady( function() {
                     this.disable();
                 }
             },
-            handler: function() {
+            handler() {
                 var textArea,
                     window,
                     text = '',
@@ -245,7 +245,7 @@ Ext.onReady( function() {
             text: 'Favorite link' + '&nbsp;&nbsp;',
             iconCls: 'gis-menu-item-datasource',
             disabled: true,
-            xable: function() {
+            xable() {
                 if (gis.map && gis.map.id) {
                     this.enable();
                 }
@@ -253,7 +253,7 @@ Ext.onReady( function() {
                     this.disable();
                 }
             },
-            handler: function() {
+            handler() {
                 var url = encodeURI(gis.init.contextPath + '/dhis-web-mapping/index.html?id=' + gis.map.id),
                     textField,
                     window;
@@ -294,7 +294,7 @@ Ext.onReady( function() {
             text: 'API link' + '&nbsp;&nbsp;',
             iconCls: 'gis-menu-item-datasource',
             disabled: true,
-            xable: function() {
+            xable() {
                 if (gis.map && gis.map.id) {
                     this.enable();
                 }
@@ -302,7 +302,7 @@ Ext.onReady( function() {
                     this.disable();
                 }
             },
-            handler: function() {
+            handler() {
                 var url = gis.init.apiPath + 'maps/' + gis.map.id + '/data',
                     textField,
                     window;
@@ -342,7 +342,7 @@ Ext.onReady( function() {
         shareButton = Ext.create('Ext.button.Button', {
             text: GIS.i18n.share,
             disabled: true,
-            xableItems: function() {
+            xableItems() {
                 interpretationItem.xable();
                 pluginItem.xable();
                 favoriteUrlItem.xable();
@@ -359,10 +359,10 @@ Ext.onReady( function() {
                     apiUrlItem
                 ],
                 listeners: {
-                    afterrender: function() {
+                    afterrender() {
                         this.getEl().addCls('gis-toolbar-btn-menu');
                     },
-                    show: function() {
+                    show() {
                         shareButton.xableItems();
                     }
                 }
@@ -372,7 +372,7 @@ Ext.onReady( function() {
         aboutButton = Ext.create('Ext.button.Button', {
             text: GIS.i18n.about,
             menu: {},
-            handler: function() {
+            handler() {
                 if (viewport.aboutWindow && viewport.aboutWindow.destroy) {
                     viewport.aboutWindow.destroy();
                     viewport.aboutWindow = null;
@@ -389,7 +389,7 @@ Ext.onReady( function() {
             fullSize: true,
             cmp: [defaultButton],
             trash: [],
-            toggleCmp: function(show) {
+            toggleCmp(show) {
                 for (var i = 0; i < this.cmp.length; i++) {
                     if (show) {
                         this.cmp[i].show();
@@ -729,7 +729,7 @@ Ext.onReady( function() {
             },
 
             // Add/resize map after layout
-            afterLayout: function() {
+            afterLayout() {
                 if (!this.map) {
                     this.map = gis.instance;
                     this.body.appendChild(this.map.getContainer());
@@ -812,7 +812,7 @@ Ext.onReady( function() {
                     collapsed: true,
                     animCollapse: false,
                     listeners: {
-                        added: function() {
+                        added() {
                             gis.layer.facility.legendPanel = this;
                         }
                     }
@@ -825,7 +825,7 @@ Ext.onReady( function() {
                     collapsed: true,
                     animCollapse: false,
                     listeners: {
-                        added: function() {
+                        added() {
                             gis.layer.thematic1.legendPanel = this;
                         }
                     }
@@ -838,7 +838,7 @@ Ext.onReady( function() {
                     collapsed: true,
                     animCollapse: false,
                     listeners: {
-                        added: function() {
+                        added() {
                             gis.layer.thematic2.legendPanel = this;
                         }
                     }
@@ -851,7 +851,7 @@ Ext.onReady( function() {
                     collapsed: true,
                     animCollapse: false,
                     listeners: {
-                        added: function() {
+                        added() {
                             gis.layer.thematic3.legendPanel = this;
                         }
                     }
@@ -864,7 +864,7 @@ Ext.onReady( function() {
                     collapsed: true,
                     animCollapse: false,
                     listeners: {
-                        added: function() {
+                        added() {
                             gis.layer.thematic4.legendPanel = this;
                         }
                     }
@@ -877,7 +877,7 @@ Ext.onReady( function() {
                     collapsed: true,
                     animCollapse: false,
                     listeners: {
-                        added: function() {
+                        added() {
                             gis.layer.earthEngine.legendPanel = this;
                         }
                     }
@@ -890,7 +890,7 @@ Ext.onReady( function() {
                     collapsed: true,
                     animCollapse: false,
                     listeners: {
-                        added: function() {
+                        added() {
                             gis.layer.external.legendPanel = this;
                         }
                     }
@@ -899,10 +899,10 @@ Ext.onReady( function() {
                 return a;
             }(),
             listeners: {
-                collapse: function() {
+                collapse() {
                     resizeButton.setText('<<<');
                 },
-                expand: function() {
+                expand() {
                     resizeButton.setText('>>>');
                 }
             }
@@ -1006,10 +1006,10 @@ Ext.onReady( function() {
                 eastRegion
             ],
             listeners: {
-                render: function() {
+                render() {
                     onRender(this);
                 },
-                afterrender: function() {
+                afterrender() {
                     afterRender();
                 }
             }
@@ -1058,7 +1058,7 @@ Ext.onReady( function() {
         // requests
         Ext.Ajax.request({
             url: encodeURI('manifest.webapp'),
-            success: function(r) {
+            success(r) {
                 var context = JSON.parse(r.responseText).activities.dhis;
 
                 init.contextPath = context.href;
@@ -1078,14 +1078,14 @@ Ext.onReady( function() {
                 // system info
                 Ext.Ajax.request({
                     url: encodeURI(init.apiPath + 'system/info.json'),
-                    success: function(r) {
+                    success(r) {
                         init.systemInfo = JSON.parse(r.responseText);
                         init.contextPath = init.systemInfo.contextPath || init.contextPath;
 
                         // date, calendar, mapzen search key
                         Ext.Ajax.request({
                             url: encodeURI(init.apiPath + 'systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyGoogleMapsApiKey&key=keyMapzenSearchApiKey'),
-                            success: function(r) {
+                            success(r) {
                                 var systemSettings = JSON.parse(r.responseText);
 
                                 init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
@@ -1096,7 +1096,7 @@ Ext.onReady( function() {
                                 // user-account
                                 Ext.Ajax.request({
                                     url: encodeURI(init.contextPath + '/api/me/user-account.json'),
-                                    success: function (r) {
+                                    success(r) {
                                         init.userAccount = JSON.parse(r.responseText);
 
                                         // init
@@ -1157,7 +1157,7 @@ Ext.onReady( function() {
                                         // i18n
                                         requests.push({
                                             url: encodeURI('i18n/i18n_app.properties'),
-                                            success: function(r) {
+                                            success(r) {
                                                 GIS.i18n = dhis2.util.parseJavaProperties(r.responseText);
 
                                                 if (keyUiLocale === defaultKeyUiLocale) {
@@ -1166,25 +1166,25 @@ Ext.onReady( function() {
                                                 else {
                                                     Ext.Ajax.request({
                                                         url: encodeURI('i18n/i18n_app_' + keyUiLocale + '.properties'),
-                                                        success: function(r) {
+                                                        success(r) {
                                                             Ext.apply(GIS.i18n, dhis2.util.parseJavaProperties(r.responseText));
                                                         },
-                                                        failure: function() {
+                                                        failure() {
                                                             console.log('No translations found for system locale (' + keyUiLocale + ')');
                                                         },
-                                                        callback: function() {
+                                                        callback() {
                                                             fn();
                                                         }
                                                     });
                                                 }
                                             },
-                                            failure: function() {
+                                            failure() {
                                                 Ext.Ajax.request({
                                                     url: encodeURI('i18n/i18n_app_' + keyUiLocale + '.properties'),
-                                                    success: function(r) {
+                                                    success(r) {
                                                         GIS.i18n = dhis2.util.parseJavaProperties(r.responseText);
                                                     },
-                                                    failure: function() {
+                                                    failure() {
                                                         alert('No translations found for system locale (' + keyUiLocale + ') or default locale (' + defaultKeyUiLocale + ').');
                                                     },
                                                     callback: fn
@@ -1195,7 +1195,7 @@ Ext.onReady( function() {
                                         // root nodes
                                         requests.push({
                                             url: encodeURI(contextPath + '/api/organisationUnits.json?userDataViewFallback=true&paging=false&fields=id,' + namePropertyUrl + ',children[id,' + namePropertyUrl + ']'),
-                                            success: function(r) {
+                                            success(r) {
                                                 init.rootNodes = JSON.parse(r.responseText).organisationUnits || [];
                                                 fn();
                                             }
@@ -1204,11 +1204,11 @@ Ext.onReady( function() {
                                         // organisation unit levels
                                         requests.push({
                                             url: encodeURI(contextPath + '/api/organisationUnitLevels.json?fields=id,displayName|rename(name),level&paging=false'),
-                                            success: function(r) {
+                                            success(r) {
                                                 init.organisationUnitLevels = JSON.parse(r.responseText).organisationUnitLevels || [];
 
                                                 if (!init.organisationUnitLevels.length) {
-                                                    alert('No organisation unit levels');
+                                                    alert(GIS.i18n.no_organisation_unit_levels);
                                                 }
 
                                                 fn();
@@ -1218,7 +1218,7 @@ Ext.onReady( function() {
                                         // user orgunits and children
                                         requests.push({
                                             url: encodeURI(contextPath + '/api/organisationUnits.json?userOnly=true&fields=id,' + namePropertyUrl + ',children[id,' + namePropertyUrl + ']&paging=false'),
-                                            success: function(r) {
+                                            success(r) {
                                                 var organisationUnits = JSON.parse(r.responseText).organisationUnits || [],
                                                     ou = [],
                                                     ouc = [];
@@ -1238,8 +1238,8 @@ Ext.onReady( function() {
                                                     init.user.ou = ou;
                                                     init.user.ouc = ouc;
                                                 }
-                                                else {
-                                                    alert('User is not assigned to any organisation units');
+                                                else if (console) {
+                                                    console.log(GIS.i18n.user_is_not_assigned_to_any_organisation_units);
                                                 }
 
                                                 fn();
@@ -1249,7 +1249,7 @@ Ext.onReady( function() {
                                         // admin
                                         requests.push({
                                             url: init.contextPath + '/api/me/authorization/F_GIS_ADMIN',
-                                            success: function(r) {
+                                            success(r) {
                                                 init.user.isAdmin = (r.responseText === 'true');
                                                 fn();
                                             }
@@ -1258,7 +1258,7 @@ Ext.onReady( function() {
                                         // indicator groups
                                         requests.push({
                                             url: encodeURI(init.apiPath + 'indicatorGroups.json?fields=id,displayName|rename(name)&paging=false'),
-                                            success: function(r) {
+                                            success(r) {
                                                 init.indicatorGroups = JSON.parse(r.responseText).indicatorGroups || [];
                                                 fn();
                                             }
@@ -1267,7 +1267,7 @@ Ext.onReady( function() {
                                         // data element groups
                                         requests.push({
                                             url: encodeURI(init.apiPath + 'dataElementGroups.json?fields=id,' + namePropertyUrl + '&paging=false'),
-                                            success: function(r) {
+                                            success(r) {
                                                 init.dataElementGroups = JSON.parse(r.responseText).dataElementGroups || [];
                                                 fn();
                                             }
@@ -1276,14 +1276,19 @@ Ext.onReady( function() {
                                         // infrastructural indicator group
                                         requests.push({
                                             url: encodeURI(init.apiPath + 'configuration/infrastructuralIndicators.json'),
-                                            success: function(r) {
-                                                var obj = JSON.parse(r.responseText);
+                                            success(r) {
+                                                let obj;
+
+                                                if (r.responseText) {
+                                                    obj = JSON.parse(r.responseText);
+                                                }
+
                                                 init.systemSettings.infrastructuralIndicatorGroup = isObject(obj) ? obj : null;
 
                                                 if (!isObject(obj)) {
                                                     Ext.Ajax.request({
                                                         url: encodeURI(init.apiPath + 'indicatorGroups.json?fields=id,displayName|rename(name),indicators[id,' + namePropertyUrl + ']&pageSize=1'),
-                                                        success: function(r) {
+                                                        success(r) {
                                                             r = JSON.parse(r.responseText);
                                                             init.systemSettings.infrastructuralIndicatorGroup = r.indicatorGroups ? r.indicatorGroups[0] : null;
                                                         },
@@ -1299,14 +1304,19 @@ Ext.onReady( function() {
                                         // infrastructural data element group
                                         requests.push({
                                             url: encodeURI(init.apiPath + 'configuration/infrastructuralDataElements.json'),
-                                            success: function(r) {
-                                                var obj = JSON.parse(r.responseText);
+                                            success(r) {
+                                                let obj;
+
+                                                if (r.responseText) {
+                                                    obj = JSON.parse(r.responseText);
+                                                }
+
                                                 init.systemSettings.infrastructuralDataElementGroup = isObject(obj) ? obj : null;
 
                                                 if (!isObject(obj)) {
                                                     Ext.Ajax.request({
                                                         url: encodeURI(init.apiPath + 'dataElementGroups.json?fields=id,' + namePropertyUrl + ',dataElements[id,' + namePropertyUrl + ']&pageSize=1'),
-                                                        success: function(r) {
+                                                        success(r) {
                                                             r = JSON.parse(r.responseText);
                                                             init.systemSettings.infrastructuralDataElementGroup = r.dataElementGroups ? r.dataElementGroups[0] : null;
                                                         },
@@ -1322,7 +1332,9 @@ Ext.onReady( function() {
                                         // infrastructural period type
                                         requests.push({
                                             url: encodeURI(init.apiPath + 'configuration/infrastructuralPeriodType.json'),
-                                            success: function(r) {
+                                            success(r) {
+
+
                                                 var obj = JSON.parse(r.responseText);
 
                                                 init.systemSettings.infrastructuralPeriodType = isObject(obj) ? obj : {id: 'Yearly', code: 'Yearly', name: 'Yearly'};
@@ -1334,7 +1346,7 @@ Ext.onReady( function() {
                                         requests.push({
                                             url: '.',
                                             disableCaching: false,
-                                            success: function() {
+                                            success() {
                                                 var store = dhis2.gis.store;
 
                                                 store.open().done( function() {
@@ -1344,7 +1356,7 @@ Ext.onReady( function() {
                                                         if (keys.length === 0) {
                                                             Ext.Ajax.request({
                                                                 url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false'),
-                                                                success: function(r) {
+                                                                success(r) {
                                                                     var sets = JSON.parse(r.responseText).optionSets;
 
                                                                     if (sets.length) {
@@ -1359,7 +1371,7 @@ Ext.onReady( function() {
                                                         else {
                                                             Ext.Ajax.request({
                                                                 url: encodeURI(contextPath + '/api/optionSets.json?fields=id,version&paging=false'),
-                                                                success: function(r) {
+                                                                success(r) {
                                                                     var optionSets = JSON.parse(r.responseText).optionSets || [],
                                                                         ids = [],
                                                                         url = '',
@@ -1380,7 +1392,7 @@ Ext.onReady( function() {
 
                                                                             Ext.Ajax.request({
                                                                                 url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false' + url),
-                                                                                success: function(r) {
+                                                                                success(r) {
                                                                                     var sets = JSON.parse(r.responseText).optionSets;
 
                                                                                     store.setAll('optionSets', sets).done(fn);

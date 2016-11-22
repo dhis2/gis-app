@@ -17,6 +17,9 @@ Ext.onReady(function() {
     let isInitStarted = false;
     let isInitComplete = false;
     let gis;
+    let execute;
+    let onUserAccountLoad;
+    let onScriptReady;
 
     GIS.i18n = {
         boundary_layer: 'Boundary layer',
@@ -114,7 +117,7 @@ Ext.onReady(function() {
             fn();
         };
 
-        const onUserAccountLoad = function(r) {
+        onUserAccountLoad = function(r) {
             init.userAccount = r.responseText ? JSON.parse(r.responseText) : r;
 
             // init
@@ -165,7 +168,9 @@ Ext.onReady(function() {
                         return;
                     }
 
-                    ids.forEach(id => url += '&filter=id:eq:' + id);
+                    ids.forEach(id => {
+                        url += '&filter=id:eq:' + id;
+                    });
 
                     Ext.Ajax.request(optionSetConfig);
                 }
@@ -186,7 +191,7 @@ Ext.onReady(function() {
             });
         };
 
-        const onScriptReady = function() {
+        onScriptReady = function() {
             const defaultKeyUiLocale = 'en';
             const defaultKeyAnalysisDisplayProperty = 'displayName';
             const displayPropertyMap = {
@@ -256,7 +261,7 @@ Ext.onReady(function() {
         requests.forEach(request => Ext.Ajax.request(request));
     };
 
-    const execute = function(config) {
+    execute = function(config) {
         const validateConfig = function() {
             if (!isString(config.url)) {
                 gis.alert('Invalid url (' + config.el + ')');

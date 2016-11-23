@@ -13,8 +13,6 @@ export default function ContextMenu(gis, layer, instance, latlng) {
         const isPoint = feature.geometry.type === 'Point';
         const att = feature.properties;
 
-        let infrastructuralPeriod; // TODO: in use?
-
         // Relocate
         const showRelocate = function() {
             if (gis.relocate.window) {
@@ -489,11 +487,13 @@ export default function ContextMenu(gis, layer, instance, latlng) {
             }));
         }
 
-        menuItems.push( Ext.create('Ext.menu.Item', {
-            text: GIS.i18n.show_information_sheet,
-            iconCls: 'gis-menu-item-icon-information',
-            handler: showInfo
-        }));
+        if (!gis.plugin) {
+            menuItems.push( Ext.create('Ext.menu.Item', {
+                text: GIS.i18n.show_information_sheet,
+                iconCls: 'gis-menu-item-icon-information',
+                handler: showInfo
+            }));
+        }
 
     }
 

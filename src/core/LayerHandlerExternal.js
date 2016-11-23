@@ -121,7 +121,7 @@ export default function LayerHandlerExternal(gis, layer) {
             };
             externalImage.src = config.legendSetUrl;
         } else {
-            callback('<br/>'); // No legend
+            callback(''); // No legend
         }
     }
 

@@ -31,10 +31,12 @@ Ext.onReady(function() {
         facility_layer: 'Facility layer',
         invalid_coordinates: 'Invalid coordinates',
         latitude: 'Latitude',
+        level: 'Level',
         longitude: 'Longitude',
         measure_distance: 'Measure distance',
         no_valid_coordinates_found: 'No valid coordinates found',
         organisation_unit: 'Organisation unit',
+        parent_unit: 'Parent unit',
         show: 'Show',
         show_lon_lat: 'Show longitude/latitude',
         thematic_layer: 'Thematic layer'

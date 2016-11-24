@@ -178,6 +178,11 @@ export default function LayerHandlerBoundary(gis, layer) {
         afterLoad(view);
     };
 
+    // Check if map has another thematic layer => disable interaction on this layer
+    const hasThematicLayer = function () {
+        return gis.thematicLayers.filter(layer => layer.instance).length > 0;
+    };
+
     const onFeatureClick = function(evt) {
         const attr = evt.layer.feature.properties;
         let content = '<div class="leaflet-popup-orgunit"><em>' + attr.name + '</em>';

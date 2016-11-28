@@ -122,7 +122,8 @@ export default function LayerHandlerFacility(gis, layer) {
                     color: view.labelFontColor,
                     fontSize: view.labelFontSize,
                     fontStyle: view.labelFontStyle,
-                    fontWeight: view.labelFontWeight
+                    fontWeight: view.labelFontWeight,
+                    paddingTop: '10px'
                 }
             });
         }

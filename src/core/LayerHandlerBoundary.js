@@ -130,7 +130,7 @@ export default function LayerHandlerBoundary(gis, layer) {
 
         features.forEach(feature => {
             feature.properties.labelStyle = {
-                paddingTop: feature.geometry.type === 'Point' ? 10 + (view.radiusLow || 5) + 'px' : '0'
+                paddingTop: feature.geometry.type === 'Point' ? 5 + (view.radiusLow || 5) + 'px' : '0'
             };
         });
 

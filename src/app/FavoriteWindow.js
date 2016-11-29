@@ -215,7 +215,7 @@ export default function FavoriteWindow(gis) {
     });
 
     const prevButton = Ext.create('Ext.button.Button', {
-        text: GIS.i18n.prev,
+        text: GIS.i18n.previous,
         handler() {
             const value = searchTextfield.getValue();
             const url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;

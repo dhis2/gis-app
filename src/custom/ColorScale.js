@@ -2,6 +2,19 @@ import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
 import colorbrewer from '../custom/colorbrewer';
 
+const reverseScales = ['YlOrBr', 'Reds', 'YlGn', 'Greens', 'Blues', 'BuPu', 'RdPu', 'PuRd', 'Greys'];
+
+reverseScales.forEach(id => {
+    const scale = colorbrewer[id];
+    const reversedScale = colorbrewer[id + '_reverse'] = {};
+
+    for (let classes in scale) {
+        if (scale.hasOwnProperty(classes)) {
+            reversedScale[classes] = [...scale[classes]].reverse();
+        }
+    }
+});
+
 const createColorScale = function(value, model) {
     const classes = model.get('classes');
     const colors = colorbrewer[model.getId()][classes];
@@ -12,28 +25,37 @@ const createColorScale = function(value, model) {
 const colorStore = Ext.create('Ext.data.Store', {
     fields: ['id', 'classes', {name: 'scale', persist: false, convert: createColorScale}],
     data: [
-        {id: 'YlOrBr',   classes: 5},
-        {id: 'Reds',     classes: 5},
-        {id: 'YlGn',     classes: 5},
-        {id: 'Greens',   classes: 5},
-        {id: 'Blues',    classes: 5},
-        {id: 'BuPu',     classes: 5},
-        {id: 'RdPu',     classes: 5},
-        {id: 'PuRd',     classes: 5},
-        {id: 'Greys',    classes: 5},
-        {id: 'PuOr',     classes: 5},
-        {id: 'BrBG',     classes: 5},
-        {id: 'PRGn',     classes: 5},
-        {id: 'PiYG',     classes: 5},
-        {id: 'RdBu',     classes: 5},
-        {id: 'RdGy',     classes: 5},
-        {id: 'RdYlBu',   classes: 5},
-        {id: 'Spectral', classes: 5},
-        {id: 'RdYlGn',   classes: 5},
-        {id: 'Paired',   classes: 5},
-        {id: 'Pastel1',  classes: 5},
-        {id: 'Set1',     classes: 5},
-        {id: 'Set3',     classes: 5}
+        {id: 'YlOrBr',         classes: 5},
+        {id: 'Reds',           classes: 5},
+        {id: 'YlGn',           classes: 5},
+        {id: 'Greens',         classes: 5},
+        {id: 'Blues',          classes: 5},
+        {id: 'BuPu',           classes: 5},
+        {id: 'RdPu',           classes: 5},
+        {id: 'PuRd',           classes: 5},
+        {id: 'Greys',          classes: 5},
+        {id: 'YlOrBr_reverse', classes: 5},
+        {id: 'Reds_reverse',   classes: 5},
+        {id: 'YlGn_reverse',   classes: 5},
+        {id: 'Greens_reverse', classes: 5},
+        {id: 'Blues_reverse',  classes: 5},
+        {id: 'BuPu_reverse',   classes: 5},
+        {id: 'RdPu_reverse',   classes: 5},
+        {id: 'PuRd_reverse',   classes: 5},
+        {id: 'Greys_reverse',  classes: 5},
+        {id: 'PuOr',           classes: 5},
+        {id: 'BrBG',           classes: 5},
+        {id: 'PRGn',           classes: 5},
+        {id: 'PiYG',           classes: 5},
+        {id: 'RdBu',           classes: 5},
+        {id: 'RdGy',           classes: 5},
+        {id: 'RdYlBu',         classes: 5},
+        {id: 'Spectral',       classes: 5},
+        {id: 'RdYlGn',         classes: 5},
+        {id: 'Paired',         classes: 5},
+        {id: 'Pastel1',        classes: 5},
+        {id: 'Set1',           classes: 5},
+        {id: 'Set3',           classes: 5}
     ]
 });
 

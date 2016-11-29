@@ -51,9 +51,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
                     .select(['year'], null, false);
 
                 featureCollection.getInfo(data => {
-                    console.log(data);
-
-
                     callback(data.features.map(feature => ({
                         id: feature.properties['year'],
                         name: feature.properties['year'],

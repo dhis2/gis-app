@@ -2,19 +2,6 @@ import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
 import colorbrewer from '../custom/colorbrewer';
 
-const reverseScales = ['YlOrBr', 'Reds', 'YlGn', 'Greens', 'Blues', 'BuPu', 'RdPu', 'PuRd', 'Greys'];
-
-reverseScales.forEach(id => {
-    const scale = colorbrewer[id];
-    const reversedScale = colorbrewer[id + '_reverse'] = {};
-
-    for (let classes in scale) {
-        if (scale.hasOwnProperty(classes)) {
-            reversedScale[classes] = [...scale[classes]].reverse();
-        }
-    }
-});
-
 const createColorScale = function(value, model) {
     const classes = model.get('classes');
     const colors = colorbrewer[model.getId()][classes];

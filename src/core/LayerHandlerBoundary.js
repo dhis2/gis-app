@@ -137,6 +137,11 @@ export default function LayerHandlerBoundary(gis, layer) {
         const layerConfig = Ext.applyIf({
             data: features,
             hoverLabel: '{name}',
+            style: {
+                opacity: 1,
+                fillOpacity: 0,
+                fill: false,
+            }
         }, layer.config);
 
         if (view.labels) {
@@ -150,11 +155,7 @@ export default function LayerHandlerBoundary(gis, layer) {
         }
 
         if (view.radiusLow) {
-            layerConfig.style = {
-                opacity: 1,
-                radius: view.radiusLow,
-                fillOpacity: 0
-            };
+            layerConfig.style.radius = view.radiusLow;
         }
 
         // Remove layer instance if already exist

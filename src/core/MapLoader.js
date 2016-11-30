@@ -172,13 +172,8 @@ export default function MapLoader(gis, isSession, applyConfig) {
             gis.mask.hide();
         }
 
-        // data statistics
-        if (isObject(GIS.app) && !isObject(GIS.plugin)) {
-            Ext.Ajax.request({
-                url: gis.init.apiPath + 'dataStatistics?eventType=MAP_VIEW' + (gis.map.id ? '&favorite=' + gis.map.id : ''),
-                method: 'POST'
-            });
-        }
+        // Post usage statistics
+        gis.postDataStatistics(gis.map.id);
     };
 
     const loader = {

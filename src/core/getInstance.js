@@ -1096,6 +1096,16 @@ export default function getInstance(init) {
         };
     }());
 
+    // Store usage statistics each time a favorite is loaded (MapLoader.js) or layer update buttons is clicked (WidgetWindow.js)
+    gis.postDataStatistics = function(mapId) {
+        if (isObject(GIS.app) && !isObject(GIS.plugin, gis.init.apiPath)) {
+            Ext.Ajax.request({
+                url: gis.init.apiPath + 'dataStatistics?eventType=MAP_VIEW' + (mapId ? '&favorite=' + mapId : ''),
+                method: 'POST'
+            });
+        }
+    }
+
     gis.alert = util.message.alert;
 
     gis.api = api;

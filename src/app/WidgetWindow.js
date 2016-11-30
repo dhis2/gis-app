@@ -27,6 +27,10 @@ export default function WidgetWindow(gis, layer, width, padding) {
                         handler.zoomToVisibleExtent = true;
                         handler.hideMask = true;
                         handler.load(view);
+
+                        // Post usage statistics each time update button is clicked
+                        // TODO: Move to a shared layer handler prototye
+                        gis.postDataStatistics();
                     }
                 }
             }

@@ -77,7 +77,6 @@
   },
   "pre-commit": [
     "test",
-    "lint",
-    "validate"
+    "lint"
   ]
 }

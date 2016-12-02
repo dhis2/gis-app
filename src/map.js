@@ -222,14 +222,19 @@ Ext.onReady(function() {
                 objectStores: ['optionSets']
             });
 
-            const optionSetVersionConfig = {
+            // user orgunit
+            Ext.Ajax.request({
+                url: encodeURI(init.apiPath + 'organisationUnits.json?userOnly=true&fields=id,' + init.namePropertyUrl + ',children[id,' + init.namePropertyUrl + ']&paging=false'),
+                disableCaching: false,
+                success: onOrgUnitsLoad
+            });
+
+            // option sets
+            Ext.Ajax.request({
                 url: encodeURI(contextPath + '/api/optionSets.json?fields=id,version&paging=false'),
                 disableCaching: false,
                 success: onOptionSetsLoad
-            };
-
-            // option sets
-            Ext.Ajax.request(optionSetVersionConfig);
+            });
         };
 
         // system info
@@ -244,13 +249,6 @@ Ext.onReady(function() {
             url: encodeURI(init.apiPath + 'systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyGoogleMapsApiKey'),
             disableCaching: false,
             success: onSystemSettingsLoad
-        });
-
-        // user orgunit
-        requests.push({
-            url: encodeURI(init.apiPath + 'organisationUnits.json?userOnly=true&fields=id,' + init.namePropertyUrl + ',children[id,' + init.namePropertyUrl + ']&paging=false'),
-            disableCaching: false,
-            success: onOrgUnitsLoad
         });
 
         // dimensions

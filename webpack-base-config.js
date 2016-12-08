@@ -13,7 +13,7 @@ module.exports = {
         filename: '[name].js',
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js?$/,
                 include: [

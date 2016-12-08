@@ -20,7 +20,7 @@ module.exports = {
                     path.resolve(__dirname, 'src/'),
                     path.resolve(__dirname, '../gis-api/src/'),
                 ],
-                loader: 'babel',
+                loader: 'babel-loader',
                 query: {
                     cacheDirectory: true,
                     presets: ['es2015', 'stage-2'],
@@ -32,20 +32,20 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                loader: 'style!css!sass',
+                loader: 'style-loader!css-loader!sass-loader',
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 loaders: [
-                    'file?hash=sha512&digest=hex&name=[hash].[ext]',
-                    'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                    'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+                    'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
                 ]
             },
         ],
     },
     plugins: [
         new webpack.ProvidePlugin({
-            'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+            'fetch': 'imports-loader?this=>global!exports?global.fetch!whatwg-fetch'
         })
     ],
 };

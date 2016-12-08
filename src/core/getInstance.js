@@ -930,6 +930,10 @@ export default function getInstance(init) {
                     layout.valueType = config.valueType;
                 }
 
+                if (config.eventCoordinateField) {
+                    layout.eventCoordinateField = config.eventCoordinateField;
+                }
+
                 if (config.eventClustering) {
                     layout.eventClustering = config.eventClustering;
                 }

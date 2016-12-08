@@ -662,6 +662,37 @@ export default function LayerWidgetEvent(gis, layer) {
         ]
     });
 
+    const coordinateFieldStore = Ext.create('Ext.data.Store', {
+        fields: ['id', 'name'],
+        data: [{
+            id: 'event',
+            name: GIS.i18n.event_location
+        }]
+    });
+
+    // Coordinate field
+    const coordinateField = Ext.create('Ext.form.field.ComboBox', {
+        editable: false,
+        valueField: 'id',
+        displayField: 'name',
+        width: 160,
+        forceSelection: true,
+        queryMode: 'local',
+        style: 'margin:1px 1px 10px 0',
+        store: coordinateFieldStore,
+        listeners: {
+            render(cb) { // Event is default
+                cb.setValue(cb.store.getAt(0).data.id);
+            }
+        }
+    });
+
+    const eventCluster = Ext.create('Ext.form.field.Checkbox', {
+        boxLabel: GIS.i18n.group_nearby_events,
+        cls: 'gis-event-clustering-checkbox',
+        checked: true
+    });
+
     const eventColor = Ext.create('Ext.ux.button.ColorButton', {
         xtype: 'colorbutton',
         height: 24,
@@ -678,12 +709,6 @@ export default function LayerWidgetEvent(gis, layer) {
         value: 6
     });
 
-    const eventCluster = Ext.create('Ext.form.field.Checkbox', {
-        boxLabel: 'Group nearby events',
-        cls: 'gis-event-clustering-checkbox',
-        checked: true
-    });
-
     const optionsPanel = Ext.create('Ext.panel.Panel', {
         title: '<div class="gis-panel-title-options">' + GIS.i18n.options + '</div>',
         cls: 'gis-accordion-last',
@@ -693,13 +718,19 @@ export default function LayerWidgetEvent(gis, layer) {
         items: [
             {
                 xtype: 'container',
-                html: 'Clustering',
+                html: GIS.i18n.coordinate_field,
+                style: 'padding-bottom:3px;font-weight:bold;font-size:12px;'
+            },
+            coordinateField,
+            {
+                xtype: 'container',
+                html: GIS.i18n.clustering,
                 style: 'padding-bottom:3px;font-weight:bold;font-size:12px;'
             },
             eventCluster,
             {
                 xtype: 'container',
-                html: 'Style',
+                html: GIS.i18n.style,
                 style: 'padding:10px 0 3px;font-weight:bold;font-size:12px;'
             },
             {
@@ -708,7 +739,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 items: [
                     {
                         xtype: 'container',
-                        html: 'Point color:',
+                        html: GIS.i18n.point_color + ':',
                         width: 80,
                         style: 'padding:5px;font-size:11px;'
                     },
@@ -721,7 +752,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 items: [
                     {
                         xtype: 'container',
-                        html: 'Point radius:',
+                        html: GIS.i18n.point_radius + ':',
                         width: 80,
                         style: 'padding:5px;font-size:11px;'
                     },
@@ -817,8 +848,15 @@ export default function LayerWidgetEvent(gis, layer) {
         const load = function(dataElements) {
             const attributes = attributeStorage[programId];
             const data = arrayClean([].concat(attributes || [], dataElements || []));
+            const coordinateFields = [{
+                id: 'event',
+                name: 'Event location'
+            }].concat(data.filter(field => field.valueType === 'COORDINATE'));
 
             dataElementsByStageStore.loadData(data);
+
+            coordinateFieldStore.removeAll();
+            coordinateFieldStore.loadData(coordinateFields);
 
             if (layout) {
                 const dataDimensions = gis.util.layout.getDataDimensionsFromLayout(layout);
@@ -1084,6 +1122,10 @@ export default function LayerWidgetEvent(gis, layer) {
             dimension: 'ou',
             items: treePanel.getDimension().items
         }];
+
+        if (coordinateField.getValue() !== 'event') { // If not event location
+            view.eventCoordinateField = coordinateField.getValue();
+        }
 
         view.eventClustering = eventCluster.getValue();
         view.eventPointColor = eventColor.getValue();

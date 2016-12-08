@@ -43,6 +43,12 @@ export default function LayerHandlerEvent(gis, layer) {
             });
         }
 
+        // If coordinate field other than event coordinate
+        if (view.eventCoordinateField) {
+            paramString += '&dimension=' + view.eventCoordinateField; // Used by analytics/events/query/
+            paramString += '&coordinateField=' + view.eventCoordinateField; // Used by analytics/events/count and analytics/events/cluster
+        }
+
         // Only events with coordinates
         paramString += '&coordinatesOnly=true';
 
@@ -170,8 +176,9 @@ export default function LayerHandlerEvent(gis, layer) {
 
             if (r.count < 2000) { // Client clustering if less than 2000 events
                 loadEvents();
-            } else { // Server clustering
-                const url = gis.init.apiPath + 'analytics/events/cluster/' + view.program.id + '.json' + paramString
+            } else {
+                let url = gis.init.apiPath + 'analytics/events/cluster/' + view.program.id + '.json' + paramString;
+
                 updateMap(view, url);
             }
         };
@@ -300,9 +307,10 @@ export default function LayerHandlerEvent(gis, layer) {
                         content += '<tr><th>' + GIS.i18n.organisation_unit + '</th><td>' + orgUnit.displayName + '</td></tr>';
                         content += '<tr><th>' + GIS.i18n.event_date + '</th><td>' + data.eventDate + '</td></tr>';
 
-                        if (data.coordinate) {
-                            content += '<tr><th>' + GIS.i18n.longitude + '</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
-                            content += '<tr><th>' + GIS.i18n.latitude + '</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
+                        if (data.coordinate) { // TODO: get correct coordinate
+                            // content += '<tr><th>' + GIS.i18n.longitude + '</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
+                            // content += '<tr><th>' + GIS.i18n.latitude + '</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
+                            content += '<tr><th>Household location</th><td>' + data.coordinate.longitude.toFixed(6) + ', ' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
                         }
 
                         content += '</tbody></table>';

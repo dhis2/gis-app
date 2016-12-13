@@ -1,8 +1,6 @@
 import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
 import isString from 'd2-utilizr/lib/isString';
-import arrayContains from 'd2-utilizr/lib/arrayContains';
-import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerEvent(gis, layer) {
     const spatialSupport = gis.init.systemInfo.databaseInfo.spatialSupport;
@@ -72,13 +70,25 @@ export default function LayerHandlerEvent(gis, layer) {
                 // Create GeoJSON features
                 rows.forEach(row => {
                     const properties = {};
+                    let coord;
 
                     // Build property object
                     row.forEach((value, i) => {
                         properties[r.headers[i].name] = booleanNames[value] || r.metaData.optionNames[value] || names[value] || value;
                     });
 
-                    const coord = [properties.longitude, properties.latitude];
+                    // If coordinate field other than event location
+                    if (view.eventCoordinateField) {
+                        const eventCoordinate = properties[view.eventCoordinateField];
+
+                        if (isArray(eventCoordinate)) {
+                            coord = eventCoordinate;
+                        } else if (isString(eventCoordinate)) {
+                            coord = JSON.parse(eventCoordinate);
+                        }
+                    } else { // Use event location
+                        coord = [properties.longitude, properties.latitude];
+                    }
 
                     if (gis.util.map.isValidCoordinate(coord)) {
                         features.push({
@@ -310,7 +320,7 @@ export default function LayerHandlerEvent(gis, layer) {
                         if (data.coordinate) { // TODO: get correct coordinate
                             // content += '<tr><th>' + GIS.i18n.longitude + '</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
                             // content += '<tr><th>' + GIS.i18n.latitude + '</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
-                            content += '<tr><th>Household location</th><td>' + data.coordinate.longitude.toFixed(6) + ', ' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
+                            content += '<tr><th>' + GIS.i18n.event_location + '</th><td>' + data.coordinate.longitude.toFixed(6) + ', ' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
                         }
 
                         content += '</tbody></table>';
@@ -321,12 +331,12 @@ export default function LayerHandlerEvent(gis, layer) {
         });
     };
 
-    // Add layer to map
+    // Add layer to map (features can also be cluster url)
     const updateMap = function(view, features) {
         let layerConfig;
         let layerUpdate = false;
 
-        if (typeof features === 'string') { // Server cluster
+        if (isString(features)) { // Server cluster
             layerConfig = Ext.applyIf({
                 type: 'serverCluster',
                 bounds: view.bounds,
@@ -340,6 +350,8 @@ export default function LayerHandlerEvent(gis, layer) {
                             gis.alert(r);
                         },
                         success(r) {
+                            console.log(features, JSON.parse(r.responseText));
+
                             callback(params.tileId, toGeoJson(JSON.parse(r.responseText)));
                         }
                     });
@@ -373,7 +385,7 @@ export default function LayerHandlerEvent(gis, layer) {
         layer.instance = gis.instance.addLayer(layerConfig);
 
         // Zoom
-        if (!layerUpdate && handler.zoomToVisibleExtent && layer.instance.getBounds) {
+        if (!layerUpdate && handler.zoomToVisibleExtent && layer.instance.getBounds().isValid()) {
             gis.instance.fitBounds(layer.instance.getBounds());
         }
 

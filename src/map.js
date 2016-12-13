@@ -26,7 +26,7 @@ Ext.onReady(function() {
         coordinates_could_not_be_loaded: 'Coordinates could not be loaded',
         drill_down_one_level: 'Drill down one level',
         drill_up_one_level: 'Drill up one level',
-        event_date: 'Event date',
+        event_time: 'Event time',
         event_layer: 'Event layer',
         facility_layer: 'Facility layer',
         invalid_coordinates: 'Invalid coordinates',

@@ -5,6 +5,7 @@ import isString from 'd2-utilizr/lib/isString';
 export default function LayerHandlerEvent(gis, layer) {
     const spatialSupport = gis.init.systemInfo.databaseInfo.spatialSupport;
     const displayElements = {}; // Data elements to display in event popup
+    let eventCoordinateFieldName; // Name of event coordinate field to show in popup
 
     const loadData = function(view) {
         view = view || layer.view;
@@ -233,7 +234,10 @@ export default function LayerHandlerEvent(gis, layer) {
                             if (el.displayInReports) {
                                 displayElements[el.dataElement.id] = el.dataElement;
                                 getDataElementOptionSets(el.dataElement);
+                            } else if (view.eventCoordinateField && el.dataElement.id === view.eventCoordinateField) {
+                                eventCoordinateFieldName = el.dataElement.name;
                             }
+
                         });
                     }
                 }
@@ -274,6 +278,8 @@ export default function LayerHandlerEvent(gis, layer) {
 
     // Called for every single marker click
     const onFeaturePopup = function(feature, callback) {
+        const coord = feature.geometry.coordinates; // Show coordinate from feature
+
         Ext.Ajax.request({
             url: encodeURI(gis.init.apiPath + 'events/' + feature.id + '.json'),
             disableCaching: false,
@@ -282,6 +288,7 @@ export default function LayerHandlerEvent(gis, layer) {
             },
             success(r) {
                 const data = JSON.parse(r.responseText);
+                const time = data.eventDate.substring(0, 10) + ' ' + data.eventDate.substring(11, 16);
                 const dataValues = data.dataValues;
                 let content = '<table><tbody>';
 
@@ -296,37 +303,18 @@ export default function LayerHandlerEvent(gis, layer) {
                                 value = displayEl.optionSet[value];
                             }
 
-                            content += '<tr><th>' + displayEl.name + '</th><td>' + value + '</td></tr>';
+                            content += `<tr><th>${displayEl.name}</th><td>${value}</td></tr>`;
                         }
                     });
-
                     content += '<tr style="height:5px;"><th></th><td></td></tr>';
                 }
 
-                // Fetch org unit name (might be possible to get in the same request later)
-                // https://blueprints.launchpad.net/dhis2/+spec/tracked-entity-instance-endpoint
-                Ext.Ajax.request({
-                    url: encodeURI(gis.init.apiPath + 'organisationUnits/' + data.orgUnit + '.json?fields=displayName'),
-                    disableCaching: false,
-                    failure(r) {
-                        gis.alert(r);
-                    },
-                    success(r) {
-                        const orgUnit = JSON.parse(r.responseText);
+                content += `<tr><th>${GIS.i18n.organisation_unit}</th><td>${data.orgUnitName}</td></tr>
+                            <tr><th>${GIS.i18n.event_time}</th><td>${time}</td></tr>
+                            <tr><th>${eventCoordinateFieldName || GIS.i18n.event_location}</th><td>${coord[0]}, ${coord[1]}</td></tr>
+                            </tbody></table>`
 
-                        content += '<tr><th>' + GIS.i18n.organisation_unit + '</th><td>' + orgUnit.displayName + '</td></tr>';
-                        content += '<tr><th>' + GIS.i18n.event_date + '</th><td>' + data.eventDate + '</td></tr>';
-
-                        if (data.coordinate) { // TODO: get correct coordinate
-                            // content += '<tr><th>' + GIS.i18n.longitude + '</th><td>' + data.coordinate.longitude.toFixed(6) + '</td></tr>';
-                            // content += '<tr><th>' + GIS.i18n.latitude + '</th><td>' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
-                            content += '<tr><th>' + GIS.i18n.event_location + '</th><td>' + data.coordinate.longitude.toFixed(6) + ', ' + data.coordinate.latitude.toFixed(6) + '</td></tr>';
-                        }
-
-                        content += '</tbody></table>';
-                        callback(content);
-                    }
-                });
+                callback(content);
             }
         });
     };
@@ -350,8 +338,6 @@ export default function LayerHandlerEvent(gis, layer) {
                             gis.alert(r);
                         },
                         success(r) {
-                            console.log(features, JSON.parse(r.responseText));
-
                             callback(params.tileId, toGeoJson(JSON.parse(r.responseText)));
                         }
                     });

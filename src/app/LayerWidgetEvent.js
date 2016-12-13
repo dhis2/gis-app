@@ -871,6 +871,10 @@ export default function LayerWidgetEvent(gis, layer) {
                 });
 
                 selectDataElements(records, layout);
+
+                if (layout.eventCoordinateField) {
+                    coordinateField.setValue(layout.eventCoordinateField);
+                }
             }
         };
 
@@ -978,7 +982,6 @@ export default function LayerWidgetEvent(gis, layer) {
     };
 
     const reset = function(skipTree) {
-
         // Uncheck in layers list
         layer.item.setValue(false);
 
@@ -1005,6 +1008,12 @@ export default function LayerWidgetEvent(gis, layer) {
         userOrganisationUnit.setValue(false);
         userOrganisationUnitChildren.setValue(false);
         userOrganisationUnitGrandChildren.setValue(false);
+
+        // Options
+        coordinateFieldStore.removeAll();
+        eventCluster.reset();
+        eventColor.reset();
+        eventRadius.reset();
     };
 
     const setGui = function(view) {
@@ -1071,6 +1080,10 @@ export default function LayerWidgetEvent(gis, layer) {
             treePanel.selectGraphMap(view.parentGraphMap);
 
             // Options
+            if (view.eventCoordinateField !== undefined) {
+                coordinateField.setValue(view.eventCoordinateField);
+            }
+
             if (view.eventClustering !== undefined) {
                 eventCluster.setValue(view.eventClustering);
             }

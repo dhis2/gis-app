@@ -18,7 +18,7 @@ module.exports = {
                 test: /\.js?$/,
                 include: [
                     path.resolve(__dirname, 'src/'),
-                    path.resolve('/Users/bjornadm/Sites/dhis2-gis-api/src/'),
+                    path.resolve(__dirname, '../gis-api/src/'),
                 ],
                 loader: 'babel',
                 query: {

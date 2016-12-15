@@ -242,7 +242,11 @@ export default function LayerHandlerThematic(gis, layer) {
             layer.maxValue = options.maxValue;
 
             applyClassification(options, features, values);
-            updateLegend(view, metaData, options);
+
+            if (!loader.isDrillDown) {
+                updateLegend(view, metaData, options);
+            }
+
             updateMap(view, features);
             afterLoad(view);
         };

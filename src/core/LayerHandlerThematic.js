@@ -242,7 +242,11 @@ export default function LayerHandlerThematic(gis, layer) {
             layer.maxValue = options.maxValue;
 
             applyClassification(options, features, values);
-            updateLegend(view, metaData, options);
+
+            if (!loader.isDrillDown) {
+                updateLegend(view, metaData, options);
+            }
+
             updateMap(view, features);
             afterLoad(view);
         };
@@ -491,6 +495,9 @@ export default function LayerHandlerThematic(gis, layer) {
     };
 
     const updateLegend = function (view, metaData, options) {
+        console.log('## updateLegend', loader.isDrillDown);
+
+
         const bounds = options.bounds;
         const colors = options.colors;
         const legendNames = view.legendSet ? view.legendSet.names || {} : {};

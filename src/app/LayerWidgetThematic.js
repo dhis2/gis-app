@@ -387,7 +387,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
     const valueType = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
-        fieldLabel: GIS.i18n.value_type,
+        fieldLabel: GIS.i18n.item_type,
         editable: false,
         valueField: 'id',
         displayField: 'name',
@@ -481,7 +481,7 @@ export default function LayerWidgetThematic(gis, layer) {
 
     const dataElementGroup = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
-        fieldLabel: GIS.i18n.dataelement_group,
+        fieldLabel: GIS.i18n.group,
         editable: false,
         valueField: 'id',
         displayField: 'name',

@@ -22,17 +22,24 @@
     <script src="map.js"></script> <!-- transpiled -->
     <script>
 
+        var getURLParameter = function(name) {
+            return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+        }
+
+        var mapId = getURLParameter('id');
+
         Ext.onReady(function() {
 
-            GIS.plugin.getMap({
-                url: 'http://localhost:8080',
-                el: "map",
-                id: 'voX07ulo2Bq',
-                crossDomain: true,
-                username: 'admin',
-                password: 'district'
-            });
-
+            if (mapId) {
+                GIS.plugin.getMap({
+                    url: 'http://localhost:8080',
+                    el: 'map',
+                    id: mapId,
+                    crossDomain: true,
+                    username: 'admin',
+                    password: 'district'
+                });
+            }
 
         });
 

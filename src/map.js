@@ -334,10 +334,9 @@ Ext.onReady(function() {
             });
 
             map.invalidateSize();
-            map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
+            // map.fitBounds([[-34.9, -18.7], [35.9, 50.2]]);
 
             // basemap
-            // gis.map.basemap = gis.map.basemap || 'openStreetMap';
             gis.map.basemap = gis.map.basemap || 'osmLight';
 
             return container;

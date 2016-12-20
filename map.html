@@ -37,7 +37,10 @@
                     id: mapId,
                     crossDomain: true,
                     username: 'admin',
-                    password: 'district'
+                    password: 'district',
+                    onReady: function() {
+                        console.log('map is ready!');
+                    }
                 });
             }
 

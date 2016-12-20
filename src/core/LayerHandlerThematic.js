@@ -1,5 +1,6 @@
 import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
+import isFunction from 'd2-utilizr/lib/isFunction';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
 import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
@@ -469,6 +470,11 @@ export default function LayerHandlerThematic(gis, layer) {
 
         layer.instance.on('click', onFeatureClick);
         layer.instance.on('contextmenu', onFeatureRightClick);
+
+        // Screenshot service needs to know when a layer is rendered
+        if (loader.onReady && isFunction(loader.onReady)) {
+            layer.instance.on('ready', loader.onReady);
+        }
 
         layer.view = view;
     };

@@ -1,10 +1,15 @@
 import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
+import isFunction from 'd2-utilizr/lib/isFunction';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
 import arrayContains from 'd2-utilizr/lib/arrayContains';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 
 export default function MapLoader(gis, isSession, applyConfig) {
+
+    const layersReady = [];
+    const onMapReady = gis.map.onReady;
+    let layersToLoad;
 
     const getMap = function() {
         const url = gis.init.apiPath + 'maps/' + gis.map.id + '.json?fields=' + gis.conf.url.mapFields.join(',');
@@ -79,6 +84,9 @@ export default function MapLoader(gis, isSession, applyConfig) {
 
         clearAllLayers();
 
+        // Keep track of layers to load, to know when map is ready
+        layersToLoad = ((basemap === 'none') ? 0 : 1) + views.length;
+
         // Add basemap
         if (basemap !== 'none') {
             const layer = gis.layer[basemap] || gis.layer['osmLight'];
@@ -87,6 +95,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
                 gis.instance.addLayer(layer.instance);
             } else { // Create and add layer instance
                 layer.instance = gis.instance.addLayer(layer.config);
+                layer.instance.on('ready', onLayerReady);
             }
 
             if (layer.item) {
@@ -99,15 +108,27 @@ export default function MapLoader(gis, isSession, applyConfig) {
             const layer = gis.layer[layout.layer];
             const handler = layer.handler(gis, layer);
 
+            handler.onReady = onLayerReady;
             handler.updateGui = !gis.el;
             handler.callBack = function(layer) {
                 register.push(layer);
+
                 if (register.length === gis.map.mapViews.length) {
                     afterLoad();
                 }
             };
             handler.load(layout);
         });
+
+    };
+
+    // Use callback function when map is fully rendered
+    const onLayerReady = function(evt) {
+        layersReady.push(evt.target);
+
+        if (layersToLoad === layersReady.length && onMapReady && isFunction(onMapReady)) {
+            onMapReady();
+        }
     };
 
     // Remove current layers from map
@@ -178,6 +199,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 
     const loader = {
         load(views) {
+
             if (gis.mask && !gis.skipMask) {
                 gis.mask.show();
             }

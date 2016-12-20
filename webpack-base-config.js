@@ -39,13 +39,13 @@ module.exports = {
                 loaders: [
                     'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
                     'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
-                ]
+                ],
             },
         ],
     },
     plugins: [
         new webpack.ProvidePlugin({
             'fetch': 'imports-loader?this=>global!exports?global.fetch!whatwg-fetch'
-        })
+        }),
     ],
 };

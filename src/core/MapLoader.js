@@ -140,6 +140,12 @@ export default function MapLoader(gis, isSession, applyConfig) {
                 // Remove layer from map if exist
                 if (layer.instance && gis.instance.hasLayer(layer.instance)) {
                     gis.instance.removeLayer(layer.instance);
+
+                    // Clear circular areas around facilities
+                    // TODO: Facilities could be represented as a LayerGroup containging both layers
+                    if (layer.areaInstance) {
+                        gis.instance.removeLayer(layer.areaInstance);
+                    }
                 }
 
                 // Reset layer widget

@@ -176,12 +176,11 @@ export default function MapLoader(gis, isSession, applyConfig) {
 
         // gis.el is the element used to render the map (only for plugin)
         // isSession is true if you select "map -> view this table/chart" as map in pivot/visualizer
-        if (layersBounds && layersBounds.isValid() && (gis.el || isSession || !validLatLng)) {
-            // Fit bounds not always set without a delay
-            // window.setTimeout(function(){ gis.instance.fitBounds(layersBounds); }, 2000);
+        // if (layersBounds && layersBounds.isValid() && (gis.el || isSession || !validLatLng)) {
+        if (layersBounds && layersBounds.isValid()) {
             gis.instance.fitBounds(layersBounds);
         }
-        else {
+        else if (validLatLng) {
             gis.instance.setView([lat, lon], zoom);
         }
 

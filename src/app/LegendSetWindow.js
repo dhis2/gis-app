@@ -51,7 +51,7 @@ export default function LegendSetWindow(gis) {
         fields: ['id', 'name'],
         proxy: {
             type: 'ajax',
-            url: encodeURI(gis.init.contextPath + '/api/legendSets.json?fields=id,displayName|rename(name)&paging=false'),
+            url: encodeURI(gis.init.contextPath + '/api/legendSets.json?fields=id,displayName~rename(name)&paging=false'),
             reader: {
                 type: 'json',
                 root: 'legendSets'
@@ -640,7 +640,7 @@ export default function LegendSetWindow(gis) {
         });
 
         if (id) {
-            legendStore.proxy.url = encodeURI(gis.init.contextPath + '/api/legendSets/' + id + '.json?fields=legends[id,displayName|rename(name),startValue,endValue,color]');
+            legendStore.proxy.url = encodeURI(gis.init.contextPath + '/api/legendSets/' + id + '.json?fields=legends[id,displayName~rename(name),startValue,endValue,color]');
             legendStore.load();
 
             legendSetName.setValue(legendSetStore.getById(id).data.name);

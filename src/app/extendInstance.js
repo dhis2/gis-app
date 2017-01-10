@@ -441,7 +441,7 @@ export default function extendInstance(gis) {
             fields: ['id', 'name'],
             proxy: {
                 type: 'ajax',
-                url: encodeURI(gis.init.contextPath + '/api/legendSets.json?fields=id,displayName|rename(name)&paging=false'),
+                url: encodeURI(gis.init.contextPath + '/api/legendSets.json?fields=id,displayName~rename(name)&paging=false'),
                 reader: {
                     type: 'json',
                     root: 'legendSets'
@@ -478,7 +478,7 @@ export default function extendInstance(gis) {
             isLoaded: false,
             pageSize: 10,
             page: 1,
-            defaultUrl: encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName|rename(name),access'),
+            defaultUrl: encodeURI(gis.init.contextPath + '/api/maps.json?fields=id,displayName~rename(name),access'),
             loadStore: function(url) {
                 this.proxy.url = url || this.defaultUrl;
 

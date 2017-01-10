@@ -5,12 +5,12 @@ cache:
   yarn: true
   directories:
   - node_modules
-script:
+before_script:
 - cd $HOME
-- git clone --depth=10 https://github.com/dhis2/gis-api.git 
+- git clone --depth=10 https://github.com/dhis2/gis-api.git
 - cd gis-api
 - npm install
 - npm run build
-- cd $TRAVIS_BUILD_DIR
-- npm link
+script:
+- npm link gis-api
 - npm run build

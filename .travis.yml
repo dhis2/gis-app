@@ -10,6 +10,6 @@ script:
 - cd gis-api
 - npm install
 - npm run build
-- cd ../gis-app
+- cd ..
 - npm link
 - npm run build

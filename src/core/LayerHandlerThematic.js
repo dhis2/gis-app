@@ -305,7 +305,7 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
             Ext.Ajax.request({
-                url: encodeURI(gis.init.apiPath + '' + elementUrl + '.json?fields=legendSet[id,displayName|rename(name)]&paging=false&filter=id:eq:' + id),
+                url: encodeURI(gis.init.apiPath + '' + elementUrl + '.json?fields=legendSet[id,displayName~rename(name)]&paging=false&filter=id:eq:' + id),
                 success(r) {
                     const elements = JSON.parse(r.responseText)[elementUrl];
                     let set;

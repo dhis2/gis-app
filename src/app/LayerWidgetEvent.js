@@ -27,7 +27,7 @@ export default function LayerWidgetEvent(gis, layer) {
         fields: ['id', 'name'],
         proxy: {
             type: 'ajax',
-            url: encodeURI(gis.init.apiPath + 'programs.json?fields=id,displayName|rename(name)&paging=false'),
+            url: encodeURI(gis.init.apiPath + 'programs.json?fields=id,displayName~rename(name)&paging=false'),
             reader: {
                 type: 'json',
                 root: 'programs'
@@ -477,7 +477,7 @@ export default function LayerWidgetEvent(gis, layer) {
                 format: 'json',
                 noCache: false,
                 extraParams: {
-                    fields: 'children[id,' + gis.init.namePropertyUrl + ',children::isNotEmpty|rename(hasChildren)&paging=false'
+                    fields: 'children[id,' + gis.init.namePropertyUrl + ',children::isNotEmpty~rename(hasChildren)&paging=false'
                 },
                 url: gis.init.apiPath + 'organisationUnits',
                 reader: {
@@ -792,7 +792,7 @@ export default function LayerWidgetEvent(gis, layer) {
         }
         else {
             Ext.Ajax.request({
-                url: encodeURI(gis.init.apiPath + 'programs.json?filter=id:eq:' + programId + '&fields=programStages[id,displayName|rename(name)],programTrackedEntityAttributes[trackedEntityAttribute[id,displayName|rename(name),valueType,optionSet[id,displayName|rename(name)]]]&paging=false'),
+                url: encodeURI(gis.init.apiPath + 'programs.json?filter=id:eq:' + programId + '&fields=programStages[id,displayName~rename(name)],programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]]&paging=false'),
                 success(r) {
                     const program = JSON.parse(r.responseText).programs[0];
 
@@ -884,7 +884,7 @@ export default function LayerWidgetEvent(gis, layer) {
         }
         else {
             Ext.Ajax.request({
-                url: encodeURI(gis.init.apiPath + 'programStages.json?filter=id:eq:' + stageId + '&fields=programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType,optionSet[id,displayName|rename(name)]]]'),
+                url: encodeURI(gis.init.apiPath + 'programStages.json?filter=id:eq:' + stageId + '&fields=programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType,optionSet[id,displayName~rename(name)]]]'),
                 success(r) {
                     const objects = JSON.parse(r.responseText).programStages;
 

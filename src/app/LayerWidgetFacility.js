@@ -156,7 +156,7 @@ export default function LayerWidgetFacility(gis, layer) {
                 format: 'json',
                 noCache: false,
                 extraParams: {
-                    fields: 'children[id,' + gis.init.namePropertyUrl + ',children::isNotEmpty|rename(hasChildren)&paging=false'
+                    fields: 'children[id,' + gis.init.namePropertyUrl + ',children::isNotEmpty~rename(hasChildren)&paging=false'
                 },
                 url: gis.init.apiPath + 'organisationUnits',
                 reader: {

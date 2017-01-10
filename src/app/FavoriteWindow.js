@@ -202,7 +202,7 @@ export default function FavoriteWindow(gis) {
                         this.currentValue = this.getValue();
 
                         const value = this.getValue();
-                        const url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
+                        const url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName~rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
                         const store = gis.store.maps;
 
                         store.page = 1;
@@ -218,7 +218,7 @@ export default function FavoriteWindow(gis) {
         text: GIS.i18n.prev,
         handler() {
             const value = searchTextfield.getValue();
-            const url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
+            const url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName~rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
             const store = gis.store.maps;
 
             store.page = store.page <= 1 ? 1 : store.page - 1;
@@ -230,7 +230,7 @@ export default function FavoriteWindow(gis) {
         text: GIS.i18n.next,
         handler() {
             const value = searchTextfield.getValue();
-            const url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName|rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
+            const url = value ? encodeURI(gis.init.apiPath + 'maps.json?fields=id,displayName~rename(name),access' + (value ? '&filter=displayName:ilike:' + value : '')) : null;
             const store = gis.store.maps;
 
             store.page = store.page + 1;

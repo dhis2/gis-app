@@ -175,7 +175,7 @@ export default function LayerHandlerThematic(gis, layer) {
         };
 
         Ext.Ajax.request({
-            url: encodeURI(gis.init.apiPath + 'analytics.json' + paramString),
+            url: encodeURI(gis.init.analyticsPath + 'analytics.json' + paramString),
             disableCaching: false,
             failure(r) {
                 gis.alert(r);

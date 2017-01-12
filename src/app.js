@@ -1063,8 +1063,8 @@ Ext.onReady( function() {
 
                 init.contextPath = context.href;
 
-
                 init.apiPath = init.contextPath + '/api/' + GIS.apiVersion + '/';
+                init.analyticsPath = init.contextPath + '/api/25/'; // TODO: Only use apiPath
                 init.defaultHeaders = {};
 
                 if (context.auth) {

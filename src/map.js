@@ -50,6 +50,8 @@ Ext.onReady(function() {
 
         init.contextPath = config.url;
         init.apiPath = init.contextPath + '/api/' + GIS.apiVersion + '/';
+        init.analyticsPath = init.contextPath + '/api/25/'; // TODO: Only use apiPath
+
         init.defaultHeaders = {};
 
         if (config.username && config.password) {

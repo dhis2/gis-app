@@ -54,11 +54,13 @@ export default function LayerHandlerEvent(gis, layer) {
         const success = function(r) {
             const features = [];
             const rows = [];
-            const names = Ext.clone(r.metaData.names);
+            const names = Ext.clone(r.metaData.names); //  || {};
+
             const booleanNames = {
                 'true': GIS.i18n.yes || 'Yes',
                 'false': GIS.i18n.no || 'No'
             };
+
             let lonIndex;
             let latIndex;
             let optionSetIndex;
@@ -161,7 +163,7 @@ export default function LayerHandlerEvent(gis, layer) {
         // Used if no spatial support and for client cluster
         const loadEvents = function() {
             Ext.Ajax.request({
-                url: encodeURI(gis.init.apiPath + 'analytics/events/query/' + view.program.id + '.json' + paramString),
+                url: encodeURI(gis.init.analyticsPath + 'analytics/events/query/' + view.program.id + '.json' + paramString),
                 disableCaching: false,
                 failure(r) {
                     gis.alert(r);
@@ -188,7 +190,7 @@ export default function LayerHandlerEvent(gis, layer) {
             if (r.count < 2000) { // Client clustering if less than 2000 events
                 loadEvents();
             } else {
-                let url = gis.init.apiPath + 'analytics/events/cluster/' + view.program.id + '.json' + paramString;
+                let url = gis.init.analyticsPath + 'analytics/events/cluster/' + view.program.id + '.json' + paramString;
 
                 updateMap(view, url);
             }
@@ -196,7 +198,7 @@ export default function LayerHandlerEvent(gis, layer) {
 
         if (spatialSupport && view.eventClustering) { // Get event count to decide on client vs server cluster
             Ext.Ajax.request({
-                url: encodeURI(gis.init.apiPath + 'analytics/events/count/' + view.program.id + '.json' + paramString),
+                url: encodeURI(gis.init.analyticsPath + 'analytics/events/count/' + view.program.id + '.json' + paramString),
                 disableCaching: false,
                 failure(r) {
                     gis.alert(r);

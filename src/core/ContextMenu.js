@@ -114,7 +114,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
 
             const onPeriodChange = function(cmp) {
                 const period = cmp.getValue();
-                const url = gis.init.apiPath + 'analytics.json?';
+                const url = gis.init.analyticsPath + 'analytics.json?';
                 const iig = gis.init.systemSettings.infrastructuralIndicatorGroup || {};
                 const ideg = gis.init.systemSettings.infrastructuralDataElementGroup || {};
                 const indicators = iig.indicators || [];

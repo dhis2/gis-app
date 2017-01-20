@@ -7,3 +7,4 @@ npm-debug.log
 coverage
 target
 *.gzip
+.nyc_output

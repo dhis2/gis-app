@@ -1,18 +1,13 @@
 import React from 'react';
+import LayerHeader from './LayerHeader';
+import LayerToolbar from './LayerToolbar';
 import Legend from '../legend/Legend';
 
-function LayerHeader () {
-    return (<div>Facility</div>);
-}
-
-function LayerToolbar () {
-    return (<div>Toolbar</div>);
-}
 
 export default function LayerWidget() {
     return (
         <div>
-            <LayerHeader />
+            <LayerHeader title="Rainfall 26 - 28 Nov." />
             <Legend />
             <LayerToolbar />
         </div>

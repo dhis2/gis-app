@@ -1,9 +1,13 @@
 import React from 'react';
 import { render } from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
-import LayerPanel from '../src/components/layers/LayerPanel';
+import LayerPanel from '../src/components/layer/LayerPanel';
 import Legend from '../src/components/legend/Legend';
-import LayerWidget from '../src/components/layers/LayerWidget';
+import LayerWidget from '../src/components/layer/LayerWidget';
+
 
 function ComponentExamples({ children }) {
     return (
@@ -23,19 +27,21 @@ function ComponentExample({ children }) {
 
 function GISComponents() {
     return (
-        <ComponentExamples>
-            <ComponentExample>
-                <LayerPanel>
+        <MuiThemeProvider>
+            <ComponentExamples>
+                <ComponentExample>
+                    <LayerPanel>
+                        <LayerWidget />
+                        <LayerWidget />
+                        <LayerWidget />
+                        <LayerWidget />
+                    </LayerPanel>
+                </ComponentExample>
+                <ComponentExample>
                     <LayerWidget />
-                    <LayerWidget />
-                    <LayerWidget />
-                    <LayerWidget />
-                </LayerPanel>
-            </ComponentExample>
-            <ComponentExample>
-                <LayerWidget />
-            </ComponentExample>
-        </ComponentExamples>
+                </ComponentExample>
+            </ComponentExamples>
+        </MuiThemeProvider>
     );
 }
 

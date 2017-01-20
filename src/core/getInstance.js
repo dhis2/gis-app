@@ -986,7 +986,7 @@ export default function getInstance(init) {
 
                 layout.key = config.key; // Earth Engine layer
 
-                if (config.config) { // JSON string config for Earth Engine layers
+                if (config.config) { // JSON string config for Earth Engine layer
                     layout.config = config.config;
                 }
 
@@ -994,7 +994,7 @@ export default function getInstance(init) {
                     layout.legendSet = config.legendSet;
                 }
 
-                if (config.colorScale) { // Thematic layers
+                if (config.colorScale) { // Thematic layer
                     layout.colorScale = config.colorScale;
                 }
 

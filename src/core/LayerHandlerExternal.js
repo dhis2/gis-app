@@ -1,6 +1,6 @@
 import arraySort from 'd2-utilizr/lib/arraySort';
 
-// Layer handler for external layers (WMS/TMS/XYZ)
+// Layer handler for external layer (WMS/TMS/XYZ)
 export default function LayerHandlerExternal(gis, layer) {
 
     // Create new layer for view definition

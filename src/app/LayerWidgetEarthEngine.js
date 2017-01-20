@@ -301,7 +301,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
     };
 
-    // Combo with with supported Earth Engine layers
+    // Combo with with supported Earth Engine layer
     const datasetCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.select_dataset,
@@ -383,7 +383,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
     }
 
-    // Combo with with supported Earth Engine layers
+    // Combo with with supported Earth Engine layer
     const collectionCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.select_period,

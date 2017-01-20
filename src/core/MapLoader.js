@@ -84,7 +84,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 
         clearAllLayers();
 
-        // Keep track of layers to load, to know when map is ready
+        // Keep track of layer to load, to know when map is ready
         layersToLoad = ((basemap === 'none') ? 0 : 1) + views.length;
 
         // Add basemap
@@ -131,7 +131,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
         }
     };
 
-    // Remove current layers from map
+    // Remove current layer from map
     const clearAllLayers = function() {
         for (let type in gis.layer) {
             if (gis.layer.hasOwnProperty(type)) {
@@ -142,7 +142,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
                     gis.instance.removeLayer(layer.instance);
 
                     // Clear circular areas around facilities
-                    // TODO: Facilities could be represented as a LayerGroup containging both layers
+                    // TODO: Facilities could be represented as a LayerGroup containging both layer
                     if (layer.areaInstance) {
                         gis.instance.removeLayer(layer.areaInstance);
                     }

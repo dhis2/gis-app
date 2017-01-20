@@ -1,12 +1,12 @@
 // Ext JS widget for external layers (WMS/TMS/XYZ)
 export default function LayerWidgetExternal(gis, layer) {
 
-    // Store for external layers
+    // Store for external layer
     const externalStore = Ext.create('Ext.data.Store', {
         fields: ['id', 'name', 'mapService', 'url', 'layers', 'attribution', 'mapLayerPosition', 'imageFormat', 'legendSet', 'legendSetUrl'],
         proxy: {
             type: 'ajax',
-            url: encodeURI(gis.init.apiPath + 'externalMapLayers.json?fields=id,displayName~rename(name),service,url,attribution,mapService,layers,imageFormat,mapLayerPosition,legendSet,legendSetUrl&paging=false'),
+            url: encodeURI(gis.init.apiPath + 'externalMapLayers.json?fields=id,displayName~rename(name),service,url,attribution,mapService,layer,imageFormat,mapLayerPosition,legendSet,legendSetUrl&paging=false'),
             reader: {
                 type: 'json',
                 root: 'externalMapLayers'

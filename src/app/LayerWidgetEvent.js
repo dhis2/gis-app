@@ -982,7 +982,7 @@ export default function LayerWidgetEvent(gis, layer) {
     };
 
     const reset = function(skipTree) {
-        // Uncheck in layers list
+        // Uncheck in layer list
         layer.item.setValue(false);
 
         if (!layer.window.isRendered) {

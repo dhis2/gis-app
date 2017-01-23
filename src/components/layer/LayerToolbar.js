@@ -1,6 +1,6 @@
 import React from 'react';
 import IconButton from 'material-ui/IconButton';
-import ContentCreateIcon from 'material-ui/svg-icons/action/visibility';
+import ContentCreateIcon from 'material-ui/svg-icons/content/create';
 import ActionFilterListIcon from 'material-ui/svg-icons/content/filter-list';
 import ActionSearchIcon from 'material-ui/svg-icons/action/search';
 import ActionDeleteIcon from 'material-ui/svg-icons/action/delete';

@@ -2,6 +2,7 @@ import React from 'react';
 import IconButton from 'material-ui/IconButton';
 import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
 import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
+import NavigationExpandLessIcon from 'material-ui/svg-icons/navigation/expand-less';
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 import {grey600} from 'material-ui/styles/colors'; // http://www.material-ui.com/#/customization/colors
 
@@ -40,6 +41,13 @@ const styles = {
 
 export default function LayerHeader(props) {
     let visibilityIcon;
+    let expandIcon;
+
+    if (props.expanded) {
+        expandIcon = <NavigationExpandLessIcon color={grey600} />;
+    } else {
+        expandIcon = <NavigationExpandMoreIcon color={grey600} />;
+    }
 
     if (props.visible) {
         visibilityIcon = <ActionVisibilityIcon color={grey600} />;
@@ -67,10 +75,10 @@ export default function LayerHeader(props) {
                 </IconButton>
 
                 <IconButton
-                    onClick={(event) => props.onExpandClicked(event, props.value)}
-                    tooltip="Expand"
+                    onClick={(event) => props.onExpandClick(event, props.value)}
+                    tooltip="Toggle expand"
                 >
-                    <NavigationExpandMoreIcon color={grey600} />
+                    {expandIcon}
                 </IconButton>
             </div>
         </div>

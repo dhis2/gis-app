@@ -28,21 +28,41 @@ function ComponentExample({ children }) {
 function GISComponents() {
     return (
         <MuiThemeProvider>
+            <LayerPanel>
+                <LayerWidget
+                    title="Precipitation"
+                    subtitle="26 - 28 Nov."
+                />
+                <LayerWidget
+                    title="ANC 3 Coverage"
+                    subtitle="2017"
+                />
+                <LayerWidget
+                    title="OSM Light"
+                    subtitle="Basemap"
+                />
+            </LayerPanel>
+        </MuiThemeProvider>
+    );
+}
+
+/*
+function GISComponents() {
+    return (
+        <MuiThemeProvider>
             <ComponentExamples>
                 <ComponentExample>
                     <LayerPanel>
-                        <LayerWidget />
-                        <LayerWidget />
-                        <LayerWidget />
-                        <LayerWidget />
+                        <LayerWidget title="Rainfall 26 - 28 Nov." />
                     </LayerPanel>
                 </ComponentExample>
                 <ComponentExample>
-                    <LayerWidget title="Rainfall 26 - 28 Nov." />
                 </ComponentExample>
             </ComponentExamples>
         </MuiThemeProvider>
     );
 }
+*/
+
 
 render(<GISComponents />, document.getElementById('examples'));

@@ -38,7 +38,7 @@ function GISComponents() {
                     </LayerPanel>
                 </ComponentExample>
                 <ComponentExample>
-                    <LayerWidget />
+                    <LayerWidget title="Rainfall 26 - 28 Nov." />
                 </ComponentExample>
             </ComponentExamples>
         </MuiThemeProvider>

@@ -1,6 +1,7 @@
 import React from 'react';
 import IconButton from 'material-ui/IconButton';
 import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
+import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 import {grey600} from 'material-ui/styles/colors'; // http://www.material-ui.com/#/customization/colors
 
@@ -35,7 +36,17 @@ const styles = {
     }
 };
 
-export default function LayerWidget(props) {
+// Is visibility a prop or a state?
+
+export default function LayerHeader(props) {
+    let visibilityIcon;
+
+    if (props.visible) {
+        visibilityIcon = <ActionVisibilityIcon color={grey600} />;
+    } else {
+        visibilityIcon = <ActionVisibilityOffIcon color={grey600} />;
+    }
+
     return (
         <div style={styles.header}>
             <IconButton
@@ -49,10 +60,10 @@ export default function LayerWidget(props) {
 
             <div style={styles.tools}>
                 <IconButton
-                    onClick={(event) => props.onVisibilityClicked(event, props.value)}
+                    onClick={(event) => props.onVisibilityClick(event, props.value)}
                     tooltip="Toggle visibility"
                 >
-                    <ActionVisibilityIcon color={grey600} />
+                    {visibilityIcon}
                 </IconButton>
 
                 <IconButton

@@ -477,7 +477,7 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
             Ext.Ajax.request({
-                url: encodeURI(gis.init.contextPath + '/api/' + elementUrl + '.json?fields=legendSet[id,displayName~rename(name)]&paging=false&filter=id:eq:' + id),
+                url: encodeURI(gis.init.contextPath + '/api/' + elementUrl + '.json?fields=legendSet[id,displayName|rename(name)]&paging=false&filter=id:eq:' + id),
                 success: function (r) {
                     var elements = JSON.parse(r.responseText)[elementUrl],
                         set;

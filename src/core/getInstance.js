@@ -270,7 +270,7 @@ export default function getInstance(init) {
 
         conf.url.baseFields = [
             'id',
-            'displayName~rename(name)',
+            'displayName|rename(name)',
             'longitude',
             'latitude',
             'zoom',
@@ -279,13 +279,13 @@ export default function getInstance(init) {
 
         conf.url.analysisFields = [
             '*',
-            'columns[dimension,filter,items[dimensionItem~rename(id),dimensionItemType,' + init.namePropertyUrl + ']]',
-            'rows[dimension,filter,items[dimensionItem~rename(id),dimensionItemType,' + init.namePropertyUrl + ']]',
-            'filters[dimension,filter,items[dimensionItem~rename(id),dimensionItemType,' + init.namePropertyUrl + ']]',
+            'columns[dimension,filter,items[dimensionItem|rename(id),dimensionItemType,' + init.namePropertyUrl + ']]',
+            'rows[dimension,filter,items[dimensionItem|rename(id),dimensionItemType,' + init.namePropertyUrl + ']]',
+            'filters[dimension,filter,items[dimensionItem|rename(id),dimensionItemType,' + init.namePropertyUrl + ']]',
             'dataDimensionItems',
             'program[id,' + init.namePropertyUrl + ']',
-            'programStage[id,displayName~rename(name)]',
-            'legendSet[id,displayName~rename(name)]',
+            'programStage[id,displayName|rename(name)]',
+            'legendSet[id,displayName|rename(name)]',
             '!lastUpdated',
             '!href',
             '!created',
@@ -332,7 +332,7 @@ export default function getInstance(init) {
         ];
 
         conf.url.legendSetFields = [
-            'id,displayName~rename(name),legends[' + conf.url.legendFields.join(',') + ']'
+            'id,displayName|rename(name),legends[' + conf.url.legendFields.join(',') + ']'
         ];
     }());
 

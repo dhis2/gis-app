@@ -223,7 +223,7 @@ Ext.onReady(function() {
             // local vars
             contextPath = init.contextPath;
             keyAnalysisDisplayProperty = init.userAccount.settings.keyAnalysisDisplayProperty;
-            namePropertyUrl = keyAnalysisDisplayProperty + '~rename(name)';
+            namePropertyUrl = keyAnalysisDisplayProperty + '|rename(name)';
 
             init.namePropertyUrl = namePropertyUrl;
 
@@ -269,7 +269,7 @@ Ext.onReady(function() {
 
         // dimensions
         requests.push({
-            url: encodeURI(init.contextPath + '/api/dimensions.json?fields=id,displayName~rename(name)&paging=false'),
+            url: encodeURI(init.contextPath + '/api/dimensions.json?fields=id,displayName|rename(name)&paging=false'),
             disableCaching: false,
             success: onDimensionsLoad
         });

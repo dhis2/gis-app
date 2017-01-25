@@ -117,22 +117,13 @@ export default function FavoriteWindow(gis) {
                 const name = nameTextfield.getValue();
 
                 Ext.Ajax.request({
-                    url: encodeURI(gis.init.apiPath + 'maps/' + id + '.json?fields=' + gis.conf.url.mapFields.join(',')),
-                    success(r) {
-                        const map = JSON.parse(r.responseText);
-
-                        map.name = name;
-
-                        Ext.Ajax.request({
-                            url: encodeURI(gis.init.apiPath + 'maps/' + id),
-                            method: 'PUT',
-                            headers: {'Content-Type': 'application/json'},
-                            params: JSON.stringify(map),
-                            success() {
-                                gis.store.maps.loadStore();
-                                window.destroy();
-                            }
-                        });
+                    url: encodeURI(gis.init.apiPath + 'maps/' + id),
+                    method: 'PATCH',
+                    headers: {'Content-Type': 'application/json'},
+                    params: JSON.stringify({ name: name }),
+                    success() {
+                        gis.store.maps.loadStore();
+                        window.destroy();
                     }
                 });
             }

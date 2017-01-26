@@ -5,6 +5,10 @@ import isString from 'd2-utilizr/lib/isString';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
 import arrayContains from 'd2-utilizr/lib/arrayContains';
 import arrayPluck from 'd2-utilizr/lib/arrayPluck';
+import log from 'loglevel';
+
+log.setLevel(log.levels.INFO); // TODO: Use DEBUG for development
+log.info('Loading: GIS app master'); // TODO: Use manifest
 
 window.GIS = GIS;
 

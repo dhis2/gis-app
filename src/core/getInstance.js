@@ -205,6 +205,8 @@ export default function getInstance(init) {
                 {id: 'FinancialApril', name: GIS.i18n.financial_april}
             ],
             relativePeriods: [
+                {id: 'TODAY', name: GIS.i18n.today},
+                {id: 'YESTERDAY', name: GIS.i18n.yesterday},
                 {id: 'THIS_WEEK', name: GIS.i18n.this_week},
                 {id: 'LAST_WEEK', name: GIS.i18n.last_week},
                 {id: 'LAST_4_WEEKS', name: GIS.i18n.last_4_weeks},

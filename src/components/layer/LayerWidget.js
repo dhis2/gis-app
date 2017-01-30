@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
-import {SortableElement, SortableHandle} from 'react-sortable-hoc';
+import {SortableElement} from 'react-sortable-hoc';
 import DragHandle from './DragHandle';
 import IconButton from 'material-ui/IconButton';
 import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
@@ -15,9 +15,6 @@ const SortableLayer = SortableElement((props) => {
         container: {
             paddingBottom: 0,
             clear: 'both',
-        },
-        card: {
-            background: 'yellow'
         },
         header: {
             padding: '10px 10px 10px 40px',
@@ -46,7 +43,7 @@ const SortableLayer = SortableElement((props) => {
     }
 
     return (
-        <Card containerStyle={styles.card} containerStyle={styles.container}>
+        <Card containerStyle={styles.container}>
             <CardHeader
                 title={props.title}
                 subtitle={props.subtitle}
@@ -62,7 +59,9 @@ const SortableLayer = SortableElement((props) => {
                 </IconButton>
             </CardHeader>
             <CardText expandable={true} style={styles.body}>
-                <Legend />
+                {props.legend &&
+                    <Legend unit={props.legend.unit} items={props.legend.items} />
+                }
                 <LayerToolbar />
             </CardText>
         </Card>
@@ -105,6 +104,7 @@ export default class LayerWidget extends Component {
         }));
     }
 
+    // TODO: Merge with SortableLayer renderer above
     render() {
         return (
             <SortableLayer
@@ -113,21 +113,9 @@ export default class LayerWidget extends Component {
                 subtitle={this.props.subtitle}
                 visible={this.state.visible}
                 onVisibilityClick={this.onVisibilityClick}
+                legend={this.props.legend}
             />
         );
     }
 }
 
-
-
-/*
-<LayerHeader
-    title={this.props.title}
-    visible={this.state.visible}
-    onVisibilityClick={this.onVisibilityClick}
-    expanded={this.state.expanded}
-    onExpandClick={this.onExpandClick}
-/>
-<Legend />
-<LayerToolbar />
-*/

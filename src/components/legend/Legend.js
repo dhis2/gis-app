@@ -6,19 +6,23 @@ const styles = {
 };
 
 export default function Legend(props) {
-    const items = props.items || [];
+    // TODO: Creae unique key for each legend item
+    const legendItems = (props.items || []).map((item, index) =>
+        <LegendItem
+            key={`item-${index}`}
+            color={item.color}
+            name={item.name}
+        />
+    );
 
-    // TODO: Creae unique key below
+    console.log(props);
+
     return (
         <dl style={styles}>
-            <p>Precipitation collected from satellite and weather stations on the ground.</p>
-            {items.map((item, index) =>
-                <LegendItem
-                    key={`item-${index}`}
-                    color={item.color}
-                    name={item.name}
-                />
-            )}
+            {props.description  &&
+                <p>{props.description}</p>
+            }
+            {legendItems}
         </dl>
     );
 }

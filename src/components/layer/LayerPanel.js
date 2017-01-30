@@ -35,6 +35,7 @@ class SortableComponent extends Component {
                 title: 'Precipitation',
                 subtitle: '26 - 28 Nov. 2016',
                 legend: {
+                    description: 'Precipitation collected from satellite and weather stations on the ground.',
                     unit: 'millimeter',
                     items: [{
                         color: '#eff3ff',

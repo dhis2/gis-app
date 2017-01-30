@@ -11,6 +11,8 @@ import Legend from '../legend/Legend';
 import {grey600} from 'material-ui/styles/colors'; // http://www.material-ui.com/#/customization/colors
 
 const SortableLayer = SortableElement((props) => {
+    const legend = props.legend;
+
     const styles = {
         container: {
             paddingBottom: 0,
@@ -59,8 +61,12 @@ const SortableLayer = SortableElement((props) => {
                 </IconButton>
             </CardHeader>
             <CardText expandable={true} style={styles.body}>
-                {props.legend &&
-                    <Legend unit={props.legend.unit} items={props.legend.items} />
+                {legend &&
+                    <Legend
+                        unit={legend.unit}
+                        items={legend.items}
+                        description={legend.description}
+                    />
                 }
                 <LayerToolbar />
             </CardText>

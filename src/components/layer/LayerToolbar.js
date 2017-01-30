@@ -21,15 +21,18 @@ const styles = {
     },
     rightButton: {
         float: 'right',
-        padding: 5
+        padding: 5,
+        marginRight: 10,
+        width: 34,
+        height: 34,
     },
-    slider: {
+    sliderContainer: {
         float: 'left',
         width: 100,
         marginBottom: 0
     },
-    sliderStyle: {
-        margin: 0
+    slider: {
+        margin: 8
     }
 };
 
@@ -45,8 +48,8 @@ export default function LayerToolbar() {
             <IconButton tooltip="Filter" style={styles.button}>
                 <ActionFilterListIcon color={grey600} />
             </IconButton>
-            <Slider defaultValue={0.9} style={styles.slider} sliderStyle={styles.sliderStyle} />
-            <IconButton tooltip="Delete" style={styles.button}>
+            <Slider defaultValue={0.9} style={styles.sliderContainer} sliderStyle={styles.slider} />
+            <IconButton tooltip="Delete" style={styles.rightButton}>
                 <ActionDeleteIcon color={grey600} />
             </IconButton>
         </div>

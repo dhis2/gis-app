@@ -16,6 +16,13 @@ const SortableLayer = SortableElement((props) => {
             paddingBottom: 0,
             clear: 'both',
         },
+        card: {
+            background: 'yellow'
+        },
+        header: {
+            padding: '10px 10px 10px 40px',
+            marginRight: -5,
+        },
         visibility: {
             width: 34,
             height: 34,
@@ -39,13 +46,13 @@ const SortableLayer = SortableElement((props) => {
     }
 
     return (
-        <Card containerStyle={styles.container}>
+        <Card containerStyle={styles.card} containerStyle={styles.container}>
             <CardHeader
                 title={props.title}
                 subtitle={props.subtitle}
                 // actAsExpander={true}  // Not able to stop event bubbling for visibility icon
                 showExpandableButton={true}
-                style={{padding: '10px 10px 10px 40px'}}>
+                style={styles.header}>
                 <DragHandle color={grey600} />
                 <IconButton
                     style={styles.visibility}
@@ -55,7 +62,7 @@ const SortableLayer = SortableElement((props) => {
                 </IconButton>
             </CardHeader>
             <CardText expandable={true} style={styles.body}>
-                <p>Legend</p>
+                <Legend />
                 <LayerToolbar />
             </CardText>
         </Card>

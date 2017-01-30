@@ -10,22 +10,26 @@ import {grey600} from 'material-ui/styles/colors'; // http://www.material-ui.com
 const styles = {
     toolbar: {
         backgroundColor: '#eee',
-        height: 36,
-        borderBottom: '1px solid #aaa'
+        height: 34,
+        paddingLeft: 7
     },
     button: {
         float: 'left',
-        padding: 6,
-        width: 36,
-        height: 36,
+        padding: 5,
+        width: 34,
+        height: 34,
     },
     rightButton: {
         float: 'right',
-        padding: 6
+        padding: 5
     },
     slider: {
         float: 'left',
-        width: 100
+        width: 100,
+        marginBottom: 0
+    },
+    sliderStyle: {
+        margin: 0
     }
 };
 
@@ -41,10 +45,13 @@ export default function LayerToolbar() {
             <IconButton tooltip="Filter" style={styles.button}>
                 <ActionFilterListIcon color={grey600} />
             </IconButton>
-            <Slider defaultValue={0.9} style={styles.slider} />
+            <Slider defaultValue={0.9} style={styles.slider} sliderStyle={styles.sliderStyle} />
             <IconButton tooltip="Delete" style={styles.button}>
                 <ActionDeleteIcon color={grey600} />
             </IconButton>
         </div>
     );
 }
+
+
+//

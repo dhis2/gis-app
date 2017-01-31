@@ -5,7 +5,6 @@ import DragHandle from './DragHandle';
 import IconButton from 'material-ui/IconButton';
 import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
 import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
-
 import LayerToolbar from './LayerToolbar';
 import Legend from '../legend/Legend';
 import {grey600} from 'material-ui/styles/colors'; // http://www.material-ui.com/#/customization/colors

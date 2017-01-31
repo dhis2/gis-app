@@ -10,6 +10,7 @@ export default function Legend(props) {
     const legendItems = (props.items || []).map((item, index) =>
         <LegendItem
             key={`item-${index}`}
+            image={item.image}
             color={item.color}
             name={item.name}
         />

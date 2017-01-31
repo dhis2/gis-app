@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {SortableContainer} from 'react-sortable-hoc';
 import SortableLayer from './SortableLayer';
 
-// Sortable list of layers
+// Returns sortable list of layers
 function SortableLayersList(props) {
     return (
         <div>
@@ -13,6 +13,9 @@ function SortableLayersList(props) {
                     title={layer.title}
                     subtitle={layer.subtitle}
                     legend={layer.legend}
+                    opacity={layer.opacity}
+                    visible={layer.visible}
+                    expanded={layer.expanded}
                 />
             )}
         </div>

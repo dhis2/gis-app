@@ -3,13 +3,42 @@ import {arrayMove} from 'react-sortable-hoc';
 import SortableLayersList from './SortableLayersList';
 
 const layers = [{
-    id: 1,
+    id: '1',
     title: 'ANC 3 Coverage',
-    subtitle: '2017'
+    subtitle: '2017',
+    opacity: 0.8,
 }, {
-    id: 2,
+    id: '2',
+    title: 'Facilitites',
+    subtitle: 'Facility type',
+    visible: false,
+    expanded: true,
+    opacity: 0.9,
+    legend: {
+        items: [{
+            image: 'https://play.dhis2.org/dev/images/orgunitgroup/08.png',
+            name : 'CHP',
+        },{
+            image: 'https://play.dhis2.org/dev/images/orgunitgroup/16.png',
+            name : 'CHC',
+        },{
+            image: 'https://play.dhis2.org/dev/images/orgunitgroup/10.png',
+            name : 'MCHP',
+        },{
+            image: 'https://play.dhis2.org/dev/images/orgunitgroup/14.png',
+            name : 'Clinic',
+        },{
+            image: 'https://play.dhis2.org/dev/images/orgunitgroup/05.png',
+            name : 'Hospital',
+        }]
+    }
+}, {
+    id: '3',
     title: 'Precipitation',
     subtitle: '26 - 28 Nov. 2016',
+    visible: false,
+    expanded: true,
+    opacity: 0.6,
     legend: {
         description: 'Precipitation collected from satellite and weather stations on the ground.',
         unit: 'millimeter',
@@ -34,9 +63,10 @@ const layers = [{
         }]
     }
 }, {
-    id: 3,
+    id: '4',
     title: 'OSM Light',
-    subtitle: 'Basemap'
+    subtitle: 'Basemap',
+    opacity: 1,
 }];
 
 

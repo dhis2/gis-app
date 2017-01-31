@@ -36,22 +36,37 @@ const styles = {
     }
 };
 
-export default function LayerToolbar() {
+export default function LayerToolbar(props) {
     return (
         <div style={styles.toolbar}>
-            <IconButton tooltip="Edit" style={styles.button}>
-                <ContentCreateIcon color={grey600} />
-            </IconButton>
-            <IconButton tooltip="Search" style={styles.button}>
-                <ActionSearchIcon color={grey600} />
-            </IconButton>
-            <IconButton tooltip="Filter" style={styles.button}>
-                <ActionFilterListIcon color={grey600} />
-            </IconButton>
-            <Slider defaultValue={0.9} style={styles.sliderContainer} sliderStyle={styles.slider} />
-            <IconButton tooltip="Delete" style={styles.rightButton}>
-                <ActionDeleteIcon color={grey600} />
-            </IconButton>
+            {props.onEdit &&
+                <IconButton onClick={props.onEdit} tooltip="Edit" tooltipPosition="top-center" style={styles.button}>
+                    <ContentCreateIcon color={grey600} />
+                </IconButton>
+            }
+            {props.onSearch &&
+                <IconButton onClick={props.onSearch} tooltip="Search" tooltipPosition="top-center" style={styles.button}>
+                    <ActionSearchIcon color={grey600} />
+                </IconButton>
+            }
+            {props.onFilter &&
+                <IconButton onClick={props.onFilter} tooltip="Filter" tooltipPosition="top-center" style={styles.button}>
+                    <ActionFilterListIcon color={grey600} />
+                </IconButton>
+            }
+            {props.onOpacityChange &&
+                <Slider
+                    defaultValue={props.opacity}
+                    onChange={props.onOpacityChange}
+                    style={styles.sliderContainer}
+                    sliderStyle={styles.slider}
+                />
+            }
+            {props.onDelete &&
+                <IconButton onClick={props.onDelete} tooltip="Delete" tooltipPosition="top-center" style={styles.rightButton}>
+                    <ActionDeleteIcon color={grey600}/>
+                </IconButton>
+            }
         </div>
     );
 }

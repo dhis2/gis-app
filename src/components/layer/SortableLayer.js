@@ -17,16 +17,39 @@ class SortableLayer extends Component {
         super(props);
 
         this.state = {
-            visible: false
+            visible: props.visible
         };
 
+        this.onEdit = this.onEdit.bind(this);
+        this.onSearch = this.onSearch.bind(this);
+        this.onFilter = this.onFilter.bind(this);
+        this.onDelete = this.onDelete.bind(this);
+        this.onOpacityChange = this.onOpacityChange.bind(this);
         this.onVisibilityChange = this.onVisibilityChange.bind(this);
     }
 
+    onEdit(evt) {
+        console.log('edit layer');
+    }
+
+    onDelete(evt) {
+        console.log('delete layer');
+    }
+
+    onFilter(evt) {
+        console.log('filter layer');
+    }
+
+    onOpacityChange(evt, opacity) {
+        console.log('opacity', opacity);
+    }
+
+    onSearch(evt) {
+        console.log('search layer');
+    }
+
     onVisibilityChange(evt) {
-        console.log('visibility change $$$', evt);
-        // evt.stopPropagation();
-        // evt.preventDefault();
+        console.log('visible', !this.state.visible);
 
         this.setState(prevState => ({
            visible: !prevState.visible
@@ -58,15 +81,6 @@ class SortableLayer extends Component {
             }
         };
 
-        let visibilityIcon;
-        let expandIcon;
-
-        if (this.state.visible) {
-            visibilityIcon = <ActionVisibilityIcon color={grey600} />;
-        } else {
-            visibilityIcon = <ActionVisibilityOffIcon color={grey600} />;
-        }
-
         return (
             <Card containerStyle={styles.container}>
                 <CardHeader
@@ -78,9 +92,13 @@ class SortableLayer extends Component {
                     <SortableHandle color={grey600} />
                     <IconButton
                         style={styles.visibility}
-                        onClick={(event) => this.onVisibilityChange(event, props.value)}
+                        onClick={this.onVisibilityChange}
                         tooltip="Toggle visibility">
-                        {visibilityIcon}
+                        {this.state.visible ? (
+                            <ActionVisibilityIcon color={grey600} />
+                        ) : (
+                            <ActionVisibilityOffIcon color={grey600} />
+                        )}
                     </IconButton>
                 </CardHeader>
                 <CardText expandable={true} style={styles.body}>
@@ -91,12 +109,34 @@ class SortableLayer extends Component {
                         description={legend.description}
                     />
                     }
-                    <LayerToolbar />
+                    <LayerToolbar
+                        opacity={props.opacity}
+                        onOpacityChange={this.onOpacityChange}
+                        onEdit={this.onEdit}
+                        onSearch={this.onSearch}
+                        onFilter={this.onFilter}
+                        onDelete={this.onDelete}
+                    />
                 </CardText>
             </Card>
         )
     }
+}
+
+SortableLayer.propTypes= {
+    id: React.PropTypes.string,
+    title: React.PropTypes.string,
+    subtitle: React.PropTypes.string,
+    opacity: React.PropTypes.number,
+    legend: React.PropTypes.object,
+    visible: React.PropTypes.bool,
+    expanded: React.PropTypes.bool,
 };
 
+SortableLayer.defaultProps = {
+    opacity: 1,
+    visible: true,
+    expanded: false,
+};
 
 export default SortableElement(SortableLayer);

@@ -1,24 +1,33 @@
 import React from 'react';
 
 const styles = {
-    padding: '0 15px 20px'
+    container: {
+        clear: 'both',
+        marginLeft: 25,
+    },
+    symbol: {
+        width: 20,
+        height: 20,
+        float: 'left',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center center',
+    },
+    name: {
+        marginLeft: 30,
+        lineHeight: '20px',
+    }
 };
 
 export default function LegendItem(props) {
-    const styles = {
-        container: {
-            clear: 'both'
-        },
-        symbol: {
-            backgroundColor: props.color,
-            width: 30,
-            height: 30,
-            float: 'left',
-        },
-        name: {
-            lineHeight: '30px'
-        }
-    };
+    console.log(props.image, props.color);
+
+    if (props.image) {
+        styles.symbol.backgroundImage = `url(${props.image})`;
+    }
+
+    if (props.color) {
+        styles.symbol.backgroundColor = props.color;
+    }
 
     // Components must return a single root element
     return (

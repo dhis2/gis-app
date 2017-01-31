@@ -20,6 +20,7 @@ export default function LegendItem(props) {
         }
     };
 
+    // Components must return a single root element
     return (
         <div style={styles.container}>
             <dt style={styles.symbol}></dt>

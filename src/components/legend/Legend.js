@@ -15,8 +15,6 @@ export default function Legend(props) {
         />
     );
 
-    console.log(props);
-
     return (
         <dl style={styles}>
             {props.description  &&

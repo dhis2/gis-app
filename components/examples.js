@@ -1,13 +1,12 @@
 import React from 'react';
-import { render } from 'react-dom';
+import {render} from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
-import LayerPanel from '../src/components/layer/LayerPanel';
-import Legend from '../src/components/legend/Legend';
-import LayerWidget from '../src/components/layer/LayerWidget';
-
+import LayersComponent from '../src/components/layer/LayersComponent';
+// import Legend from '../src/components/legend/Legend';
+// import LayerWidget from '../src/components/layer/SortableLayer';
 
 function ComponentExamples({ children }) {
     return (
@@ -28,20 +27,7 @@ function ComponentExample({ children }) {
 function GISComponents() {
     return (
         <MuiThemeProvider>
-            <LayerPanel>
-                <LayerWidget
-                    title="Precipitation"
-                    subtitle="26 - 28 Nov."
-                />
-                <LayerWidget
-                    title="ANC 3 Coverage"
-                    subtitle="2017"
-                />
-                <LayerWidget
-                    title="OSM Light"
-                    subtitle="Basemap"
-                />
-            </LayerPanel>
+            <LayersComponent></LayersComponent>
         </MuiThemeProvider>
     );
 }

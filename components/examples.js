@@ -8,6 +8,7 @@ import LayersComponent from '../src/components/layer/LayersComponent';
 import LayerToolbar from '../src/components/layer/LayerToolbar';
 import Legend from '../src/components/legend/Legend';
 import Layer from '../src/components/layer/Layer';
+import Basemaps from '../src/components/layer/Basemaps';
 
 
 const layers = [{
@@ -15,13 +16,41 @@ const layers = [{
     title: 'ANC 3 Coverage',
     subtitle: '2017',
     opacity: 0.8,
+    expanded: false,
+    legend: {
+        items: [{
+            color: '#ffffb2',
+            name: 'Low',
+            range: '0 - 40 (0)'
+        },{
+            color: '#fed976',
+            name : 'Medium',
+            range: '40 - 60 (1)',
+        },{
+            color: '#feb24c',
+            name : 'Medium plus',
+            range: '60 - 70 (1)',
+        },{
+            color: '#fd8d3c',
+            name : 'High',
+            range: '70 - 80 (0)',
+        },{
+            color: '#f03b20',
+            name : 'High plus',
+            range: '80 - 90 (4)',
+        },{
+            color: '#bd0026',
+            name : 'Great',
+            range: '90 - 120 (5)',
+        }]
+    }
 }, {
     id: '2',
     title: 'Facilitites',
     subtitle: 'Facility type',
-    visible: false,
-    expanded: true,
     opacity: 0.9,
+    visible: false,
+    expanded: false,
     legend: {
         items: [{
             image: 'https://play.dhis2.org/dev/images/orgunitgroup/08.png',
@@ -44,30 +73,30 @@ const layers = [{
     id: '3',
     title: 'Precipitation',
     subtitle: '26 - 28 Nov. 2016',
-    visible: false,
-    expanded: true,
     opacity: 0.6,
+    visible: false,
+    expanded: false,
     legend: {
         description: 'Precipitation collected from satellite and weather stations on the ground.',
         unit: 'millimeter',
         items: [{
             color: '#eff3ff',
-            name : '0 - 20',
+            range : '0 - 20',
         },{
             color: '#c6dbef',
-            name : '20 - 40',
+            range : '20 - 40',
         },{
             color: '#9ecae1',
-            name : '40 - 60',
+            range : '40 - 60',
         },{
             color: '#6baed6',
-            name : '60 - 80',
+            range : '60 - 80',
         },{
             color: '#3182bd',
-            name : '80 - 100',
+            range : '80 - 100',
         },{
             color: '#08519c',
-            name : '> 100',
+            range : '> 100',
         }],
         source: 'UCSB / CHG / Google Earth Engine',
         sourceUrl: 'https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD',
@@ -106,6 +135,18 @@ function GISComponents() {
                     <LayersComponent layers={layers} />
                 </ComponentExample>
                 <ComponentExample>
+                    <h2>Legend colors</h2>
+                    <Legend {...layers[2].legend} />
+                </ComponentExample>
+                <ComponentExample>
+                    <h2>Legend colors</h2>
+                    <Legend {...layers[0].legend} />
+                </ComponentExample>
+                <ComponentExample>
+                    <h2>Legend symbols</h2>
+                    <Legend {...layers[1].legend} />
+                </ComponentExample>
+                <ComponentExample>
                     <h2>Layer toolbar</h2>
                     <LayerToolbar
                         onEdit={() => {}}
@@ -117,20 +158,20 @@ function GISComponents() {
                     />
                 </ComponentExample>
                 <ComponentExample>
-                    <h2>Legend colors</h2>
-                    <Legend {...layers[2].legend} />
-                </ComponentExample>
-                <ComponentExample>
-                    <h2>Legend symbols</h2>
-                    <Legend {...layers[1].legend} />
-                </ComponentExample>
-                <ComponentExample>
                     <h2>Layer</h2>
                     <Layer {...layers[0]} subtitle={undefined} />
                 </ComponentExample>
                 <ComponentExample>
                     <h2>Layer</h2>
                     <Layer {...layers[0]} visible={false} />
+                </ComponentExample>
+                <ComponentExample>
+                    <h2>Layer</h2>
+                    <Layer {...layers[0]} expanded={true} />
+                </ComponentExample>
+                <ComponentExample>
+                    <h2>Basemaps</h2>
+                    <Basemaps />
                 </ComponentExample>
             </ComponentExamples>
         </MuiThemeProvider>

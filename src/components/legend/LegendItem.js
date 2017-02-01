@@ -25,7 +25,7 @@ export default function LegendItem(props) {
     return (
         <div style={styles.container}>
             <dt style={styles.symbol}></dt>
-            <dd style={styles.name}>{props.name}</dd>
+            <dd style={styles.name}>{props.name} {props.range}</dd>
         </div>
     );
 }

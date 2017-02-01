@@ -5,8 +5,8 @@ const styles = {
     width: 24,
     height: 24,
     position: 'absolute',
-    left: 5,
-    top: 14,
+    left: 3,
+    top: 16,
     cursor: 'ns-resize'
 };
 

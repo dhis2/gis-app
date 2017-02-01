@@ -2,26 +2,44 @@ import React from 'react';
 import LegendItem from './LegendItem';
 
 const styles = {
-    padding: '0 15px 20px'
-};
+    description: {
+        paddingBottom: 16,
+    },
+    unit: {
+        marginLeft: 32,
+        lineHeight: '24px',
+    },
+    source: {
+        paddingTop: 16,
+        fontSize: 12,
+    },
+}
 
 export default function Legend(props) {
-    // TODO: Creae unique key for each legend item
-    const legendItems = (props.items || []).map((item, index) =>
-        <LegendItem
-            key={`item-${index}`}
-            image={item.image}
-            color={item.color}
-            name={item.name}
-        />
-    );
-
     return (
-        <dl style={styles}>
+        <dl style={props.style}>
             {props.description  &&
-                <p>{props.description}</p>
+                <div style={styles.description}>{props.description}</div>
             }
-            {legendItems}
+            {props.unit  &&
+                <div style={styles.unit}>{props.unit}</div>
+            }
+            {props.items.map((item, index) => (
+                <LegendItem
+                    {...item}
+                    key={`item-${index}`}
+                />
+            ))}
+            {props.source && (
+                <div style={styles.source}>
+                    Source:&nbsp;
+                    {props.sourceUrl ? (
+                        <a href={props.sourceUrl}>{props.source}</a>
+                    ) : (
+                        <span>{props.source}</span>
+                    )}
+                </div>
+            )}
         </dl>
     );
 }

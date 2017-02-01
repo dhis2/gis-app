@@ -1,27 +1,18 @@
-import React, { Component } from 'react';
-import {SortableContainer} from 'react-sortable-hoc';
-import SortableLayer from './SortableLayer';
+import React from 'react';
+import {SortableContainer, SortableElement} from 'react-sortable-hoc';
+import Layer from './Layer';
 
-// Returns sortable list of layers
-function SortableLayersList(props) {
-    return (
-        <div>
-            {props.layers.map((layer, index) =>
-                <SortableLayer
-                    key={`layer-${index}`}
-                    index={index}
-                    title={layer.title}
-                    subtitle={layer.subtitle}
-                    legend={layer.legend}
-                    opacity={layer.opacity}
-                    visible={layer.visible}
-                    expanded={layer.expanded}
-                />
-            )}
-        </div>
-    );
-}
+const SortableLayer = SortableElement(Layer);
 
-export default SortableContainer(SortableLayersList);
-
+export default SortableContainer(props => (
+    <div>
+        {props.layers.map((layer, index) =>
+            <SortableLayer
+                {...layer}
+                key={`layer-${index}`}
+                index={index}
+            />
+        )}
+    </div>
+));
 

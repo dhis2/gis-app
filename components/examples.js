@@ -5,12 +5,85 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 import LayersComponent from '../src/components/layer/LayersComponent';
-// import Legend from '../src/components/legend/Legend';
-// import LayerWidget from '../src/components/layer/SortableLayer';
+import LayerToolbar from '../src/components/layer/LayerToolbar';
+import Legend from '../src/components/legend/Legend';
+import Layer from '../src/components/layer/Layer';
+
+
+const layers = [{
+    id: '1',
+    title: 'ANC 3 Coverage',
+    subtitle: '2017',
+    opacity: 0.8,
+}, {
+    id: '2',
+    title: 'Facilitites',
+    subtitle: 'Facility type',
+    visible: false,
+    expanded: true,
+    opacity: 0.9,
+    legend: {
+        items: [{
+            image: 'https://play.dhis2.org/dev/images/orgunitgroup/08.png',
+            name : 'CHP',
+        },{
+            image: 'https://play.dhis2.org/dev/images/orgunitgroup/16.png',
+            name : 'CHC',
+        },{
+            image: 'https://play.dhis2.org/dev/images/orgunitgroup/10.png',
+            name : 'MCHP',
+        },{
+            image: 'https://play.dhis2.org/dev/images/orgunitgroup/14.png',
+            name : 'Clinic',
+        },{
+            image: 'https://play.dhis2.org/dev/images/orgunitgroup/05.png',
+            name : 'Hospital',
+        }]
+    }
+}, {
+    id: '3',
+    title: 'Precipitation',
+    subtitle: '26 - 28 Nov. 2016',
+    visible: false,
+    expanded: true,
+    opacity: 0.6,
+    legend: {
+        description: 'Precipitation collected from satellite and weather stations on the ground.',
+        unit: 'millimeter',
+        items: [{
+            color: '#eff3ff',
+            name : '0 - 20',
+        },{
+            color: '#c6dbef',
+            name : '20 - 40',
+        },{
+            color: '#9ecae1',
+            name : '40 - 60',
+        },{
+            color: '#6baed6',
+            name : '60 - 80',
+        },{
+            color: '#3182bd',
+            name : '80 - 100',
+        },{
+            color: '#08519c',
+            name : '> 100',
+        }],
+        source: 'UCSB / CHG / Google Earth Engine',
+        sourceUrl: 'https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD',
+    }
+}, {
+    id: '4',
+    title: 'OSM Light',
+    subtitle: 'Basemap',
+    opacity: 1,
+}];
+
+
 
 function ComponentExamples({ children }) {
     return (
-        <div style={{ display:  'flex', flexWrap: 'wrap' }}>
+        <div style={{ flexWrap: 'wrap' }}>
           {children}
         </div>
     );
@@ -18,7 +91,7 @@ function ComponentExamples({ children }) {
 
 function ComponentExample({ children }) {
     return (
-        <div style={{ flex: '1 1 auto', padding:  '2rem', border: '1px solid #CCC' }}>
+        <div style={{ padding:  '2rem', border: '1px solid #CCC' }}>
             {children}
         </div>
     ); 
@@ -27,28 +100,45 @@ function ComponentExample({ children }) {
 function GISComponents() {
     return (
         <MuiThemeProvider>
-            <LayersComponent></LayersComponent>
-        </MuiThemeProvider>
-    );
-}
-
-/*
-function GISComponents() {
-    return (
-        <MuiThemeProvider>
             <ComponentExamples>
                 <ComponentExample>
-                    <LayerPanel>
-                        <LayerWidget title="Rainfall 26 - 28 Nov." />
-                    </LayerPanel>
+                    <h2>Layers component</h2>
+                    <LayersComponent layers={layers} />
                 </ComponentExample>
                 <ComponentExample>
+                    <h2>Layer toolbar</h2>
+                    <LayerToolbar
+                        onEdit={() => {}}
+                        onSearch={() => {}}
+                        onFilter={() => {}}
+                        onOpacityChange={() => {}}
+                        onDelete={() => {}}
+                        opacity={0.8}
+                    />
+                </ComponentExample>
+                <ComponentExample>
+                    <h2>Legend colors</h2>
+                    <Legend {...layers[2].legend} />
+                </ComponentExample>
+                <ComponentExample>
+                    <h2>Legend symbols</h2>
+                    <Legend {...layers[1].legend} />
+                </ComponentExample>
+                <ComponentExample>
+                    <h2>Layer</h2>
+                    <Layer {...layers[0]} subtitle={undefined} />
+                </ComponentExample>
+                <ComponentExample>
+                    <h2>Layer</h2>
+                    <Layer {...layers[0]} visible={false} />
                 </ComponentExample>
             </ComponentExamples>
         </MuiThemeProvider>
     );
 }
-*/
 
 
 render(<GISComponents />, document.getElementById('examples'));
+
+
+

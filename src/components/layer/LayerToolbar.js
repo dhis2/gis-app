@@ -10,21 +10,21 @@ import {grey600} from 'material-ui/styles/colors'; // http://www.material-ui.com
 const styles = {
     toolbar: {
         backgroundColor: '#eee',
-        height: 34,
+        height: 32,
         paddingLeft: 7
     },
     button: {
         float: 'left',
-        padding: 5,
-        width: 34,
-        height: 34,
+        padding: 4,
+        width: 32,
+        height: 32,
     },
     rightButton: {
         float: 'right',
-        padding: 5,
+        padding: 4,
         marginRight: 10,
-        width: 34,
-        height: 34,
+        width: 32,
+        height: 32,
     },
     sliderContainer: {
         float: 'left',

@@ -1,6 +1,6 @@
 {
   "name": "gis-app",
-  "version": "26.0.0",
+  "version": "27.0.1",
   "description": "GIS Web App for DHIS 2",
   "main": "src/app.js",
   "scripts": {
@@ -31,6 +31,7 @@
   "dependencies": {
     "d2-utilizr": "^0.2.7",
     "d3-time-format": "^2.0.1",
+    "dhis2-gis-api": "^27.0.1",
     "loglevel": "^1.4.1",
     "whatwg-fetch": "^0.10.1"
   },
@@ -73,7 +74,7 @@
     "style-loader": "0.12.3",
     "susy": "2.2.5",
     "url-loader": "^0.5.7",
-    "webpack": "^2.1.0-beta.27",
+    "webpack": "^2.2.1",
     "webpack-dev-server": "^2.1.0-beta.12"
   },
   "pre-commit": [

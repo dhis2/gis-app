@@ -9,6 +9,8 @@ import LayerToolbar from '../src/components/layer/LayerToolbar';
 import Legend from '../src/components/legend/Legend';
 import Layer from '../src/components/layer/Layer';
 import Basemaps from '../src/components/layer/Basemaps';
+import NewLayerButton from '../src/components/layer/NewLayerButton';
+import NewLayerDialog from '../src/components/layer/NewLayerDialog';
 
 
 import './styles/material-override.css';
@@ -177,6 +179,11 @@ function GISComponents() {
                 <ComponentExample>
                     <h2>Basemaps</h2>
                     <Basemaps />
+                </ComponentExample>
+                <ComponentExample>
+                    <h2>Add new Layer</h2>
+                    <NewLayerButton onTouchTap={() => {console.log('clicked')}} />
+                    <NewLayerDialog />
                 </ComponentExample>
             </ComponentExamples>
         </MuiThemeProvider>

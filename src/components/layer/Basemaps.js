@@ -24,35 +24,31 @@ const basemaps = [{
 
 
 const styles = {
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-    },
     gridList: {
-        //width: 500,
-        //height: 450,
-        overflowY: 'auto',
+        padding: '8px 16px 16px 16px',
     },
-    image: {
-        width: '50%',
-        height: '50%',
-    }
+    gridTile: {
+        cursor: 'pointer',
+    },
+    title: {
+        fontSize: 12,
+    },
 };
 
 export default function Basemaps(props) {
     return (
         <div style={styles.root}>
-            <GridList
-                cellHeight={180}
-                style={styles.gridList}
-            >
+            <GridList cellHeight={100} style={styles.gridList} >
                 {basemaps.map((basemap, index) => (
                     <GridTile
                         key={`basemap-${index}`}
                         title={basemap.title}
+                        className="dhis-basemap-tile"
+                        style={styles.gridTile}
+                        titleStyle={styles.title}
+                        onClick={() => {console.log('clicked')}}
                     >
-                        <img src={basemap.img} style={styles.image} />
+                        <img src={basemap.img} />
                     </GridTile>
                 ))}
             </GridList>

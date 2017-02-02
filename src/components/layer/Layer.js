@@ -7,8 +7,8 @@ import {grey600} from 'material-ui/styles/colors';
 
 import SortableHandle from './SortableHandle';
 import LayerToolbar from './LayerToolbar';
+import Basemap from './Basemaps';
 import Legend from '../legend/Legend';
-
 
 export default class Layer extends Component {
 
@@ -118,6 +118,9 @@ export default class Layer extends Component {
                             {...legend}
                             style={styles.legend}
                         />
+                    }
+                    {props.type === 'basemap' &&
+                        <Basemap />
                     }
                     <LayerToolbar
                         opacity={props.opacity}

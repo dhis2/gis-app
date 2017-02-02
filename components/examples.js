@@ -11,6 +11,10 @@ import Layer from '../src/components/layer/Layer';
 import Basemaps from '../src/components/layer/Basemaps';
 
 
+import './styles/material-override.css';
+
+
+
 const layers = [{
     id: '1',
     title: 'ANC 3 Coverage',
@@ -103,6 +107,7 @@ const layers = [{
     }
 }, {
     id: '4',
+    type: 'basemap',
     title: 'OSM Light',
     subtitle: 'Basemap',
     opacity: 1,

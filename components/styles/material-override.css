@@ -1,0 +1,7 @@
+.dhis-basemap-tile > div {
+    height: 24px!important;
+}
+
+.dhis-basemap-tile > div > div {
+    margin-left: 8px!important;
+}

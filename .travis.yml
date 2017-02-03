@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+- '5'
+cache:
+  directories:
+  - node_modules
+before_script:
+- cd $HOME
+- git clone --depth=10 https://github.com/dhis2/gis-api.git
+- cd $HOME/gis-api
+- npm install
+- npm run build
+script:
+- npm link
+- npm run build
+after_success:
+- if ( [ "$TRAVIS_BRANCH" == "master" ]  && [ "$TRAVIS_REPO_SLUG" == "dhis2/gis-app" ]  &&  [ "$TRAVIS_PULL_REQUEST" == "false" ] ; then
+        mvn clean deploy --settings deploy/settings.xml && exit 0;
+  fi
+env:
+  global:
+  - secure: nFDZ7dLHIrbI3JHitsfHA6MnbHCRApO5Xc8mTN0jX5tPgfoF4UsWak8Mn1YjDL2fFN0/WL8IzDHmcKAibtxNoY2YtEnCV/cJqnL7A9w3prxLuI2tw4cVl9pd0oRIqBq417dr7mVJoXEzzclVfwfsYecDKPEMovpoemAcOONNO+hKslD6ALwoA+O/EBZGBdwHpwPNo2jwcU9W/KF3Lrx30xa3/pap9AVgPst4HdGVXku0lxP5kw+B4AQTCetrPld9G8RW0k4ucB2OP2XRUyhWv+iOJA2GnmAOBqTekc6pRue29wk/gv3SoiFjq6CTnEmiBB8ESibJMo3Id+sATt56wurzk/WEpxVJmNgLPowjRPAxoTnwcwy08qBAFWhB8OVqFRf95AhFIk2N2uoa5frh4DOlZ27KjASyC8HaRLRiyqIUbkmshXdC1KALOjsYKO1RZsHULVAkJqlQZgGgivueNqevROSTAWojXEqQKY6BGxxYvuCwloSgRxJLP2BRULLwmvsFU/Damxt6n92jV7bc5W8zdQbMZ7CA322bXPfm1Fp34IxFMtlE6ttiHvXyS/LyQuMPRf4I/vjAb9/Jfo1UNLCkMg4XSLbT0edvvPtWRv43HJmKl/Z/+dB7E73wq7yXPaRdlND84t/Brv1DqQazmHW1do2DtHgsD0LJYroScNs=
+  - secure: GtxpyzUBHeM1FRdYFyz5Az+/d3i7uUe3p1/sbX5GPwWLga14SKDxIfUO2KGcYf6Wj2uMuxCMyuGMeVTiac2+HOiJqEmX4eiJKPAqrnhyoxfMmZ17YmUmAnMKDjFwv4DMHiQRXxYIR95o8+QcjdFukwHnmlIe1Hf2OlhHLXQNMmp2rXm35ZzORKBZuheeJwDeAakae+p/LUtMUcV03vEsAfASoPi8yz3ksWd4qH8RflLFv+PD1bAtH67AtijJIo23RaH1/NIRQD2XATxDmfzF3MQbL5fuJ075B3Lsf7M2khHBiw1meKXwDzDFpnEz3n/R5TYX35KB/XolEkyvS9ARiAYAr1y4vvU1Th9WU58NE5gzfud0eXuCbN5SvUJ/u0LDhPpiPDtyRw9xdTtqbw7d//2ZfoEN7VP/fo4HSF+/WrdJHBe/0UxWJm2oWY3xeF86dcbpW4XJoScCeHMO6y5i09X6UHJQ5RUqy+q5V2ITzr4n8Jfdr4JTmr6hr11oGzMZJ119HKa8Gj/mwUF8+QzNERCVAlP/Z+kLusfxyaX6t/UJt6uKzdtgvBDAbkLk6UKoyP2M9/GrEdPqJwX5iwsYd5Eya65qfYfWbdeKh1E1EUg3St928dv7F4iRRad1jJEb3xupZIV6EXy203qs7CNWp2ExtPTro5Zjs/ndX6KcYTw=

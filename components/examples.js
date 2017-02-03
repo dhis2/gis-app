@@ -116,7 +116,6 @@ const layers = [{
 }];
 
 
-
 function ComponentExamples({ children }) {
     return (
         <div style={{ flexWrap: 'wrap' }}>
@@ -132,6 +131,7 @@ function ComponentExample({ children }) {
         </div>
     ); 
 }
+
 
 function GISComponents() {
     return (
@@ -181,9 +181,9 @@ function GISComponents() {
                     <Basemaps />
                 </ComponentExample>
                 <ComponentExample>
-                    <h2>Add new Layer</h2>
-                    <NewLayerButton onTouchTap={() => {console.log('clicked')}} />
-                    <NewLayerDialog />
+                    <h2>Add new layer button</h2>
+                    <NewLayerButton onTouchTap={() => console.log('clicked')} />
+                    <NewLayerDialog open={false} />
                 </ComponentExample>
             </ComponentExamples>
         </MuiThemeProvider>

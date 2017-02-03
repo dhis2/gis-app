@@ -3,22 +3,22 @@ import {GridList, GridTile} from 'material-ui/GridList';
 
 
 const basemaps = [{
-    img: 'images/basemaps/osmlight.png',
+    img: 'images/layers/osmlight.png',
     title: 'OSM Light',
 },{
-    img: 'images/basemaps/osm.png',
+    img: 'images/layers/osm.png',
     title: 'OSM Detailed',
 },{
-    img: 'images/basemaps/googlestreets.png',
+    img: 'images/layers/googlestreets.png',
     title: 'Google Streets',
 },{
-    img: 'images/basemaps/googlehybrid.jpeg',
+    img: 'images/layers/googlehybrid.jpeg',
     title: 'Google Hybrid',
 },{
-    img: 'images/basemaps/terrain.png',
+    img: 'images/layers/terrain.png',
     title: 'Terrain',
 },{
-    img: 'images/basemaps/osmdark.png',
+    img: 'images/layers/osmdark.png',
     title: 'OSM Dark',
 },];
 

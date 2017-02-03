@@ -18,7 +18,6 @@ module.exports = {
                 test: /\.js?$/,
                 include: [
                     path.resolve(__dirname, 'src/'),
-                    path.resolve(__dirname, '../gis-api/src/'),
                 ],
                 loader: 'babel-loader',
                 query: {

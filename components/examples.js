@@ -11,6 +11,7 @@ import Layer from '../src/components/layer/Layer';
 import Basemaps from '../src/components/layer/Basemaps';
 import NewLayerButton from '../src/components/layer/NewLayerButton';
 import NewLayerDialog from '../src/components/layer/NewLayerDialog';
+import DataTable from '../src/components/datatable/DataTable';
 
 
 import './styles/material-override.css';
@@ -184,6 +185,10 @@ function GISComponents() {
                     <h2>Add new layer button</h2>
                     <NewLayerButton onTouchTap={() => console.log('clicked')} />
                     <NewLayerDialog open={false} />
+                </ComponentExample>
+                <ComponentExample>
+                    <h2>Data table</h2>
+                    <DataTable />
                 </ComponentExample>
             </ComponentExamples>
         </MuiThemeProvider>

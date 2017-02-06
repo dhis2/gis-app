@@ -54,11 +54,20 @@ const styles = {
     },
 };
 
+
 export default function NewLayerDialog(props) {
+    const actions = [
+        <FlatButton
+            label="Cancel"
+            primary={true}
+            onTouchTap={() => {}}
+        />,
+    ];
+
     return (
         <Dialog
             title="Add new layer"
-            //actions={actions}
+            actions={actions}
             modal={true}
             open={false}
             {...props}

@@ -184,11 +184,11 @@ function GISComponents() {
                 <ComponentExample>
                     <h2>Add new layer button</h2>
                     <NewLayerButton onTouchTap={() => console.log('clicked')} />
-                    <NewLayerDialog open={false} />
+                    <NewLayerDialog open={true} />
                 </ComponentExample>
                 <ComponentExample>
                     <h2>Data table</h2>
-                    <DataTable />
+                    <DataTable open={false} />
                 </ComponentExample>
             </ComponentExamples>
         </MuiThemeProvider>

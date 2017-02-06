@@ -1,6 +1,6 @@
 import React from 'react';
+import Dialog from 'material-ui/Dialog';
 import {Table, Column, Cell} from 'fixed-data-table';
-import FakeObjectDataListStore from '../helpers/FakeObjectDataListStore';
 
 import '../../../node_modules/fixed-data-table/dist/fixed-data-table.css'; // TODO: Which to load?
 
@@ -98,6 +98,14 @@ const dataList = [{
 
 // http://facebook.github.io/fixed-data-table/
 
+
+const IndexCell = ({rowIndex, data, col, ...props}) => (
+    <Cell {...props}>
+        {rowIndex}
+    </Cell>
+);
+
+
 const TextCell = ({rowIndex, data, col, ...props}) => (
     <Cell {...props}>
         {data[rowIndex][col]}
@@ -121,50 +129,66 @@ export default class ObjectDataExample extends React.Component {
     render() {
         var {dataList} = this.state;
         return (
-            <Table
-                rowHeight={50}
-                headerHeight={50}
-                rowsCount={dataList.length}
-                width={660}
-                height={500}
-                {...this.props}>
-                <Column
-                    header={<Cell>Name</Cell>}
-                    cell={<TextCell data={dataList} col="name" />}
-                    fixed={true}
-                    width={200}
-                />
-                <Column
-                    header={<Cell>Code</Cell>}
-                    cell={<TextCell data={dataList} col="code" />}
-                    width={100}
-                />
-                <Column
-                    header={<Cell>Type</Cell>}
-                    cell={<TextCell data={dataList} col="type" />}
-                    width={120}
-                />
-                <Column
-                    header={<Cell>Ownership</Cell>}
-                    cell={<TextCell data={dataList} col="ownership" />}
-                    width={120}
-                />
-                <Column
-                    header={<Cell>Location</Cell>}
-                    cell={<TextCell data={dataList} col="location" />}
-                    width={120}
-                />
-                <Column
-                    header={<Cell>Level</Cell>}
-                    cell={<TextCell data={dataList} col="level" />}
-                    width={60}
-                />
-                <Column
-                    header={<Cell>Parent unit</Cell>}
-                    cell={<TextCell data={dataList} col="parent" />}
-                    width={200}
-                />
-            </Table>
+            <Dialog
+                title="Data table"
+                //actions={actions}
+                modal={true}
+                open={false}
+                {...this.props}
+                //onRequestClose={this.handleClose}
+            >
+                <Table
+                    rowHeight={50}
+                    headerHeight={50}
+                    rowsCount={dataList.length}
+                    width={660}
+                    height={500}
+                    {...this.props}>
+                    <Column
+                        header={<Cell></Cell>}
+                        cell={<IndexCell />}
+                        fixed={true}
+                        width={40}
+                    />
+                    <Column
+                        header={<Cell>Name</Cell>}
+                        cell={<TextCell data={dataList} col="name" />}
+                        fixed={true}
+                        width={200}
+                    />
+                    <Column
+                        header={<Cell>Code</Cell>}
+                        cell={<TextCell data={dataList} col="code" />}
+                        width={100}
+                    />
+                    <Column
+                        header={<Cell>Type</Cell>}
+                        cell={<TextCell data={dataList} col="type" />}
+                        width={120}
+                    />
+                    <Column
+                        header={<Cell>Ownership</Cell>}
+                        cell={<TextCell data={dataList} col="ownership" />}
+                        width={120}
+                    />
+                    <Column
+                        header={<Cell>Location</Cell>}
+                        cell={<TextCell data={dataList} col="location" />}
+                        width={120}
+                    />
+                    <Column
+                        header={<Cell>Level</Cell>}
+                        cell={<TextCell data={dataList} col="level" />}
+                        width={60}
+                    />
+                    <Column
+                        header={<Cell>Parent unit</Cell>}
+                        cell={<TextCell data={dataList} col="parent" />}
+                        width={200}
+                    />
+                </Table>
+
+            </Dialog>
         );
     }
 }

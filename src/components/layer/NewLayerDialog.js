@@ -4,7 +4,7 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
-const basemaps = [{
+const layers = [{
     img: 'images/layers/events.png',
     title: 'Events',
 },{
@@ -17,25 +17,25 @@ const basemaps = [{
     img: 'images/layers/boundaries.png',
     title: 'Boundaries',
 },{
-    img: 'images/layers/osmdark.png',
+    img: 'images/layers/labels.png',
     title: 'Labels',
 },{
-    img: 'images/layers/osmdark.png',
+    img: 'images/layers/population.png',
     title: 'Population density',
 },{
-    img: 'images/layers/osmdark.png',
+    img: 'images/layers/elevation.png',
     title: 'Elevation',
 },{
-    img: 'images/layers/osmdark.png',
+    img: 'images/layers/temperature.png',
     title: 'Temperature',
 },{
-    img: 'images/layers/osmdark.png',
+    img: 'images/layers/landcover.png',
     title: 'Landcover',
 },{
-    img: 'images/layers/osmdark.png',
+    img: 'images/layers/precipitation.png',
     title: 'Precipitation',
 },{
-    img: 'images/layers/osmdark.png',
+    img: 'images/layers/nighttime.png',
     title: 'Nighttime lights',
 },];
 
@@ -45,12 +45,18 @@ const styles = {
         // padding: '8px 16px 16px 16px',
     },
     gridTile: {
-        border: '1px solid #555',
+        //border: '1px solid #555',
         cursor: 'pointer',
-
+        boxSizing: 'border-box',
     },
     title: {
-        fontSize: 12,
+        fontSize: 14,
+        color: '#333',
+    },
+    image: {
+        border: '1px solid #555',
+        width: '99%',
+        height: 'auto',
     },
 };
 
@@ -73,17 +79,17 @@ export default function NewLayerDialog(props) {
             {...props}
             //onRequestClose={this.handleClose}
         >
-            <GridList cellHeight={150} cols={4} padding={16} style={styles.gridList} >
-                {basemaps.map((basemap, index) => (
+            <GridList cellHeight={200} cols={4} padding={16} style={styles.gridList} >
+                {layers.map((layer, index) => (
                     <GridTile
                         key={`basemap-${index}`}
-                        title={basemap.title}
-                        className="dhis-basemap-tile"
+                        title={layer.title}
+                        className="dhis-layer-tile"
                         style={styles.gridTile}
                         titleStyle={styles.title}
                         onClick={() => {console.log('clicked')}}
                     >
-                        <img src={basemap.img} />
+                        <img src={layer.img} style={styles.image} />
                     </GridTile>
                 ))}
             </GridList>

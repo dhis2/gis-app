@@ -61,7 +61,7 @@ const styles = {
 };
 
 
-export default function NewLayerDialog(props) {
+export default function AddLayerDialog(props) {
     const actions = [
         <FlatButton
             label="Cancel"

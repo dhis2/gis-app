@@ -23,28 +23,13 @@ export default class LayersComponent extends Component {
         });
     }
 
-    // Runs after the widget has been rendered to the DOM
-    componentDidMount() {
-
-    }
-
-    // Clean up when layer is removed
-    componentWillUnmount() {
-
-    }
-
     render() {
-        const styles = {
-            backgroundColor: 'red',
-        };
-
-
         return (
             <SortableLayersList
-                style={styles} // How to set on div?
                 layers={this.state.layers}
                 onSortEnd={this.onSortEnd}
                 useDragHandle={true}
+                {...this.props}
             />
         )
     }

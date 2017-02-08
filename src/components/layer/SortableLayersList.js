@@ -5,7 +5,7 @@ import Layer from './Layer';
 const SortableLayer = SortableElement(Layer);
 
 export default SortableContainer(props => (
-    <div>
+    <div style={props.style}>
         {props.layers.map((layer, index) =>
             <SortableLayer
                 {...layer}

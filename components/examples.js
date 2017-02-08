@@ -1,22 +1,21 @@
 import React from 'react';
 import {render} from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
+// import injectTapEventPlugin from 'react-tap-event-plugin';
+// injectTapEventPlugin();
+
+import GisApp from '../src/components';
+
+import './styles/material-override.css';
 
 import LayersComponent from '../src/components/layer/LayersComponent';
 import LayerToolbar from '../src/components/layer/LayerToolbar';
 import Legend from '../src/components/legend/Legend';
 import Layer from '../src/components/layer/Layer';
 import Basemaps from '../src/components/layer/Basemaps';
-import NewLayerButton from '../src/components/layer/NewLayerButton';
-import NewLayerDialog from '../src/components/layer/NewLayerDialog';
+// import AddLayerButton from '../src/components/layer/AddLayerButton';
+import AddLayerDialog from '../src/components/layer/AddLayerDialog';
 import DataTable from '../src/components/datatable/DataTable';
-
-
-import './styles/material-override.css';
-
-
 
 const layers = [{
     id: '1',
@@ -182,9 +181,8 @@ function GISComponents() {
                     <Basemaps />
                 </ComponentExample>
                 <ComponentExample>
-                    <h2>Add new layer button</h2>
-                    <NewLayerButton onTouchTap={() => console.log('clicked')} />
-                    <NewLayerDialog open={true} />
+                    <h2>Add new layer</h2>
+                    <AddLayerDialog open={false} />
                 </ComponentExample>
                 <ComponentExample>
                     <h2>Data table</h2>

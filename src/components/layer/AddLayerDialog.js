@@ -2,7 +2,6 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import {GridList, GridTile} from 'material-ui/GridList';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 
 const layers = [{
     img: 'images/layers/events.png',
@@ -66,7 +65,7 @@ export default function AddLayerDialog(props) {
         <FlatButton
             label="Cancel"
             primary={true}
-            onTouchTap={() => {}}
+            onTouchTap={props.handleClose}
         />,
     ];
 
@@ -77,7 +76,7 @@ export default function AddLayerDialog(props) {
             modal={true}
             open={false}
             {...props}
-            //onRequestClose={this.handleClose}
+            onRequestClose={props.handleClose}
         >
             <GridList cellHeight={200} cols={4} padding={16} style={styles.gridList} >
                 {layers.map((layer, index) => (
@@ -87,7 +86,7 @@ export default function AddLayerDialog(props) {
                         className="dhis-layer-tile"
                         style={styles.gridTile}
                         titleStyle={styles.title}
-                        onClick={() => {console.log('clicked')}}
+                        onClick={() => props.onLayerSelect(layer.title)}
                     >
                         <img src={layer.img} style={styles.image} />
                     </GridTile>

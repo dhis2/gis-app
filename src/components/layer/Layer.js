@@ -68,7 +68,7 @@ export default class Layer extends Component {
                 height: 56,
                 padding: '0px 8px 0px 32px',
                 marginRight: -8,
-                fontSize: 10
+                fontSize: 10,
             },
             headerText: {
                 position: 'relative',

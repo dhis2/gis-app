@@ -1,23 +1,81 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAddIcon from 'material-ui/svg-icons/content/add';
+import AddLayerDialog from '../layer/AddLayerDialog';
 import { addLayer } from '../actions';
 
-let AddLayerButton = ({ dispatch }) => {
+
+class AddLayer extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            open: false,
+        };
+
+        this.handleOpen = this.handleOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.onLayerSelect = this.onLayerSelect.bind(this);
+    }
+
+    handleOpen() {
+        this.setState({open: true});
+    }
+
+    handleClose() {
+        this.setState({open: false});
+    }
+
+    onLayerSelect(title) {
+        this.handleClose();
+        this.props.dispatch(addLayer({title: title}));
+    }
+
+    render() {
+        return (
+            <div>
+                <FloatingActionButton onTouchTap={this.handleOpen} style={this.props.style}>
+                    <ContentAddIcon />
+                </FloatingActionButton>
+                <AddLayerDialog
+                    open={this.state.open}
+                    handleClose={this.handleClose}
+                    onLayerSelect={this.onLayerSelect}
+                />
+            </div>
+        );
+    }
+}
+
+AddLayer = connect()(AddLayer);
+
+export default AddLayer;
+
+
+
+
+
+/*
+let AddLayer = ({ dispatch, style }) => {
 
     let onTouchTap = () => {
-        console.log('dispatch');
-        dispatch(addLayer({title: 'New layer'}));
+        console.log('show dialog');
+        dispatch(addLayer({title: 'Layer'}));
     };
 
     return (
-        <FloatingActionButton onTouchTap={onTouchTap}>
-            <ContentAddIcon />
-        </FloatingActionButton>
+        <div>
+            <FloatingActionButton onTouchTap={onTouchTap} style={style}>
+                <ContentAddIcon />
+            </FloatingActionButton>
+            <AddLayerDialog open={false} />
+        </div>
     )
 };
 
-AddLayerButton = connect()(AddLayerButton)
+AddLayer = connect()(AddLayer);
 
-export default AddLayerButton;
+export default AddLayer;
+*/

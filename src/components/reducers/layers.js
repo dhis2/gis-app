@@ -3,10 +3,10 @@ import {arrayMove} from 'react-sortable-hoc';
 const layer = (state, action) => {
     switch (action.type) {
         case 'ADD_LAYER':
-            console.log('Add Layer', action);
+            // console.log('Add Layer', action);
             return {
                 id: String(action.id),
-                title: action.title + ' ' + action.id,
+                title: action.title,
                 subtitle: action.subtitle,
                 opacity: action.opacity,
                 expanded: action.expanded,

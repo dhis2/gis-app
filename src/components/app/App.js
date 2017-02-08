@@ -5,16 +5,13 @@ import Menu from './Menu';
 import LayersList from '../containers/LayersList';
 import Map from './Map';
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
 const styles = {
     app: {
         height: 750,
         border: '1px solid #eee',
-    },
-    layers: {
-        float: 'left',
-        width: 300,
-        height: 'calc(100% - 88px)',
-        backgroundColor: '#fafafa',
     },
     map: {
         float: 'right',

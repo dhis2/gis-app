@@ -28,9 +28,9 @@ class AddLayer extends Component {
         this.setState({open: false});
     }
 
-    onLayerSelect(title) {
+    onLayerSelect(layer) {
         this.handleClose();
-        this.props.dispatch(addLayer({title: title}));
+        this.props.dispatch(addLayer(layer));
     }
 
     render() {

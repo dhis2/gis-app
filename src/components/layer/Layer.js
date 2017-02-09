@@ -10,89 +10,56 @@ import LayerToolbar from './LayerToolbar';
 import Basemap from './Basemaps';
 import Legend from '../legend/Legend';
 
-export default class Layer extends Component {
 
-    constructor(props) {
-        super(props);
+function onEdit(layer) {
+    console.log('edit layer', layer);
+}
 
-        this.state = {
-            visible: props.visible
-        };
+function onDataTableShow(layer) {
+    console.log('show data table', layer);
+}
 
-        this.onEdit = this.onEdit.bind(this);
-        this.onSearch = this.onSearch.bind(this);
-        this.onFilter = this.onFilter.bind(this);
-        this.onDelete = this.onDelete.bind(this);
-        this.onOpacityChange = this.onOpacityChange.bind(this);
-        this.onVisibilityChange = this.onVisibilityChange.bind(this);
+
+const styles = {
+    container: {
+        paddingBottom: 0,
+        clear: 'both',
+    },
+    header: {
+        height: 56,
+        padding: '0px 8px 0px 32px',
+        marginRight: -8,
+        fontSize: 10,
+    },
+    headerText: {
+        position: 'relative',
+        top: '50%',
+        transform: 'translateY(-50%)',
+    },
+    visibility: {
+        width: 56,
+        height: 56,
+        padding: 8,
+        position: 'absolute',
+        right: 32
+    },
+    body: {
+        padding: 0,
+    },
+    legend: {
+        padding: '8px 16px 16px 32px',
+        margin: 0,
     }
+};
 
-    onEdit(evt) {
-        console.log('edit layer');
-    }
-
-    onDelete(evt) {
-        console.log('delete layer');
-    }
-
-    onFilter(evt) {
-        console.log('filter layer');
-    }
-
-    onOpacityChange(evt, opacity) {
-        console.log('opacity', opacity);
-    }
-
-    onSearch(evt) {
-        console.log('search layer');
-    }
-
-    onVisibilityChange(evt) {
-        console.log('visible', !this.state.visible);
-
-        this.setState(prevState => ({
-           visible: !prevState.visible
-        }));
-    }
-
-    render() {
-        const props = this.props;
-        const legend = props.legend;
-
-        const styles = {
-            container: {
-                paddingBottom: 0,
-                clear: 'both',
-            },
-            header: {
-                height: 56,
-                padding: '0px 8px 0px 32px',
-                marginRight: -8,
-                fontSize: 10,
-            },
-            headerText: {
-                position: 'relative',
-                top: '50%',
-                transform: 'translateY(-50%)',
-            },
-            visibility: {
-                width: 56,
-                height: 56,
-                padding: 8,
-                position: 'absolute',
-                right: 32
-            },
-            body: {
-                padding: 0,
-            },
-            legend: {
-                padding: '8px 16px 16px 32px',
-                margin: 0,
-            }
-        };
+export default function AddLayerDialog(props) {
 
         return (
-            <Card containerStyle={styles.container} initiallyExpanded={props.expanded}>
+            <Card
+                containerStyle={styles.container}
+                expanded={props.expanded}
+                onExpandChange={() => props.onExpandChange(props.id)}
+            >
                 <CardHeader
                     title={props.title}
                     subtitle={props.subtitle}
@@ -103,9 +70,9 @@ export default class Layer extends Component {
                     <SortableHandle color={grey600} />
                     <IconButton
                         style={styles.visibility}
-                        onClick={this.onVisibilityChange}
+                        onClick={() => props.onVisibilityChange(props.id)}
                         tooltip="Toggle visibility">
-                        {this.state.visible ? (
+                        {props.visible ? (
                             <ActionVisibilityIcon color={grey600} />
                         ) : (
                             <ActionVisibilityOffIcon color={grey600} />
@@ -113,9 +80,9 @@ export default class Layer extends Component {
                     </IconButton>
                 </CardHeader>
                 <CardText expandable={true} style={styles.body}>
-                    {legend &&
+                    {props.legend &&
                         <Legend
-                            {...legend}
+                            {...props.legend}
                             style={styles.legend}
                         />
                     }
@@ -123,19 +90,21 @@ export default class Layer extends Component {
                         <Basemap />
                     }
                     <LayerToolbar
+                        id={props.id}
                         opacity={props.opacity}
-                        onOpacityChange={this.onOpacityChange}
-                        onEdit={this.onEdit}
-                        onSearch={this.onSearch}
-                        onFilter={this.onFilter}
-                        onDelete={this.onDelete}
+                        onOpacityChange={props.onOpacityChange}
+                        onEdit={() => onEdit(props)}
+                        onDataTableShow={() => onDataTableShow(props)}
+                        onFilter={props.onFilter}
+                        onRemove={() => props.onRemove(props.id)}
                     />
                 </CardText>
             </Card>
         )
-    }
+    //}
 }
 
+/*
 Layer.propTypes= {
     id: React.PropTypes.string,
     title: React.PropTypes.string,
@@ -151,3 +120,4 @@ Layer.defaultProps = {
     visible: true,
     expanded: false,
 };
+*/

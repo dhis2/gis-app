@@ -31,7 +31,7 @@
   "dependencies": {
     "d2-utilizr": "^0.2.7",
     "d3-time-format": "^2.0.1",
-    "dhis2-gis-api": "^27.0.1",
+    "dhis2-gis-api": "^27.0.2",
     "loglevel": "^1.4.1",
     "whatwg-fetch": "^0.10.1"
   },

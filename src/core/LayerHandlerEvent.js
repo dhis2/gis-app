@@ -152,7 +152,9 @@ export default function LayerHandlerEvent(gis, layer) {
 
             if (!rows.length) {
                 gis.alert(GIS.i18n.no_event_coordinates_found);
-                gis.mask.hide();
+                if (gis.mask) {
+                    gis.mask.hide();
+                }
                 return;
             }
 

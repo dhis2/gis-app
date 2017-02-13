@@ -1,6 +1,5 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
-import {GridList, GridTile} from 'material-ui/GridList';
 import FlatButton from 'material-ui/FlatButton';
 
 const layers = [{
@@ -140,22 +139,30 @@ const layers = [{
 
 
 const styles = {
-    gridList: {
-        // padding: '8px 16px 16px 16px',
+    bodyStyle: {
+        overflowY: 'scroll',
     },
-    gridTile: {
-        //border: '1px solid #555',
+    layer: {
+        float: 'left',
+        width: 120,
+        marginRight: 24,
         cursor: 'pointer',
         boxSizing: 'border-box',
+        height: 160,
     },
-    title: {
+    name: {
         fontSize: 14,
         color: '#333',
+        paddingBottom: 20,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
     image: {
+        boxSizing: 'border-box',
         border: '1px solid #555',
-        width: '99%',
-        height: 'auto',
+        width: 120,
+        height: 120,
     },
 };
 
@@ -177,21 +184,38 @@ export default function AddLayerDialog(props) {
             open={false}
             {...props}
             onRequestClose={props.handleClose}
+            bodyStyle={styles.bodyStyle}
         >
-            <GridList cellHeight={200} cols={4} padding={16} style={styles.gridList} >
+            <div style={styles.list}>
                 {layers.map((layer, index) => (
-                    <GridTile
-                        key={`basemap-${index}`}
-                        title={layer.layerType || layer.title}
-                        className="dhis-layer-tile"
-                        style={styles.gridTile}
-                        titleStyle={styles.title}
-                        onClick={() => props.onLayerSelect(layer)}
-                    >
+
+                    <div key={`basemap-${index}`} style={styles.layer} onClick={() => props.onLayerSelect(layer)}>
                         <img src={layer.img} style={styles.image} />
-                    </GridTile>
+                        <div style={styles.name}>{layer.layerType || layer.title}</div>
+                    </div>
+
                 ))}
-            </GridList>
+            </div>
+
+
         </Dialog>
     );
 }
+
+
+/*
+<GridList cellHeight={200} cols={4} padding={16} style={styles.gridList} >
+    {layers.map((layer, index) => (
+        <GridTile
+            key={`basemap-${index}`}
+            title={layer.layerType || layer.title}
+            className="dhis-layer-tile"
+            style={styles.gridTile}
+            titleStyle={styles.title}
+            onClick={() => props.onLayerSelect(layer)}
+        >
+            <img src={layer.img} style={styles.image} />
+        </GridTile>
+    ))}
+</GridList>
+    */

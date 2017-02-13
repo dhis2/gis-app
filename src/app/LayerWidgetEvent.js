@@ -280,6 +280,7 @@ export default function LayerWidgetEvent(gis, layer) {
         ]
     });
 
+
     const startDate = Ext.create('Ext.form.field.Text', {
         fieldLabel: GIS.i18n.start_date,
         labelAlign: 'top',
@@ -1115,8 +1116,8 @@ export default function LayerWidgetEvent(gis, layer) {
         view.programStage = stage.getRecord();
 
         if (periods.getValue() === 'CUSTOM') {
-            view.startDate = startDate.getValue();
-            view.endDate = endDate.getValue();
+            view.startDate = gis.init.calendar.formatDate('yyyy-mm-dd', gis.init.calendar.parseDate(gis.init.systemInfo.dateFormat, startDate.getValue()));
+            view.endDate = gis.init.calendar.formatDate('yyyy-mm-dd', gis.init.calendar.parseDate(gis.init.systemInfo.dateFormat, endDate.getValue()));
         } else {
             // pe
             view.filters = [{

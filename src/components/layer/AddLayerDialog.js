@@ -189,7 +189,7 @@ export default function AddLayerDialog(props) {
             <div style={styles.list}>
                 {layers.map((layer, index) => (
 
-                    <div key={`basemap-${index}`} style={styles.layer} onClick={() => props.onLayerSelect(layer)}>
+                    <div key={`layer-${index}`} style={styles.layer} onClick={() => props.onLayerSelect(layer)}>
                         <img src={layer.img} style={styles.image} />
                         <div style={styles.name}>{layer.layerType || layer.title}</div>
                     </div>

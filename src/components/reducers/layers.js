@@ -3,10 +3,10 @@ import {arrayMove} from 'react-sortable-hoc';
 const layer = (state, action) => {
     switch (action.type) {
 
-        case 'ADD_LAYER':
-            // console.log('Add Layer', action);
+        case 'LAYER_ADD':
             return {
                 id: String(action.id),
+                type: action.layerType,
                 title: action.title,
                 subtitle: action.subtitle,
                 opacity: action.opacity,
@@ -15,17 +15,19 @@ const layer = (state, action) => {
                 legend: action.legend,
             };
 
-        case 'CHANGE_LAYER_OPACITY':
+        case 'LAYER_CHANGE_OPACITY':
             if (state.id !== action.id) {
                 return state;
             }
+
+            layer.instance.setOpacity(action.opacity);
 
             return {
                 ...state,
                 opacity: action.opacity,
             };
 
-        case 'TOGGLE_LAYER_EXPAND':
+        case 'LAYER_TOGGLE_EXPAND':
             if (state.id !== action.id) {
                 return state;
             }
@@ -35,7 +37,7 @@ const layer = (state, action) => {
                 expanded: !state.expanded,
             };
 
-        case 'TOGGLE_LAYER_VISIBILITY':
+        case 'LAYER_TOGGLE_VISIBILITY':
             if (state.id !== action.id) {
                 return state;
             }
@@ -55,29 +57,29 @@ const layers = (state = [], action) => {
 
     switch (action.type) {
 
-        case 'SORT_LAYERS':
+        case 'LAYERS_SORT':
             return arrayMove(state, action.oldIndex, action.newIndex);
 
-        case 'ADD_LAYER':
+        case 'LAYER_ADD':
             return [
                 ...state,
                 layer(undefined, action)
             ];
 
-        case 'REMOVE_LAYER':
+        case 'LAYER_REMOVE':
             return state.filter(layer => layer.id !== action.id);
 
-        case 'CHANGE_LAYER_OPACITY':
+        case 'LAYER_CHANGE_OPACITY':
             return state.map(l =>
                 layer(l, action)
             );
 
-        case 'TOGGLE_LAYER_EXPAND':
+        case 'LAYER_TOGGLE_EXPAND':
             return state.map(l =>
                 layer(l, action)
             );
 
-        case 'TOGGLE_LAYER_VISIBILITY':
+        case 'LAYER_TOGGLE_VISIBILITY':
             return state.map(l =>
                 layer(l, action)
             );

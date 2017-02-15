@@ -194,7 +194,7 @@ function GISComponents() {
 }
 
 
-render(<GISComponents />, document.getElementById('examples'));
+// render(<GISComponents />, document.getElementById('examples'));
 
 
 

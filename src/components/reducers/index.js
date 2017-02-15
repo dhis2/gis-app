@@ -1,11 +1,6 @@
-import { combineReducers } from 'redux'
-import layers from './layers'
-// import visibilityFilter from './visibilityFilter'
+import { combineReducers } from 'redux';
+import layers from './layers';
 
-
-const gisApp = combineReducers({
+export default combineReducers({
     layers,
-    // visibilityFilter
-})
-
-export default gisApp
+});

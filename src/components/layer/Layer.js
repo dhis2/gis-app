@@ -52,56 +52,56 @@ const styles = {
     }
 };
 
-export default function AddLayerDialog(props) {
-
-        return (
-            <Card
-                containerStyle={styles.container}
-                expanded={props.expanded}
-                onExpandChange={() => props.onExpandChange(props.id)}
-            >
-                <CardHeader
-                    title={props.title}
-                    subtitle={props.subtitle}
-                    // actAsExpander={true}  // Not able to stop event bubbling for visibility icon
-                    showExpandableButton={true}
-                    style={styles.header}
-                    textStyle={styles.headerText}>
-                    <SortableHandle color={grey600} />
-                    <IconButton
-                        style={styles.visibility}
-                        onClick={() => props.onVisibilityChange(props.id)}
-                        tooltip="Toggle visibility">
-                        {props.visible ? (
-                            <ActionVisibilityIcon color={grey600} />
-                        ) : (
-                            <ActionVisibilityOffIcon color={grey600} />
-                        )}
-                    </IconButton>
-                </CardHeader>
-                <CardText expandable={true} style={styles.body}>
-                    {props.legend &&
-                        <Legend
-                            {...props.legend}
-                            style={styles.legend}
-                        />
-                    }
-                    {props.type === 'basemap' &&
-                        <Basemap />
-                    }
-                    <LayerToolbar
-                        id={props.id}
-                        opacity={props.opacity}
-                        onOpacityChange={props.onOpacityChange}
-                        onEdit={() => onEdit(props)}
-                        onDataTableShow={() => onDataTableShow(props)}
-                        onFilter={props.onFilter}
-                        onRemove={() => props.onRemove(props.id)}
+export default function LayerCard(props) {
+    return (
+        <Card
+            containerStyle={styles.container}
+            expanded={props.expanded}
+            onExpandChange={() => props.onExpandChange(props.id)}
+        >
+            <CardHeader
+                title={props.title}
+                subtitle={props.subtitle}
+                // actAsExpander={true}  // Not able to stop event bubbling for visibility icon
+                showExpandableButton={true}
+                style={styles.header}
+                textStyle={styles.headerText}>
+                <SortableHandle color={grey600} />
+                <IconButton
+                    style={styles.visibility}
+                    onClick={() => props.onVisibilityChange(props.id)}
+                    tooltip="Toggle visibility">
+                    {props.visible ? (
+                        <ActionVisibilityIcon color={grey600} />
+                    ) : (
+                        <ActionVisibilityOffIcon color={grey600} />
+                    )}
+                </IconButton>
+            </CardHeader>
+            <CardText expandable={true} style={styles.body}>
+                {props.legend &&
+                    <Legend
+                        {...props.legend}
+                        style={styles.legend}
+                        style={styles.legend}
                     />
-                </CardText>
-            </Card>
-        )
-    //}
+                }
+                {props.type === 'basemap' &&
+                    <Basemap id={props.id} />
+                }
+                <LayerToolbar
+                    id={props.id}
+                    opacity={props.opacity}
+                    onOpacityChange={props.onOpacityChange}
+                    onEdit={() => onEdit(props)}
+                    onDataTableShow={() => onDataTableShow(props)}
+                    onFilter={props.onFilter}
+                    onRemove={() => props.onRemove(props.id)}
+                />
+            </CardText>
+        </Card>
+    )
+
 }
 
 /*

@@ -1,59 +1,84 @@
 import React from 'react';
-import {GridList, GridTile} from 'material-ui/GridList';
-
 
 const basemaps = [{
-    img: 'images/layers/osmlight.png',
+    id: 'osmLight',
     title: 'OSM Light',
+    img: 'images/layers/osmlight.png',
 },{
-    img: 'images/layers/osm.png',
+    id: 'openStreetMap',
     title: 'OSM Detailed',
+    img: 'images/layers/osm.png',
 },{
-    img: 'images/layers/googlestreets.png',
+    id: 'googleStreets',
     title: 'Google Streets',
+    img: 'images/layers/googlestreets.png',
 },{
-    img: 'images/layers/googlehybrid.jpeg',
+    id: 'googleHybrid',
     title: 'Google Hybrid',
+    img: 'images/layers/googlehybrid.jpeg',
 },{
-    img: 'images/layers/terrain.png',
+    id: 'stamenTerrain',
     title: 'Terrain',
+    img: 'images/layers/terrain.png',
 },{
-    img: 'images/layers/osmdark.png',
+    id: 'osmDark',
     title: 'OSM Dark',
+    img: 'images/layers/osmdark.png',
 },];
 
 
 const styles = {
-    gridList: {
-        padding: '8px 16px 16px 16px',
+    root: {
+        overflowY: 'scroll',
     },
-    gridTile: {
+    layer: {
+        float: 'left',
+        width: 120,
+        marginLeft: 13,
         cursor: 'pointer',
+        boxSizing: 'border-box',
+        height: 90,
     },
-    title: {
+    name: {
         fontSize: 12,
+        color: '#333',
+        paddingTop: 4,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    imageContainer: {
+        position: 'relative',
+        height: 56,
+        width: 120,
+        marginTop: 4,
+    },
+    image: {
+        position: 'absolute',
+        clip: 'rect(64px, 256px, 192px, 0)', // top, right, bottom, left
+        width: 120,
+        top: -64,
     },
 };
 
 export default function Basemaps(props) {
     return (
         <div style={styles.root}>
-            <GridList cellHeight={100} style={styles.gridList} >
-                {basemaps.map((basemap, index) => (
-                    <GridTile
-                        key={`basemap-${index}`}
-                        title={basemap.title}
-                        className="dhis-basemap-tile"
-                        style={styles.gridTile}
-                        titleStyle={styles.title}
-                        onClick={() => {console.log('clicked')}}
-                    >
-                        <img src={basemap.img} />
-                    </GridTile>
-                ))}
-            </GridList>
+                {basemaps.map((basemap, index) => {
+
+                    const borderStyle = Object.assign({
+                        outline: (basemap.id === props.id ? '3px solid orange' : '1px solid #999'),
+                    }, styles.imageContainer);
+
+                    return (
+                        <div key={`basemap-${index}`} style={styles.layer} onClick={() => {console.log('clicked')}}>
+                            <div style={borderStyle}>
+                                <img src={basemap.img} style={styles.image} />
+                            </div>
+                            <div style={styles.name}>{basemap.title}</div>
+                        </div>
+                    )
+                })}
         </div>
-
-
     )
 }

@@ -18,14 +18,16 @@ render(
     document.getElementById('app')
 );
 
-// Add default basemap - TODO: Where is best placement?
+
+/* Add default basemap - Moved to reduser
 store.dispatch(addLayer({
     id: 'osmLight',
     layerType: 'basemap',
     title: 'OSM Light',
     subtitle: 'Basemap',
     visible: true,
-    expanded: true,
+    expanded: false,
     opacity: 1,
 }));
+*/
 

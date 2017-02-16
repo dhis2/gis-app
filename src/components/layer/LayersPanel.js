@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import Layer from '../containers/Layer';
-import AddLayer from '../containers/AddLayer';
+// import AddLayer from '../containers/AddLayer';
 
 const SortableLayer = SortableElement(Layer);
 
@@ -27,14 +27,20 @@ const SortableLayersList = SortableContainer(({layers}) => {
 
     return (
         <div style={styles.layers}>
-            {layers.map((layer, index) =>
-                <SortableLayer
+            {layers.filter(layer => layer.type !== 'basemap').map((layer, index) => // Draggable layers
+                    <SortableLayer
+                        {...layer}
+                        key={`layer-${index}`}
+                        index={index}
+                    />
+            )}
+            {layers.filter(layer => layer.type === 'basemap').map((layer, index) => // Basemaps are not draggable
+                <Layer
                     {...layer}
                     key={`layer-${index}`}
                     index={index}
                 />
             )}
-            <AddLayer style={styles.button} />
         </div>
     );
 });
@@ -48,3 +54,6 @@ const LayersPanel = ({ layers, onSortEnd }) => (
 );
 
 export default LayersPanel;
+
+
+// <AddLayer style={styles.button} />

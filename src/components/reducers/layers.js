@@ -20,8 +20,6 @@ const layer = (state, action) => {
                 return state;
             }
 
-            layer.instance.setOpacity(action.opacity);
-
             return {
                 ...state,
                 opacity: action.opacity,
@@ -78,8 +76,18 @@ const basemaps = (state, action) => {
     }
 };
 
+const defaultLayers = [{
+    id: 'osmLight',
+    type: 'basemap',
+    layerType: 'basemap',
+    title: 'OSM Light',
+    subtitle: 'Basemap',
+    visible: true,
+    expanded: false,
+    opacity: 1,
+}];
 
-const layers = (state = [], action) => {
+const layers = (state = defaultLayers, action) => {
 
     switch (action.type) {
 
@@ -88,8 +96,8 @@ const layers = (state = [], action) => {
 
         case 'LAYER_ADD':
             return [
-                ...state,
-                layer(undefined, action)
+                layer(undefined, action),
+                ...state
             ];
 
         case 'LAYER_REMOVE':
@@ -121,4 +129,4 @@ const layers = (state = [], action) => {
     }
 };
 
-export default layers
+export default layers;

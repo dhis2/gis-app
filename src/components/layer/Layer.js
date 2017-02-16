@@ -66,7 +66,9 @@ export default function LayerCard(props) {
                 showExpandableButton={true}
                 style={styles.header}
                 textStyle={styles.headerText}>
-                <SortableHandle color={grey600} />
+                {props.type !== 'basemap' &&
+                    <SortableHandle color={grey600} />
+                }
                 <IconButton
                     style={styles.visibility}
                     onClick={() => props.onVisibilityChange(props.id)}
@@ -93,7 +95,7 @@ export default function LayerCard(props) {
                     id={props.id}
                     opacity={props.opacity}
                     onOpacityChange={props.onOpacityChange}
-                    onEdit={props.type!== 'basemap' ? () => onEdit(props) : null}
+                    onEdit={props.type !== 'basemap' ? () => onEdit(props) : null}
                     onDataTableShow={props.type !== 'basemap' ? () => onDataTableShow(props) : null}
                     onFilter={props.onFilter}
                     onRemove={props.type!== 'basemap' ? () => props.onRemove(props.id) : null}

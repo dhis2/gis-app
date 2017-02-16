@@ -6,6 +6,17 @@ const mapStateToProps = (state) => ({
     layers: state.layers,
 });
 
+/*
+const mapStateToProps = function(state) {
+    console.log('state', state);
+
+    return {
+        layers: state.layers,
+    }
+}
+*/
+
+
 const mapDispatchToProps = ({
     onSortEnd: sortLayers,
 });

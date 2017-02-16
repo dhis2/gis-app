@@ -6,7 +6,7 @@ const mapStateToProps = (state) => ({
     layers: state.layers,
 });
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = ({
     onRemove: removeLayer,
     onExpandChange: toggleLayerExpand,
     onOpacityChange: changeLayerOpacity,

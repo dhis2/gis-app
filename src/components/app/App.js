@@ -2,6 +2,8 @@ import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from './Header';
 import Menu from './Menu';
+import AddLayerButton from '../containers/AddLayerButton';
+import AddLayerDialog from '../containers/AddLayerDialog';
 import LayersList from '../containers/LayersList';
 import Map from './Map';
 
@@ -29,6 +31,8 @@ const App = () => (
         <div style={styles.app}>
             <Header />
             <Menu />
+            <AddLayerButton />
+            <AddLayerDialog />
             <LayersList />
             <Map style={styles.map} />
         </div>

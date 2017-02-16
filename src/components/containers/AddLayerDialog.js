@@ -1,0 +1,25 @@
+import { connect } from 'react-redux'
+import AddLayerDialog from '../layer/AddLayerDialog';
+import { addLayer, closeLayersDialog } from '../actions';
+
+// TODO: More elegant way?
+const mapStateToProps = (state) => ({
+    layersDialogOpen: state.ui.layersDialogOpen,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    onRequestClose: closeLayersDialog,
+    onLayerSelect: (layer) => {
+        dispatch(addLayer(layer));
+        dispatch(closeLayersDialog());
+    },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddLayerDialog);
+
+
+
+
+
+
+

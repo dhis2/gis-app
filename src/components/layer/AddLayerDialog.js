@@ -73,31 +73,37 @@ const layers = [{
     title: 'Boundaries',
     opacity: 1,
     visible: true,
+    expanded: false,
 },{
     img: 'images/layers/labels.png',
     title: 'Labels',
     opacity: 0.9,
     visible: true,
+    expanded: false,
 },{
     img: 'images/layers/population.png',
     title: 'Population density',
     opacity: 0.9,
     visible: true,
+    expanded: false,
 },{
     img: 'images/layers/elevation.png',
     title: 'Elevation',
     opacity: 0.9,
     visible: true,
+    expanded: false,
 },{
     img: 'images/layers/temperature.png',
     title: 'Temperature',
     opacity: 0.9,
     visible: true,
+    expanded: false,
 },{
     img: 'images/layers/landcover.png',
     title: 'Landcover',
     opacity: 0.9,
     visible: true,
+    expanded: false,
 },{
     img: 'images/layers/precipitation.png',
     title: 'Precipitation',
@@ -135,6 +141,7 @@ const layers = [{
     title: 'Nighttime lights',
     opacity: 0.9,
     visible: true,
+    expanded: false,
 },];
 
 
@@ -172,7 +179,7 @@ export default function AddLayerDialog(props) {
         <FlatButton
             label="Cancel"
             primary={true}
-            onTouchTap={props.handleClose}
+            onTouchTap={props.onRequestClose}
         />,
     ];
 
@@ -181,9 +188,7 @@ export default function AddLayerDialog(props) {
             title="Add new layer"
             actions={actions}
             modal={true}
-            open={false}
-            {...props}
-            onRequestClose={props.handleClose}
+            open={props.layersDialogOpen}
             bodyStyle={styles.bodyStyle}
         >
             <div style={styles.list}>
@@ -202,20 +207,3 @@ export default function AddLayerDialog(props) {
     );
 }
 
-
-/*
-<GridList cellHeight={200} cols={4} padding={16} style={styles.gridList} >
-    {layers.map((layer, index) => (
-        <GridTile
-            key={`basemap-${index}`}
-            title={layer.layerType || layer.title}
-            className="dhis-layer-tile"
-            style={styles.gridTile}
-            titleStyle={styles.title}
-            onClick={() => props.onLayerSelect(layer)}
-        >
-            <img src={layer.img} style={styles.image} />
-        </GridTile>
-    ))}
-</GridList>
-    */

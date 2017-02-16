@@ -7,7 +7,7 @@ import {grey600} from 'material-ui/styles/colors';
 
 import SortableHandle from './SortableHandle';
 import LayerToolbar from './LayerToolbar';
-import Basemap from './Basemaps';
+import Basemaps from '../containers/Basemaps';
 import Legend from '../legend/Legend';
 
 
@@ -87,7 +87,7 @@ export default function LayerCard(props) {
                     />
                 }
                 {props.type === 'basemap' &&
-                    <Basemap id={props.id} />
+                    <Basemaps id={props.id} />
                 }
                 <LayerToolbar
                     id={props.id}

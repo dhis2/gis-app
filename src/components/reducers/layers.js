@@ -53,6 +53,30 @@ const layer = (state, action) => {
     }
 };
 
+
+const basemaps = (state, action) => {
+    switch (action.type) {
+
+        case 'BASEMAP_SELECTED':
+            if (state.id !== action.id) {
+                return state;
+            }
+
+            const basemap = action.basemap;
+
+            return {
+                ...state,
+                id: basemap.id,
+                title: basemap.title,
+            };
+
+        default:
+            return state;
+
+    }
+};
+
+
 const layers = (state = [], action) => {
 
     switch (action.type) {
@@ -82,6 +106,11 @@ const layers = (state = [], action) => {
         case 'LAYER_TOGGLE_VISIBILITY':
             return state.map(l =>
                 layer(l, action)
+            );
+
+        case 'BASEMAP_SELECTED':
+            return state.map(l =>
+                basemaps(l, action)
             );
 
         default:

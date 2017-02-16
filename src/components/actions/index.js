@@ -41,4 +41,8 @@ export const closeLayersDialog = () => ({
     type: 'LAYERS_DIALOG_CLOSE_REQUESTED'
 });
 
-
+export const basemapSelected = (id, basemap) => ({
+    type: 'BASEMAP_SELECTED',
+    id,
+    basemap,
+});

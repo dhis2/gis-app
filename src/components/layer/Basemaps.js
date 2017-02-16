@@ -18,10 +18,12 @@ const basemaps = [{
     img: 'images/layers/googlehybrid.jpeg',
 },{
     id: 'stamenTerrain',
+    type: 'external',
     title: 'Terrain',
     img: 'images/layers/terrain.png',
 },{
     id: 'osmDark',
+    type: 'external',
     title: 'OSM Dark',
     img: 'images/layers/osmdark.png',
 },];
@@ -71,7 +73,7 @@ export default function Basemaps(props) {
                     }, styles.imageContainer);
 
                     return (
-                        <div key={`basemap-${index}`} style={styles.layer} onClick={() => {console.log('clicked')}}>
+                        <div key={`basemap-${index}`} style={styles.layer} onClick={() => props.onBasemapSelect(props.id, basemap)}>
                             <div style={borderStyle}>
                                 <img src={basemap.img} style={styles.image} />
                             </div>

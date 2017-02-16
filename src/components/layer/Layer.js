@@ -93,10 +93,10 @@ export default function LayerCard(props) {
                     id={props.id}
                     opacity={props.opacity}
                     onOpacityChange={props.onOpacityChange}
-                    onEdit={() => onEdit(props)}
-                    onDataTableShow={() => onDataTableShow(props)}
+                    onEdit={props.type!== 'basemap' ? () => onEdit(props) : null}
+                    onDataTableShow={props.type !== 'basemap' ? () => onDataTableShow(props) : null}
                     onFilter={props.onFilter}
-                    onRemove={() => props.onRemove(props.id)}
+                    onRemove={props.type!== 'basemap' ? () => props.onRemove(props.id) : null}
                 />
             </CardText>
         </Card>

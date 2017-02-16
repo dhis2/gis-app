@@ -67,6 +67,8 @@ const basemaps = (state, action) => {
             return {
                 ...state,
                 id: basemap.id,
+                type: basemap.type,
+                layerType: basemap.layerType,
                 title: basemap.title,
             };
 

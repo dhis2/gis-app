@@ -24,7 +24,8 @@ store.dispatch(addLayer({
     layerType: 'basemap',
     title: 'OSM Light',
     subtitle: 'Basemap',
-    expanded: false,
+    visible: true,
+    expanded: true,
     opacity: 1,
 }));
 

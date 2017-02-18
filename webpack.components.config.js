@@ -4,7 +4,7 @@ var path = require('path');
 module.exports = {
     context: __dirname,
     entry: {
-        'components': './react/examples.js',
+        'components': './components/examples.js',
     },
     devtool: 'source-map',
     output: {
@@ -16,8 +16,8 @@ module.exports = {
             {
                 test: /\.js?$/,
                 include: [
-                    path.resolve(__dirname, 'src/react'),
-                    path.resolve(__dirname, './react'),
+                    path.resolve(__dirname, 'src'),
+                    path.resolve(__dirname, './components'),
                 ],
                 loader: 'babel-loader',
             },
@@ -44,6 +44,6 @@ module.exports = {
         }),
     ],
     devServer: {
-        contentBase: './react'
+        contentBase: './components'
     }
 };

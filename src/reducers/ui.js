@@ -1,4 +1,8 @@
-const ui = (state = { layersDialogOpen: false }, action) => {
+const defaultState = {
+    layersDialogOpen: false,
+};
+
+const ui = (state = defaultState, action) => {
 
     switch (action.type) {
 

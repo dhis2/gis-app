@@ -10,7 +10,4 @@ const mapDispatchToProps = ({
     onBasemapSelect: basemapSelected,
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(Basemaps);
+export default connect(mapStateToProps, mapDispatchToProps)(Basemaps);

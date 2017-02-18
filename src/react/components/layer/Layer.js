@@ -7,7 +7,7 @@ import {grey600} from 'material-ui/styles/colors';
 
 import SortableHandle from './SortableHandle';
 import LayerToolbar from './LayerToolbar';
-import Basemaps from '../containers/Basemaps';
+import Basemaps from '../../containers/Basemaps';
 import Legend from '../legend/Legend';
 
 

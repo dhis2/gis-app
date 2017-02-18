@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Layer from '../layer/Layer';
+import Layer from '../components/layer/Layer';
 import { removeLayer, changeLayerOpacity, toggleLayerExpand, toggleLayerVisibility } from '../actions';
 
 const mapStateToProps = (state) => ({

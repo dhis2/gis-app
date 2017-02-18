@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import Layer from '../containers/Layer';
+import Layer from '../../containers/Layer';
 // import AddLayer from '../containers/AddLayer';
 
 const SortableLayer = SortableElement(Layer);

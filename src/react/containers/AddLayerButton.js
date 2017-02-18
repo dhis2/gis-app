@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import AddLayerButton from '../layer/AddLayerButton';
+import AddLayerButton from '../components/layer/AddLayerButton';
 import { openLayersDialog } from '../actions';
 
 const mapDispatchToProps = ({

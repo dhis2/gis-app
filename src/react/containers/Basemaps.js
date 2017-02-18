@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import Basemaps from '../layer/Basemaps';
+import Basemaps from '../components/layer/Basemaps';
 import { basemapSelected } from '../actions';
 
 const mapStateToProps = (state) => ({
-    layers: state.layers,
+    basemaps: state.basemaps,
 });
 
 const mapDispatchToProps = ({

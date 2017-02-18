@@ -4,18 +4,18 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // import injectTapEventPlugin from 'react-tap-event-plugin';
 // injectTapEventPlugin();
 
-import GisApp from '../src/components';
+import GisApp from '../src/react';
 
 import './styles/material-override.css';
 
-import LayersComponent from '../src/components/layer/LayersComponent';
-import LayerToolbar from '../src/components/layer/LayerToolbar';
-import Legend from '../src/components/legend/Legend';
-import Layer from '../src/components/layer/Layer';
-import Basemaps from '../src/components/layer/Basemaps';
+import LayersComponent from '../src/react/components/layer/LayersComponent';
+import LayerToolbar from '../src/react/components/layer/LayerToolbar';
+import Legend from '../src/react/components/legend/Legend';
+import Layer from '../src/react/components/layer/Layer';
+import Basemaps from '../src/react/components/layer/Basemaps';
 // import AddLayerButton from '../src/components/layer/AddLayerButton';
-import AddLayerDialog from '../src/components/layer/AddLayerDialog';
-import DataTable from '../src/components/datatable/DataTable';
+import AddLayerDialog from '../src/react/components/layer/AddLayerDialog';
+import DataTable from '../src/react/components/datatable/DataTable';
 
 const layers = [{
     id: '1',

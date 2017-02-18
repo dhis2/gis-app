@@ -2,9 +2,9 @@ import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from './Header';
 import Menu from './Menu';
-import AddLayerButton from '../containers/AddLayerButton';
-import AddLayerDialog from '../containers/AddLayerDialog';
-import LayersList from '../containers/LayersList';
+import AddLayerButton from '../../containers/AddLayerButton';
+import AddLayerDialog from '../../containers/AddLayerDialog';
+import LayersList from '../../containers/LayersList';
 import Map from './Map';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';

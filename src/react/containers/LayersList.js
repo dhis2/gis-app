@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import LayersPanel from '../layer/LayersPanel'
+import LayersPanel from '../components/layer/LayersPanel'
 import { sortLayers } from '../actions';
 
 const mapStateToProps = (state) => ({

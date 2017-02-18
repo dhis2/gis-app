@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import AddLayerDialog from '../layer/AddLayerDialog';
+import AddLayerDialog from '../components/layer/AddLayerDialog';
 import { addLayer, closeLayersDialog } from '../actions';
 
 // TODO: More elegant way?

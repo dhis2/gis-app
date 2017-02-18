@@ -2,7 +2,7 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import {Table, Column, Cell} from 'fixed-data-table';
 
-import '../../../node_modules/fixed-data-table/dist/fixed-data-table.css'; // TODO: Which to load?
+import '../../../../node_modules/fixed-data-table/dist/fixed-data-table.css'; // TODO: Which to load?
 
 // https://play.dhis2.org/dev/api/26/geoFeatures.json?ou=ou:LEVEL-4;ImspTQPwCqd&displayProperty=NAME&includeGroupSets=true
 const dataList = [{

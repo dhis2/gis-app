@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import LayerPanel from '../../src/components/layer/LayersPanel';
+import LayerPanel from '../../src/react/components/layer/LayersPanel';
 
 describe('LayerPanel', () => {
     it('should render The layer panel', () => {

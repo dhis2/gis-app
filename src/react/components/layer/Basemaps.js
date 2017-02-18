@@ -1,44 +1,5 @@
 import React from 'react';
 
-const basemaps = [{
-    id: 'osmLight',
-    type: 'basemap',
-    layerType: 'basemap',
-    title: 'OSM Light',
-    img: 'images/layers/osmlight.png',
-},{
-    id: 'openStreetMap',
-    type: 'basemap',
-    layerType: 'basemap',
-    title: 'OSM Detailed',
-    img: 'images/layers/osm.png',
-},{
-    id: 'googleStreets',
-    type: 'basemap',
-    layerType: 'basemap',
-    title: 'Google Streets',
-    img: 'images/layers/googlestreets.png',
-},{
-    id: 'googleHybrid',
-    type: 'basemap',
-    layerType: 'basemap',
-    title: 'Google Hybrid',
-    img: 'images/layers/googlehybrid.jpeg',
-},{
-    id: 'stamenTerrain',
-    type: 'basemap',
-    layerType: 'external',
-    title: 'Terrain',
-    img: 'images/layers/terrain.png',
-},{
-    id: 'osmDark',
-    type: 'basemap',
-    layerType: 'external',
-    title: 'OSM Dark',
-    img: 'images/layers/osmdark.png',
-},];
-
-
 const styles = {
     root: {
         overflowY: 'scroll',
@@ -76,7 +37,7 @@ const styles = {
 export default function Basemaps(props) {
     return (
         <div style={styles.root}>
-                {basemaps.map((basemap, index) => {
+                {props.basemaps.map((basemap, index) => {
 
                     const borderStyle = Object.assign({
                         outline: (basemap.id === props.id ? '3px solid orange' : '1px solid #999'),

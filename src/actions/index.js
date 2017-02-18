@@ -33,6 +33,12 @@ export const sortLayers = ({oldIndex, newIndex}) => ({
     newIndex,
 });
 
+export const basemapSelected = (id, basemap) => ({
+    type: 'BASEMAP_SELECTED',
+    id,
+    basemap,
+});
+
 export const openLayersDialog = () => ({
     type: 'LAYERS_DIALOG_OPEN_REQUESTED',
 });
@@ -41,8 +47,12 @@ export const closeLayersDialog = () => ({
     type: 'LAYERS_DIALOG_CLOSE_REQUESTED',
 });
 
-export const basemapSelected = (id, basemap) => ({
-    type: 'BASEMAP_SELECTED',
-    id,
-    basemap,
+export const openDataTable = () => ({
+    type: 'DATA_TABLE_OPEN_REQUESTED',
 });
+
+export const closeDataTable = () => ({
+    type: 'DATA_TABLE_CLOSE_REQUESTED',
+});
+
+

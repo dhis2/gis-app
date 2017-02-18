@@ -4,6 +4,7 @@ import { addLayer, closeLayersDialog } from '../actions';
 
 // TODO: More elegant way?
 const mapStateToProps = (state) => ({
+    overlays: state.overlays,
     layersDialogOpen: state.ui.layersDialogOpen,
 });
 

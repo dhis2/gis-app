@@ -6,6 +6,7 @@ import AddLayerButton from '../../containers/AddLayerButton';
 import AddLayerDialog from '../../containers/AddLayerDialog';
 import LayersList from '../../containers/LayersList';
 import Map from './Map';
+import DataTable from '../../containers/DataTable';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
@@ -25,7 +26,6 @@ const styles = {
     }
 };
 
-
 const App = () => (
     <MuiThemeProvider>
         <div style={styles.app}>
@@ -35,6 +35,7 @@ const App = () => (
             <AddLayerDialog />
             <LayersList />
             <Map style={styles.map} />
+            <DataTable />
         </div>
     </MuiThemeProvider>
 )

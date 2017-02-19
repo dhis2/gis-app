@@ -45,7 +45,7 @@ export default function LayerToolbar(props) {
             }
 
             {props.onDataTableShow &&
-            <IconButton onClick={props.onDataTableShow} tooltip="Data table" tooltipPosition="top-center" style={styles.button}>
+            <IconButton onClick={() => props.onDataTableShow(props.id, props.data)} tooltip="Data table" tooltipPosition="top-center" style={styles.button}>
                 <ActionDataTableIcon color={grey600} />
             </IconButton>
             }

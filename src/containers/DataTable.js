@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
 import DataTable from '../components/datatable/DataTable';
-import { basemapSelected } from '../actions';
+import { closeDataTable } from '../actions';
 
-// TODO: More elegant way?
 const mapStateToProps = (state) => ({
-    dataTableOpen: state.ui.dataTableOpen,
+    dataList: state.dataTable.data,
+    dataTableOpen: state.dataTable.open,
 });
 
 const mapDispatchToProps = ({
-    onBasemapSelect: basemapSelected,
+    onRequestClose: closeDataTable,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DataTable);

@@ -5,14 +5,9 @@ const layer = (state, action) => {
 
         case 'LAYER_ADD':
             return {
+                ...action,
                 id: String(action.id),
                 type: action.layerType,
-                title: action.title,
-                subtitle: action.subtitle,
-                opacity: action.opacity,
-                expanded: action.expanded,
-                visible: action.visible,
-                legend: action.legend,
             };
 
         case 'LAYER_CHANGE_OPACITY':

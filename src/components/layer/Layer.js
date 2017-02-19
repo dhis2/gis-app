@@ -15,11 +15,6 @@ function onEdit(layer) {
     console.log('edit layer', layer);
 }
 
-function onDataTableShow(layer) {
-    console.log('show data table', layer);
-}
-
-
 const styles = {
     container: {
         paddingBottom: 0,
@@ -92,12 +87,9 @@ export default function LayerCard(props) {
                     <Basemaps id={props.id} />
                 }
                 <LayerToolbar
-                    id={props.id}
-                    opacity={props.opacity}
-                    onOpacityChange={props.onOpacityChange}
+                    {...props}
                     onEdit={props.type !== 'basemap' ? () => onEdit(props) : null}
-                    onDataTableShow={props.type !== 'basemap' ? () => onDataTableShow(props) : null}
-                    onFilter={props.onFilter}
+                    onDataTableShow={props.type !== 'basemap' ? () => props.onDataTableShow(props) : null}
                     onRemove={props.type!== 'basemap' ? () => props.onRemove(props.id) : null}
                 />
             </CardText>

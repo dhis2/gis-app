@@ -47,8 +47,10 @@ export const closeLayersDialog = () => ({
     type: 'LAYERS_DIALOG_CLOSE_REQUESTED',
 });
 
-export const openDataTable = () => ({
+export const openDataTable = (id, data) => ({
     type: 'DATA_TABLE_OPEN_REQUESTED',
+    id,
+    data,
 });
 
 export const closeDataTable = () => ({

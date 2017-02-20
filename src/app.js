@@ -8,7 +8,7 @@ import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 import log from 'loglevel';
 
 log.setLevel(log.levels.INFO); // TODO: Use DEBUG for development
-log.info('Loading: GIS app v25.0.2'); // TODO: Use manifest
+log.info('Loading: GIS app v25.0.3'); // TODO: Use manifest
 
 window.GIS = GIS;
 

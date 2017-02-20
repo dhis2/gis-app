@@ -3,11 +3,11 @@ var webpackBaseConfig = require('./webpack-base-config');
 
 webpackBaseConfig.devServer = {
     contentBase: './',
-    progress: true,
-    colors: true,
+    // progress: true,
+    // colors: true,
     port: 8081,
     inline: true,
-    devtool: 'source-map',
+    // devtool: 'source-map',
 };
 
 module.exports = webpackBaseConfig;

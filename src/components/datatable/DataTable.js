@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {Table, Column, Cell} from 'fixed-data-table';
@@ -13,22 +13,18 @@ const IndexCell = ({rowIndex, data, col, ...props}) => (
     </Cell>
 );
 
-
 const TextCell = ({rowIndex, data, col, ...props}) => (
     <Cell {...props}>
         {data[rowIndex][col]}
     </Cell>
 );
 
-
-export default function AddLayerDialog(props) {
-    const dataList = props.dataList || [];
-
+const AddLayerDialog = ({ dataList, dataTableOpen, onRequestClose }) => {
     const actions = [
         <FlatButton
             label="Cancel"
             primary={true}
-            onTouchTap={props.onRequestClose}
+            onTouchTap={onRequestClose}
         />,
     ];
 
@@ -37,7 +33,7 @@ export default function AddLayerDialog(props) {
             title="Data table"
             actions={actions}
             modal={true}
-            open={props.dataTableOpen}
+            open={dataTableOpen}
         >
             <Table
                 rowHeight={50}
@@ -88,7 +84,16 @@ export default function AddLayerDialog(props) {
                     width={200}
                 />
             </Table>
-
         </Dialog>
     );
-}
+};
+
+AddLayerDialog.propTypes = {
+    dataList: PropTypes.array, // TODO: Use arrayOf?
+};
+
+AddLayerDialog.defaultProps = {
+    dataList: [],
+};
+
+export default AddLayerDialog;

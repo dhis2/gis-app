@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-export default function LegendItem(props) {
+const LegendItem = ({ image, color, name, range }) => {
     const styles = {
         container: {
             clear: 'both',
@@ -18,14 +18,23 @@ export default function LegendItem(props) {
         }
     };
 
-    styles.symbol.backgroundImage = props.image ? `url(${props.image})` : 'none';
-    styles.symbol.backgroundColor = props.color ? props.color : 'transparent';
+    styles.symbol.backgroundImage = image ? `url(${image})` : 'none';
+    styles.symbol.backgroundColor = color ? color : 'transparent';
 
     // Components must return a single root element
     return (
         <div style={styles.container}>
             <dt style={styles.symbol}></dt>
-            <dd style={styles.name}>{props.name} {props.range}</dd>
+            <dd style={styles.name}>{name} {range}</dd>
         </div>
     );
-}
+};
+
+LegendItem.propTypes = {
+    image: PropTypes.string,
+    color: PropTypes.string,
+    name: PropTypes.string,
+    range: PropTypes.string,
+};
+
+export default LegendItem;

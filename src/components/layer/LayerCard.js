@@ -74,7 +74,6 @@ const LayerCard = (props) => (
                 <Legend
                     {...props.legend}
                     style={styles.legend}
-                    style={styles.legend}
                 />
             }
             {props.type === 'basemap' &&

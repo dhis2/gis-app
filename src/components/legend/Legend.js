@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import LegendItem from './LegendItem';
 
 const styles = {
@@ -15,31 +15,40 @@ const styles = {
     },
 }
 
-export default function Legend(props) {
-    return (
-        <dl style={props.style}>
-            {props.description  &&
-                <div style={styles.description}>{props.description}</div>
-            }
-            {props.unit  &&
-                <div style={styles.unit}>{props.unit}</div>
-            }
-            {props.items.map((item, index) => (
-                <LegendItem
-                    {...item}
-                    key={`item-${index}`}
-                />
-            ))}
-            {props.source && (
-                <div style={styles.source}>
-                    Source:&nbsp;
-                    {props.sourceUrl ? (
-                        <a href={props.sourceUrl}>{props.source}</a>
-                    ) : (
-                        <span>{props.source}</span>
-                    )}
-                </div>
-            )}
-        </dl>
-    );
-}
+const Legend = ({ style, description, unit, items, source, sourceUrl }) => (
+    <dl style={style}>
+        {description  &&
+            <div style={styles.description}>{description}</div>
+        }
+        {unit &&
+            <div style={styles.unit}>{unit}</div>
+        }
+        {items.map((item, index) => (
+            <LegendItem
+                {...item}
+                key={`item-${index}`}
+            />
+        ))}
+        {source && (
+            <div style={styles.source}>
+                Source:&nbsp;
+                {sourceUrl ? (
+                    <a href={sourceUrl}>{source}</a>
+                ) : (
+                    <span>{source}</span>
+                )}
+            </div>
+        )}
+    </dl>
+);
+
+Legend.propTypes = {
+    style: PropTypes.object,
+    description: PropTypes.string,
+    unit: PropTypes.string,
+    items: PropTypes.array,
+    source: PropTypes.string,
+    sourceUrl: PropTypes.string,
+};
+
+export default Legend;

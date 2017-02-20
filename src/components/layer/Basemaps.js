@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const styles = {
     root: {
@@ -34,24 +34,34 @@ const styles = {
     },
 };
 
-export default function Basemaps(props) {
-    return (
-        <div style={styles.root}>
-                {props.basemaps.map((basemap, index) => {
+const Basemaps = ({ id, basemaps, onBasemapSelect }) => (
+    <div style={styles.root}>
+            {basemaps.map((basemap, index) => {
 
-                    const borderStyle = Object.assign({
-                        outline: (basemap.id === props.id ? '3px solid orange' : '1px solid #999'),
-                    }, styles.imageContainer);
+                const borderStyle = Object.assign({
+                    outline: (basemap.id === id ? '3px solid orange' : '1px solid #999'),
+                }, styles.imageContainer);
 
-                    return (
-                        <div key={`basemap-${index}`} style={styles.layer} onClick={() => props.onBasemapSelect(props.id, basemap)}>
-                            <div style={borderStyle}>
-                                <img src={basemap.img} style={styles.image} />
-                            </div>
-                            <div style={styles.name}>{basemap.title}</div>
+                return (
+                    <div key={`basemap-${index}`} style={styles.layer} onClick={() => onBasemapSelect(id, basemap)}>
+                        <div style={borderStyle}>
+                            <img src={basemap.img} style={styles.image} />
                         </div>
-                    )
-                })}
-        </div>
-    )
-}
+                        <div style={styles.name}>{basemap.title}</div>
+                    </div>
+                )
+            })}
+    </div>
+);
+
+Basemaps.propTypes = {
+    id: PropTypes.string.isRequired,
+    basemaps: PropTypes.array, // TODO: Use arrayOf?
+    onBasemapSelect: PropTypes.func.isRequired,
+};
+
+Basemaps.defaultProps = {
+    basemaps: [],
+};
+
+export default Basemaps;

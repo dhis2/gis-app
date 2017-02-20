@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
@@ -30,13 +30,12 @@ const styles = {
     },
 };
 
-
-export default function AddLayerDialog(props) {
+const AddLayerDialog = ({ layersDialogOpen, overlays, onRequestClose, onLayerSelect }) => {
     const actions = [
         <FlatButton
             label="Cancel"
             primary={true}
-            onTouchTap={props.onRequestClose}
+            onTouchTap={onRequestClose}
         />,
     ];
 
@@ -45,22 +44,31 @@ export default function AddLayerDialog(props) {
             title="Add new layer"
             actions={actions}
             modal={true}
-            open={props.layersDialogOpen}
+            open={layersDialogOpen}
             bodyStyle={styles.bodyStyle}
         >
             <div style={styles.list}>
-                {props.overlays.map((layer, index) => (
-
-                    <div key={`layer-${index}`} style={styles.layer} onClick={() => props.onLayerSelect(layer)}>
+                {overlays.map((layer, index) => (
+                    <div key={`layer-${index}`} style={styles.layer} onClick={() => onLayerSelect(layer)}>
                         <img src={layer.img} style={styles.image} />
                         <div style={styles.name}>{layer.layerType || layer.title}</div>
                     </div>
-
                 ))}
             </div>
-
-
         </Dialog>
     );
-}
+};
 
+AddLayerDialog.propTypes = {
+    layersDialogOpen: PropTypes.bool,
+    overlays: PropTypes.array, // TODO: Use arrayOf?
+    onRequestClose: PropTypes.func.isRequired,
+    onLayerSelect: PropTypes.func.isRequired,
+};
+
+AddLayerDialog.defaultProps = {
+    layersDialogOpen: false,
+    overlays: [],
+};
+
+export default AddLayerDialog;

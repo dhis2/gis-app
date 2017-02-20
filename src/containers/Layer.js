@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Layer from '../components/layer/Layer';
+import LayerCard from '../components/layer/LayerCard';
 import { removeLayer, changeLayerOpacity, toggleLayerExpand, toggleLayerVisibility, openDataTable } from '../actions';
 
 const mapStateToProps = (state) => ({
@@ -14,7 +14,4 @@ const mapDispatchToProps = ({
     onDataTableShow: openDataTable,
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(Layer);
+export default connect(mapStateToProps, mapDispatchToProps)(LayerCard);

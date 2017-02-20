@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react'
 import IconButton from 'material-ui/IconButton';
 import ContentCreateIcon from 'material-ui/svg-icons/content/create';
 import ActionDataTableIcon from 'material-ui/svg-icons/action/view-list';
 import ActionDeleteIcon from 'material-ui/svg-icons/action/delete';
 import Slider from 'material-ui/Slider';
-import {grey600} from 'material-ui/styles/colors'; // http://www.material-ui.com/#/customization/colors
+import { grey600 } from 'material-ui/styles/colors'; // http://www.material-ui.com/#/customization/colors
 
 const styles = {
     toolbar: {
@@ -35,36 +35,49 @@ const styles = {
     }
 };
 
-export default function LayerToolbar(props) {
-    return (
-        <div style={styles.toolbar}>
-            {props.onEdit &&
-                <IconButton onClick={props.onEdit} tooltip="Edit" tooltipPosition="top-center" style={styles.button}>
-                    <ContentCreateIcon color={grey600} />
-                </IconButton>
-            }
+const LayerToolbar = ({ id, data, opacity, onEdit, onRemove, onDataTableShow, onOpacityChange}) => (
+    <div style={styles.toolbar}>
+        {onEdit &&
+            <IconButton onClick={onEdit} tooltip="Edit" tooltipPosition="top-center" style={styles.button}>
+                <ContentCreateIcon color={grey600} />
+            </IconButton>
+        }
 
-            {props.onDataTableShow &&
-            <IconButton onClick={() => props.onDataTableShow(props.id, props.data)} tooltip="Data table" tooltipPosition="top-center" style={styles.button}>
+        {onDataTableShow &&
+            <IconButton onClick={() => onDataTableShow(id, data)} tooltip="Data table" tooltipPosition="top-center" style={styles.button}>
                 <ActionDataTableIcon color={grey600} />
             </IconButton>
-            }
+        }
 
-            {props.onOpacityChange &&
-                <Slider
-                    defaultValue={props.opacity}
-                    onChange={(evt, opacity) => props.onOpacityChange(props.id, opacity)}
-                    style={styles.sliderContainer}
-                    sliderStyle={styles.slider}
-                />
-            }
-            {props.onRemove &&
-                <IconButton onClick={props.onRemove} tooltip="Delete" tooltipPosition="top-center" style={styles.rightButton}>
-                    <ActionDeleteIcon color={grey600}/>
-                </IconButton>
-            }
-        </div>
-    );
-}
+        {onOpacityChange &&
+            <Slider
+                defaultValue={opacity}
+                onChange={(evt, opacity) => onOpacityChange(id, opacity)}
+                style={styles.sliderContainer}
+                sliderStyle={styles.slider}
+            />
+        }
+        {onRemove &&
+            <IconButton onClick={onRemove} tooltip="Delete" tooltipPosition="top-center" style={styles.rightButton}>
+                <ActionDeleteIcon color={grey600}/>
+            </IconButton>
+        }
+    </div>
+);
 
+LayerToolbar.propTypes = {
+    id: PropTypes.string.isRequired,
+    data: PropTypes.array,
+    opacity: PropTypes.number,
+    onEdit: PropTypes.func,
+    onRemove: PropTypes.func,
+    onDataTableShow: PropTypes.func,
+    onOpacityChange: PropTypes.func,
+};
 
+LayerToolbar.defaultProps = {
+    data: [],
+    opacity: 1,
+};
+
+export default LayerToolbar;

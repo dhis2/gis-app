@@ -8,10 +8,10 @@ import GisApp from '../src/index';
 
 import './styles/material-override.css';
 
-import LayersComponent from '../src/components/layer/LayersComponent';
+// import LayersComponent from '../src/components/layer/LayersComponent';
 import LayerToolbar from '../src/components/layer/LayerToolbar';
 import Legend from '../src/components/legend/Legend';
-import Layer from '../src/components/layer/Layer';
+import LayerCard from '../src/components/layer/LayerCard';
 import Basemaps from '../src/components/layer/Basemaps';
 // import AddLayerButton from '../src/components/layer/AddLayerButton';
 import AddLayerDialog from '../src/components/layer/AddLayerDialog';
@@ -166,15 +166,15 @@ function GISComponents() {
                 </ComponentExample>
                 <ComponentExample>
                     <h2>Layer</h2>
-                    <Layer {...layers[0]} subtitle={undefined} />
+                    <LayerCard {...layers[0]} subtitle={undefined} />
                 </ComponentExample>
                 <ComponentExample>
                     <h2>Layer</h2>
-                    <Layer {...layers[0]} visible={false} />
+                    <LayerCard {...layers[0]} visible={false} />
                 </ComponentExample>
                 <ComponentExample>
                     <h2>Layer</h2>
-                    <Layer {...layers[0]} expanded={true} />
+                    <LayerCard {...layers[0]} expanded={true} />
                 </ComponentExample>
                 <ComponentExample>
                     <h2>Basemaps</h2>

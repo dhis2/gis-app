@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAddIcon from 'material-ui/svg-icons/content/add';
 
@@ -9,10 +9,14 @@ const style = {
     zIndex: 10
 };
 
-export default function AddLayerButton(props) {
-    return (
-        <FloatingActionButton onTouchTap={props.onClick} style={style}>
-            <ContentAddIcon />
-        </FloatingActionButton>
-    )
-}
+const AddLayerButton = ({ onClick }) => (
+    <FloatingActionButton onTouchTap={onClick} style={style}>
+        <ContentAddIcon />
+    </FloatingActionButton>
+);
+
+AddLayerButton.propTypes = {
+    onClick: PropTypes.func.isRequired,
+};
+
+export default AddLayerButton;

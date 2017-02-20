@@ -18,13 +18,13 @@ export default function getMap() {
     map.getPane('thematic1').style.zIndex = 450;
 
     map.createPane('thematic2');
-    map.getPane('thematic1').style.zIndex = 440;
+    map.getPane('thematic2').style.zIndex = 440;
 
     map.createPane('thematic3');
-    map.getPane('thematic1').style.zIndex = 430;
+    map.getPane('thematic3').style.zIndex = 430;
 
     map.createPane('thematic4');
-    map.getPane('thematic1').style.zIndex = 420;
+    map.getPane('thematic4').style.zIndex = 420;
 
     map.createPane('earthEngine');
     map.getPane('earthEngine').style.zIndex = 300;

@@ -38,32 +38,33 @@ const styles = {
 const LayerToolbar = ({ id, data, opacity, onEdit, onRemove, onDataTableShow, onOpacityChange}) => (
     <div style={styles.toolbar}>
         {onEdit &&
-            <IconButton onClick={onEdit} tooltip="Edit" tooltipPosition="top-center" style={styles.button}>
-                <ContentCreateIcon color={grey600} />
-            </IconButton>
+        <IconButton onClick={onEdit} tooltip="Edit" tooltipPosition="top-center" style={styles.button}>
+            <ContentCreateIcon color={grey600} />
+        </IconButton>
         }
 
         {onDataTableShow &&
-            <IconButton onClick={() => onDataTableShow(id, data)} tooltip="Data table" tooltipPosition="top-center" style={styles.button}>
-                <ActionDataTableIcon color={grey600} />
-            </IconButton>
+        <IconButton onClick={() => onDataTableShow(id, data)} tooltip="Data table" tooltipPosition="top-center" style={styles.button}>
+            <ActionDataTableIcon color={grey600} />
+        </IconButton>
         }
 
         {onOpacityChange &&
-            <Slider
-                defaultValue={opacity}
-                onChange={(evt, opacity) => onOpacityChange(id, opacity)}
-                style={styles.sliderContainer}
-                sliderStyle={styles.slider}
-            />
+        <Slider
+            defaultValue={opacity}
+            onChange={(evt, opacity) => onOpacityChange(id, opacity)}
+            style={styles.sliderContainer}
+            sliderStyle={styles.slider}
+        />
         }
         {onRemove &&
-            <IconButton onClick={onRemove} tooltip="Delete" tooltipPosition="top-center" style={styles.rightButton}>
-                <ActionDeleteIcon color={grey600}/>
-            </IconButton>
+        <IconButton onClick={onRemove} tooltip="Delete" tooltipPosition="top-center" style={styles.rightButton}>
+            <ActionDeleteIcon color={grey600}/>
+        </IconButton>
         }
     </div>
-);
+)
+
 
 LayerToolbar.propTypes = {
     id: PropTypes.string.isRequired,

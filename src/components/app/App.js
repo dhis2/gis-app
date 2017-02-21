@@ -5,7 +5,7 @@ import Menu from './Menu';
 import AddLayerButton from '../../containers/AddLayerButton';
 import AddLayerDialog from '../../containers/AddLayerDialog';
 import LayersList from '../../containers/LayersList';
-import Map from './Map';
+import Map from '../../containers/Map';
 import DataTable from '../../containers/DataTable';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -16,12 +16,12 @@ const styles = {
         height: 750,
         border: '1px solid #eee',
     },
-    map: {
+    mapContainer: {
         float: 'right',
         width: 'calc(100% - 300px)',
         height: 'calc(100% - 80px)',
-        textAlign: 'center',
-        paddingTop: 330,
+        //textAlign: 'center',
+        //paddingTop: 330,
         boxSizing: 'border-box',
     }
 };
@@ -34,7 +34,9 @@ const App = () => (
             <AddLayerButton />
             <AddLayerDialog />
             <LayersList />
-            <Map style={styles.map} />
+            <div style={styles.mapContainer}>
+                <Map />
+            </div>
             <DataTable />
         </div>
     </MuiThemeProvider>

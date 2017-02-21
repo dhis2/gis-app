@@ -63,6 +63,7 @@ const basemaps = (state, action) => {
                 type: basemap.type,
                 layerType: basemap.layerType,
                 title: basemap.title,
+                config: basemap.config,
             };
 
         default:
@@ -78,7 +79,7 @@ const defaultLayers = [{
     title: 'OSM Light',
     subtitle: 'Basemap',
     visible: true,
-    expanded: false,
+    expanded: true,
     opacity: 1,
 }];
 

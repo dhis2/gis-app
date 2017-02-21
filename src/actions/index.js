@@ -56,5 +56,3 @@ export const openDataTable = (id, data) => ({
 export const closeDataTable = () => ({
     type: 'DATA_TABLE_CLOSE_REQUESTED',
 });
-
-

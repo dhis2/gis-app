@@ -10,11 +10,10 @@ const dataTable = (state = defaultState, action) => {
     switch (action.type) {
 
         case 'DATA_TABLE_OPEN_REQUESTED':
-            console.log('DATA_TABLE_OPEN_REQUESTED', action.layer);
-
             return {
                 ...state,
                 open: true,
+                data: action.data, // TODO: Should the data be copied?
             };
 
         case 'DATA_TABLE_CLOSE_REQUESTED':

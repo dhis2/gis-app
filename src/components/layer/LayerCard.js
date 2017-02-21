@@ -17,7 +17,7 @@ const styles = {
     },
     header: {
         height: 56,
-        padding: '0px 8px 0px 32px',
+        paddingRight: 8,
         marginRight: -8,
         fontSize: 10,
     },
@@ -31,7 +31,8 @@ const styles = {
         height: 56,
         padding: 8,
         position: 'absolute',
-        right: 32
+        right: 32,
+        top: 0,
     },
     body: {
         padding: 0,
@@ -53,7 +54,10 @@ const LayerCard = (props) => (
             subtitle={props.subtitle}
             // actAsExpander={true}  // Not able to stop event bubbling for visibility icon
             showExpandableButton={true}
-            style={styles.header}
+            style={{
+                ...styles.header,
+                paddingLeft: props.type !== 'basemap' ? 34 : 14
+            }}
             textStyle={styles.headerText}>
             {props.type !== 'basemap' &&
                 <SortableHandle color={grey600} />
@@ -82,7 +86,7 @@ const LayerCard = (props) => (
             <LayerToolbar
                 {...props}
                 onEdit={props.type !== 'basemap' ? () => console.log('Edit layer') : null}
-                onDataTableShow={props.type !== 'basemap' ? () => props.onDataTableShow(props) : null}
+                onDataTableShow={props.type !== 'basemap' ? props.onDataTableShow : null}
                 onRemove={props.type!== 'basemap' ? () => props.onRemove(props.id) : null}
             />
         </CardText>

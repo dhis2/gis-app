@@ -5,7 +5,7 @@ const styles = {
     width: 24,
     height: 24,
     position: 'absolute',
-    left: 3,
+    left: 6,
     top: 16,
     cursor: 'ns-resize'
 };

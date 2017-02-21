@@ -20,12 +20,6 @@ class Map extends Component {
         this.mapEl = ReactDOM.findDOMNode(this.refs.map);
         this.map = d2map(this.mapEl);
 
-        /*
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(this.map);
-        */
-
         this.map.setView([props.latitude, props.longitude], props.zoom);
     }
 

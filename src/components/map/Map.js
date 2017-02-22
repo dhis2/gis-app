@@ -2,15 +2,12 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import d2map from 'gis-api/src/';
 import Layer from './Layer';
+import FacilityLayer from './FacilityLayer';
 import EarthEngineLayer from './EarthEngineLayer';
-
-const style = {
-    width: '100%',
-    height: '100%',
-}
 
 const layerTypeToLayerComponent = new global.Map([
     ['earthEngine', EarthEngineLayer],
+    ['markers',     FacilityLayer],
 ]);
 
 function getLayerForType(layer) {
@@ -19,6 +16,11 @@ function getLayerForType(layer) {
     if (layerTypeToLayerComponent.has(type))
         return layerTypeToLayerComponent.get(type)
     return Layer;
+}
+
+const style = {
+    width: '100%',
+    height: '100%',
 }
 
 class Map extends Component {
@@ -37,7 +39,6 @@ class Map extends Component {
     // Append map container to DOM on mount
     componentDidMount() {
         const props = this.props;
-
         const mapEl = ReactDOM.findDOMNode(this.refs.map);
 
         mapEl.append(this.map.getContainer());
@@ -54,7 +55,7 @@ class Map extends Component {
                     return (
                         <MapLayer
                             {...layer}
-                            key={`layer-${layer.type}`}
+                            key={`layer-${layer.id}`}
                             index={index}
                             map={this.map}
                         />

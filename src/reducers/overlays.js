@@ -11,23 +11,46 @@ const defaultOverlays = [{
     expanded: true,
     visible: true,
     opacity: 1,
+
+    "layer": "facility",
+    "rows": [{
+        "dimension": "ou",
+        "items": [{
+            "id": "ImspTQPwCqd",
+            "name": ""
+        }]
+    }],
+    "organisationUnitGroupSet": {
+        "id": "J5jldMd8OHv"
+    },
+    "labels": false,
+    "labelFontSize": "11px",
+    "labelFontStyle": "normal",
+    "labelFontWeight": "normal",
+    "labelFontColor": "#000000",
+    "areaRadius": null,
+
     legend: {
         items: [{
-            image: 'https://play.dhis2.org/dev/images/orgunitgroup/08.png',
+            image: '//localhost:8080/images/orgunitgroup/08.png',
             name : 'CHP',
         },{
-            image: 'https://play.dhis2.org/dev/images/orgunitgroup/16.png',
+            image: '//localhost:8080/images/orgunitgroup/16.png',
             name : 'CHC',
         },{
-            image: 'https://play.dhis2.org/dev/images/orgunitgroup/10.png',
+            image: '//localhost:8080/images/orgunitgroup/10.png',
             name : 'MCHP',
         },{
-            image: 'https://play.dhis2.org/dev/images/orgunitgroup/14.png',
+            image: '//localhost:8080/images/orgunitgroup/14.png',
             name : 'Clinic',
         },{
-            image: 'https://play.dhis2.org/dev/images/orgunitgroup/05.png',
+            image: '//localhost:8080/images/orgunitgroup/05.png',
             name : 'Hospital',
         }]
+    },
+    config: {
+        "type": "markers",
+        "hoverLabel": "{label}",
     },
     data: [{
         name: 'Ahamadyya Mission Cl',

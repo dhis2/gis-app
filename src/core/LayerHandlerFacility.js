@@ -149,6 +149,8 @@ export default function LayerHandlerFacility(gis, layer) {
             gis.instance.removeLayer(layer.instance);
         }
 
+        // console.log(JSON.stringify(layerConfig));
+
 		// Create layer instance
 		layer.instance = gis.instance.addLayer(layerConfig);
 

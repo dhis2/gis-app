@@ -1,19 +1,16 @@
 import { Component } from 'react';
 
-class Layer extends Component {
+export default class Layer extends Component {
     constructor(props, context) {
         super(props, context);
 
         this.createLayer();
+        this.setLayerOpacity();
         this.setLayerVisibility();
-
     }
 
     componentDidUpdate(prevProps) {
         const props = this.props;
-        // console.log('componentDidUpdate');
-
-        // console.log('opacity', prevProps.opacity, props.opacity);
 
         if (props.config !== prevProps.config) {
             this.removeLayer();
@@ -21,7 +18,7 @@ class Layer extends Component {
         }
 
         if (prevProps.opacity !== props.opacity) {
-            this.instance.setOpacity(props.opacity);
+            this.setLayerOpacity();
         }
 
         if (prevProps.visible !== props.visible) {
@@ -29,10 +26,16 @@ class Layer extends Component {
         }
     }
 
-    createLayer() {
-        const config = {...this.props.config};
+    componentWillUnmount() {
+        this.removeLayer();
+    }
 
-        this.instance = this.props.map.createLayer(config).addTo(this.props.map);
+    createLayer() {
+        this.instance = this.props.map.addLayer({...this.props.config});
+    }
+
+    setLayerOpacity() {
+        this.instance.setOpacity(this.props.opacity);
     }
 
     setLayerVisibility() {
@@ -44,25 +47,16 @@ class Layer extends Component {
         } else if (!props.visible && map.hasLayer(this.instance) === true) {
             map.removeLayer(this.instance);
         }
-
     }
 
-
     removeLayer() {
-        //if (this.instance) {
-            if (this.props.map.hasLayer(this.instance)) {
-                this.props.map.removeLayer(this.instance);
-            }
-            delete(this.instance);
-        //}
+        if (this.props.map.hasLayer(this.instance)) {
+            this.props.map.removeLayer(this.instance);
+        }
+        delete(this.instance);
     }
 
     render() {
-        // console.log('layer render', this.props.map);
-
         return null;
     }
 }
-
-
-export default Layer;

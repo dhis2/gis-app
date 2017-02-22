@@ -220,7 +220,28 @@ const defaultOverlays = [{
         }],
         source: 'UCSB / CHG / Google Earth Engine',
         sourceUrl: 'https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD',
-    }
+    },
+    config: {
+        type: 'earthEngine',
+        // pane: 'earthEngine',
+        name: 'Precipitation',
+        unit: 'millimeter',
+        band: 'precipitation',
+        mask: true,
+        description: 'Precipitation collected from satellite and weather stations on the ground.',
+        attribution: '<a href=\"https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD\" target=\"_blank\">UCSB/CHG</a>',
+        id: 'UCSB-CHG/CHIRPS/PENTAD',
+        image: '26 – 31 Jan 2017',
+        params: {
+            palette: "#eff3ff,#c6dbef,#9ecae1,#6baed6,#4292c6,#2171b5,#084594",
+            min: 0,
+            max: 100
+        },
+        filter: [{
+            type: 'eq',
+            arguments: ['system:index', "20170126"]
+        }]
+    },
 },{
     img: 'images/layers/nighttime.png',
     title: 'Nighttime lights',

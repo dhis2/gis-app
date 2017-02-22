@@ -157,6 +157,7 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 }
             }, layer.config, datasets[view.config.id], view.config);
 
+
             // Remove layer instance if already exist
             if (layer.instance && gis.instance.hasLayer(layer.instance)) {
                 layer.instance.off('initialized', hideMask);

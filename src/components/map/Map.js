@@ -21,6 +21,9 @@ class Map extends Component {
         this.map = d2map(this.mapEl);
 
         this.map.setView([props.latitude, props.longitude], props.zoom);
+
+        // Force update to render layers
+        this.forceUpdate();
     }
 
     componentDidUpdate(prevProps, prevState) {

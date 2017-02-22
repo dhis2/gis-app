@@ -3,31 +3,42 @@ import { Component } from 'react';
 class Layer extends Component {
 
     componentDidUpdate(prevProps) {
-        this.renderLayer();
-    }
+        const props = this.props;
+        const map = props.map;
 
-    renderLayer() {
-        const map = this.props.map;
-        const config = this.props.config;
+        if (map) {
+            this.map = map;
 
-        if (map && config) {
+            if (props.id !== prevProps.id) {
+                this.removeLayer();
+            }
 
-            if (this.instance) {
+            if (!this.instance) {
+                this.instance = map.createLayer({...props.config});
+            }
+
+            if (props.visible && map.hasLayer(this.instance) === false) {
+                map.addLayer(this.instance);
+            } else if (!props.visible && map.hasLayer(this.instance) === true) {
                 map.removeLayer(this.instance);
             }
 
-            this.instance = map.addLayer({...config});
+            this.instance.setOpacity(props.opacity);
+        }
+    }
+
+    removeLayer() {
+        if (this.instance) {
+            if (this.map.hasLayer(this.instance)) {
+                this.map.removeLayer(this.instance);
+            }
+            delete(this.instance);
         }
     }
 
     render() {
-        if (!this.instance) {
-            this.renderLayer();
-        }
-
         return null;
     }
-
 }
 
 

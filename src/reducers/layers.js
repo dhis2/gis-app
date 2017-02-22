@@ -72,6 +72,7 @@ const basemaps = (state, action) => {
     }
 };
 
+// TODO: clone from basemaps
 const defaultLayers = [{
     id: 'osmLight',
     type: 'basemap',
@@ -81,6 +82,11 @@ const defaultLayers = [{
     visible: true,
     expanded: true,
     opacity: 1,
+    config: {
+        type: 'tileLayer',
+        url: '//cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    },
 }];
 
 const layers = (state = defaultLayers, action) => {

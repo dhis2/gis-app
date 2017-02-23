@@ -71,14 +71,30 @@ const overlay = (state, action) => {
                 return state;
             }
 
-            return state;
-
-            /*
             return {
                 ...state,
                 opacity: action.opacity,
             };
-            */
+
+        case 'OVERLAY_TOGGLE_VISIBILITY':
+            if (state.id !== action.id) {
+                return state;
+            }
+
+            return {
+                ...state,
+                visible: !state.visible,
+            };
+
+        case 'OVERLAY_TOGGLE_EXPAND':
+            if (state.id !== action.id) {
+                return state;
+            }
+
+            return {
+                ...state,
+                expanded: !state.expanded,
+            };
 
         default:
             return state;
@@ -108,12 +124,19 @@ const map = (state = defaultState, action) => {
                 ]
             };
 
-        case 'OVERLAY_CHANGE_OPACITY':
-            console.log(state);
+        case 'OVERLAY_REMOVE':
+            return {
+                ...state,
+                overlays: state.overlays.filter(overlay => overlay.id !== action.id)
+            };
 
-            return state.overlays.map(l =>
-                overlay(l, action)
-            );
+        case 'OVERLAY_CHANGE_OPACITY':
+        case 'OVERLAY_TOGGLE_VISIBILITY':
+        case 'OVERLAY_TOGGLE_EXPAND':
+            return {
+                ...state,
+                overlays: state.overlays.map(l => overlay(l, action))
+            };
 
         default:
             return state;

@@ -5,6 +5,7 @@ export default class Layer extends Component {
         super(props, context);
 
         this.createLayer();
+        this.setLayerOrder();
         this.setLayerOpacity();
         this.setLayerVisibility();
     }
@@ -15,6 +16,10 @@ export default class Layer extends Component {
         if (props.config !== prevProps.config) {
             this.removeLayer();
             this.createLayer();
+        }
+
+        if (prevProps.order !== props.order) {
+            this.setLayerOrder();
         }
 
         if (prevProps.opacity !== props.opacity) {
@@ -38,6 +43,10 @@ export default class Layer extends Component {
         this.instance.setOpacity(this.props.opacity);
     }
 
+    setLayerOrder() {
+        this.mapPane = this.props.map.createPane('layer-' + this.props.index);
+    }
+
     setLayerVisibility() {
         const props = this.props;
         const map = props.map;
@@ -53,6 +62,7 @@ export default class Layer extends Component {
         if (this.props.map.hasLayer(this.instance)) {
             this.props.map.removeLayer(this.instance);
         }
+        delete(this.mapPane);
         delete(this.instance);
     }
 

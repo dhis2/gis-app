@@ -34,7 +34,7 @@ const styles = {
     },
 };
 
-const Basemaps = ({ id, basemaps, onBasemapSelect }) => (
+const BasemapList = ({ id, basemaps, onBasemapSelect }) => (
     <div style={styles.root}>
             {basemaps.map((basemap, index) => {
 
@@ -43,7 +43,7 @@ const Basemaps = ({ id, basemaps, onBasemapSelect }) => (
                 }, styles.imageContainer);
 
                 return (
-                    <div key={`basemap-${index}`} style={styles.layer} onClick={() => onBasemapSelect(id, basemap)}>
+                    <div key={`basemap-${index}`} style={styles.layer} onClick={() => onBasemapSelect(basemap.id)}>
                         <div style={borderStyle}>
                             <img src={basemap.img} style={styles.image} />
                         </div>
@@ -54,14 +54,14 @@ const Basemaps = ({ id, basemaps, onBasemapSelect }) => (
     </div>
 );
 
-Basemaps.propTypes = {
+BasemapList.propTypes = {
     id: PropTypes.string.isRequired,
     basemaps: PropTypes.array, // TODO: Use arrayOf?
     onBasemapSelect: PropTypes.func.isRequired,
 };
 
-Basemaps.defaultProps = {
+BasemapList.defaultProps = {
     basemaps: [],
 };
 
-export default Basemaps;
+export default BasemapList;

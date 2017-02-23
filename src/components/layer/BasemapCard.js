@@ -4,19 +4,23 @@ import IconButton from 'material-ui/IconButton';
 import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
 import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
 import { grey600 } from 'material-ui/styles/colors';
+import Slider from 'material-ui/Slider';
 
-import SortableHandle from './SortableHandle';
-import LayerToolbar from './LayerToolbar';
-import Basemaps from '../../containers/Basemaps';
-import Legend from '../legend/Legend';
+// import LayerToolbar from './LayerToolbar';
+import BasemapList from './BasemapList';
 
 const styles = {
+    root: {
+        zIndex: 1010,
+    },
     container: {
         paddingBottom: 0,
         clear: 'both',
+        zIndex: 1010,
     },
     header: {
         height: 56,
+        paddingLeft: 14,
         paddingRight: 8,
         marginRight: -8,
         fontSize: 10,
@@ -40,11 +44,25 @@ const styles = {
     legend: {
         padding: '8px 16px 16px 32px',
         margin: 0,
+    },
+    toolbar: {
+        backgroundColor: '#eee',
+        height: 32,
+        paddingLeft: 7
+    },
+    sliderContainer: {
+        float: 'left',
+        width: 100,
+        marginBottom: 0
+    },
+    slider: {
+        margin: 8
     }
 };
 
-const LayerCard = (props) => (
+const BasemapCard = (props) => (
     <Card
+        style={styles.root}
         containerStyle={styles.container}
         expanded={props.expanded}
         onExpandChange={() => props.onExpandChange(props.id)}
@@ -54,13 +72,10 @@ const LayerCard = (props) => (
             subtitle={props.subtitle}
             // actAsExpander={true}  // Not able to stop event bubbling for visibility icon
             showExpandableButton={true}
-            style={{
-                ...styles.header,
-                paddingLeft: props.type !== 'basemap' ? 34 : 14
-            }}
+            style={styles.header}
             textStyle={styles.headerText}>
-            {props.type !== 'basemap' &&
-                <SortableHandle color={grey600} />
+            {!props.basemap &&
+            <SortableHandle color={grey600} />
             }
             <IconButton
                 style={styles.visibility}
@@ -74,40 +89,32 @@ const LayerCard = (props) => (
             </IconButton>
         </CardHeader>
         <CardText expandable={true} style={styles.body}>
-            {props.legend &&
-                <Legend
-                    {...props.legend}
-                    style={styles.legend}
+            <BasemapList {...props} />
+            <div style={styles.toolbar}>
+                <Slider
+                    defaultValue={props.opacity}
+                    onChange={(evt, opacity) => props.onOpacityChange(opacity)}
+                    style={styles.sliderContainer}
+                    sliderStyle={styles.slider}
                 />
-            }
-            {props.type === 'basemap' &&
-                <Basemaps id={props.id} />
-            }
-            <LayerToolbar
-                {...props}
-                onEdit={props.type !== 'basemap' ? () => console.log('Edit layer') : null}
-                onDataTableShow={props.type !== 'basemap' ? props.onDataTableShow : null}
-                onRemove={props.type!== 'basemap' ? () => props.onRemove(props.id) : null}
-            />
+            </div>
         </CardText>
     </Card>
 )
 
-LayerCard.propTypes= {
+BasemapCard.propTypes= {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     subtitle: PropTypes.string,
     opacity: PropTypes.number,
-    legend: PropTypes.object,
     visible: PropTypes.bool,
     expanded: PropTypes.bool,
 };
 
-LayerCard.defaultProps = {
+BasemapCard.defaultProps = {
     opacity: 1,
     visible: true,
     expanded: false,
 };
 
-
-export default LayerCard;
+export default BasemapCard;

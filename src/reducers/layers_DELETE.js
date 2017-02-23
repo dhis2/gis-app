@@ -7,6 +7,7 @@ const layer = (state, action) => {
             return {
                 ...action,
                 id: String(action.id),
+                index: action.index,
                 type: action.layerType,
             };
 
@@ -72,31 +73,23 @@ const basemaps = (state, action) => {
     }
 };
 
-// TODO: clone from basemaps
-const defaultLayers = [{
-    id: 'osmLight',
-    type: 'basemap',
-    layerType: 'basemap',
-    title: 'OSM Light',
-    subtitle: 'Basemap',
-    visible: true,
-    expanded: true,
-    opacity: 1,
-    config: {
-        type: 'tileLayer',
-        url: '//cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-    },
-}];
-
-const layers = (state = defaultLayers, action) => {
+const layers = (state = [], action) => {
 
     switch (action.type) {
 
         case 'LAYERS_SORT':
+            // const layers = arrayMove(state, action.oldIndex, action.newIndex);
+
+            // Update index
+            // layers.forEach((layer, index) => layer.index = index);
+
+            // console.log('update index', layers);
             return arrayMove(state, action.oldIndex, action.newIndex);
+            // return layers;
 
         case 'LAYER_ADD':
+            action.index = state.length;
+
             return [
                 ...state,
                 layer(undefined, action)

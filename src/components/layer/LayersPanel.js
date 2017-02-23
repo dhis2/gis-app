@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import Layer from '../../containers/Layer';
+import Basemap from '../../containers/Basemap';
+import Overlay from '../../containers/Overlay';
 
 const styles = {
     float: 'left',
@@ -14,19 +15,12 @@ const styles = {
     overflowY: 'scroll',
 };
 
-const SortableLayer = SortableElement(Layer);
+const SortableLayer = SortableElement(Overlay);
 
 const SortableLayersList = SortableContainer(({layers}) => (
-    <div style={styles}>
-        {layers.filter(layer => layer.type !== 'basemap').slice().reverse().map((layer, index) => // Draggable layers - last layer on top
+    <div>
+        {layers.slice().reverse().map((layer, index) => // Draggable layers - last layer on top
             <SortableLayer
-                {...layer}
-                key={`layer-${index}`}
-                index={index}
-            />
-        )}
-        {layers.filter(layer => layer.type === 'basemap').map((layer, index) => // Basemaps are not draggable
-            <Layer
                 {...layer}
                 key={`layer-${index}`}
                 index={index}
@@ -35,12 +29,19 @@ const SortableLayersList = SortableContainer(({layers}) => (
     </div>
 ));
 
-const LayersPanel = ({ layers, onSortEnd }) => (
-    <SortableLayersList
-        layers={layers}
-        onSortEnd={onSortEnd}
-        useDragHandle={true}
-    />
+const LayersPanel = ({ basemap, basemaps, overlays, onSortEnd }) => (
+    <div style={styles}>
+        <SortableLayersList
+            layers={overlays}
+            onSortEnd={onSortEnd}
+            useDragHandle={true}
+        />
+        <Basemap
+            {...basemaps.filter(b => b.id === basemap.id)[0]}
+            {...basemap}
+            basemap={true}
+        />
+    </div>
 );
 
 export default LayersPanel;

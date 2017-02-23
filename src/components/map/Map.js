@@ -47,20 +47,27 @@ class Map extends Component {
     }
 
     render() {
+        const props = this.props;
+
+        const basemap = {
+            ...props.basemaps.filter(basemap => basemap.id === props.basemap.id)[0], // TODO: Handle missing basemap id
+            ...props.basemap
+        };
+
         return (
             <div ref="map" style={style}>
-                {this.props.layers.map((layer, index) => {
+                {this.props.overlays.map((layer, index) => {
                     const MapLayer = getLayerForType(layer);
 
                     return (
                         <MapLayer
                             {...layer}
-                            key={`layer-${layer.id}`}
-                            index={index}
+                            key={layer.id}
                             map={this.map}
                         />
                     )
                 })}
+                <Layer {...basemap} key="basemap" map={this.map} />
             </div>
         )
     }

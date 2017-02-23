@@ -9,10 +9,10 @@ import GisApp from '../src/index';
 import './styles/material-override.css';
 
 // import LayersComponent from '../src/components/layer/LayersComponent';
-import LayerToolbar from '../src/components/layer/LayerToolbar';
-import Legend from '../src/components/legend/Legend';
-import LayerCard from '../src/components/layer/LayerCard';
-import Basemaps from '../src/components/layer/Basemaps';
+// import LayerToolbar from '../src/components/layer/LayerToolbar';
+// import Legend from '../src/components/legend/Legend';
+// import LayerCard from '../src/components/layer/LayerCard';
+// import Basemaps from '../src/components/layer/Basemaps';
 // import AddLayerButton from '../src/components/layer/AddLayerButton';
 import AddLayerDialog from '../src/components/layer/AddLayerDialog';
 import DataTable from '../src/components/datatable/DataTable';

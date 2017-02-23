@@ -3,7 +3,9 @@ import LayersPanel from '../components/layer/LayersPanel'
 import { sortLayers } from '../actions';
 
 const mapStateToProps = (state) => ({
-    layers: state.layers,
+    basemap: state.map.basemap,
+    basemaps: state.basemaps,
+    overlays: state.map.overlays,
 });
 
 const mapDispatchToProps = ({

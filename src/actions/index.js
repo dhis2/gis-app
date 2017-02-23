@@ -1,43 +1,64 @@
-let nextLayerId = 0;
+let nextOverlayId = 0;
 
-export const addLayer = (layer) => ({
-    type: 'LAYER_ADD',
-    id: nextLayerId++,
+
+/* BASEMAPS */
+
+export const basemapSelected = (id) => ({
+    type: 'BASEMAP_SELECTED',
+    id,
+});
+
+export const toggleBasemapExpand = () => ({
+    type: 'BASEMAP_TOGGLE_EXPAND',
+});
+
+export const toggleBasemapVisibility = () => ({
+    type: 'BASEMAP_TOGGLE_VISIBILITY',
+});
+
+export const changeBasemapOpacity = (opacity) => ({
+    type: 'BASEMAP_CHANGE_OPACITY',
+    opacity,
+});
+
+
+/* OVERLAYS */
+
+export const addOverlay = (layer) => ({
+    type: 'OVERLAY_ADD',
+    id: 'overlay-' + nextOverlayId++,
     ...layer,
 });
 
-export const removeLayer = (id) => ({
-    type: 'LAYER_REMOVE',
+export const removeOverlay = (id) => ({
+    type: 'OVERLAY_REMOVE',
     id,
 });
 
-export const toggleLayerExpand = (id) => ({
-    type: 'LAYER_TOGGLE_EXPAND',
+export const toggleOverlayExpand = (id) => ({
+    type: 'OVERLAY_TOGGLE_EXPAND',
     id,
 });
 
-export const toggleLayerVisibility = (id) => ({
-    type: 'LAYER_TOGGLE_VISIBILITY',
+export const toggleOverlayVisibility = (id) => ({
+    type: 'OVERLAY_TOGGLE_VISIBILITY',
     id,
 });
 
-export const changeLayerOpacity = (id, opacity) => ({
-    type: 'LAYER_CHANGE_OPACITY',
+export const changeOverlayOpacity = (id, opacity) => ({
+    type: 'OVERLAY_CHANGE_OPACITY',
     id,
     opacity,
 });
 
-export const sortLayers = ({oldIndex, newIndex}) => ({
-    type: 'LAYERS_SORT',
+export const sortOverlays = ({oldIndex, newIndex}) => ({
+    type: 'OVERLAYS_SORT',
     oldIndex,
     newIndex,
 });
 
-export const basemapSelected = (id, basemap) => ({
-    type: 'BASEMAP_SELECTED',
-    id,
-    basemap,
-});
+
+/* USER INTERFACE */
 
 export const openLayersDialog = () => ({
     type: 'LAYERS_DIALOG_OPEN_REQUESTED',

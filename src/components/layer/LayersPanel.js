@@ -18,7 +18,7 @@ const SortableLayer = SortableElement(Layer);
 
 const SortableLayersList = SortableContainer(({layers}) => (
     <div style={styles}>
-        {layers.filter(layer => layer.type !== 'basemap').map((layer, index) => // Draggable layers
+        {layers.filter(layer => layer.type !== 'basemap').slice().reverse().map((layer, index) => // Draggable layers - last layer on top
             <SortableLayer
                 {...layer}
                 key={`layer-${index}`}
@@ -33,8 +33,7 @@ const SortableLayersList = SortableContainer(({layers}) => (
             />
         )}
     </div>
-    )
-);
+));
 
 const LayersPanel = ({ layers, onSortEnd }) => (
     <SortableLayersList

@@ -98,8 +98,8 @@ const layers = (state = defaultLayers, action) => {
 
         case 'LAYER_ADD':
             return [
-                layer(undefined, action),
-                ...state
+                ...state,
+                layer(undefined, action)
             ];
 
         case 'LAYER_REMOVE':

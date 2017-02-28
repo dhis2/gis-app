@@ -19,7 +19,7 @@ const SortableLayer = SortableElement(Overlay);
 
 const SortableLayersList = SortableContainer(({layers}) => (
     <div>
-        {layers.slice().reverse().map((layer, index) => // Draggable layers - last layer on top
+        {layers.map((layer, index) => // Draggable layers - last layer on top
             <SortableLayer
                 {...layer}
                 key={`layer-${index}`}

@@ -59,8 +59,6 @@ export default class FacilityLayer extends Layer {
             });
         });
 
-        console.log('facility layer config', config);
-
         this.instance = this.props.map.createLayer(config).addTo(this.props.map);
     }
 

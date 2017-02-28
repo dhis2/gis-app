@@ -39,36 +39,35 @@ export default class Layer extends Component {
         this.removeLayer();
     }
 
-    // Create layer pane
+    // Create custom pane to control layer ordering: http://leafletjs.com/examples/map-panes/
     createPane() {
-        // this.pane = this.props.map.createPane(this.props.id);
         this.pane = this.props.map.createPane(this.props.id);
     }
 
+    // Create new layer from config object (override in subclasses)
     createLayer() {
-        // console.log('Create layer');
-
         const props = this.props;
         const map = props.map;
-
-        this.instance = map.addLayer({
+        const config = {
             ...props.config,
-            //pane: props.id,
-        });
+        };
 
+        if (props.index !== undefined) { // If not a basemap
+            config.pane = props.id;
+        }
 
+        this.instance = map.addLayer(config);
     }
 
     setLayerOpacity() {
         this.instance.setOpacity(this.props.opacity);
     }
 
+    // Set layer order using custom pages and z-index: http://leafletjs.com/examples/map-panes/
     setLayerOrder() {
         const props = this.props;
 
-        props.map.getPane(props.id).style.zIndex = 300 - (props.index * 10);
-
-        console.log('set layer order', props.title, props.map.getPane(props.id), this.instance.getPane());
+        props.map.getPane(props.id).style.zIndex = 600 - (props.index * 10);
     }
 
     setLayerVisibility() {

@@ -119,8 +119,8 @@ const map = (state = defaultState, action) => {
             return { // TODO: Best way?
                 ...state,
                 overlays: [
+                    overlay(undefined, action),
                     ...state.overlays,
-                    overlay(undefined, action)
                 ]
             };
 

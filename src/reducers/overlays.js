@@ -8,10 +8,9 @@ const defaultOverlays = [{
     img: 'images/layers/facilities.png',
     title: 'Facilities',
     subtitle: 'Facility type',
-    expanded: true,
+    expanded: false,
     visible: true,
     opacity: 1,
-
     "layer": "facility",
     "rows": [{
         "dimension": "ou",
@@ -29,7 +28,6 @@ const defaultOverlays = [{
     "labelFontWeight": "normal",
     "labelFontColor": "#000000",
     "areaRadius": null,
-
     legend: {
         items: [{
             image: '//localhost:8080/images/orgunitgroup/08.png',
@@ -146,7 +144,7 @@ const defaultOverlays = [{
     layerType: 'Thematic',
     title: 'ANC 3 Coverage',
     subtitle: '2017',
-    expanded: true,
+    expanded: false,
     visible: true,
     opacity: 0.8,
     legend: {
@@ -194,18 +192,6 @@ const defaultOverlays = [{
     opacity: 0.9,
     visible: true,
     expanded: false,
-},{
-    img: 'images/layers/elevation.png',
-    title: 'Elevation',
-    opacity: 0.9,
-    visible: true,
-    expanded: false,
-},{
-    img: 'images/layers/temperature.png',
-    title: 'Temperature',
-    opacity: 0.9,
-    visible: true,
-    expanded: false,
     config: {
         "type": "earthEngine",
         // "pane": "earthEngine",
@@ -234,7 +220,19 @@ const defaultOverlays = [{
             "type": "eq",
             "arguments": ["UNadj", "yes"]
         }]
-    }
+    },
+},{
+    img: 'images/layers/elevation.png',
+    title: 'Elevation',
+    opacity: 0.9,
+    visible: true,
+    expanded: false,
+},{
+    img: 'images/layers/temperature.png',
+    title: 'Temperature',
+    opacity: 0.9,
+    visible: true,
+    expanded: false,
 },{
     img: 'images/layers/landcover.png',
     title: 'Landcover',
@@ -245,7 +243,7 @@ const defaultOverlays = [{
     img: 'images/layers/precipitation.png',
     title: 'Precipitation',
     subtitle: '26 - 28 Nov. 2016',
-    expanded: true,
+    expanded: false,
     visible: true,
     opacity: 0.9,
     legend: {

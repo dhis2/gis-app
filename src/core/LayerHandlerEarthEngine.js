@@ -164,8 +164,6 @@ export default function LayerHandlerEarthEngine(gis, layer) {
                 gis.instance.removeLayer(layer.instance);
             }
 
-            console.log(JSON.stringify(layerConfig));
-
             // Create layer instance
             layer.instance = gis.instance.addLayer(layerConfig);
             layer.instance.on('initialized', hideMask);

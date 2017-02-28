@@ -189,9 +189,35 @@ const defaultOverlays = [{
 },{
     img: 'images/layers/population.png',
     title: 'Population density',
+    subtitle: '2010',
     opacity: 0.9,
     visible: true,
     expanded: false,
+    legend: {
+        description: 'Population density estimates with national totals adjusted to match UN population division estimates.',
+        unit: 'people per km2',
+        items: [{
+            color: '#ffffd4',
+            range : '0 - 20',
+        },{
+            color: '#fee391',
+            range : '20 - 40',
+        },{
+            color: '#fec44f',
+            range : '40 - 60',
+        },{
+            color: '#fe9929',
+            range : '60 - 80',
+        },{
+            color: '#d95f0e',
+            range : '80 - 100',
+        },{
+            color: '#993404',
+            range : '> 100',
+        }],
+        source: 'WorldPop / Google Earth Engine',
+        sourceUrl: 'https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP',
+    },
     config: {
         "type": "earthEngine",
         // "pane": "earthEngine",

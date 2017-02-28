@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import LayersPanel from '../components/layer/LayersPanel'
-import { sortLayers } from '../actions';
+import { sortOverlays } from '../actions';
 
 const mapStateToProps = (state) => ({
     basemap: state.map.basemap,
@@ -9,7 +9,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = ({
-    onSortEnd: sortLayers,
+    onSortEnd: sortOverlays,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayersPanel);

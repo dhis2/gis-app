@@ -64,6 +64,7 @@ class Map extends Component {
                             {...layer}
                             key={layer.id}
                             map={this.map}
+                            index={index}
                         />
                     )
                 })}

@@ -52,7 +52,7 @@ export const changeOverlayOpacity = (id, opacity) => ({
 });
 
 export const sortOverlays = ({oldIndex, newIndex}) => ({
-    type: 'OVERLAYS_SORT',
+    type: 'OVERLAY_SORT',
     oldIndex,
     newIndex,
 });

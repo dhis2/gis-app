@@ -1,3 +1,5 @@
+import {arrayMove} from 'react-sortable-hoc';
+
 const defaultState = {
     latitude: 8.4,
     longitude: -11.8,
@@ -11,9 +13,6 @@ const defaultState = {
     },
     overlays: [],
 };
-
-
-
 
 
 const basemap = (state, action) => {
@@ -53,6 +52,7 @@ const basemap = (state, action) => {
 
     }
 };
+
 
 const overlay = (state, action) => {
 
@@ -128,6 +128,12 @@ const map = (state = defaultState, action) => {
             return {
                 ...state,
                 overlays: state.overlays.filter(overlay => overlay.id !== action.id)
+            };
+
+        case 'OVERLAY_SORT':
+            return {
+                ...state,
+                overlays: arrayMove(state.overlays, action.oldIndex, action.newIndex)
             };
 
         case 'OVERLAY_CHANGE_OPACITY':

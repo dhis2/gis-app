@@ -13,7 +13,10 @@ export default class FacilityLayer extends Layer {
         const orgUnitGroupSymbols = {};
         const features = [];
 
-        const config = {...props.config};
+        const config = {
+            ...props.config,
+            pane: props.id,
+        };
 
         this.loadOrganisationUnitGroups(orgUnitGroups => {
 
@@ -55,6 +58,8 @@ export default class FacilityLayer extends Layer {
                 this.instance = this.props.map.createLayer(config).addTo(this.props.map);
             });
         });
+
+        console.log('facility layer config', config);
 
         this.instance = this.props.map.createLayer(config).addTo(this.props.map);
     }

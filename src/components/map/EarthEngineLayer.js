@@ -7,7 +7,10 @@ const headers = {
 
 export default class EarthEngineLayer extends Layer {
     createLayer() {
-        const config = {...this.props.config};
+        const config = {
+            ...this.props.config,
+            pane: this.props.id,
+        };
 
         config.accessToken = (callback) => {
             fetch('//localhost:8080/api/27/tokens/google', { headers })

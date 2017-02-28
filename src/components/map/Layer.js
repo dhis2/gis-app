@@ -4,10 +4,14 @@ export default class Layer extends Component {
     constructor(props, context) {
         super(props, context);
 
+        this.createPane();
         this.createLayer();
-        this.setLayerOrder();
         this.setLayerOpacity();
         this.setLayerVisibility();
+
+        if (props.index !== undefined) { // Basemap don't have index
+            this.setLayerOrder();
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -18,7 +22,7 @@ export default class Layer extends Component {
             this.createLayer();
         }
 
-        if (prevProps.order !== props.order) {
+        if (props.index !== undefined && prevProps.index !== props.index) {
             this.setLayerOrder();
         }
 
@@ -35,8 +39,24 @@ export default class Layer extends Component {
         this.removeLayer();
     }
 
+    // Create layer pane
+    createPane() {
+        // this.pane = this.props.map.createPane(this.props.id);
+        this.pane = this.props.map.createPane(this.props.id);
+    }
+
     createLayer() {
-        this.instance = this.props.map.addLayer({...this.props.config});
+        // console.log('Create layer');
+
+        const props = this.props;
+        const map = props.map;
+
+        this.instance = map.addLayer({
+            ...props.config,
+            //pane: props.id,
+        });
+
+
     }
 
     setLayerOpacity() {
@@ -44,7 +64,11 @@ export default class Layer extends Component {
     }
 
     setLayerOrder() {
-        this.mapPane = this.props.map.createPane('layer-' + this.props.index);
+        const props = this.props;
+
+        props.map.getPane(props.id).style.zIndex = 300 - (props.index * 10);
+
+        console.log('set layer order', props.title, props.map.getPane(props.id), this.instance.getPane());
     }
 
     setLayerVisibility() {

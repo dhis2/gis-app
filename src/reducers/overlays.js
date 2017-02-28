@@ -206,6 +206,35 @@ const defaultOverlays = [{
     opacity: 0.9,
     visible: true,
     expanded: false,
+    config: {
+        "type": "earthEngine",
+        // "pane": "earthEngine",
+        "name": "Population density",
+        "unit": "people per km<sup>2</sup>",
+        "aggregation": "mosaic",
+        "mask": true,
+        "methods": {
+            "multiply": [100]
+        },
+        "resolution": 100,
+        "projection": "EPSG:4326",
+        "description": "Population density estimates with national totals adjusted to match UN population division estimates.",
+        "attribution": "<a href=\"https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP\" target=\"_blank\">WorldPop</a>",
+        "id": "WorldPop/POP",
+        "image": 2010,
+        "params": {
+            "palette": "#ffffd4,#fee391,#fec44f,#fe9929,#d95f0e,#993404",
+            "min": 0,
+            "max": 100
+        },
+        "filter": [{
+            "type": "eq",
+            "arguments": ["year", 2010]
+        }, {
+            "type": "eq",
+            "arguments": ["UNadj", "yes"]
+        }]
+    }
 },{
     img: 'images/layers/landcover.png',
     title: 'Landcover',
@@ -246,7 +275,6 @@ const defaultOverlays = [{
     },
     config: {
         type: 'earthEngine',
-        // pane: 'earthEngine',
         name: 'Precipitation',
         unit: 'millimeter',
         band: 'precipitation',

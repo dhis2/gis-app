@@ -1,18 +1,18 @@
-import React, { PropTypes } from 'react'
+import React, { PropTypes } from 'react';
+import Drawer from 'material-ui/Drawer';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import Basemap from '../../containers/Basemap';
 import Overlay from '../../containers/Overlay';
 
 const styles = {
-    float: 'left',
-    padding: 8,
-    boxSizing: 'border-box',
-    width: 300,
-    height: 'calc(100% - 88px)',
+    position: 'absolute',
+    top: 88,
+    height: 'auto',
+    bottom: 0,
+    //padding: 8,
     backgroundColor: '#fafafa',
-    position: 'relative',
-    overflowX: 'hidden',
-    overflowY: 'scroll',
+    boxShadow: '0 3px 10px 0 rgba(0, 0, 0, 0.227451)', // h-shadow v-shadow blur spread
+    zIndex: 1049,
 };
 
 const SortableLayer = SortableElement(Overlay);
@@ -30,7 +30,10 @@ const SortableLayersList = SortableContainer(({layers}) => (
 ));
 
 const LayersPanel = ({ basemap, basemaps, overlays, onSortEnd }) => (
-    <div style={styles}>
+    <Drawer
+        containerStyle={styles}
+        width={300}
+    >
         <SortableLayersList
             layers={overlays}
             onSortEnd={onSortEnd}
@@ -41,7 +44,7 @@ const LayersPanel = ({ basemap, basemaps, overlays, onSortEnd }) => (
             {...basemap}
             basemap={true}
         />
-    </div>
+    </Drawer>
 );
 
 export default LayersPanel;

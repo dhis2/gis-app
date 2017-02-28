@@ -3,11 +3,12 @@ import React, { PropTypes } from 'react';
 const styles = {
     root: {
         overflowY: 'scroll',
+        marginLeft: 7,
     },
     layer: {
         float: 'left',
         width: 120,
-        marginLeft: 13,
+        marginLeft: 16,
         cursor: 'pointer',
         boxSizing: 'border-box',
         height: 90,

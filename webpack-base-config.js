@@ -20,10 +20,6 @@ module.exports = {
                     path.resolve(__dirname, 'src/'),
                 ],
                 loader: 'babel-loader',
-                query: {
-                    cacheDirectory: true,
-                    presets: ['es2015', 'stage-2'],
-                },
             },
             {
                 test: /\.css$/,
@@ -44,7 +40,8 @@ module.exports = {
     },
     plugins: [
         new webpack.ProvidePlugin({
-            'fetch': 'imports-loader?this=>global!exports?global.fetch!whatwg-fetch'
+            'Promise': 'es6-promise',
+            'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
         }),
     ],
 };

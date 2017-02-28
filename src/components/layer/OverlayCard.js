@@ -11,12 +11,11 @@ import Legend from '../legend/Legend';
 
 const styles = {
     root: {
-        zIndex: 1010,
+        zIndex: 1100,
     },
     container: {
         paddingBottom: 0,
         clear: 'both',
-        zIndex: 1010,
     },
     header: {
         height: 56,

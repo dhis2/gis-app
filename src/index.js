@@ -11,15 +11,6 @@ const store = createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-
-/*
-const div = document.createElement('div');
-div.style.width = '100%';
-div.style.height = '100%';
-
-window.d2map = map(div);
-*/
-
 render(
     <Provider store={store}>
         <App />

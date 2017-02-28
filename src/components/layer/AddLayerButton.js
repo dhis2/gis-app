@@ -1,18 +1,14 @@
 import React, { PropTypes } from 'react';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAddIcon from 'material-ui/svg-icons/content/add';
+//import FloatingActionButton from 'material-ui/FloatingActionButton';
+import FlatButton from 'material-ui/FlatButton';
+//import ContentAddIcon from 'material-ui/svg-icons/content/add';
 
 const style = {
-    position: 'absolute',
-    right: 16,
-    bottom: 24,
-    zIndex: 10
+    height: 40
 };
 
 const AddLayerButton = ({ onClick }) => (
-    <FloatingActionButton onTouchTap={onClick} style={style}>
-        <ContentAddIcon />
-    </FloatingActionButton>
+    <FlatButton label="Add layer" onTouchTap={onClick} style={style} />
 );
 
 AddLayerButton.propTypes = {

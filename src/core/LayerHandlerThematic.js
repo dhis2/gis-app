@@ -466,9 +466,6 @@ export default function LayerHandlerThematic(gis, layer) {
             gis.instance.removeLayer(layer.instance);
         }
 
-
-        console.log('update map', layerConfig);
-
         layer.instance = gis.instance.addLayer(layerConfig);
 
         layer.instance.on('click', onFeatureClick);

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import AddLayerDialog from '../components/layer/AddLayerDialog';
 import { addOverlay, closeLayersDialog } from '../actions';
+import FacilityDialog from '../components/layer/FacilityDialog';
 
 const mapStateToProps = (state) => ({
     overlays: state.overlays,
@@ -11,8 +12,32 @@ const mapDispatchToProps = (dispatch) => ({
     // onRequestClose: closeLayersDialog,
     onRequestClose: () => dispatch(closeLayersDialog()),
     onLayerSelect: (layer) => {
-        dispatch(addOverlay(layer));
+        // console.log('before', layer);
+
         dispatch(closeLayersDialog());
+
+        if (gis && gis.layer && gis.layer[layer.type]) {
+            const layerWindow = gis.layer[layer.type].window;
+
+            // Warning: Very ugly hack!
+            window.layerCallback = (config) => {
+                window.layerCallback = null;
+                layerWindow.hide();
+
+                if (config.layerConfig) {
+                    layer.config = config.layerConfig;
+                    console.log('after', layer, addOverlay);
+
+                    delete(layer.type);
+
+                    dispatch(addOverlay(layer));
+                }
+            }
+
+            layerWindow.show();
+        } else {
+            dispatch(addOverlay(layer));
+        }
     },
 });
 

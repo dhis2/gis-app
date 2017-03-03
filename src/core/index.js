@@ -17,8 +17,7 @@ Ext.isIE = (/trident/.test(Ext.userAgent));
 
 Ext.isIE11 = Ext.isIE && (/rv:11.0/.test(Ext.userAgent));
 
-// GIS
-export default {
+window.GIS = {
     apiVersion: 26,
     core: {
         instances: [],
@@ -39,3 +38,6 @@ export default {
     isSessionStorage: 'sessionStorage' in window && window['sessionStorage'] !== null,
     logg: []
 };
+
+// GIS
+export default GIS;

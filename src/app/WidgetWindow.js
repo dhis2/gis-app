@@ -1,3 +1,5 @@
+import isFunction from 'd2-utilizr/lib/isFunction';
+
 // Window container for layer widgets
 export default function WidgetWindow(gis, layer, width, padding) {
     width = width || gis.conf.layout.widget.window_width;
@@ -23,6 +25,12 @@ export default function WidgetWindow(gis, layer, width, padding) {
 
                     if (view) {
                         var handler = layer.handler(gis, layer);
+
+                        // Warning: Very ugly hack!
+                        if (isFunction(window.layerCallback)) {
+                            handler.callBack = window.layerCallback;
+                        }
+
                         handler.compare = (layer.id !== gis.layer.facility.id && layer.id !== gis.layer.earthEngine.id);
                         handler.zoomToVisibleExtent = true;
                         handler.hideMask = true;
@@ -45,7 +53,7 @@ export default function WidgetWindow(gis, layer, width, padding) {
                     }
                 }
 
-                gis.util.gui.window.setPositionTopLeft(this);
+                // gis.util.gui.window.setPositionTopLeft(this);
             }
         }
     });

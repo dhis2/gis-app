@@ -128,6 +128,7 @@ export default function LayerHandlerFacility(gis, layer) {
             });
         }
 
+
         // Remove area layer instance if already exist
         if (layer.areaInstance && gis.instance.hasLayer(layer.areaInstance)) {
             gis.instance.removeLayer(layer.areaInstance);
@@ -149,7 +150,7 @@ export default function LayerHandlerFacility(gis, layer) {
             gis.instance.removeLayer(layer.instance);
         }
 
-        // console.log(JSON.stringify(layerConfig));
+		layer.layerConfig = layerConfig; // TODO: Hack
 
 		// Create layer instance
 		layer.instance = gis.instance.addLayer(layerConfig);
@@ -242,7 +243,7 @@ export default function LayerHandlerFacility(gis, layer) {
 		}
 
 		// Mask
-		if (loader.hideMask) {
+		if (gis.mask && loader.hideMask) {
 			gis.mask.hide();
 		}
 

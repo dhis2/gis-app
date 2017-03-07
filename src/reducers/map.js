@@ -116,9 +116,7 @@ const map = (state = defaultState, action) => {
             };
 
         case 'OVERLAY_ADD':
-            console.log('OVERLAY_ADD');
-
-            return { // TODO: Best way?
+            return {
                 ...state,
                 overlays: [
                     overlay(undefined, action),

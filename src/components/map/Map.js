@@ -7,11 +7,13 @@ import EarthEngineLayer from './EarthEngineLayer';
 
 const layerTypeToLayerComponent = new global.Map([
     ['earthEngine', EarthEngineLayer],
-    ['markers',     FacilityLayer],
+    //['markers',     FacilityLayer],
+    ['facility',    FacilityLayer],
 ]);
 
 function getLayerForType(layer) {
-    const type = layer && layer.config && layer.config.type;
+    // const type = layer && layer.config && layer.config.type;
+    const type = layer.type;
 
     if (layerTypeToLayerComponent.has(type))
         return layerTypeToLayerComponent.get(type)

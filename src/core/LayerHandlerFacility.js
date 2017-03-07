@@ -1,6 +1,5 @@
 import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
-import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerFacility(gis, layer) {
 
@@ -127,6 +126,7 @@ export default function LayerHandlerFacility(gis, layer) {
                 }
             });
         }
+
 
 
         // Remove area layer instance if already exist
@@ -267,11 +267,23 @@ export default function LayerHandlerFacility(gis, layer) {
 		hideMask: false,
 		callBack: null,
 		load(view) {
+
+		    /*
 			if (gis.mask && !gis.skipMask) {
 				gis.mask.show();
 			}
 
 			loadOrganisationUnitGroups(view);
+			*/
+
+		    // console.log('loader', view);
+
+            if (loader.callBack) {
+                view.layerType = 'facility';
+
+
+                loader.callBack(view);
+            }
 		}
 	};
 

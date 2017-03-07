@@ -1,17 +1,11 @@
-import { Component } from 'react';
+import { Component, PropTypes } from 'react';
 
-export default class Layer extends Component {
+class Layer extends Component {
     constructor(props, context) {
         super(props, context);
 
         this.createPane();
         this.createLayer();
-        this.setLayerOpacity();
-        this.setLayerVisibility();
-
-        if (props.index !== undefined) { // Basemap don't have index
-            this.setLayerOrder();
-        }
     }
 
     componentDidUpdate(prevProps) {
@@ -57,6 +51,16 @@ export default class Layer extends Component {
         }
 
         this.instance = map.addLayer(config);
+        this.onLayerAdd();
+    }
+
+    onLayerAdd() {
+        this.setLayerOpacity();
+        this.setLayerVisibility();
+
+        if (this.props.index !== undefined) { // Basemap don't have index
+            this.setLayerOrder();
+        }
     }
 
     setLayerOpacity() {
@@ -93,3 +97,13 @@ export default class Layer extends Component {
         return null;
     }
 }
+
+Layer.propTypes = {
+    visible: PropTypes.bool,
+};
+
+Layer.defaultProps = {
+    visible: true,
+};
+
+export default Layer;

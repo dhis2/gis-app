@@ -1,4 +1,5 @@
 import Layer from './Layer';
+import {isValidCoordinate} from '../../util/map';
 import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
 
@@ -66,7 +67,7 @@ export default class FacilityLayer extends Layer {
                 const coord = JSON.parse(facility.co);
                 const group = facility.dimensions[indicator];
 
-                if (gis.util.map.isValidCoordinate(coord) && group) { // TODO
+                if (isValidCoordinate(coord) && group) {
                     features.push({
                         type: 'Feature',
                         id: facility.id,

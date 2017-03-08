@@ -58,7 +58,7 @@ class Map extends Component {
 
         return (
             <div ref="map" style={style}>
-                {this.props.overlays.map((layer, index) => {
+                {this.props.overlays.filter(layer => layer.loaded).map((layer, index) => { // Only render loaded layers
                     const MapLayer = getLayerForType(layer);
 
                     return (

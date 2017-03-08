@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import AddLayerDialog from '../components/layer/AddLayerDialog';
-import { addOverlay, closeLayersDialog } from '../actions';
+import { editOverlay, addOverlay, closeLayersDialog } from '../actions';
 
 const mapStateToProps = (state) => ({
     overlays: state.overlays,
@@ -14,7 +14,12 @@ const mapDispatchToProps = (dispatch) => ({
         // console.log('before', layer);
 
         dispatch(closeLayersDialog());
+        dispatch(addOverlay(layer));
 
+        //  dispatch(editOverlay(layer));
+
+
+        /*
         if (gis && gis.layer && gis.layer[layer.type]) {
             const layerWindow = gis.layer[layer.type].window;
 
@@ -26,7 +31,6 @@ const mapDispatchToProps = (dispatch) => ({
                 view.title = 'Facilities';
 
                 // console.log('layer view',view);
-
 
                 //if (config.layerConfig) {
                     // layer.config = config.layerConfig;
@@ -42,6 +46,7 @@ const mapDispatchToProps = (dispatch) => ({
         } else {
             dispatch(addOverlay(layer));
         }
+        */
     },
 });
 

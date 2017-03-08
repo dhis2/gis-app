@@ -66,6 +66,15 @@ const overlay = (state, action) => {
                 type: action.layerType,
             };
 
+        case 'OVERLAY_UPDATE':
+            if (state.id !== action.id) {
+                return state;
+            }
+
+            return {
+                ...action,
+            };
+
         case 'OVERLAY_CHANGE_OPACITY':
             if (state.id !== action.id) {
                 return state;
@@ -122,6 +131,34 @@ const map = (state = defaultState, action) => {
                     overlay(undefined, action),
                     ...state.overlays,
                 ]
+            };
+
+        case 'OVERLAY_ADD_DATA':
+            console.log('OVERLAY_ADD_DATA');
+
+            return {
+                ...state,
+            };
+
+        case 'OVERLAY_LOAD':
+            console.log('OVERLAY_LOAD');
+
+            return {
+                ...state,
+            };
+
+        case 'OVERLAY_UPDATE':
+            return {
+                ...state,
+                overlays: state.overlays.map(l => overlay(l, action))
+            };
+
+        case 'OVERLAY_EDIT':
+
+            console.log('OVERLAY_EDIT', action);
+
+            return {
+                ...state,
             };
 
         case 'OVERLAY_REMOVE':

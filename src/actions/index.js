@@ -1,5 +1,6 @@
-let nextOverlayId = 0;
+import loadLayer from './loadLayer';
 
+let nextOverlayId = 0;
 
 /* BASEMAPS */
 
@@ -23,6 +24,23 @@ export const changeBasemapOpacity = (opacity) => ({
 
 
 /* OVERLAYS */
+
+export const editOverlay = (layer) => ({
+    type: 'OVERLAY_EDIT',
+    ...layer,
+});
+
+export const updateOverlay = (layer) => ({
+    ...layer,
+    type: 'OVERLAY_UPDATE',
+});
+
+/*
+export const loadOverlay = (layer) => ({
+    ...layer,
+    type: 'OVERLAY_LOAD',
+});
+*/
 
 export const addOverlay = (layer) => ({
     type: 'OVERLAY_ADD',
@@ -57,6 +75,22 @@ export const sortOverlays = ({oldIndex, newIndex}) => ({
     newIndex,
 });
 
+// http://redux.js.org/docs/advanced/AsyncActions.html
+export function loadOverlay(layer) {
+
+    return function (dispatch) {
+        // dispatch ...
+
+        loadLayer(layer, () => {
+            console.log('loaded!', layer);
+            layer.loaded = true;
+
+            dispatch(updateOverlay(layer));
+        });
+
+
+    }
+}
 
 /* USER INTERFACE */
 

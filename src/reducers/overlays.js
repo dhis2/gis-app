@@ -5,34 +5,15 @@ const defaultOverlays = [{
     expanded: false,
     visible: true,
 },{
+    layerType: 'facility',
     img: 'images/layers/facilities.png',
     title: 'Facilities',
-    subtitle: 'Facility type',
-    expanded: false,
+    // subtitle: 'Facility type',
     visible: true,
     opacity: 1,
-    "type": 'facility',
-    "layer": "facility",
-    "rows": [{
-        "dimension": "ou",
-        "items": [{
-            "id": "ImspTQPwCqd",
-            "name": ""
-        }]
-    }],
-    "organisationUnitGroupSet": {
-        "id": "J5jldMd8OHv"
-    },
-    "labels": false,
-    "labelFontSize": "11px",
-    "labelFontStyle": "normal",
-    "labelFontWeight": "normal",
-    "labelFontColor": "#000000",
-    "areaRadius": null,
-    config: {
-        "type": "markers",
-        "hoverLabel": "{label}",
-    },
+    expanded: false,
+    loaded: false,
+    edit: true,
 },{
     img: 'images/layers/thematic.png',
     layerType: 'Thematic',

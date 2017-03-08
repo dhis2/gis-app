@@ -24,7 +24,7 @@
         Ext.onReady(function() {
             var url = "http://localhost:8080";
 
-            GIS.plugin.getMap({
+            var test = GIS.plugin.getMap({
                 url: url,
                 el: "map1",
                 id: 'voX07ulo2Bq',
@@ -34,6 +34,8 @@
                 // username: 'system',
                 // password: 'System123'
             });
+
+            console.log('test', test, GIS);
 
             /*
             GIS.plugin.getMap({

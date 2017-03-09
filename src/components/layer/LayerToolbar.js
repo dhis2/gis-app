@@ -44,7 +44,7 @@ const LayerToolbar = ({ id, data, opacity, onEdit, onRemove, onDataTableShow, on
         }
 
         {onDataTableShow &&
-        <IconButton onClick={() => onDataTableShow(id, data)    } tooltip="Data table" tooltipPosition="top-center" style={styles.button}>
+        <IconButton onClick={() => onDataTableShow(id, data)} tooltip="Data table" tooltipPosition="top-center" style={styles.button}>
             <ActionDataTableIcon color={grey600} />
         </IconButton>
         }

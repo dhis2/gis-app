@@ -19,73 +19,82 @@ const TextCell = ({rowIndex, data, col, ...props}) => (
     </Cell>
 );
 
-const AddLayerDialog = ({ dataList, dataTableOpen, onRequestClose }) => {
-    const actions = [
-        <FlatButton
-            label="Cancel"
-            primary={true}
-            onTouchTap={onRequestClose}
-        />,
-    ];
+const AddLayerDialog = ({ data, dataTableOpen, onRequestClose }) => {
+    if (data) { // TODO: Needed
+        const actions = [
+            <FlatButton
+                label="Cancel"
+                primary={true}
+                onTouchTap={onRequestClose}
+            />,
+        ];
 
-    return (
-        <Dialog
-            title="Data table"
-            actions={actions}
-            modal={true}
-            open={dataTableOpen}
-        >
-            <Table
-                rowHeight={50}
-                headerHeight={50}
-                rowsCount={dataList.length}
-                width={660}
-                height={500}>
-                <Column
-                    header={<Cell></Cell>}
-                    cell={<IndexCell />}
-                    fixed={true}
-                    width={40}
-                />
-                <Column
-                    header={<Cell>Name</Cell>}
-                    cell={<TextCell data={dataList} col="name" />}
-                    fixed={true}
-                    width={200}
-                />
-                <Column
-                    header={<Cell>Code</Cell>}
-                    cell={<TextCell data={dataList} col="code" />}
-                    width={100}
-                />
-                <Column
-                    header={<Cell>Type</Cell>}
-                    cell={<TextCell data={dataList} col="type" />}
-                    width={120}
-                />
-                <Column
-                    header={<Cell>Ownership</Cell>}
-                    cell={<TextCell data={dataList} col="ownership" />}
-                    width={120}
-                />
-                <Column
-                    header={<Cell>Location</Cell>}
-                    cell={<TextCell data={dataList} col="location" />}
-                    width={120}
-                />
-                <Column
-                    header={<Cell>Level</Cell>}
-                    cell={<TextCell data={dataList} col="level" />}
-                    width={60}
-                />
-                <Column
-                    header={<Cell>Parent unit</Cell>}
-                    cell={<TextCell data={dataList} col="parent" />}
-                    width={200}
-                />
-            </Table>
-        </Dialog>
-    );
+        const dataList = data.map(item => ({
+            code: item.id,
+            name: item.properties.name
+        }));
+
+        return (
+            <Dialog
+                title="Data table"
+                actions={actions}
+                modal={true}
+                open={dataTableOpen}
+            >
+                <Table
+                    rowHeight={50}
+                    headerHeight={50}
+                    rowsCount={dataList.length}
+                    width={660}
+                    height={500}>
+                    <Column
+                        header={<Cell></Cell>}
+                        cell={<IndexCell />}
+                        fixed={true}
+                        width={40}
+                    />
+                    <Column
+                        header={<Cell>Name</Cell>}
+                        cell={<TextCell data={dataList} col="name" />}
+                        fixed={true}
+                        width={200}
+                    />
+                    <Column
+                        header={<Cell>Code</Cell>}
+                        cell={<TextCell data={dataList} col="code" />}
+                        width={100}
+                    />
+                    <Column
+                        header={<Cell>Type</Cell>}
+                        cell={<TextCell data={dataList} col="type" />}
+                        width={120}
+                    />
+                    <Column
+                        header={<Cell>Ownership</Cell>}
+                        cell={<TextCell data={dataList} col="ownership" />}
+                        width={120}
+                    />
+                    <Column
+                        header={<Cell>Location</Cell>}
+                        cell={<TextCell data={dataList} col="location" />}
+                        width={120}
+                    />
+                    <Column
+                        header={<Cell>Level</Cell>}
+                        cell={<TextCell data={dataList} col="level" />}
+                        width={60}
+                    />
+                    <Column
+                        header={<Cell>Parent unit</Cell>}
+                        cell={<TextCell data={dataList} col="parent" />}
+                        width={200}
+                    />
+                </Table>
+            </Dialog>
+        );
+    } else {
+        return null;
+    }
 };
 
 AddLayerDialog.propTypes = {

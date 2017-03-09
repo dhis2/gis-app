@@ -7,7 +7,7 @@ const defaultState = {
     basemap: {
         id: 'osmLight',
         visible: true,
-        expanded: true,
+        expanded: false,
         opacity: 1,
         subtitle: 'Basemap',
     },
@@ -58,12 +58,22 @@ const overlay = (state, action) => {
 
     switch (action.type) {
 
+        case 'OVERLAY_EDIT':
+            if (state.id !== action.id) {
+                return state;
+            }
+
+            return {
+                ...state,
+                edit: true,
+            };
+
         case 'OVERLAY_ADD':
             return {
                 ...action,
                 id: String(action.id),
                 index: action.index,
-                type: action.layerType,
+                editCounter: 0, // Keeps tracks of layer edits to know if map should be updated
             };
 
         case 'OVERLAY_UPDATE':
@@ -73,6 +83,7 @@ const overlay = (state, action) => {
 
             return {
                 ...action,
+                editCounter: ++state.editCounter,
             };
 
         case 'OVERLAY_CHANGE_OPACITY':
@@ -153,14 +164,6 @@ const map = (state = defaultState, action) => {
                 overlays: state.overlays.map(l => overlay(l, action))
             };
 
-        case 'OVERLAY_EDIT':
-
-            console.log('OVERLAY_EDIT', action);
-
-            return {
-                ...state,
-            };
-
         case 'OVERLAY_REMOVE':
             return {
                 ...state,
@@ -173,6 +176,7 @@ const map = (state = defaultState, action) => {
                 overlays: arrayMove(state.overlays, action.oldIndex, action.newIndex)
             };
 
+        case 'OVERLAY_EDIT':
         case 'OVERLAY_CHANGE_OPACITY':
         case 'OVERLAY_TOGGLE_VISIBILITY':
         case 'OVERLAY_TOGGLE_EXPAND':

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 const styles = {
     root: {
-        overflowY: 'scroll',
+        overflowY: 'hidden',
         marginLeft: 7,
     },
     layer: {

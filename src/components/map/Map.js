@@ -13,7 +13,7 @@ const layerTypeToLayerComponent = new global.Map([
 
 function getLayerForType(layer) {
     // const type = layer && layer.config && layer.config.type;
-    const type = layer.type;
+    const type = layer.layerType;
 
     if (layerTypeToLayerComponent.has(type))
         return layerTypeToLayerComponent.get(type)

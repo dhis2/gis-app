@@ -88,7 +88,7 @@ const OverlayCard = (props) => (
             }
             <LayerToolbar
                 {...props}
-                onEdit={!props.basemap ? () => console.log('Edit layer') : null}
+                onEdit={!props.basemap ? () => props.onEdit(props.id) : null}
                 onDataTableShow={!props.basemap ? props.onDataTableShow : null}
                 onRemove={!props.basemap ? () => props.onRemove(props.id) : null}
             />

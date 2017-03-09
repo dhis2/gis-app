@@ -24,6 +24,8 @@ class LayersEdit extends Component {
                 editWindow.onUpdate = (layer) => {
                     editWindow.hide();
 
+                    layer.mapShouldUpdate = true; // TODO: Better way?
+
                     this.props.onOverlayUpdate(layer); // TODO: Rename to load?
                 }
 

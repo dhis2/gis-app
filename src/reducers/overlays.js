@@ -11,7 +11,7 @@ const defaultOverlays = [{
     // subtitle: 'Facility type',
     visible: true,
     opacity: 1,
-    expanded: false,
+    expanded: true,
     loaded: false,
     edit: true,
 },{

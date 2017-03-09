@@ -2,16 +2,48 @@
 
 import {isValidCoordinate} from '../util/map';
 import isArray from 'd2-utilizr/lib/isArray';
-import isObject from 'd2-utilizr/lib/isObject';
-
-let map;
-let config;
 
 // TODO: How to share headers for all fetch requests
 const headers = {
     'Authorization': 'Basic ' + btoa('admin:district'),
 };
 
+// Load facilites for map display
+const facilityLoader = (layer, callback) =>  {
+    const groupSetId = layer.organisationUnitGroupSet.id;
+    const groupSetUrl = gis.init.apiPath + 'organisationUnitGroupSets/' + groupSetId + '.json' + '?fields=organisationUnitGroups[id,' + gis.init.namePropertyUrl + ',symbol]';
+
+    const items = layer.rows[0].items.map(item => item.id).join(';');
+    const propertyMap = {
+        name: 'name',
+        displayName: 'name',
+        shortName: 'shortName',
+        displayShortName: 'shortName',
+    };
+    const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty;
+    //const displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name'; // TODO: xLayout?
+    const displayProperty = (propertyMap[keyAnalysisDisplayProperty] || 'name').toUpperCase();
+    let params = `?ou=ou:${items}&displayProperty=${displayProperty}`;
+
+    if (isArray(params.userOrgUnit) && params.userOrgUnit.length) {
+        const userOrgUnit = view.userOrgUnit.map(unit => unit).join(';');
+        params += `&userOrgUnit=${userOrgUnit}`;
+    }
+
+    const facilitiesUrl = `${gis.init.apiPath}geoFeatures.json${params}&includeGroupSets=true`;
+
+    const groupSetReq = fetch(encodeURI(groupSetUrl), {headers});
+    const facilitiesReq = fetch(encodeURI(facilitiesUrl), {headers});
+
+    // Load data from API
+    Promise.all([groupSetReq, facilitiesReq])
+        .then(response => Promise.all(response.map(r => r.json())))
+        .then(data => onDataLoad(data[0].organisationUnitGroups, data[1], layer, callback))
+        .catch(error => console.log('Parsing failed: ', error));
+
+};
+
+// Called when group set and facilities are loaded
 const onDataLoad = (groupSet, facilities, layer, callback) => {
     const indicator = layer.organisationUnitGroupSet.id;
     const orgUnitGroupSymbols = {};
@@ -57,83 +89,20 @@ const onDataLoad = (groupSet, facilities, layer, callback) => {
         return;
     }
 
-    // TODO: Store features for data table
-
-    const config = {
-        type: 'markers',
-        pane: layer.id,
-        data: features,
-        hoverLabel: '{label}',
-    };
-
-    if (layer.labels) {
-        config.label = '{name}';
-        config.labelStyle = {
-            color: layer.labelFontColor,
-            fontSize: layer.labelFontSize,
-            fontStyle: layer.labelFontStyle,
-            fontWeight: layer.labelFontWeight,
-            paddingTop: '10px'
-        };
-    }
-
-    layer.config = config;
+    layer.data = features;
+    layer.legend = createLegend(groupSet);
 
     callback(layer);
 };
 
-const onFeatureClick = (evt) => {
-    const attr = evt.layer.feature.properties;
-    let content = '<div class="leaflet-popup-orgunit"><em>' + attr.name + '</em>';
-
-    if (isObject(attr.dimensions)) {
-        content += '<br/>' + GIS.i18n.groups + ': ' + Object.keys(attr.dimensions).map(id => attr.dimensions[id]).join(', ');
+// Create group set legend
+const createLegend = (groupSet) => {
+    return {
+        items: groupSet.map(item => ({
+            image: gis.init.contextPath + '/images/orgunitgroup/' + item.symbol, // TODO
+            name: item.name,
+        }))
     }
-
-    if (attr.pn) {
-        content += '<br/>' + GIS.i18n.parent_unit + ': ' + attr.pn;
-    }
-
-    content += '</div>';
-
-    L.popup()
-        .setLatLng(evt.latlng)
-        .setContent(content)
-        .openOn(this.props.map);
-};
-
-const facilityLoader = (layer, callback) =>  {
-    const groupSetId = layer.organisationUnitGroupSet.id;
-    const groupSetUrl = gis.init.apiPath + 'organisationUnitGroupSets/' + groupSetId + '.json' + '?fields=organisationUnitGroups[id,' + gis.init.namePropertyUrl + ',symbol]';
-
-    const items = layer.rows[0].items.map(item => item.id).join(';');
-    const propertyMap = {
-        'name': 'name',
-        'displayName': 'name',
-        'shortName': 'shortName',
-        'displayShortName': 'shortName'
-    };
-    const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty;
-    //const displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name'; // TODO: xLayout?
-    const displayProperty = (propertyMap[keyAnalysisDisplayProperty] || 'name').toUpperCase();
-    let params = `?ou=ou:${items}&displayProperty=${displayProperty}`;
-
-    if (isArray(params.userOrgUnit) && params.userOrgUnit.length) {
-        const userOrgUnit = view.userOrgUnit.map(unit => unit).join(';');
-        params += `&userOrgUnit=${userOrgUnit}`;
-    }
-
-    const facilitiesUrl = `${gis.init.apiPath}geoFeatures.json${params}&includeGroupSets=true`;
-
-    const groupSetReq = fetch(encodeURI(groupSetUrl), {headers});
-    const facilitiesReq = fetch(encodeURI(facilitiesUrl), {headers});
-
-    // Load data from API
-    Promise.all([groupSetReq, facilitiesReq])
-        .then(response => Promise.all(response.map(r => r.json())))
-        .then(data => onDataLoad(data[0].organisationUnitGroups, data[1], layer, callback))
-        .catch(error => console.log('Parsing failed: ', error));
-
 };
 
 export default facilityLoader;

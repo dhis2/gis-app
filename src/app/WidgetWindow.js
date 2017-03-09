@@ -1,4 +1,3 @@
-import isFunction from 'd2-utilizr/lib/isFunction';
 
 // Window container for layer widgets
 export default function WidgetWindow(gis, layer, width, padding) {
@@ -25,8 +24,6 @@ export default function WidgetWindow(gis, layer, width, padding) {
                 text: GIS.i18n.update,
                 handler: () => {
                     var view = layer.widget.getView();
-
-                    // console.log('### this', layerConfig, callback);
 
                     //console.log('this', layer.widget.onUpdate, this.onUpdate, this);
 
@@ -55,19 +52,21 @@ export default function WidgetWindow(gis, layer, width, padding) {
             }
         ],
         listeners: {
-            show(widget) {
-                callback = widget.onUpdate; // Temporary hack
-                layerConfig = widget.layer; // Temporary hack
+            show(win) {
+                callback = win.onUpdate; // Temporary hack
+                layerConfig = win.layer; // Temporary hack
 
-                if (!this.isRendered) {
-                    this.isRendered = true;
+                // if (!this.isRendered) {
+                    //this.isRendered = true;
+
+                    this.widget.setGui(win.layer);
 
                     /*
                     if (layer.view) {
                         this.widget.setGui(layer.view); // TODO
                     }
                     */
-                }
+                //}
 
                 // gis.util.gui.window.setPositionTopLeft(this);
             }

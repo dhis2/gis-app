@@ -590,7 +590,10 @@ export default function LayerWidgetFacility(gis, layer) {
     };
 
     const setGui = function(view) {
-        const ouDim = view.rows[0];
+        if (view.rows) {
+            const ouDim = view.rows[0];
+        }
+
         const levels = [];
         const groups = [];
 
@@ -657,9 +660,11 @@ export default function LayerWidgetFacility(gis, layer) {
             areaRadius.setValue(!!view.areaRadius, !!view.areaRadius ? view.areaRadius : null);
         }();
 
+        /*
         const setLayerGui = function() {
 
             // Layer item
+            if (layer.item) {
             layer.item.setValue(!view.hidden, view.opacity);
 
             // Layer menu
@@ -670,6 +675,7 @@ export default function LayerWidgetFacility(gis, layer) {
                 layer.filterWindow.filter();
             }
         }();
+        */
     };
 
     const getView = function(config) {
@@ -678,6 +684,9 @@ export default function LayerWidgetFacility(gis, layer) {
         view.layer = layer.id;
 
         view.rows = [treePanel.getDimension()];
+
+        // Show group set name as subtitle
+        view.subtitle = groupSet.getDisplayValue();
 
         view.organisationUnitGroupSet = {
             id: groupSet.getValue()

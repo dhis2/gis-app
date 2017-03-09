@@ -25,9 +25,9 @@ export const changeBasemapOpacity = (opacity) => ({
 
 /* OVERLAYS */
 
-export const editOverlay = (layer) => ({
+export const editOverlay = (id) => ({
     type: 'OVERLAY_EDIT',
-    ...layer,
+    id,
 });
 
 export const updateOverlay = (layer) => ({
@@ -77,17 +77,13 @@ export const sortOverlays = ({oldIndex, newIndex}) => ({
 
 // http://redux.js.org/docs/advanced/AsyncActions.html
 export function loadOverlay(layer) {
-
     return function (dispatch) {
         // dispatch ...
 
         loadLayer(layer, () => {
-            console.log('loaded!', layer);
             layer.loaded = true;
-
             dispatch(updateOverlay(layer));
         });
-
 
     }
 }

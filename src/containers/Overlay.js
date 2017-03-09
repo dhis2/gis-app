@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
 import OverlayCard from '../components/layer/OverlayCard';
-import { removeOverlay, changeOverlayOpacity, toggleOverlayExpand, toggleOverlayVisibility, openDataTable } from '../actions';
+import { editOverlay, removeOverlay, changeOverlayOpacity, toggleOverlayExpand, toggleOverlayVisibility, openDataTable } from '../actions';
 
 const mapStateToProps = (state) => ({
     layers: state.layers,
 });
 
 const mapDispatchToProps = ({
+    onEdit: editOverlay,
     onRemove: removeOverlay,
     onExpandChange: toggleOverlayExpand,
     onOpacityChange: changeOverlayOpacity,

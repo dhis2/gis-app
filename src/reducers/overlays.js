@@ -1,4 +1,5 @@
 const defaultOverlays = [{
+    layerType: 'event',
     img: 'images/layers/events.png',
     title: 'Events',
     opacity: 0.95,
@@ -8,20 +9,22 @@ const defaultOverlays = [{
     layerType: 'facility',
     img: 'images/layers/facilities.png',
     title: 'Facilities',
-    // subtitle: 'Facility type',
     visible: true,
     opacity: 1,
     expanded: true,
     loaded: false,
     edit: true,
 },{
+    layerType: 'thematic',
     img: 'images/layers/thematic.png',
-    layerType: 'Thematic',
-    title: 'ANC 3 Coverage',
-    subtitle: '2017',
-    expanded: false,
+    // title: 'ANC 3 Coverage',
+    // subtitle: '2017',
     visible: true,
     opacity: 0.8,
+    expanded: false,
+    loaded: false,
+    edit: true,
+    /*
     legend: {
         items: [{
             color: '#ffffb2',
@@ -49,19 +52,23 @@ const defaultOverlays = [{
             range: '90 - 120 (5)',
         }]
     },
+    */
 },{
+    layerType: 'boundary',
     img: 'images/layers/boundaries.png',
     title: 'Boundaries',
     opacity: 1,
     visible: true,
     expanded: false,
 },{
+    layerType: 'external',
     img: 'images/layers/labels.png',
     title: 'Labels',
     opacity: 0.9,
     visible: true,
     expanded: false,
 },{
+    layerType: 'earthEngine',
     img: 'images/layers/population.png',
     title: 'Population density',
     subtitle: '2010',
@@ -123,24 +130,28 @@ const defaultOverlays = [{
         }]
     },
 },{
+    layerType: 'earthEngine',
     img: 'images/layers/elevation.png',
     title: 'Elevation',
     opacity: 0.9,
     visible: true,
     expanded: false,
 },{
+    layerType: 'earthEngine',
     img: 'images/layers/temperature.png',
     title: 'Temperature',
     opacity: 0.9,
     visible: true,
     expanded: false,
 },{
+    layerType: 'earthEngine',
     img: 'images/layers/landcover.png',
     title: 'Landcover',
     opacity: 0.9,
     visible: true,
     expanded: false,
 },{
+    layerType: 'earthEngine',
     img: 'images/layers/precipitation.png',
     title: 'Precipitation',
     subtitle: '26 - 28 Nov. 2016',
@@ -193,6 +204,7 @@ const defaultOverlays = [{
         }]
     },
 },{
+    layerType: 'earthEngine',
     img: 'images/layers/nighttime.png',
     title: 'Nighttime lights',
     opacity: 0.9,

@@ -1,41 +1,32 @@
 import { Component } from 'react';
+import WidgetWindow from '../../app/WidgetWindow';
+
+const widgets = {}; // TODO: Temporary widget store
 
 class LayersEdit extends Component {
 
-    /*
-    constructor(props, context) {
-        super(props, context);
-
-        console.log('constrctor');
-    }
-    */
-
     componentDidUpdate(prevProps) {
-        const overlays = this.props.overlays;
-
-        overlays.filter(layer => layer.edit).map(layer => {
-            const type = layer.layerType;
-
-            if (gis && gis.layer && gis.layer[type]) {
-                const editWindow = gis.layer[type].window;
-
-                editWindow.layer = layer; // Temporary hack
-
-                editWindow.onUpdate = (layer) => {
-                    editWindow.hide();
-
-                    layer.mapShouldUpdate = true; // TODO: Better way?
-
-                    this.props.onOverlayUpdate(layer); // TODO: Rename to load?
-                }
-
-                editWindow.show();
-            }
-        });
+        this.props.overlays.filter(layer => layer.edit).map(layer => this.editLayer(layer));
     }
 
     componentWillUnmount() {
-        console.log('unmount');
+        console.log('unmount'); // TODO
+    }
+
+    // Called for each layer in edit mode
+    editLayer(layer) {
+        let widget = widgets[layer.id];
+
+        if (!widget) { // Create widget first time
+            widget = widgets[layer.id] = WidgetWindow(gis, layer, (layer) => {
+                widget.hide();
+                this.props.onOverlayUpdate(layer);
+            })
+        } else {
+            // widget.setLayer(layer);
+        }
+
+        widget.show();
     }
 
     // React rendering will happen here later :-)

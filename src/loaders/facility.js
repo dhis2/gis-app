@@ -1,9 +1,7 @@
-// TODO: Move to another folder
-
 import {isValidCoordinate} from '../util/map';
 import isArray from 'd2-utilizr/lib/isArray';
 
-// TODO: How to share headers for all fetch requests
+// TODO: How to share headers for all fetch requests?
 const headers = {
     'Authorization': 'Basic ' + btoa('admin:district'),
 };

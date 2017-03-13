@@ -548,7 +548,7 @@ export default function LayerWidgetFacility(gis, layer) {
     const reset = function(skipTree) {
 
         // Item
-        layer.item.setValue(false, layer.item.defaultOpacity);
+        // layer.item.setValue(false, layer.item.defaultOpacity);
 
         // Layer
         if (layer.searchWindow) {
@@ -566,10 +566,12 @@ export default function LayerWidgetFacility(gis, layer) {
         }
 
         // Components
+        /*
         if (!layer.window.isRendered) {
             layer.view = null;
             return;
         }
+        */
 
         groupSet.clearValue();
 
@@ -590,10 +592,7 @@ export default function LayerWidgetFacility(gis, layer) {
     };
 
     const setGui = function(view) {
-        if (view.rows) {
-            const ouDim = view.rows[0];
-        }
-
+        const ouDim = view.rows[0];
         const levels = [];
         const groups = [];
 
@@ -601,19 +600,21 @@ export default function LayerWidgetFacility(gis, layer) {
         let isOuc = false;
         let isOugc = false;
 
+        console.log('setGui', view.rows, ouDim);
+
         const setWidgetGui = function() {
 
             // Components
-            if (!layer.window.isRendered) {
-                return;
-            }
+            // if (!layer.window.isRendered) {
+            //    return;
+            // }
 
             reset(true);
 
             // Group set
-            groupSet.store.removeAll();
-            groupSet.store.add(view.organisationUnitGroupSet);
-            groupSet.setValue(view.organisationUnitGroupSet.id);
+            // groupSet.store.removeAll();
+            // groupSet.store.add(view.organisationUnitGroupSet);
+            // groupSet.setValue(view.organisationUnitGroupSet.id);
 
             // Organisation units
             for (let i = 0, item; i < ouDim.items.length; i++) {

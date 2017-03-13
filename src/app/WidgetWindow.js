@@ -1,75 +1,59 @@
+import LayerWidgetEvent from './LayerWidgetEvent';
+import LayerWidgetFacility from './LayerWidgetFacility';
+import LayerWidgetThematic from './LayerWidgetThematic';
+import LayerWidgetBoundary from './LayerWidgetBoundary';
+import LayerWidgetEarthEngine from './LayerWidgetEarthEngine';
+import LayerWidgetExternal from './LayerWidgetExternal';
+
+const layerType = {
+    event: LayerWidgetEvent,
+    facility: LayerWidgetFacility,
+    thematic: LayerWidgetThematic,
+    boundary: LayerWidgetBoundary,
+    earthEngine: LayerWidgetEarthEngine,
+    external: LayerWidgetExternal,
+};
 
 // Window container for layer widgets
-export default function WidgetWindow(gis, layer, width, padding) {
-    width = width || gis.conf.layout.widget.window_width;
-    padding = padding || 0;
-
-    let layerConfig;
-    let callback;
+export default function WidgetWindow(gis, layer, onUpdate) {
+    const layerWidget = layerType[layer.layerType](gis, layer);
 
     return Ext.create('Ext.window.Window', {
         title: layer.name,
         layout: 'fit',
         iconCls: 'gis-window-title-icon-' + layer.id,
-        bodyStyle: 'padding:' + padding + 'px',
+        bodyStyle: 'padding:0',
         cls: 'gis-container-default',
         closeAction: 'hide',
-        width: width,
+        width: gis.conf.layout.widget.window_width,
         resizable: false,
         isRendered: false,
-        items: layer.widget,
+        items: layerWidget,
         bbar: [
             '->',
             {
                 text: GIS.i18n.update,
                 handler: () => {
-                    var view = layer.widget.getView();
+                    const view = layerWidget.getView();
 
-                    //console.log('this', layer.widget.onUpdate, this.onUpdate, this);
+                    // console.log('update layer view', view);
 
-                    if (view && layerConfig && callback) {
-                        /*
-                        var handler = layer.handler(gis, layer);
+                    onUpdate({
+                        ...layer,
+                        ...view,
+                        edit: false,
+                        loaded: false,
+                    });
 
-                        handler.compare = (layer.id !== gis.layer.facility.id && layer.id !== gis.layer.earthEngine.id);
-                        handler.zoomToVisibleExtent = true;
-                        handler.hideMask = true;
-                        handler.load(view);
-                        */
-
-                        callback({
-                            ...layerConfig,
-                            ...view,
-                            edit: false,
-                            loaded: false,
-                        });
-
-                        // Post usage statistics each time update button is clicked
-                        // TODO: Move to a shared layer handler prototye
-                        gis.postDataStatistics();
-                    }
+                    // Post usage statistics each time update button is clicked
+                    // TODO: Move to a shared layer handler prototye
+                    gis.postDataStatistics();
                 }
             }
         ],
-        listeners: {
-            show(win) {
-                callback = win.onUpdate; // Temporary hack
-                layerConfig = win.layer; // Temporary hack
-
-                // if (!this.isRendered) {
-                    //this.isRendered = true;
-
-                    this.widget.setGui(win.layer);
-
-                    /*
-                    if (layer.view) {
-                        this.widget.setGui(layer.view); // TODO
-                    }
-                    */
-                //}
-
-                // gis.util.gui.window.setPositionTopLeft(this);
-            }
+        setLayer: (layer) => {
+            layerWidget.setGui(layer);
         }
+
     });
 };

@@ -1,4 +1,4 @@
-import loadLayer from './loadLayer';
+import loadLayer from '../loaders/layer';
 
 let nextOverlayId = 0;
 
@@ -82,7 +82,7 @@ export function loadOverlay(layer) {
 
         loadLayer(layer, () => {
             layer.loaded = true;
-            dispatch(updateOverlay(layer));
+            dispatch(updateOverlay(layer)); // TODO: immutable?
         });
 
     }

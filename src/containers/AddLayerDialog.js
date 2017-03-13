@@ -13,7 +13,6 @@ const mapDispatchToProps = (dispatch) => ({
     onLayerSelect: (layer) => {
         dispatch(closeLayersDialog());
         dispatch(addOverlay(layer));
-
     },
 });
 

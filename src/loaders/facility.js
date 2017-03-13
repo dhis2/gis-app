@@ -1,3 +1,5 @@
+// TODO: Use d2? Make promise based?
+
 import {isValidCoordinate} from '../util/map';
 import isArray from 'd2-utilizr/lib/isArray';
 

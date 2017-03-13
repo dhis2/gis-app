@@ -16,7 +16,8 @@ const layerType = {
 
 // Window container for layer widgets
 export default function WidgetWindow(gis, layer, onUpdate) {
-    const layerWidget = layerType[layer.layerType](gis, layer);
+    const type = layer.layerType;
+    const layerWidget = layerType[type](gis, layer);
 
     return Ext.create('Ext.window.Window', {
         title: layer.name,
@@ -25,7 +26,7 @@ export default function WidgetWindow(gis, layer, onUpdate) {
         bodyStyle: 'padding:0',
         cls: 'gis-container-default',
         closeAction: 'hide',
-        width: gis.conf.layout.widget.window_width,
+        width: type === 'event' ? 456 : 306,
         resizable: false,
         isRendered: false,
         items: layerWidget,

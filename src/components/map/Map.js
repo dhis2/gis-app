@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import d2map from 'gis-api/src/';
 import Layer from './Layer';
+import EventLayer from './EventLayer';
 import FacilityLayer from './FacilityLayer';
 import EarthEngineLayer from './EarthEngineLayer';
 
 const layerTypeToLayerComponent = new global.Map([
-    ['earthEngine', EarthEngineLayer],
-    //['markers',     FacilityLayer],
+    ['event',       EventLayer],
     ['facility',    FacilityLayer],
+    ['earthEngine', EarthEngineLayer]
 ]);
 
 function getLayerForType(layer) {

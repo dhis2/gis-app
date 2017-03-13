@@ -5,6 +5,7 @@ const defaultOverlays = [{
     opacity: 0.95,
     expanded: false,
     visible: true,
+    edit: true,
 },{
     layerType: 'facility',
     img: 'images/layers/facilities.png',

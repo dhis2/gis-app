@@ -1,12 +1,6 @@
 import Layer from './Layer';
 import isObject from 'd2-utilizr/lib/isObject';
 
-// TODO: How to share headers for all fetch requests
-const headers = {
-    'Authorization': 'Basic ' + btoa('admin:district'),
-};
-
-
 class FacilityLayer extends Layer {
 
     createLayer(callback) {

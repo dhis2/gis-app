@@ -12,7 +12,17 @@ const headers = {
 const loadEvents = (paramString, layer, callback) => {
     const url = gis.init.analyticsPath + 'analytics/events/query/' + layer.program.id + '.json' + paramString
 
-    console.log('loadEvents', url);
+    console.log('loadEvents', layer);
+
+    layer.title = layer.program.name;
+
+    layer.legend = {
+        items: [{
+            radius: layer.eventPointRadius,
+            color: '#' + layer.eventPointColor,
+            name: 'Event', // TODO: i18n
+        }]
+    };
 
     fetch(encodeURI(url), {headers})
         .then(response => response.json())

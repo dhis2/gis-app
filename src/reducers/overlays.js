@@ -3,7 +3,7 @@ const defaultOverlays = [{
     img: 'images/layers/events.png',
     title: 'Events',
     opacity: 0.95,
-    expanded: false,
+    expanded: true,
     visible: true,
     edit: true,
 },{

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const LegendItem = ({ image, color, name, range }) => {
+const LegendItem = ({ image, color, radius, name, range }) => {
     const styles = {
         container: {
             clear: 'both',
@@ -18,8 +18,16 @@ const LegendItem = ({ image, color, name, range }) => {
         }
     };
 
-    styles.symbol.backgroundImage = image ? `url(${image})` : 'none';
-    styles.symbol.backgroundColor = color ? color : 'transparent';
+    const symbol = styles.symbol;
+
+    symbol.backgroundImage = image ? `url(${image})` : 'none';
+    symbol.backgroundColor = color ? color : 'transparent';
+
+    if (radius) {
+        symbol.width = radius * 2 + 'px';
+        symbol.height = radius * 2 + 'px';
+        symbol.borderRadius = radius ? '50%' : '0';
+    }
 
     // Components must return a single root element
     return (
@@ -33,6 +41,7 @@ const LegendItem = ({ image, color, name, range }) => {
 LegendItem.propTypes = {
     image: PropTypes.string,
     color: PropTypes.string,
+    radius: PropTypes.number,
     name: PropTypes.string,
     range: PropTypes.string,
 };

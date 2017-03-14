@@ -1,36 +1,27 @@
 // TODO: Use d2? Make promise based? Wrap in closure?
 
-import {isValidCoordinate} from '../util/map';
+import { isValidCoordinate } from '../util/map';
+import { apiFetch } from '../util/api';
 import isArray from 'd2-utilizr/lib/isArray';
 import isString from 'd2-utilizr/lib/isString';
 
-// TODO: How to share headers for all fetch requests?
-const headers = {
-    'Authorization': 'Basic ' + btoa('admin:district'),
-};
+let layer;
+let callback;
+let paramString;
 
-const loadEvents = (paramString, layer, callback) => {
-    const url = gis.init.analyticsPath + 'analytics/events/query/' + layer.program.id + '.json' + paramString
+let filterTypes = {
+    'IN': '=',
+    'LE': '<=',
+}
 
-    console.log('loadEvents', layer);
-
-    layer.title = layer.program.name;
-
-    layer.legend = {
-        items: [{
-            radius: layer.eventPointRadius,
-            color: '#' + layer.eventPointColor,
-            name: 'Event', // TODO: i18n
-        }]
-    };
-
-    fetch(encodeURI(url), {headers})
+const loadEvents = () => {
+    apiFetch(`analytics/events/query/${layer.program.id}.json${paramString}`)
         .then(response => response.json())
         .then(data => onDataLoad(data, layer, callback))
         .catch(error => console.log('Parsing failed: ', error)); // TODO
 };
 
-const onDataLoad = (data, layer, callback) => {
+const onDataLoad = (data) => {
     const features = [];
     const rows = [];
     const names = {...data.metaData.names};
@@ -109,7 +100,7 @@ const onDataLoad = (data, layer, callback) => {
                 coord = [properties.longitude, properties.latitude];
             }
 
-            if (gis.util.map.isValidCoordinate(coord)) {
+            if (isValidCoordinate(coord)) {
                 features.push({
                     type: 'Feature',
                     id: properties.psi,
@@ -124,11 +115,6 @@ const onDataLoad = (data, layer, callback) => {
 
         layer.data = features;
         callback(layer);
-
-        // console.log('features', features);
-
-
-        // updateMap(view, features);
     };
 
     if (!optionSetHeader) {
@@ -142,12 +128,51 @@ const onDataLoad = (data, layer, callback) => {
 
 };
 
+const onEventCountLoad = (data) => {
+    // console.log('onEventCountLoad', data);
+
+    if (data.extent) {
+        const extent = data.extent.match(/([-\d\.]+)/g);
+
+        layer.bounds = [[extent[1], extent[0]],[extent[3], extent[2]]];
+
+        // Dont fit to bounds when layer is updated
+        // if (!layer.instance) { // TODO: Move to map layer handler
+        //    gis.instance.fitBounds(bounds);
+        // }
+    }
+
+    if (data.count < 2000) { // Client clustering if less than 2000 events
+        loadEvents();
+    } else { // Server clustering
+        layer.layerType = 'serverCluster',
+        layer.data = 'analytics/events/cluster/' + layer.program.id + '.json' + paramString;
+
+        layer.data = features;
+        callback(layer);
+
+        // console.log('server cluster');
+        // updateMap(view, url);
+    }
+
+
+};
+
 // Load events for map display
-const eventLoader = (layer, callback) =>  {
+const eventLoader = (config, cb) =>  {
+    layer = config;
+    callback = cb;
+
     const spatialSupport = gis.init.systemInfo.databaseInfo.spatialSupport;
     const displayElements = {}; // Data elements to display in event popup
     let eventCoordinateFieldName; // Name of event coordinate field to show in popup
-    let paramString = '?';
+    let legendItemName = '' // TODO: i18n
+
+    // Set title to prgram name
+    layer.title = layer.program.name;
+
+    // Build param string
+    paramString = '?';
 
     if (!layer.programStage) {
         gis.alert(GIS.i18n.no_program_stage_selected); // TODO
@@ -175,8 +200,45 @@ const eventLoader = (layer, callback) =>  {
         layer.columns.forEach(element => {
             if (element.dimension !== 'dx') { // API sometimes returns empty dx filter
                 paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
-            }
+
+                console.log('element', element);
+
+                if (element.filter) {
+                    const filter = element.filter.split(':');
+                    const type = filterTypes[filter[0]];
+                    const items = filter[1].split(';').join(', ');
+
+
+                    // const filter = filters[element.filter.split(':')[0]];
+
+                    legendItemName += element.name + ' ' + type + ' ' + items;
+                }
+
+
+       }
         });
+    }
+
+    console.log('#', layer);
+
+    // Create legend
+    layer.legend = {
+        description: 'Period: ', // TODO: i18n
+        items: [{
+            radius: layer.eventPointRadius,
+            color: '#' + layer.eventPointColor,
+            name: legendItemName || 'Event', // TODO: i18n
+        }]
+    };
+
+    if (layer.filters) {
+        const period = layer.filters[0].items[0].id.replace(/_/g, ' ').toLowerCase();
+
+        console.log('### period', period);
+
+        layer.legend.description += period;
+    } else {
+        layer.legend.description += layer.startDate + ' – '+ layer.endDate;
     }
 
     // If coordinate field other than event coordinate
@@ -188,31 +250,15 @@ const eventLoader = (layer, callback) =>  {
     // Only events with coordinates
     paramString += '&coordinatesOnly=true';
 
-    /*
+
     if (spatialSupport && layer.eventClustering) { // Get event count to decide on client vs server cluster
-        Ext.Ajax.request({
-            url: encodeURI(gis.init.analyticsPath + 'analytics/events/count/' + view.program.id + '.json' + paramString),
-            disableCaching: false,
-            failure(r) {
-                gis.alert(r);
-            },
-            success(r) {
-                onEventCountSuccess(JSON.parse(r.responseText));
-            }
-        });
+        apiFetch('analytics/events/count/' + layer.program.id + '.json' + paramString)
+            .then(response => response.json())
+            .then(data => onEventCountLoad(data))
+            .catch(error => console.log('Parsing failed: ', error)); // TODO
     } else {
         loadEvents();
     }
-    */
-
-    loadEvents(paramString, layer, callback);
-
-    // console.log('eventLoader', paramString);
-
-
-
-
-
 
 };
 

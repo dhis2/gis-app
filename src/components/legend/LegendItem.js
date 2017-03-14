@@ -5,10 +5,17 @@ const LegendItem = ({ image, color, radius, name, range }) => {
         container: {
             clear: 'both',
         },
-        symbol: {
+        symbolContainer: {
             width: 24,
             height: 24,
+            lineHeight: '24px',
             float: 'left',
+            textAlign: 'center',
+        },
+        symbol: {
+            display: 'inline-block',
+            width: '100%',
+            height: '100%',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center center',
         },
@@ -32,7 +39,7 @@ const LegendItem = ({ image, color, radius, name, range }) => {
     // Components must return a single root element
     return (
         <div style={styles.container}>
-            <dt style={styles.symbol}></dt>
+            <dt style={styles.symbolContainer}><span style={styles.symbol}></span></dt>
             <dd style={styles.name}>{name} {range}</dd>
         </div>
     );

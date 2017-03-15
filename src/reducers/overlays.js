@@ -60,7 +60,9 @@ const defaultOverlays = [{
     title: 'Boundaries',
     opacity: 1,
     visible: true,
-    expanded: false,
+    expanded: true,
+    loaded: false,
+    edit: true,
 },{
     layerType: 'external',
     img: 'images/layers/labels.png',
@@ -68,6 +70,8 @@ const defaultOverlays = [{
     opacity: 0.9,
     visible: true,
     expanded: false,
+    loaded: false,
+    edit: true,
 },{
     layerType: 'earthEngine',
     img: 'images/layers/population.png',
@@ -76,6 +80,9 @@ const defaultOverlays = [{
     opacity: 0.9,
     visible: true,
     expanded: false,
+    loaded: false,
+    edit: true,
+    /*
     legend: {
         description: 'Population density estimates with national totals adjusted to match UN population division estimates.',
         unit: 'people per km2',
@@ -130,6 +137,7 @@ const defaultOverlays = [{
             "arguments": ["UNadj", "yes"]
         }]
     },
+    */
 },{
     layerType: 'earthEngine',
     img: 'images/layers/elevation.png',
@@ -137,6 +145,8 @@ const defaultOverlays = [{
     opacity: 0.9,
     visible: true,
     expanded: false,
+    loaded: false,
+    edit: true,
 },{
     layerType: 'earthEngine',
     img: 'images/layers/temperature.png',
@@ -144,6 +154,8 @@ const defaultOverlays = [{
     opacity: 0.9,
     visible: true,
     expanded: false,
+    loaded: false,
+    edit: true,
 },{
     layerType: 'earthEngine',
     img: 'images/layers/landcover.png',
@@ -151,6 +163,8 @@ const defaultOverlays = [{
     opacity: 0.9,
     visible: true,
     expanded: false,
+    loaded: false,
+    edit: true,
 },{
     layerType: 'earthEngine',
     img: 'images/layers/precipitation.png',
@@ -159,6 +173,9 @@ const defaultOverlays = [{
     expanded: false,
     visible: true,
     opacity: 0.9,
+    loaded: false,
+    edit: true,
+    /*
     legend: {
         description: 'Precipitation collected from satellite and weather stations on the ground.',
         unit: 'millimeter',
@@ -204,6 +221,7 @@ const defaultOverlays = [{
             arguments: ['system:index', "20170126"]
         }]
     },
+    */
 },{
     layerType: 'earthEngine',
     img: 'images/layers/nighttime.png',
@@ -211,6 +229,8 @@ const defaultOverlays = [{
     opacity: 0.9,
     visible: true,
     expanded: false,
+    loaded: false,
+    edit: true,
 },];
 
 const overlays = (state = defaultOverlays, action) => {

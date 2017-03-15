@@ -19,6 +19,8 @@ export default function WidgetWindow(gis, layer, onUpdate) {
     const type = layer.layerType;
     const layerWidget = layerType[type](gis, layer);
 
+    console.log('type', type);
+
     return Ext.create('Ext.window.Window', {
         title: layer.name,
         layout: 'fit',
@@ -36,8 +38,6 @@ export default function WidgetWindow(gis, layer, onUpdate) {
                 text: GIS.i18n.update,
                 handler: () => {
                     const view = layerWidget.getView();
-
-                    // console.log('update layer view', view);
 
                     onUpdate({
                         ...layer,

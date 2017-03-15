@@ -19,8 +19,6 @@ export default function WidgetWindow(gis, layer, onUpdate) {
     const type = layer.layerType;
     const layerWidget = layerType[type](gis, layer);
 
-    console.log('type', type);
-
     return Ext.create('Ext.window.Window', {
         title: layer.name,
         layout: 'fit',
@@ -47,7 +45,7 @@ export default function WidgetWindow(gis, layer, onUpdate) {
                     });
 
                     // Post usage statistics each time update button is clicked
-                    // TODO: Move to a shared layer handler prototye
+                    // TODO: Move to a shared layer handler
                     gis.postDataStatistics();
                 }
             }

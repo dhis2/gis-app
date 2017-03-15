@@ -1,6 +1,7 @@
 import { apiFetch } from '../util/api';
 import { toGeoJson } from '../util/map';
 import { arraySort } from '../util/array';
+import { classify } from '../util/thematic';
 import isObject from 'd2-utilizr/lib/isObject';
 import isArray from 'd2-utilizr/lib/isArray';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
@@ -10,11 +11,10 @@ let dimConf;
 let layer;
 let callback;
 let metaData;
+let aggregationType;
 
 // Load legend - TODO: Add to separate file
 const loadLegend = (features, values) => {
-    console.log('create legend', layer.legendSet);
-
     const bounds = [];
     const colors = [];
     const names = [];
@@ -60,12 +60,71 @@ const loadLegend = (features, values) => {
         layer.maxValue = options.maxValue;
         */
 
-        applyClassification(options, features, values);
+        // Apply classification
+        classify(features, values, options);
 
-        //if (!loader.isDrillDown) { // TODO
-            updateLegend(layer, metaData, options);
+        //if (!loader.isDrillDown) { // TODO: Where is this set?
+            // updateLegend(layer, metaData, options);
         //}
 
+        // Build legen object
+        const legend = {
+            items: []
+        };
+
+        const legendNames = layer.legendSet ? layer.legendSet.names || {} : {};
+
+        // title
+        let id = layer.columns[0].items[0].id;
+
+        // event data items
+        if (layer.valueType === 'di') {
+            id = layer.program.id + '.' + id;
+        }
+
+        let name = layer.columns[0].items[0].name;
+
+        // legend.title = (metaData.names[id] || name || id) + (aggregationType ? ` (${aggregationType})` : '');
+        layer.title = (metaData.names[id] || name || id) + (aggregationType ? ` (${aggregationType})` : '');
+
+        // period
+        id = layer.filters[0].items[0].id;
+        name = layer.filters[0].items[0].name;
+
+        layer.subtitle = metaData.names[id] || name || id;
+
+        if (layer.method === 1 && layer.legendSet) { // Predefined legend
+            for (let i = 0; i < bounds.length - 1; i++) {
+                const name = legendNames[i];
+                const label = bounds[i] + ' - ' + bounds[i + 1];
+                const count = ' (' + (options.count[i + 1] || 0) + ')';
+
+                const item = {
+                    color: options.colors[i],
+                };
+
+                if (name === label) {
+                    item.name = label + count;
+                } else {
+                    item.name = name || '';
+                    item.range = label + count;
+                }
+
+                legend.items.push(item);
+            }
+        }
+        else { // Automatic legend
+            for (let i = 0; i < bounds.length - 1; i++) {
+                legend.items.push({
+                    color: options.colors[i],
+                    name: bounds[i].toFixed(1) + ' - ' + bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')',
+                });
+            }
+        }
+
+        layer.legend = legend;
+        layer.data = features;
+        callback(layer);
     };
 
     const loadLegendSet = () => {
@@ -163,7 +222,8 @@ const onDataLoad = (orgUnits, data) => {
     const valueMap = {};
     const valueFeatures = []; // only include features with values
     const values = []; // to find min and max values
-    const aggregationType = (GIS.i18n[(layer.aggregationType || '').toLowerCase()] || '').toLowerCase();
+
+    aggregationType = (GIS.i18n[(layer.aggregationType || '').toLowerCase()] || '').toLowerCase();
 
     let ouIndex;
     let valueIndex;

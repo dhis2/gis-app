@@ -22,38 +22,9 @@ const defaultOverlays = [{
     // subtitle: '2017',
     visible: true,
     opacity: 0.8,
-    expanded: false,
+    expanded: true,
     loaded: false,
     edit: true,
-    /*
-    legend: {
-        items: [{
-            color: '#ffffb2',
-            name: 'Low',
-            range: '0 - 40 (0)'
-        },{
-            color: '#fed976',
-            name : 'Medium',
-            range: '40 - 60 (1)',
-        },{
-            color: '#feb24c',
-            name : 'Medium plus',
-            range: '60 - 70 (1)',
-        },{
-            color: '#fd8d3c',
-            name : 'High',
-            range: '70 - 80 (0)',
-        },{
-            color: '#f03b20',
-            name : 'High plus',
-            range: '80 - 90 (4)',
-        },{
-            color: '#bd0026',
-            name : 'Great',
-            range: '90 - 120 (5)',
-        }]
-    },
-    */
 },{
     layerType: 'boundary',
     img: 'images/layers/boundaries.png',

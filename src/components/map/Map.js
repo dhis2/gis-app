@@ -4,12 +4,18 @@ import d2map from 'gis-api/src/';
 import Layer from './Layer';
 import EventLayer from './EventLayer';
 import FacilityLayer from './FacilityLayer';
+import ThematicLayer from './ThematicLayer';
+import BoundaryLayer from './BoundaryLayer';
 import EarthEngineLayer from './EarthEngineLayer';
+import ExternalLayer from './ExternalLayer';
 
 const layerTypeToLayerComponent = new global.Map([
     ['event',       EventLayer],
     ['facility',    FacilityLayer],
-    ['earthEngine', EarthEngineLayer]
+    ['thematic',    ThematicLayer],
+    ['boundary',    BoundaryLayer],
+    ['earthEngine', EarthEngineLayer],
+    ['external',    ExternalLayer]
 ]);
 
 function getLayerForType(layer) {

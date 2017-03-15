@@ -40,7 +40,7 @@ export default function LayerHandlerExternal(gis, layer) {
         layer.instance = gis.instance.addLayer(layerConfig);
 
         addLegend(view);
-    }
+    };
 
     const addLegend = function(view, legend) {
 
@@ -72,7 +72,7 @@ export default function LayerHandlerExternal(gis, layer) {
 
             afterLoad(view);
         });
-    }
+    };
 
     // Show a predefined legend set or image URL
     const createLegend = function(config, callback) {
@@ -166,7 +166,7 @@ export default function LayerHandlerExternal(gis, layer) {
                 gis.viewport.shareButton.enable();
             }
         }
-    }
+    };
 
     const loader = {
         compare: false,

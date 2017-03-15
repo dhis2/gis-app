@@ -42,7 +42,14 @@ const defaultOverlays = [{
     visible: true,
     expanded: false,
     loaded: false,
-    edit: true,
+    edit: false,
+    config: {
+        mapService: 'XYZ',
+        url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png',
+        attribution: '&copy; <a href=\\\"http://www.openstreetmap.org/copyright\\\">OpenStreetMap</a>, <a href=\\\"https://carto.com/attributions\\\">CARTO</a>',
+        mapLayerPosition: 'OVERLAY',
+        imageFormat: 'PNG',
+    },
 },{
     layerType: 'earthEngine',
     img: 'images/layers/population.png',
@@ -50,7 +57,7 @@ const defaultOverlays = [{
     subtitle: '2010',
     opacity: 0.9,
     visible: true,
-    expanded: false,
+    expanded: true,
     loaded: false,
     edit: true,
     /*
@@ -133,7 +140,7 @@ const defaultOverlays = [{
     title: 'Landcover',
     opacity: 0.9,
     visible: true,
-    expanded: false,
+    expanded: true,
     loaded: false,
     edit: true,
 },{
@@ -141,7 +148,7 @@ const defaultOverlays = [{
     img: 'images/layers/precipitation.png',
     title: 'Precipitation',
     subtitle: '26 - 28 Nov. 2016',
-    expanded: false,
+    expanded: true,
     visible: true,
     opacity: 0.9,
     loaded: false,

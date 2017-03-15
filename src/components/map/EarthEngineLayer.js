@@ -1,24 +1,41 @@
 import Layer from './Layer';
-
-// TODO: How to share headers for all fetch requests
-const headers = {
-    'Authorization': 'Basic ' + btoa('admin:district'),
-};
+import { apiFetch } from '../../util/api';
 
 export default class EarthEngineLayer extends Layer {
     createLayer() {
+        const props = this.props;
+        const map = props.map;
+
+        /* TODO
+         if (typeof view.config === 'string') { // From database as favorite
+         view.config = JSON.parse(view.config);
+         }
+         */
+
         const config = {
-            ...this.props.config,
-            pane: this.props.id,
+            type: 'earthEngine',
+            pane: props.id,
+            id: props.datasetId,
+            band: props.band,
+            mask: props.mask,
+            attribution: props.attribution,
+            filter: props.filter,
         };
 
+        if (props.params) {
+            config.params = props.params;
+        }
+
+        console.log('Create Earth Engine layer', props, config);
+
         config.accessToken = (callback) => {
-            fetch('//localhost:8080/api/27/tokens/google', { headers })
+            apiFetch('tokens/google')
                 .then(response => response.json())
                 .then(json => callback(json))
                 .catch(error => console.log('parsing failed', error));
         };
 
-        this.instance = this.props.map.createLayer(config).addTo(this.props.map);
+        this.instance = map.createLayer(config).addTo(map);
+
     }
 }

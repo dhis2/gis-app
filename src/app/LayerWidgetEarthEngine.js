@@ -350,29 +350,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
                 }
             });
 
-
-            /* fetch did not work in production
-            fetch(gis.init.apiPath + 'tokens/google', { headers: gis.init.defaultHeaders })
-                .then(response => response.json())
-                .then(token => {
-
-                    // Set token
-                    ee.data.setAuthToken(token.client_id, 'Bearer', token.access_token, token.expires_in, null, null, false);
-                    ee.initialize();
-
-                    dataset.collection(list => {
-                        collectionCombo.store.loadData(list);
-                        dataset.collection = list;
-                        collectionCombo.setLoading(false);
-
-                        if (callback) {
-                            callback(dataset);
-                        }
-                    });
-                })
-                .catch(error => gis.alert(error));
-           */
-
         } else { // Image collection already loaded
 
             collectionCombo.store.loadData(dataset.collection);
@@ -480,10 +457,16 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     const getView = function() {
         const dataset = datasets[datasetCombo.getValue()];
         const image = collectionCombo.getValue();
+        /*
         const view = {
             config: { // Config object stored as one field in favorite
                 id: dataset.id,
             },
+        };
+        */
+
+        const view = {
+            datasetId: dataset.id,
         };
 
         if (!dataset) {
@@ -495,11 +478,20 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             gis.alert('No period selected.'); // TODO: i18n
             return
         } else if (image) {
-            view.config.image = collectionCombo.findRecordByValue(image).get('name');
+            // view.config.image = collectionCombo.findRecordByValue(image).get('name');
+            view.subtitle = String(collectionCombo.findRecordByValue(image).get('name'));
         }
 
         if (dataset.min !== undefined) { // If not fixed palette
+            /*
             view.config.params = {
+                palette: colorsCombo.getValue().join(','),
+                min: minValue.getValue(),
+                max: maxValue.getValue()
+            };
+            */
+
+            view.params = {
                 palette: colorsCombo.getValue().join(','),
                 min: minValue.getValue(),
                 max: maxValue.getValue()
@@ -507,7 +499,11 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
 
         if (image) {
-            view.config.filter = dataset.filter(image);
+            // view.config.filter = dataset.filter(image);
+            // view.config.filter = dataset.filter(image);
+            view.filter = dataset.filter(image);
+
+            //console.log(image);
         }
 
         return view;

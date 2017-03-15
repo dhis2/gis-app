@@ -77,6 +77,8 @@ const overlay = (state, action) => {
             };
 
         case 'OVERLAY_UPDATE':
+            console.log('OVERLAY_UPDATE', state.id, action.id);
+
             if (state.id !== action.id) {
                 return state;
             }

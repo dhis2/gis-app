@@ -50,7 +50,7 @@ const onDataLoad = (data) => {
     // layer.featureStore.loadFeatures(features.slice(0));
     layer.data = features;
 
-    console.log('callback', layer);
+    // console.log('callback', layer);
     callback(layer);
 };
 

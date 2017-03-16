@@ -1143,7 +1143,7 @@ export default function LayerWidgetEvent(gis, layer) {
         view.eventClustering = eventCluster.getValue();
         view.eventPointColor = eventColor.getValue();
         view.eventPointRadius = eventRadius.getValue();
-        view.opacity = layer.layerOpacity;
+        // view.opacity = layer.layerOpacity;
 
         return view;
     };

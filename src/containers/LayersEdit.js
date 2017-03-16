@@ -3,11 +3,11 @@ import LayersEdit from '../components/edit/LayersEdit';
 import { updateOverlay, loadOverlay } from '../actions';
 
 const mapStateToProps = (state) => ({
-    ...state.map,
+    layer: state.editOverlay,
 });
 
 const mapDispatchToProps = ({
-    onOverlayUpdate: loadOverlay,
+    loadOverlay: loadOverlay,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayersEdit);

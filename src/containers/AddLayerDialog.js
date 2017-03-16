@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import AddLayerDialog from '../components/layer/AddLayerDialog';
-import { editOverlay, addOverlay, closeLayersDialog } from '../actions';
+import { editOverlay, closeLayersDialog } from '../actions';
 
 const mapStateToProps = (state) => ({
     overlays: state.overlays,
@@ -12,7 +12,7 @@ const mapDispatchToProps = (dispatch) => ({
     onRequestClose: () => dispatch(closeLayersDialog()),
     onLayerSelect: (layer) => {
         dispatch(closeLayersDialog());
-        dispatch(addOverlay(layer));
+        dispatch(editOverlay(layer));
     },
 });
 

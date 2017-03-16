@@ -1,41 +1,37 @@
 const defaultBasemaps = [{
     id: 'osmLight',
-    type: 'basemap',
-    layerType: 'basemap',
     title: 'OSM Light',
+    subtitle: 'Basemap',
     img: 'images/layers/osmlight.png',
     config: {
         type: 'tileLayer',
         url: '//cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
     },
 },{
     id: 'openStreetMap',
-    type: 'basemap',
-    layerType: 'basemap',
     title: 'OSM Detailed',
+    subtitle: 'Basemap',
     img: 'images/layers/osm.png',
     config: {
         type: 'tileLayer',
         url: '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     },
 },{
     id: 'googleStreets',
-    type: 'basemap',
-    layerType: 'basemap',
     title: 'Google Streets',
+    subtitle: 'Basemap',
     img: 'images/layers/googlestreets.png',
     config: {
         type: 'googleLayer',
         style: 'ROADMAP',
         apiKey: 'AIzaSyBjlDmwuON9lJbPMDlh_LI3zGpGtpK9erc',
-    }
+    },
 },{
     id: 'googleHybrid',
-    type: 'basemap',
-    layerType: 'basemap',
     title: 'Google Hybrid',
+    subtitle: 'Basemap',
     img: 'images/layers/googlehybrid.jpeg',
     config: {
         type: 'googleLayer',
@@ -44,27 +40,27 @@ const defaultBasemaps = [{
     },
 },{
     id: 'stamenTerrain',
-    type: 'basemap',
     layerType: 'external',
     title: 'Terrain',
+    subtitle: 'Basemap',
     img: 'images/layers/terrain.png',
     config: {
         type: 'tileLayer',
         url: '//stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png',
         attribution: '&copy; <a href="http://stamen.com">Stamen Design</a>, <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     },
-},{
+}, {
     id: 'osmDark',
-    type: 'basemap',
     layerType: 'external',
     title: 'OSM Dark',
+    subtitle: 'Basemap',
     img: 'images/layers/osmdark.png',
     config: {
         type: 'tileLayer',
         url: '//cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
     },
-},];
+}];
 
 const basemaps = (state = defaultBasemaps, action) => {
 

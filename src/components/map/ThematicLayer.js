@@ -25,6 +25,8 @@ class ThematicLayer extends Layer {
 
         this.instance.on('click', this.onFeatureClick, this);
         this.instance.on('contextmenu', this.onFeatureRightClick, this);
+
+        map.fitBounds(this.instance.getBounds()); // TODO: Do as action?
     }
 
     onFeatureClick(evt) {

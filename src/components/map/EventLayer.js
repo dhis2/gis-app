@@ -40,6 +40,8 @@ class EventLayer extends Layer {
         // Create and add event layer based on config object
         this.instance = map.createLayer(config).addTo(map);
 
+        map.fitBounds(this.instance.getBounds()); // TODO: Do as action?
+
         this.loadDataElements();
     }
 
@@ -60,7 +62,7 @@ class EventLayer extends Layer {
         apiFetch(`programStages/${props.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${namePropertyUrl},optionSet]]`)
             .then(response => response.json())
             .then(data => {
-                console.log('loadDataElements', data, this);
+                // console.log('loadDataElements', data, this);
 
                 if (data.programStageDataElements) {
                     data.programStageDataElements.forEach(el => {
@@ -74,7 +76,7 @@ class EventLayer extends Layer {
                     });
                 }
 
-                console.log('displayElements', this.displayElements);
+                // console.log('displayElements', this.displayElements);
 
             })
             .catch(error => console.log('Parsing failed: ', error)); // TODO

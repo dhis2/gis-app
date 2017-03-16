@@ -1,9 +1,7 @@
 import {arrayMove} from 'react-sortable-hoc';
 
 const defaultState = {
-    latitude: 8.4,
-    longitude: -11.8,
-    zoom: 8,
+    bounds: [[-34.9, -18.7], [35.9, 50.2]],
     basemap: {
         id: 'osmLight',
         visible: true,
@@ -58,36 +56,6 @@ const overlay = (state, action) => {
 
     switch (action.type) {
 
-        case 'OVERLAY_EDIT':
-            if (state.id !== action.id) {
-                return state;
-            }
-
-            return {
-                ...state,
-                edit: true,
-            };
-
-        case 'OVERLAY_ADD':
-            return {
-                ...action,
-                id: String(action.id),
-                index: action.index,
-                editCounter: 0, // Keeps tracks of layer edits to know if map should be updated
-            };
-
-        case 'OVERLAY_UPDATE':
-            console.log('OVERLAY_UPDATE', state.id, action.id);
-
-            if (state.id !== action.id) {
-                return state;
-            }
-
-            return {
-                ...action,
-                editCounter: ++state.editCounter,
-            };
-
         case 'OVERLAY_CHANGE_OPACITY':
             if (state.id !== action.id) {
                 return state;
@@ -125,9 +93,7 @@ const overlay = (state, action) => {
 };
 
 const map = (state = defaultState, action) => {
-
     switch (action.type) {
-
         case 'BASEMAP_SELECTED':
         case 'BASEMAP_CHANGE_OPACITY':
         case 'BASEMAP_TOGGLE_EXPAND':
@@ -141,7 +107,7 @@ const map = (state = defaultState, action) => {
             return {
                 ...state,
                 overlays: [
-                    overlay(undefined, action),
+                    action.payload,
                     ...state.overlays,
                 ]
             };
@@ -160,11 +126,18 @@ const map = (state = defaultState, action) => {
                 ...state,
             };
 
+
         case 'OVERLAY_UPDATE':
+            console.log('OVERLAY_UPDATE');
+
+            return state;
+
+            /*
             return {
                 ...state,
                 overlays: state.overlays.map(l => overlay(l, action))
             };
+            */
 
         case 'OVERLAY_REMOVE':
             return {

@@ -40,8 +40,6 @@ export default function WidgetWindow(gis, layer, onUpdate) {
                     onUpdate({
                         ...layer,
                         ...view,
-                        edit: false,
-                        loaded: false,
                     });
 
                     // Post usage statistics each time update button is clicked

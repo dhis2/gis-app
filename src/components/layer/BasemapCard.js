@@ -6,7 +6,6 @@ import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off
 import { grey600 } from 'material-ui/styles/colors';
 import Slider from 'material-ui/Slider';
 
-// import LayerToolbar from './LayerToolbar';
 import BasemapList from './BasemapList';
 
 const styles = {

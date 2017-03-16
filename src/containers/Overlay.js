@@ -3,7 +3,7 @@ import OverlayCard from '../components/layer/OverlayCard';
 import { editOverlay, removeOverlay, changeOverlayOpacity, toggleOverlayExpand, toggleOverlayVisibility, openDataTable } from '../actions';
 
 const mapStateToProps = (state) => ({
-    layers: state.layers,
+    // layers: state.layers,
 });
 
 const mapDispatchToProps = ({
@@ -15,4 +15,5 @@ const mapDispatchToProps = ({
     onDataTableShow: openDataTable,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OverlayCard);
+// export default connect(mapStateToProps, mapDispatchToProps)(OverlayCard);
+export default connect(null, mapDispatchToProps)(OverlayCard);

@@ -52,20 +52,23 @@ class Map extends Component {
 
         mapEl.append(this.map.getContainer());
 
-        this.map.setView([props.latitude, props.longitude], props.zoom);
+        if (props.bounds) {
+            this.map.fitBounds(props.bounds);
+        } else if (props.latitude && props.longitude && props.zoom) {
+            this.map.setView([props.latitude, props.longitude], props.zoom);
+        }
     }
 
     render() {
         const props = this.props;
-
         const basemap = {
-            ...props.basemaps.filter(basemap => basemap.id === props.basemap.id)[0], // TODO: Handle missing basemap id
+            ...props.basemaps.filter(b => b.id === props.basemap.id)[0],
             ...props.basemap
         };
 
         return (
             <div ref="map" style={style}>
-                {this.props.overlays.filter(layer => layer.loaded).map((layer, index) => { // Only render loaded layers
+                {props.overlays.map((layer, index) => {
                     const MapLayer = getLayerForType(layer);
 
                     return (
@@ -84,3 +87,4 @@ class Map extends Component {
 }
 
 export default Map;
+

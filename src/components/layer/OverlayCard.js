@@ -45,56 +45,59 @@ const styles = {
     }
 };
 
-const OverlayCard = (props) => (
-    <Card
-        style={styles.root}
-        containerStyle={styles.container}
-        expanded={props.expanded}
-        onExpandChange={() => props.onExpandChange(props.id)}
-    >
-        <CardHeader
-            title={props.title}
-            subtitle={props.subtitle}
-            // actAsExpander={true}  // Not able to stop event bubbling for visibility icon
-            showExpandableButton={true}
-            style={{
-                ...styles.header,
-                paddingLeft: props.basemap ? 14 : 34
-            }}
-            textStyle={styles.headerText}>
-            {!props.basemap &&
+const OverlayCard = (props) => {
+    return (
+        <Card
+            style={styles.root}
+            containerStyle={styles.container}
+            expanded={props.expanded}
+            onExpandChange={() => props.onExpandChange(props.id)}
+        >
+            <CardHeader
+                title={props.title}
+                subtitle={props.subtitle}
+                // actAsExpander={true}  // Not able to stop event bubbling for visibility icon
+                showExpandableButton={true}
+                style={{
+                    ...styles.header,
+                    paddingLeft: props.basemap ? 14 : 34
+                }}
+                textStyle={styles.headerText}>
+                {!props.basemap &&
                 <SortableHandle color={grey600} />
-            }
-            <IconButton
-                style={styles.visibility}
-                onClick={() => props.onVisibilityChange(props.id)}
-                tooltip="Toggle visibility">
-                {props.visible ? (
-                    <ActionVisibilityIcon color={grey600} />
-                ) : (
-                    <ActionVisibilityOffIcon color={grey600} />
-                )}
-            </IconButton>
-        </CardHeader>
-        <CardText expandable={true} style={styles.body}>
-            {props.legend &&
+                }
+                <IconButton
+                    style={styles.visibility}
+                    onClick={() => props.onVisibilityChange(props.id)}
+                    tooltip="Toggle visibility">
+                    {props.visible ? (
+                        <ActionVisibilityIcon color={grey600} />
+                    ) : (
+                        <ActionVisibilityOffIcon color={grey600} />
+                    )}
+                </IconButton>
+            </CardHeader>
+            <CardText expandable={true} style={styles.body}>
+                {props.legend &&
                 <Legend
                     {...props.legend}
                     style={styles.legend}
                 />
-            }
-            {props.basemap &&
+                }
+                {props.basemap &&
                 <Basemaps id={props.id} />
-            }
-            <LayerToolbar
-                {...props}
-                onEdit={!props.basemap ? () => props.onEdit(props.id) : null}
-                onDataTableShow={!props.basemap ? props.onDataTableShow : null}
-                onRemove={!props.basemap ? () => props.onRemove(props.id) : null}
-            />
-        </CardText>
-    </Card>
-)
+                }
+                <LayerToolbar
+                    {...props}
+                    onEdit={!props.basemap ? () => props.onEdit(props.id) : null}
+                    onDataTableShow={!props.basemap ? props.onDataTableShow : null}
+                    onRemove={!props.basemap ? () => props.onRemove(props.id) : null}
+                />
+            </CardText>
+        </Card>
+    )
+
+};
 
 OverlayCard.propTypes= {
     id: PropTypes.string.isRequired,
@@ -109,7 +112,7 @@ OverlayCard.propTypes= {
 OverlayCard.defaultProps = {
     opacity: 1,
     visible: true,
-    expanded: false,
+    expanded: true,
 };
 
 export default OverlayCard;

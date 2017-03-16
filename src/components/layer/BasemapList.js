@@ -37,32 +37,28 @@ const styles = {
 
 const BasemapList = ({ id, basemaps, onBasemapSelect }) => (
     <div style={styles.root}>
-            {basemaps.map((basemap, index) => {
+        {basemaps.map((basemap, index) => {
 
-                const borderStyle = Object.assign({
-                    outline: (basemap.id === id ? '3px solid orange' : '1px solid #999'),
-                }, styles.imageContainer);
+            const borderStyle = Object.assign({
+                outline: (basemap.id === id ? '3px solid orange' : '1px solid #999'),
+            }, styles.imageContainer);
 
-                return (
-                    <div key={`basemap-${index}`} style={styles.layer} onClick={() => onBasemapSelect(basemap.id)}>
-                        <div style={borderStyle}>
-                            <img src={basemap.img} style={styles.image} />
-                        </div>
-                        <div style={styles.name}>{basemap.title}</div>
+            return (
+                <div key={`basemap-${index}`} style={styles.layer} onClick={() => onBasemapSelect(basemap.id)}>
+                    <div style={borderStyle}>
+                        <img src={basemap.img} style={styles.image} />
                     </div>
-                )
-            })}
+                    <div style={styles.name}>{basemap.title}</div>
+                </div>
+            )
+        })}
     </div>
 );
 
 BasemapList.propTypes = {
     id: PropTypes.string.isRequired,
-    basemaps: PropTypes.array, // TODO: Use arrayOf?
+    basemaps: PropTypes.array.isRequired,
     onBasemapSelect: PropTypes.func.isRequired,
-};
-
-BasemapList.defaultProps = {
-    basemaps: [],
 };
 
 export default BasemapList;

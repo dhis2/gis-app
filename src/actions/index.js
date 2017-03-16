@@ -1,4 +1,8 @@
-import loadLayer from '../loaders/layer';
+import * as actions from '../constants/actionTypes';
+import loadLayer from '../loaders/loadLayer';
+
+// Syntax: https://github.com/dhis2/dhis2-appstore/blob/feature/front-end/app/src/actions/actionCreators.js
+
 
 let nextOverlayId = 0;
 
@@ -25,14 +29,24 @@ export const changeBasemapOpacity = (opacity) => ({
 
 /* OVERLAYS */
 
-export const editOverlay = (id) => ({
-    type: 'OVERLAY_EDIT',
-    id,
+export const editOverlay = layer => ({
+    type: actions.OVERLAY_EDIT,
+    payload: { // Creating a copy as the same overlay can be added more than once
+        ...layer,
+    },
+});
+
+export const addOverlay = layer => ({
+    type: actions.OVERLAY_ADD,
+    payload: {
+        id: 'overlay-' + nextOverlayId++,
+        ...layer,
+    },
 });
 
 export const updateOverlay = (layer) => ({
-    ...layer,
-    type: 'OVERLAY_UPDATE',
+    type: actions.OVERLAY_UPDATE,
+    payload: layer,
 });
 
 /*
@@ -42,11 +56,22 @@ export const loadOverlay = (layer) => ({
 });
 */
 
-export const addOverlay = (layer) => ({
-    type: 'OVERLAY_ADD',
-    id: 'overlay-' + nextOverlayId++,
-    ...layer,
-});
+// http://redux.js.org/docs/advanced/AsyncActions.html
+export function loadOverlay(layer) {
+    return function (dispatch) {
+        // dispatch ...
+
+        loadLayer(layer, () => {
+            if (!layer.id) { // Add new layer
+                dispatch(addOverlay(layer));
+            } else { // Update existing layer
+                dispatch(updateOverlay(layer));
+            }
+        });
+    }
+}
+
+
 
 export const removeOverlay = (id) => ({
     type: 'OVERLAY_REMOVE',
@@ -75,18 +100,7 @@ export const sortOverlays = ({oldIndex, newIndex}) => ({
     newIndex,
 });
 
-// http://redux.js.org/docs/advanced/AsyncActions.html
-export function loadOverlay(layer) {
-    return function (dispatch) {
-        // dispatch ...
 
-        loadLayer(layer, () => {
-            layer.loaded = true;
-            dispatch(updateOverlay(layer)); // TODO: immutable?
-        });
-
-    }
-}
 
 /* USER INTERFACE */
 

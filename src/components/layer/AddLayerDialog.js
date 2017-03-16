@@ -51,7 +51,7 @@ const AddLayerDialog = ({ layersDialogOpen, overlays, onRequestClose, onLayerSel
                 {overlays.map((layer, index) => (
                     <div key={`layer-${index}`} style={styles.layer} onClick={() => onLayerSelect(layer)}>
                         <img src={layer.img} style={styles.image} />
-                        <div style={styles.name}>{layer.layerType || layer.title}</div>
+                        <div style={styles.name}>{layer.title}</div>
                     </div>
                 ))}
             </div>

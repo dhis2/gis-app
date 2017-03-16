@@ -1,48 +1,40 @@
 const defaultOverlays = [{
     layerType: 'event',
-    img: 'images/layers/events.png',
     title: 'Events',
+    img: 'images/layers/events.png',
     opacity: 0.95,
-    expanded: true,
-    visible: true,
-    edit: true,
 },{
     layerType: 'facility',
-    img: 'images/layers/facilities.png',
     title: 'Facilities',
+    img: 'images/layers/facilities.png',
     visible: true,
     opacity: 1,
     expanded: true,
     loaded: false,
-    edit: true,
 },{
     layerType: 'thematic',
+    title: 'Thematic',
     img: 'images/layers/thematic.png',
-    // title: 'ANC 3 Coverage',
-    // subtitle: '2017',
     visible: true,
     opacity: 0.8,
     expanded: true,
     loaded: false,
-    edit: true,
 },{
     layerType: 'boundary',
-    img: 'images/layers/boundaries.png',
     title: 'Boundaries',
+    img: 'images/layers/boundaries.png',
     opacity: 1,
     visible: true,
     expanded: true,
     loaded: false,
-    edit: true,
 },{
     layerType: 'external',
-    img: 'images/layers/labels.png',
     title: 'Labels',
+    img: 'images/layers/labels.png',
     opacity: 0.9,
     visible: true,
     expanded: false,
     loaded: false,
-    edit: false,
     config: {
         mapService: 'XYZ',
         url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png',
@@ -52,14 +44,13 @@ const defaultOverlays = [{
     },
 },{
     layerType: 'earthEngine',
-    img: 'images/layers/population.png',
     title: 'Population density',
+    img: 'images/layers/population.png',
     subtitle: '2010',
     opacity: 0.9,
     visible: true,
     expanded: true,
     loaded: false,
-    edit: true,
     /*
     legend: {
         description: 'Population density estimates with national totals adjusted to match UN population division estimates.',
@@ -118,41 +109,37 @@ const defaultOverlays = [{
     */
 },{
     layerType: 'earthEngine',
-    img: 'images/layers/elevation.png',
     title: 'Elevation',
+    img: 'images/layers/elevation.png',
     opacity: 0.9,
     visible: true,
     expanded: false,
     loaded: false,
-    edit: true,
 },{
     layerType: 'earthEngine',
-    img: 'images/layers/temperature.png',
     title: 'Temperature',
+    img: 'images/layers/temperature.png',
     opacity: 0.9,
     visible: true,
     expanded: false,
     loaded: false,
-    edit: true,
 },{
     layerType: 'earthEngine',
-    img: 'images/layers/landcover.png',
     title: 'Landcover',
+    img: 'images/layers/landcover.png',
     opacity: 0.9,
     visible: true,
     expanded: true,
     loaded: false,
-    edit: true,
 },{
     layerType: 'earthEngine',
-    img: 'images/layers/precipitation.png',
     title: 'Precipitation',
+    img: 'images/layers/precipitation.png',
     subtitle: '26 - 28 Nov. 2016',
     expanded: true,
     visible: true,
     opacity: 0.9,
     loaded: false,
-    edit: true,
     /*
     legend: {
         description: 'Precipitation collected from satellite and weather stations on the ground.',
@@ -202,13 +189,13 @@ const defaultOverlays = [{
     */
 },{
     layerType: 'earthEngine',
-    img: 'images/layers/nighttime.png',
     title: 'Nighttime lights',
+    img: 'images/layers/nighttime.png',
     opacity: 0.9,
     visible: true,
     expanded: false,
     loaded: false,
-    edit: true,
+
 },];
 
 const overlays = (state = defaultOverlays, action) => {

@@ -71,8 +71,6 @@ const onDataLoad = (data) => {
         });
     }
 
-
-
     const updateFeatures = function() {
         // Find header names and keys
         data.headers.forEach(header => names[header.name] = header.column);
@@ -218,8 +216,6 @@ const eventLoader = (config, cb) =>  {
        }
         });
     }
-
-    console.log('#', layer);
 
     // Create legend
     layer.legend = {

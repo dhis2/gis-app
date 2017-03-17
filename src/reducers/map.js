@@ -95,6 +95,11 @@ const overlay = (state, action) => {
 
 const map = (state = defaultState, action) => {
     switch (action.type) {
+        case actionTypes.MAP_SET:
+            console.log('MAPSET', action, state);
+
+            return action.payload;
+
         case actionTypes.BASEMAP_SELECTED:
         case actionTypes.BASEMAP_CHANGE_OPACITY:
         case actionTypes.BASEMAP_TOGGLE_EXPAND:

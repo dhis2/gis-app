@@ -1,5 +1,6 @@
 import React from 'react';
 import AddLayerButton from '../../containers/AddLayerButton';
+import FavoriteButton from '../../containers/FavoriteButton';
 
 const styles = {
     position: 'absolute',
@@ -14,6 +15,7 @@ const styles = {
 const Menu = () => (
     <div style={styles}>
         <AddLayerButton />
+        <FavoriteButton />
     </div>
 );
 

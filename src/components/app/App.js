@@ -4,6 +4,7 @@ import Header from './Header';
 import Menu from './Menu';
 
 import AddLayerDialog from '../../containers/AddLayerDialog';
+import FavoriteDialog from '../../containers/FavoriteDialog';
 import LayersList from '../../containers/LayersList';
 import Map from '../../containers/Map';
 import DataTable from '../../containers/DataTable';
@@ -28,6 +29,7 @@ const App = () => (
             <Header />
             <Menu />
             <AddLayerDialog />
+            <FavoriteDialog />
             <LayersList />
             <LayersEdit />
             <div style={styles.mapContainer}>

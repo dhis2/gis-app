@@ -1,10 +1,18 @@
 import * as actionTypes from '../constants/actionTypes';
 import loadLayer from '../loaders/loadLayer';
+import loadMap from '../loaders/loadMap';
 
 // Syntax: https://github.com/dhis2/dhis2-appstore/blob/feature/front-end/app/src/actions/actionCreators.js
 
-
 // let nextOverlayId = 0;
+
+/* MAP */
+export const setMap = map => ({
+    type: actionTypes.MAP_SET,
+    payload: map
+});
+
+
 
 /* BASEMAPS */
 
@@ -58,10 +66,12 @@ export const updateOverlay = layer => ({
 });
 
 // Loading overlay data
+/*
 export const loadOverlay = id => ({
     type: actionTypes.OVERLAY_LOAD,
     id,
 });
+*/
 
 // http://redux.js.org/docs/advanced/AsyncActions.html
 export function loadOverlay(layer) {
@@ -108,6 +118,20 @@ export const sortOverlays = ({oldIndex, newIndex}) => ({
 });
 
 
+/* FAVORITE */
+export function loadFavorite(id) {
+    return function (dispatch) {
+        // dispatch ...
+        loadMap(id, map => {
+            if (map) {
+                dispatch(setMap(map));
+            }
+       });
+    }
+}
+
+
+
 
 /* USER INTERFACE */
 
@@ -127,4 +151,12 @@ export const openDataTable = (id, data) => ({
 
 export const closeDataTable = () => ({
     type: actionTypes.DATA_TABLE_CLOSE_REQUESTED,
+});
+
+export const openFavoriteDialog = () => ({
+    type: actionTypes.FAVORITE_DIALOG_OPEN_REQUESTED,
+});
+
+export const closeFavoriteDialog = () => ({
+    type: actionTypes.FAVORITE_DIALOG_CLOSE_REQUESTED,
 });

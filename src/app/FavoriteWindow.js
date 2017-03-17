@@ -253,7 +253,7 @@ export default function FavoriteWindow(gis) {
                 dataIndex: 'name',
                 sortable: false,
                 width: windowCmpWidth - 88,
-                renderer(value, metaData, record) {
+                renderer: (value, metaData, record) => {
                     const fn = function() {
                         let element = Ext.get(record.data.id);
 
@@ -262,8 +262,11 @@ export default function FavoriteWindow(gis) {
                             element.addClsOnOver('link');
                             element.load = function() {
                                 favoriteWindow.hide();
-                                gis.map = {id: record.data.id};
-                                GIS.core.MapLoader(gis).load();
+                                // gis.map = {id: record.data.id};
+                                // GIS.core.MapLoader(gis).load();
+
+                                // TODO: Temporary hack to pass map id back to react/redux app
+                                favoriteWindow.onFavoriteClick(record.data.id);
                             };
                             element.dom.setAttribute('onclick', 'Ext.get(this).load();');
                         }
@@ -431,10 +434,11 @@ export default function FavoriteWindow(gis) {
         ],
         listeners: {
             added() {
-                gis.viewport.mapGrid = this;
+                // gis.viewport.mapGrid = this;
             },
             render() {
-                const size = Math.floor((gis.viewport.centerRegion.getHeight() - 155) / gis.conf.layout.grid.row_height);
+                // const size = Math.floor((gis.viewport.centerRegion.getHeight() - 155) / gis.conf.layout.grid.row_height);
+                const size = 20; // TODO: Calculate from screen height
                 this.store.pageSize = size;
                 this.store.page = 1;
                 this.store.loadStore();
@@ -547,6 +551,9 @@ export default function FavoriteWindow(gis) {
                 }
 
                 searchTextfield.focus(false, 500);
+            },
+            close(win) {
+                win.onClose(); // Temporary hack
             }
         }
     });

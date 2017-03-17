@@ -5,12 +5,12 @@ const style = {
     height: 40
 };
 
-const AddLayerButton = ({ onClick }) => (
-    <FlatButton label="Add layer" onTouchTap={onClick} style={style} />
+const FavoriteButton = ({ onClick }) => (
+    <FlatButton label="Favorites" onTouchTap={onClick} style={style} />
 );
 
-AddLayerButton.propTypes = {
+FavoriteButton.propTypes = {
     onClick: PropTypes.func.isRequired,
 };
 
-export default AddLayerButton;
+export default FavoriteButton;

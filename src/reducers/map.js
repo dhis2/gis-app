@@ -1,3 +1,4 @@
+import * as actionTypes from '../constants/actionTypes';
 import {arrayMove} from 'react-sortable-hoc';
 
 const defaultState = {
@@ -17,7 +18,7 @@ const basemap = (state, action) => {
 
     switch (action.type) {
 
-        case 'BASEMAP_SELECTED':
+        case actionTypes.BASEMAP_SELECTED:
             if (state.id === action.id) { // No change
                 return state;
             }
@@ -27,19 +28,19 @@ const basemap = (state, action) => {
                 id: action.id,
             };
 
-        case 'BASEMAP_CHANGE_OPACITY':
+        case actionTypes.BASEMAP_CHANGE_OPACITY:
             return {
                 ...state,
                 opacity: action.opacity,
             };
 
-        case 'BASEMAP_TOGGLE_EXPAND':
+        case actionTypes.BASEMAP_TOGGLE_EXPAND:
             return {
                 ...state,
                 expanded: !state.expanded,
             };
 
-        case 'BASEMAP_TOGGLE_VISIBILITY':
+        case actionTypes.BASEMAP_TOGGLE_VISIBILITY:
             return {
                 ...state,
                 visible: !state.visible,
@@ -56,7 +57,7 @@ const overlay = (state, action) => {
 
     switch (action.type) {
 
-        case 'OVERLAY_CHANGE_OPACITY':
+        case actionTypes.OVERLAY_CHANGE_OPACITY:
             if (state.id !== action.id) {
                 return state;
             }
@@ -66,7 +67,7 @@ const overlay = (state, action) => {
                 opacity: action.opacity,
             };
 
-        case 'OVERLAY_TOGGLE_VISIBILITY':
+        case actionTypes.OVERLAY_TOGGLE_VISIBILITY:
             if (state.id !== action.id) {
                 return state;
             }
@@ -76,7 +77,7 @@ const overlay = (state, action) => {
                 visible: !state.visible,
             };
 
-        case 'OVERLAY_TOGGLE_EXPAND':
+        case actionTypes.OVERLAY_TOGGLE_EXPAND:
             if (state.id !== action.id) {
                 return state;
             }
@@ -94,16 +95,16 @@ const overlay = (state, action) => {
 
 const map = (state = defaultState, action) => {
     switch (action.type) {
-        case 'BASEMAP_SELECTED':
-        case 'BASEMAP_CHANGE_OPACITY':
-        case 'BASEMAP_TOGGLE_EXPAND':
-        case 'BASEMAP_TOGGLE_VISIBILITY':
+        case actionTypes.BASEMAP_SELECTED:
+        case actionTypes.BASEMAP_CHANGE_OPACITY:
+        case actionTypes.BASEMAP_TOGGLE_EXPAND:
+        case actionTypes.BASEMAP_TOGGLE_VISIBILITY:
             return {
                 ...state,
                 basemap: basemap(state.basemap, action),
             };
 
-        case 'OVERLAY_ADD':
+        case actionTypes.OVERLAY_ADD:
             return {
                 ...state,
                 overlays: [
@@ -112,14 +113,14 @@ const map = (state = defaultState, action) => {
                 ]
             };
 
-        case 'OVERLAY_ADD_DATA':
+        case actionTypes.OVERLAY_ADD_DATA:
             console.log('OVERLAY_ADD_DATA');
 
             return {
                 ...state,
             };
 
-        case 'OVERLAY_LOAD':
+        case actionTypes.OVERLAY_LOAD:
             console.log('OVERLAY_LOAD');
 
             return {
@@ -127,7 +128,7 @@ const map = (state = defaultState, action) => {
             };
 
 
-        case 'OVERLAY_UPDATE':
+        case actionTypes.OVERLAY_UPDATE:
             console.log('OVERLAY_UPDATE');
 
             return state;
@@ -139,22 +140,22 @@ const map = (state = defaultState, action) => {
             };
             */
 
-        case 'OVERLAY_REMOVE':
+        case actionTypes.OVERLAY_REMOVE:
             return {
                 ...state,
                 overlays: state.overlays.filter(overlay => overlay.id !== action.id)
             };
 
-        case 'OVERLAY_SORT':
+        case actionTypes.OVERLAY_SORT:
             return {
                 ...state,
                 overlays: arrayMove(state.overlays, action.oldIndex, action.newIndex)
             };
 
-        case 'OVERLAY_EDIT':
-        case 'OVERLAY_CHANGE_OPACITY':
-        case 'OVERLAY_TOGGLE_VISIBILITY':
-        case 'OVERLAY_TOGGLE_EXPAND':
+        case actionTypes.OVERLAY_EDIT:
+        case actionTypes.OVERLAY_CHANGE_OPACITY:
+        case actionTypes.OVERLAY_TOGGLE_VISIBILITY:
+        case actionTypes.OVERLAY_TOGGLE_EXPAND:
             return {
                 ...state,
                 overlays: state.overlays.map(l => overlay(l, action))

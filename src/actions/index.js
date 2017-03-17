@@ -1,60 +1,67 @@
-import * as actions from '../constants/actionTypes';
+import * as actionTypes from '../constants/actionTypes';
 import loadLayer from '../loaders/loadLayer';
 
 // Syntax: https://github.com/dhis2/dhis2-appstore/blob/feature/front-end/app/src/actions/actionCreators.js
 
 
-let nextOverlayId = 0;
+// let nextOverlayId = 0;
 
 /* BASEMAPS */
 
 export const basemapSelected = (id) => ({
-    type: 'BASEMAP_SELECTED',
+    type: actionTypes.BASEMAP_SELECTED,
     id,
 });
 
 export const toggleBasemapExpand = () => ({
-    type: 'BASEMAP_TOGGLE_EXPAND',
+    type: actionTypes.BASEMAP_TOGGLE_EXPAND,
 });
 
 export const toggleBasemapVisibility = () => ({
-    type: 'BASEMAP_TOGGLE_VISIBILITY',
+    type: actionTypes.BASEMAP_TOGGLE_VISIBILITY,
 });
 
 export const changeBasemapOpacity = (opacity) => ({
-    type: 'BASEMAP_CHANGE_OPACITY',
+    type: actionTypes.BASEMAP_CHANGE_OPACITY,
     opacity,
 });
 
 
 /* OVERLAYS */
 
+// Edit overlay
 export const editOverlay = layer => ({
-    type: actions.OVERLAY_EDIT,
-    payload: { // Creating a copy as the same overlay can be added more than once
-        ...layer,
-    },
+    type: actionTypes.OVERLAY_EDIT,
+    payload: layer
 });
 
+/*
 export const addOverlay = layer => ({
-    type: actions.OVERLAY_ADD,
+    type: actionTypes.OVERLAY_ADD,
     payload: {
         id: 'overlay-' + nextOverlayId++,
         ...layer,
     },
 });
+*/
 
-export const updateOverlay = (layer) => ({
-    type: actions.OVERLAY_UPDATE,
+// Add new overlay
+export const addOverlay = layer => ({
+    type: actionTypes.OVERLAY_ADD,
     payload: layer,
 });
 
-/*
-export const loadOverlay = (layer) => ({
-    ...layer,
-    type: 'OVERLAY_LOAD',
+// Update existing overlay
+export const updateOverlay = layer => ({
+    type: actionTypes.OVERLAY_UPDATE,
+    payload: layer,
 });
-*/
+
+// Loading overlay data
+export const loadOverlay = id => ({
+    type: actionTypes.OVERLAY_LOAD,
+    id,
+});
 
 // http://redux.js.org/docs/advanced/AsyncActions.html
 export function loadOverlay(layer) {
@@ -74,28 +81,28 @@ export function loadOverlay(layer) {
 
 
 export const removeOverlay = (id) => ({
-    type: 'OVERLAY_REMOVE',
+    type: actionTypes.OVERLAY_REMOVE,
     id,
 });
 
 export const toggleOverlayExpand = (id) => ({
-    type: 'OVERLAY_TOGGLE_EXPAND',
+    type: actionTypes.OVERLAY_TOGGLE_EXPAND,
     id,
 });
 
 export const toggleOverlayVisibility = (id) => ({
-    type: 'OVERLAY_TOGGLE_VISIBILITY',
+    type: actionTypes.OVERLAY_TOGGLE_VISIBILITY,
     id,
 });
 
 export const changeOverlayOpacity = (id, opacity) => ({
-    type: 'OVERLAY_CHANGE_OPACITY',
+    type: actionTypes.OVERLAY_CHANGE_OPACITY,
     id,
     opacity,
 });
 
 export const sortOverlays = ({oldIndex, newIndex}) => ({
-    type: 'OVERLAY_SORT',
+    type: actionTypes.OVERLAY_SORT,
     oldIndex,
     newIndex,
 });
@@ -105,19 +112,19 @@ export const sortOverlays = ({oldIndex, newIndex}) => ({
 /* USER INTERFACE */
 
 export const openLayersDialog = () => ({
-    type: 'LAYERS_DIALOG_OPEN_REQUESTED',
+    type: actionTypes.LAYERS_DIALOG_OPEN_REQUESTED,
 });
 
 export const closeLayersDialog = () => ({
-    type: 'LAYERS_DIALOG_CLOSE_REQUESTED',
+    type: actionTypes.LAYERS_DIALOG_CLOSE_REQUESTED,
 });
 
 export const openDataTable = (id, data) => ({
-    type: 'DATA_TABLE_OPEN_REQUESTED',
+    type: actionTypes.DATA_TABLE_OPEN_REQUESTED,
     id,
     data,
 });
 
 export const closeDataTable = () => ({
-    type: 'DATA_TABLE_CLOSE_REQUESTED',
+    type: actionTypes.DATA_TABLE_CLOSE_REQUESTED,
 });

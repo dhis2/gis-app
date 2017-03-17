@@ -21,16 +21,12 @@ const ui = (state = defaultState, action) => {
             };
 
         case actionTypes.FAVORITE_DIALOG_OPEN_REQUESTED:
-            console.log('FAVORITE_DIALOG_OPEN_REQUESTED');
-
             return {
                 ...state,
                 favoriteDialogOpen: true,
             };
 
         case actionTypes.FAVORITE_DIALOG_CLOSE_REQUESTED:
-            console.log('FAVORITE_DIALOG_CLOSE_REQUESTED');
-
             return {
                 ...state,
                 favoriteDialogOpen: false,

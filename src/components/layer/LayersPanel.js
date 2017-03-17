@@ -35,6 +35,8 @@ const SortableLayersList = SortableContainer(({layers}) => (
 const LayersPanel = ({ basemap, basemaps, overlays, onSortEnd }) => {
     const selectedBasemap = basemaps.filter(b => b.id === basemap.id)[0];
 
+    // console.log('layerspanel', basemap, overlays);
+
     return (
         <Drawer containerStyle={styles} width={300}>
             <SortableLayersList layers={overlays} onSortEnd={onSortEnd} useDragHandle={true} />

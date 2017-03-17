@@ -124,7 +124,17 @@ export function loadFavorite(id) {
         // dispatch ...
         loadMap(id, map => {
             if (map) {
+
+                console.log('####', dispatch);
                 dispatch(setMap(map));
+                console.log('####', map);
+
+                //if (map.overlays) {
+                    map.overlays.forEach(layer => {
+                        console.log('overlay');
+                    });
+                //}
+
             }
        });
     }

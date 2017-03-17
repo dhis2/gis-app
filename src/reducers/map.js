@@ -96,9 +96,10 @@ const overlay = (state, action) => {
 const map = (state = defaultState, action) => {
     switch (action.type) {
         case actionTypes.MAP_SET:
-            console.log('MAPSET', action, state);
-
-            return action.payload;
+            return {
+                ...defaultState, // TODO: Not sure why needed
+                ...action.payload
+            };
 
         case actionTypes.BASEMAP_SELECTED:
         case actionTypes.BASEMAP_CHANGE_OPACITY:

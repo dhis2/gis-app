@@ -59,6 +59,10 @@ class Map extends Component {
         }
     }
 
+    componentDidUpdate(prevProps) {
+        console.log('map did update');
+    }
+
     render() {
         const props = this.props;
         const basemap = {

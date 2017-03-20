@@ -367,58 +367,59 @@ export default function getInstance(init) {
             util.array.sort(organisationUnits, levelOrder, 'le');
 
             organisationUnits.forEach(ou => {
-                const coord = JSON.parse(ou.co);
-                let gpid = '';
-                let gppg = '';
-                let type;
+                if (ou.co !== '[,]') {
+                    const coord = JSON.parse(ou.co);
+                    let gpid = '';
+                    let gppg = '';
+                    let type;
 
-                // Only add features with coordinates
-                if (coord && coord.length) {
-                    type = 'Point';
-                    if (ou.ty === 2) {
-                        type = 'Polygon';
-                        if (ou.co.substring(0, 4) === '[[[[') {
-                            type = 'MultiPolygon';
-                        }
-                    }
-
-                    // grand parent
-                    if (isString(ou.pg) && ou.pg.length) {
-                        const ids = arrayClean(ou.pg.split('/'));
-
-                        // grand parent id
-                        if (ids.length >= 2) {
-                            gpid = ids[ids.length - 2];
+                    // Only add features with coordinates
+                    if (coord && coord.length) {
+                        type = 'Point';
+                        if (ou.ty === 2) {
+                            type = 'Polygon';
+                            if (ou.co.substring(0, 4) === '[[[[') {
+                                type = 'MultiPolygon';
+                            }
                         }
 
-                        // grand parent parentgraph
-                        if (ids.length > 2) {
-                            gppg = '/' + ids.slice(0, ids.length - 2).join('/');
-                        }
-                    }
+                        // grand parent
+                        if (isString(ou.pg) && ou.pg.length) {
+                            const ids = arrayClean(ou.pg.split('/'));
 
-                    features.push({
-                        type: 'Feature',
-                        id: ou.id,
-                        geometry: {
-                            type: type,
-                            coordinates: coord
-                        },
-                        properties: {
+                            // grand parent id
+                            if (ids.length >= 2) {
+                                gpid = ids[ids.length - 2];
+                            }
+
+                            // grand parent parentgraph
+                            if (ids.length > 2) {
+                                gppg = '/' + ids.slice(0, ids.length - 2).join('/');
+                            }
+                        }
+
+                        features.push({
+                            type: 'Feature',
                             id: ou.id,
-                            name: ou.na,
-                            hasCoordinatesDown: ou.hcd,
-                            hasCoordinatesUp: ou.hcu,
-                            level: ou.le,
-                            grandParentParentGraph: gppg,
-                            grandParentId: gpid,
-                            parentGraph: ou.pg,
-                            parentId: ou.pi,
-                            parentName: ou.pn
-                        }
-                    });
+                            geometry: {
+                                type: type,
+                                coordinates: coord
+                            },
+                            properties: {
+                                id: ou.id,
+                                name: ou.na,
+                                hasCoordinatesDown: ou.hcd,
+                                hasCoordinatesUp: ou.hcu,
+                                level: ou.le,
+                                grandParentParentGraph: gppg,
+                                grandParentId: gpid,
+                                parentGraph: ou.pg,
+                                parentId: ou.pi,
+                                parentName: ou.pn
+                            }
+                        });
+                    }
                 }
-
             });
 
             return features;
@@ -869,11 +870,15 @@ export default function getInstance(init) {
                     return;
                 }
 
+                // console.log('A', config.layer, config.columns);
+
                 if (arrayContains([gis.layer.thematic1.id, gis.layer.thematic2.id, gis.layer.thematic3.id, gis.layer.thematic4.id], config.layer)) {
                     if (!config.columns) {
                         return;
                     }
                 }
+
+                console.log('B');
 
                 // Collect object names and user orgunits
                 for (let i = 0, dim, dims = arrayClean([].concat(config.columns, config.rows, config.filters)); i < dims.length; i++) {

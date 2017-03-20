@@ -1390,9 +1390,15 @@ Ext.onReady( function() {
                                                                                 return;
                                                                             }
 
+                                                                            /*
                                                                             for (var i = 0; i < ids.length; i++) {
                                                                                 url += '&filter=id:eq:' + ids[i];
                                                                             }
+                                                                            */
+
+                                                                            // IN filter is more compact than filter=id:eq for each id
+                                                                            // Had ro remove the last three ids to get below the 8192 bytes limit
+                                                                            url = '&filter=id:in:[' + ids.splice(-3).join(',') + ']';
 
                                                                             Ext.Ajax.request({
                                                                                 url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName~rename(name),version,options[code,displayName~rename(name)]&paging=false' + url),

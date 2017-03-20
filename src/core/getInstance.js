@@ -367,8 +367,9 @@ export default function getInstance(init) {
             util.array.sort(organisationUnits, levelOrder, 'le');
 
             organisationUnits.forEach(ou => {
-                if (ou.co !== '[,]') {
-                    const coord = JSON.parse(ou.co);
+                try {
+                    let coord = JSON.parse(ou.co);
+
                     let gpid = '';
                     let gppg = '';
                     let type;
@@ -376,8 +377,10 @@ export default function getInstance(init) {
                     // Only add features with coordinates
                     if (coord && coord.length) {
                         type = 'Point';
+
                         if (ou.ty === 2) {
                             type = 'Polygon';
+
                             if (ou.co.substring(0, 4) === '[[[[') {
                                 type = 'MultiPolygon';
                             }
@@ -418,6 +421,10 @@ export default function getInstance(init) {
                                 parentName: ou.pn
                             }
                         });
+                    }
+                } catch (e) {
+                    if (console && console.log) {
+                        console.log('Missing/wrong coordinates for: ', ou);
                     }
                 }
             });

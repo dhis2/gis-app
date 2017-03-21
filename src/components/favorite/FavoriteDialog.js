@@ -7,9 +7,11 @@ class FavoriteDialog extends Component {
         const props = this.props;
 
         if (this.props.layersDialogOpen) {
-            this.favoriteWindow = FavoriteWindow(gis); // TODO: Reuse favorite window?
-            this.favoriteWindow.onFavoriteClick = props.onFavoriteSelect;
-            this.favoriteWindow.onClose = props.onClose;
+            if (!this.favoriteWindow) { // Only create once
+                this.favoriteWindow = FavoriteWindow(gis);
+                this.favoriteWindow.onFavoriteClick = props.onFavoriteSelect;
+                this.favoriteWindow.onClose = props.onClose;
+            }
             this.favoriteWindow.show();
         } else {
             this.favoriteWindow.hide();

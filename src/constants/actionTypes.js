@@ -1,6 +1,6 @@
 /* MAP */
 export const MAP_SET = 'MAP_SET';
-export const MAP_CLEAR = 'MAP_CLEAR';
+export const MAP_CLEAR = 'MAP_CLEAR'; // Needed?
 
 /* BASEMAP */
 export const BASEMAP_SELECTED = 'BASEMAP_SELECTED';

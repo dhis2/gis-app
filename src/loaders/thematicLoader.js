@@ -67,7 +67,7 @@ const loadLegend = (features, values) => {
             // updateLegend(layer, metaData, options);
         //}
 
-        // Build legen object
+        // Build legend object
         const legend = {
             items: []
         };
@@ -114,10 +114,10 @@ const loadLegend = (features, values) => {
             }
         }
         else { // Automatic legend
-            for (let i = 0; i < bounds.length - 1; i++) {
+            for (let i = 0; i < options.bounds.length - 1; i++) {
                 legend.items.push({
                     color: options.colors[i],
-                    name: bounds[i].toFixed(1) + ' - ' + bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')',
+                    name: options.bounds[i].toFixed(1) + ' - ' + options.bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')',
                 });
             }
         }
@@ -175,7 +175,7 @@ const loadLegend = (features, values) => {
         const id = layer.columns[0].items[0].id;
 
         if (!elementUrl) {
-            createLegend()();
+            createLegend();
             return;
         }
 
@@ -205,7 +205,6 @@ const loadLegend = (features, values) => {
 // Called when org units and data is loaded
 const onDataLoad = (orgUnits, data) => {
     metaData = data.metaData;
-    // console.log('onDataLoad', orgUnits, data);
 
     const features = toGeoJson(orgUnits, 'ASC');
 

@@ -12,8 +12,6 @@ export const setMap = map => ({
     payload: map
 });
 
-
-
 /* BASEMAPS */
 
 export const basemapSelected = (id) => ({
@@ -87,7 +85,7 @@ export function loadOverlay(layer) {
             //console.log('layer.isNew', layer.isNew);
 
             if (layer.isNew) { // Add new layer
-                //console.log('### ADD');
+                console.log('### ADD');
                 dispatch(addOverlay(layer));
             } else { // Update existing layer
                 //console.log('### UPDATE', layer);
@@ -138,7 +136,7 @@ export function loadFavorite(id) {
 
 
                 // console.log('####', dispatch);
-                dispatch(setMap(map)).then(() => console.log('THEN!'));
+                dispatch(setMap(map));
                 // console.log('####', map);
 
                 //if (map.overlays) {

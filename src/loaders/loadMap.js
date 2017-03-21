@@ -1,3 +1,4 @@
+import isString from 'd2-utilizr/lib/isString';
 import { apiFetch } from '../util/api';
 
 let callback;
@@ -14,7 +15,22 @@ const layerTypes = {
     earthEngine: 'earthEngine',
 };
 
+const basemap = { // TODO
+    id: 'osmLight',
+    visible: true,
+    expanded: false,
+    opacity: 1,
+    subtitle: 'Basemap',
+};
+
+
 const onMapLoad = data => {
+    if (isString(data.basemap)) {
+        data.basemap = {
+            id: data.basemap,
+        };
+    }
+
     if (data.mapViews) {
         data.overlays = data.mapViews.map(view => {
             view.type = layerTypes[view.layer]; // TODO: use only "type"?

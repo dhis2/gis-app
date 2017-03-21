@@ -14,6 +14,11 @@ export function classify(features, values, options) {
         for (let i = 0; i <= options.numClasses; i++) {
             bounds[i] = options.minValue + i * (options.maxValue - options.minValue) / options.numClasses;
         }
+
+        // Make sure that last bounds is exactly max value.
+        bounds[bounds.length - 1] = options.maxValue;
+        // console.log('##', bounds)
+
         options.bounds = bounds;
 
         if (!options.colors.length) { // Backward compability

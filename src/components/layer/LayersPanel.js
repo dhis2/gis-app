@@ -20,6 +20,8 @@ const SortableLayer = SortableElement(Overlay);
 const SortableLayersList = SortableContainer(({layers, loadOverlay}) => (
     <div>
         {layers.map((layer, index) => { // Draggable layers - last layer on top
+            // console.log('SortableLayersList', index, layer);
+
             if (!layer.isLoaded) {
                 loadOverlay(layer);
             }
@@ -31,8 +33,7 @@ const SortableLayersList = SortableContainer(({layers, loadOverlay}) => (
                     layer={layer}
                 />
             )
-            }
-        )}
+        })}
     </div>
 ));
 

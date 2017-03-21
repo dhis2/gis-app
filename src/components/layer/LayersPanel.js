@@ -24,8 +24,6 @@ const SortableLayersList = SortableContainer(({layers, loadOverlay}) => (
                 loadOverlay(layer);
             }
 
-            // console.log('sortable later', index, `layer-${index}`, layer);
-
             return (
                 <SortableLayer
                     key={layer.id}

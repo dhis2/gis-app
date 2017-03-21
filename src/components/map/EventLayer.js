@@ -10,7 +10,8 @@ class EventLayer extends Layer {
 
     createLayer(callback) {
         const props = this.props;
-        const data = props.data;
+        const layer = props.layer;
+        const data = layer.data;
         const map = props.map;
 
         // Data elements to display in event popup
@@ -19,23 +20,21 @@ class EventLayer extends Layer {
         // Default props = no cluster
         const config = {
             type: 'dots',
-            pane: props.id,
+            pane: layer.id,
             data: data,
-            color: '#' + props.eventPointColor,
-            radius: props.eventPointRadius,
+            color: '#' + layer.eventPointColor,
+            radius: layer.eventPointRadius,
             popup: this.onEventClick.bind(this),
         };
 
-        if (props.eventClustering) {
+        if (layer.eventClustering) {
             if (isArray(data)) {
                 config.type = 'clientCluster';
             } else if (isString(data)) {
                 config.type = 'serverCluster';
-                config.bounds = props.bounds;
+                config.bounds = layer.bounds;
             }
         }
-
-        // console.log('create event layer', props, this, this.onEventClick);
 
         // Create and add event layer based on config object
         this.instance = map.createLayer(config).addTo(map);
@@ -57,27 +56,22 @@ class EventLayer extends Layer {
     // Load data elements that should be displayed in popups
     loadDataElements() {
         const props = this.props;
+        const layer = props.layer;
         const namePropertyUrl = gis.init.namePropertyUrl; // TODO
 
-        apiFetch(`programStages/${props.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${namePropertyUrl},optionSet]]`)
+        apiFetch(`programStages/${layer.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${namePropertyUrl},optionSet]]`)
             .then(response => response.json())
             .then(data => {
-                // console.log('loadDataElements', data, this);
-
                 if (data.programStageDataElements) {
                     data.programStageDataElements.forEach(el => {
                         if (el.displayInReports) {
                             this.displayElements[el.dataElement.id] = el.dataElement;
                             this.getDataElementOptionSets(el.dataElement);
-                        } else if (props.eventCoordinateField && el.dataElement.id === props.eventCoordinateField) {
+                        } else if (layer.eventCoordinateField && el.dataElement.id === layer.eventCoordinateField) {
                             this.eventCoordinateFieldName = el.dataElement.name;
                         }
-
                     });
                 }
-
-                // console.log('displayElements', this.displayElements);
-
             })
             .catch(error => console.log('Parsing failed: ', error)); // TODO
 
@@ -122,11 +116,6 @@ class EventLayer extends Layer {
             })
             .catch(error => console.log('Parsing failed: ', error)); // TODO
 
-
-
-
-
-        console.log('Event click', feature);
     }
 
 

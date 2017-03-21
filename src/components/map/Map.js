@@ -77,14 +77,14 @@ class Map extends Component {
 
                     return (
                         <MapLayer
-                            {...layer}
                             key={layer.id}
                             map={this.map}
                             index={index}
+                            layer={layer}
                         />
                     )
                 })}
-                <Layer {...basemap} key="basemap" map={this.map} />
+                <Layer layer={basemap} key="basemap" map={this.map} />
             </div>
         )
     }

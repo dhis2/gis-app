@@ -6,27 +6,31 @@ class Layer extends Component {
 
         this.createPane();
         this.createLayer();
+        if (props.index !== undefined) {
+            this.setLayerOrder();
+        }
     }
 
     componentDidUpdate(prevProps) {
         const props = this.props;
+        const layer = props.layer;
+        const prevLayer = prevProps.layer;
 
-        // console.log('componentDidUpdate', props);
-
-        if (props.editCounter !== prevProps.editCounter || props.config !== prevProps.config) { // TODO
+        if (layer.editCounter !== prevLayer.editCounter || layer.config !== prevLayer.config) { // TODO
             this.removeLayer();
             this.createLayer();
         }
 
-        if (props.index !== undefined && prevProps.index !== props.index) {
+        // if (props.index !== undefined && prevLayer.index !== layer.index) {
+        if (props.index !== undefined) {
             this.setLayerOrder();
         }
 
-        if (prevProps.opacity !== props.opacity) {
+        if (prevLayer.opacity !== layer.opacity) {
             this.setLayerOpacity();
         }
 
-        if (prevProps.visible !== props.visible) {
+        if (prevLayer.visible !== layer.visible) {
             this.setLayerVisibility();
         }
     }
@@ -37,19 +41,20 @@ class Layer extends Component {
 
     // Create custom pane to control layer ordering: http://leafletjs.com/examples/map-panes/
     createPane() {
-        this.pane = this.props.map.createPane(this.props.id);
+        this.pane = this.props.map.createPane(this.props.layer.id);
     }
 
     // Create new layer from config object (override in subclasses)
     createLayer() {
         const props = this.props;
+        const layer = props.layer;
         const map = props.map;
         const config = {
-            ...props.config,
+            ...layer.config,
         };
 
-        if (props.index !== undefined) { // If not a basemap
-            config.pane = props.id;
+        if (layer.index !== undefined) { // If not a basemap
+            config.pane = layer.id;
         }
 
         this.instance = map.addLayer(config);
@@ -60,7 +65,7 @@ class Layer extends Component {
         this.setLayerOpacity();
         this.setLayerVisibility();
 
-        if (this.props.index !== undefined) { // Basemap don't have index
+        if (this.props.layer.index !== undefined) { // Basemap don't have index
             this.setLayerOrder();
         }
     }
@@ -72,17 +77,19 @@ class Layer extends Component {
     // Set layer order using custom pages and z-index: http://leafletjs.com/examples/map-panes/
     setLayerOrder() {
         const props = this.props;
+        const layer = props.layer;
 
-        props.map.getPane(props.id).style.zIndex = 600 - (props.index * 10);
+        props.map.getPane(layer.id).style.zIndex = 600 - (props.index * 10);
     }
 
     setLayerVisibility() {
         const props = this.props;
+        const layer = props.layer;
         const map = props.map;
 
-        if (props.visible && map.hasLayer(this.instance) === false) {
+        if (layer.visible && map.hasLayer(this.instance) === false) {
             map.addLayer(this.instance);
-        } else if (!props.visible && map.hasLayer(this.instance) === true) {
+        } else if (!layer.visible && map.hasLayer(this.instance) === true) {
             map.removeLayer(this.instance);
         }
     }
@@ -101,11 +108,11 @@ class Layer extends Component {
 }
 
 Layer.propTypes = {
-    visible: PropTypes.bool,
+    //visible: PropTypes.bool,
 };
 
 Layer.defaultProps = {
-    visible: true,
+    //visible: true,
 };
 
 export default Layer;

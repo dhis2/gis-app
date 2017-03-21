@@ -143,7 +143,7 @@ const onEventCountLoad = (data) => {
     if (data.count < 2000) { // Client clustering if less than 2000 events
         loadEvents();
     } else { // Server clustering
-        layer.layerType = 'serverCluster',
+        layer.type = 'serverCluster',
         layer.data = 'analytics/events/cluster/' + layer.program.id + '.json' + paramString;
 
         layer.data = features;

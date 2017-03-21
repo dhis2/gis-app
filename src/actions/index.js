@@ -62,6 +62,7 @@ export const addOverlay = layer => ({
 // Update existing overlay
 export const updateOverlay = layer => ({
     type: actionTypes.OVERLAY_UPDATE,
+    id: layer.id,
     payload: layer,
 });
 
@@ -79,9 +80,18 @@ export function loadOverlay(layer) {
         // dispatch ...
 
         loadLayer(layer, () => {
-            if (!layer.id) { // Add new layer
+            layer.isLoaded = true;
+            layer.expanded = true;
+            layer.visible = true;
+
+            //console.log('layer.isNew', layer.isNew);
+
+            if (layer.isNew) { // Add new layer
+                //console.log('### ADD');
                 dispatch(addOverlay(layer));
             } else { // Update existing layer
+                //console.log('### UPDATE', layer);
+
                 dispatch(updateOverlay(layer));
             }
         });
@@ -125,14 +135,16 @@ export function loadFavorite(id) {
         loadMap(id, map => {
             if (map) {
 
-                console.log('####', dispatch);
-                dispatch(setMap(map));
-                console.log('####', map);
+
+
+                // console.log('####', dispatch);
+                dispatch(setMap(map)).then(() => console.log('THEN!'));
+                // console.log('####', map);
 
                 //if (map.overlays) {
-                    map.overlays.forEach(layer => {
-                        console.log('overlay');
-                    });
+                    // map.overlays.forEach(layer => {
+                        //console.log('overlay');
+                    //});
                 //}
 
             }

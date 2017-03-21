@@ -11,6 +11,8 @@ class Layer extends Component {
     componentDidUpdate(prevProps) {
         const props = this.props;
 
+        // console.log('componentDidUpdate', props);
+
         if (props.editCounter !== prevProps.editCounter || props.config !== prevProps.config) { // TODO
             this.removeLayer();
             this.createLayer();

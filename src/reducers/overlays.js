@@ -1,10 +1,10 @@
 const defaultOverlays = [{
-    layerType: 'event',
+    type: 'event',
     title: 'Events',
     img: 'images/layers/events.png',
     opacity: 0.95,
 },{
-    layerType: 'facility',
+    type: 'facility',
     title: 'Facilities',
     img: 'images/layers/facilities.png',
     visible: true,
@@ -12,7 +12,7 @@ const defaultOverlays = [{
     expanded: true,
     loaded: false,
 },{
-    layerType: 'thematic',
+    type: 'thematic',
     title: 'Thematic',
     img: 'images/layers/thematic.png',
     visible: true,
@@ -20,7 +20,7 @@ const defaultOverlays = [{
     expanded: true,
     loaded: false,
 },{
-    layerType: 'boundary',
+    type: 'boundary',
     title: 'Boundaries',
     img: 'images/layers/boundaries.png',
     opacity: 1,
@@ -28,7 +28,7 @@ const defaultOverlays = [{
     expanded: true,
     loaded: false,
 },{
-    layerType: 'external',
+    type: 'external',
     title: 'Labels',
     img: 'images/layers/labels.png',
     opacity: 0.9,
@@ -43,7 +43,7 @@ const defaultOverlays = [{
         imageFormat: 'PNG',
     },
 },{
-    layerType: 'earthEngine',
+    type: 'earthEngine',
     title: 'Population density',
     img: 'images/layers/population.png',
     subtitle: '2010',
@@ -108,7 +108,7 @@ const defaultOverlays = [{
     },
     */
 },{
-    layerType: 'earthEngine',
+    type: 'earthEngine',
     title: 'Elevation',
     img: 'images/layers/elevation.png',
     opacity: 0.9,
@@ -116,7 +116,7 @@ const defaultOverlays = [{
     expanded: false,
     loaded: false,
 },{
-    layerType: 'earthEngine',
+    type: 'earthEngine',
     title: 'Temperature',
     img: 'images/layers/temperature.png',
     opacity: 0.9,
@@ -124,7 +124,7 @@ const defaultOverlays = [{
     expanded: false,
     loaded: false,
 },{
-    layerType: 'earthEngine',
+    type: 'earthEngine',
     title: 'Landcover',
     img: 'images/layers/landcover.png',
     opacity: 0.9,
@@ -132,7 +132,7 @@ const defaultOverlays = [{
     expanded: true,
     loaded: false,
 },{
-    layerType: 'earthEngine',
+    type: 'earthEngine',
     title: 'Precipitation',
     img: 'images/layers/precipitation.png',
     subtitle: '26 - 28 Nov. 2016',
@@ -188,7 +188,7 @@ const defaultOverlays = [{
     },
     */
 },{
-    layerType: 'earthEngine',
+    type: 'earthEngine',
     title: 'Nighttime lights',
     img: 'images/layers/nighttime.png',
     opacity: 0.9,

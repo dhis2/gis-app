@@ -16,7 +16,10 @@ const layerType = {
 
 // Window container for layer widgets
 export default function WidgetWindow(gis, layer, onUpdate) {
-    const type = layer.layerType;
+    const type = layer.type;
+
+    // console.log('type', type, layer);
+
     const layerWidget = layerType[type](gis, layer);
 
     return Ext.create('Ext.window.Window', {

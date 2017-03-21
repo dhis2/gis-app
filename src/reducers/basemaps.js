@@ -40,7 +40,7 @@ const defaultBasemaps = [{
     },
 },{
     id: 'stamenTerrain',
-    layerType: 'external',
+    type: 'external',
     title: 'Terrain',
     subtitle: 'Basemap',
     img: 'images/layers/terrain.png',
@@ -51,7 +51,7 @@ const defaultBasemaps = [{
     },
 }, {
     id: 'osmDark',
-    layerType: 'external',
+    type: 'external',
     title: 'OSM Dark',
     subtitle: 'Basemap',
     img: 'images/layers/osmdark.png',

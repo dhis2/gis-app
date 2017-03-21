@@ -15,8 +15,8 @@ const layerType = {
 };
 
 const loadLayer = (layer, callback) =>  {
-    if (layerType[layer.layerType]) {
-        layerType[layer.layerType](layer, callback);
+    if (layerType[layer.type]) {
+        layerType[layer.type](layer, callback);
     }
 };
 

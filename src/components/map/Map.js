@@ -20,7 +20,7 @@ const layerTypeToLayerComponent = new global.Map([
 
 function getLayerForType(layer) {
     // const type = layer && layer.config && layer.config.type;
-    const type = layer.layerType;
+    const type = layer.type;
 
     if (layerTypeToLayerComponent.has(type))
         return layerTypeToLayerComponent.get(type)
@@ -60,7 +60,7 @@ class Map extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log('map did update');
+        // console.log('map did update');
     }
 
     render() {

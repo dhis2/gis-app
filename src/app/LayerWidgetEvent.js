@@ -19,6 +19,8 @@ export default function LayerWidgetEvent(gis, layer) {
     // Dimensions
     const dimConf = gis.conf.finals.dimension;
 
+    let isNew = true;
+
 
     // --------------- STORES --------------- //
 
@@ -983,12 +985,12 @@ export default function LayerWidgetEvent(gis, layer) {
 
     const reset = function(skipTree) {
         // Uncheck in layer list
-        layer.item.setValue(false);
+        //layer.item.setValue(false);
 
-        if (!layer.window.isRendered) {
-            layer.view = null;
-            return;
-        }
+        //if (!layer.window.isRendered) {
+        //    layer.view = null;
+        //    return;
+        //}
 
         // Components
         program.clearValue();
@@ -1024,12 +1026,16 @@ export default function LayerWidgetEvent(gis, layer) {
         let isOugc = false;
         let isTopOu = false;
 
+        isNew = view.isNew;
+
         const setWidgetGui = function() {
 
             // Components
+            /*
             if (!layer.window.isRendered) {
                 return;
             }
+            */
 
             reset(true);
 
@@ -1098,6 +1104,7 @@ export default function LayerWidgetEvent(gis, layer) {
 
         }();
 
+        /*
         const setLayerGui = function() {
 
             // Layer item
@@ -1106,6 +1113,7 @@ export default function LayerWidgetEvent(gis, layer) {
             // Layer menu
             layer.menu.enableItems();
         }();
+        */
     };
 
     const getView = function(config) {
@@ -1144,6 +1152,8 @@ export default function LayerWidgetEvent(gis, layer) {
         view.eventPointColor = eventColor.getValue();
         view.eventPointRadius = eventRadius.getValue();
         // view.opacity = layer.layerOpacity;
+
+        view.isNew = isNew; // TODO: Needed?
 
         return view;
     };

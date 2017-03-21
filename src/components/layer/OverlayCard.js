@@ -46,16 +46,18 @@ const styles = {
 };
 
 const OverlayCard = (props) => {
+    const layer = props.layer;
+
     return (
         <Card
             style={styles.root}
             containerStyle={styles.container}
-            expanded={props.expanded}
-            onExpandChange={() => props.onExpandChange(props.id)}
+            expanded={layer.expanded}
+            onExpandChange={() => props.onExpandChange(layer.id)}
         >
             <CardHeader
-                title={props.title}
-                subtitle={props.subtitle}
+                title={layer.title}
+                subtitle={layer.subtitle}
                 // actAsExpander={true}  // Not able to stop event bubbling for visibility icon
                 showExpandableButton={true}
                 style={{
@@ -64,13 +66,13 @@ const OverlayCard = (props) => {
                 }}
                 textStyle={styles.headerText}>
                 {!props.basemap &&
-                <SortableHandle color={grey600} />
+                    <SortableHandle color={grey600} />
                 }
                 <IconButton
                     style={styles.visibility}
-                    onClick={() => props.onVisibilityChange(props.id)}
+                    onClick={() => props.onVisibilityChange(layer.id)}
                     tooltip="Toggle visibility">
-                    {props.visible ? (
+                    {layer.visible ? (
                         <ActionVisibilityIcon color={grey600} />
                     ) : (
                         <ActionVisibilityOffIcon color={grey600} />
@@ -78,20 +80,20 @@ const OverlayCard = (props) => {
                 </IconButton>
             </CardHeader>
             <CardText expandable={true} style={styles.body}>
-                {props.legend &&
+                {layer.legend &&
                 <Legend
-                    {...props.legend}
+                    {...layer.legend}
                     style={styles.legend}
                 />
                 }
                 {props.basemap &&
-                <Basemaps id={props.id} />
+                <Basemaps id={layer.id} />
                 }
                 <LayerToolbar
-                    {...props}
-                    onEdit={!props.basemap ? () => props.onEdit(props.id) : null}
+                    layer={layer}
+                    onEdit={!props.basemap ? () => props.onEdit(layer) : null}
                     onDataTableShow={!props.basemap ? props.onDataTableShow : null}
-                    onRemove={!props.basemap ? () => props.onRemove(props.id) : null}
+                    onRemove={!props.basemap ? () => props.onRemove(layer.id) : null}
                 />
             </CardText>
         </Card>
@@ -99,6 +101,13 @@ const OverlayCard = (props) => {
 
 };
 
+OverlayCard.propTypes= {
+    layer: PropTypes.object,
+};
+
+
+
+/*
 OverlayCard.propTypes= {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -108,6 +117,7 @@ OverlayCard.propTypes= {
     visible: PropTypes.bool,
     expanded: PropTypes.bool,
 };
+*/
 
 OverlayCard.defaultProps = {
     opacity: 1,

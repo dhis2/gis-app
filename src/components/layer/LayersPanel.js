@@ -17,14 +17,20 @@ const styles = {
 
 const SortableLayer = SortableElement(Overlay);
 
-const SortableLayersList = SortableContainer(({layers}) => (
+const SortableLayersList = SortableContainer(({layers, loadOverlay}) => (
     <div>
         {layers.map((layer, index) => { // Draggable layers - last layer on top
+            if (!layer.isLoaded) {
+                loadOverlay(layer);
+            }
+
+            // console.log('sortable later', index, `layer-${index}`, layer);
+
             return (
-                <Overlay
-                    {...layer}
-                    key={`layer-${index}`}
+                <SortableLayer
+                    key={layer.id}
                     index={index}
+                    layer={layer}
                 />
             )
             }
@@ -32,14 +38,12 @@ const SortableLayersList = SortableContainer(({layers}) => (
     </div>
 ));
 
-const LayersPanel = ({ basemap, basemaps, overlays, onSortEnd }) => {
+const LayersPanel = ({ basemap, basemaps, overlays, onSortEnd, loadOverlay }) => {
     const selectedBasemap = basemaps.filter(b => b.id === basemap.id)[0];
-
-    // console.log('layerspanel', basemap, overlays);
 
     return (
         <Drawer containerStyle={styles} width={300}>
-            <SortableLayersList layers={overlays} onSortEnd={onSortEnd} useDragHandle={true} />
+            <SortableLayersList layers={overlays} onSortEnd={onSortEnd} loadOverlay={loadOverlay} useDragHandle={true} />
             <Basemap {...selectedBasemap} {...basemap} basemaps={basemaps} />
         </Drawer>
     );

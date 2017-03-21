@@ -57,6 +57,15 @@ const overlay = (state, action) => {
 
     switch (action.type) {
 
+        case actionTypes.OVERLAY_UPDATE:
+            if (state.id !== action.id) {
+                return state;
+            }
+
+            return {
+                ...action.payload,
+            };
+
         case actionTypes.OVERLAY_CHANGE_OPACITY:
             if (state.id !== action.id) {
                 return state;
@@ -133,19 +142,6 @@ const map = (state = defaultState, action) => {
                 ...state,
             };
 
-
-        case actionTypes.OVERLAY_UPDATE:
-            console.log('OVERLAY_UPDATE');
-
-            return state;
-
-            /*
-            return {
-                ...state,
-                overlays: state.overlays.map(l => overlay(l, action))
-            };
-            */
-
         case actionTypes.OVERLAY_REMOVE:
             return {
                 ...state,
@@ -158,6 +154,7 @@ const map = (state = defaultState, action) => {
                 overlays: arrayMove(state.overlays, action.oldIndex, action.newIndex)
             };
 
+        case actionTypes.OVERLAY_UPDATE:
         case actionTypes.OVERLAY_EDIT:
         case actionTypes.OVERLAY_CHANGE_OPACITY:
         case actionTypes.OVERLAY_TOGGLE_VISIBILITY:

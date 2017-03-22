@@ -57,6 +57,18 @@ const overlay = (state, action) => {
 
     switch (action.type) {
 
+        case actionTypes.OVERLAY_LOAD_REQUESTED:
+            if (state.id !== action.id) {
+                return state;
+            }
+
+            console.log('OVERLAY_LOAD_REQUESTED', action);
+
+            return {
+                ...state,
+                isLoading: true,
+            };
+
         case actionTypes.OVERLAY_UPDATE:
             if (state.id !== action.id) {
                 return state;
@@ -154,6 +166,7 @@ const map = (state = defaultState, action) => {
                 overlays: arrayMove(state.overlays, action.oldIndex, action.newIndex)
             };
 
+        case actionTypes.OVERLAY_LOAD_REQUESTED:
         case actionTypes.OVERLAY_UPDATE:
         case actionTypes.OVERLAY_EDIT:
         case actionTypes.OVERLAY_CHANGE_OPACITY:

@@ -19,11 +19,8 @@ const layerTypeToLayerComponent = new global.Map([
 ]);
 
 function getLayerForType(layer) {
-    // const type = layer && layer.config && layer.config.type;
-    const type = layer.type;
-
-    if (layerTypeToLayerComponent.has(type))
-        return layerTypeToLayerComponent.get(type)
+    if (layerTypeToLayerComponent.has(layer.type))
+        return layerTypeToLayerComponent.get(layer.type)
     return Layer;
 }
 
@@ -72,7 +69,7 @@ class Map extends Component {
 
         return (
             <div ref="map" style={style}>
-                {props.overlays.map((layer, index) => {
+                {props.overlays.filter(layer => layer.isLoaded).map((layer, index) => {
                     const MapLayer = getLayerForType(layer);
 
                     return (

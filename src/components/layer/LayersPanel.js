@@ -17,14 +17,24 @@ const styles = {
 
 const SortableLayer = SortableElement(Overlay);
 
-const SortableLayersList = SortableContainer(({layers, loadOverlay}) => (
+const loading = {}; // TODO: Temp fix
+
+const SortableLayersList = SortableContainer(({layers, loadOverlayRequested, requestOverlayLoad, loadOverlay}) => (
     <div>
         {layers.map((layer, index) => { // Draggable layers - last layer on top
-            // console.log('SortableLayersList', index, layer);
 
-            if (!layer.isLoaded) {
+            // console.log('SortableLayersList', index, layer);
+            // console.log('LayersPanel is loaded: ', layer.isLoaded, layer.isLoading);
+
+            // console.log('AAAA');
+
+            if (!layer.isLoaded && !layer.isLoading && !loading[layer.id]) {
+                loading[layer.id] = true; // TODO: Temp fix
+                // requestOverlayLoad(layer.id); // Only able to dispach on action
                 loadOverlay(layer);
             }
+
+            // console.log('######', layer);
 
             return (
                 <SortableLayer

@@ -124,6 +124,8 @@ const loadLegend = (features, values) => {
 
         layer.legend = legend;
         layer.data = features;
+        layer.isLoaded = true;
+
         callback(layer);
     };
 

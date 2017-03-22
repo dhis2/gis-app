@@ -52,13 +52,13 @@ export const addOverlay = layer => ({
 */
 
 // Add new overlay
-export const addOverlay = layer => ({
+export const addOverlay = (layer) => ({
     type: actionTypes.OVERLAY_ADD,
     payload: layer,
 });
 
 // Update existing overlay
-export const updateOverlay = layer => ({
+export const updateOverlay = (layer) => ({
     type: actionTypes.OVERLAY_UPDATE,
     id: layer.id,
     payload: layer,
@@ -72,27 +72,40 @@ export const loadOverlay = id => ({
 });
 */
 
+
+// Update existing overlay
+export const requestOverlayLoad = (id) => ({
+    type: actionTypes.OVERLAY_LOAD_REQUESTED,
+    id: layer.id,
+});
+
+
 // http://redux.js.org/docs/advanced/AsyncActions.html
 export function loadOverlay(layer) {
     return function (dispatch) {
         // dispatch ...
 
-        loadLayer(layer, () => {
-            layer.isLoaded = true;
-            layer.expanded = true;
-            layer.visible = true;
+        // console.log('loadLayer', layer);
 
-            //console.log('layer.isNew', layer.isNew);
+        loadLayer(layer, (loadedLayer) => {
+            loadedLayer.isLoaded = true;
+            loadedLayer.expanded = true;
+            loadedLayer.visible = true;
+
+            // console.log('layer.isNew', layer.isNew);
 
             if (layer.isNew) { // Add new layer
-                console.log('### ADD');
-                dispatch(addOverlay(layer));
+                // console.log('### ADD');
+                dispatch(addOverlay(loadedLayer));
             } else { // Update existing layer
-                //console.log('### UPDATE', layer);
+                // console.log('### UPDATE', loadedLayer.title, loadedLayer);
 
-                dispatch(updateOverlay(layer));
+                // console.log('###################### isLoaded', loadedLayer.isLoaded, loadedLayer);
+
+                dispatch(updateOverlay(loadedLayer));
             }
         });
+
     }
 }
 

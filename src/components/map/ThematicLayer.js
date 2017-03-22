@@ -11,7 +11,7 @@ class ThematicLayer extends Layer {
             type: 'choropleth',
             pane: layer.id,
             data: layer.data,
-            hoverLabel: '{name} ({value})'
+            // hoverLabel: '{name} ({value})'
         };
 
         if (layer.labels) {

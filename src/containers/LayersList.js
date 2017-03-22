@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import LayersPanel from '../components/layer/LayersPanel'
-import { loadOverlay, sortOverlays } from '../actions';
+import { requestOverlayLoad, loadOverlay, sortOverlays } from '../actions';
 
 const mapStateToProps = (state) => ({
     basemap: state.map.basemap,
@@ -10,6 +10,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = ({
     loadOverlay: loadOverlay,
+    requestOverlayLoad: requestOverlayLoad,
     onSortEnd: sortOverlays,
 });
 

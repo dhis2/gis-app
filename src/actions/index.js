@@ -85,27 +85,19 @@ export function loadOverlay(layer) {
     return function (dispatch) {
         // dispatch ...
 
-        // console.log('loadLayer', layer);
-
         loadLayer(layer, (loadedLayer) => {
             loadedLayer.isLoaded = true;
             loadedLayer.expanded = true;
             loadedLayer.visible = true;
 
-            // console.log('layer.isNew', layer.isNew);
+            console.log('editCounter', loadedLayer.editCounter);
 
-            if (layer.isNew) { // Add new layer
-                // console.log('### ADD');
+            if (loadedLayer.editCounter === 1) { // Add new layer
                 dispatch(addOverlay(loadedLayer));
             } else { // Update existing layer
-                // console.log('### UPDATE', loadedLayer.title, loadedLayer);
-
-                // console.log('###################### isLoaded', loadedLayer.isLoaded, loadedLayer);
-
                 dispatch(updateOverlay(loadedLayer));
             }
         });
-
     }
 }
 
@@ -142,28 +134,11 @@ export const sortOverlays = ({oldIndex, newIndex}) => ({
 /* FAVORITE */
 export function loadFavorite(id) {
     return function (dispatch) {
-        // dispatch ...
-        loadMap(id, map => {
-            if (map) {
-
-
-
-                // console.log('####', dispatch);
-                dispatch(setMap(map));
-                // console.log('####', map);
-
-                //if (map.overlays) {
-                    // map.overlays.forEach(layer => {
-                        //console.log('overlay');
-                    //});
-                //}
-
-            }
+        loadMap(id, (map) => {
+            dispatch(setMap(map));
        });
     }
 }
-
-
 
 
 /* USER INTERFACE */

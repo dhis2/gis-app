@@ -72,6 +72,8 @@ class Map extends Component {
                 {props.overlays.filter(layer => layer.isLoaded).map((layer, index) => {
                     const MapLayer = getLayerForType(layer);
 
+                    console.log('key', index, layer.id ,layer);
+
                     return (
                         <MapLayer
                             key={layer.id}

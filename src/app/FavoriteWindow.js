@@ -522,7 +522,8 @@ export default function FavoriteWindow(gis) {
         resizable: false,
         modal: true,
         width: windowWidth,
-        destroyOnBlur: true,
+        closeAction: 'hide',
+        // destroyOnBlur: true,
         items: [
             {
                 xtype: 'panel',

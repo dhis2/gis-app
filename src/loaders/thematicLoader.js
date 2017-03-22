@@ -54,12 +54,6 @@ const loadLegend = (features, values) => {
             colorHigh: layer.colorHigh
         };
 
-        /*
-        layer.view = view;
-        layer.minValue = options.minValue;
-        layer.maxValue = options.maxValue;
-        */
-
         // Apply classification
         classify(features, values, options);
 
@@ -92,6 +86,8 @@ const loadLegend = (features, values) => {
         name = layer.filters[0].items[0].name;
 
         layer.subtitle = metaData.names[id] || name || id;
+
+        console.log('method', layer.method);
 
         if (layer.method === 1 && layer.legendSet) { // Predefined legend
             for (let i = 0; i < bounds.length - 1; i++) {
@@ -270,19 +266,7 @@ const onDataLoad = (orgUnits, data) => {
     });
 
     // Sort values in ascending order
-    values.sort((a, b) => {
-        return a - b;
-    });
-
-    // TODO: Temporarily
-    /*
-    gis.data = {
-        metaData: response.metaData,
-        features: valueFeatures,
-        values: values,
-        aggregationType: aggregationType
-    };
-    */
+    values.sort((a, b) => a - b);
 
     loadLegend(features, values);
 };

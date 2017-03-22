@@ -430,7 +430,6 @@ export default function LayerWidgetThematic(gis, layer) {
         listeners: {
             select() {
                 indicator.clearValue();
-
                 indicator.store.proxy.url = encodeURI(gis.init.apiPath + 'indicators.json?fields=dimensionItem~rename(id),' + gis.init.namePropertyUrl + '&paging=false&filter=indicatorGroups.id:eq:' + this.getValue());
                 indicator.store.load();
             }
@@ -1625,7 +1624,7 @@ export default function LayerWidgetThematic(gis, layer) {
     const reset = function(skipTree) {
 
         // Item
-        layer.item.setValue(false);
+        // layer.item.setValue(false);
 
         // Layer options
         if (layer.searchWindow) {
@@ -1638,10 +1637,11 @@ export default function LayerWidgetThematic(gis, layer) {
         }
 
         // Components
+        /*
         if (!layer.window.isRendered) {
             layer.view = null;
             return;
-        }
+        }*/
 
         valueType.reset();
         valueTypeToggler(dimConf.indicator.objectName);
@@ -1690,6 +1690,9 @@ export default function LayerWidgetThematic(gis, layer) {
     };
 
     const setGui = function(view, isDrillDown) {
+        console.log('setGui', view);
+
+
         const dxDim = view.columns[0];
         const peDim = view.filters[0];
         const ouDim = view.rows[0];
@@ -1837,21 +1840,25 @@ export default function LayerWidgetThematic(gis, layer) {
         const setLayer = function() {
 
             // Layer item
-            layer.item.setValue(!view.hidden, view.opacity);
+            //layer.item.setValue(!view.hidden, view.opacity);
 
             // Layer menu
-            layer.menu.enableItems();
+            //layer.menu.enableItems();
 
             // Filter
+            /*
             if (layer.filterWindow && layer.filterWindow.isVisible()) {
                 layer.filterWindow.filter();
             }
+            */
         };
 
         const init = function() {
+            /*
             if (!layer.window.isRendered) {
                 return;
             }
+            */
 
             if (!isDrillDown) {
                 reset(true);
@@ -2031,10 +2038,10 @@ export default function LayerWidgetThematic(gis, layer) {
         },
         listeners: {
             added() {
-                layer.accordion = this;
+                // layer.accordion = this;
             },
             render() {
-                toolMenu.clickHandler('level');
+                // toolMenu.clickHandler('level');
             }
         }
     });

@@ -5,7 +5,6 @@ import WidgetWindow from '../../app/WidgetWindow';
 const widgets = {};
 const editCounter = {};
 
-
 let nextOverlayId = 0;
 
 class LayersEdit extends Component {
@@ -23,25 +22,32 @@ class LayersEdit extends Component {
             layer.isNew = false;
         }
 
-        // console.log('isNew', isNew);
+        console.log('EDIT');
 
         if (!widgets[id]) {
             editCounter[id] = 0;
+
             widgets[id] = WidgetWindow(gis, layer, (editedLayer) => {
-                // console.log('inside', isNew);
+                editedLayer.isLoaded = false;
 
                 editedLayer.editCounter = ++editCounter[editedLayer.id];
 
-                // editedLayer.isNew = isNew;
-                // console.log('editedLayer', editedLayer.isNew);
+                editedLayer.isNew = layer.isNew;
+                // console.log('editedLayer', layer);
 
                 widgets[id].hide();
                 props.loadOverlay(editedLayer);
             });
+
+            if (layer.isLoaded) { // Loaded as favorite
+                widgets[id].show();
+                editCounter[id]++;
+                widgets[id].setLayer(layer);
+            }
+
+            // console.log('isLoaded', layer.isLoaded);
         } else {
             layer.isNew = false;
-            // editCounter[id];
-            widgets[id].setLayer(layer);
         }
 
         widgets[id].show();

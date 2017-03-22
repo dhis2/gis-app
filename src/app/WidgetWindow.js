@@ -29,6 +29,7 @@ export default function WidgetWindow(gis, layer, onUpdate) {
         bodyStyle: 'padding:0',
         cls: 'gis-container-default',
         closeAction: 'hide',
+        modal: true,
         width: type === 'event' ? 456 : 306,
         resizable: false,
         isRendered: false,

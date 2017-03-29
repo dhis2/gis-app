@@ -1,6 +1,6 @@
 import * as actionTypes from '../constants/actionTypes';
-import loadLayer from '../loaders/loadLayer';
-import loadMap from '../loaders/loadMap';
+import layerLoader from '../loaders/layerLoader';
+import mapLoader from '../loaders/mapLoader';
 
 // Syntax: https://github.com/dhis2/dhis2-appstore/blob/feature/front-end/app/src/actions/actionCreators.js
 
@@ -85,12 +85,16 @@ export function loadOverlay(layer) {
     return function (dispatch) {
         // dispatch ...
 
-        loadLayer(layer, (loadedLayer) => {
+        console.log('load layer', layer.id, layer);
+
+        layerLoader(layer, (loadedLayer) => {
             loadedLayer.isLoaded = true;
             loadedLayer.expanded = true;
             loadedLayer.visible = true;
 
-            console.log('editCounter', loadedLayer.editCounter);
+            console.log('layerLoader', loadedLayer);
+
+            // console.log('editCounter', loadedLayer.editCounter);
 
             if (loadedLayer.editCounter === 1) { // Add new layer
                 dispatch(addOverlay(loadedLayer));
@@ -134,7 +138,7 @@ export const sortOverlays = ({oldIndex, newIndex}) => ({
 /* FAVORITE */
 export function loadFavorite(id) {
     return function (dispatch) {
-        loadMap(id, (map) => {
+        mapLoader(id, (map) => {
             dispatch(setMap(map));
        });
     }

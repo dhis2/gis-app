@@ -78,6 +78,10 @@ Ext.onReady( function() {
                 // gis.viewport = createViewport();
 
                 window.gis = gis; // TODO
+
+                // Remove loading mask
+                const maskEl = document.getElementById('loading-mask');
+                maskEl.parentNode.removeChild(maskEl);
             }
         };
 

@@ -13,6 +13,7 @@ const styles = {
     backgroundColor: '#fafafa',
     boxShadow: '0 3px 10px 0 rgba(0, 0, 0, 0.227451)', // h-shadow v-shadow blur spread
     zIndex: 1049,
+    overflowX: 'hidden',
 };
 
 const SortableLayer = SortableElement(Overlay);

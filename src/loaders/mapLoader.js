@@ -33,7 +33,7 @@ const onMapLoad = data => {
 
     if (data.mapViews) {
         data.overlays = data.mapViews.map(view => {
-            view.type = layerTypes[view.layer]; // TODO: use only "type"?
+            view.type = layerTypes[view.layer];
             view.title = view.name;
             view.isLoaded = false;
             return view;
@@ -41,10 +41,11 @@ const onMapLoad = data => {
         delete(data.mapViews);
     }
 
+    console.log('onMapLoad', data);
     callback (data);
 };
 
-const loadMap = (id, cb) =>  {
+const mapLoader = (id, cb) =>  {
     callback = cb;
 
     const mapFields = gis.conf.url.mapFields.join(','); // TODO
@@ -55,4 +56,4 @@ const loadMap = (id, cb) =>  {
         .catch(error => gis.alert('Loading failed: ' + error)); // TODO
 };
 
-export default loadMap;
+export default mapLoader;

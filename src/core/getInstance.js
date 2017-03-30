@@ -885,7 +885,7 @@ export default function getInstance(init) {
                     }
                 }
 
-                console.log('B');
+               //        console.log('B');
 
                 // Collect object names and user orgunits
                 for (let i = 0, dim, dims = arrayClean([].concat(config.columns, config.rows, config.filters)); i < dims.length; i++) {

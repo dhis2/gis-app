@@ -1,23 +1,23 @@
 import * as actionTypes from '../constants/actionTypes';
 
 const defaultState = {
-    layersDialogOpen: false,
+    overlaysDialogOpen: false,
     favoritesDialogOpen: false,
 };
 
 const ui = (state = defaultState, action) => {
     switch (action.type) {
 
-        case actionTypes.LAYERS_DIALOG_OPEN_REQUESTED:
+        case actionTypes.OVERLAYS_DIALOG_OPEN_REQUESTED:
             return {
                 ...state,
-                layersDialogOpen: true,
+                overlaysDialogOpen: true,
             };
 
-        case actionTypes.LAYERS_DIALOG_CLOSE_REQUESTED:
+        case actionTypes.OVERLAYS_DIALOG_CLOSE_REQUESTED:
             return {
                 ...state,
-                layersDialogOpen: false,
+                overlaysDialogOpen: false,
             };
 
         case actionTypes.FAVORITES_DIALOG_OPEN_REQUESTED:

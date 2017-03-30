@@ -6,9 +6,12 @@ import { fetchFavorite, parseFavorite } from '../loaders/favorites';
 export function getFavorite(id) {
     return dispatch => {
         dispatch(loading());
+
         return fetchFavorite(id).then(favorite => {
             dispatch(setMap(parseFavorite(favorite)));
             dispatch(loaded());
+        }).catch(error => {
+            console.log('Error: ', error); // TODO
         });
     }
 }

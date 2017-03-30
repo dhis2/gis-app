@@ -30,7 +30,7 @@ const styles = {
     },
 };
 
-const AddLayerDialog = ({ layersDialogOpen, overlays, onRequestClose, onLayerSelect }) => {
+const AddLayerDialog = ({ overlaysDialogOpen, overlays, onRequestClose, onLayerSelect }) => {
     const actions = [
         <FlatButton
             label="Cancel"
@@ -44,7 +44,7 @@ const AddLayerDialog = ({ layersDialogOpen, overlays, onRequestClose, onLayerSel
             title="Add new layer"
             actions={actions}
             modal={true}
-            open={layersDialogOpen}
+            open={overlaysDialogOpen}
             bodyStyle={styles.bodyStyle}
         >
             <div style={styles.list}>

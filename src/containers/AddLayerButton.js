@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
 import AddLayerButton from '../components/layer/AddLayerButton';
-import { openLayersDialog } from '../actions';
+import { openOverlaysDialog } from '../actions/overlays';
 
 const mapDispatchToProps = ({
-    onClick: openLayersDialog,
+    onClick: openOverlaysDialog,
 });
 
 export default connect(null, mapDispatchToProps)(AddLayerButton);

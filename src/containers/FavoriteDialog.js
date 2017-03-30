@@ -1,20 +1,20 @@
 import { connect } from 'react-redux'
-import FavoriteDialog from '../components/favorite/FavoriteDialog';
-import { loadFavorite, closeFavoriteDialog } from '../actions';
+import FavoritesDialog from '../components/favorite/FavoritesDialog';
+import { getFavorite, closeFavoritesDialog } from '../actions/favorites';
 
 const mapStateToProps = (state) => ({
-    layersDialogOpen: state.ui.favoriteDialogOpen,
+    favoritesDialogOpen: state.ui.favoritesDialogOpen,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    onClose: () => dispatch(closeFavoriteDialog()),
+    onClose: () => dispatch(closeFavoritesDialog()),
     onFavoriteSelect: id => {
-        dispatch(closeFavoriteDialog());
-        dispatch(loadFavorite(id));
+        dispatch(closeFavoritesDialog());
+        dispatch(getFavorite(id));
     },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FavoriteDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(FavoritesDialog);
 
 
 

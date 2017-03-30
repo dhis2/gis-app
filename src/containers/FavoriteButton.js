@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
-import FavoriteButton from '../components/favorite/FavoriteButton';
-import { openFavoriteDialog } from '../actions';
+import FavoritesButton from '../components/favorite/FavoritesButton';
+import { openFavoritesDialog } from '../actions/favorites';
 
 const mapDispatchToProps = ({
-    onClick: openFavoriteDialog,
+    onClick: openFavoritesDialog,
 });
 
-export default connect(null, mapDispatchToProps)(FavoriteButton);
+export default connect(null, mapDispatchToProps)(FavoritesButton);

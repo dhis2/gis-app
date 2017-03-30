@@ -2,7 +2,7 @@ import * as actionTypes from '../constants/actionTypes';
 
 const defaultState = {
     layersDialogOpen: false,
-    favoriteDialogOpen: false,
+    favoritesDialogOpen: false,
 };
 
 const ui = (state = defaultState, action) => {
@@ -20,16 +20,16 @@ const ui = (state = defaultState, action) => {
                 layersDialogOpen: false,
             };
 
-        case actionTypes.FAVORITE_DIALOG_OPEN_REQUESTED:
+        case actionTypes.FAVORITES_DIALOG_OPEN_REQUESTED:
             return {
                 ...state,
-                favoriteDialogOpen: true,
+                favoritesDialogOpen: true,
             };
 
-        case actionTypes.FAVORITE_DIALOG_CLOSE_REQUESTED:
+        case actionTypes.FAVORITES_DIALOG_CLOSE_REQUESTED:
             return {
                 ...state,
-                favoriteDialogOpen: false,
+                favoritesDialogOpen: false,
             };
 
         default:

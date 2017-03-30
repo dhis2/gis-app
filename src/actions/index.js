@@ -1,6 +1,5 @@
 import * as actionTypes from '../constants/actionTypes';
 import layerLoader from '../loaders/layerLoader';
-import mapLoader from '../loaders/mapLoader';
 
 // Syntax: https://github.com/dhis2/dhis2-appstore/blob/feature/front-end/app/src/actions/actionCreators.js
 
@@ -135,14 +134,7 @@ export const sortOverlays = ({oldIndex, newIndex}) => ({
 });
 
 
-/* FAVORITE */
-export function loadFavorite(id) {
-    return function (dispatch) {
-        mapLoader(id, (map) => {
-            dispatch(setMap(map));
-       });
-    }
-}
+
 
 
 /* USER INTERFACE */
@@ -163,12 +155,4 @@ export const openDataTable = (id, data) => ({
 
 export const closeDataTable = () => ({
     type: actionTypes.DATA_TABLE_CLOSE_REQUESTED,
-});
-
-export const openFavoriteDialog = () => ({
-    type: actionTypes.FAVORITE_DIALOG_OPEN_REQUESTED,
-});
-
-export const closeFavoriteDialog = () => ({
-    type: actionTypes.FAVORITE_DIALOG_CLOSE_REQUESTED,
 });

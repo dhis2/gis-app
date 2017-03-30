@@ -1,12 +1,12 @@
 import { Component } from 'react';
 import FavoriteWindow from '../../app/FavoriteWindow';
 
-class FavoriteDialog extends Component {
+class FavoritesDialog extends Component {
 
     componentDidUpdate(prevProps) {
         const props = this.props;
 
-        if (this.props.layersDialogOpen) {
+        if (this.props.favoritesDialogOpen) {
             if (!this.favoriteWindow) { // Only create once
                 this.favoriteWindow = FavoriteWindow(gis);
                 this.favoriteWindow.onFavoriteClick = props.onFavoriteSelect;
@@ -26,4 +26,4 @@ class FavoriteDialog extends Component {
 }
 
 
-export default FavoriteDialog;
+export default FavoritesDialog;

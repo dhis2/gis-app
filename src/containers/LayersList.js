@@ -9,7 +9,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = ({
-    loadOverlay: getOverlay,
+    getOverlay: getOverlay,
     requestOverlayLoad: requestOverlayLoad,
     onSortEnd: sortOverlays,
 });

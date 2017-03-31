@@ -1690,9 +1690,6 @@ export default function LayerWidgetThematic(gis, layer) {
     };
 
     const setGui = function(view, isDrillDown) {
-        console.log('setGui', view);
-
-
         const dxDim = view.columns[0];
         const peDim = view.filters[0];
         const ouDim = view.rows[0];

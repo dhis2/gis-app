@@ -510,77 +510,60 @@ export default function extendInstance(gis) {
     }());
 
     // layer
+    /*
     (function() {
         layer = gis.layer.event;
-        /*
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetEvent(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer, gis.conf.layout.widget.window_width + 150, 1);
         layer.window.widget = layer.widget;
-        */
 
         layer = gis.layer.facility;
-
-        /*
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetFacility(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        */
 
         layer = gis.layer.thematic1;
-        /*
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetThematic(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        */
 
         layer = gis.layer.thematic2;
-        /*
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetThematic(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        */
 
         layer = gis.layer.thematic3;
-        /*
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetThematic(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
-        */
 
         layer = gis.layer.thematic4;
-        /*
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetThematic(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        */
 
         layer = gis.layer.boundary;
-        /*
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetBoundary(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        */
 
         layer = gis.layer.earthEngine;
-        /*
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetEarthEngine(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        */
 
         layer = gis.layer.external;
-        /*
         layer.menu = GIS.app.LayerMenu(gis, layer);
         layer.widget = GIS.app.LayerWidgetExternal(gis, layer);
         layer.window = GIS.app.WidgetWindow(gis, layer);
         layer.window.widget = layer.widget;
-        */
     }());
+    */
 };

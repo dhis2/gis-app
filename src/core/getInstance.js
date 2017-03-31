@@ -869,10 +869,9 @@ export default function getInstance(init) {
                     return;
                 }
 
-                if (arrayContains([gis.layer.thematic1.id, gis.layer.thematic2.id, gis.layer.thematic3.id, gis.layer.thematic4.id], config.layer)) {
-                    if (!config.columns) {
-                        return;
-                    }
+                if (arrayContains(['thematic', 'thematic1', 'thematic2', 'thematic3', 'thematic4'], config.layer) && !config.columns) {
+                    console.log('Missing columns for thematic layer', config.rows);
+                    return;
                 }
 
                 // Collect object names and user orgunits
@@ -1115,6 +1114,7 @@ export default function getInstance(init) {
     gis.api = api;
     gis.store = store;
 
+    /*
     gis.layer = GIS.core.getLayers(gis);
     gis.thematicLayers = [gis.layer.thematic1, gis.layer.thematic2, gis.layer.thematic3, gis.layer.thematic4];
 
@@ -1145,17 +1145,20 @@ export default function getInstance(init) {
         gis.layer.facility,
         gis.layer.event
     ];
+    */
 
     gis.relocate = {}; // Relocate organisation units
 
-    gis.instance = GIS.core.getMap(gis);
+    // gis.instance = GIS.core.getMap(gis);
 
     GIS.core.instances.push(gis);
 
+    /*
     gis.instance.on('contextmenu', evt => {
         const menu = GIS.core.ContextMenu(gis, null, null, evt.latlng);
         menu.showAt([evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y]);
     });
+    */
 
     return gis;
 };

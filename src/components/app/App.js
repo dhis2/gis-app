@@ -8,7 +8,7 @@ import FavoriteDialog from '../../containers/FavoriteDialog';
 import LayersList from '../../containers/LayersList';
 import Map from '../../containers/Map';
 import DataTable from '../../containers/DataTable';
-import LayersEdit from '../../containers/LayersEdit';
+import OverlayEdit from '../../containers/OverlayEdit';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
@@ -31,10 +31,10 @@ const App = () => (
             <AddLayerDialog />
             <FavoriteDialog />
             <LayersList />
-            <LayersEdit />
             <div style={styles.mapContainer}>
                 <Map />
             </div>
+            <OverlayEdit />
             <DataTable />
         </div>
     </MuiThemeProvider>

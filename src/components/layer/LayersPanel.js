@@ -9,51 +9,34 @@ const styles = {
     top: 88,
     height: 'auto',
     bottom: 0,
-    //padding: 8,
     backgroundColor: '#fafafa',
-    boxShadow: '0 3px 10px 0 rgba(0, 0, 0, 0.227451)', // h-shadow v-shadow blur spread
+    boxShadow: '0 3px 10px 0 rgba(0, 0, 0, 0.227451)',
     zIndex: 1049,
     overflowX: 'hidden',
 };
 
 const SortableLayer = SortableElement(Overlay);
 
-const loading = {}; // TODO: Temp fix
-
-const SortableLayersList = SortableContainer(({layers, loadOverlayRequested, requestOverlayLoad, loadOverlay}) => (
+const SortableLayersList = SortableContainer(({overlays, loadOverlayRequested, requestOverlayLoad, getOverlay}) => (
     <div>
-        {layers.map((layer, index) => { // Draggable layers - last layer on top
-
-            // console.log('SortableLayersList', index, layer);
-            // console.log('LayersPanel is loaded: ', layer.isLoaded, layer.isLoading);
-
-            // console.log('AAAA');
-
-            if (!layer.isLoaded && !layer.isLoading && !loading[layer.id]) {
-                loading[layer.id] = true; // TODO: Temp fix
-                // requestOverlayLoad(layer.id); // Only able to dispach on action
-                loadOverlay(layer);
-            }
-
-            // console.log('######', layer);
-
+        {overlays.map((overlay, index) => { // Draggable layers - last layer on top
             return (
                 <SortableLayer
-                    key={layer.id}
+                    key={overlay.id}
                     index={index}
-                    layer={layer}
+                    layer={overlay}
                 />
             )
         })}
     </div>
 ));
 
-const LayersPanel = ({ basemap, basemaps, overlays, onSortEnd, loadOverlay }) => {
+const LayersPanel = ({ basemap, basemaps, overlays, onSortEnd, getOverlay }) => {
     const selectedBasemap = basemaps.filter(b => b.id === basemap.id)[0];
 
     return (
         <Drawer containerStyle={styles} width={300}>
-            <SortableLayersList layers={overlays} onSortEnd={onSortEnd} loadOverlay={loadOverlay} useDragHandle={true} />
+            <SortableLayersList overlays={overlays} onSortEnd={onSortEnd} useDragHandle={true} />
             <Basemap {...selectedBasemap} {...basemap} basemaps={basemaps} />
         </Drawer>
     );

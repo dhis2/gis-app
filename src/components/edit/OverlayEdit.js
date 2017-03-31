@@ -7,7 +7,7 @@ const editCounter = {};
 
 let nextOverlayId = 0;
 
-class LayersEdit extends Component {
+class OverlayEdit extends Component {
 
     componentDidUpdate(prevProps) {
         const props = this.props;
@@ -22,8 +22,6 @@ class LayersEdit extends Component {
             layer.isNew = false;
         }
 
-        console.log('EDIT');
-
         if (!widgets[id]) {
             editCounter[id] = 0;
 
@@ -33,10 +31,9 @@ class LayersEdit extends Component {
                 editedLayer.editCounter = ++editCounter[editedLayer.id];
 
                 editedLayer.isNew = layer.isNew;
-                // console.log('editedLayer', layer);
 
                 widgets[id].hide();
-                props.loadOverlay(editedLayer);
+                props.getOverlay(editedLayer);
             });
 
             if (layer.isLoaded) { // Loaded as favorite
@@ -44,8 +41,6 @@ class LayersEdit extends Component {
                 editCounter[id]++;
                 widgets[id].setLayer(layer);
             }
-
-            // console.log('isLoaded', layer.isLoaded);
         } else {
             layer.isNew = false;
         }
@@ -57,10 +52,8 @@ class LayersEdit extends Component {
     render() {
         return null;
     }
-
 }
 
-
-export default LayersEdit;
+export default OverlayEdit;
 
 

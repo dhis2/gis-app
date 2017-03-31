@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 import ui from './ui';
 import map from './map';
-// import layers from './layers';
 import basemaps from './basemaps';
 import overlays from './overlays';
 import editOverlay from './editOverlay';
 import dataTable from './dataTable';
+import loading from './loading';
 
 export default combineReducers({
     ui,
@@ -14,5 +14,6 @@ export default combineReducers({
     overlays,
     editOverlay,
     dataTable,
+    loading,
 });
 

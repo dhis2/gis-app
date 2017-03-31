@@ -3,7 +3,7 @@ import { loading, loaded } from './loading';
 import { fetchOverlay } from '../loaders/overlays';
 
 // Add new overlay
-export const addOverlay = (layer) => ({
+export const addOverlay = layer => ({
     type: actionTypes.OVERLAY_ADD,
     payload: layer,
 });
@@ -15,22 +15,23 @@ export const editOverlay = layer => ({
 });
 
 // Update existing overlay
-export const updateOverlay = (layer) => ({
+export const updateOverlay = layer => ({
     type: actionTypes.OVERLAY_UPDATE,
     id: layer.id,
     payload: layer,
 });
 
 // Update existing overlay
-export const requestOverlayLoad = (id) => ({
+export const requestOverlayLoad = id => ({
     type: actionTypes.OVERLAY_LOAD_REQUESTED,
     id: layer.id,
 });
 
+// Load overlay data
 // http://redux.js.org/docs/advanced/AsyncActions.html
 export function getOverlay(layer) {
     return dispatch => {
-        // dispatch(loading()); Gives error: Warning: setState(...): Cannot update during an existing state transition
+        dispatch(loading()); // Gives error: Warning: setState(...): Cannot update during an existing state transition
 
         return fetchOverlay(layer).then(layer => {
             if (layer.editCounter === 1) { // Add new layer
@@ -44,39 +45,44 @@ export function getOverlay(layer) {
     }
 }
 
-
-export const removeOverlay = (id) => ({
+// Remover an overlay
+export const removeOverlay = id => ({
     type: actionTypes.OVERLAY_REMOVE,
     id,
 });
 
-export const toggleOverlayExpand = (id) => ({
+// Expand/collapse overlay card
+export const toggleOverlayExpand = id => ({
     type: actionTypes.OVERLAY_TOGGLE_EXPAND,
     id,
 });
 
-export const toggleOverlayVisibility = (id) => ({
+// Show/hide overlay on map
+export const toggleOverlayVisibility = id => ({
     type: actionTypes.OVERLAY_TOGGLE_VISIBILITY,
     id,
 });
 
+// Set overlay opacity
 export const changeOverlayOpacity = (id, opacity) => ({
     type: actionTypes.OVERLAY_CHANGE_OPACITY,
     id,
     opacity,
 });
 
+// Change ordering of overlays
 export const sortOverlays = ({oldIndex, newIndex}) => ({
     type: actionTypes.OVERLAY_SORT,
     oldIndex,
     newIndex,
 });
 
-
+// Open overlay selection dialog
 export const openOverlaysDialog = () => ({
     type: actionTypes.OVERLAYS_DIALOG_OPEN_REQUESTED,
 });
 
+// Close overlay selection dialog
 export const closeOverlaysDialog = () => ({
     type: actionTypes.OVERLAYS_DIALOG_CLOSE_REQUESTED,
 });

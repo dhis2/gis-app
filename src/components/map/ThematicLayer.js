@@ -48,6 +48,13 @@ class ThematicLayer extends Layer {
 
     onFeatureRightClick(evt) {
         L.DomEvent.stopPropagation(evt); // Don't propagate to map right-click
+
+        const pos = [evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y];
+
+        this.props.openContextMenu(pos, {});
+
+        // console.log(pos, evt, this.props.openContextMenu);
+
         // const contextMenu = GIS.core.ContextMenu(gis, this.props, evt.layer, evt.latlng); // TODO
         // contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y]);
     }

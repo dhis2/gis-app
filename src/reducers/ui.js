@@ -3,6 +3,7 @@ import * as actionTypes from '../constants/actionTypes';
 const defaultState = {
     overlaysDialogOpen: false,
     favoritesDialogOpen: false,
+    mapContextMenu: true,
 };
 
 const ui = (state = defaultState, action) => {

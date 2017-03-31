@@ -70,16 +70,15 @@ class Map extends Component {
         return (
             <div ref="map" style={style}>
                 {props.overlays.filter(layer => layer.isLoaded).map((layer, index) => {
-                    const MapLayer = getLayerForType(layer);
-
-                    // console.log('key', index, layer.id ,layer);
+                    const Overlay = getLayerForType(layer);
 
                     return (
-                        <MapLayer
+                        <Overlay
                             key={layer.id}
                             map={this.map}
                             index={index}
                             layer={layer}
+                            openContextMenu={props.openContextMenu}
                         />
                     )
                 })}

@@ -59,7 +59,7 @@ const styles = {
     }
 };
 
-const BasemapCard = (props) => (
+const BasemapCard = props => (
     <Card
         style={styles.root}
         containerStyle={styles.container}

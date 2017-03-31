@@ -2,12 +2,12 @@ import * as actionTypes from '../constants/actionTypes';
 
 export function loading() {
     return {
-        type: actionTypes.LOADING
+        type: actionTypes.LOADING,
     };
 }
 
 export function loaded() {
     return {
-        type: actionTypes.LOADED
+        type: actionTypes.LOADED,
     };
 }

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Map from '../components/map/Map';
-// import { closeDataTable } from '../actions';
+import { openContextMenu } from '../actions/map';
 
 const mapStateToProps = (state) => ({
     ...state.map,
@@ -8,7 +8,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = ({
-    //onRequestClose: closeDataTable,
+    openContextMenu,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);

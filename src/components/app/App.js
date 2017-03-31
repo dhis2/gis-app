@@ -9,6 +9,7 @@ import LayersList from '../../containers/LayersList';
 import Map from '../../containers/Map';
 import DataTable from '../../containers/DataTable';
 import OverlayEdit from '../../containers/OverlayEdit';
+import ContextMenu from '../../containers/ContextMenu';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
@@ -35,6 +36,7 @@ const App = () => (
                 <Map />
             </div>
             <OverlayEdit />
+            <ContextMenu/>
             <DataTable />
         </div>
     </MuiThemeProvider>

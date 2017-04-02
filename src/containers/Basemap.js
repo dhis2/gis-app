@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import BasemapCard from '../components/layer/BasemapCard';
-import { changeBasemapOpacity, toggleBasemapExpand, toggleBasemapVisibility, basemapSelected } from '../actions';
+import { changeBasemapOpacity, toggleBasemapExpand, toggleBasemapVisibility, basemapSelected } from '../actions/basemap';
 
 const mapStateToProps = (state) => ({
     basemap: state.map.basemap, // Selected basemap

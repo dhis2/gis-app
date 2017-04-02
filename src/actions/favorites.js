@@ -1,5 +1,5 @@
 import * as actionTypes from '../constants/actionTypes';
-import { setMap } from '.';
+import { setMap } from './map';
 import { loading, loaded } from './loading';
 import { fetchFavorite, parseFavorite } from '../loaders/favorites';
 import { getOverlay } from './overlays';

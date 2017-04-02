@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import DataTable from '../components/datatable/DataTable';
-import { closeDataTable } from '../actions';
+import { closeDataTable } from '../actions/dataTable';
 
 const mapStateToProps = (state) => ({
     dataList: state.dataTable.data,

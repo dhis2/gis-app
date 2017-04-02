@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import OverlayCard from '../components/layer/OverlayCard';
 import { editOverlay, removeOverlay, changeOverlayOpacity, toggleOverlayExpand, toggleOverlayVisibility } from '../actions/overlays';
-import { openDataTable } from '../actions';
+import { openDataTable } from '../actions/dataTable';
 
 const mapStateToProps = (state) => ({
     // layers: state.layers,

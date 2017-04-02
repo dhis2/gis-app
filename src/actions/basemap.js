@@ -1,6 +1,6 @@
 import * as actionTypes from '../constants/actionTypes';
 
-export const basemapSelected = (id) => ({
+export const selectBasemap = id => ({
     type: actionTypes.BASEMAP_SELECTED,
     id,
 });

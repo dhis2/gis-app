@@ -1,6 +1,5 @@
 import { apiFetch } from '../util/api';
 import isArray from 'd2-utilizr/lib/isArray';
-import isString from 'd2-utilizr/lib/isString';
 
 // Fetch favorite
 export function fetchFavorite(id) {
@@ -14,13 +13,8 @@ export function parseFavorite({id, name, basemap, mapViews, user}) { // TODO: Ad
         id,
         name,
         user,
+        basemap
     };
-
-    if (isString(basemap)) {
-        fav.basemap = {
-            id: basemap,
-        };
-    }
 
     if (isArray(mapViews)) {
         fav.overlays = mapViews.map(view => {

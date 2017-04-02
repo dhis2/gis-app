@@ -20,6 +20,7 @@ class ThematicLayer extends Layer {
                 fontSize: layer.labelFontSize,
                 fontStyle: layer.labelFontStyle
             };
+            config.labelPane = layer.id + '-labels';
         }
 
         this.instance = map.createLayer(config).addTo(map);

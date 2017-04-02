@@ -16,8 +16,6 @@ class Layer extends Component {
         const layer = props.layer;
         const prevLayer = prevProps.layer;
 
-        console.log('componentDidUpdate', props);
-
         if (layer.editCounter !== prevLayer.editCounter || layer.config !== prevLayer.config) { // TODO
             this.removeLayer();
             this.createLayer();
@@ -43,7 +41,14 @@ class Layer extends Component {
 
     // Create custom pane to control layer ordering: http://leafletjs.com/examples/map-panes/
     createPane() {
-        this.pane = this.props.map.createPane(this.props.layer.id);
+        const props = this.props;
+        const layer = props.layer;
+
+        this.pane = props.map.createPane(layer.id);
+
+        if (layer.labels) {
+            this.labelPane = props.map.createPane(layer.id + '-labels');
+        }
     }
 
     // Create new layer from config object (override in subclasses)
@@ -80,8 +85,13 @@ class Layer extends Component {
     setLayerOrder() {
         const props = this.props;
         const layer = props.layer;
+        const zIndex = 600 - (props.index * 10);
 
-        props.map.getPane(layer.id).style.zIndex = 600 - (props.index * 10);
+        this.pane.style.zIndex = zIndex;
+
+        if (this.labelPane) {
+            this.labelPane.style.zIndex = zIndex + 1;
+        }
     }
 
     setLayerVisibility() {
@@ -100,8 +110,12 @@ class Layer extends Component {
         if (this.props.map.hasLayer(this.instance)) {
             this.props.map.removeLayer(this.instance);
         }
-        delete(this.mapPane);
         delete(this.instance);
+        delete(this.pane);
+
+        if (this.labelPane) {
+            delete(this.labelPane);
+        }
     }
 
     render() {

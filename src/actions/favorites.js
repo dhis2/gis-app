@@ -1,8 +1,10 @@
 import * as actionTypes from '../constants/actionTypes';
 import { setMap } from './map';
+import { selectBasemap } from './basemap';
 import { loading, loaded } from './loading';
 import { fetchFavorite, parseFavorite } from '../loaders/favorites';
 import { getOverlay } from './overlays';
+import isString from 'd2-utilizr/lib/isString';
 
 export function getFavorite(id) {
     return dispatch => {
@@ -10,8 +12,15 @@ export function getFavorite(id) {
 
         return fetchFavorite(id).then(favorite => {
             const mapConfig = parseFavorite(favorite);
+            const basemap = mapConfig.basemap;
+
+            delete(mapConfig.basemap); // Added below
 
             dispatch(setMap(mapConfig));
+
+            if (isString(basemap)) {
+                dispatch(selectBasemap(basemap));
+            }
 
             // Trigger loading of all overlays
             mapConfig.overlays.forEach(overlay => dispatch(getOverlay(overlay)));

@@ -52,7 +52,9 @@ class ThematicLayer extends Layer {
 
         const pos = [evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y];
 
-        this.props.openContextMenu(pos, {});
+        this.props.openContextMenu(pos, evt.layer.feature);
+
+        // console.log(evt.layer.feature);
 
         // console.log(pos, evt, this.props.openContextMenu);
 

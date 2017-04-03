@@ -5,6 +5,7 @@ import basemaps from './basemaps';
 import overlays from './overlays';
 import editOverlay from './editOverlay';
 import dataTable from './dataTable';
+import contextMenu from './contextMenu';
 import loading from './loading';
 
 export default combineReducers({
@@ -14,6 +15,6 @@ export default combineReducers({
     overlays,
     editOverlay,
     dataTable,
+    contextMenu,
     loading,
 });
-

@@ -5,14 +5,16 @@ export const setMap = map => ({
     payload: map
 });
 
-export const openContextMenu = feature => {
+export const openContextMenu = (pos, feature) => {
     return {
         type: actionTypes.MAP_CONTEXT_MENU_OPEN,
+        pos: pos,
         payload: feature,
     };
 };
 
 export const closeContextMenu = () => {
+    console.log('close it');
     return {
         type: actionTypes.MAP_CONTEXT_MENU_CLOSE,
     };

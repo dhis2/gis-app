@@ -1,14 +1,13 @@
 import { connect } from 'react-redux';
 import ContextMenu from '../components/map/ContextMenu';
-// import { editOverlay } from '../actions/overlays';
+import { closeContextMenu } from '../actions/map';
 
-const mapStateToProps = (state) => ({
-    // layers: state.layers,
+const mapStateToProps = state => ({
+    ...state.contextMenu
 });
 
 const mapDispatchToProps = ({
-    // onEdit: editOverlay,
+    onRequestClose: closeContextMenu,
 });
 
-// export default connect(mapStateToProps, mapDispatchToProps)(OverlayCard);
-export default connect(undefined, mapDispatchToProps)(ContextMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(ContextMenu);

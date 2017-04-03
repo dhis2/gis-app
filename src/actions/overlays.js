@@ -1,4 +1,5 @@
 import * as actionTypes from '../constants/actionTypes';
+import { closeContextMenu } from './map';
 import { loading, loaded } from './loading';
 import { fetchOverlay } from '../loaders/overlays';
 
@@ -33,7 +34,11 @@ export function getOverlay(layer) {
     return dispatch => {
         dispatch(loading()); // Gives error: Warning: setState(...): Cannot update during an existing state transition
 
+        // console.log('getOverlay', layer);
+
         return fetchOverlay(layer).then(layer => {
+            //  console.log('LOADED', layer);
+
             if (layer.editCounter === 1) { // Add new layer
                 dispatch(addOverlay(layer));
             } else { // Update existing layer
@@ -76,6 +81,36 @@ export const sortOverlays = ({oldIndex, newIndex}) => ({
     oldIndex,
     newIndex,
 });
+
+// Drill
+export function drillOverlay(layerId, parentId, parentGraph, level) {
+    return (dispatch, getState) => {
+        dispatch(closeContextMenu());
+
+        const dimConf = gis.conf.finals.dimension; // TODO
+        const state = getState();
+        const layer = state.map.overlays.filter(overlay => overlay.id === layerId)[0]; // TODO: Add check
+
+        const overlay = {
+            ...layer,
+            rows: [{
+                dimension: dimConf.organisationUnit.objectName,
+                items: [
+                    {id: parentId},
+                    {id: 'LEVEL-' + level}
+                ]
+            }],
+            parentGraphMap: {}
+        };
+
+        layer.parentGraphMap[parentId] = parentGraph;
+
+        // console.log('DRILL', overlay);
+        // dispatch(updateOverlay(overlay));
+
+        dispatch(getOverlay(overlay));
+    }
+}
 
 // Open overlay selection dialog
 export const openOverlaysDialog = () => ({

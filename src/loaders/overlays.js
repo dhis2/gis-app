@@ -28,6 +28,7 @@ export function fetchOverlay(layer) {
         const Loader = layerType[layer.type];
 
         if (Loader) {
+            // console.log('rows', layer.rows);
             if (layer.type === 'thematic') { // TODO: Remove check when all loaders are classes
                 new Loader(layer, config => parseOverlay(config, resolve));
             } else {

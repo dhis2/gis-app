@@ -16,10 +16,13 @@ class Layer extends Component {
         const layer = props.layer;
         const prevLayer = prevProps.layer;
 
-        if (layer.editCounter !== prevLayer.editCounter || layer.config !== prevLayer.config) { // TODO
+       //  console.log('componentDidUpdate', layer.editCounter !== prevLayer.editCounter, layer.config !== prevLayer.config);
+
+        // if (layer.editCounter !== prevLayer.editCounter || layer.config !== prevLayer.config) { // TODO
+        //if (layer !== layer) { // TODO: Check Needed?
             this.removeLayer();
             this.createLayer();
-        }
+        //}
 
         // if (props.index !== undefined && prevLayer.index !== layer.index) {
         if (props.index !== undefined) {

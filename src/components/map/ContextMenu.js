@@ -4,10 +4,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import ArrowUpIcon from 'material-ui/svg-icons/navigation/arrow-upward';
 import ArrowDownIcon from 'material-ui/svg-icons/navigation/arrow-downward';
-// import InfoIcon from 'material-ui/svg-icons/action/info';
-// import InfoIcon from 'material-ui/svg-icons/communication/chat-bubble-outline';
 import InfoIcon from 'material-ui/svg-icons/action/info-outline';
-// import EditLocationIcon from 'material-ui/svg-icons/maps/edit-location';
 import EditLocationIcon from 'material-ui/svg-icons/action/room';
 
 // https://github.com/callemall/material-ui/issues/2866
@@ -26,29 +23,29 @@ const ContextMenu = props => {
             paddingBottom: 4,
         },
         menuItem: {
-            fontSize: 11,
+            fontSize: 12,
             lineHeight: '24px',
             minHeight: '24px',
         },
         menuItemInner: {
-            padding: '0 10px 0 40px',
+            padding: '0 8px 0 34px',
         },
         icon: {
-            margin: 0,
-            left: 8,
+            margin: 3,
+            left: 6,
+            width: 18,
+            height: 18,
         }
     };
 
     if (props.pos) {
-        anchorEl.style.left = props.pos[0] + 'px'; // '400px';
-        anchorEl.style.top = props.pos[1] + 'px'; // '400px';
+        anchorEl.style.left = props.pos[0] + 'px';
+        anchorEl.style.top = props.pos[1] + 'px';
     }
 
     if (feature) {
         isPoint = feature.geometry.type === 'Point';
         attr = feature.properties;
-
-        // console.log('feature', feature, isPoint, attr, attr.hasCoordinatesUp, attr.hasCoordinatesDown);
     }
 
     return (
@@ -85,6 +82,7 @@ const ContextMenu = props => {
                 />
                 <MenuItem
                     primaryText="Show information"
+                    onTouchTap={() => props.onShowInformation(feature.properties)}
                     innerDivStyle={style.menuItemInner}
                     leftIcon={
                         <InfoIcon

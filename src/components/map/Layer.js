@@ -16,13 +16,11 @@ class Layer extends Component {
         const layer = props.layer;
         const prevLayer = prevProps.layer;
 
-       //  console.log('componentDidUpdate', layer.editCounter !== prevLayer.editCounter, layer.config !== prevLayer.config);
-
         // if (layer.editCounter !== prevLayer.editCounter || layer.config !== prevLayer.config) { // TODO
-        //if (layer !== layer) { // TODO: Check Needed?
+        if (layer !== prevLayer) { // TODO: Improve check?
             this.removeLayer();
             this.createLayer();
-        //}
+        }
 
         // if (props.index !== undefined && prevLayer.index !== layer.index) {
         if (props.index !== undefined) {
@@ -90,7 +88,9 @@ class Layer extends Component {
         const layer = props.layer;
         const zIndex = 600 - (props.index * 10);
 
-        this.pane.style.zIndex = zIndex;
+        if (this.pane) { // TODO: Needed?
+            this.pane.style.zIndex = zIndex;
+        }
 
         if (this.labelPane) {
             this.labelPane.style.zIndex = zIndex + 1;
@@ -115,10 +115,7 @@ class Layer extends Component {
         }
         delete(this.instance);
         delete(this.pane);
-
-        if (this.labelPane) {
-            delete(this.labelPane);
-        }
+        delete(this.labelPane);
     }
 
     render() {

@@ -5,24 +5,25 @@ class FacilityLayer extends Layer {
 
     createLayer(callback) {
         const props = this.props;
+        const layer = props.layer;
         const map = props.map;
 
         // Create layer config object
         const config = {
             type: 'markers',
-            pane: props.id,
-            data: props.data,
+            pane: layer.id,
+            data: layer.data,
             hoverLabel: '{label}',
         };
 
         // Labels and label style
-        if (props.labels) {
+        if (layer.labels) {
             config.label = '{name}';
             config.labelStyle = {
-                color: props.labelFontColor,
-                fontSize: props.labelFontSize,
-                fontStyle: props.labelFontStyle,
-                fontWeight: props.labelFontWeight,
+                color: layer.labelFontColor,
+                fontSize: layer.labelFontSize,
+                fontStyle: layer.labelFontStyle,
+                fontWeight: layer.labelFontWeight,
                 paddingTop: '10px'
             };
         }
@@ -33,12 +34,12 @@ class FacilityLayer extends Layer {
         }
 
         // Create and add area layer
-        if (props.areaRadius) {
+        if (layer.areaRadius) {
             this.areaInstance = map.addLayer({
                 type: 'circles',
-                radius: props.areaRadius,
+                radius: layer.areaRadius,
                 highlightStyle: false,
-                data: props.data
+                data: layer.data
             });
         }
 
@@ -47,9 +48,12 @@ class FacilityLayer extends Layer {
 
         // Handle facility click
         this.instance.on('click', this.onFeatureClick, this);
+        this.instance.on('contextmenu', this.onFeatureRightClick, this);
 
         // Defined in parent class
-        this.onLayerAdd();
+        // this.onLayerAdd();
+
+        map.fitBounds(this.instance.getBounds()); // TODO: Do as action?
     }
 
     // Show pupup on facility click
@@ -72,6 +76,24 @@ class FacilityLayer extends Layer {
             .setContent(content)
             .openOn(this.props.map);
     };
+
+    onFeatureRightClick(evt) {
+        L.DomEvent.stopPropagation(evt); // Don't propagate to map right-click
+
+        const latlng = evt.latlng;
+        const position = [evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y];
+        const layer = this.props.layer;
+
+        console.log('latlng', evt.latlng);
+
+        this.props.openContextMenu({
+            position,
+            coordinate: [latlng[1], latlng[0]],
+            layerId: layer.id,
+            layerType: layer.type,
+            feature: evt.layer.feature,
+        });
+    }
 
     // Remove layer istance (both facilities and areas)
     removeLayer() {

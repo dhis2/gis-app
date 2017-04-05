@@ -4,11 +4,7 @@ const contextMenu = (state = null, action) => {
     switch (action.type) {
 
         case actionTypes.MAP_CONTEXT_MENU_OPEN:
-            return {
-                pos: action.pos,
-                layerId: action.layerId,
-                feature: action.feature,
-            };
+            return action.payload;
 
         case actionTypes.MAP_CONTEXT_MENU_CLOSE:
             return null;

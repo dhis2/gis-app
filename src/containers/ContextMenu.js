@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ContextMenu from '../components/map/ContextMenu';
-import { closeContextMenu } from '../actions/map';
+import { closeContextMenu, openCoordinatePopup } from '../actions/map';
 import { drillOverlay } from '../actions/overlays';
 import { openOrgUnit } from '../actions/orgUnit';
 
@@ -15,6 +15,10 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(closeContextMenu());
         dispatch(openOrgUnit(attr));
     },
+    showCoordinate: coord => {
+        dispatch(closeContextMenu());
+        dispatch(openCoordinatePopup(coord));
+    }
 });
 
 

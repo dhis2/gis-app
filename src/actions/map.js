@@ -2,15 +2,22 @@ import * as actionTypes from '../constants/actionTypes';
 
 export const setMap = map => ({
     type: actionTypes.MAP_SET,
-    payload: map
+    payload: map,
 });
 
-export const openContextMenu = (pos, layerId, feature) => {
+export const openCoordinatePopup = coord => ({
+    type: actionTypes.MAP_COORDINATE_OPEN,
+    payload: coord,
+});
+
+export const closeCoordinatePopup = coord => ({
+    type: actionTypes.MAP_COORDINATE_CLOSE,
+});
+
+export const openContextMenu = payload => {
     return {
         type: actionTypes.MAP_CONTEXT_MENU_OPEN,
-        pos,
-        layerId,
-        feature,
+        payload,
     };
 };
 

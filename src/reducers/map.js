@@ -122,6 +122,18 @@ const map = (state = defaultState, action) => {
                 ...action.payload
             };
 
+        case actionTypes.MAP_COORDINATE_OPEN:
+            return {
+                ...state,
+                coordinatePopup: action.payload,
+            };
+
+        case actionTypes.MAP_COORDINATE_CLOSE:
+            return {
+                ...state,
+                coordinatePopup: null,
+            };
+
         case actionTypes.BASEMAP_SELECTED:
         case actionTypes.BASEMAP_CHANGE_OPACITY:
         case actionTypes.BASEMAP_TOGGLE_EXPAND:

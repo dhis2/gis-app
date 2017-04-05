@@ -40,6 +40,8 @@ class Map extends Component {
         div.style.height = '100%';
 
         this.map = d2map(div);
+
+        this.map.on('contextmenu', this.onRightClick, this);
     }
 
     // Append map container to DOM on mount
@@ -57,7 +59,31 @@ class Map extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        // console.log('map did update');
+        const props = this.props;
+
+        if (props.coordinatePopup) {
+            this.showCoordinate(props.coordinatePopup);
+        }
+    }
+
+    showCoordinate(coord) {
+        L.popup()
+            .setLatLng([coord[1], coord[0]])
+            .setContent('Longitude: ' + coord[0].toFixed(6) + '<br />Latitude: ' + coord[1].toFixed(6))
+            .on('remove', this.props.closeCoordinatePopup)
+            .openOn(this.map);
+    }
+
+    onRightClick(evt) {
+        L.DomEvent.stopPropagation(evt); // Don't propagate to map right-click
+
+        const latlng = evt.latlng;
+        const position = [evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y];
+
+        this.props.openContextMenu({
+            position,
+            coordinate: [latlng.lng, latlng.lat],
+        });
     }
 
     render() {
@@ -71,8 +97,6 @@ class Map extends Component {
             <div ref="map" style={style}>
                 {props.overlays.filter(layer => layer.isLoaded).map((layer, index) => {
                     const Overlay = getLayerForType(layer);
-
-                    // console.log('overlay on map', layer.data.length);
 
                     return (
                         <Overlay

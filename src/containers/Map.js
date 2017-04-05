@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Map from '../components/map/Map';
-import { openContextMenu } from '../actions/map';
+import { openContextMenu, closeCoordinatePopup } from '../actions/map';
 
 const mapStateToProps = (state) => ({
     ...state.map,
@@ -9,6 +9,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = ({
     openContextMenu,
+    closeCoordinatePopup,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Map);

@@ -12,10 +12,18 @@ const anchorEl = document.getElementById('context-menu');
 
 const ContextMenu = props => {
     const feature = props.feature;
+    const layerType = props.layerType;
     const iconColor = '#777';
     const iconDisabledColor = '#eee';
+    let isRelocate;
+    let isPlugin;
     let isPoint;
     let attr = {};
+
+    if (typeof(gis) !== 'undefined') { // TODO
+        isRelocate = !!GIS.app ? !!gis.init.user.isAdmin : false;
+        isPlugin = gis.plugin;
+    }
 
     const style = {
         list: {
@@ -38,9 +46,9 @@ const ContextMenu = props => {
         }
     };
 
-    if (props.pos) {
-        anchorEl.style.left = props.pos[0] + 'px';
-        anchorEl.style.top = props.pos[1] + 'px';
+    if (props.position) {
+        anchorEl.style.left = props.position[0] + 'px';
+        anchorEl.style.top = props.position[1] + 'px';
     }
 
     if (feature) {
@@ -48,57 +56,111 @@ const ContextMenu = props => {
         attr = feature.properties;
     }
 
+    // console.log('context menu', props.layerId, props.layerType);
+
     return (
         <Popover
-            open={props.pos ? true : false}
+            open={props.position ? true : false}
             style={style.popover}
             anchorEl={anchorEl}
             onRequestClose={props.onRequestClose}
         >
             <Menu autoWidth={true} style={style.menu} listStyle={style.list} menuItemStyle={style.menuItem} >
-                <MenuItem
-                    primaryText="Drill up one level" // TODO: i18n
-                    disabled={!attr.hasCoordinatesUp}
-                    onTouchTap={() => props.onDrill(props.layerId, attr.grandParentId, attr.grandParentParentGraph, parseInt(attr.level) - 1)}
-                    innerDivStyle={style.menuItemInner}
-                    leftIcon={
-                        <ArrowUpIcon
-                            color={attr.hasCoordinatesUp ? iconColor : iconDisabledColor}
-                            style={style.icon}
-                        />
-                    }
-                />
-                <MenuItem
-                    primaryText="Drill down one level" // TODO: i18n
-                    disabled={!attr.hasCoordinatesDown}
-                    onTouchTap={() => props.onDrill(props.layerId, attr.id, attr.parentGraph, parseInt(attr.level) + 1)}
-                    innerDivStyle={style.menuItemInner}
-                    leftIcon={
-                        <ArrowDownIcon
-                            color={attr.hasCoordinatesDown ? iconColor : iconDisabledColor}
-                            style={style.icon}
-                        />
-                    }
-                />
-                <MenuItem
-                    primaryText="Show information"
-                    onTouchTap={() => props.onShowInformation(feature.properties)}
-                    innerDivStyle={style.menuItemInner}
-                    leftIcon={
-                        <InfoIcon
-                            style={style.icon}
-                        />
-                    }
-                />
-                <MenuItem
-                    primaryText="Show longitude/latitude"
-                    innerDivStyle={style.menuItemInner}
-                    leftIcon={
-                        <EditLocationIcon
-                            style={style.icon}
-                        />
-                    }
-                />
+
+                {layerType !== 'facility' && feature &&
+                    <MenuItem
+                        primaryText={GIS.i18n.drill_up_one_level}
+                        disabled={!attr.hasCoordinatesUp}
+                        onTouchTap={() => props.onDrill(props.layerId, attr.grandParentId, attr.grandParentParentGraph, parseInt(attr.level) - 1)}
+                        innerDivStyle={style.menuItemInner}
+                        leftIcon={
+                            <ArrowUpIcon
+                                color={attr.hasCoordinatesUp ? iconColor : iconDisabledColor}
+                                style={style.icon}
+                            />
+                        }
+                    />
+                }
+
+                {layerType !== 'facility' && feature &&
+                    <MenuItem
+                        primaryText={GIS.i18n.drill_down_one_level}
+                        disabled={!attr.hasCoordinatesDown}
+                        onTouchTap={() => props.onDrill(props.layerId, attr.id, attr.parentGraph, parseInt(attr.level) + 1)}
+                        innerDivStyle={style.menuItemInner}
+                        leftIcon={
+                            <ArrowDownIcon
+                                color={attr.hasCoordinatesDown ? iconColor : iconDisabledColor}
+                                style={style.icon}
+                            />
+                        }
+                    />
+                }
+
+                {isRelocate && isPoint &&
+                    <MenuItem
+                        primaryText={GIS.i18n.relocate}
+                        onTouchTap={() => props.onRelocate(feature.properties)}
+                        innerDivStyle={style.menuItemInner}
+                        leftIcon={
+                            <EditLocationIcon
+                                style={style.icon}
+                            />
+                        }
+                    />
+                }
+
+                {isRelocate && isPoint &&
+                    <MenuItem
+                        primaryText={GIS.i18n.swap_lon_lat}
+                        onTouchTap={() => props.onSwapLngLat(feature.properties)}
+                        innerDivStyle={style.menuItemInner}
+                        leftIcon={
+                            <EditLocationIcon
+                                style={style.icon}
+                            />
+                        }
+                    />
+                }
+
+                {!isPlugin && feature &&
+                    <MenuItem
+                        primaryText={GIS.i18n.show_information_sheet}
+                        onTouchTap={() => props.onShowInformation(feature.properties)}
+                        innerDivStyle={style.menuItemInner}
+                        leftIcon={
+                            <InfoIcon
+                                style={style.icon}
+                            />
+                        }
+                    />
+                }
+
+                {layerType === 'earthEngine' &&
+                    <MenuItem
+                        primaryText={GIS.i18n.show + ' todo'}
+                        onTouchTap={() => props.onShowValue()}
+                        innerDivStyle={style.menuItemInner}
+                        leftIcon={
+                            <InfoIcon
+                                style={style.icon}
+                            />
+                        }
+                    />
+                }
+
+                {props.coordinate && !isPoint &&
+                    <MenuItem
+                        primaryText="Show longitude/latitude"
+                        onTouchTap={() => props.showCoordinate(props.coordinate)}
+                        innerDivStyle={style.menuItemInner}
+                        leftIcon={
+                            <EditLocationIcon
+                                style={style.icon}
+                            />
+                        }
+                    />
+                }
             </Menu>
         </Popover>
     );

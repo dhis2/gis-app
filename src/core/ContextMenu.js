@@ -5,12 +5,12 @@ import isString from 'd2-utilizr/lib/isString';
 // Right-click context menu for map and features
 export default function ContextMenu(gis, layer, instance, latlng) {
     const mapContainer = gis.instance.getContainer();
-    const isRelocate = !!GIS.app ? !!gis.init.user.isAdmin : false;
     const menuItems = [];
 
     if (instance) { // layer and instance don't exist when basemap is clicked
         const feature = instance.feature;
         const isPoint = feature.geometry.type === 'Point';
+        const isRelocate = !!GIS.app ? !!gis.init.user.isAdmin : false;
         const att = feature.properties;
 
         // Relocate

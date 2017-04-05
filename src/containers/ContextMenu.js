@@ -2,14 +2,14 @@ import { connect } from 'react-redux';
 import ContextMenu from '../components/map/ContextMenu';
 import { closeContextMenu, openCoordinatePopup } from '../actions/map';
 import { drillOverlay } from '../actions/overlays';
-import { openOrgUnit } from '../actions/orgUnit';
+import { openOrgUnit, relocateOrgUnit, swapOrgUnitCoordinate} from '../actions/orgUnit';
 
 const mapStateToProps = state => ({
     ...state.contextMenu
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    onRequestClose: () => dispatch(closeContextMenu()),
+    onClose: () => dispatch(closeContextMenu()),
     onDrill: (layerId, parentId, parentGraph, level) => dispatch(drillOverlay(layerId, parentId, parentGraph, level)),
     onShowInformation: attr => {
         dispatch(closeContextMenu());
@@ -18,6 +18,14 @@ const mapDispatchToProps = (dispatch) => ({
     showCoordinate: coord => {
         dispatch(closeContextMenu());
         dispatch(openCoordinatePopup(coord));
+    },
+    onRelocate: attr => {
+        dispatch(closeContextMenu());
+        dispatch(relocateOrgUnit(attr));
+    },
+    onSwapCoordinate: attr => {
+        dispatch(closeContextMenu());
+        dispatch(swapOrgUnitCoordinate(attr));
     }
 });
 

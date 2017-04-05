@@ -13,26 +13,16 @@ export const closeOrgUnit = () => {
     };
 };
 
+export const relocateOrgUnit = () => {
+    return {
+        type: actionTypes.ORGANISATION_UNIT_RELOCATE,
+    };
+};
 
-export function getOrgUnit() {
-    return dispatch => {
-        // dispatch(loading()); // Gives error: Warning: setState(...): Cannot update during an existing state transition
+export const swapOrgUnitCoordinate = () => {
+    return {
+        type: actionTypes.ORGANISATION_UNIT_SWAP_COORDINATE,
+    };
+};
 
-        // console.log('getOverlay', layer);
-
-        /*
-        return fetchOverlay(layer).then(layer => {
-            //  console.log('LOADED', layer);
-
-            if (layer.editCounter === 1) { // Add new layer
-                dispatch(addOverlay(layer));
-            } else { // Update existing layer
-                dispatch(updateOverlay(layer));
-            }
-
-            dispatch(loaded());
-        });
-        */
-    }
-}
 

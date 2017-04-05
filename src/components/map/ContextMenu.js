@@ -56,14 +56,12 @@ const ContextMenu = props => {
         attr = feature.properties;
     }
 
-    console.log('context menu', attr);
-
     return (
         <Popover
             open={props.position ? true : false}
             style={style.popover}
             anchorEl={anchorEl}
-            onRequestClose={props.onRequestClose}
+            onRequestClose={props.onClose}
         >
             <Menu autoWidth={true} style={style.menu} listStyle={style.list} menuItemStyle={style.menuItem} >
 
@@ -113,7 +111,7 @@ const ContextMenu = props => {
                 {isRelocate && isPoint &&
                     <MenuItem
                         primaryText={GIS.i18n.swap_lon_lat}
-                        onTouchTap={() => props.onSwapLngLat(attr)}
+                        onTouchTap={() => props.onSwapCoordinate(attr)}
                         innerDivStyle={style.menuItemInner}
                         leftIcon={
                             <EditLocationIcon

@@ -4,6 +4,7 @@ import {isValidCoordinate} from '../util/map';
 import isArray from 'd2-utilizr/lib/isArray';
 
 // TODO: How to share headers for all fetch requests?
+// TODO: Use apiFetch
 const headers = {
     'Authorization': 'Basic ' + btoa('admin:district'),
 };
@@ -68,6 +69,7 @@ const onDataLoad = (groupSet, facilities, layer, callback) => {
                     type: 'Feature',
                     id: facility.id,
                     properties: {
+                        id: facility.id,
                         name: facility.na,
                         label: facility.na + ' (' + group + ')',
                         icon: {

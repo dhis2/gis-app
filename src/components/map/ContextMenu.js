@@ -56,7 +56,7 @@ const ContextMenu = props => {
         attr = feature.properties;
     }
 
-    // console.log('context menu', props.layerId, props.layerType);
+    console.log('context menu', attr);
 
     return (
         <Popover
@@ -100,7 +100,7 @@ const ContextMenu = props => {
                 {isRelocate && isPoint &&
                     <MenuItem
                         primaryText={GIS.i18n.relocate}
-                        onTouchTap={() => props.onRelocate(feature.properties)}
+                        onTouchTap={() => props.onRelocate(attr)}
                         innerDivStyle={style.menuItemInner}
                         leftIcon={
                             <EditLocationIcon
@@ -113,7 +113,7 @@ const ContextMenu = props => {
                 {isRelocate && isPoint &&
                     <MenuItem
                         primaryText={GIS.i18n.swap_lon_lat}
-                        onTouchTap={() => props.onSwapLngLat(feature.properties)}
+                        onTouchTap={() => props.onSwapLngLat(attr)}
                         innerDivStyle={style.menuItemInner}
                         leftIcon={
                             <EditLocationIcon
@@ -126,7 +126,7 @@ const ContextMenu = props => {
                 {!isPlugin && feature &&
                     <MenuItem
                         primaryText={GIS.i18n.show_information_sheet}
-                        onTouchTap={() => props.onShowInformation(feature.properties)}
+                        onTouchTap={() => props.onShowInformation(attr)}
                         innerDivStyle={style.menuItemInner}
                         leftIcon={
                             <InfoIcon

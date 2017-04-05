@@ -328,9 +328,7 @@ const showInfo = function(att) {
 class OrgUnitDialog extends Component {
 
     componentDidUpdate(prevProps) {
-        if (this.props.id) {
-            showInfo(this.props);
-        }
+        showInfo(this.props);
     }
 
     // TODO: Add react component here later

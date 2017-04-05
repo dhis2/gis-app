@@ -184,7 +184,10 @@ const showInfo = function(att) {
         height: 250,
         period: null,
         modal: true,
-        items: [orgUnitInfo, orgUnitForm]
+        items: [orgUnitInfo, orgUnitForm],
+        listeners: {
+            close: att.onClose
+        }
     });
 
     infrastructuralWindow.show();
@@ -325,12 +328,12 @@ const showInfo = function(att) {
 class OrgUnitDialog extends Component {
 
     componentDidUpdate(prevProps) {
-        if (this.props) {
+        if (this.props.id) {
             showInfo(this.props);
         }
     }
 
-    // TODO: Add react component here
+    // TODO: Add react component here later
     render() {
         return null;
     }

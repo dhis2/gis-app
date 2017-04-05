@@ -7,13 +7,20 @@ export const openOrgUnit = attr => {
     };
 };
 
+export const closeOrgUnit = () => {
+    return {
+        type: actionTypes.ORGANISATION_UNIT_CLOSE,
+    };
+};
+
 
 export function getOrgUnit() {
     return dispatch => {
-        dispatch(loading()); // Gives error: Warning: setState(...): Cannot update during an existing state transition
+        // dispatch(loading()); // Gives error: Warning: setState(...): Cannot update during an existing state transition
 
         // console.log('getOverlay', layer);
 
+        /*
         return fetchOverlay(layer).then(layer => {
             //  console.log('LOADED', layer);
 
@@ -25,6 +32,7 @@ export function getOrgUnit() {
 
             dispatch(loaded());
         });
+        */
     }
 }
 

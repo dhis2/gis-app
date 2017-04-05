@@ -1,17 +1,13 @@
 import { connect } from 'react-redux';
 import OrgUnitDialog from '../components/OrgUnit/OrgUnitDialog';
-// import { closeContextMenu } from '../actions/map';
-// import { drillOverlay } from '../actions/overlays';
+import { closeOrgUnit } from '../actions/orgUnit';
 
 const mapStateToProps = state => ({
     ...state.orgUnit
 });
 
 const mapDispatchToProps = ({
-    // onRequestClose: closeContextMenu,
-    // onDrill: drillOverlay,
+    onClose: closeOrgUnit,
 });
-
-// console.log('orgUnitDialog', OrgUnitDialog);
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrgUnitDialog);

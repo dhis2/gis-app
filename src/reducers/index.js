@@ -7,6 +7,7 @@ import editOverlay from './editOverlay';
 import dataTable from './dataTable';
 import contextMenu from './contextMenu';
 import orgUnit from './orgUnit';
+import relocate from './relocate';
 import loading from './loading';
 
 export default combineReducers({
@@ -18,5 +19,6 @@ export default combineReducers({
     dataTable,
     contextMenu,
     orgUnit,
+    relocate,
     loading,
 });

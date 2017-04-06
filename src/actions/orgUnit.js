@@ -14,9 +14,11 @@ export const closeOrgUnit = () => {
     };
 };
 
-export const relocateOrgUnit = () => {
+export const relocateOrgUnit = (layerId, feature) => {
     return {
         type: actionTypes.ORGANISATION_UNIT_RELOCATE,
+        layerId,
+        feature,
     };
 };
 

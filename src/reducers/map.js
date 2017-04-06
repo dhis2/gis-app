@@ -148,7 +148,6 @@ const orgUnit = (state, action) => {
 };
 
 const map = (state = defaultState, action) => {
-    console.log(action.type);
 
     switch (action.type) {
         case actionTypes.MAP_SET:

@@ -10,6 +10,7 @@ import DataTable from '../../containers/DataTable';
 import OverlayEdit from '../../containers/OverlayEdit';
 import ContextMenu from '../../containers/ContextMenu';
 import OrgUnitDialog from '../../containers/OrgUnitDialog';
+import RelocateDialog from '../../containers/RelocateDialog';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
@@ -38,6 +39,7 @@ const App = () => (
             <OverlayEdit />
             <ContextMenu />
             <OrgUnitDialog />
+            <RelocateDialog />
             <DataTable />
         </div>
     </MuiThemeProvider>

@@ -517,7 +517,7 @@ export default function FavoriteWindow(gis) {
     const favoriteWindow = Ext.create('Ext.window.Window', {
         title: GIS.i18n.manage_favorites + (gis.map ? '<span style="font-weight:normal">&nbsp;|&nbsp;&nbsp;' + gis.map.name + '</span>' : ''),
         iconCls: 'gis-window-title-icon-favorite',
-        cls: 'gis-container-default',
+        cls: 'gis-container-default gis-widget-favorite',
         bodyStyle: 'padding:1px',
         resizable: false,
         modal: true,

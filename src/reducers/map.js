@@ -108,13 +108,48 @@ const overlay = (state, action) => {
                 expanded: !state.expanded,
             };
 
+        case actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE:
+            if (state.id !== action.layerId) {
+                return state;
+            }
+
+            return {
+                ...state,
+                data: state.data.map(l => orgUnit(l, action))
+            };
+
         default:
             return state;
 
     }
 };
 
+const orgUnit = (state, action) => {
+
+    switch (action.type) {
+        case actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE:
+            if (state.id !== action.featureId) {
+                return state;
+            }
+
+            return {
+                ...state,
+                geometry: {
+                    ...state.geometry,
+                    coordinates: action.coordinate
+                },
+            };
+
+        default:
+            return state;
+
+    }
+
+};
+
 const map = (state = defaultState, action) => {
+    console.log(action.type);
+
     switch (action.type) {
         case actionTypes.MAP_SET:
             return {
@@ -184,6 +219,7 @@ const map = (state = defaultState, action) => {
         case actionTypes.OVERLAY_CHANGE_OPACITY:
         case actionTypes.OVERLAY_TOGGLE_VISIBILITY:
         case actionTypes.OVERLAY_TOGGLE_EXPAND:
+        case actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE:
             return {
                 ...state,
                 overlays: state.overlays.map(l => overlay(l, action))

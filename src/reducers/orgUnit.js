@@ -11,6 +11,7 @@ const orgUnit = (state = null, action) => {
         case actionTypes.ORGANISATION_UNIT_CLOSE:
             return null;
 
+        /*
         case actionTypes.ORGANISATION_UNIT_RELOCATE:
             console.log('ORGANISATION_UNIT_RELOCATE', action);
             return state;
@@ -18,6 +19,7 @@ const orgUnit = (state = null, action) => {
         case actionTypes.ORGANISATION_UNIT_SWAP_COORDINATE:
             console.log('ORGANISATION_UNIT_SWAP_COORDINATE', action);
             return state;
+        */
 
         default:
             return state;

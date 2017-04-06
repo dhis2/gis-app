@@ -23,9 +23,9 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(closeContextMenu());
         dispatch(relocateOrgUnit(attr));
     },
-    onSwapCoordinate: attr => {
+    onSwapCoordinate: (layerId, feature) => {
         dispatch(closeContextMenu());
-        dispatch(swapOrgUnitCoordinate(attr));
+        dispatch(swapOrgUnitCoordinate(layerId, feature));
     }
 });
 

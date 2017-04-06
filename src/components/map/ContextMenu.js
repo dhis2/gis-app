@@ -111,7 +111,7 @@ const ContextMenu = props => {
                 {isRelocate && isPoint &&
                     <MenuItem
                         primaryText={GIS.i18n.swap_lon_lat}
-                        onTouchTap={() => props.onSwapCoordinate(attr)}
+                        onTouchTap={() => props.onSwapCoordinate(props.layerId, feature)}
                         innerDivStyle={style.menuItemInner}
                         leftIcon={
                             <EditLocationIcon

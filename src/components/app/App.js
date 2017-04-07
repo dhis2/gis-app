@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes, Children } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from './Header';
 import Menu from './Menu';
@@ -11,8 +11,10 @@ import OverlayEdit from '../../containers/OverlayEdit';
 import ContextMenu from '../../containers/ContextMenu';
 import OrgUnitDialog from '../../containers/OrgUnitDialog';
 import RelocateDialog from '../../containers/RelocateDialog';
+import MapProvider from '../map/MapProvider';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
+
 injectTapEventPlugin();
 
 const styles = {
@@ -27,22 +29,24 @@ const styles = {
 
 const App = () => (
     <MuiThemeProvider>
-        <div>
-            <Header />
-            <Menu />
-            <AddLayerDialog />
-            <FavoriteDialog />
-            <LayersList />
-            <div style={styles.mapContainer}>
-                <Map />
+        <MapProvider>
+            <div>
+                <Header />
+                <Menu />
+                <AddLayerDialog />
+                <FavoriteDialog />
+                <LayersList />
+                <div style={styles.mapContainer}>
+                    <Map />
+                </div>
+                <OverlayEdit />
+                <ContextMenu />
+                <OrgUnitDialog />
+                <RelocateDialog />
+                <DataTable />
             </div>
-            <OverlayEdit />
-            <ContextMenu />
-            <OrgUnitDialog />
-            <RelocateDialog />
-            <DataTable />
-        </div>
+        </MapProvider>
     </MuiThemeProvider>
-)
+);
 
 export default App;

@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
 import RelocateDialog from '../components/orgUnit/RelocateDialog';
-// import { closeOrgUnit } from '../actions/orgUnit';
+import { changeOrgUnitCoordinate, stopRelocateOrgUnit} from '../actions/orgUnit';
 
 const mapStateToProps = state => ({
     ...state.relocate
 });
 
 const mapDispatchToProps = ({
-    // onClose: closeOrgUnit,
+    changeOrgUnitCoordinate,
+    stopRelocateOrgUnit,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RelocateDialog);

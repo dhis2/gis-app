@@ -14,20 +14,25 @@ export const closeOrgUnit = () => {
     };
 };
 
-export const relocateOrgUnit = (layerId, feature) => {
+export const startRelocateOrgUnit = (layerId, feature) => {
     return {
-        type: actionTypes.ORGANISATION_UNIT_RELOCATE,
+        type: actionTypes.ORGANISATION_UNIT_RELOCATE_START,
         layerId,
         feature,
     };
 };
 
-export function swapOrgUnitCoordinate(layerId, feature) {
-    return dispatch => {
-        const featureId = feature.properties.id;
-        const swappedCoordinate = feature.geometry.coordinates.slice(0).reverse();
+export const stopRelocateOrgUnit = (layerId, feature) => {
+    return {
+        type: actionTypes.ORGANISATION_UNIT_RELOCATE_STOP,
+        layerId,
+        feature,
+    };
+};
 
-        changeCoordinate(featureId, swappedCoordinate)
+export function changeOrgUnitCoordinate(layerId, featureId, coordinate) {
+    return dispatch => {
+        changeCoordinate(featureId, coordinate)
             .then(response => {
                 if (response.ok) {
                     // Update org. unit in redux store
@@ -35,13 +40,15 @@ export function swapOrgUnitCoordinate(layerId, feature) {
                         type: actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE,
                         layerId,
                         featureId,
-                        coordinate: swappedCoordinate,
+                        coordinate,
                     });
                 }
             })
             .catch(err => console.log('Error:', err)); // TODO
     }
 }
+
+
 
 
 

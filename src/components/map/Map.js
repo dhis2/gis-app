@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import d2map from 'gis-api/src/';
 import Layer from './Layer';
@@ -27,20 +27,14 @@ function getLayerForType(layer) {
 const style = {
     width: '100%',
     height: '100%',
-}
+};
 
 class Map extends Component {
 
-    constructor(props) {
+    constructor(props, context) {
         super(props);
 
-        // Create map div
-        const div = document.createElement('div');
-        div.style.width = '100%';
-        div.style.height = '100%';
-
-        this.map = d2map(div);
-
+        this.map = context.map;
         this.map.on('contextmenu', this.onRightClick, this);
     }
 
@@ -113,6 +107,10 @@ class Map extends Component {
         )
     }
 }
+
+Map.contextTypes = {
+    map: PropTypes.object
+};
 
 export default Map;
 

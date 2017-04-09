@@ -3,8 +3,8 @@ import DataTable from '../components/datatable/DataTable';
 import { closeDataTable } from '../actions/dataTable';
 
 const mapStateToProps = (state) => ({
-    dataList: state.dataTable.data,
-    dataTableOpen: state.dataTable.open,
+    overlays: state.map.overlays, // TODO: Better to only pass overlays being edited?
+    overlayId: state.dataTable,
 });
 
 const mapDispatchToProps = ({

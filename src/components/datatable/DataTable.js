@@ -1,14 +1,19 @@
 import React, { PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import TextField from 'material-ui/TextField';
+import SearchIcon from 'material-ui/svg-icons/action/search';
+import FilterIcon from 'material-ui/svg-icons/content/filter-list';
 import FlatButton from 'material-ui/FlatButton';
 import {Table, Column, Cell} from 'fixed-data-table';
+import { grey600 } from 'material-ui/styles/colors';
 
 import '../../../node_modules/fixed-data-table/dist/fixed-data-table.css'; // TODO: Which to load?
 
 // http://facebook.github.io/fixed-data-table/
 
 const IndexCell = ({rowIndex, data, col, ...props}) => (
-    <Cell {...props}>
+    <Cell {...props} style={{textAlign: 'right'}}>
         {rowIndex}
     </Cell>
 );
@@ -19,31 +24,71 @@ const TextCell = ({rowIndex, data, col, ...props}) => (
     </Cell>
 );
 
-const AddLayerDialog = ({ data, dataTableOpen, onRequestClose }) => {
-    if (data) { // TODO: Needed
+const styles = {
+    dialog: {
+        padding: 0,
+    },
+    toolbar: {
+        height: 40,
+        padding: '0px 16px',
+    },
+    toolbarTitle: {
+        fontSize: 16,
+    },
+    searchField: {
+        width: 100,
+        fontSize: 12,
+    },
+    valueField: {
+        width: 100,
+        fontSize: 12,
+        marginRight: 16,
+    },
+    icon: {
+        margin: '0 8px 0 16px'
+    }
+};
+
+
+const AddLayerDialog = ({ overlayId, overlays, onRequestClose }) => {
+    if (overlayId) {
+        const overlay = overlays.filter(layer => layer.id === overlayId)[0];
+
         const actions = [
             <FlatButton
                 label="Cancel"
                 primary={true}
                 onTouchTap={onRequestClose}
-            />,
+            />
         ];
 
-        const dataList = data.map(item => ({
+        const dataList = overlay.data.map(item => ({
             code: item.id,
-            name: item.properties.name
+            name: item.properties.name,
+            type: item.geometry.type,
         }));
 
         return (
             <Dialog
-                title="Data table"
+                bodyStyle={styles.dialog}
                 actions={actions}
                 modal={true}
-                open={dataTableOpen}
+                open={true}
             >
+
+                <Toolbar style={styles.toolbar}>
+                    <ToolbarGroup>
+                        <ToolbarTitle style={styles.toolbarTitle} text="Data table" />
+                        <SearchIcon style={styles.icon} color={grey600} />
+                        <TextField style={styles.searchField} hintText="Search" />
+                        <FilterIcon style={styles.icon} color={grey600} />
+                        <TextField style={styles.valueField} hintText="Greater than" />
+                        <TextField style={styles.valueField} hintText="Lower than" />
+                    </ToolbarGroup>
+                </Toolbar>
                 <Table
-                    rowHeight={50}
-                    headerHeight={50}
+                    rowHeight={24}
+                    headerHeight={24}
                     rowsCount={dataList.length}
                     width={660}
                     height={500}>
@@ -97,6 +142,7 @@ const AddLayerDialog = ({ data, dataTableOpen, onRequestClose }) => {
     }
 };
 
+/*
 AddLayerDialog.propTypes = {
     dataList: PropTypes.array, // TODO: Use arrayOf?
 };
@@ -104,5 +150,6 @@ AddLayerDialog.propTypes = {
 AddLayerDialog.defaultProps = {
     dataList: [],
 };
+*/
 
 export default AddLayerDialog;

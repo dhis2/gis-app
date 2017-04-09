@@ -1,9 +1,8 @@
 import * as actionTypes from '../constants/actionTypes';
 
-export const openDataTable = (id, data) => ({
+export const openDataTable = (id) => ({
     type: actionTypes.DATA_TABLE_OPEN_REQUESTED,
     id,
-    data,
 });
 
 export const closeDataTable = () => ({

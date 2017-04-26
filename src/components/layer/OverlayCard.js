@@ -95,6 +95,7 @@ const OverlayCard = (props) => {
                     layer={layer}
                     onEdit={!props.basemap ? () => props.onEdit(layer) : null}
                     onDataTableShow={!props.basemap ? props.onDataTableShow : null}
+                    onOpacityChange={props.onOpacityChange}
                     onRemove={!props.basemap ? () => props.onRemove(layer.id) : null}
                 />
             </CardText>

@@ -5,7 +5,11 @@
 }
 
 .public_fixedDataTable_bodyRow {
-  // font-family: "Lucida Console", Monaco, monospace;
+  cursor: pointer;
+
+  .selected {
+    background: yellow;
+  }
 }
 
 .public_fixedDataTable_header .public_fixedDataTableCell_main {

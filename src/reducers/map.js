@@ -108,6 +108,8 @@ const overlay = (state, action) => {
                 expanded: !state.expanded,
             };
 
+        case actionTypes.ORGANISATION_UNIT_SELECT:
+        case actionTypes.ORGANISATION_UNIT_UNSELECT:
         case actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE:
             if (state.id !== action.layerId) {
                 return state;
@@ -127,6 +129,26 @@ const overlay = (state, action) => {
 const orgUnit = (state, action) => {
 
     switch (action.type) {
+        case actionTypes.ORGANISATION_UNIT_SELECT:
+            if (state.id !== action.featureId) {
+                return state;
+            }
+
+            return {
+                ...state,
+                isSelected: true,
+            };
+
+        case actionTypes.ORGANISATION_UNIT_UNSELECT:
+            if (state.id !== action.featureId) {
+                return state;
+            }
+
+            return {
+                ...state,
+                isSelected: false,
+            };
+
         case actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE:
             if (state.id !== action.featureId) {
                 return state;
@@ -187,15 +209,11 @@ const map = (state = defaultState, action) => {
             };
 
         case actionTypes.OVERLAY_ADD_DATA:
-            console.log('OVERLAY_ADD_DATA');
-
             return {
                 ...state,
             };
 
         case actionTypes.OVERLAY_LOAD:
-            console.log('OVERLAY_LOAD');
-
             return {
                 ...state,
             };
@@ -218,6 +236,8 @@ const map = (state = defaultState, action) => {
         case actionTypes.OVERLAY_CHANGE_OPACITY:
         case actionTypes.OVERLAY_TOGGLE_VISIBILITY:
         case actionTypes.OVERLAY_TOGGLE_EXPAND:
+        case actionTypes.ORGANISATION_UNIT_SELECT:
+        case actionTypes.ORGANISATION_UNIT_UNSELECT:
         case actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE:
             return {
                 ...state,

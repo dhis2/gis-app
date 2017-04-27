@@ -6,7 +6,7 @@ import Overlay from '../../containers/Overlay';
 
 const styles = {
     position: 'absolute',
-    top: 88,
+    top: 40,
     height: 'auto',
     bottom: 0,
     backgroundColor: '#fafafa',

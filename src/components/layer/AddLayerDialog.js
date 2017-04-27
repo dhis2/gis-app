@@ -3,8 +3,13 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 const styles = {
+    contentStyle: {
+        width: 610,
+        maxWidth: 'none',
+    },
     bodyStyle: {
-        overflowY: 'scroll',
+        overflowY: 'auto',
+        padding: '0px 0px 0px 24px',
     },
     layer: {
         float: 'left',
@@ -45,6 +50,7 @@ const AddLayerDialog = ({ overlaysDialogOpen, overlays, onRequestClose, onLayerS
             actions={actions}
             modal={true}
             open={overlaysDialogOpen}
+            contentStyle={styles.contentStyle}
             bodyStyle={styles.bodyStyle}
         >
             <div style={styles.list}>

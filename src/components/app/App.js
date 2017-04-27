@@ -1,6 +1,6 @@
 import React, { Component, PropTypes, Children } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Header from './Header';
+// import Header from './Header';
 import Menu from './Menu';
 import AddLayerDialog from '../../containers/AddLayerDialog';
 import FavoriteDialog from '../../containers/FavoriteDialog';
@@ -20,7 +20,7 @@ injectTapEventPlugin();
 const styles = {
     mapContainer: {
         position: 'absolute',
-        top: 88,
+        top: 40,
         left: 300,
         right: 0,
         bottom: 0,
@@ -31,7 +31,6 @@ const App = () => (
     <MuiThemeProvider>
         <MapProvider>
             <div>
-                <Header />
                 <Menu />
                 <AddLayerDialog />
                 <FavoriteDialog />

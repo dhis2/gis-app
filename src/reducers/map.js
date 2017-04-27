@@ -62,8 +62,6 @@ const overlay = (state, action) => {
                 return state;
             }
 
-            console.log('OVERLAY_LOAD_REQUESTED', action);
-
             return {
                 ...state,
                 isLoading: true,
@@ -118,6 +116,12 @@ const overlay = (state, action) => {
             return {
                 ...state,
                 data: state.data.map(l => orgUnit(l, action))
+            };
+
+        case actionTypes.ORGANISATION_UNITS_FILTER:
+            return {
+                ...state,
+                valueFilter: action.filter,
             };
 
         default:
@@ -239,6 +243,7 @@ const map = (state = defaultState, action) => {
         case actionTypes.ORGANISATION_UNIT_SELECT:
         case actionTypes.ORGANISATION_UNIT_UNSELECT:
         case actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE:
+        case actionTypes.ORGANISATION_UNITS_FILTER:
             return {
                 ...state,
                 overlays: state.overlays.map(l => overlay(l, action))

@@ -30,6 +30,22 @@ export const unselectOrgUnit = (layerId, featureId) => {
     };
 };
 
+export const filterOrgUnits = (layerId, filter) => {
+    return {
+        type: actionTypes.ORGANISATION_UNITS_FILTER,
+        layerId,
+        filter,
+    };
+};
+
+export const unfilterOrgUnits = (layerId, filter) => {
+    return {
+        type: actionTypes.ORGANISATION_UNITS_UNFILTER,
+        layerId,
+        filter,
+    };
+};
+
 export const startRelocateOrgUnit = (layerId, feature) => {
     return {
         type: actionTypes.ORGANISATION_UNIT_RELOCATE_START,

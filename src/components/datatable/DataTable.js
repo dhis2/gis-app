@@ -62,13 +62,24 @@ const TextCell = ({rowIndex, data, col, ...props}) => (
     </Cell>
 );
 
-const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, unselectOrgUnit }) => {
+const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits }) => {
 
     if (overlayId) {
-
         const overlay = overlays.filter(layer => layer.id === overlayId)[0];
+        let data = overlay.data;
 
-        // console.log('overlay', overlay);
+        const valueFilter = overlay.valueFilter || {
+            gt: null,
+            lt: null,
+        };
+
+        if (valueFilter.gt !== null) {
+            data = data.filter(feature => feature.properties.value > valueFilter.gt);
+        }
+
+        if (valueFilter.lt !== null) {
+            data = data.filter(feature => feature.properties.value < valueFilter.lt);
+        }
 
         const actions = [
             <FlatButton
@@ -78,7 +89,7 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
             />
         ];
 
-        const dataList = overlay.data.map(item => ({
+        const dataList = data.map(item => ({
             id: item.id,
             type: item.geometry.type,
             name: item.properties.name,
@@ -100,6 +111,16 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
             }
         };
 
+        const onGreaterThanChange = function(evt, value) {
+            valueFilter.gt = (value !== '') ? Number(value) : null;
+            filterOrgUnits(overlayId, valueFilter);
+        };
+
+        const onLessThanChange = function(evt, value) {
+            valueFilter.lt = (value !== '') ? Number(value) : null;
+            filterOrgUnits(overlayId, valueFilter);
+        };
+
         return (
             <Dialog
                 bodyStyle={styles.dialog}
@@ -115,9 +136,8 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
                         <SearchIcon style={styles.icon} color={grey600} />
                         <TextField style={styles.searchField} hintText="Search" />
                         <FilterIcon style={styles.icon} color={grey600} />
-                        <TextField style={styles.valueField} hintText="Greater than" />
-                        <TextField style={styles.valueField} hintText="Lower than" />
-
+                        <TextField type="number" style={styles.valueField} hintText="Greater than" onChange={onGreaterThanChange} />
+                        <TextField type="number" style={styles.valueField} hintText="Lower than" onChange={onLessThanChange} />
                     </ToolbarGroup>
                 </Toolbar>
                 <Table

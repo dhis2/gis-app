@@ -6,11 +6,22 @@ class ThematicLayer extends Layer {
         const props = this.props;
         const layer = props.layer;
         const map = props.map;
+        const valueFilter = layer.valueFilter || { gt: null, lt: null, };
+        let data = layer.data;
+
+        // TODO: Move to separate file and reuse for data table
+        if (valueFilter.gt !== null) {
+            data = data.filter(feature => feature.properties.value > valueFilter.gt);
+        }
+
+        if (valueFilter.lt !== null) {
+            data = data.filter(feature => feature.properties.value < valueFilter.lt);
+        }
 
         const config = {
             type: 'choropleth',
             pane: layer.id,
-            data: layer.data,
+            data: data,
             // hoverLabel: '{name} ({value})'
         };
 

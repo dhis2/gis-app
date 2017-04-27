@@ -66,12 +66,8 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
 
     if (overlayId) {
         const overlay = overlays.filter(layer => layer.id === overlayId)[0];
+        const valueFilter = overlay.valueFilter || { gt: null, lt: null, };
         let data = overlay.data;
-
-        const valueFilter = overlay.valueFilter || {
-            gt: null,
-            lt: null,
-        };
 
         if (valueFilter.gt !== null) {
             data = data.filter(feature => feature.properties.value > valueFilter.gt);
@@ -136,8 +132,8 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
                         <SearchIcon style={styles.icon} color={grey600} />
                         <TextField style={styles.searchField} hintText="Search" />
                         <FilterIcon style={styles.icon} color={grey600} />
-                        <TextField type="number" style={styles.valueField} hintText="Greater than" onChange={onGreaterThanChange} />
-                        <TextField type="number" style={styles.valueField} hintText="Lower than" onChange={onLessThanChange} />
+                        <TextField type="number" value={valueFilter.gt !== null ? valueFilter.gt : ''} style={styles.valueField} hintText="Greater than" onChange={onGreaterThanChange} />
+                        <TextField type="number" value={valueFilter.lt !== null ? valueFilter.lt : ''} style={styles.valueField} hintText="Lower than" onChange={onLessThanChange} />
                     </ToolbarGroup>
                 </Toolbar>
                 <Table

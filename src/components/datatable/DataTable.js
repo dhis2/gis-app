@@ -27,14 +27,23 @@ const styles = {
     toolbarTitle: {
         fontSize: 16,
     },
-    searchField: {
+    field: {
         width: 100,
-        fontSize: 12,
-    },
-    valueField: {
-        width: 100,
+        height: 48,
         fontSize: 12,
         marginRight: 16,
+    },
+    input: {
+        marginTop: 4,
+    },
+    underline: {
+        background: 'red',
+    },
+    floatingLabel: {
+        top: 14,
+    },
+    floatingLabelShrink: {
+        top: 26,
     },
     icon: {
         margin: '0 8px 0 16px',
@@ -130,10 +139,37 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
                     <ToolbarGroup>
                         <ToolbarTitle style={styles.toolbarTitle} text="Data table" />
                         <SearchIcon style={styles.icon} color={grey600} />
-                        <TextField style={styles.searchField} hintText="Search" />
+                        <TextField
+                            floatingLabelText="Search"
+                            style={styles.field}
+                            inputStyle={styles.input}
+                            underlineStyle={styles.underline}
+                            floatingLabelStyle={styles.floatingLabel}
+                            floatingLabelShrinkStyle={styles.floatingLabelShrink}
+                        />
                         <FilterIcon style={styles.icon} color={grey600} />
-                        <TextField type="number" value={valueFilter.gt !== null ? valueFilter.gt : ''} style={styles.valueField} hintText="Greater than" onChange={onGreaterThanChange} />
-                        <TextField type="number" value={valueFilter.lt !== null ? valueFilter.lt : ''} style={styles.valueField} hintText="Lower than" onChange={onLessThanChange} />
+                        <TextField
+                            type="number"
+                            floatingLabelText="Greater than"
+                            value={valueFilter.gt !== null ? valueFilter.gt : ''}
+                            onChange={onGreaterThanChange}
+                            style={styles.field}
+                            inputStyle={styles.input}
+                            underlineStyle={styles.underline}
+                            floatingLabelStyle={styles.floatingLabel}
+                            floatingLabelShrinkStyle={styles.floatingLabelShrink}
+                        />
+                        <TextField
+                            type="number"
+                            floatingLabelText="Lower than"
+                            value={valueFilter.lt !== null ? valueFilter.lt : ''}
+                            onChange={onLessThanChange}
+                            style={styles.field}
+                            inputStyle={styles.input}
+                            underlineStyle={styles.underline}
+                            floatingLabelStyle={styles.floatingLabel}
+                            floatingLabelShrinkStyle={styles.floatingLabelShrink}
+                        />
                     </ToolbarGroup>
                 </Toolbar>
                 <Table

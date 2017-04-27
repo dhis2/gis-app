@@ -1,6 +1,7 @@
 import { Component, PropTypes } from 'react';
 
 class Layer extends Component {
+
     constructor(props, context) {
         super(props, context);
 
@@ -27,9 +28,9 @@ class Layer extends Component {
             this.setLayerOrder();
         }
 
-        if (prevLayer.opacity !== layer.opacity) {
-            this.setLayerOpacity();
-        }
+        //if (prevLayer.opacity !== layer.opacity) {
+        this.setLayerOpacity();
+        //}
 
         if (prevLayer.visible !== layer.visible) {
             this.setLayerVisibility();
@@ -79,7 +80,7 @@ class Layer extends Component {
     }
 
     setLayerOpacity() {
-        this.instance.setOpacity(this.props.opacity);
+        this.instance.setOpacity(this.props.layer.opacity);
     }
 
     // Set layer order using custom pages and z-index: http://leafletjs.com/examples/map-panes/

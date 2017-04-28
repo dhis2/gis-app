@@ -67,6 +67,7 @@ export default function FavoriteWindow(gis) {
 
                     // Remove properties used by UI, but not handled by server
                     delete view.id;
+                    delete view.type;
                     delete view.data;
                     delete view.isLoading;
                     delete view.visible; // TODO: Should be stored? Is "hidden" used instead?
@@ -81,7 +82,7 @@ export default function FavoriteWindow(gis) {
                     }
 
                     // add
-                    view.layer = layer.id;
+                    view.layer = layer.type;
                     view.opacity = layer.layerOpacity;
                     view.hidden = !layer.visible;
 
@@ -105,8 +106,6 @@ export default function FavoriteWindow(gis) {
                     params: JSON.stringify(config),
                     success(r) {
                         const id = r.getAllResponseHeaders().location.split('/').pop();
-
-                        console.log('success', id);
 
                         gis.map = {
                             id: id,

@@ -34,11 +34,7 @@ export function getOverlay(layer) {
     return dispatch => {
         dispatch(loading()); // Gives error: Warning: setState(...): Cannot update during an existing state transition
 
-        // console.log('getOverlay', layer);
-
         return fetchOverlay(layer).then(layer => {
-            //  console.log('LOADED', layer);
-
             if (layer.editCounter === 1) { // Add new layer
                 dispatch(addOverlay(layer));
             } else { // Update existing layer

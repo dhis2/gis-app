@@ -17,32 +17,22 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
 
-const styles = {
-    mapContainer: {
-        position: 'absolute',
-        top: 40,
-        left: 300,
-        right: 0,
-        bottom: 0,
-    }
-};
-
 const App = () => (
     <MuiThemeProvider>
         <MapProvider>
-            <div>
+            <div id="dhis-gis-container">
                 <Menu />
                 <AddLayerDialog />
                 <FavoritesDialog />
                 <LayersList />
-                <div style={styles.mapContainer}>
+                <div className="dhis-gis-map-container">
                     <Map />
                 </div>
+                <DataTable />
                 <OverlayEdit />
                 <ContextMenu />
                 <OrgUnitDialog />
                 <RelocateDialog />
-                <DataTable />
             </div>
         </MapProvider>
     </MuiThemeProvider>

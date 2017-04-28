@@ -17,8 +17,8 @@ const styles = {
         padding: 0,
     },
     dialogContent: {
-        width: 660,
-        maxWidth: 'none',
+        // width: 660,
+        // maxWidth: 'none',
     },
     toolbar: {
         height: 40,
@@ -72,8 +72,9 @@ const TextCell = ({rowIndex, data, col, ...props}) => (
 );
 
 const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits }) => {
-
     if (overlayId) {
+        document.getElementById('app').className = 'dhis-gis-data-table-visible'; // TODO: Do with redux state
+
         const overlay = overlays.filter(layer => layer.id === overlayId)[0];
         const valueFilter = overlay.valueFilter || { gt: null, lt: null, };
         let data = overlay.data;
@@ -126,14 +127,19 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
             filterOrgUnits(overlayId, valueFilter);
         };
 
+        /*
+        <Dialog
+            bodyStyle={styles.dialog}
+            contentStyle={styles.dialogContent}
+            actions={actions}
+            modal={true}
+            open={true}
+        >
+        */
+
+
         return (
-            <Dialog
-                bodyStyle={styles.dialog}
-                contentStyle={styles.dialogContent}
-                actions={actions}
-                modal={true}
-                open={true}
-            >
+            <div className="dhis-gis-data-table">
 
                 <Toolbar style={styles.toolbar}>
                     <ToolbarGroup>
@@ -176,7 +182,7 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
                     rowHeight={24}
                     headerHeight={24}
                     rowsCount={dataList.length}
-                    width={660}
+                    width={640}
                     height={500}
                     onRowClick={onRowClick}
                 >
@@ -193,13 +199,23 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
                         width={200}
                     />
                     <Column
-                        header={<Cell>Id</Cell>}
-                        cell={<TextCell data={dataList} col="id" />}
+                        header={<Cell style={styles.rightAlign}>Value</Cell>}
+                        cell={<NumberCell data={dataList} col="value" />}
                         width={100}
                     />
                     <Column
-                        header={<Cell style={styles.rightAlign}>Value</Cell>}
-                        cell={<NumberCell data={dataList} col="value" />}
+                        header={<Cell>Level</Cell>}
+                        cell={<TextCell data={dataList} col="level" />}
+                        width={60}
+                    />
+                    <Column
+                        header={<Cell>Parent unit</Cell>}
+                        cell={<TextCell data={dataList} col="parent" />}
+                        width={200}
+                    />
+                    <Column
+                        header={<Cell>Id</Cell>}
+                        cell={<TextCell data={dataList} col="id" />}
                         width={100}
                     />
                     <Column
@@ -213,16 +229,6 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
                         width={120}
                     />
                     <Column
-                        header={<Cell>Level</Cell>}
-                        cell={<TextCell data={dataList} col="level" />}
-                        width={60}
-                    />
-                    <Column
-                        header={<Cell>Parent unit</Cell>}
-                        cell={<TextCell data={dataList} col="parent" />}
-                        width={200}
-                    />
-                    <Column
                         header={<Cell>Ownership</Cell>}
                         cell={<TextCell data={dataList} col="ownership" />}
                         width={120}
@@ -233,9 +239,10 @@ const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, un
                         width={120}
                     />
                 </Table>
-            </Dialog>
+            </div>
         );
     } else {
+        document.getElementById('app').className = ''; // TODO: Do with redux state
         return null;
     }
 };

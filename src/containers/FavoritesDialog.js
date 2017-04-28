@@ -3,6 +3,7 @@ import FavoritesDialog from '../components/favorite/FavoritesDialog';
 import { getFavorite, closeFavoritesDialog } from '../actions/favorites';
 
 const mapStateToProps = (state) => ({
+    map: {...state.map},
     favoritesDialogOpen: state.ui.favoritesDialogOpen,
 });
 

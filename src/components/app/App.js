@@ -3,7 +3,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // import Header from './Header';
 import Menu from './Menu';
 import AddLayerDialog from '../../containers/AddLayerDialog';
-import FavoriteDialog from '../../containers/FavoriteDialog';
+import FavoritesDialog from '../../containers/FavoritesDialog';
 import LayersList from '../../containers/LayersList';
 import Map from '../../containers/Map';
 import DataTable from '../../containers/DataTable';
@@ -33,7 +33,7 @@ const App = () => (
             <div>
                 <Menu />
                 <AddLayerDialog />
-                <FavoriteDialog />
+                <FavoritesDialog />
                 <LayersList />
                 <div style={styles.mapContainer}>
                     <Map />

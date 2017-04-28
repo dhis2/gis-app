@@ -649,23 +649,25 @@ export default function getInstance(init) {
             html += obj.httpStatus ? 'Status: ' + obj.httpStatus + '<br><br>' : '';
             html += obj.message + (obj.message.substr(obj.message.length - 1) === '.' ? '' : '.');
 
-            if (gis.viewport && gis.viewport.centerRegion) {
+            if (!gis.container) {
                 Ext.create('Ext.window.Window', {
                     title: obj.status,
                     modal: true,
                     destroyOnBlur: true,
                     html: html,
-                    bodyStyle: 'padding: 12px; background: #fff; max-width: 600px; max-height: ' + gis.viewport.centerRegion.getHeight() / 2 + 'px',
+                    // bodyStyle: 'padding: 12px; background: #fff; max-width: 600px; max-height: ' + gis.viewport.centerRegion.getHeight() / 2 + 'px',
+                    bodyStyle: 'padding: 12px; background: #fff; max-width: 600px;',
                     listeners: {
+                        /*
                         show(win) {
                             win.setPosition(win.getPosition()[0], win.getPosition()[1] / 2);
                             if (!win.hasDestroyOnBlurHandler) {
                                 gis.util.gui.window.addDestroyOnBlurHandler(win);
                             }
-                        }
+                        }*/
                     }
                 }).show();
-            } else if (gis.container) { // Dashboard
+            } else  { // Dashboard
                 gis.instance.getContainer().style.display = 'none';
                 const alertDiv = document.createElement('div');
                 alertDiv.className = 'dhis2-map-widget-alert';
@@ -1107,7 +1109,7 @@ export default function getInstance(init) {
                 method: 'POST'
             });
         }
-    }
+    };
 
     gis.alert = util.message.alert;
 

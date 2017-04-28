@@ -1,7 +1,7 @@
 import React from 'react';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import AddLayerButton from '../../containers/AddLayerButton';
-import FavoriteButton from '../../containers/FavoriteButton';
+import FavoritesButton from '../../containers/FavoritesButton';
 import TableIcon from 'material-ui/svg-icons/image/grid-on';
 import ChartIcon from 'material-ui/svg-icons/editor/show-chart';
 import MapIcon from 'material-ui/svg-icons/maps/map';
@@ -30,7 +30,7 @@ const Menu = () => (
     <Toolbar style={style.toolbar} className="dhis-gis-menu">
         <ToolbarGroup firstChild={true}>
             <AddLayerButton />
-            <FavoriteButton />
+            <FavoritesButton />
             <FlatButton label="Share" disabled={true} style={style.button} />
         </ToolbarGroup>
         <ToolbarGroup lastChild={true}>

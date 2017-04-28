@@ -44,9 +44,12 @@ export default function FavoriteWindow(gis) {
         const createButton = Ext.create('Ext.button.Button', {
             text: GIS.i18n.create,
             handler() {
+
                 const name = nameTextfield.getValue();
-                const layers = gis.util.map.getVisibleVectorLayers();
-                const centerPoint = gis.instance.getCenter();
+                const map = favoriteWindow.map;
+                const basemap = map.basemap;
+                const layers = map.overlays;
+                // const centerPoint = gis.instance.getCenter();
                 const views = [];
 
                 if (!layers.length) {
@@ -60,32 +63,38 @@ export default function FavoriteWindow(gis) {
                 }
 
                 layers.forEach(layer => {
-                    const view = Ext.clone(layer.view);
+                    const view = Ext.clone(layer);
+
+                    // Remove properties used by UI, but not handled by server
+                    delete view.id;
+                    delete view.data;
+                    delete view.isLoading;
+                    delete view.visible; // TODO: Should be stored? Is "hidden" used instead?
+                    delete view.expanded; // TODO: Should be stored?
+                    delete view.valueFilter;  // TODO: Should be stored?
+                    delete view.legend;
+                    delete view.dataDimensionItems;
 
                     // TODO temp fix: https://github.com/dhis2/dhis2-gis/issues/108
                     if (view.legendSet && view.method && (view.method === 2 || view.method === 3)) {
                         delete view.legendSet;
                     }
 
-                    view.hidden = !gis.instance.hasLayer(layer.instance);
-
                     // add
                     view.layer = layer.id;
-
                     view.opacity = layer.layerOpacity;
-
-                    // remove
-                    delete view.dataDimensionItems;
+                    view.hidden = !layer.visible;
 
                     views.push(view);
                 });
 
-                const map = {
+                const config = {
                     name: name,
-                    longitude: centerPoint.lng,
-                    latitude: centerPoint.lat,
-                    zoom: gis.instance.getZoom(),
-                    basemap: gis.util.map.getBasemap(),
+                    // longitude: centerPoint.lng, // TODO
+                    // latitude: centerPoint.lat, // TODO
+                    // zoom: gis.instance.getZoom(), // TODO
+                    // basemap: gis.util.map.getBasemap(),
+                    basemap: basemap.visible ? basemap.id : 'none',
                     mapViews: views
                 };
 
@@ -93,9 +102,11 @@ export default function FavoriteWindow(gis) {
                     url: encodeURI(gis.init.apiPath + 'maps/'),
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    params: JSON.stringify(map),
+                    params: JSON.stringify(config),
                     success(r) {
                         const id = r.getAllResponseHeaders().location.split('/').pop();
+
+                        console.log('success', id);
 
                         gis.map = {
                             id: id,
@@ -160,13 +171,13 @@ export default function FavoriteWindow(gis) {
             ],
             listeners: {
                 show(w) {
-                    this.setPosition(favoriteWindow.x + 14, favoriteWindow.y + 67);
+                    // this.setPosition(favoriteWindow.x + 14, favoriteWindow.y + 67);
 
-                    if (!w.hasDestroyOnBlurHandler) {
-                        gis.util.gui.window.addDestroyOnBlurHandler(w);
-                    }
+                    // if (!w.hasDestroyOnBlurHandler) {
+                    //     gis.util.gui.window.addDestroyOnBlurHandler(w);
+                    // }
 
-                    gis.viewport.favoriteWindow.destroyOnBlur = true;
+                    // gis.viewport.favoriteWindow.destroyOnBlur = true;
 
                     nameTextfield.focus(false, 500);
                 }
@@ -438,7 +449,7 @@ export default function FavoriteWindow(gis) {
             },
             render() {
                 // const size = Math.floor((gis.viewport.centerRegion.getHeight() - 155) / gis.conf.layout.grid.row_height);
-                const size = 20; // TODO: Calculate from screen height
+                const size = Math.floor((window.innerHeight - 150) / gis.conf.layout.grid.row_height);
                 this.store.pageSize = size;
                 this.store.page = 1;
                 this.store.loadStore();
@@ -523,7 +534,6 @@ export default function FavoriteWindow(gis) {
         modal: true,
         width: windowWidth,
         closeAction: 'hide',
-        // destroyOnBlur: true,
         items: [
             {
                 xtype: 'panel',
@@ -545,7 +555,7 @@ export default function FavoriteWindow(gis) {
         ],
         listeners: {
             show(w) {
-                this.setPosition(199, 33);
+                this.setPosition(null, 60);
 
                 if (!w.hasDestroyOnBlurHandler) {
                     gis.util.gui.window.addDestroyOnBlurHandler(w);

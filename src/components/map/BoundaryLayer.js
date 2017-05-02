@@ -4,12 +4,14 @@ export default class BoundaryLayer extends Layer {
 
     createLayer() {
         const props = this.props;
+        const layer = props.layer;
+        const data = layer.data;
         const map = props.map;
 
         const config = {
             type: 'boundary',
-            pane: props.id,
-            data: props.data,
+            pane: layer.id,
+            data: layer.data,
             hoverLabel: '{name}',
             style: {
                 opacity: 1,
@@ -18,7 +20,7 @@ export default class BoundaryLayer extends Layer {
             },
         };
 
-        if (props.labels) {
+        if (layer.labels) {
             config.label = '{name}';
             config.labelStyle = {
                 fontSize: view.labelFontSize,
@@ -27,7 +29,7 @@ export default class BoundaryLayer extends Layer {
         }
 
 
-        if (props.radiusLow) {
+        if (layer.radiusLow) {
             config.style.radius = props.radiusLow;
         }
 
@@ -35,6 +37,8 @@ export default class BoundaryLayer extends Layer {
 
         this.instance.on('click', this.onFeatureClick, this);
         this.instance.on('contextmenu', this.onFeatureRightClick, this);
+
+        map.fitBounds(this.instance.getBounds()); // TODO: Do as action?
     }
 
     onFeatureClick(evt) {

@@ -33,6 +33,17 @@ class EventLayer extends Layer {
             } else if (isString(data)) {
                 config.type = 'serverCluster';
                 config.bounds = layer.bounds;
+
+                const self = this;
+                config.load = function(params, callback) {
+                    apiFetch(`${data}&bbox=${params.bbox}&clusterSize=${params.clusterSize}&includeClusterPoints=${params.includeClusterPoints}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        callback(params.tileId, self.toGeoJson(data));
+
+                    })
+                    .catch(error => console.log('Loading event cluster failed: ', error));
+                }
             }
         }
 
@@ -74,7 +85,6 @@ class EventLayer extends Layer {
                 }
             })
             .catch(error => console.log('Parsing failed: ', error)); // TODO
-
     }
 
     onEventClick(feature, callback) {
@@ -118,6 +128,39 @@ class EventLayer extends Layer {
 
     }
 
+    toGeoJson(data) {
+        const header = {};
+        const features = [];
+
+        // Convert headers to object for easier lookup
+        data.headers.forEach((h, i) => header[h.name] = i);
+
+        if (isArray(data.rows)) {
+            data.rows.forEach(row => {
+                const extent = row[header.extent].match(/([-\d\.]+)/g);
+                const coords = row[header.center].match(/([-\d\.]+)/g);
+
+                // Round to 6 decimals - http://www.jacklmoore.com/notes/rounding-in-javascript/
+                coords[0] = Number(Math.round(coords[0] + 'e6') + 'e-6');
+                coords[1] = Number(Math.round(coords[1] + 'e6') + 'e-6');
+
+                features.push({
+                    type: 'Feature',
+                    id: row[header.points],
+                    geometry: {
+                        type: 'Point',
+                        coordinates: coords
+                    },
+                    properties: {
+                        count: parseInt(row[header.count], 10),
+                        bounds: [[extent[1], extent[0]], [extent[3], extent[2]]]
+                    }
+                });
+            });
+        }
+
+        return features;
+    }
 
 }
 

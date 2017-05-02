@@ -111,8 +111,6 @@ const onDataLoad = (data) => {
             }
         });
 
-        console.log('features', features);
-
         layer.data = features;
         callback(layer);
     };
@@ -144,17 +142,12 @@ const onEventCountLoad = (data) => {
     if (data.count < 2000) { // Client clustering if less than 2000 events
         loadEvents();
     } else { // Server clustering
-        layer.type = 'serverCluster',
+        //layer.type = 'serverCluster',
+        layer.type = 'event',
         layer.data = 'analytics/events/cluster/' + layer.program.id + '.json' + paramString;
-
-        layer.data = features;
+        // layer.isLoaded = true;
         callback(layer);
-
-        // console.log('server cluster');
-        // updateMap(view, url);
     }
-
-
 };
 
 // Load events for map display
@@ -200,7 +193,7 @@ const eventLoader = (config, cb) =>  {
             if (element.dimension !== 'dx') { // API sometimes returns empty dx filter
                 paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
 
-                console.log('element', element);
+                // console.log('element', element);
 
                 if (element.filter) {
                     const filter = element.filter.split(':');
@@ -231,7 +224,7 @@ const eventLoader = (config, cb) =>  {
     if (layer.filters) {
         const period = layer.filters[0].items[0].id.replace(/_/g, ' ').toLowerCase();
 
-        console.log('### period', period);
+        // console.log('### period', period);
 
         layer.legend.description += period;
     } else {

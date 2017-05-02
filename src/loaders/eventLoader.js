@@ -54,12 +54,6 @@ const onDataLoad = (data) => {
             optionSetIndex = i;
             optionSetHeader = header;
         }
-
-        if (!rows.length) {
-            gis.alert(GIS.i18n.no_event_coordinates_found);
-            // gis.mask.hide();
-            // return;
-        }
     });
 
     // get events with coordinates
@@ -69,6 +63,12 @@ const onDataLoad = (data) => {
                 rows.push(row);
             }
         });
+    }
+
+    if (!rows.length) {
+        gis.alert(GIS.i18n.no_event_coordinates_found);
+        // gis.mask.hide();
+        return;
     }
 
     const updateFeatures = function() {
@@ -111,6 +111,8 @@ const onDataLoad = (data) => {
             }
         });
 
+        console.log('features', features);
+
         layer.data = features;
         callback(layer);
     };
@@ -127,7 +129,6 @@ const onDataLoad = (data) => {
 };
 
 const onEventCountLoad = (data) => {
-    // console.log('onEventCountLoad', data);
 
     if (data.extent) {
         const extent = data.extent.match(/([-\d\.]+)/g);

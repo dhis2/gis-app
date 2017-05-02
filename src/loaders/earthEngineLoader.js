@@ -1,4 +1,4 @@
-import { apiFetch } from '../util/api';
+// import { apiFetch } from '../util/api';
 
 const datasets = {
     'USGS/SRTMGL1_003': {
@@ -145,13 +145,23 @@ const datasets = {
 };
 
 
-const earthEngineLoader = (layer, callback) =>  {
-    const dataset = datasets[layer.datasetId];
+const earthEngineLoader = (config, callback) =>  {
+    const dataset = datasets[config.datasetId];
 
-    callback({
+    // TODO: Is this a deep copy?
+    const layer = {
+        ...config,
         ...dataset,
-        ...layer,
-    });
+    };
+
+    setTimeout(() => {
+        callback(layer);
+    }, 3000); // TODO: Remove timeout
+
+    console.log('### layer.id in 3 sec', layer);
+
+    //callback(layer);
+
 };
 
 export default earthEngineLoader;

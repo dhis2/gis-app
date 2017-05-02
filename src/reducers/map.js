@@ -68,6 +68,8 @@ const overlay = (state, action) => {
             };
 
         case actionTypes.OVERLAY_UPDATE:
+            // console.log('OVERLAY_UPDATE', state.id, action.id);
+
             if (state.id !== action.id) {
                 return state;
             }
@@ -204,12 +206,14 @@ const map = (state = defaultState, action) => {
             };
 
         case actionTypes.OVERLAY_ADD:
+            console.log('OVERLAY_ADD', action, state);
+
             return {
                 ...state,
                 overlays: [
                     action.payload,
                     ...state.overlays,
-                ]
+                ],
             };
 
         case actionTypes.OVERLAY_ADD_DATA:

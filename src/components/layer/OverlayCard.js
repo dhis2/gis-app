@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
@@ -48,7 +49,7 @@ const styles = {
 const OverlayCard = (props) => {
     const layer = props.layer;
 
-    // console.log('OverlayCard', layer);
+    console.log('OverlayCard', layer);
 
     return (
         <Card
@@ -82,7 +83,7 @@ const OverlayCard = (props) => {
                 </IconButton>
             </CardHeader>
             <CardText expandable={true} style={styles.body}>
-                {layer.legend &&
+                {layer.legend && layer.type !== 'earthEngine' &&
                 <Legend
                     {...layer.legend}
                     style={styles.legend}

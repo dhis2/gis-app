@@ -1,4 +1,5 @@
-import { Component, PropTypes } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 import isArray from 'd2-utilizr/lib/isArray';
 import isNumeric from 'd2-utilizr/lib/isNumeric';
 import isString from 'd2-utilizr/lib/isString';

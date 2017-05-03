@@ -4,6 +4,7 @@ import { apiFetch } from '../../util/api';
 export default class EarthEngineLayer extends Layer {
     createLayer() {
         const props = this.props;
+        const layer = props.layer;
         const map = props.map;
 
         /* TODO
@@ -14,17 +15,17 @@ export default class EarthEngineLayer extends Layer {
 
         const config = {
             type: 'earthEngine',
-            pane: props.id,
-            id: props.datasetId,
-            band: props.band,
-            mask: props.mask,
-            attribution: props.attribution,
-            filter: props.filter,
+            pane: layer.id,
+            id: layer.datasetId,
+            band: layer.band,
+            mask: layer.mask,
+            attribution: layer.attribution,
+            filter: layer.filter,
         };
 
-        if (props.params) {
-            config.params = props.params;
-        }
+        //if (layer.params) {
+            config.params = layer.params;
+        //}
 
         console.log('Create Earth Engine layer', props, config);
 

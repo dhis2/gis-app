@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Drawer from 'material-ui/Drawer';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import Basemap from '../../containers/Basemap';
@@ -20,6 +21,8 @@ const SortableLayer = SortableElement(Overlay);
 const SortableLayersList = SortableContainer(({overlays, loadOverlayRequested, requestOverlayLoad, getOverlay}) => (
     <div>
         {overlays.map((overlay, index) => { // Draggable layers - last layer on top
+            console.log('panel', overlay);
+
             return (
                 <SortableLayer
                     key={overlay.id}

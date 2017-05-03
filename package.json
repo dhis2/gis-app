@@ -41,6 +41,7 @@
     "material-ui": "^0.18.0",
     "npm": "^4.5.0",
     "promise-polyfill": "6.0.2",
+    "prop-types": "^15.5.8",
     "react-redux": "^5.0.4",
     "react-sortable-hoc": "^0.6.3",
     "react-tap-event-plugin": "^2.0.1",

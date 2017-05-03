@@ -21,8 +21,6 @@ const SortableLayer = SortableElement(Overlay);
 const SortableLayersList = SortableContainer(({overlays, loadOverlayRequested, requestOverlayLoad, getOverlay}) => (
     <div>
         {overlays.map((overlay, index) => { // Draggable layers - last layer on top
-            console.log('panel', overlay);
-
             return (
                 <SortableLayer
                     key={overlay.id}

@@ -49,8 +49,6 @@ const styles = {
 const OverlayCard = (props) => {
     const layer = props.layer;
 
-    console.log('OverlayCard', layer);
-
     return (
         <Card
             style={styles.root}

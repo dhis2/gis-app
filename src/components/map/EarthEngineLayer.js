@@ -23,11 +23,9 @@ export default class EarthEngineLayer extends Layer {
             filter: layer.filter,
         };
 
-        //if (layer.params) {
+        if (layer.params) {
             config.params = layer.params;
-        //}
-
-        console.log('Create Earth Engine layer', props, config);
+        }
 
         config.accessToken = (callback) => {
             apiFetch('tokens/google')
@@ -37,6 +35,5 @@ export default class EarthEngineLayer extends Layer {
         };
 
         this.instance = map.createLayer(config).addTo(map);
-
     }
 }

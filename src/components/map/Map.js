@@ -56,7 +56,7 @@ class Map extends Component {
     componentDidUpdate(prevProps) {
         const props = this.props;
 
-        console.log('componentDidUpdate', props);
+        // console.log('componentDidUpdate', props);
 
         if (props.coordinatePopup) {
             this.showCoordinate(props.coordinatePopup);
@@ -90,14 +90,10 @@ class Map extends Component {
             ...props.basemap
         };
 
-        console.log('overlays', props.overlays);
-
         return (
             <div ref="map" style={style}>
                 {props.overlays.filter(layer => layer.isLoaded).map((layer, index) => {
                     const Overlay = getLayerForType(layer);
-
-                    console.log('layer id', layer.id);
 
                     return (
                         <Overlay

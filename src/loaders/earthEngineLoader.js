@@ -154,13 +154,7 @@ const earthEngineLoader = (config, callback) =>  {
         ...dataset,
     };
 
-    setTimeout(() => {
-        callback(layer);
-    }, 3000); // TODO: Remove timeout
-
-    console.log('### layer.id in 3 sec', layer);
-
-    //callback(layer);
+    callback(layer);
 
 };
 

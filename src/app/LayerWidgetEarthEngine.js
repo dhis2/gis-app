@@ -7,7 +7,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // Supported Earth Engine datasets
     const datasets = {
 
-        'USGS/SRTMGL1_003': {
+        'Elevation': {
             id: 'USGS/SRTMGL1_003',
             name: GIS.i18n.elevation,
             description: 'Elevation above sea-level. You can adjust the min and max values so it better representes the terrain in your region.',
@@ -20,7 +20,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             colors: 'YlOrBr',
         },
 
-        'WorldPop/POP': { // Population density
+        'Population density': { // Population density
             id: 'WorldPop/POP',
             name: GIS.i18n.population_density,
             description: 'Population density estimates with national totals adjusted to match UN population division estimates. Try a different year if you don\'t see data for your country.',
@@ -59,7 +59,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             },
         },
 
-        'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {
+        'Nighttime lights': {
             id: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
             name: GIS.i18n.nighttime_lights,
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
@@ -92,7 +92,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             },
         },
 
-        'UCSB-CHG/CHIRPS/PENTAD': {
+        'Precipitation': {
             id: 'UCSB-CHG/CHIRPS/PENTAD',
             name: GIS.i18n.precipitation,
             description: 'Precipitation collected from satellite and weather stations on the ground. The values are in millimeters within 5 days periods. Updated monthly, during the 3rd week of the following month.',
@@ -126,7 +126,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             }
         },
 
-        'MODIS/MOD11A2': {
+        'Temperature': {
             id: 'MODIS/MOD11A2',
             name: GIS.i18n.temperature,
             description: 'Land surface temperatures collected from satellite in 8 days periods. Blank spots will appear in areas with a persistent cloud cover.',
@@ -159,7 +159,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
             }
         },
 
-        'MODIS/051/MCD12Q1': {
+        'Landcover': {
             id: 'MODIS/051/MCD12Q1',
             name: GIS.i18n.landcover,
             description: '17 distinct landcover types collected from satellites.',
@@ -187,6 +187,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         },
 
     };
+
+
+    const dataset = datasets[layer.title];
 
     const minValue = Ext.create('Ext.form.field.Number', {
         cls: 'gis-numberfield',
@@ -237,7 +240,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     });
 
     const descriptionField = Ext.create('Ext.container.Container', {
-        hidden: true,
+        html: dataset.description,
         style: 'padding:10px; color:#444'
     });
 
@@ -266,63 +269,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }, stepValue]
     });
 
-    // Show form fields used by the selected EE dataset
-    const onDatasetSelect = function(combo) {
-        const dataset = datasets[combo.getValue()];
-
-        descriptionField.show();
-        descriptionField.update(dataset.description);
-
-        collectionCombo.clearValue();
-
-        if (dataset.collection) {
-            collectionCombo.show();
-            collectionCombo.labelEl.update((dataset.imageLabel || GIS.i18n.select_period) + ':');
-        } else {
-            collectionCombo.hide();
-        }
-
-        if (dataset.min !== undefined) {
-            minMaxField.show();
-            minMaxLabel.update((dataset.valueLabel || GIS.i18n.min_max_value) + ':');
-            minValue.setMinValue(dataset.minValue);
-            minValue.setValue(dataset.min);
-            maxValue.setMaxValue(dataset.maxValue);
-            maxValue.setValue(dataset.max);
-
-            stepField.show();
-            stepValue.setValue(dataset.steps);
-
-            colorsCombo.show().setValue(dataset.colors);
-        } else {
-            minMaxField.hide();
-            stepField.hide();
-            colorsCombo.hide();
-        }
-    };
-
-    // Combo with with supported Earth Engine layer
-    const datasetCombo = Ext.create('Ext.form.field.ComboBox', {
-        cls: 'gis-combo',
-        fieldLabel: GIS.i18n.select_dataset,
-        editable: false,
-        valueField: 'id',
-        displayField: 'name',
-        queryMode: 'local',
-        forceSelection: true,
-        labelWidth: gis.conf.layout.widget.itemlabel_width,
-        width: gis.conf.layout.widget.item_width,
-        store: Ext.create('Ext.data.Store', {
-            fields: ['id', 'name'],
-            data: Object.keys(datasets).map(id => datasets[id]),
-        }),
-        listeners: {
-            select: onDatasetSelect
-        }
-    });
-
-    const loadCollection = function(id, callback) {
-        const dataset = datasets[id];
+    const loadCollection = function(dataset, callback) {
 
         if (isFunction(dataset.collection)) { // Load image collection from EE
 
@@ -360,10 +307,10 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
     }
 
-    // Combo with with supported Earth Engine layer
+    // Combo with periods
     const collectionCombo = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
-        fieldLabel: GIS.i18n.select_period,
+        fieldLabel: dataset.imageLabel || GIS.i18n.select_period,
         hidden: true,
         editable: false,
         valueField: 'id',
@@ -377,7 +324,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }),
         listeners: {
             expand() {
-                loadCollection(datasetCombo.getValue());
+                loadCollection(dataset);
             }
         }
     });
@@ -391,6 +338,28 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         labelWidth: gis.conf.layout.widget.itemlabel_width,
         width: gis.conf.layout.widget.item_width
     });
+
+    if (dataset.collection) {
+        collectionCombo.show();
+    }
+
+    if (dataset.min !== undefined) {
+        minMaxField.show();
+        minMaxLabel.update((dataset.valueLabel || GIS.i18n.min_max_value) + ':');
+        minValue.setMinValue(dataset.minValue);
+        minValue.setValue(dataset.min);
+        maxValue.setMaxValue(dataset.maxValue);
+        maxValue.setValue(dataset.max);
+
+        stepField.show();
+        stepValue.setValue(dataset.steps);
+
+        colorsCombo.show().setValue(dataset.colors);
+    } else {
+        minMaxField.hide();
+        stepField.hide();
+        colorsCombo.hide();
+    }
 
     // Reset this widget
     const reset = function() {
@@ -414,13 +383,13 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         const dataset = datasets[config.id];
         const params = config.params;
 
-        datasetCombo.setValue(config.id);
+        // datasetCombo.setValue(config.id); // TODO
 
         descriptionField.show();
         descriptionField.update(dataset.description);
 
         if (dataset.collection) {
-            loadCollection(config.id, () => {
+            loadCollection(dataset, () => {
                 if (isArray(config.filter)) {
                     collectionCombo.setValue(config.filter[0].arguments[1]);
                 }
@@ -455,15 +424,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
 
     // Get the view representation of the layer
     const getView = function() {
-        const dataset = datasets[datasetCombo.getValue()];
         const image = collectionCombo.getValue();
-        /*
-        const view = {
-            config: { // Config object stored as one field in favorite
-                id: dataset.id,
-            },
-        };
-        */
 
         const view = {
             datasetId: dataset.id,
@@ -483,14 +444,6 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
 
         if (dataset.min !== undefined) { // If not fixed palette
-            /*
-            view.config.params = {
-                palette: colorsCombo.getValue().join(','),
-                min: minValue.getValue(),
-                max: maxValue.getValue()
-            };
-            */
-
             view.params = {
                 palette: colorsCombo.getValue().join(','),
                 min: minValue.getValue(),
@@ -499,11 +452,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         }
 
         if (image) {
-            // view.config.filter = dataset.filter(image);
-            // view.config.filter = dataset.filter(image);
             view.filter = dataset.filter(image);
-
-            //console.log(image);
         }
 
         return view;
@@ -512,7 +461,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
     // Return widget panel
     return Ext.create('Ext.panel.Panel', {
         bodyStyle: 'border:0;padding:5px 1px;',
-        items: [datasetCombo, descriptionField, collectionCombo, minMaxField, colorsCombo, stepField],
+        items: [descriptionField, collectionCombo, minMaxField, colorsCombo, stepField],
         map: layer.map,
         layer: layer,
         menu: layer.menu,

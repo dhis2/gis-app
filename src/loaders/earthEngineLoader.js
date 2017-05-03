@@ -154,6 +154,8 @@ const earthEngineLoader = (config, callback) =>  {
         ...dataset,
     };
 
+    // console.log('loader', layer);
+
     callback(layer);
 
 };

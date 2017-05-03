@@ -81,7 +81,7 @@ const OverlayCard = (props) => {
                 </IconButton>
             </CardHeader>
             <CardText expandable={true} style={styles.body}>
-                {layer.legend && layer.type !== 'earthEngine' &&
+                {layer.legend &&
                 <Legend
                     {...layer.legend}
                     style={styles.legend}

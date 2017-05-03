@@ -24,7 +24,7 @@ const Legend = ({ style, description, unit, items, source, sourceUrl }) => (
         {unit &&
             <div style={styles.unit}>{unit}</div>
         }
-        {items.map((item, index) => (
+        {items && items.map((item, index) => (
             <LegendItem
                 {...item}
                 key={`item-${index}`}

@@ -14,8 +14,6 @@ class OverlayEdit extends Component {
         const layer = {...props.layer};
         let id = layer.id;
 
-        console.log('###', id, layer);
-
         if (!id) { // New layer
             id = 'overlay-' + nextOverlayId++;
             layer.id = id;

@@ -8,8 +8,9 @@ export default class ExternalLayer extends Layer {
         const config = layer.config;
         const map = props.map;
 
-        config.type = 'tileLayer';
-
+        config.type = 'tileLayer'; // TODO: Should be part of config object
+        config.pane = layer.id;
+        
         this.instance = map.createLayer(config).addTo(map);
     }
 }

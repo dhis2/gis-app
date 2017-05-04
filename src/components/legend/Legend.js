@@ -16,7 +16,7 @@ const styles = {
     },
 }
 
-const Legend = ({ style, description, unit, items, source, sourceUrl }) => (
+const Legend = ({ style, description, unit, items, source, sourceUrl, attribution }) => (
     <dl style={style}>
         {description  &&
             <div style={styles.description}>{description}</div>

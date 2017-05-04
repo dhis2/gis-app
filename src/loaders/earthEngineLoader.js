@@ -8,7 +8,8 @@ const datasets = {
         legend: {
             unit: 'metres',
             description: 'Elevation above sea-level.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003" target="_blank">NASA / USGS / JPL-Caltech</a>',
+            source: 'NASA / USGS / JPL-Caltech / Google Earth Engine',
+            sourceUrl: 'https://explorer.earthengine.google.com/#detail/USGS%2FSRTMGL1_003',
         },
     },
     'WorldPop/POP': {
@@ -24,9 +25,10 @@ const datasets = {
             return Math.round(value);
         },
         legend: {
-            unit: 'people per km<sup>2</sup>',
+            unit: 'people per km²',
             description: 'Population density estimates with national totals adjusted to match UN population division estimates.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP" target="_blank">WorldPop</a>',
+            source: 'WorldPop / Google Earth Engine',
+            sourceUrl: 'https://explorer.earthengine.google.com/#detail/WorldPop%2FPOP',
         },
     },
     'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS': {
@@ -37,7 +39,8 @@ const datasets = {
         legend: {
             unit: 'light intensity',
             description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS" target="_blank">NOAA</a>',
+            source: 'NOAA / Google Earth Engine',
+            sourceUrl: 'https://explorer.earthengine.google.com/#detail/NOAA%2FDMSP-OLS%2FNIGHTTIME_LIGHTS',
         },
     },
     'UCSB-CHG/CHIRPS/PENTAD': {
@@ -50,7 +53,8 @@ const datasets = {
         legend: {
             unit: 'millimeter',
             description: 'Precipitation collected from satellite and weather stations on the ground.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD" target="_blank">UCSB/CHG</a>',
+            source: 'UCSB / CHG / Google Earth Engine',
+            sourceUrl: 'https://explorer.earthengine.google.com/#detail/UCSB-CHG%2FCHIRPS%2FPENTAD',
         },
     },
     'MODIS/MOD11A2': {
@@ -69,7 +73,8 @@ const datasets = {
         legend: {
             unit: '°C during daytime',
             description: 'Land surface temperatures collected from satellite. Blank spots will appear in areas with a persistent cloud cover.',
-            attribution: '<a href="https://explorer.earthengine.google.com/#detail/MODIS%2FMOD11A2" target="_blank">NASA LP DAAC</a>',
+            source: 'NASA LP DAAC / Google Earth Engine',
+            sourceUrl: 'https://explorer.earthengine.google.com/#detail/MODIS%2FMOD11A2',
         },
     },
     'MODIS/051/MCD12Q1': {
@@ -83,7 +88,8 @@ const datasets = {
         mask: false,
         legend: {
             description: 'Distinct landcover types collected from satellites.',
-            attribution: '<a href="https://code.earthengine.google.com/dataset/MODIS/051/MCD12Q1" target="_blank">NASA LP DAAC</a>',
+            source: 'NASA LP DAAC / Google Earth Engine',
+            sourceUrl: 'https://code.earthengine.google.com/dataset/MODIS/051/MCD12Q1',
             items: [{
                 color: '#aec3d6',
                 name: 'Water'
@@ -145,7 +151,7 @@ const datasets = {
 };
 
 
-// TODO: This function is currently duplicated from GIS API
+// TODO: This function is currently duplicated from  GIS API
 const createLegend = (params) => {
     const min = params.min;
     const max = params.max;
@@ -193,7 +199,6 @@ const earthEngineLoader = (config, callback) =>  {
     }
 
     callback(layer);
-
 };
 
 export default earthEngineLoader;

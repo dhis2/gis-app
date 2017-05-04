@@ -21,6 +21,8 @@ export default class EarthEngineLayer extends Layer {
             mask: layer.mask,
             attribution: layer.attribution,
             filter: layer.filter,
+            methods: layer.methods,
+            aggregation: layer.aggregation,
         };
 
         if (layer.params) {

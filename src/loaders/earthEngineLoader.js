@@ -145,6 +145,39 @@ const datasets = {
 };
 
 
+// TODO: This function is currently duplicated from GIS API
+const createLegend = (params) => {
+    const min = params.min;
+    const max = params.max;
+    const palette = params.palette.split(',');
+    const step = (params.max - min) / (palette.length - (min > 0 ? 2 : 1));
+
+    let from = min;
+    let to = Math.round(min + step);
+
+    return palette.map((color, index) => {
+        const item = {
+            color: color,
+        };
+
+        if (index === 0 && min > 0) { // Less than min
+            item.name = '< ' + min;
+            to = min;
+        } else if (from < max) {
+            item.name = from + ' - ' + to;
+        } else { // Higher than max
+            item.name = '> ' + from;
+        }
+
+        from = to;
+        to = Math.round(min + (step * (index + (min > 0 ? 1 : 2))));
+
+        return item;
+    });
+};
+
+
+
 const earthEngineLoader = (config, callback) =>  {
     const dataset = datasets[config.datasetId];
 
@@ -154,7 +187,10 @@ const earthEngineLoader = (config, callback) =>  {
         ...dataset,
     };
 
-    console.log('loader', layer);
+    // Create legend items from params
+    if (layer.legend && !layer.legend.items && layer.params) {
+        layer.legend.items = createLegend(layer.params);
+    }
 
     callback(layer);
 

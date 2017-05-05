@@ -5,6 +5,7 @@ import { openContextMenu, closeCoordinatePopup } from '../actions/map';
 const mapStateToProps = (state) => ({
     ...state.map,
     basemaps: state.basemaps,
+    ui: state.ui,
 });
 
 const mapDispatchToProps = ({

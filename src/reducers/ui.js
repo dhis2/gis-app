@@ -2,6 +2,7 @@ import * as actionTypes from '../constants/actionTypes';
 
 const defaultState = {
     layersPanelOpen: true,
+    dataTableOpen: false,
     overlaysDialogOpen: false,
     favoritesDialogOpen: false,
     mapContextMenu: true,
@@ -20,6 +21,18 @@ const ui = (state = defaultState, action) => {
             return {
                 ...state,
                 layersPanelOpen: false,
+            };
+
+        case 'DATA_TABLE_OPEN_REQUESTED':
+            return {
+                ...state,
+                dataTableOpen: true,
+            };
+
+        case 'DATA_TABLE_CLOSE_REQUESTED':
+            return {
+                ...state,
+                dataTableOpen: false,
             };
 
         case actionTypes.OVERLAYS_DIALOG_OPEN_REQUESTED:

@@ -6,7 +6,7 @@ const defaultState = {
     basemap: {
         id: 'osmLight',
         visible: true,
-        expanded: false,
+        expanded: true,
         opacity: 1,
         subtitle: 'Basemap',
     },

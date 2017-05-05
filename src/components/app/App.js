@@ -26,9 +26,7 @@ const App = () => (
                 <AddLayerDialog />
                 <FavoritesDialog />
                 <LayersList />
-                <div className="dhis-gis-map-container">
-                    <Map />
-                </div>
+                <Map />
                 <DataTable />
                 <OverlayEdit />
                 <ContextMenu />
@@ -40,3 +38,11 @@ const App = () => (
 );
 
 export default App;
+
+/*
+
+ <div className="dhis-gis-map-container">
+ <Map />
+ </div>
+
+ */

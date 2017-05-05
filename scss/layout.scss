@@ -9,32 +9,11 @@ body {
 }
 
 
-.dhis-gis-map-container {
-  position: absolute;
-  top: 40px;
-  left: 300px;
-  right: 0;
-  bottom: 0;
+.dhis-gis-resize-handle svg {
+  margin-left: 8px;
+  margin-top: -4px;
 }
 
-.dhis-gis-data-table {
-  position: absolute;
-  left: 300px;
-  height: 200px;
-  right: 0;
-  bottom: 0;
-  overflow: auto;
-  // border-top: 1px solid #bbb;
-  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.227451);
-  z-index: 1048;
-}
-
-
-.dhis-gis-data-table-visible {
-  .dhis-gis-map-container {
-    bottom: 200px;
-  }
-}
 
 .dhis-gis-menu {
   button:disabled {

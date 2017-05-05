@@ -25,11 +25,6 @@ function getLayerForType(layer) {
     return Layer;
 }
 
-const style = {
-    width: '100%',
-    height: '100%',
-};
-
 class Map extends Component {
 
     constructor(props, context) {
@@ -61,6 +56,8 @@ class Map extends Component {
         if (props.coordinatePopup) {
             this.showCoordinate(props.coordinatePopup);
         }
+
+        this.map.invalidateSize();
     }
 
     showCoordinate(coord) {
@@ -88,6 +85,13 @@ class Map extends Component {
         const basemap = {
             ...props.basemaps.filter(b => b.id === props.basemap.id)[0],
             ...props.basemap
+        };
+        const style = {
+            position: 'absolute',
+            top: 40,
+            left: props.ui.layersPanelOpen ? 300 : 0,
+            right: 0,
+            bottom: props.ui.dataTableOpen ? 200 : 0,
         };
 
         return (

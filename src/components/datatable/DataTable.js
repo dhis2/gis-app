@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
@@ -6,14 +6,28 @@ import TextField from 'material-ui/TextField';
 import SearchIcon from 'material-ui/svg-icons/action/search';
 import FilterIcon from 'material-ui/svg-icons/content/filter-list';
 import FlatButton from 'material-ui/FlatButton';
+import DragIcon from 'material-ui/svg-icons/editor/drag-handle';
 import {Table, Column, Cell} from 'fixed-data-table';
-import { grey600 } from 'material-ui/styles/colors';
+import { grey400, grey600 } from 'material-ui/styles/colors';
 
 import '../../../node_modules/fixed-data-table/dist/fixed-data-table.css'; // TODO: Which to load?
 
 // http://facebook.github.io/fixed-data-table/
 
 const styles = {
+    resizeHandle: {
+        position: 'absolute',
+        left: '50%',
+        top: -8,
+        boxShadow: '0px 0px 10px 0px rgba(0, 0, 0, 0.2)',
+        borderRadius: 2,
+        width: 40,
+        height: 16,
+        background: '#fff',
+        zIndex: 1500,
+        cursor: '-webkit-grab',
+
+    },
     dialog: {
         padding: 0,
     },
@@ -72,190 +86,243 @@ const TextCell = ({rowIndex, data, col, ...props}) => (
     </Cell>
 );
 
-const AddLayerDialog = ({ overlayId, overlays, closeDataTable, selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits }) => {
-    if (overlayId) {
-        document.getElementById('app').className = 'dhis-gis-data-table-visible'; // TODO: Do with redux state
 
-        const overlay = overlays.filter(layer => layer.id === overlayId)[0];
-        const valueFilter = overlay.valueFilter || { gt: null, lt: null, };
-        let data = overlay.data;
 
-        if (valueFilter.gt !== null) {
-            data = data.filter(feature => feature.properties.value > valueFilter.gt);
-        }
+class DataTable extends Component {
 
-        if (valueFilter.lt !== null) {
-            data = data.filter(feature => feature.properties.value < valueFilter.lt);
-        }
-
-        const actions = [
-            <FlatButton
-                label="Close"
-                primary={true}
-                onTouchTap={closeDataTable}
-            />
-        ];
-
-        const dataList = data.map(item => ({
-            id: item.id,
-            type: item.geometry.type,
-            name: item.properties.name,
-            value: item.properties.value,
-            color: item.properties.color,
-            level: item.properties.level,
-            parent: item.properties.parentName,
-            isSelected: item.isSelected || false,
-        }));
-
-        // Toggle row selection
-        const onRowClick = function(evt, index) {
-            const orgUnit = dataList[index];
-
-            if (!orgUnit.isSelected) {
-                selectOrgUnit(overlayId, orgUnit.id);
-            } else {
-                unselectOrgUnit(overlayId, orgUnit.id);
-            }
+    constructor(props) {
+        super(props);
+        this.state = {
+            width: this.getWidth(),
+            height: 200
         };
-
-        const onGreaterThanChange = function(evt, value) {
-            valueFilter.gt = (value !== '') ? Number(value) : null;
-            filterOrgUnits(overlayId, valueFilter);
-        };
-
-        const onLessThanChange = function(evt, value) {
-            valueFilter.lt = (value !== '') ? Number(value) : null;
-            filterOrgUnits(overlayId, valueFilter);
-        };
-
-        /*
-        <Dialog
-            bodyStyle={styles.dialog}
-            contentStyle={styles.dialogContent}
-            actions={actions}
-            modal={true}
-            open={true}
-        >
-        */
-
-
-        return (
-            <div className="dhis-gis-data-table">
-
-                <Toolbar style={styles.toolbar}>
-                    <ToolbarGroup>
-                        <ToolbarTitle style={styles.toolbarTitle} text="Data table" />
-                        <SearchIcon style={styles.icon} color={grey600} />
-                        <TextField
-                            floatingLabelText="Search"
-                            style={styles.field}
-                            inputStyle={styles.input}
-                            underlineStyle={styles.underline}
-                            floatingLabelStyle={styles.floatingLabel}
-                            floatingLabelShrinkStyle={styles.floatingLabelShrink}
-                        />
-                        <FilterIcon style={styles.icon} color={grey600} />
-                        <TextField
-                            type="number"
-                            floatingLabelText="Greater than"
-                            value={valueFilter.gt !== null ? valueFilter.gt : ''}
-                            onChange={onGreaterThanChange}
-                            style={styles.field}
-                            inputStyle={styles.input}
-                            underlineStyle={styles.underline}
-                            floatingLabelStyle={styles.floatingLabel}
-                            floatingLabelShrinkStyle={styles.floatingLabelShrink}
-                        />
-                        <TextField
-                            type="number"
-                            floatingLabelText="Lower than"
-                            value={valueFilter.lt !== null ? valueFilter.lt : ''}
-                            onChange={onLessThanChange}
-                            style={styles.field}
-                            inputStyle={styles.input}
-                            underlineStyle={styles.underline}
-                            floatingLabelStyle={styles.floatingLabel}
-                            floatingLabelShrinkStyle={styles.floatingLabelShrink}
-                        />
-                    </ToolbarGroup>
-                </Toolbar>
-                <Table
-                    rowHeight={24}
-                    headerHeight={24}
-                    rowsCount={dataList.length}
-                    width={640}
-                    height={500}
-                    onRowClick={onRowClick}
-                >
-                    <Column
-                        header={<Cell style={styles.rightAlign}>#</Cell>}
-                        cell={<IndexCell data={dataList} />}
-                        fixed={true}
-                        width={40}
-                    />
-                    <Column
-                        header={<Cell>Name</Cell>}
-                        cell={<TextCell data={dataList} col="name" />}
-                        fixed={true}
-                        width={200}
-                    />
-                    <Column
-                        header={<Cell style={styles.rightAlign}>Value</Cell>}
-                        cell={<NumberCell data={dataList} col="value" />}
-                        width={100}
-                    />
-                    <Column
-                        header={<Cell>Level</Cell>}
-                        cell={<TextCell data={dataList} col="level" />}
-                        width={60}
-                    />
-                    <Column
-                        header={<Cell>Parent unit</Cell>}
-                        cell={<TextCell data={dataList} col="parent" />}
-                        width={200}
-                    />
-                    <Column
-                        header={<Cell>Id</Cell>}
-                        cell={<TextCell data={dataList} col="id" />}
-                        width={100}
-                    />
-                    <Column
-                        header={<Cell>Color</Cell>}
-                        cell={<TextCell data={dataList} col="color" />}
-                        width={100}
-                    />
-                    <Column
-                        header={<Cell>Type</Cell>}
-                        cell={<TextCell data={dataList} col="type" />}
-                        width={120}
-                    />
-                    <Column
-                        header={<Cell>Ownership</Cell>}
-                        cell={<TextCell data={dataList} col="ownership" />}
-                        width={120}
-                    />
-                    <Column
-                        header={<Cell>Location</Cell>}
-                        cell={<TextCell data={dataList} col="location" />}
-                        width={120}
-                    />
-                </Table>
-            </div>
-        );
-    } else {
-        document.getElementById('app').className = ''; // TODO: Do with redux state
-        return null;
     }
-};
 
-/*
-AddLayerDialog.propTypes = {
-    dataList: PropTypes.array, // TODO: Use arrayOf?
-};
+    componentDidMount() {
+        this.updateDimensions = () => {
+            this.setState({
+                width: this.getWidth(),
+            });
+        };
 
-AddLayerDialog.defaultProps = {
-    dataList: [],
-};
-*/
+        window.addEventListener('resize', this.updateDimensions);
+    }
 
-export default AddLayerDialog;
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    getWidth() {
+        return window.innerWidth - (this.props.ui.layersPanelOpen ? 300 : 0);
+    }
+
+    onDrag(evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+
+        if (evt.pageY) {
+            this.setState({
+                height: window.innerHeight - evt.pageY,
+            });
+        }
+    }
+
+    render() {
+        const {overlayId, overlays, closeDataTable, selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits, ui} = this.props;
+
+        if (overlayId) {
+            // document.getElementById('app').className = 'dhis-gis-data-table-visible'; // TODO: Do with redux state
+
+            const overlay = overlays.filter(layer => layer.id === overlayId)[0];
+            const valueFilter = overlay.valueFilter || { gt: null, lt: null, };
+            let data = overlay.data;
+
+            if (valueFilter.gt !== null) {
+                data = data.filter(feature => feature.properties.value > valueFilter.gt);
+            }
+
+            if (valueFilter.lt !== null) {
+                data = data.filter(feature => feature.properties.value < valueFilter.lt);
+            }
+
+            const actions = [
+                <FlatButton
+                    label="Close"
+                    primary={true}
+                    onTouchTap={closeDataTable}
+                />
+            ];
+
+            const dataList = data.map(item => ({
+                id: item.id,
+                type: item.geometry.type,
+                name: item.properties.name,
+                value: item.properties.value,
+                color: item.properties.color,
+                level: item.properties.level,
+                parent: item.properties.parentName,
+                isSelected: item.isSelected || false,
+            }));
+
+            // Toggle row selection
+            const onRowClick = function(evt, index) {
+                const orgUnit = dataList[index];
+
+                if (!orgUnit.isSelected) {
+                    selectOrgUnit(overlayId, orgUnit.id);
+                } else {
+                    unselectOrgUnit(overlayId, orgUnit.id);
+                }
+            };
+
+            const onGreaterThanChange = function(evt, value) {
+                valueFilter.gt = (value !== '') ? Number(value) : null;
+                filterOrgUnits(overlayId, valueFilter);
+            };
+
+            const onLessThanChange = function(evt, value) {
+                valueFilter.lt = (value !== '') ? Number(value) : null;
+                filterOrgUnits(overlayId, valueFilter);
+            };
+
+            /*
+             <Dialog
+             bodyStyle={styles.dialog}
+             contentStyle={styles.dialogContent}
+             actions={actions}
+             modal={true}
+             open={true}
+             >
+             */
+
+
+            const dataTableStyle = {
+                position: 'absolute',
+                left: ui.layersPanelOpen ? 300 : 0,
+                height: this.state.height,
+                right: 0,
+                bottom: 0,
+                // overflow: 'auto',
+                boxShadow: '0 -1px 3px rgba(0, 0, 0, 0.227451)',
+                zIndex: 1048,
+            };
+
+            return (
+                <div style={dataTableStyle}>
+
+                    <div draggable={true} onDragEnd={(evt) => this.onDrag(evt)} style={styles.resizeHandle} className="dhis-gis-resize-handle">
+                        <DragIcon color={grey400} />
+                    </div>
+
+                    <Toolbar style={styles.toolbar}>
+                        <ToolbarGroup>
+                            <ToolbarTitle style={styles.toolbarTitle} text="Data table" />
+                            <SearchIcon style={styles.icon} color={grey600} />
+                            <TextField
+                                floatingLabelText="Search"
+                                style={styles.field}
+                                inputStyle={styles.input}
+                                underlineStyle={styles.underline}
+                                floatingLabelStyle={styles.floatingLabel}
+                                floatingLabelShrinkStyle={styles.floatingLabelShrink}
+                            />
+                            <FilterIcon style={styles.icon} color={grey600} />
+                            <TextField
+                                type="number"
+                                floatingLabelText="Greater than"
+                                value={valueFilter.gt !== null ? valueFilter.gt : ''}
+                                onChange={onGreaterThanChange}
+                                style={styles.field}
+                                inputStyle={styles.input}
+                                underlineStyle={styles.underline}
+                                floatingLabelStyle={styles.floatingLabel}
+                                floatingLabelShrinkStyle={styles.floatingLabelShrink}
+                            />
+                            <TextField
+                                type="number"
+                                floatingLabelText="Lower than"
+                                value={valueFilter.lt !== null ? valueFilter.lt : ''}
+                                onChange={onLessThanChange}
+                                style={styles.field}
+                                inputStyle={styles.input}
+                                underlineStyle={styles.underline}
+                                floatingLabelStyle={styles.floatingLabel}
+                                floatingLabelShrinkStyle={styles.floatingLabelShrink}
+                            />
+                        </ToolbarGroup>
+                    </Toolbar>
+                    <Table
+                        width={this.state.width}
+                        height={this.state.height - 40}
+                        rowHeight={24}
+                        headerHeight={24}
+                        rowsCount={dataList.length}
+                        onRowClick={onRowClick}
+                    >
+                        <Column
+                            header={<Cell style={styles.rightAlign}>#</Cell>}
+                            cell={<IndexCell data={dataList} />}
+                            fixed={true}
+                            width={40}
+                        />
+                        <Column
+                            header={<Cell>Name</Cell>}
+                            cell={<TextCell data={dataList} col="name" />}
+                            fixed={true}
+                            width={200}
+                        />
+                        <Column
+                            header={<Cell style={styles.rightAlign}>Value</Cell>}
+                            cell={<NumberCell data={dataList} col="value" />}
+                            width={100}
+                        />
+                        <Column
+                            header={<Cell>Level</Cell>}
+                            cell={<TextCell data={dataList} col="level" />}
+                            width={60}
+                        />
+                        <Column
+                            header={<Cell>Parent unit</Cell>}
+                            cell={<TextCell data={dataList} col="parent" />}
+                            width={200}
+                        />
+                        <Column
+                            header={<Cell>Id</Cell>}
+                            cell={<TextCell data={dataList} col="id" />}
+                            width={100}
+                        />
+                        <Column
+                            header={<Cell>Color</Cell>}
+                            cell={<TextCell data={dataList} col="color" />}
+                            width={100}
+                        />
+                        <Column
+                            header={<Cell>Type</Cell>}
+                            cell={<TextCell data={dataList} col="type" />}
+                            width={120}
+                        />
+                        <Column
+                            header={<Cell>Ownership</Cell>}
+                            cell={<TextCell data={dataList} col="ownership" />}
+                            width={120}
+                        />
+                        <Column
+                            header={<Cell>Location</Cell>}
+                            cell={<TextCell data={dataList} col="location" />}
+                            width={120}
+                        />
+                    </Table>
+                </div>
+            );
+        } else {
+            // document.getElementById('app').className = ''; // TODO: Do with redux state
+            return null;
+        }
+
+    }
+
+}
+
+
+
+export default DataTable;

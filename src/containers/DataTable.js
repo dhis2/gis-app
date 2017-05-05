@@ -6,6 +6,7 @@ import { selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits } from
 const mapStateToProps = (state) => ({
     overlays: state.map.overlays, // TODO: Better to only pass overlays being edited?
     overlayId: state.dataTable,
+    ui: state.ui,
 });
 
 const mapDispatchToProps = ({

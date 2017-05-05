@@ -10,7 +10,7 @@ export default class ExternalLayer extends Layer {
 
         config.type = 'tileLayer'; // TODO: Should be part of config object
         config.pane = layer.id;
-        
+
         this.instance = map.createLayer(config).addTo(map);
     }
 }

@@ -1,17 +1,20 @@
 import { connect } from 'react-redux';
 import LayersPanel from '../components/layer/LayersPanel'
-import { requestOverlayLoad, getOverlay, sortOverlays } from '../actions/overlays';
+import { requestOverlayLoad, sortOverlays } from '../actions/overlays';
+import { openLayersPanel, closeLayersPanel } from '../actions/ui';
 
 const mapStateToProps = (state) => ({
     basemap: state.map.basemap,
     basemaps: state.basemaps,
     overlays: state.map.overlays,
+    ui: state.ui,
 });
 
 const mapDispatchToProps = ({
-    getOverlay: getOverlay,
-    requestOverlayLoad: requestOverlayLoad,
-    onSortEnd: sortOverlays,
+    requestOverlayLoad,
+    sortOverlays,
+    openLayersPanel,
+    closeLayersPanel,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayersPanel);

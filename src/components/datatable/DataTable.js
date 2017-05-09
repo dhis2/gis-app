@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
@@ -117,15 +118,41 @@ class DataTable extends Component {
     }
 
     onDrag(evt) {
-        evt.preventDefault();
-        evt.stopPropagation();
+        // evt.preventDefault();
+        // evt.stopPropagation();
 
         if (evt.pageY) {
+            const el = findDOMNode(this.refs['dhis-gis-data-table']);
+
+            el.style.height = (window.innerHeight - evt.pageY) + 'px';
+
+            // console.log(window.innerHeight - evt.pageY, el);
+            /*
             this.setState({
                 height: window.innerHeight - evt.pageY,
             });
+            */
         }
     }
+
+    onDragEnd(evt) {
+        // evt.preventDefault();
+        // evt.stopPropagation();
+
+        if (evt.pageY) {
+            //const el = findDOMNode(this.refs['dhis-gis-data-table']);
+
+            //el.style.height = (window.innerHeight - evt.pageY) + 'px';
+
+            // console.log(window.innerHeight - evt.pageY, el);
+
+            this.setState({
+                height: window.innerHeight - evt.pageY,
+            });
+
+        }
+    }
+
 
     render() {
         const {overlayId, overlays, closeDataTable, selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits, ui} = this.props;
@@ -205,12 +232,13 @@ class DataTable extends Component {
                 // overflow: 'auto',
                 boxShadow: '0 -1px 3px rgba(0, 0, 0, 0.227451)',
                 zIndex: 1048,
+                overflow: 'visible',
             };
 
             return (
-                <div style={dataTableStyle}>
+                <div ref="dhis-gis-data-table" style={dataTableStyle}>
 
-                    <div draggable={true} onDragEnd={(evt) => this.onDrag(evt)} style={styles.resizeHandle} className="dhis-gis-resize-handle">
+                    <div draggable={true} onDrag={(evt) => this.onDrag(evt)} onDragEnd={(evt) => this.onDragEnd(evt)} style={styles.resizeHandle} className="dhis-gis-resize-handle">
                         <DragIcon color={grey400} />
                     </div>
 

@@ -8,11 +8,14 @@ body {
   margin: 0;
 }
 
-
-.dhis-gis-resize-handle svg {
-  margin-left: 8px;
-  margin-top: -4px;
+.dhis-gis-resize-handle {
+  svg {
+    margin-left: 8px;
+    margin-top: -4px;
+  }
 }
+
+
 
 
 .dhis-gis-menu {

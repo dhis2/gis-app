@@ -8,6 +8,9 @@ import ContentCreateIcon from 'material-ui/svg-icons/content/create';
 import ActionDataTableIcon from 'material-ui/svg-icons/action/view-list';
 import ActionDeleteIcon from 'material-ui/svg-icons/action/delete';
 import FileDownloadIcon from 'material-ui/svg-icons/file/file-download';
+import NavigationMoreIcon from 'material-ui/svg-icons/navigation/more-vert';
+import NavigationArrowIcon from 'material-ui/svg-icons/navigation-arrow-drop-right';
+
 import Slider from 'material-ui/Slider';
 import { grey600 } from 'material-ui/styles/colors'; // http://www.material-ui.com/#/customization/colors
 
@@ -24,6 +27,17 @@ const styles = {
         padding: 4,
         width: 32,
         height: 32,
+    },
+    moreButton: {
+        float: 'right',
+        padding: 4,
+        width: 32,
+        height: 32,
+        marginRight: -7,
+        marginLeft: -5,
+    },
+    arrowIcon: {
+        margin: 4,
     },
     sliderContainer: {
         float: 'left',
@@ -42,6 +56,12 @@ const styles = {
         minHeight: 32,
         fontSize: 14,
     },
+    menuItem2: {
+        background: 'yellow',
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+
 };
 
 const LayerToolbar = ({ layer, onEdit, onRemove, onDataTableShow, onOpacityChange }) => {
@@ -148,20 +168,40 @@ const LayerToolbar = ({ layer, onEdit, onRemove, onDataTableShow, onOpacityChang
             </ToolbarGroup>
 
             <ToolbarGroup>
-                <IconMenu iconButtonElement={
-                    <IconButton style={{...styles.button}}>
-                        <FileDownloadIcon color={grey600} />
-                    </IconButton>
-                } listStyle={styles.menuList}>
-                    <MenuItem primaryText="Organisation units (GeoJSON)" onTouchTap={onFeaturesDownload} style={styles.menuItem} />
-                    <MenuItem primaryText="Style (SLD)" onTouchTap={onStyleDownload} style={styles.menuItem} />
-                </IconMenu>
-
                 {onRemove &&
                 <IconButton onClick={onRemove} tooltip="Delete" tooltipPosition="top-center" style={styles.button}>
                     <ActionDeleteIcon color={grey600}/>
                 </IconButton>
                 }
+
+                <IconMenu iconButtonElement={
+                    <IconButton tooltip="More" tooltipPosition="top-center" style={{...styles.moreButton}}>
+                        <NavigationMoreIcon color={grey600} />
+                    </IconButton>
+                } listStyle={styles.menuList}>
+
+                    <MenuItem
+                        primaryText="Open as ..."
+                        rightIcon={<NavigationArrowIcon color={grey600} style={styles.arrowIcon} />}
+                        menuItems={[
+                            <MenuItem primaryText="Pivot" style={styles.menuItem} />,
+                            <MenuItem primaryText="Chart" style={styles.menuItem} />,
+                        ]}
+                        style={styles.menuItem}
+                    />
+
+                    <MenuItem
+                        primaryText="Download ..."
+                        rightIcon={<NavigationArrowIcon color={grey600} style={styles.arrowIcon} />}
+                        menuItems={[
+                            <MenuItem primaryText="Organisation units (GeoJSON)" onTouchTap={onFeaturesDownload} style={styles.menuItem} />,
+                            <MenuItem primaryText="Style (SLD)" onTouchTap={onStyleDownload} style={styles.menuItem} />,
+                        ]}
+                        style={styles.menuItem}
+                    />
+
+
+                </IconMenu>
             </ToolbarGroup>
 
         </Toolbar>
@@ -188,3 +228,15 @@ LayerToolbar.defaultProps = {
 */
 
 export default LayerToolbar;
+
+
+/*
+<IconMenu iconButtonElement={
+    <IconButton style={{...styles.button}}>
+        <FileDownloadIcon color={grey600} />
+    </IconButton>
+} listStyle={styles.menuList}>
+    <MenuItem primaryText="Organisation units (GeoJSON)" onTouchTap={onFeaturesDownload} style={styles.menuItem} />
+    <MenuItem primaryText="Style (SLD)" onTouchTap={onStyleDownload} style={styles.menuItem} />
+</IconMenu>
+*/

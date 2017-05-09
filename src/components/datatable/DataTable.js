@@ -212,27 +212,15 @@ class DataTable extends Component {
                 filterOrgUnits(overlayId, valueFilter);
             };
 
-            /*
-             <Dialog
-             bodyStyle={styles.dialog}
-             contentStyle={styles.dialogContent}
-             actions={actions}
-             modal={true}
-             open={true}
-             >
-             */
-
-
             const dataTableStyle = {
                 position: 'absolute',
                 left: ui.layersPanelOpen ? 300 : 0,
                 height: this.state.height,
                 right: 0,
                 bottom: 0,
-                // overflow: 'auto',
                 boxShadow: '0 -1px 3px rgba(0, 0, 0, 0.227451)',
                 zIndex: 1048,
-                overflow: 'visible',
+                background: '#fff',
             };
 
             return (

@@ -22,30 +22,37 @@ class OverlayEdit extends Component {
             layer.isNew = false;
         }
 
-        if (!widgets[id]) {
-            editCounter[id] = 0;
-
-            widgets[id] = WidgetWindow(gis, layer, (editedLayer) => {
-                editedLayer.isLoaded = false;
-
-                editedLayer.editCounter = ++editCounter[editedLayer.id];
-
-                editedLayer.isNew = layer.isNew;
-
-                widgets[id].hide();
-                props.getOverlay(editedLayer);
-            });
-
-            if (layer.isLoaded) { // Loaded as favorite
-                widgets[id].show();
-                editCounter[id]++;
-                widgets[id].setLayer(layer);
-            }
+        if (layer.type === 'external') { // External layers has no edit widget
+            layer.editCounter = 1;
+            props.getOverlay(layer);
         } else {
-            layer.isNew = false;
+            if (!widgets[id]) {
+                editCounter[id] = 0;
+
+                widgets[id] = WidgetWindow(gis, layer, (editedLayer) => {
+                    editedLayer.isLoaded = false;
+
+                    editedLayer.editCounter = ++editCounter[editedLayer.id];
+
+                    editedLayer.isNew = layer.isNew;
+
+                    widgets[id].hide();
+                    props.getOverlay(editedLayer);
+                });
+
+                if (layer.isLoaded) { // Loaded as favorite
+                    widgets[id].show();
+                    editCounter[id]++;
+                    widgets[id].setLayer(layer);
+                }
+            } else {
+                layer.isNew = false;
+            }
+
+            widgets[id].show();
         }
 
-        widgets[id].show();
+
     }
 
     // React rendering will happen here later :-)

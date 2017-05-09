@@ -11,10 +11,7 @@ const externalLoader = (layer, callback) =>  {
 
     // TODO: Add legend support
 
-    // The current redux thunk setup doesn't work  without an async callback...
-    setTimeout(() => {
-        callback(layer);
-    }, 1000);
+    callback(layer);
 };
 
 export default externalLoader;

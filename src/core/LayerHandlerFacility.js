@@ -58,6 +58,8 @@ export default function LayerHandlerFacility(gis, layer) {
                     const coord = JSON.parse(facility.co);
                     const group = facility.dimensions[indicator];
 
+					// console.log('orgUnitGroupSymbols', orgUnitGroupSymbols);
+
                     if (gis.util.map.isValidCoordinate(coord) && group) {
 
                         facility.icon = {
@@ -186,6 +188,8 @@ export default function LayerHandlerFacility(gis, layer) {
 
 	const updateLegend = function(items, symbols) {
 		let html = '<div class="dhis2-legend"><dl class="dhis2-legend-image">';
+
+		// console.log('legend', items, symbols);
 
         items.forEach(item => {
             html += '<dt style="background-image:url(' + gis.init.contextPath + '/images/orgunitgroup/' + item.symbol + ');"></dt>';

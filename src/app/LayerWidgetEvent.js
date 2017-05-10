@@ -1130,7 +1130,9 @@ export default function LayerWidgetEvent(gis, layer) {
 
         view.columns = [];
 
-        dataElementSelected.items.items.forEach(panel => view.columns.push(panel.getRecord()));
+        dataElementSelected.items.items.forEach(panel => {
+            view.columns.push(panel.getRecord());
+        });
 
         view.rows = [{
             dimension: 'ou',

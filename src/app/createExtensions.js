@@ -991,6 +991,7 @@ export default function createExtensions(gis) {
                 if (Ext.isObject(items[i])) {
                     items[i] = items[i].code;
                 }
+                items[i] = encodeURIComponent(items[i]); // https://jira.dhis2.org/browse/DHIS2-1170
             }
 
             if (items.length) {

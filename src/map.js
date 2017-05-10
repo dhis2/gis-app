@@ -50,7 +50,7 @@ Ext.onReady(function() {
 
         init.contextPath = config.url;
         init.apiPath = init.contextPath + '/api/' + GIS.apiVersion + '/';
-        init.analyticsPath = init.contextPath + '/api/25/'; // TODO: Only use apiPath
+        init.analyticsPath = init.contextPath + '/api/25/'; // https://jira.dhis2.org/browse/DHIS2-502
 
         init.defaultHeaders = {};
 
@@ -84,7 +84,7 @@ Ext.onReady(function() {
 
             // user-account
             const userAccountConfig = {
-                url: init.contextPath + '/api/me/user-account.json',
+                url: init.contextPath + '/api/23/me/user-account.json', // https://jira.dhis2.org/browse/DHIS2-304
                 disableCaching: false,
                 success: onUserAccountLoad
             };

@@ -48,7 +48,8 @@ export default function LayerHandlerFacility(gis, layer) {
                     group.symbol = (21 + index) + '.png'; // Symbol 21-25 are coloured circles
                 }
 
-                orgUnitGroupSymbols[group.name] = group.symbol;
+                // orgUnitGroupSymbols[group.name] = group.symbol; // Not safe to match on name
+                orgUnitGroupSymbols[group.id] = group.symbol;
             });
 
 			const features = [];

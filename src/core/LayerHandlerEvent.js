@@ -166,7 +166,6 @@ export default function LayerHandlerEvent(gis, layer) {
         const loadEvents = function() {
             Ext.Ajax.request({
                 url: encodeURI(gis.init.analyticsPath + 'analytics/events/query/' + view.program.id + '.json' + paramString),
-                // url: gis.init.analyticsPath + 'analytics/events/query/' + view.program.id + '.json' + encodeURIComponent(paramString),
                 disableCaching: false,
                 failure(r) {
                     gis.alert(r);

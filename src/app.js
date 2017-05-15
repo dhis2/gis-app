@@ -194,8 +194,8 @@ Ext.onReady( function() {
                 }
 
                 text += '<html>\n<head>\n';
-                text += '<link rel="stylesheet" href="http://dhis2-cdn.org/' + version + '/ext/resources/css/ext-plugin-gray.css" />\n';
-                text += '<script src="http://dhis2-cdn.org/' + version + '/ext/ext-all.js"></script>\n';
+                text += '<link rel="stylesheet" href="http://dhis2-cdn.org/v222/ext/resources/css/ext-plugin-gray.css" />\n';
+                text += '<script src="http://dhis2-cdn.org/v222/ext/ext-all.js"></script>\n';
                 text += '<script src="http://dhis2-cdn.org/' + version + '/plugin/map.js"></script>\n';
                 text += '</head>\n\n<body>\n';
                 text += '<div id="' + el + '"></div>\n\n';

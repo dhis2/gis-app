@@ -5,6 +5,7 @@ cache:
   directories:
   - node_modules
 script:
+- npm rebuild node-sass
 - npm run build
 #after_success:
 #- if ( [ "$TRAVIS_BRANCH" == "master" ]  && [ "$TRAVIS_REPO_SLUG" == "dhis2/gis-app" ]  &&  [ "$TRAVIS_PULL_REQUEST" == "false" ] ; then

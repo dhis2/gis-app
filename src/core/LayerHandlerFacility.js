@@ -54,7 +54,7 @@ export default function LayerHandlerFacility(gis, layer) {
 			const features = [];
 
             data.forEach(facility => {
-                if (facility.ty === 1) { // Only add points
+                if (facility.ty === 1 && isObject(facility.dimensions)) { // Only include points belonging to a org.unit group
                     const coord = JSON.parse(facility.co);
                     const group = facility.dimensions[indicator];
 

@@ -1,0 +1,29 @@
+<html>
+<head>
+    <link rel="stylesheet" href="http://dhis2-cdn.org/v222/ext/resources/css/ext-plugin-gray.css" />
+    <script src="http://dhis2-cdn.org/v222/ext/ext-all.js"></script>
+    <script src="http://dhis2-cdn.org/v226/plugin/map.js"></script>
+    <!-- <script src="/build/map.js"></script> -->
+</head>
+
+<body>
+<div id="map"></div>
+
+<script>
+
+    Ext.onReady(function() {
+
+        DHIS.getMap({
+            "id": "zDP78aJU8nX",
+            "el": "map",
+            "url": "//localhost:8080",
+            "username": "admin",
+            "password": "district"
+        });
+
+    });
+
+</script>
+
+</body>
+</html>

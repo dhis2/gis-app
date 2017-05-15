@@ -160,7 +160,7 @@ Ext.onReady( function() {
                 var textArea,
                     window,
                     text = '',
-                    el = 'map1',
+                    el = 'map',
                     layout = gis.util.map.map2plugin(gis.util.layout.getPluginConfig()),
                     version = function() {
                         var versionArray = gis.init.systemInfo.version.split('.');
@@ -192,6 +192,10 @@ Ext.onReady( function() {
                         }
                     }
                 }
+
+                layout.url = '<url to server>';
+                layout.username = '<username>';
+                layout.password = '<password>';
 
                 text += '<html>\n<head>\n';
                 text += '<link rel="stylesheet" href="http://dhis2-cdn.org/v222/ext/resources/css/ext-plugin-gray.css" />\n';

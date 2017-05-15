@@ -1,4 +1,11 @@
-import d2map from 'gis-api/src/';
+// import d2map from 'gis-api/src/';
+import d2map from 'gis-api/build';
+// import d2map from 'dhis2-gis-api/src/';
+
+
+
+
+
 
 export default function getMap() {
     const map = d2map(document.createElement('div'));

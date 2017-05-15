@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@mapbox/corslite@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@mapbox/corslite/-/corslite-0.0.7.tgz#29f5b6a188ba946e514bdf0b6401ed4fbe13a39e"
+
 abbrev@1, abbrev@1.0.x:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.0.9.tgz#91b4792588a7738c25f35dd6f63752a2f8776135"
@@ -1524,6 +1528,10 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
 
+console-polyfill@0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/console-polyfill/-/console-polyfill-0.2.3.tgz#d455d3d574dbcdccf80e1631df21a486fe05f989"
+
 console-stream@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/console-stream/-/console-stream-0.1.1.tgz#a095fe07b20465955f2fafd28b5d72bccd949d44"
@@ -1744,9 +1752,9 @@ d3-collection@1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.2.tgz#df5acb5400443e9eabe9c1379896c67e52426b39"
 
-d3-color@1, d3-color@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.0.2.tgz#83cb4b3a9474e40795f009d97e97a15649830bbc"
+d3-color@1, d3-color@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.0.3.tgz#bc7643fca8e53a8347e2fbdaffa236796b58509b"
 
 d3-format@1:
   version "1.0.2"
@@ -1758,9 +1766,9 @@ d3-interpolate@1:
   dependencies:
     d3-color "1"
 
-d3-scale@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-1.0.4.tgz#50e28bf6a193b706745528515ed9b3d44205a033"
+d3-scale@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-1.0.5.tgz#418506f0fb18eb052b385e196398acc2a4134858"
   dependencies:
     d3-array "1"
     d3-collection "1"
@@ -1975,22 +1983,23 @@ detect-indent@^4.0.0:
   dependencies:
     repeating "^2.0.0"
 
-dhis2-gis-api@^27.0.2:
-  version "27.0.2"
-  resolved "https://registry.yarnpkg.com/dhis2-gis-api/-/dhis2-gis-api-27.0.2.tgz#fb0bc1af9d7aec6118d7e84c327d0a1c1a40b7cc"
+dhis2-gis-api@v27.0.8:
+  version "27.0.8"
+  resolved "https://registry.yarnpkg.com/dhis2-gis-api/-/dhis2-gis-api-27.0.8.tgz#2eddb922d05ef412042baaf4e267d1d2f689abb7"
   dependencies:
-    d3-color "^1.0.2"
-    d3-scale "^1.0.4"
+    d3-color "^1.0.3"
+    d3-scale "^1.0.5"
     geojson-area "^0.2.1"
+    gifsicle "^3.0.4"
     leaflet "^1.0.3"
-    leaflet-geocoder-mapzen "^1.7.1"
-    leaflet-measure "^2.1.1"
-    leaflet.gridlayer.googlemutant "^0.4.3"
+    leaflet-geocoder-mapzen "^1.9.2"
+    leaflet-measure "^2.1.7"
+    leaflet.gridlayer.googlemutant "^0.6.1"
     leaflet.layergroup.collision "^0.3.1"
-    leaflet.markercluster "^1.0.3"
+    leaflet.markercluster "^1.0.5"
     polylabel "^1.0.2"
-    rbush "^1.4.3"
-    whatwg-fetch "^2.0.1"
+    rbush "^2.0.1"
+    whatwg-fetch "^2.0.3"
 
 di@^0.0.1:
   version "0.0.1"
@@ -3018,7 +3027,7 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-gifsicle@^3.0.0:
+gifsicle@^3.0.0, gifsicle@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/gifsicle/-/gifsicle-3.0.4.tgz#f45cb5ed10165b665dc929e0e9328b6c821dfa3b"
   dependencies:
@@ -4096,13 +4105,16 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
-leaflet-geocoder-mapzen@^1.7.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/leaflet-geocoder-mapzen/-/leaflet-geocoder-mapzen-1.7.1.tgz#83224becbb9d66df54d30c80a159105e59085365"
+leaflet-geocoder-mapzen@^1.9.2:
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/leaflet-geocoder-mapzen/-/leaflet-geocoder-mapzen-1.9.2.tgz#b2411a4ad49c9332c8241d1e02e8c57974427646"
+  dependencies:
+    "@mapbox/corslite" "0.0.7"
+    console-polyfill "0.2.3"
 
-leaflet-measure@^2.1.1:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/leaflet-measure/-/leaflet-measure-2.1.4.tgz#bdd1cf6dfa3c104d9cf295861a4d039f386957b5"
+leaflet-measure@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/leaflet-measure/-/leaflet-measure-2.1.7.tgz#01cde74ca717f51888cc9d7ddd8334f7e773eaf6"
   dependencies:
     brfs "^1.4.3"
     color "^0.8.0"
@@ -4111,9 +4123,9 @@ leaflet-measure@^2.1.1:
     i18n-2 "^0.6.3"
     underscore "^1.7.0"
 
-leaflet.gridlayer.googlemutant@^0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/leaflet.gridlayer.googlemutant/-/leaflet.gridlayer.googlemutant-0.4.3.tgz#5cb22d6ee49f308428b24f02baa5b78aeb1fc6c3"
+leaflet.gridlayer.googlemutant@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/leaflet.gridlayer.googlemutant/-/leaflet.gridlayer.googlemutant-0.6.1.tgz#56e4de440425ed68d1618963381f91b2071fee37"
 
 leaflet.layergroup.collision@^0.3.1:
   version "0.3.1"
@@ -4122,9 +4134,9 @@ leaflet.layergroup.collision@^0.3.1:
     leaflet "^1.0.0-beta.2"
     rbush "^1.4.2"
 
-leaflet.markercluster@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.0.3.tgz#64c779365c0951f4885c3414024a994f3effc708"
+leaflet.markercluster@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.0.5.tgz#12fde61630f4eb3146d92b56a36fdff903d1e023"
 
 leaflet@^1.0.0-beta.2, leaflet@^1.0.3:
   version "1.0.3"
@@ -5477,6 +5489,10 @@ querystringify@0.0.x:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-0.0.4.tgz#0cf7f84f9463ff0ae51c4c4b142d95be37724d9c"
 
+quickselect@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/quickselect/-/quickselect-1.0.0.tgz#02630818f9aae4ecab26f0103f98d061c17c58f3"
+
 quote-stream@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/quote-stream/-/quote-stream-1.0.2.tgz#84963f8c9c26b942e153feeb53aae74652b7e0b2"
@@ -5515,9 +5531,15 @@ raw-body@~2.2.0:
     iconv-lite "0.4.15"
     unpipe "1.0.0"
 
-rbush@^1.4.2, rbush@^1.4.3:
+rbush@^1.4.2:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/rbush/-/rbush-1.4.3.tgz#7874e2d38911d2719ea27731d32445da5ec4394c"
+
+rbush@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/rbush/-/rbush-2.0.1.tgz#4cfaca28c3064bc0ee75431a1b79990e875eefa9"
+  dependencies:
+    quickselect "^1.0.0"
 
 rc@^1.1.2, rc@~1.1.6:
   version "1.1.7"
@@ -6935,7 +6957,7 @@ wgs84@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/wgs84/-/wgs84-0.0.0.tgz#34fdc555917b6e57cf2a282ed043710c049cdc76"
 
-whatwg-fetch@^2.0.1, whatwg-fetch@^2.0.3:
+whatwg-fetch@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-2.0.3.tgz#9c84ec2dcf68187ff00bc64e1274b442176e1c84"
 

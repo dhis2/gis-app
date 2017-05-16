@@ -1983,9 +1983,9 @@ detect-indent@^4.0.0:
   dependencies:
     repeating "^2.0.0"
 
-dhis2-gis-api@v27.0.8:
-  version "27.0.8"
-  resolved "https://registry.yarnpkg.com/dhis2-gis-api/-/dhis2-gis-api-27.0.8.tgz#2eddb922d05ef412042baaf4e267d1d2f689abb7"
+dhis2-gis-api@27.0.10:
+  version "27.0.10"
+  resolved "https://registry.yarnpkg.com/dhis2-gis-api/-/dhis2-gis-api-27.0.10.tgz#780152d11abdc2bd26e1861b317e243b64154242"
   dependencies:
     d3-color "^1.0.3"
     d3-scale "^1.0.5"

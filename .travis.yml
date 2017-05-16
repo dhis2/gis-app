@@ -7,10 +7,10 @@ cache:
 script:
 - npm rebuild node-sass
 - npm run build
-#after_success:
-#- if ( [ "$TRAVIS_BRANCH" == "master" ]  && [ "$TRAVIS_REPO_SLUG" == "dhis2/gis-app" ]  &&  [ "$TRAVIS_PULL_REQUEST" == "false" ] ; then
-#        mvn clean deploy --settings deploy/settings.xml && exit 0;
-#  fi
+after_success:
+- if ( [ "$TRAVIS_BRANCH" == "master" ]  && [ "$TRAVIS_REPO_SLUG" == "dhis2/gis-app" ]  &&  [ "$TRAVIS_PULL_REQUEST" == "false" ] ; then
+        mvn clean deploy --settings deploy/settings.xml && exit 0;
+  fi
 env:
   global:
   - secure: nFDZ7dLHIrbI3JHitsfHA6MnbHCRApO5Xc8mTN0jX5tPgfoF4UsWak8Mn1YjDL2fFN0/WL8IzDHmcKAibtxNoY2YtEnCV/cJqnL7A9w3prxLuI2tw4cVl9pd0oRIqBq417dr7mVJoXEzzclVfwfsYecDKPEMovpoemAcOONNO+hKslD6ALwoA+O/EBZGBdwHpwPNo2jwcU9W/KF3Lrx30xa3/pap9AVgPst4HdGVXku0lxP5kw+B4AQTCetrPld9G8RW0k4ucB2OP2XRUyhWv+iOJA2GnmAOBqTekc6pRue29wk/gv3SoiFjq6CTnEmiBB8ESibJMo3Id+sATt56wurzk/WEpxVJmNgLPowjRPAxoTnwcwy08qBAFWhB8OVqFRf95AhFIk2N2uoa5frh4DOlZ27KjASyC8HaRLRiyqIUbkmshXdC1KALOjsYKO1RZsHULVAkJqlQZgGgivueNqevROSTAWojXEqQKY6BGxxYvuCwloSgRxJLP2BRULLwmvsFU/Damxt6n92jV7bc5W8zdQbMZ7CA322bXPfm1Fp34IxFMtlE6ttiHvXyS/LyQuMPRf4I/vjAb9/Jfo1UNLCkMg4XSLbT0edvvPtWRv43HJmKl/Z/+dB7E73wq7yXPaRdlND84t/Brv1DqQazmHW1do2DtHgsD0LJYroScNs=

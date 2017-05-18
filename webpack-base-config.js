@@ -1,5 +1,7 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
+
+const nodeEnv = process.env.NODE_ENV || 'development';
 
 module.exports = {
     context: __dirname,
@@ -58,7 +60,12 @@ module.exports = {
     plugins: [
         new webpack.ProvidePlugin({
             'Promise': 'es6-promise',
-            'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
+            'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch',
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(nodeEnv),
+            },
         }),
     ],
 };

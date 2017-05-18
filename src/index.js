@@ -1,19 +1,13 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import reducer from './reducers';
-import App from './components/app/App';
+import storeFactory from './store';
+import Root from './components/Root';
 
+const store = storeFactory();
 
-const store = createStore(
-    reducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+console.log('#######');
 
 render(
-    <Provider store={store}>
-        <App map={map} />
-    </Provider>,
+    <Root store={store} />,
     document.getElementById('app')
 );

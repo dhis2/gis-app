@@ -60,7 +60,7 @@ const onDataLoad = (groupSet, facilities, layer, callback) => {
 
     // Convert API response to GeoJSON features
     facilities.forEach(facility => {
-        if (facility.ty === 1) { // Only add point facilities
+        if (facility.ty === 1 && isObject(facility.dimensions)) { // Only add points belonging to an org.unit group
             const coord = JSON.parse(facility.co);
             const group = facility.dimensions[indicator];
 

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
-import d2map from 'gis-api/src/';
 import Layer from './Layer';
 import EventLayer from './EventLayer';
 import FacilityLayer from './FacilityLayer';
@@ -10,20 +8,14 @@ import BoundaryLayer from './BoundaryLayer';
 import EarthEngineLayer from './EarthEngineLayer';
 import ExternalLayer from './ExternalLayer';
 
-const layerTypeToLayerComponent = new global.Map([
-    ['event',       EventLayer],
-    ['facility',    FacilityLayer],
-    ['thematic',    ThematicLayer],
-    ['boundary',    BoundaryLayer],
-    ['earthEngine', EarthEngineLayer],
-    ['external',    ExternalLayer]
-]);
-
-function getLayerForType(layer) {
-    if (layerTypeToLayerComponent.has(layer.type))
-        return layerTypeToLayerComponent.get(layer.type)
-    return Layer;
-}
+const layerType = {
+    event:       EventLayer,
+    facility:    FacilityLayer,
+    thematic:    ThematicLayer,
+    boundary:    BoundaryLayer,
+    earthEngine: EarthEngineLayer,
+    external:    ExternalLayer
+};
 
 class Map extends Component {
 
@@ -31,17 +23,11 @@ class Map extends Component {
         map: PropTypes.object,
     };
 
-    constructor(props, context) {
-        console.log('map constructor');
-
-        super(props);
-
-        this.map = context.map;
-        this.map.on('contextmenu', this.onRightClick, this);
-    }
-
     componentWillMount() {
         console.log('map componentWillMount');
+
+        this.map = this.context.map;
+        this.map.on('contextmenu', this.onRightClick, this);
     }
 
     componentDidMount() {
@@ -113,17 +99,17 @@ class Map extends Component {
             bottom: props.ui.dataTableOpen ? 200 : 0,
         };
 
+
         return (
             <div ref={node => this.node = node} style={style}>
                 {props.overlays.filter(layer => layer.isLoaded).map((layer, index) => {
-                    const Overlay = getLayerForType(layer);
+                    const Overlay = layerType[layer.type] || Layer;
 
                     return (
                         <Overlay
                             key={layer.id}
-                            map={this.map}
                             index={index}
-                            layer={layer}
+                            {...layer}
                             openContextMenu={props.openContextMenu}
                         />
                     )

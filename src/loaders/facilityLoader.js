@@ -2,6 +2,7 @@
 
 import {isValidCoordinate} from '../util/map';
 import isArray from 'd2-utilizr/lib/isArray';
+import isObject from 'd2-utilizr/lib/isObject';
 
 // TODO: How to share headers for all fetch requests?
 // TODO: Use apiFetch

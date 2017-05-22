@@ -7,25 +7,25 @@ class Layer extends PureComponent {
         map: PropTypes.object,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    // Create pane and layer
+    componentWillMount() {
+        console.log('layer componentWillMount');
+
+        const { index } = this.props;
 
         this.createPane();
         this.createLayer();
-        if (props.index !== undefined) {
-            this.setLayerOrder();
-        }
-
-
-
     }
 
-    componentWillMount() {
-        console.log('layer componentWillMount');
-    }
-
+    //
     componentDidMount() {
         console.log('layer componentDidMount');
+
+        const map = this.context.map;
+
+        map.addLayer(this.layer);
+        this.onLayerAdd();
+
     }
 
     componentDidUpdate(prev) {
@@ -35,13 +35,11 @@ class Layer extends PureComponent {
 
         // if (layer.editCounter !== prevLayer.editCounter || layer.config !== prevLayer.config) { // TODO
 
-
-        console.log('########', this.props);
-
-
         if (id !== prev.id) {
             this.removeLayer();
             this.createLayer();
+            this.context.map.addLayer(this.layer);
+            this.onLayerAdd();
         }
 
         // if (props.index !== undefined && prevLayer.index !== layer.index) {
@@ -65,7 +63,7 @@ class Layer extends PureComponent {
 
     // Create custom pane to control layer ordering: http://leafletjs.com/examples/map-panes/
     createPane() {
-        console.log('createPane');
+        // console.log('createPane');
 
         const { id, labels } = this.props;
         const map = this.context.map;
@@ -79,7 +77,7 @@ class Layer extends PureComponent {
 
     // Create new layer from config object (override in subclasses)
     createLayer() {
-        console.log('createLayer');
+        // console.log('createLayer');
 
         const { id, index, config } = this.props;
         const map = this.context.map;
@@ -88,15 +86,14 @@ class Layer extends PureComponent {
         };
 
         if (index !== undefined) { // If not a basemap
-            config.pane = id;
+            layerConfig.pane = id;
         }
 
-        this.layer = map.addLayer(layerConfig);
-        this.onLayerAdd();
+        this.layer = map.createLayer(layerConfig);
     }
 
     onLayerAdd() {
-        console.log('onLayerAdd');
+        // console.log('onLayerAdd');
 
         this.setLayerOpacity();
         this.setLayerVisibility();
@@ -107,14 +104,15 @@ class Layer extends PureComponent {
     }
 
     setLayerOpacity() {
-        console.log('setLayerOpacity');
+        // console.log('setLayerOpacity');
 
         this.layer.setOpacity(this.props.opacity);
     }
 
-    // Set layer order using custom pages and z-index: http://leafletjs.com/examples/map-panes/
+    // Set layer order using custom panes and z-index: http://leafletjs.com/examples/map-panes/
     setLayerOrder() {
-        console.log('setLayerOrder');
+        // console.log('setLayerOrder');
+
         const { index } = this.props;
         const zIndex = 600 - (index * 10);
 
@@ -143,11 +141,12 @@ class Layer extends PureComponent {
         const layer = this.layer;
         const map = this.context.map;
 
-        console.log('removeLayer');
+        // console.log('removeLayer');
 
         if (map.hasLayer(layer)) {
             map.removeLayer(layer);
         }
+
         delete(this.layer);
         delete(this.pane);
         delete(this.labelPane);

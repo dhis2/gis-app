@@ -5,25 +5,24 @@ class FacilityLayer extends Layer {
 
     createLayer(callback) {
         const props = this.props;
-        const layer = props.layer;
-        const map = props.map;
+        const map = this.context.map;
 
         // Create layer config object
         const config = {
             type: 'markers',
-            pane: layer.id,
-            data: layer.data,
+            pane: props.id,
+            data: props.data,
             hoverLabel: '{label}',
         };
 
         // Labels and label style
-        if (layer.labels) {
+        if (props.labels) {
             config.label = '{name}';
             config.labelStyle = {
-                color: layer.labelFontColor,
-                fontSize: layer.labelFontSize,
-                fontStyle: layer.labelFontStyle,
-                fontWeight: layer.labelFontWeight,
+                color: props.labelFontColor,
+                fontSize: props.labelFontSize,
+                fontStyle: props.labelFontStyle,
+                fontWeight: props.labelFontWeight,
                 paddingTop: '10px'
             };
         }
@@ -34,26 +33,26 @@ class FacilityLayer extends Layer {
         }
 
         // Create and add area layer
-        if (layer.areaRadius) {
+        if (props.areaRadius) {
             this.areaInstance = map.addLayer({
                 type: 'circles',
-                radius: layer.areaRadius,
+                radius: props.areaRadius,
                 highlightStyle: false,
-                data: layer.data
+                data: props.data
             });
         }
 
         // Create and add facility layer based on config object
-        this.instance = map.createLayer(config).addTo(map);
+        this.layer = map.createLayer(config); // .addTo(map);
 
         // Handle facility click
-        this.instance.on('click', this.onFeatureClick, this);
-        this.instance.on('contextmenu', this.onFeatureRightClick, this);
+        this.layer.on('click', this.onFeatureClick, this);
+        this.layer.on('contextmenu', this.onFeatureRightClick, this);
 
         // Defined in parent class
         // this.onLayerAdd();
 
-        map.fitBounds(this.instance.getBounds()); // TODO: Do as action?
+        map.fitBounds(this.layer.getBounds()); // TODO: Do as action?
     }
 
     // Show pupup on facility click
@@ -74,7 +73,7 @@ class FacilityLayer extends Layer {
         L.popup()
             .setLatLng(evt.latlng)
             .setContent(content)
-            .openOn(this.props.map);
+            .openOn(this.context.map);
     };
 
     onFeatureRightClick(evt) {
@@ -82,21 +81,23 @@ class FacilityLayer extends Layer {
 
         const latlng = evt.latlng;
         const position = [evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y];
-        const layer = this.props.layer;
+        const propsr = this.props;
 
         this.props.openContextMenu({
             position,
             coordinate: [latlng[1], latlng[0]],
-            layerId: layer.id,
-            layerType: layer.type,
+            layerId: props.id,
+            layerType: props.type,
             feature: evt.layer.feature,
         });
     }
 
     // Remove layer istance (both facilities and areas)
     removeLayer() {
-        if (this.props.map.hasLayer(this.areaInstance)) {
-            this.props.map.removeLayer(this.areaInstance);
+        const map = this.context.map;
+
+        if (map.hasLayer(this.areaInstance)) {
+            map.removeLayer(this.areaInstance);
         }
         super.removeLayer();
     }

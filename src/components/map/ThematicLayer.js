@@ -4,10 +4,9 @@ class ThematicLayer extends Layer {
 
     createLayer(callback) {
         const props = this.props;
-        const layer = props.layer;
-        const map = props.map;
-        const valueFilter = layer.valueFilter || { gt: null, lt: null, };
-        let data = layer.data;
+        const valueFilter = props.valueFilter || { gt: null, lt: null, };
+        const map = this.context.map;
+        let data = props.data;
 
         // TODO: Move to separate file and reuse for data table
         if (valueFilter.gt !== null) {
@@ -20,33 +19,33 @@ class ThematicLayer extends Layer {
 
         const config = {
             type: 'choropleth',
-            pane: layer.id,
+            pane: props.id,
             data: data,
             // hoverLabel: '{name} ({value})'
         };
 
-        if (layer.labels) {
+        if (props.labels) {
             config.label = '{name}';
             config.labelStyle = {
-                fontSize: layer.labelFontSize,
-                fontStyle: layer.labelFontStyle
+                fontSize: props.labelFontSize,
+                fontStyle: props.labelFontStyle
             };
-            config.labelPane = layer.id + '-labels';
+            config.labelPane = props.id + '-labels';
         }
 
-        this.instance = map.createLayer(config).addTo(map);
+        this.layer = map.createLayer(config);
 
-        this.instance.on('click', this.onFeatureClick, this);
-        this.instance.on('contextmenu', this.onFeatureRightClick, this);
+        this.layer.on('click', this.onFeatureClick, this);
+        this.layer.on('contextmenu', this.onFeatureRightClick, this);
 
-        map.fitBounds(this.instance.getBounds()); // TODO: Do as action?
+        map.fitBounds(this.layer.getBounds()); // TODO: Do as action?
     }
 
     onFeatureClick(evt) {
+        const map = this.context.map;
         const props = this.props;
-        const layer = props.layer;
-        const indicator = layer.columns[0].items[0].name;
-        const period = layer.filters[0].items[0].name;
+        const indicator = props.columns[0].items[0].name;
+        const period = props.filters[0].items[0].name;
         const name = evt.layer.feature.properties.name;
         const value = evt.layer.feature.properties.value;
         const aggregationType = evt.layer.feature.properties.aggregationType;
@@ -55,7 +54,7 @@ class ThematicLayer extends Layer {
         L.popup()
             .setLatLng(evt.latlng)
             .setContent(content)
-            .openOn(props.map);
+            .openOn(map);
     }
 
     onFeatureRightClick(evt) {
@@ -63,24 +62,23 @@ class ThematicLayer extends Layer {
 
         const latlng = evt.latlng;
         const position = [evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y];
-        const layer = this.props.layer;
+        const props = this.props;
 
         this.props.openContextMenu({
             position,
             coordinate: [latlng.lng, latlng.lat],
-            layerId: layer.id,
-            layerType: layer.type,
+            layerId: props.id,
+            layerType: props.type,
             feature: evt.layer.feature,
         });
     }
 
     removeLayer() {
-        this.instance.off('click', this.onFeatureClick, this);
-        this.instance.off('contextmenu', this.onFeatureRightClick, this);
+        this.layer.off('click', this.onFeatureClick, this);
+        this.layer.off('contextmenu', this.onFeatureRightClick, this);
 
         super.removeLayer();
     }
-
 }
 
 export default ThematicLayer;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import d2map from 'gis-api/src/';
 import Layer from './Layer';
 import EventLayer from './EventLayer';
@@ -27,28 +27,41 @@ function getLayerForType(layer) {
 
 class Map extends Component {
 
+    static contextTypes = {
+        map: PropTypes.object,
+    };
+
     constructor(props, context) {
+        console.log('map constructor');
+
         super(props);
 
         this.map = context.map;
         this.map.on('contextmenu', this.onRightClick, this);
     }
 
-    // Append map container to DOM on mount
+    componentWillMount() {
+        console.log('map componentWillMount');
+    }
+
     componentDidMount() {
         const props = this.props;
-        const mapEl = ReactDOM.findDOMNode(this.refs.map);
 
-        mapEl.append(this.map.getContainer());
+        // Append map container to DOM
+        this.node.appendChild(this.map.getContainer());
 
         if (props.bounds) {
             this.map.fitBounds(props.bounds);
         } else if (props.latitude && props.longitude && props.zoom) {
             this.map.setView([props.latitude, props.longitude], props.zoom);
         }
+
+        console.log('map componentDidMount');
     }
 
     componentDidUpdate(prevProps) {
+        console.log('map componentDidUpdate');
+
         const props = this.props;
 
         // console.log('componentDidUpdate', props);
@@ -58,6 +71,12 @@ class Map extends Component {
         }
 
         this.map.invalidateSize();
+    }
+
+    // Remove map
+    componentWillUnmount() {
+        console.log('map componentWillUnmount');
+        this.map.remove();
     }
 
     showCoordinate(coord) {
@@ -95,7 +114,7 @@ class Map extends Component {
         };
 
         return (
-            <div ref="map" style={style}>
+            <div ref={node => this.node = node} style={style}>
                 {props.overlays.filter(layer => layer.isLoaded).map((layer, index) => {
                     const Overlay = getLayerForType(layer);
 
@@ -109,15 +128,11 @@ class Map extends Component {
                         />
                     )
                 })}
-                <Layer layer={basemap} key="basemap" map={this.map} />
+                <Layer {...basemap} key='basemap' />
             </div>
         )
     }
 }
-
-Map.contextTypes = {
-    map: PropTypes.object
-};
 
 export default Map;
 

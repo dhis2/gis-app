@@ -3,7 +3,6 @@ import isObject from 'd2-utilizr/lib/isObject';
 import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 
 export default function LayerHandlerFacility(gis, layer) {
-
 	const loadOrganisationUnitGroups = function (view) {
 		const url = gis.init.apiPath + 'organisationUnitGroupSets/' + view.organisationUnitGroupSet.id + '.json' + '?fields=organisationUnitGroups[id,' + gis.init.namePropertyUrl + ',symbol]';
 
@@ -40,7 +39,7 @@ export default function LayerHandlerFacility(gis, layer) {
 
 		const success = function(data) {
 			const indicator = view.organisationUnitGroupSet.id;
-			const orgUnitGroupSymbols = {};
+            const orgUnitGroupSymbols = {};
 
 			// Easier lookup of unit group symbols
             orgUnitGroups.forEach((group, index) => {
@@ -48,8 +47,7 @@ export default function LayerHandlerFacility(gis, layer) {
                     group.symbol = (21 + index) + '.png'; // Symbol 21-25 are coloured circles
                 }
 
-                // orgUnitGroupSymbols[group.name] = group.symbol; // Not safe to match on name
-                orgUnitGroupSymbols[group.id] = group.symbol;
+                orgUnitGroupSymbols[group.id] = group;
             });
 
 			const features = [];
@@ -59,17 +57,17 @@ export default function LayerHandlerFacility(gis, layer) {
                     const coord = JSON.parse(facility.co);
                     const group = facility.dimensions[indicator];
 
-					// console.log('orgUnitGroupSymbols', orgUnitGroupSymbols);
+					// console.log('group', orgUnitGroupSymbols[group]);
 
                     if (gis.util.map.isValidCoordinate(coord) && group) {
 
                         facility.icon = {
-                            iconUrl: gis.init.contextPath + '/images/orgunitgroup/' + orgUnitGroupSymbols[group],
+                            iconUrl: gis.init.contextPath + '/images/orgunitgroup/' + orgUnitGroupSymbols[group].symbol,
                             iconSize: [16, 16]
                         };
 
                         facility.name = facility.na;
-                        facility.label = facility.na + ' (' + group + ')';
+                        facility.label = facility.na + ' (' + orgUnitGroupSymbols[group].name + ')'; 
 
                         features.push({
                             type: 'Feature',
@@ -165,9 +163,11 @@ export default function LayerHandlerFacility(gis, layer) {
 		const attr = evt.layer.feature.properties;
 		let content = '<div class="leaflet-popup-orgunit"><em>' + attr.name + '</em>';
 
+		/*
 		if (isObject(attr.dimensions)) {
 			content += '<br/>' + GIS.i18n.groups + ': ' + Object.keys(attr.dimensions).map(id => attr.dimensions[id]).join(', ');
 		}
+		*/
 
 		if (attr.pn) {
 			content += '<br/>' + GIS.i18n.parent_unit + ': ' + attr.pn;

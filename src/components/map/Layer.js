@@ -29,21 +29,18 @@ class Layer extends PureComponent {
     }
 
     componentDidUpdate(prev) {
-        console.log('layer componentDidUpdate');
+        const { id, index, opacity, visible, editCounter } = this.props;
+        const map = this.context.map;
 
-        const { id, index, opacity, visible } = this.props;
-
-        // if (layer.editCounter !== prevLayer.editCounter || layer.config !== prevLayer.config) { // TODO
-
-        if (id !== prev.id) {
+        // Create new map if new id of editCounter is increased
+        if (id !== prev.id || editCounter !== prev.editCounter) {
             this.removeLayer();
             this.createLayer();
-            this.context.map.addLayer(this.layer);
+            map.addLayer(this.layer);
             this.onLayerAdd();
         }
 
-        // if (props.index !== undefined && prevLayer.index !== layer.index) {
-        if (index !== undefined) {
+        if (index !== undefined && index !== prev.index) {
             this.setLayerOrder();
         }
 
@@ -54,6 +51,8 @@ class Layer extends PureComponent {
         if (visible !== prev.visible) {
             this.setLayerVisibility();
         }
+
+        console.log('layer componentDidUpdate');
     }
 
     componentWillUnmount() {
@@ -93,7 +92,7 @@ class Layer extends PureComponent {
     }
 
     onLayerAdd() {
-        // console.log('onLayerAdd');
+        console.log('onLayerAdd');
 
         this.setLayerOpacity();
         this.setLayerVisibility();
@@ -104,7 +103,7 @@ class Layer extends PureComponent {
     }
 
     setLayerOpacity() {
-        // console.log('setLayerOpacity');
+        console.log('setLayerOpacity');
 
         this.layer.setOpacity(this.props.opacity);
     }

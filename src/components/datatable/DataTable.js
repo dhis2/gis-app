@@ -1,19 +1,10 @@
 import React, { Component } from 'react';
-import {findDOMNode} from 'react-dom';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import TextField from 'material-ui/TextField';
-import SearchIcon from 'material-ui/svg-icons/action/search';
-import FilterIcon from 'material-ui/svg-icons/content/filter-list';
-import FlatButton from 'material-ui/FlatButton';
-import DragIcon from 'material-ui/svg-icons/editor/drag-handle';
-import {Table, Column, Cell} from 'fixed-data-table';
-import { grey400, grey600 } from 'material-ui/styles/colors';
+import { Table, Column } from 'react-virtualized';
+import headerRenderer from './headerRenderer';
 
-import '../../../node_modules/fixed-data-table/dist/fixed-data-table.css'; // TODO: Which to load?
-
-// http://facebook.github.io/fixed-data-table/
+// Inspiration (custom filters): http://adazzle.github.io/react-data-grid/examples.html#/custom-filters
+// Filters: https://github.com/adazzle/react-data-grid/tree/master/packages/react-data-grid-addons/src/cells/headerCells/filters
 
 const styles = {
     resizeHandle: {
@@ -69,23 +60,7 @@ const styles = {
     },
 };
 
-const IndexCell = ({rowIndex, data, col, ...props}) => (
-    <Cell {...props} style={styles.rightAlign} className={data[rowIndex].isSelected ? 'selected' : ''}>
-        {rowIndex}
-    </Cell>
-);
 
-const NumberCell = ({rowIndex, data, col, ...props}) => (
-    <Cell {...props} style={styles.rightAlign} className={data[rowIndex].isSelected ? 'selected' : ''}>
-        {data[rowIndex][col]}
-    </Cell>
-);
-
-const TextCell = ({rowIndex, data, col, ...props}) => (
-    <Cell {...props} className={data[rowIndex].isSelected ? 'selected' : ''}>
-        {data[rowIndex][col]}
-    </Cell>
-);
 
 
 
@@ -128,10 +103,10 @@ class DataTable extends Component {
 
             // console.log(window.innerHeight - evt.pageY, el);
             /*
-            this.setState({
-                height: window.innerHeight - evt.pageY,
-            });
-            */
+             this.setState({
+             height: window.innerHeight - evt.pageY,
+             });
+             */
         }
     }
 
@@ -153,12 +128,15 @@ class DataTable extends Component {
         }
     }
 
-
     render() {
         const {overlayId, overlays, closeDataTable, selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits, ui} = this.props;
 
+
+
+
+
+
         if (overlayId) {
-            // document.getElementById('app').className = 'dhis-gis-data-table-visible'; // TODO: Do with redux state
 
             const overlay = overlays.filter(layer => layer.id === overlayId)[0];
             const valueFilter = overlay.valueFilter || { gt: null, lt: null, };
@@ -172,45 +150,10 @@ class DataTable extends Component {
                 data = data.filter(feature => feature.properties.value < valueFilter.lt);
             }
 
-            const actions = [
-                <FlatButton
-                    label="Close"
-                    primary={true}
-                    onTouchTap={closeDataTable}
-                />
-            ];
+            // Temp
+            data = data.map(d => d.properties);
 
-            const dataList = data.map(item => ({
-                id: item.id,
-                type: item.geometry.type,
-                name: item.properties.name,
-                value: item.properties.value,
-                color: item.properties.color,
-                level: item.properties.level,
-                parent: item.properties.parentName,
-                isSelected: item.isSelected || false,
-            }));
-
-            // Toggle row selection
-            const onRowClick = function(evt, index) {
-                const orgUnit = dataList[index];
-
-                if (!orgUnit.isSelected) {
-                    selectOrgUnit(overlayId, orgUnit.id);
-                } else {
-                    unselectOrgUnit(overlayId, orgUnit.id);
-                }
-            };
-
-            const onGreaterThanChange = function(evt, value) {
-                valueFilter.gt = (value !== '') ? Number(value) : null;
-                filterOrgUnits(overlayId, valueFilter);
-            };
-
-            const onLessThanChange = function(evt, value) {
-                valueFilter.lt = (value !== '') ? Number(value) : null;
-                filterOrgUnits(overlayId, valueFilter);
-            };
+            console.log('DATA!', data);
 
             const dataTableStyle = {
                 position: 'absolute',
@@ -223,122 +166,63 @@ class DataTable extends Component {
                 background: '#fff',
             };
 
+            // sortBy={sortBy}
+            // sortDirection={sortDirection}
+            // scrollToIndex={scrollToIndex}
+
             return (
-                <div ref="dhis-gis-data-table" style={dataTableStyle}>
-
-                    <div draggable={true} onDrag={(evt) => this.onDrag(evt)} onDragEnd={(evt) => this.onDragEnd(evt)} style={styles.resizeHandle} className="dhis-gis-resize-handle">
-                        <DragIcon color={grey400} />
-                    </div>
-
-                    <Toolbar style={styles.toolbar}>
-                        <ToolbarGroup>
-                            <ToolbarTitle style={styles.toolbarTitle} text="Data table" />
-                            <SearchIcon style={styles.icon} color={grey600} />
-                            <TextField
-                                floatingLabelText="Search"
-                                style={styles.field}
-                                inputStyle={styles.input}
-                                underlineStyle={styles.underline}
-                                floatingLabelStyle={styles.floatingLabel}
-                                floatingLabelShrinkStyle={styles.floatingLabelShrink}
-                            />
-                            <FilterIcon style={styles.icon} color={grey600} />
-                            <TextField
-                                type="number"
-                                floatingLabelText="Greater than"
-                                value={valueFilter.gt !== null ? valueFilter.gt : ''}
-                                onChange={onGreaterThanChange}
-                                style={styles.field}
-                                inputStyle={styles.input}
-                                underlineStyle={styles.underline}
-                                floatingLabelStyle={styles.floatingLabel}
-                                floatingLabelShrinkStyle={styles.floatingLabelShrink}
-                            />
-                            <TextField
-                                type="number"
-                                floatingLabelText="Lower than"
-                                value={valueFilter.lt !== null ? valueFilter.lt : ''}
-                                onChange={onLessThanChange}
-                                style={styles.field}
-                                inputStyle={styles.input}
-                                underlineStyle={styles.underline}
-                                floatingLabelStyle={styles.floatingLabel}
-                                floatingLabelShrinkStyle={styles.floatingLabelShrink}
-                            />
-                        </ToolbarGroup>
-                    </Toolbar>
+                <div style={dataTableStyle}>
                     <Table
-                        width={this.state.width}
-                        height={this.state.height - 40}
-                        rowHeight={24}
-                        headerHeight={24}
-                        rowsCount={dataList.length}
-                        onRowClick={onRowClick}
+                        className=''
+                        width={700}
+                        height={150}
+                        headerHeight={50}
+                        rowHeight={30}
+                        rowCount={data.length}
+                        rowGetter={({ index }) => data[index]}
+                        onRowClick={evt => console.log('row click')}
+                        sort={({ sortBy, sortDirection }) => console.log(sortBy, sortDirection)}
+                        useDynamicRowHeight={false}
                     >
                         <Column
-                            header={<Cell style={styles.rightAlign}>#</Cell>}
-                            cell={<IndexCell data={dataList} />}
-                            fixed={true}
-                            width={40}
+                            label='ID'
+                            dataKey='id'
+                            width={100}
+                            disableSort={true}
                         />
                         <Column
-                            header={<Cell>Name</Cell>}
-                            cell={<TextCell data={dataList} col="name" />}
-                            fixed={true}
-                            width={200}
+                            label='Name'
+                            dataKey='name'
+                            width={100}
+                            headerRenderer={({label}) => [
+                                <span key='label'>#{label}#</span>
+                            ]}
                         />
                         <Column
-                            header={<Cell style={styles.rightAlign}>Value</Cell>}
-                            cell={<NumberCell data={dataList} col="value" />}
+                            label='Value'
+                            dataKey='value'
                             width={100}
                         />
                         <Column
-                            header={<Cell>Level</Cell>}
-                            cell={<TextCell data={dataList} col="level" />}
-                            width={60}
+                            label='Level'
+                            dataKey='level'
+                            width={30}
                         />
                         <Column
-                            header={<Cell>Parent unit</Cell>}
-                            cell={<TextCell data={dataList} col="parent" />}
-                            width={200}
-                        />
-                        <Column
-                            header={<Cell>Id</Cell>}
-                            cell={<TextCell data={dataList} col="id" />}
+                            label='Parent'
+                            dataKey='parentName'
                             width={100}
                         />
-                        <Column
-                            header={<Cell>Color</Cell>}
-                            cell={<TextCell data={dataList} col="color" />}
-                            width={100}
-                        />
-                        <Column
-                            header={<Cell>Type</Cell>}
-                            cell={<TextCell data={dataList} col="type" />}
-                            width={120}
-                        />
-                        <Column
-                            header={<Cell>Ownership</Cell>}
-                            cell={<TextCell data={dataList} col="ownership" />}
-                            width={120}
-                        />
-                        <Column
-                            header={<Cell>Location</Cell>}
-                            cell={<TextCell data={dataList} col="location" />}
-                            width={120}
-                        />
+
                     </Table>
+
+
                 </div>
             );
         } else {
-            // document.getElementById('app').className = ''; // TODO: Do with redux state
             return null;
         }
-
     }
-
 }
-
-
 
 export default DataTable;

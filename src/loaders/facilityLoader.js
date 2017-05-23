@@ -56,14 +56,15 @@ const onDataLoad = (groupSet, facilities, layer, callback) => {
         if (!group.symbol) { // Add default symbol
             group.symbol = (21 + index) + '.png'; // Symbol 21-25 are coloured circles
         }
-        orgUnitGroupSymbols[group.name] = group.symbol;
+        orgUnitGroupSymbols[group.id] = group;
     });
 
     // Convert API response to GeoJSON features
     facilities.forEach(facility => {
         if (facility.ty === 1 && isObject(facility.dimensions)) { // Only add points belonging to an org.unit group
             const coord = JSON.parse(facility.co);
-            const group = facility.dimensions[indicator];
+            const id = facility.dimensions[indicator];
+            const group = orgUnitGroupSymbols[id];
 
             if (isValidCoordinate(coord) && group) {
                 features.push({
@@ -72,9 +73,9 @@ const onDataLoad = (groupSet, facilities, layer, callback) => {
                     properties: {
                         id: facility.id,
                         name: facility.na,
-                        label: facility.na + ' (' + group + ')',
+                        label: facility.na + ' (' + group.name + ')',
                         icon: {
-                            iconUrl: gis.init.contextPath + '/images/orgunitgroup/' + orgUnitGroupSymbols[group],
+                            iconUrl: gis.init.contextPath + '/images/orgunitgroup/' + group.symbol,
                             iconSize: [16, 16]
                         },
                     },

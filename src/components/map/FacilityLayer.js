@@ -92,7 +92,7 @@ class FacilityLayer extends Layer {
         });
     }
 
-    // Remove layer istance (both facilities and areas)
+    // Remove layer instance (both facilities and areas)
     removeLayer() {
         const map = this.context.map;
 

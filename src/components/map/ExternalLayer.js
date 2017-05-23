@@ -4,13 +4,12 @@ import isString from 'd2-utilizr/lib/isString';
 export default class ExternalLayer extends Layer {
     createLayer() {
         const props = this.props;
-        const layer = props.layer;
-        const config = layer.config;
-        const map = props.map;
+        const config = props.config;
+        const map = this.context.map;
 
         config.type = 'tileLayer'; // TODO: Should be part of config object
-        config.pane = layer.id;
+        config.pane = props.id;
 
-        this.instance = map.createLayer(config).addTo(map);
+        this.layer = map.createLayer(config);
     }
 }

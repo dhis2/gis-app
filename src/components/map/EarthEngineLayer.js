@@ -4,8 +4,7 @@ import { apiFetch } from '../../util/api';
 export default class EarthEngineLayer extends Layer {
     createLayer() {
         const props = this.props;
-        const layer = props.layer;
-        const map = props.map;
+        const map = this.context.map;
 
         /* TODO
          if (typeof view.config === 'string') { // From database as favorite
@@ -15,18 +14,18 @@ export default class EarthEngineLayer extends Layer {
 
         const config = {
             type: 'earthEngine',
-            pane: layer.id,
-            id: layer.datasetId,
-            band: layer.band,
-            mask: layer.mask,
-            attribution: layer.attribution,
-            filter: layer.filter,
-            methods: layer.methods,
-            aggregation: layer.aggregation,
+            pane: props.id,
+            id: props.datasetId,
+            band: props.band,
+            mask: props.mask,
+            attribution: props.attribution,
+            filter: props.filter,
+            methods: props.methods,
+            aggregation: props.aggregation,
         };
 
-        if (layer.params) {
-            config.params = layer.params;
+        if (props.params) {
+            config.params = props.params;
         }
 
         config.accessToken = (callback) => {
@@ -36,6 +35,6 @@ export default class EarthEngineLayer extends Layer {
                 .catch(error => console.log('parsing failed', error));
         };
 
-        this.instance = map.createLayer(config).addTo(map);
+        this.layer = map.createLayer(config);
     }
 }

@@ -4,14 +4,12 @@ export default class BoundaryLayer extends Layer {
 
     createLayer() {
         const props = this.props;
-        const layer = props.layer;
-        const data = layer.data;
-        const map = props.map;
+        const map = this.context.map;
 
         const config = {
             type: 'boundary',
-            pane: layer.id,
-            data: layer.data,
+            pane: props.id,
+            data: props.data,
             hoverLabel: '{name}',
             style: {
                 opacity: 1,
@@ -20,25 +18,24 @@ export default class BoundaryLayer extends Layer {
             },
         };
 
-        if (layer.labels) {
+        if (props.labels) {
             config.label = '{name}';
             config.labelStyle = {
-                fontSize: view.labelFontSize,
-                fontStyle: view.labelFontStyle
+                fontSize: props.labelFontSize,
+                fontStyle: props.labelFontStyle
             };
         }
 
-
-        if (layer.radiusLow) {
+        if (props.radiusLow) {
             config.style.radius = props.radiusLow;
         }
 
-        this.instance = map.createLayer(config).addTo(map);
+        this.layer = map.createLayer(config);
 
-        this.instance.on('click', this.onFeatureClick, this);
-        this.instance.on('contextmenu', this.onFeatureRightClick, this);
+        this.layer.on('click', this.onFeatureClick, this);
+        this.layer.on('contextmenu', this.onFeatureRightClick, this);
 
-        map.fitBounds(this.instance.getBounds()); // TODO: Do as action?
+        map.fitBounds(this.layer.getBounds()); // TODO: Do as action?
     }
 
     onFeatureClick(evt) {
@@ -58,7 +55,7 @@ export default class BoundaryLayer extends Layer {
         L.popup()
             .setLatLng(evt.latlng)
             .setContent(content)
-            .openOn(this.props.map);
+            .openOn(this.context.map);
     }
 
     onFeatureRightClick(evt) {
@@ -68,8 +65,8 @@ export default class BoundaryLayer extends Layer {
     }
 
     removeLayer() {
-        this.instance.off('click', this.onFeatureClick, this);
-        this.instance.off('contextmenu', this.onFeatureRightClick, this);
+        this.layer.off('click', this.onFeatureClick, this);
+        this.layer.off('contextmenu', this.onFeatureRightClick, this);
 
         super.removeLayer();
     }

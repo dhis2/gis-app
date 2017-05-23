@@ -67,7 +67,7 @@ export default function LayerHandlerFacility(gis, layer) {
                         };
 
                         facility.name = facility.na;
-                        facility.label = facility.na + ' (' + orgUnitGroupSymbols[group].name + ')'; 
+                        facility.label = facility.na + ' (' + orgUnitGroupSymbols[group].name + ')';
 
                         features.push({
                             type: 'Feature',

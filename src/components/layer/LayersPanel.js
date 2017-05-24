@@ -4,22 +4,13 @@ import Drawer from 'material-ui/Drawer';
 import IconButton from 'material-ui/IconButton';
 import CollapseIcon from 'material-ui/svg-icons/navigation/chevron-left';
 import ExpandIcon from 'material-ui/svg-icons/navigation/chevron-right';
+import { grey800 } from 'material-ui/styles/colors';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import Basemap from '../../containers/Basemap';
 import Overlay from '../../containers/Overlay';
-import { grey800 } from 'material-ui/styles/colors';
+import { HEADER_SIZE, LAYERS_PANEL_SIZE } from '../../constants/layout';
 
-const style = {
-    drawer: {
-        position: 'absolute',
-        top: 40,
-        height: 'auto',
-        bottom: 0,
-        backgroundColor: '#fafafa',
-        boxShadow: '0 3px 10px 0 rgba(0, 0, 0, 0.227451)',
-        zIndex: 1049,
-        overflow: 'visible',
-    },
+const styles = {
     collapse: { // Collapse button
         position: 'absolute',
         top: 8,
@@ -42,7 +33,6 @@ const style = {
     },
 };
 
-
 const SortableLayer = SortableElement(Overlay);
 
 const SortableLayersList = SortableContainer(({overlays, loadOverlayRequested, requestOverlayLoad, getOverlay}) => (
@@ -59,30 +49,59 @@ const SortableLayersList = SortableContainer(({overlays, loadOverlayRequested, r
     </div>
 ));
 
-
-// https://github.com/callemall/material-ui/issues/4752
-const LayersPanel = ({ basemap, basemaps, overlays, sortOverlays, ui, openLayersPanel, closeLayersPanel }) => {
+const LayersPanel = (props) => {
+    const {
+        basemap,
+        basemaps,
+        overlays,
+        sortOverlays,
+        layersPanelOpen,
+        openLayersPanel,
+        closeLayersPanel
+    } = props;
     const selectedBasemap = basemaps.filter(b => b.id === basemap.id)[0];
     let toggleButton;
 
-    if (ui.layersPanelOpen) {
-        toggleButton = (<IconButton onClick={closeLayersPanel} style={style.collapse} disableTouchRipple={true}>
+    if (layersPanelOpen) {
+        toggleButton = (<IconButton onClick={closeLayersPanel} style={styles.collapse} disableTouchRipple={true}>
             <CollapseIcon color={grey800} />
         </IconButton>);
     } else {
-        toggleButton = (<IconButton onClick={openLayersPanel} style={style.expand} disableTouchRipple={true}>
+        toggleButton = (<IconButton onClick={openLayersPanel} style={styles.expand} disableTouchRipple={true}>
             <ExpandIcon color={grey800} />
         </IconButton>);
     }
 
+    const style = {
+        position: 'absolute',
+        top: HEADER_SIZE,
+        height: 'auto',
+        bottom: 0,
+        backgroundColor: '#fafafa',
+        boxShadow: '0 3px 10px 0 rgba(0, 0, 0, 0.227451)',
+        zIndex: 1049,
+        overflow: 'visible',
+    };
+
     return (
-        <Drawer open={ui.layersPanelOpen} containerStyle={style.drawer} width={300}>
+        <Drawer
+            open={layersPanelOpen}
+            containerStyle={style}
+            width={LAYERS_PANEL_SIZE}
+        >
             {toggleButton}
-            <SortableLayersList overlays={overlays} onSortEnd={sortOverlays} useDragHandle={true} />
-            <Basemap {...selectedBasemap} {...basemap} basemaps={basemaps} />
+            <SortableLayersList
+                overlays={overlays}
+                onSortEnd={sortOverlays}
+                useDragHandle={true}
+            />
+            <Basemap
+                {...selectedBasemap}
+                {...basemap}
+                basemaps={basemaps}
+            />
         </Drawer>
     );
-}
-
+};
 
 export default LayersPanel;

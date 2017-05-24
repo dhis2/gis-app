@@ -8,7 +8,7 @@ const styles = {
     },
     layer: {
         float: 'left',
-        width: 120,
+        width: '41%',
         marginLeft: 16,
         cursor: 'pointer',
         boxSizing: 'border-box',
@@ -25,18 +25,20 @@ const styles = {
     imageContainer: {
         position: 'relative',
         height: 56,
-        width: 120,
+        width: '100%',
         marginTop: 4,
+        overflow: 'hidden',
     },
     image: {
         position: 'absolute',
         clip: 'rect(64px, 256px, 192px, 0)', // top, right, bottom, left
-        width: 120,
+        width: '100%',
         top: -64,
+
     },
 };
 
-const BasemapList = ({ id, basemaps, onBasemapSelect }) => (
+const BasemapList = ({ id, basemaps, selectBasemap }) => (
     <div style={styles.root}>
         {basemaps.map((basemap, index) => {
 
@@ -45,7 +47,7 @@ const BasemapList = ({ id, basemaps, onBasemapSelect }) => (
             }, styles.imageContainer);
 
             return (
-                <div key={`basemap-${index}`} style={styles.layer} onClick={() => onBasemapSelect(basemap.id)}>
+                <div key={`basemap-${index}`} style={styles.layer} onClick={() => selectBasemap(basemap.id)}>
                     <div style={borderStyle}>
                         <img src={basemap.img} style={styles.image} />
                     </div>
@@ -59,7 +61,7 @@ const BasemapList = ({ id, basemaps, onBasemapSelect }) => (
 BasemapList.propTypes = {
     id: PropTypes.string.isRequired,
     basemaps: PropTypes.array.isRequired,
-    onBasemapSelect: PropTypes.func.isRequired,
+    selectBasemap: PropTypes.func.isRequired,
 };
 
 export default BasemapList;

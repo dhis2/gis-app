@@ -7,14 +7,10 @@ const mapStateToProps = (state) => ({
     basemap: state.map.basemap,
     basemaps: state.basemaps,
     overlays: state.map.overlays,
-    ui: state.ui,
+    layersPanelOpen: state.ui.layersPanelOpen,
 });
 
-const mapDispatchToProps = ({
-    requestOverlayLoad,
-    sortOverlays,
-    openLayersPanel,
-    closeLayersPanel,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(LayersPanel);
+export default connect(
+    mapStateToProps,
+    { requestOverlayLoad, sortOverlays, openLayersPanel, closeLayersPanel, }
+)(LayersPanel);

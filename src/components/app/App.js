@@ -1,10 +1,10 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppMenu from './AppMenu';
+import AppMenu from '../../containers/AppMenu';
 import AddLayerDialog from '../../containers/AddLayerDialog';
 import FavoritesDialog from '../../containers/FavoritesDialog';
-import LayersList from '../../containers/LayersList';
+import LayersPanel from '../../containers/LayersPanel';
 import Map from '../../containers/Map';
 import DataTable from '../../containers/DataTable';
 import OverlayEdit from '../../containers/OverlayEdit';
@@ -23,7 +23,7 @@ const App = () => (
                 <AppMenu />
                 <AddLayerDialog />
                 <FavoritesDialog />
-                <LayersList />
+                <LayersPanel />
                 <Map />
                 <DataTable />
                 <OverlayEdit />

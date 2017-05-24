@@ -7,11 +7,7 @@ const mapStateToProps = (state) => ({
     basemaps: state.basemaps, // All basemaps
 });
 
-const mapDispatchToProps = ({
-    onExpandChange: toggleBasemapExpand,
-    onOpacityChange: changeBasemapOpacity,
-    onVisibilityChange: toggleBasemapVisibility,
-    onBasemapSelect: selectBasemap,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(BasemapCard);
+export default connect(
+    mapStateToProps,
+    { changeBasemapOpacity, toggleBasemapExpand, toggleBasemapVisibility, selectBasemap, }
+)(BasemapCard);

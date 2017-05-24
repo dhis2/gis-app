@@ -1,7 +1,5 @@
 import React from 'react';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import AddLayerButton from '../../containers/AddLayerButton';
-import FavoritesButton from '../../containers/FavoritesButton';
 import TableIcon from 'material-ui/svg-icons/image/grid-on';
 import ChartIcon from 'material-ui/svg-icons/editor/show-chart';
 import MapIcon from 'material-ui/svg-icons/maps/map';
@@ -24,19 +22,53 @@ const styles = {
     },
 };
 
-const AppMenu = () => (
-    <Toolbar style={styles.toolbar} className="dhis-gis-menu">
+const AppMenu = ({ openOverlaysDialog, openFavoritesDialog }) => (
+    <Toolbar
+        style={styles.toolbar}
+        className="dhis-gis-menu"
+    >
         <ToolbarGroup firstChild={true}>
-            <AddLayerButton />
-            <FavoritesButton />
-            <FlatButton label="Share" disabled={true} style={styles.button} />
+            <FlatButton
+                label="Add layer"
+                onTouchTap={openOverlaysDialog}
+                style={styles.button}
+            />
+            <FlatButton
+                label="Favorites"
+                onTouchTap={openFavoritesDialog}
+                style={styles.button}
+            />
+            <FlatButton
+                label="Share"
+                disabled={true}
+                style={styles.button}
+            />
         </ToolbarGroup>
         <ToolbarGroup lastChild={true} style={styles.lastToolbar}>
-            <FlatButton label="Table" icon={<TableIcon />} style={styles.button} labelStyle={styles.label} />
-            <FlatButton label="Chart" icon={<ChartIcon />} style={styles.button} />
-            <FlatButton label="Map" icon={<MapIcon />} style={styles.button} />
-            <FlatButton label="About" style={styles.button} />
-            <FlatButton label="Home" style={styles.button} />
+            <FlatButton
+                label="Table"
+                icon={<TableIcon />}
+                style={styles.button}
+                labelStyle={styles.label}
+            />
+            <FlatButton
+                label="Chart"
+                icon={<ChartIcon />}
+                style={styles.button}
+            />
+            <FlatButton
+                label="Map"
+                icon={<MapIcon />}
+                style={styles.button}
+            />
+            <FlatButton
+                label="About"
+                style={styles.button}
+            />
+            <FlatButton
+                label="Home"
+                style={styles.button}
+            />
         </ToolbarGroup>
     </Toolbar>
 );

@@ -7,6 +7,7 @@ import ThematicLayer from './ThematicLayer';
 import BoundaryLayer from './BoundaryLayer';
 import EarthEngineLayer from './EarthEngineLayer';
 import ExternalLayer from './ExternalLayer';
+import { isArray, isNumeric } from 'd2-utilizr';
 import { HEADER_SIZE, LAYERS_PANEL_SIZE, DATA_TABLE_SIZE } from '../../constants/layout';
 
 const layerType = {
@@ -34,9 +35,9 @@ class Map extends Component {
 
         this.node.appendChild(map.getContainer()); // Append map container to DOM
 
-        if (bounds) {
+        if (isArray(bounds)) {
             map.fitBounds(bounds);
-        } else if (latitude && longitude && zoom) {
+        } else if (isNumeric(latitude) && isNumeric(longitude) && isNumeric(zoom)) {
             map.setView([latitude, longitude], zoom);
         }
     }
@@ -48,7 +49,7 @@ class Map extends Component {
             this.showCoordinate(coordinatePopup);
         }
 
-        this.map.invalidateSize();
+        this.context.map.invalidateSize();
     }
 
     // Remove map
@@ -95,8 +96,8 @@ class Map extends Component {
             position: 'absolute',
             top: HEADER_SIZE,
             left: layersPanelOpen ? LAYERS_PANEL_SIZE : 0,
-            right: 0,
             bottom: dataTableOpen ? DATA_TABLE_SIZE : 0,
+            right: 0,
         };
 
         return (

@@ -4,8 +4,8 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
 import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
-import { grey600 } from 'material-ui/styles/colors';
 import Slider from 'material-ui/Slider';
+import { grey600 } from 'material-ui/styles/colors';
 
 import BasemapList from './BasemapList';
 
@@ -60,12 +60,12 @@ const styles = {
     }
 };
 
-const BasemapCard = props => (
+const BasemapCard = (props) => (
     <Card
         style={styles.root}
         containerStyle={styles.container}
         expanded={props.expanded}
-        onExpandChange={() => props.onExpandChange(props.id)}
+        onExpandChange={() => props.toggleBasemapExpand(props.id)}
     >
         <CardHeader
             title={props.title}
@@ -79,7 +79,7 @@ const BasemapCard = props => (
             }
             <IconButton
                 style={styles.visibility}
-                onClick={() => props.onVisibilityChange(props.id)}
+                onClick={() => props.toggleBasemapVisibility(props.id)}
                 tooltip="Toggle visibility">
                 {props.visible ? (
                     <ActionVisibilityIcon color={grey600} />
@@ -93,14 +93,14 @@ const BasemapCard = props => (
             <div style={styles.toolbar}>
                 <Slider
                     defaultValue={props.opacity}
-                    onChange={(evt, opacity) => props.onOpacityChange(opacity)}
+                    onChange={(evt, opacity) => props.changeBasemapOpacity(opacity)}
                     style={styles.sliderContainer}
                     sliderStyle={styles.slider}
                 />
             </div>
         </CardText>
     </Card>
-)
+);
 
 BasemapCard.propTypes= {
     id: PropTypes.string.isRequired,

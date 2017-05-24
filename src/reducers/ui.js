@@ -1,11 +1,11 @@
 import * as types from '../constants/actionTypes';
 
-// // http://stackoverflow.com/questions/35073669/window-resize-react-redux
 const defaultState = {
     width: typeof window === 'object' ? window.innerWidth : null,
     height: typeof window === 'object' ? window.innerHeight : null,
     layersPanelOpen: true,
     dataTableOpen: false,
+    dataTableSize: 200,
     overlaysDialogOpen: false,
     favoritesDialogOpen: false,
     mapContextMenu: true,

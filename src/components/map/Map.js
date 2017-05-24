@@ -8,7 +8,7 @@ import BoundaryLayer from './BoundaryLayer';
 import EarthEngineLayer from './EarthEngineLayer';
 import ExternalLayer from './ExternalLayer';
 import { isArray, isNumeric } from 'd2-utilizr';
-import { HEADER_SIZE, LAYERS_PANEL_SIZE, DATA_TABLE_SIZE } from '../../constants/layout';
+import { HEADER_SIZE, LAYERS_PANEL_SIZE } from '../../constants/layout';
 
 const layerType = {
     event:       EventLayer,
@@ -84,6 +84,7 @@ class Map extends Component {
             overlays,
             layersPanelOpen,
             dataTableOpen,
+            dataTableSize,
             openContextMenu
         } = this.props;
 
@@ -96,7 +97,7 @@ class Map extends Component {
             position: 'absolute',
             top: HEADER_SIZE,
             left: layersPanelOpen ? LAYERS_PANEL_SIZE : 0,
-            bottom: dataTableOpen ? DATA_TABLE_SIZE : 0,
+            bottom: dataTableOpen ? dataTableSize : 0,
             right: 0,
         };
 

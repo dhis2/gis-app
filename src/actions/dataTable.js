@@ -1,10 +1,10 @@
-import * as actionTypes from '../constants/actionTypes';
+import * as types from '../constants/actionTypes';
 
 export const openDataTable = (id) => ({
-    type: actionTypes.DATA_TABLE_OPEN_REQUESTED,
+    type: types.DATA_TABLE_OPEN_REQUESTED,
     id,
 });
 
 export const closeDataTable = () => ({
-    type: actionTypes.DATA_TABLE_CLOSE_REQUESTED,
+    type: types.DATA_TABLE_CLOSE_REQUESTED,
 });

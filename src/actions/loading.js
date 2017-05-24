@@ -1,13 +1,9 @@
-import * as actionTypes from '../constants/actionTypes';
+import * as types from '../constants/actionTypes';
 
-export function loading() {
-    return {
-        type: actionTypes.LOADING,
-    };
-}
+export const loading = () => ({
+    type: types.LOADING,
+});
 
-export function loaded() {
-    return {
-        type: actionTypes.LOADED,
-    };
-}
+export const loaded = () => ({
+    type: types.LOADED,
+});

@@ -1,14 +1,14 @@
-import * as actionTypes from '../constants/actionTypes';
+import * as types from '../constants/actionTypes';
 
 const orgUnit = (state = null, action) => {
     switch (action.type) {
 
-        case actionTypes.ORGANISATION_UNIT_OPEN:
+        case types.ORGANISATION_UNIT_OPEN:
             return {
                 ...action.payload,
             };
 
-        case actionTypes.ORGANISATION_UNIT_CLOSE:
+        case types.ORGANISATION_UNIT_CLOSE:
             return null;
 
         default:

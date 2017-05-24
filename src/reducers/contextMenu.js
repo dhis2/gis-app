@@ -1,12 +1,12 @@
-import * as actionTypes from '../constants/actionTypes';
+import * as types from '../constants/actionTypes';
 
 const contextMenu = (state = null, action) => {
     switch (action.type) {
 
-        case actionTypes.MAP_CONTEXT_MENU_OPEN:
+        case types.MAP_CONTEXT_MENU_OPEN:
             return action.payload;
 
-        case actionTypes.MAP_CONTEXT_MENU_CLOSE:
+        case types.MAP_CONTEXT_MENU_CLOSE:
             return null;
 
         default:

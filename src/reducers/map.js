@@ -1,4 +1,4 @@
-import * as actionTypes from '../constants/actionTypes';
+import * as types from '../constants/actionTypes';
 import {arrayMove} from 'react-sortable-hoc';
 
 const defaultState = {
@@ -18,7 +18,7 @@ const basemap = (state, action) => {
 
     switch (action.type) {
 
-        case actionTypes.BASEMAP_SELECTED:
+        case types.BASEMAP_SELECTED:
             if (state.id === action.id) { // No change
                 return state;
             }
@@ -28,19 +28,19 @@ const basemap = (state, action) => {
                 id: action.id,
             };
 
-        case actionTypes.BASEMAP_CHANGE_OPACITY:
+        case types.BASEMAP_CHANGE_OPACITY:
             return {
                 ...state,
                 opacity: action.opacity,
             };
 
-        case actionTypes.BASEMAP_TOGGLE_EXPAND:
+        case types.BASEMAP_TOGGLE_EXPAND:
             return {
                 ...state,
                 expanded: !state.expanded,
             };
 
-        case actionTypes.BASEMAP_TOGGLE_VISIBILITY:
+        case types.BASEMAP_TOGGLE_VISIBILITY:
             return {
                 ...state,
                 visible: !state.visible,
@@ -57,7 +57,7 @@ const overlay = (state, action) => {
 
     switch (action.type) {
 
-        case actionTypes.OVERLAY_LOAD_REQUESTED:
+        case types.OVERLAY_LOAD_REQUESTED:
             if (state.id !== action.id) {
                 return state;
             }
@@ -67,7 +67,7 @@ const overlay = (state, action) => {
                 isLoading: true,
             };
 
-        case actionTypes.OVERLAY_UPDATE:
+        case types.OVERLAY_UPDATE:
             if (state.id !== action.id) {
                 return state;
             }
@@ -76,7 +76,7 @@ const overlay = (state, action) => {
                 ...action.payload,
             };
 
-        case actionTypes.OVERLAY_CHANGE_OPACITY:
+        case types.OVERLAY_CHANGE_OPACITY:
             if (state.id !== action.id) {
                 return state;
             }
@@ -86,7 +86,7 @@ const overlay = (state, action) => {
                 opacity: action.opacity,
             };
 
-        case actionTypes.OVERLAY_TOGGLE_VISIBILITY:
+        case types.OVERLAY_TOGGLE_VISIBILITY:
             if (state.id !== action.id) {
                 return state;
             }
@@ -96,7 +96,7 @@ const overlay = (state, action) => {
                 visible: !state.visible,
             };
 
-        case actionTypes.OVERLAY_TOGGLE_EXPAND:
+        case types.OVERLAY_TOGGLE_EXPAND:
             if (state.id !== action.id) {
                 return state;
             }
@@ -106,9 +106,9 @@ const overlay = (state, action) => {
                 expanded: !state.expanded,
             };
 
-        case actionTypes.ORGANISATION_UNIT_SELECT:
-        case actionTypes.ORGANISATION_UNIT_UNSELECT:
-        case actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE:
+        case types.ORGANISATION_UNIT_SELECT:
+        case types.ORGANISATION_UNIT_UNSELECT:
+        case types.ORGANISATION_UNIT_COORDINATE_CHANGE:
             if (state.id !== action.layerId) {
                 return state;
             }
@@ -118,7 +118,7 @@ const overlay = (state, action) => {
                 data: state.data.map(l => orgUnit(l, action))
             };
 
-        case actionTypes.ORGANISATION_UNITS_FILTER:
+        case types.ORGANISATION_UNITS_FILTER:
             return {
                 ...state,
                 valueFilter: action.filter,
@@ -133,7 +133,7 @@ const overlay = (state, action) => {
 const orgUnit = (state, action) => {
 
     switch (action.type) {
-        case actionTypes.ORGANISATION_UNIT_SELECT:
+        case types.ORGANISATION_UNIT_SELECT:
             if (state.id !== action.featureId) {
                 return state;
             }
@@ -143,7 +143,7 @@ const orgUnit = (state, action) => {
                 isSelected: true,
             };
 
-        case actionTypes.ORGANISATION_UNIT_UNSELECT:
+        case types.ORGANISATION_UNIT_UNSELECT:
             if (state.id !== action.featureId) {
                 return state;
             }
@@ -153,7 +153,7 @@ const orgUnit = (state, action) => {
                 isSelected: false,
             };
 
-        case actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE:
+        case types.ORGANISATION_UNIT_COORDINATE_CHANGE:
             if (state.id !== action.featureId) {
                 return state;
             }
@@ -176,34 +176,34 @@ const orgUnit = (state, action) => {
 const map = (state = defaultState, action) => {
 
     switch (action.type) {
-        case actionTypes.MAP_SET:
+        case types.MAP_SET:
             return {
                 ...defaultState, // TODO: Not sure why needed
                 ...action.payload
             };
 
-        case actionTypes.MAP_COORDINATE_OPEN:
+        case types.MAP_COORDINATE_OPEN:
             return {
                 ...state,
                 coordinatePopup: action.payload,
             };
 
-        case actionTypes.MAP_COORDINATE_CLOSE:
+        case types.MAP_COORDINATE_CLOSE:
             return {
                 ...state,
                 coordinatePopup: null,
             };
 
-        case actionTypes.BASEMAP_SELECTED:
-        case actionTypes.BASEMAP_CHANGE_OPACITY:
-        case actionTypes.BASEMAP_TOGGLE_EXPAND:
-        case actionTypes.BASEMAP_TOGGLE_VISIBILITY:
+        case types.BASEMAP_SELECTED:
+        case types.BASEMAP_CHANGE_OPACITY:
+        case types.BASEMAP_TOGGLE_EXPAND:
+        case types.BASEMAP_TOGGLE_VISIBILITY:
             return {
                 ...state,
                 basemap: basemap(state.basemap, action),
             };
 
-        case actionTypes.OVERLAY_ADD:
+        case types.OVERLAY_ADD:
             return {
                 ...state,
                 overlays: [
@@ -212,38 +212,38 @@ const map = (state = defaultState, action) => {
                 ],
             };
 
-        case actionTypes.OVERLAY_ADD_DATA:
+        case types.OVERLAY_ADD_DATA:
             return {
                 ...state,
             };
 
-        case actionTypes.OVERLAY_LOAD:
+        case types.OVERLAY_LOAD:
             return {
                 ...state,
             };
 
-        case actionTypes.OVERLAY_REMOVE:
+        case types.OVERLAY_REMOVE:
             return {
                 ...state,
                 overlays: state.overlays.filter(overlay => overlay.id !== action.id)
             };
 
-        case actionTypes.OVERLAY_SORT:
+        case types.OVERLAY_SORT:
             return {
                 ...state,
                 overlays: arrayMove(state.overlays, action.oldIndex, action.newIndex)
             };
 
-        case actionTypes.OVERLAY_LOAD_REQUESTED:
-        case actionTypes.OVERLAY_UPDATE:
-        case actionTypes.OVERLAY_EDIT:
-        case actionTypes.OVERLAY_CHANGE_OPACITY:
-        case actionTypes.OVERLAY_TOGGLE_VISIBILITY:
-        case actionTypes.OVERLAY_TOGGLE_EXPAND:
-        case actionTypes.ORGANISATION_UNIT_SELECT:
-        case actionTypes.ORGANISATION_UNIT_UNSELECT:
-        case actionTypes.ORGANISATION_UNIT_COORDINATE_CHANGE:
-        case actionTypes.ORGANISATION_UNITS_FILTER:
+        case types.OVERLAY_LOAD_REQUESTED:
+        case types.OVERLAY_UPDATE:
+        case types.OVERLAY_EDIT:
+        case types.OVERLAY_CHANGE_OPACITY:
+        case types.OVERLAY_TOGGLE_VISIBILITY:
+        case types.OVERLAY_TOGGLE_EXPAND:
+        case types.ORGANISATION_UNIT_SELECT:
+        case types.ORGANISATION_UNIT_UNSELECT:
+        case types.ORGANISATION_UNIT_COORDINATE_CHANGE:
+        case types.ORGANISATION_UNITS_FILTER:
             return {
                 ...state,
                 overlays: state.overlays.map(l => overlay(l, action))

@@ -7,6 +7,7 @@ import ThematicLayer from './ThematicLayer';
 import BoundaryLayer from './BoundaryLayer';
 import EarthEngineLayer from './EarthEngineLayer';
 import ExternalLayer from './ExternalLayer';
+import { HEADER_SIZE, LAYERS_PANEL_SIZE, DATA_TABLE_SIZE } from '../../constants/layout';
 
 const layerType = {
     event:       EventLayer,
@@ -24,36 +25,27 @@ class Map extends Component {
     };
 
     componentWillMount() {
-        console.log('map componentWillMount');
-
-        this.map = this.context.map;
-        this.map.on('contextmenu', this.onRightClick, this);
+        this.context.map.on('contextmenu', this.onRightClick, this);
     }
 
     componentDidMount() {
-        const props = this.props;
+        const { bounds, latitude, longitude, zoom } = this.props;
+        const map = this.context.map;
 
-        // Append map container to DOM
-        this.node.appendChild(this.map.getContainer());
+        this.node.appendChild(map.getContainer()); // Append map container to DOM
 
-        if (props.bounds) {
-            this.map.fitBounds(props.bounds);
-        } else if (props.latitude && props.longitude && props.zoom) {
-            this.map.setView([props.latitude, props.longitude], props.zoom);
+        if (bounds) {
+            map.fitBounds(bounds);
+        } else if (latitude && longitude && zoom) {
+            map.setView([latitude, longitude], zoom);
         }
-
-        console.log('map componentDidMount');
     }
 
     componentDidUpdate(prevProps) {
-        console.log('map componentDidUpdate');
+        const { coordinatePopup } = this.props;
 
-        const props = this.props;
-
-        // console.log('componentDidUpdate', props);
-
-        if (props.coordinatePopup) {
-            this.showCoordinate(props.coordinatePopup);
+        if (coordinatePopup) {
+            this.showCoordinate(coordinatePopup);
         }
 
         this.map.invalidateSize();
@@ -61,8 +53,7 @@ class Map extends Component {
 
     // Remove map
     componentWillUnmount() {
-        console.log('map componentWillUnmount');
-        this.map.remove();
+        this.context.map.remove();
     }
 
     showCoordinate(coord) {
@@ -70,7 +61,7 @@ class Map extends Component {
             .setLatLng([coord[1], coord[0]])
             .setContent('Longitude: ' + coord[0].toFixed(6) + '<br />Latitude: ' + coord[1].toFixed(6))
             .on('remove', this.props.closeCoordinatePopup)
-            .openOn(this.map);
+            .openOn(this.context.map);
     }
 
     onRightClick(evt) {
@@ -86,23 +77,31 @@ class Map extends Component {
     }
 
     render() {
-        const props = this.props;
-        const basemap = {
-            ...props.basemaps.filter(b => b.id === props.basemap.id)[0],
-            ...props.basemap
-        };
-        const style = {
-            position: 'absolute',
-            top: 40,
-            left: props.ui.layersPanelOpen ? 300 : 0,
-            right: 0,
-            bottom: props.ui.dataTableOpen ? 200 : 0,
+        const {
+            basemap,
+            basemaps,
+            overlays,
+            layersPanelOpen,
+            dataTableOpen,
+            openContextMenu
+        } = this.props;
+
+        const basemapConfig = {
+            ...basemaps.filter(b => b.id === basemap.id)[0],
+            ...basemap
         };
 
+        const style = {
+            position: 'absolute',
+            top: HEADER_SIZE,
+            left: layersPanelOpen ? LAYERS_PANEL_SIZE : 0,
+            right: 0,
+            bottom: dataTableOpen ? DATA_TABLE_SIZE : 0,
+        };
 
         return (
             <div ref={node => this.node = node} style={style}>
-                {props.overlays.filter(layer => layer.isLoaded).map((layer, index) => {
+                {overlays.filter(layer => layer.isLoaded).map((layer, index) => {
                     const Overlay = layerType[layer.type] || Layer;
 
                     return (
@@ -110,15 +109,14 @@ class Map extends Component {
                             key={layer.id}
                             index={index}
                             {...layer}
-                            openContextMenu={props.openContextMenu}
+                            openContextMenu={openContextMenu}
                         />
                     )
                 })}
-                <Layer {...basemap} key='basemap' />
+                <Layer key='basemap' {...basemapConfig} />
             </div>
         )
     }
 }
 
 export default Map;
-

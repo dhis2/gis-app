@@ -37,6 +37,7 @@
     "d3-time-format": "^2.0.5",
     "dhis2-gis-api": "^27.0.1",
     "file-saver": "^1.3.3",
+    "lodash.debounce": "^4.0.8",
     "material-ui": "^0.18.0",
     "npm": "^4.5.0",
     "promise-polyfill": "6.0.2",

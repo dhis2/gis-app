@@ -1,6 +1,9 @@
-import * as actionTypes from '../constants/actionTypes';
+import * as types from '../constants/actionTypes';
 
+// // http://stackoverflow.com/questions/35073669/window-resize-react-redux
 const defaultState = {
+    width: typeof window === 'object' ? window.innerWidth : null,
+    height: typeof window === 'object' ? window.innerHeight : null,
     layersPanelOpen: true,
     dataTableOpen: false,
     overlaysDialogOpen: false,
@@ -11,13 +14,20 @@ const defaultState = {
 const ui = (state = defaultState, action) => {
     switch (action.type) {
 
-        case actionTypes.LAYERS_PANEL_OPEN_REQUESTED:
+        case types.SCREEN_RESIZE:
+            return {
+                ...state,
+                width: action.width,
+                height: action.height,
+            };
+
+        case types.LAYERS_PANEL_OPEN_REQUESTED:
             return {
                 ...state,
                 layersPanelOpen: true,
             };
 
-        case actionTypes.LAYERS_PANEL_CLOSE_REQUESTED:
+        case types.LAYERS_PANEL_CLOSE_REQUESTED:
             return {
                 ...state,
                 layersPanelOpen: false,
@@ -35,25 +45,25 @@ const ui = (state = defaultState, action) => {
                 dataTableOpen: false,
             };
 
-        case actionTypes.OVERLAYS_DIALOG_OPEN_REQUESTED:
+        case types.OVERLAYS_DIALOG_OPEN_REQUESTED:
             return {
                 ...state,
                 overlaysDialogOpen: true,
             };
 
-        case actionTypes.OVERLAYS_DIALOG_CLOSE_REQUESTED:
+        case types.OVERLAYS_DIALOG_CLOSE_REQUESTED:
             return {
                 ...state,
                 overlaysDialogOpen: false,
             };
 
-        case actionTypes.FAVORITES_DIALOG_OPEN_REQUESTED:
+        case types.FAVORITES_DIALOG_OPEN_REQUESTED:
             return {
                 ...state,
                 favoritesDialogOpen: true,
             };
 
-        case actionTypes.FAVORITES_DIALOG_CLOSE_REQUESTED:
+        case types.FAVORITES_DIALOG_CLOSE_REQUESTED:
             return {
                 ...state,
                 favoritesDialogOpen: false,

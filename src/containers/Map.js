@@ -5,12 +5,11 @@ import { openContextMenu, closeCoordinatePopup } from '../actions/map';
 const mapStateToProps = (state) => ({
     ...state.map,
     basemaps: state.basemaps,
-    ui: state.ui,
+    layersPanelOpen: state.ui.layersPanelOpen,
+    dataTableOpen: state.ui.dataTableOpen,
 });
 
-const mapDispatchToProps = ({
-    openContextMenu,
-    closeCoordinatePopup,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+export default connect(
+    mapStateToProps,
+    { openContextMenu, closeCoordinatePopup, }
+)(Map);

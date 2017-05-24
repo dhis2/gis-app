@@ -4,13 +4,13 @@ import TableIcon from 'material-ui/svg-icons/image/grid-on';
 import ChartIcon from 'material-ui/svg-icons/editor/show-chart';
 import MapIcon from 'material-ui/svg-icons/maps/map';
 import FlatButton from 'material-ui/FlatButton';
-import { HEADER_SIZE } from '../../constants/layout';
+import { HEADER_HEIGHT } from '../../constants/layout';
 
 const styles = {
     toolbar: {
         position: 'absolute',
         width: '100%',
-        height: HEADER_SIZE,
+        height: HEADER_HEIGHT,
         backgroundColor: 'rgb(39, 102, 150)',
         boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.227451)',
         zIndex: 1050,

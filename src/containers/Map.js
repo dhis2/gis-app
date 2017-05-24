@@ -7,7 +7,7 @@ const mapStateToProps = (state) => ({
     basemaps: state.basemaps,
     layersPanelOpen: state.ui.layersPanelOpen,
     dataTableOpen: state.ui.dataTableOpen,
-    dataTableSize: state.ui.dataTableSize,
+    dataTableHeight: state.ui.dataTableHeight,
 });
 
 export default connect(

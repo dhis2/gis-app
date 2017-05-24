@@ -5,7 +5,7 @@ const defaultState = {
     height: typeof window === 'object' ? window.innerHeight : null,
     layersPanelOpen: true,
     dataTableOpen: false,
-    dataTableSize: 200,
+    dataTableHeight: 200,
     overlaysDialogOpen: false,
     favoritesDialogOpen: false,
     mapContextMenu: true,
@@ -67,6 +67,12 @@ const ui = (state = defaultState, action) => {
             return {
                 ...state,
                 favoritesDialogOpen: false,
+            };
+
+        case types.DATA_TABLE_RESIZE:
+            return {
+                ...state,
+                dataTableHeight: action.height,
             };
 
         default:

@@ -8,7 +8,7 @@ import { grey800 } from 'material-ui/styles/colors';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import Basemap from '../../containers/Basemap';
 import Overlay from '../../containers/Overlay';
-import { HEADER_SIZE, LAYERS_PANEL_SIZE } from '../../constants/layout';
+import { HEADER_HEIGHT, LAYERS_PANEL_WIDTH } from '../../constants/layout';
 
 const styles = {
     collapse: { // Collapse button
@@ -74,7 +74,7 @@ const LayersPanel = (props) => {
 
     const style = {
         position: 'absolute',
-        top: HEADER_SIZE,
+        top: HEADER_HEIGHT,
         height: 'auto',
         bottom: 0,
         backgroundColor: '#fafafa',
@@ -87,7 +87,7 @@ const LayersPanel = (props) => {
         <Drawer
             open={layersPanelOpen}
             containerStyle={style}
-            width={LAYERS_PANEL_SIZE}
+            width={LAYERS_PANEL_WIDTH}
         >
             {toggleButton}
             <SortableLayersList

@@ -27,7 +27,6 @@ const styles = {
         background: '#fff',
         zIndex: 1500,
         cursor: '-webkit-grab',
-
     },
     dialog: {
         padding: 0,

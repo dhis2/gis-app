@@ -1,17 +1,19 @@
 import { connect } from 'react-redux';
 import DataTable from '../components/datatable/DataTable';
-import { closeDataTable } from '../actions/dataTable';
+import { closeDataTable, resizeDataTable } from '../actions/dataTable';
 import { selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits } from '../actions/orgUnit';
 
 const mapStateToProps = (state) => ({
     overlays: state.map.overlays, // TODO: Better to only pass overlay being edited?
     overlayId: state.dataTable,
-    dataTableSize: state.ui.dataTableSize,
-    width: state.ui.width,
+    dataTableOpen: state.ui.dataTableOpen,
+    dataTableHeight: state.ui.dataTableHeight,
     layersPanelOpen: state.ui.layersPanelOpen,
+    width: state.ui.width,
+    height: state.ui.height,
 });
 
 export default connect(
     mapStateToProps,
-    { closeDataTable, selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits }
+    { closeDataTable, resizeDataTable, selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits }
 )(DataTable);

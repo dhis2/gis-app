@@ -8,3 +8,8 @@ export const openDataTable = (id) => ({
 export const closeDataTable = () => ({
     type: types.DATA_TABLE_CLOSE_REQUESTED,
 });
+
+export const resizeDataTable = (height) => ({
+    type: types.DATA_TABLE_RESIZE,
+    height,
+});

@@ -6,7 +6,7 @@ import AddLayerDialog from '../../containers/AddLayerDialog';
 import FavoritesDialog from '../../containers/FavoritesDialog';
 import LayersPanel from '../../containers/LayersPanel';
 import Map from '../../containers/Map';
-import DataTable from '../../containers/DataTable';
+import BottomPanel from "../../containers/BottomPanel";
 import OverlayEdit from '../../containers/OverlayEdit';
 import ContextMenu from '../../containers/ContextMenu';
 import OrgUnitDialog from '../../containers/OrgUnitDialog';
@@ -25,7 +25,7 @@ const App = () => (
                 <FavoritesDialog />
                 <LayersPanel />
                 <Map />
-                <DataTable />
+                <BottomPanel />
                 <OverlayEdit />
                 <ContextMenu />
                 <OrgUnitDialog />

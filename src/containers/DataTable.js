@@ -9,12 +9,7 @@ const mapStateToProps = (state) => ({
     ui: state.ui,
 });
 
-const mapDispatchToProps = ({
-    closeDataTable,
-    selectOrgUnit,
-    unselectOrgUnit,
-    filterOrgUnits,
-    unfilterOrgUnits,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DataTable);
+export default connect(
+    mapStateToProps,
+    { closeDataTable, selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits }
+)(DataTable);

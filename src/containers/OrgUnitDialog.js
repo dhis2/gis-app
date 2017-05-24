@@ -6,8 +6,7 @@ const mapStateToProps = state => ({
     ...state.orgUnit
 });
 
-const mapDispatchToProps = ({
-    onClose: closeOrgUnit,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OrgUnitDialog);
+export default connect(
+    mapStateToProps,
+    { closeOrgUnit, }
+)(OrgUnitDialog);

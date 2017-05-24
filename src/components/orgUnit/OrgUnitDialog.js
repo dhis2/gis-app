@@ -187,7 +187,7 @@ const showInfo = function(att) {
         modal: true,
         items: [orgUnitInfo, orgUnitForm],
         listeners: {
-            close: att.onClose
+            close: att.closeOrgUnit
         }
     });
 

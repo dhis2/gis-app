@@ -6,8 +6,7 @@ const mapStateToProps = (state) => ({
     layer: state.editOverlay,
 });
 
-const mapDispatchToProps = ({
-    getOverlay: getOverlay,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(OverlayEdit);
+export default connect(
+    mapStateToProps,
+    { getOverlay, }
+)(OverlayEdit);

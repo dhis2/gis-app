@@ -8,8 +8,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    onClose: () => dispatch(closeFavoritesDialog()),
-    onFavoriteSelect: id => {
+    closeFavoritesDialog,
+    onFavoriteSelect: (id) => {
         dispatch(closeFavoritesDialog());
         dispatch(getFavorite(id));
     },

@@ -6,9 +6,7 @@ const mapStateToProps = state => ({
     ...state.relocate
 });
 
-const mapDispatchToProps = ({
-    changeOrgUnitCoordinate,
-    stopRelocateOrgUnit,
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(RelocateDialog);
+export default connect(
+    mapStateToProps,
+    { changeOrgUnitCoordinate, stopRelocateOrgUnit, }
+)(RelocateDialog);

@@ -5,7 +5,6 @@ import IconButton from 'material-ui/IconButton';
 import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
 import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
 import { grey600 } from 'material-ui/styles/colors';
-
 import SortableHandle from './SortableHandle';
 import LayerToolbar from './LayerToolbar';
 import Legend from '../legend/Legend';
@@ -47,33 +46,47 @@ const styles = {
 };
 
 const OverlayCard = (props) => {
-    const layer = props.layer;
+    const {
+        layer,
+        editOverlay,
+        removeOverlay,
+        changeOverlayOpacity,
+        toggleOverlayExpand,
+        toggleOverlayVisibility,
+        openDataTable,
+    } = props;
+
+    const {
+        id,
+        title,
+        subtitle,
+        expanded,
+        visible,
+        legend,
+    } = layer;
 
     return (
         <Card
             style={styles.root}
             containerStyle={styles.container}
-            expanded={layer.expanded}
-            onExpandChange={() => props.onExpandChange(layer.id)}
+            expanded={expanded}
+            onExpandChange={() => toggleOverlayExpand(id)}
         >
             <CardHeader
-                title={layer.title}
-                subtitle={layer.subtitle}
+                title={title}
+                subtitle={subtitle}
                 // actAsExpander={true}  // Not able to stop event bubbling for visibility icon
                 showExpandableButton={true}
                 style={{
                     ...styles.header,
-                    paddingLeft: props.basemap ? 14 : 34
+                    paddingLeft: 34
                 }}
                 textStyle={styles.headerText}>
-                {!props.basemap &&
-                    <SortableHandle color={grey600} />
-                }
                 <IconButton
                     style={styles.visibility}
-                    onClick={() => props.onVisibilityChange(layer.id)}
+                    onClick={() => toggleOverlayVisibility(id)}
                     tooltip="Toggle visibility">
-                    {layer.visible ? (
+                    {visible ? (
                         <ActionVisibilityIcon color={grey600} />
                     ) : (
                         <ActionVisibilityOffIcon color={grey600} />
@@ -81,33 +94,27 @@ const OverlayCard = (props) => {
                 </IconButton>
             </CardHeader>
             <CardText expandable={true} style={styles.body}>
-                {layer.legend &&
+                {legend &&
                 <Legend
-                    {...layer.legend}
+                    {...legend}
                     style={styles.legend}
                 />
                 }
-                {props.basemap &&
-                <Basemaps id={layer.id} />
-                }
                 <LayerToolbar
                     layer={layer}
-                    onEdit={!props.basemap ? () => props.onEdit(layer) : null}
-                    onDataTableShow={!props.basemap ? props.onDataTableShow : null}
-                    onOpacityChange={props.onOpacityChange}
-                    onRemove={!props.basemap ? () => props.onRemove(layer.id) : null}
+                    onEdit={() => editOverlay(layer)}
+                    onDataTableShow={openDataTable}
+                    onOpacityChange={changeOverlayOpacity}
+                    onRemove={() => removeOverlay(id)}
                 />
             </CardText>
         </Card>
     )
-
 };
 
 OverlayCard.propTypes= {
     layer: PropTypes.object,
 };
-
-
 
 /*
 OverlayCard.propTypes= {

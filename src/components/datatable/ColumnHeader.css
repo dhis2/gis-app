@@ -1,4 +1,17 @@
-.ColumnHeader span {
-    display: block;
-    padding: 5px 0;
+.ColumnHeader {
+    position: relative;
+    top: -22px;
+}
+
+.ColumnHeader-label {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    user-select: none;
+}
+
+.ColumnHeader svg {
+    position: absolute;
+    top: 5px;
+    right: 0;
 }

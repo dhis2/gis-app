@@ -1,13 +1,15 @@
 import React from 'react';
-import InputField from './InputField';
+import FilterInput from './FilterInput';
 import './ColumnHeader.css';
+import { SortIndicator } from 'react-virtualized';
 
-const ColumnHeader = ({ type, label }) => (
+// Replacement for https://github.com/bvaughn/react-virtualized/blob/master/source/Table/defaultHeaderRenderer.js
+
+const ColumnHeader = ({ columnData, dataKey, label, sortBy, sortDirection }) => (
     <div className="ColumnHeader">
-        <span>{label}</span>
-        <InputField
-            type={type}
-        />
+        <span className="ColumnHeader-label">{label}</span>
+        {sortBy === dataKey ? <SortIndicator className="AAA" sortDirection={sortDirection} /> : null}
+        <FilterInput type='string' />
     </div>
 );
 

@@ -26,6 +26,6 @@
     background-color: #fafafa;
 }
 
-.ReactVirtualized__Table__rowColumn .right {
+.ReactVirtualized__Table__rowColumn.right {
     text-align: right;
 }

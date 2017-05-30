@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DragIcon from 'material-ui/svg-icons/editor/drag-handle';
 import { grey400 } from 'material-ui/styles/colors';
+import './ResizeHandle.css';
 
 const ResizeHandle = ({ onResize, onResizeEnd, minHeight, maxHeight }) => {
 
@@ -36,11 +37,11 @@ const ResizeHandle = ({ onResize, onResizeEnd, minHeight, maxHeight }) => {
 
     return (
         <div
+            className='ResizeHandle'
             draggable={true}
             onDragStart={(evt) => onDragStart(evt)}
             onDrag={(evt) => onDrag(evt)}
             onDragEnd={(evt) => onDragEnd(evt)}
-            className='dhis-gis-resize-handle'
         >
             <DragIcon color={grey400} />
         </div>

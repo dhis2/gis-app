@@ -1,4 +1,4 @@
-import React, { Component, Children } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppMenu from '../../containers/AppMenu';

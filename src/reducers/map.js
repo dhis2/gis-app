@@ -53,8 +53,8 @@ const basemap = (state, action) => {
 };
 
 
-const overlay = (state, action) => {
 
+const overlay = (state, action) => {
     switch (action.type) {
 
         case types.OVERLAY_LOAD_REQUESTED:
@@ -118,11 +118,26 @@ const overlay = (state, action) => {
                 data: state.data.map(l => orgUnit(l, action))
             };
 
-        case types.ORGANISATION_UNITS_FILTER:
+        // Add/change filter
+        case types.DATA_FILTER_SET:
             return {
                 ...state,
-                valueFilter: action.filter,
+                dataFilters: {
+                    ...state.dataFilters,
+                    [action.fieldId]: action.filter,
+                }
             };
+
+        // Remove field from filter
+        case types.DATA_FILTER_CLEAR:
+            const filters = { ...state.dataFilters };
+            delete (filters[action.fieldId]);
+
+            return {
+                ...state,
+                dataFilters: filters,
+            };
+
 
         default:
             return state;
@@ -244,6 +259,8 @@ const map = (state = defaultState, action) => {
         case types.ORGANISATION_UNIT_UNSELECT:
         case types.ORGANISATION_UNIT_COORDINATE_CHANGE:
         case types.ORGANISATION_UNITS_FILTER:
+        case types.DATA_FILTER_SET:
+        case types.DATA_FILTER_CLEAR:
             return {
                 ...state,
                 overlays: state.overlays.map(l => overlay(l, action))

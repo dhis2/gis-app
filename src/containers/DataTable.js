@@ -1,15 +1,24 @@
 import { connect } from 'react-redux';
 import DataTable from '../components/datatable/DataTable';
-import { selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits } from '../actions/orgUnit';
+import { selectOrgUnit, unselectOrgUnit } from '../actions/orgUnit';
+import { setDataFilter, clearDataFilter } from '../actions/dataFilters';
+import { filterData } from '../util/filter';
 
 const mapStateToProps = (state) => {
     const overlay = state.dataTable ? state.map.overlays.filter(layer => layer.id === state.dataTable)[0] : null;
 
     if (overlay) {
-        return {
-            data: overlay.data,
-            valueFilter: overlay.valueFilter, // TODO: Allow filter across all columns
-        }
+        const data = filterData(overlay.data.map((d, i) => ({
+            ...d.properties,
+            index: i,
+            type: d.geometry.type,
+        })), overlay.dataFilters);
+
+        // const data = filterData(overlay.data, overlay.dataFilters);
+
+        // console.log('###########', data);
+
+        return { data };
     }
 
     return null;
@@ -17,5 +26,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
     mapStateToProps,
-    { selectOrgUnit, unselectOrgUnit, filterOrgUnits, unfilterOrgUnits }
+    { selectOrgUnit, unselectOrgUnit, setDataFilter, clearDataFilter }
 )(DataTable);

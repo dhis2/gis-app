@@ -19,6 +19,7 @@ function parseOverlay(layer, callback) {
     layer.isLoaded = true;
     layer.expanded = true;
     layer.visible = true;
+    layer.dataFilters = layer.dataFilters || {}; // TODO: Get from Web API?
 
     callback(layer);
 }
@@ -38,6 +39,3 @@ export function fetchOverlay(layer) {
         }
     });
 }
-
-
-

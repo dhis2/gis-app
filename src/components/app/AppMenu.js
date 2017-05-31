@@ -46,22 +46,6 @@ const AppMenu = ({ openOverlaysDialog, openFavoritesDialog }) => (
         </ToolbarGroup>
         <ToolbarGroup lastChild={true} style={styles.lastToolbar}>
             <FlatButton
-                label="Table"
-                icon={<TableIcon />}
-                style={styles.button}
-                labelStyle={styles.label}
-            />
-            <FlatButton
-                label="Chart"
-                icon={<ChartIcon />}
-                style={styles.button}
-            />
-            <FlatButton
-                label="Map"
-                icon={<MapIcon />}
-                style={styles.button}
-            />
-            <FlatButton
                 label="About"
                 style={styles.button}
             />

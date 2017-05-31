@@ -14,26 +14,17 @@ class DataTable extends Component {
         const sortBy = 'index';
         const sortDirection = 'ASC';
 
-        // Transform from GeoJSON to table format
-        // TODO: What happens if data changes outside the component?
-        const data = props.data.map((d, i) => {
-            return {
-                ...d.properties,
-                index: i,
-                type: d.geometry.type,
-            };
-        });
-
         this.state = {
             sortBy: sortBy,
             sortDirection: sortDirection,
-            data: this.sort(data, sortBy, sortDirection),
+            data: this.sort(props.data, sortBy, sortDirection),
         };
     }
 
     render() {
-        const { width, height } = this.props;
-        const { data, sortBy, sortDirection } = this.state;
+        const { width, height, data } = this.props;
+        const { sortBy, sortDirection } = this.state;
+        const sortedData = this.sort(data, sortBy, sortDirection);
 
         return (
             <Table
@@ -42,8 +33,8 @@ class DataTable extends Component {
                 height={height}
                 headerHeight={48}
                 rowHeight={32}
-                rowCount={data.length}
-                rowGetter={({ index }) => data[index]}
+                rowCount={sortedData.length}
+                rowGetter={({ index }) => sortedData[index]}
                 onRowClick={evt => console.log('row click')}
                 sort={({ sortBy, sortDirection }) => this.onSort(sortBy, sortDirection) }
                 sortBy={sortBy}
@@ -56,101 +47,57 @@ class DataTable extends Component {
                         ({ columnData, dataKey, rowData }) => rowData.index
                     }
                     dataKey='index'
-                    label="Index"
+                    label='Index'
                     width={72}
                     className='right'
-                    headerRenderer={ColumnHeader}
+                    headerRenderer={(props) => <ColumnHeader type='string' {...props}  />}
                 />
                 <Column
                     dataKey='name'
+                    label='Name'
                     width={100}
-                    headerRenderer={() =>
-                        <ColumnHeader
-                            type='string'
-                            label='Name'
-                        />
-                    }
+                    headerRenderer={(props) => <ColumnHeader type='string' {...props}  />}
                 />
                 <Column
                     dataKey='value'
+                    label='Value'
                     width={72}
                     className='right'
-                    headerRenderer={() =>
-                        <ColumnHeader
-                            type='number'
-                            label='Value'
-                        />
-                    }
+                    headerRenderer={(props) => <ColumnHeader type='number' {...props}  />}
                 />
                 <Column
                     dataKey='level'
+                    label='Level'
                     width={72}
                     className='right'
-                    headerRenderer={() =>
-                        <ColumnHeader
-                            type='number'
-                            label='Level'
-                        />
-                    }
+                    headerRenderer={(props) => <ColumnHeader type='number' {...props}  />}
                 />
                 <Column
                     dataKey='parentName'
+                    label='Parent'
                     width={100}
-                    headerRenderer={() =>
-                        <ColumnHeader
-                            type='string'
-                            label='Parent'
-                        />
-                    }
+                    headerRenderer={(props) => <ColumnHeader type='string' {...props}  />}
                 />
                 <Column
                     dataKey='id'
+                    label='ID'
                     width={100}
-                    headerRenderer={() =>
-                        <ColumnHeader
-                            type='string'
-                            label='ID'
-                        />
-                    }
+                    headerRenderer={(props) => <ColumnHeader type='string' {...props}  />}
                 />
                 <Column
                     dataKey='type'
+                    label='Type'
                     width={100}
-                    headerRenderer={() =>
-                        <ColumnHeader
-                            type='string'
-                            label='Type'
-                        />
-                    }
+                    headerRenderer={(props) => <ColumnHeader type='string' {...props}  />}
                 />
                 <Column
                     dataKey='color'
+                    label='Color'
                     width={100}
-                    headerRenderer={() =>
-                        <ColumnHeader
-                            type='string'
-                            label='Color'
-                        />
-                    }
+                    headerRenderer={(props) => <ColumnHeader type='string' {...props}  />}
                 />
             </Table>
         );
-    }
-
-    filter() {
-        /*
-         const valueFilter = overlay.valueFilter || { gt: null, lt: null, };
-         let data = overlay.data;
-
-         if (valueFilter.gt !== null) {
-         data = data.filter(feature => feature.properties.value > valueFilter.gt);
-         }
-
-         if (valueFilter.lt !== null) {
-         data = data.filter(feature => feature.properties.value < valueFilter.lt);
-         }
-
-         */
     }
 
     onSort(sortBy, sortDirection) {

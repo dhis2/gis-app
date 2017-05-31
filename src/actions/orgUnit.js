@@ -22,16 +22,17 @@ export const unselectOrgUnit = (layerId, featureId) => ({
     featureId,
 });
 
-export const filterOrgUnits = (layerId, filter) => ({
-    type: types.ORGANISATION_UNITS_FILTER,
+export const setOrgUnitsFilter = (layerId, fieldId, filter) => ({
+    type: types.ORGANISATION_UNITS_FILTER_SET,
     layerId,
+    fieldId,
     filter,
 });
 
-export const unfilterOrgUnits = (layerId, filter) => ({
-    type: types.ORGANISATION_UNITS_UNFILTER,
+export const clearOrgUnitsFilter = (layerId, fieldId) => ({
+    type: types.ORGANISATION_UNITS_FILTER_CLEAR,
     layerId,
-    filter,
+    fieldId,
 });
 
 export const startRelocateOrgUnit = (layerId, feature) => ({

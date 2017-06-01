@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Table, Column } from 'react-virtualized';
 import ColumnHeader from './ColumnHeader';
+import ColorCell from './ColorCell';
 import './DataTable.css';
 
 // Using react component to keep sorting state, which is only used within the data table.
@@ -95,6 +96,7 @@ class DataTable extends Component {
                     label='Color'
                     width={100}
                     headerRenderer={(props) => <ColumnHeader type='string' {...props}  />}
+                    cellRenderer={ColorCell}
                 />
             </Table>
         );

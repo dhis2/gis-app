@@ -7,7 +7,7 @@ import { SortIndicator } from 'react-virtualized';
 
 const ColumnHeader = ({ columnData, dataKey, label, type, sortBy, sortDirection }) => (
     <div className='ColumnHeader'>
-        <span className='ColumnHeader-label'>{label}</span>
+        <span className='ColumnHeader-label' title={label}>{label}</span>
         {sortBy === dataKey ? <SortIndicator sortDirection={sortDirection} /> : null}
         <FilterInput
             type={type}

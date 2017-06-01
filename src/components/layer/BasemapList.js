@@ -8,7 +8,7 @@ const styles = {
     },
     layer: {
         float: 'left',
-        width: '41%',
+        width: 120,
         marginLeft: 16,
         cursor: 'pointer',
         boxSizing: 'border-box',

@@ -25,6 +25,8 @@ function parseOverlay(layer, callback) {
 }
 
 export function fetchOverlay(layer) {
+    console.log('fetch', layer);
+
     return new Promise((resolve, reject) => {
         const Loader = layerType[layer.type];
 

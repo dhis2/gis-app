@@ -108,10 +108,10 @@ class Map extends Component {
 
                     return (
                         <Overlay
-                            {...layer}
                             key={layer.id}
                             index={index}
                             openContextMenu={openContextMenu}
+                            {...layer}
                         />
                     )
                 })}

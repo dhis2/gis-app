@@ -985,7 +985,7 @@ export default function getInstance(init) {
 
                 layout.dataDimensionItems = config.dataDimensionItems;
 
-                layout.key = config.key; // Earth Engine layer
+                // layout.key = config.key; // Earth Engine layer - TODO: Conflict with react key
 
                 if (config.config) { // JSON string config for Earth Engine layer
                     layout.config = config.config;

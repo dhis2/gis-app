@@ -25,8 +25,6 @@ class ThematicLayer extends Layer {
             // hoverLabel: '{name} ({value})'
         };
 
-        console.log('pane', props.id);
-
         if (props.labels) {
             config.label = '{name}';
             config.labelStyle = {
@@ -35,8 +33,6 @@ class ThematicLayer extends Layer {
             };
             config.labelPane = props.id + '-labels';
         }
-
-        console.log('config', config);
 
         this.layer = map.createLayer(config);
 

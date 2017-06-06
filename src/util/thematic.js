@@ -1,7 +1,7 @@
 // Utils for thematic mapping
 
 // Classify data
-export function classify(features, values, options) {
+export function classify(features, values, options, legend) {
     const method = options.method;
     let bounds = [];
     let colors = [];
@@ -54,13 +54,16 @@ export function classify(features, values, options) {
     }
 
     if (bounds.length) {
-        for (let i = 0, prop, value, classNumber; i < features.length; i++) {
+        for (let i = 0, prop, value, classNumber, legendItem; i < features.length; i++) {
             prop = features[i].properties;
             value = prop[options.indicator];
             classNumber = getClass(value, bounds);
+            legendItem = legend.items[classNumber - 1];
 
             prop.color = options.colors[classNumber - 1];
             prop.radius = (value - options.minValue) / (options.maxValue - options.minValue) * (options.maxSize - options.minSize) + options.minSize;
+            prop.legend = legendItem.name;
+            prop.range = legendItem.range.replace(/ *\([^)]*\) */g, ''); // Remove count in brackets
 
             // Count features in each class
             if (!options.count[classNumber]) {

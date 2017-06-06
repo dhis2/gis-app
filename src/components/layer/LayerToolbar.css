@@ -1,0 +1,11 @@
+.LayerToolbar {
+    background-color: #eee;
+    height: 32px;
+    padding-left: 7px;
+}
+
+.LayerToolbar-slider {
+    float: left;
+    width: 100px;
+    margin-bottom: 0;
+}

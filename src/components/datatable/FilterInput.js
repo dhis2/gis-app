@@ -21,7 +21,7 @@ const FilterInput = (props) => {
     return (
         <input
             className='FilterInput'
-            placeholder={type === 'number' ? '3,5-15,>20' : 'Search'} // TODO: Support more field types
+            placeholder={type === 'number' ? '2,>3&<8' : 'Search'} // TODO: Support more field types
             value={filterValue}
             onClick={evt => evt.stopPropagation()}
             onChange={onChange}

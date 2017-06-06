@@ -1,12 +1,12 @@
 .ColumnHeader {
     position: relative;
-    top: -22px;
 }
 
 .ColumnHeader-label {
+    display: inline-block;
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 7px;
+    left: 0;
     right: 15px;
     user-select: none;
     overflow: hidden;

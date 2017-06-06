@@ -60,8 +60,8 @@ const OverlayCard = (props) => {
         id,
         title,
         subtitle,
-        expanded,
-        visible,
+        isExpanded,
+        isVisible,
         legend,
     } = layer;
 
@@ -69,24 +69,25 @@ const OverlayCard = (props) => {
         <Card
             style={styles.root}
             containerStyle={styles.container}
-            expanded={expanded}
+            expanded={isExpanded}
             onExpandChange={() => toggleOverlayExpand(id)}
         >
             <CardHeader
                 title={title}
                 subtitle={subtitle}
-                // actAsExpander={true}  // Not able to stop event bubbling for visibility icon
                 showExpandableButton={true}
                 style={{
                     ...styles.header,
                     paddingLeft: 34
                 }}
-                textStyle={styles.headerText}>
+                textStyle={styles.headerText}
+            >
+                <SortableHandle color={grey600} />
                 <IconButton
                     style={styles.visibility}
                     onClick={() => toggleOverlayVisibility(id)}
                     tooltip="Toggle visibility">
-                    {visible ? (
+                    {isVisible ? (
                         <ActionVisibilityIcon color={grey600} />
                     ) : (
                         <ActionVisibilityOffIcon color={grey600} />
@@ -130,8 +131,8 @@ OverlayCard.propTypes= {
 
 OverlayCard.defaultProps = {
     opacity: 1,
-    visible: true,
-    expanded: true,
+    isVisible: true,
+    isExpanded: true,
 };
 
 export default OverlayCard;

@@ -347,13 +347,9 @@ class ThematicLoader {
         // Apply classification
         classify(features, values, options, legend);
 
-        console.log('options, legend', options, legend);
-
         layer.legend = legend;
         layer.data = features;
         layer.isLoaded = true;
-
-
 
         this.callback(layer);
     }

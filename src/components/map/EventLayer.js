@@ -3,16 +3,12 @@ import isString from 'd2-utilizr/lib/isString';
 import isArray from 'd2-utilizr/lib/isArray';
 import { apiFetch } from '../../util/api';
 
-// let eventCoordinateFieldName; // Name of event coordinate field to show in popup
-
-
 class EventLayer extends Layer {
 
     createLayer(callback) {
         const props = this.props;
-        const layer = props.layer;
-        const data = layer.data;
-        const map = props.map;
+        const data = props.data;
+        const map = this.context.map;
 
         // Data elements to display in event popup
         this.displayElements = {};
@@ -20,19 +16,19 @@ class EventLayer extends Layer {
         // Default props = no cluster
         const config = {
             type: 'dots',
-            pane: layer.id,
+            pane: props.id,
             data: data,
-            color: '#' + layer.eventPointColor,
-            radius: layer.eventPointRadius,
+            color: '#' + props.eventPointColor,
+            radius: props.eventPointRadius,
             popup: this.onEventClick.bind(this),
         };
 
-        if (layer.eventClustering) {
+        if (props.eventClustering) {
             if (isArray(data)) {
                 config.type = 'clientCluster';
             } else if (isString(data)) {
                 config.type = 'serverCluster';
-                config.bounds = layer.bounds;
+                config.bounds = props.bounds;
 
                 const self = this;
                 config.load = function(params, callback) {
@@ -48,9 +44,9 @@ class EventLayer extends Layer {
         }
 
         // Create and add event layer based on config object
-        this.instance = map.createLayer(config).addTo(map);
+        this.layer = map.createLayer(config).addTo(map);
 
-        map.fitBounds(this.instance.getBounds()); // TODO: Do as action?
+        map.fitBounds(this.layer.getBounds()); // TODO: Do as action?
 
         this.loadDataElements();
     }
@@ -67,10 +63,9 @@ class EventLayer extends Layer {
     // Load data elements that should be displayed in popups
     loadDataElements() {
         const props = this.props;
-        const layer = props.layer;
         const namePropertyUrl = gis.init.namePropertyUrl; // TODO
 
-        apiFetch(`programStages/${layer.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${namePropertyUrl},optionSet]]`)
+        apiFetch(`programStages/${props.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${namePropertyUrl},optionSet]]`)
             .then(response => response.json())
             .then(data => {
                 if (data.programStageDataElements) {
@@ -78,7 +73,7 @@ class EventLayer extends Layer {
                         if (el.displayInReports) {
                             this.displayElements[el.dataElement.id] = el.dataElement;
                             this.getDataElementOptionSets(el.dataElement);
-                        } else if (layer.eventCoordinateField && el.dataElement.id === layer.eventCoordinateField) {
+                        } else if (props.eventCoordinateField && el.dataElement.id === props.eventCoordinateField) {
                             this.eventCoordinateFieldName = el.dataElement.name;
                         }
                     });
@@ -118,7 +113,7 @@ class EventLayer extends Layer {
                 content += `<tr><th>${GIS.i18n.organisation_unit}</th><td>${data.orgUnitName}</td></tr>
                             <tr><th>${GIS.i18n.event_time}</th><td>${time}</td></tr>
                             <tr><th>${this.eventCoordinateFieldName || GIS.i18n.event_location}</th><td>${coord[0]}, ${coord[1]}</td></tr> 
-                            </tbody></table>`
+                            </tbody></table>`;
 
                 callback(content);
 

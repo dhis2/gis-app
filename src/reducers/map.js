@@ -5,8 +5,8 @@ const defaultState = {
     bounds: [[-34.9, -18.7], [35.9, 50.2]],
     basemap: {
         id: 'osmLight',
-        visible: true,
-        expanded: true,
+        isVisible: true,
+        isExpanded: true,
         opacity: 1,
         subtitle: 'Basemap',
     },
@@ -37,13 +37,13 @@ const basemap = (state, action) => {
         case types.BASEMAP_TOGGLE_EXPAND:
             return {
                 ...state,
-                expanded: !state.expanded,
+                isExpanded: !state.isExpanded,
             };
 
         case types.BASEMAP_TOGGLE_VISIBILITY:
             return {
                 ...state,
-                visible: !state.visible,
+                isVisible: !state.isVisible,
             };
 
         default:
@@ -93,7 +93,7 @@ const overlay = (state, action) => {
 
             return {
                 ...state,
-                visible: !state.visible,
+                isVisible: !state.isVisible,
             };
 
         case types.OVERLAY_TOGGLE_EXPAND:
@@ -103,7 +103,7 @@ const overlay = (state, action) => {
 
             return {
                 ...state,
-                expanded: !state.expanded,
+                isExpanded: !state.isExpanded,
             };
 
         case types.ORGANISATION_UNIT_SELECT:

@@ -7,30 +7,40 @@ class Layer extends PureComponent {
         map: PropTypes.object,
     };
 
+    static propTypes = {
+        id: PropTypes.string.isRequired,
+        index: PropTypes.number,
+        editCounter: PropTypes.number,
+        opacity: PropTypes.number,
+        isVisible: PropTypes.bool,
+        config: PropTypes.object,
+        // labels: PropTypes.object, // TODO: Is sometimes boolean
+    };
+
+    static defaultProps = {
+        opacity: 1,
+        isVisible: true,
+    };
+
     // Create pane and layer
     componentWillMount() {
-        console.log('layer componentWillMount');
-
-        const { index } = this.props;
-
         this.createPane();
         this.createLayer();
+        // console.log('layer componentWillMount');
     }
 
-    //
     componentDidMount() {
-        console.log('layer componentDidMount');
-
         const map = this.context.map;
-
         map.addLayer(this.layer);
         this.onLayerAdd();
-
+        // console.log('layer componentDidMount');
     }
 
     componentDidUpdate(prev) {
-        const { id, index, opacity, visible, editCounter } = this.props;
+        const { id, index, opacity, isVisible, editCounter } = this.props;
         const map = this.context.map;
+
+        console.log('LAYER componentDidUpdate', id, index);
 
         // Create new map if new id of editCounter is increased
         if (id !== prev.id || editCounter !== prev.editCounter) {
@@ -48,22 +58,18 @@ class Layer extends PureComponent {
             this.setLayerOpacity();
         }
 
-        if (visible !== prev.visible) {
+        if (isVisible !== prev.isVisible) {
             this.setLayerVisibility();
         }
-
-        console.log('layer componentDidUpdate');
     }
 
     componentWillUnmount() {
-        console.log('layer componentWillUnmount');
         this.removeLayer();
+        console.log('layer componentWillUnmount');
     }
 
     // Create custom pane to control layer ordering: http://leafletjs.com/examples/map-panes/
     createPane() {
-        // console.log('createPane');
-
         const { id, labels } = this.props;
         const map = this.context.map;
 
@@ -103,15 +109,11 @@ class Layer extends PureComponent {
     }
 
     setLayerOpacity() {
-        console.log('setLayerOpacity');
-
         this.layer.setOpacity(this.props.opacity);
     }
 
     // Set layer order using custom panes and z-index: http://leafletjs.com/examples/map-panes/
     setLayerOrder() {
-        // console.log('setLayerOrder');
-
         const { index } = this.props;
         const zIndex = 600 - (index * 10);
 
@@ -125,13 +127,13 @@ class Layer extends PureComponent {
     }
 
     setLayerVisibility() {
-        const {visible } = this.props;
+        const isVisible = this.props.isVisible;
         const map = this.context.map;
         const layer = this.layer;
 
-        if (visible && map.hasLayer(layer) === false) {
+        if (isVisible && map.hasLayer(layer) === false) {
             map.addLayer(layer);
-        } else if (!visible && map.hasLayer(layer) === true) {
+        } else if (!isVisible && map.hasLayer(layer) === true) {
             map.removeLayer(layer);
         }
     }
@@ -139,8 +141,6 @@ class Layer extends PureComponent {
     removeLayer() {
         const layer = this.layer;
         const map = this.context.map;
-
-        // console.log('removeLayer');
 
         if (map.hasLayer(layer)) {
             map.removeLayer(layer);
@@ -155,13 +155,5 @@ class Layer extends PureComponent {
         return null;
     }
 }
-
-Layer.propTypes = {
-    //visible: PropTypes.bool,
-};
-
-Layer.defaultProps = {
-    //visible: true,
-};
 
 export default Layer;

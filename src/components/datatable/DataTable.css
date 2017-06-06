@@ -12,6 +12,7 @@
 }
 
 .ReactVirtualized__Table__headerColumn {
+    height: 48px;
     margin-bottom: 2px;
 }
 

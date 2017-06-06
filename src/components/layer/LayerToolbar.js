@@ -13,6 +13,7 @@ import NavigationArrowIcon from 'material-ui/svg-icons/navigation-arrow-drop-rig
 
 import Slider from 'material-ui/Slider';
 import { grey600 } from 'material-ui/styles/colors'; // http://www.material-ui.com/#/customization/colors
+import './LayerToolbar.css';
 
 import FileSaver from 'file-saver'; // https://github.com/eligrey/FileSaver.js
 

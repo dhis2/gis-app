@@ -35,17 +35,16 @@ const styles = {
 
 const SortableLayer = SortableElement(Overlay);
 
-const SortableLayersList = SortableContainer(({overlays, loadOverlayRequested, requestOverlayLoad, getOverlay}) => (
+// Draggable layers - last layer on top
+const SortableLayersList = SortableContainer(({ overlays }) => (
     <div>
-        {overlays.map((overlay, index) => { // Draggable layers - last layer on top
-            return (
-                <SortableLayer
-                    key={overlay.id}
-                    index={index}
-                    layer={overlay}
-                />
-            )
-        })}
+        {overlays.map((overlay, index) => (
+            <SortableLayer
+                key={overlay.id}
+                index={index}
+                layer={overlay}
+            />
+        ))}
     </div>
 ));
 
@@ -59,7 +58,7 @@ const LayersPanel = (props) => {
         openLayersPanel,
         closeLayersPanel
     } = props;
-    const selectedBasemap = basemaps.filter(b => b.id === basemap.id)[0];
+
     let toggleButton;
 
     if (layersPanelOpen) {
@@ -84,7 +83,7 @@ const LayersPanel = (props) => {
         overflowY: 'auto',
     };
 
-    return (
+        return (
         <Drawer
             open={layersPanelOpen}
             containerStyle={style}
@@ -97,7 +96,6 @@ const LayersPanel = (props) => {
                 useDragHandle={true}
             />
             <Basemap
-                {...selectedBasemap}
                 {...basemap}
                 basemaps={basemaps}
             />

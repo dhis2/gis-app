@@ -17,8 +17,8 @@ const layerType = {
 // TODO: Add to function below
 function parseOverlay(layer, callback) {
     layer.isLoaded = true;
-    layer.expanded = true;
-    layer.visible = true;
+    layer.isExpanded = true;
+    layer.isVisible = true;
     layer.dataFilters = layer.dataFilters || {}; // TODO: Get from Web API?
 
     callback(layer);

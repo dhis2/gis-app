@@ -1,3 +1,4 @@
+import { PureComponent } from 'react';
 import Layer from './Layer';
 
 class ThematicLayer extends Layer {
@@ -9,13 +10,13 @@ class ThematicLayer extends Layer {
         let data = props.data;
 
         // TODO: Move to separate file and reuse for data table
-        if (valueFilter.gt !== null) {
-            data = data.filter(feature => feature.properties.value > valueFilter.gt);
-        }
+        // if (valueFilter.gt !== null) {
+        //     data = data.filter(feature => feature.properties.value > valueFilter.gt);
+        // }
 
-        if (valueFilter.lt !== null) {
-            data = data.filter(feature => feature.properties.value < valueFilter.lt);
-        }
+        // if (valueFilter.lt !== null) {
+        //     data = data.filter(feature => feature.properties.value < valueFilter.lt);
+        // }
 
         const config = {
             type: 'choropleth',
@@ -23,6 +24,8 @@ class ThematicLayer extends Layer {
             data: data,
             // hoverLabel: '{name} ({value})'
         };
+
+        console.log('pane', props.id);
 
         if (props.labels) {
             config.label = '{name}';
@@ -32,6 +35,8 @@ class ThematicLayer extends Layer {
             };
             config.labelPane = props.id + '-labels';
         }
+
+        console.log('config', config);
 
         this.layer = map.createLayer(config);
 

@@ -4,9 +4,12 @@ import { requestOverlayLoad, sortOverlays } from '../actions/overlays';
 import { openLayersPanel, closeLayersPanel } from '../actions/ui';
 
 const mapStateToProps = (state) => ({
-    basemap: state.map.basemap,
-    basemaps: state.basemaps,
+    basemap: {
+        ...state.basemaps.filter(b => b.id === state.map.basemap.id)[0],
+        ...state.map.basemap,
+    },
     overlays: state.map.overlays,
+    basemaps: state.basemaps,
     layersPanelOpen: state.ui.layersPanelOpen,
 });
 

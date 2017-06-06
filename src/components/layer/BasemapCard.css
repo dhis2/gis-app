@@ -1,0 +1,13 @@
+.BasemapCard {
+    clear: both;
+    z-index: 1010;
+}
+
+.BasemapCard-header {
+    height: 56px;
+    padding-left: 14px;
+    padding-right: 8px;
+    margin-right: -8px;
+    font-size: 10px;
+}
+

@@ -51,7 +51,7 @@ class DataTable extends Component {
                     label='Index'
                     width={72}
                     className='right'
-                    headerRenderer={(props) => <ColumnHeader type='string' {...props}  />}
+                    headerRenderer={(props) => <ColumnHeader type='number' {...props}  />}
                 />
                 <Column
                     dataKey='name'
@@ -65,6 +65,18 @@ class DataTable extends Component {
                     width={72}
                     className='right'
                     headerRenderer={(props) => <ColumnHeader type='number' {...props}  />}
+                />
+                <Column
+                    dataKey='legend'
+                    label='Legend'
+                    width={100}
+                    headerRenderer={(props) => <ColumnHeader type='multiselect' {...props}  />}
+                />
+                <Column
+                    dataKey='range'
+                    label='Range'
+                    width={72}
+                    headerRenderer={(props) => <ColumnHeader type='string' {...props}  />}
                 />
                 <Column
                     dataKey='level'

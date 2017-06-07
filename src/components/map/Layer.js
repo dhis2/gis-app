@@ -40,7 +40,7 @@ class Layer extends PureComponent {
         const { id, index, opacity, isVisible, editCounter } = this.props;
         const map = this.context.map;
 
-        console.log('LAYER componentDidUpdate', id, index);
+        // console.log('LAYER componentDidUpdate', id, index);
 
         // Create new map if new id of editCounter is increased
         if (id !== prev.id || editCounter !== prev.editCounter) {
@@ -65,7 +65,7 @@ class Layer extends PureComponent {
 
     componentWillUnmount() {
         this.removeLayer();
-        console.log('layer componentWillUnmount');
+        // console.log('layer componentWillUnmount');
     }
 
     // Create custom pane to control layer ordering: http://leafletjs.com/examples/map-panes/
@@ -98,7 +98,7 @@ class Layer extends PureComponent {
     }
 
     onLayerAdd() {
-        console.log('onLayerAdd');
+        // console.log('onLayerAdd');
 
         this.setLayerOpacity();
         this.setLayerVisibility();

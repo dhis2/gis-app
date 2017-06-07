@@ -64,6 +64,8 @@ const ui = (state = defaultState, action) => {
             };
 
         case types.FAVORITES_DIALOG_CLOSE_REQUESTED:
+            console.log('#####');
+
             return {
                 ...state,
                 favoritesDialogOpen: false,

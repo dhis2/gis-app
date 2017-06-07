@@ -1,5 +1,6 @@
 import { PureComponent } from 'react';
 import Layer from './Layer';
+import { filterData } from '../../util/filter';
 
 class ThematicLayer extends Layer {
 
@@ -7,16 +8,7 @@ class ThematicLayer extends Layer {
         const props = this.props;
         const valueFilter = props.valueFilter || { gt: null, lt: null, };
         const map = this.context.map;
-        let data = props.data;
-
-        // TODO: Move to separate file and reuse for data table
-        // if (valueFilter.gt !== null) {
-        //     data = data.filter(feature => feature.properties.value > valueFilter.gt);
-        // }
-
-        // if (valueFilter.lt !== null) {
-        //     data = data.filter(feature => feature.properties.value < valueFilter.lt);
-        // }
+        const data = filterData(props.data, props.dataFilters);
 
         const config = {
             type: 'choropleth',
@@ -39,7 +31,11 @@ class ThematicLayer extends Layer {
         this.layer.on('click', this.onFeatureClick, this);
         this.layer.on('contextmenu', this.onFeatureRightClick, this);
 
-        map.fitBounds(this.layer.getBounds()); // TODO: Do as action?
+        const layerBounds = this.layer.getBounds();
+
+        if (layerBounds.isValid()) {
+            map.fitBounds(this.layer.getBounds()); // TODO: Do as action?
+        }
     }
 
     onFeatureClick(evt) {

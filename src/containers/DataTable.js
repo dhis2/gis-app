@@ -14,10 +14,6 @@ const mapStateToProps = (state) => {
             type: d.geometry.type,
         })), overlay.dataFilters);
 
-        // const data = filterData(overlay.data, overlay.dataFilters);
-
-        // console.log('###########', data);
-
         return { data };
     }
 

@@ -10,7 +10,8 @@ export const filterData = (data, filters) => {
         const filter = filters[field];
 
         filteredData = filteredData.filter(d => { // Loop through all data items
-            const value = d[field];
+            const props = d.properties || d; // GeoJSON or plain object
+            const value = props[field];
             return isNumeric(value) ? numericFilter(value, filter) : stringFilter(value, filter);
         });
     });

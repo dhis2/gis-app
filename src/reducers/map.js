@@ -125,7 +125,8 @@ const overlay = (state, action) => {
                 dataFilters: {
                     ...state.dataFilters,
                     [action.fieldId]: action.filter,
-                }
+                },
+                editCounter: ++state.editCounter, // Will trigger redraw
             };
 
         // Remove field from filter
@@ -136,6 +137,7 @@ const overlay = (state, action) => {
             return {
                 ...state,
                 dataFilters: filters,
+                editCounter: ++state.editCounter, // Will trigger redraw
             };
 
 

@@ -1232,6 +1232,7 @@ export default function LayerWidgetThematic(gis, layer) {
         },
         reset() { // Set second org.unit level as default
             const secondLevel = this.getStore().getAt(1);
+
             if (secondLevel) {
                 this.setValue(secondLevel);
             }
@@ -2038,7 +2039,7 @@ export default function LayerWidgetThematic(gis, layer) {
                 // layer.accordion = this;
             },
             render() {
-                // toolMenu.clickHandler('level');
+                toolMenu.clickHandler('level');
             }
         }
     });

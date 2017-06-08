@@ -47,6 +47,7 @@ export default function FavoriteWindow(gis) {
 
                 const name = nameTextfield.getValue();
                 const map = favoriteWindow.map;
+
                 const basemap = map.basemap;
                 const layers = map.overlays;
                 // const centerPoint = gis.instance.getCenter();
@@ -70,10 +71,14 @@ export default function FavoriteWindow(gis) {
                     delete view.type;
                     delete view.data;
                     delete view.isLoading;
-                    delete view.visible; // TODO: Should be stored? Is "hidden" used instead?
-                    delete view.expanded; // TODO: Should be stored?
+                    delete view.isLoaded;
+                    delete view.isNew;
+                    delete view.isVisible; // TODO: Should be stored? Is "hidden" used instead?
+                    delete view.isExpanded; // TODO: Should be stored?
                     delete view.valueFilter;  // TODO: Should be stored?
                     delete view.legend;
+                    delete view.dataFilters;
+                    delete view.editCounter;
                     delete view.dataDimensionItems;
 
                     // TODO temp fix: https://github.com/dhis2/dhis2-gis/issues/108
@@ -83,8 +88,7 @@ export default function FavoriteWindow(gis) {
 
                     // add
                     view.layer = layer.type;
-                    view.opacity = layer.layerOpacity;
-                    view.hidden = !layer.visible;
+                    view.hidden = !layer.isVisible;
 
                     views.push(view);
                 });
@@ -95,7 +99,7 @@ export default function FavoriteWindow(gis) {
                     // latitude: centerPoint.lat, // TODO
                     // zoom: gis.instance.getZoom(), // TODO
                     // basemap: gis.util.map.getBasemap(),
-                    basemap: basemap.visible ? basemap.id : 'none',
+                    basemap: basemap.isVisible ? basemap.id : 'none',
                     mapViews: views
                 };
 

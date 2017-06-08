@@ -101,6 +101,7 @@ class Map extends Component {
             right: 0,
         };
 
+
         return (
             <div ref={node => this.node = node} style={style}>
                 {overlays.filter(layer => layer.isLoaded).map((layer, index) => {

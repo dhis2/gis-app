@@ -83,8 +83,10 @@ Ext.onReady( function() {
                 const maskEl = document.getElementById('loading-mask');
                 maskEl.parentNode.removeChild(maskEl);
 
-
-
+                // Temporary fix to tell new react app that data is loaded
+                if (GIS.onLoad) {
+                    GIS.onLoad();
+                }
             }
         };
 
@@ -101,7 +103,7 @@ Ext.onReady( function() {
         Ext.Ajax.request({
             url: encodeURI('manifest.webapp'),
             success(r) {
-                var context = JSON.parse(r.responseText).activities.dhis;
+                const context = JSON.parse(r.responseText).activities.dhis;
 
                 init.contextPath = context.href;
 
@@ -128,7 +130,7 @@ Ext.onReady( function() {
                         Ext.Ajax.request({
                             url: encodeURI(init.apiPath + 'systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyGoogleMapsApiKey&key=keyMapzenSearchApiKey'),
                             success(r) {
-                                var systemSettings = JSON.parse(r.responseText);
+                                const systemSettings = JSON.parse(r.responseText);
 
                                 init.systemInfo.dateFormat = isString(systemSettings.keyDateFormat) ? systemSettings.keyDateFormat.toLowerCase() : 'yyyy-mm-dd';
                                 init.systemInfo.calendar = systemSettings.keyCalendar;
@@ -142,19 +144,19 @@ Ext.onReady( function() {
                                         init.userAccount = JSON.parse(r.responseText);
 
                                         // init
-                                        var defaultKeyUiLocale = 'en',
-                                            defaultKeyAnalysisDisplayProperty = 'displayName',
-                                            displayPropertyMap = {
-                                                'name': 'displayName',
-                                                'displayName': 'displayName',
-                                                'shortName': 'displayShortName',
-                                                'displayShortName': 'displayShortName'
-                                            },
-                                            namePropertyUrl,
-                                            contextPath,
-                                            keyUiLocale,
-                                            keyAnalysisDisplayProperty,
-                                            dateFormat;
+                                        const defaultKeyUiLocale = 'en';
+                                        const defaultKeyAnalysisDisplayProperty = 'displayName';
+                                        const displayPropertyMap = {
+                                            name: 'displayName',
+                                            displayName: 'displayName',
+                                            shortName: 'displayShortName',
+                                            displayShortName: 'displayShortName'
+                                        };
+                                        let namePropertyUrl;
+                                        let contextPath;
+                                        let keyUiLocale;
+                                        let keyAnalysisDisplayProperty;
+                                        let dateFormat;
 
                                         init.userAccount.settings.keyUiLocale = init.userAccount.settings.keyUiLocale || defaultKeyUiLocale;
                                         init.userAccount.settings.keyAnalysisDisplayProperty = displayPropertyMap[init.userAccount.settings.keyAnalysisDisplayProperty] || defaultKeyAnalysisDisplayProperty;

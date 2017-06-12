@@ -6,7 +6,6 @@ import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
 import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
 import Slider from 'material-ui/Slider';
 import { grey600 } from 'material-ui/styles/colors';
-import isObject from 'd2-utilizr/lib/isObject';
 import BasemapList from './BasemapList';
 import './BasemapCard.css';
 
@@ -24,8 +23,10 @@ const styles = {
     },
     headerText: {
         position: 'relative',
+        width: 210,
         top: '50%',
         transform: 'translateY(-50%)',
+        paddingRight: 0,
     },
     body: {
         padding: 0,
@@ -55,7 +56,6 @@ const BasemapCard = (props) => {
             expanded={isExpanded}
             onExpandChange={toggleBasemapExpand}
         >
-
             <CardHeader
                 className='BasemapCard-header'
                 title={title}

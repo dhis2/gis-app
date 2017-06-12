@@ -9,7 +9,7 @@ export const addOverlay = (layer) => ({
     payload: layer,
 });
 
-// Remover an overlay
+// Remove an overlay
 export const removeOverlay = (id) => ({
     type: types.OVERLAY_REMOVE,
     id,

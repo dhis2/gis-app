@@ -40,36 +40,20 @@ const defaultBasemaps = [{
         style: 'HYBRID',
         apiKey: 'AIzaSyBjlDmwuON9lJbPMDlh_LI3zGpGtpK9erc',
     },
-},/*{
-    id: 'stamenTerrain',
-    type: 'external',
-    title: 'Terrain',
-    subtitle: 'Basemap',
-    img: 'images/layers/terrain.png',
-    config: {
-        type: 'tileLayer',
-        url: '//stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png',
-        attribution: '&copy; <a href="http://stamen.com">Stamen Design</a>, <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    },
-}, {
-    id: 'osmDark',
-    type: 'external',
-    title: 'OSM Dark',
-    subtitle: 'Basemap',
-    img: 'images/layers/osmdark.png',
-    config: {
-        type: 'tileLayer',
-        url: '//cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-    },
-}*/];
+}];
 
 const basemaps = (state = defaultBasemaps, action) => {
 
     switch (action.type) {
 
         case types.BASEMAP_ADD:
-            return state;
+            return [
+                ...state,
+                action.payload,
+            ];
+
+        case types.BASEMAP_REMOVE:
+            return state.filter(basemap => basemap.id !== action.id);
 
         default:
             return state
@@ -78,4 +62,3 @@ const basemaps = (state = defaultBasemaps, action) => {
 };
 
 export default basemaps;
-

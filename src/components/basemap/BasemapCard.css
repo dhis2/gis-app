@@ -11,3 +11,11 @@
     font-size: 10px;
 }
 
+.BasemapCard-header span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+

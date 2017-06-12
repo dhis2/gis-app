@@ -6,8 +6,8 @@ import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
 import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
 import { grey600 } from 'material-ui/styles/colors';
 import SortableHandle from './SortableHandle';
-import LayerToolbar from './LayerToolbar';
-import Legend from '../legend/Legend';
+import OverlayToolbar from './OverlayToolbar';
+import Legend from '../../legend/Legend';
 
 const styles = {
     root: {
@@ -101,7 +101,7 @@ const OverlayCard = (props) => {
                     style={styles.legend}
                 />
                 }
-                <LayerToolbar
+                <OverlayToolbar
                     layer={layer}
                     onEdit={() => editOverlay(layer)}
                     onDataTableShow={openDataTable}

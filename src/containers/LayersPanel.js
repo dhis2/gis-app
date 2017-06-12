@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import LayersPanel from '../components/layer/LayersPanel'
+import LayersPanel from '../components/layers/LayersPanel'
 import { requestOverlayLoad, sortOverlays } from '../actions/overlays';
 import { openLayersPanel, closeLayersPanel } from '../actions/ui';
 

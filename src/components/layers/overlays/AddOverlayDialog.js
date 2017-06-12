@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import OverlayList from './OverlayList'
 
 const styles = {
     contentStyle: {
@@ -11,28 +12,6 @@ const styles = {
     bodyStyle: {
         overflowY: 'auto',
         padding: '0px 0px 0px 24px',
-    },
-    layer: {
-        float: 'left',
-        width: 120,
-        marginRight: 24,
-        cursor: 'pointer',
-        boxSizing: 'border-box',
-        height: 160,
-    },
-    name: {
-        fontSize: 14,
-        color: '#333',
-        paddingBottom: 20,
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-    },
-    image: {
-        boxSizing: 'border-box',
-        border: '1px solid #555',
-        width: 120,
-        height: 120,
     },
 };
 
@@ -54,21 +33,17 @@ const AddLayerDialog = ({ overlaysDialogOpen, overlays, onRequestClose, onLayerS
             contentStyle={styles.contentStyle}
             bodyStyle={styles.bodyStyle}
         >
-            <div style={styles.list}>
-                {overlays.map((layer, index) => (
-                    <div key={`layer-${index}`} style={styles.layer} onClick={() => onLayerSelect(layer)}>
-                        <img src={layer.img} style={styles.image} />
-                        <div style={styles.name}>{layer.title}</div>
-                    </div>
-                ))}
-            </div>
+            <OverlayList
+                overlays={overlays}
+                onLayerSelect={onLayerSelect}
+            />
         </Dialog>
     );
 };
 
 AddLayerDialog.propTypes = {
     layersDialogOpen: PropTypes.bool,
-    overlays: PropTypes.array, // TODO: Use arrayOf?
+    overlays: PropTypes.array,
     onRequestClose: PropTypes.func.isRequired,
     onLayerSelect: PropTypes.func.isRequired,
 };

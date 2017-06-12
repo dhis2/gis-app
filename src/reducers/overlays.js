@@ -1,3 +1,5 @@
+import * as types from '../constants/actionTypes';
+
 const defaultOverlays = [{
     type: 'event',
     title: 'Events',
@@ -18,7 +20,7 @@ const defaultOverlays = [{
     title: 'Boundaries',
     img: 'images/layers/boundaries.png',
     opacity: 1,
-},{
+},/*{
     type: 'external',
     title: 'Labels',
     img: 'images/layers/labels.png',
@@ -30,7 +32,7 @@ const defaultOverlays = [{
         mapLayerPosition: 'OVERLAY',
         imageFormat: 'PNG',
     },
-},{
+},*/{
     type: 'earthEngine',
     title: 'Population density',
     img: 'images/layers/population.png',
@@ -64,10 +66,18 @@ const defaultOverlays = [{
     opacity: 0.9,
 }];
 
-// TODO: Add external layers from Web API
 const overlays = (state = defaultOverlays, action) => {
 
     switch (action.type) {
+
+        case types.EXTERNAL_OVERLAY_ADD:
+            return [
+                ...state,
+                action.payload,
+            ];
+
+        case types.EXTERNAL_OVERLAY_REMOVE:
+            return state.filter(overlay => overlay.id !== action.id);
 
         default:
             return state

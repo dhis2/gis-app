@@ -10,11 +10,9 @@ import ActionDeleteIcon from 'material-ui/svg-icons/action/delete';
 // import FileDownloadIcon from 'material-ui/svg-icons/file/file-download';
 import NavigationMoreIcon from 'material-ui/svg-icons/navigation/more-vert';
 import NavigationArrowIcon from 'material-ui/svg-icons/navigation-arrow-drop-right';
-
 import Slider from 'material-ui/Slider';
 import { grey600 } from 'material-ui/styles/colors'; // http://www.material-ui.com/#/customization/colors
-import './LayerToolbar.css';
-
+import './OverlayToolbar.css';
 import FileSaver from 'file-saver'; // https://github.com/eligrey/FileSaver.js
 
 const styles = {
@@ -65,7 +63,7 @@ const styles = {
 
 };
 
-const LayerToolbar = ({ layer, onEdit, onRemove, onDataTableShow, onOpacityChange }) => {
+const OverlayToolbar = ({ layer, onEdit, onRemove, onDataTableShow, onOpacityChange }) => {
 
     function onFeaturesDownload() {
         const geojson = {
@@ -200,17 +198,14 @@ const LayerToolbar = ({ layer, onEdit, onRemove, onDataTableShow, onOpacityChang
                         ]}
                         style={styles.menuItem}
                     />
-
-
                 </IconMenu>
             </ToolbarGroup>
-
         </Toolbar>
     )
 };
 
 
-LayerToolbar.propTypes = {
+OverlayToolbar.propTypes = {
     //id: PropTypes.string.isRequired,
     //data: PropTypes.array,
     //opacity: PropTypes.number,
@@ -221,23 +216,4 @@ LayerToolbar.propTypes = {
     onOpacityChange: PropTypes.func,
 };
 
-/*
-LayerToolbar.defaultProps = {
-    data: [],
-    opacity: 1,
-};
-*/
-
-export default LayerToolbar;
-
-
-/*
-<IconMenu iconButtonElement={
-    <IconButton style={{...styles.button}}>
-        <FileDownloadIcon color={grey600} />
-    </IconButton>
-} listStyle={styles.menuList}>
-    <MenuItem primaryText="Organisation units (GeoJSON)" onTouchTap={onFeaturesDownload} style={styles.menuItem} />
-    <MenuItem primaryText="Style (SLD)" onTouchTap={onStyleDownload} style={styles.menuItem} />
-</IconMenu>
-*/
+export default OverlayToolbar;

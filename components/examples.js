@@ -14,7 +14,7 @@ import './styles/material-override.css';
 // import LayerCard from '../src/components/layer/LayerCard';
 // import Basemaps from '../src/components/layer/Basemaps';
 // import AddLayerButton from '../src/components/layer/AddLayerButton';
-import AddLayerDialog from '../src/components/layer/AddLayerDialog';
+import AddLayerDialog from '../src/components/layers/overlays/AddOverlayDialog';
 import DataTable from '../src/components/datatable/DataTable';
 
 const layers = [{

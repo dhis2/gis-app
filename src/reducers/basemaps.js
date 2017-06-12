@@ -1,3 +1,5 @@
+import * as types from '../constants/actionTypes';
+
 const defaultBasemaps = [{
     id: 'osmLight',
     title: 'OSM Light',
@@ -38,7 +40,7 @@ const defaultBasemaps = [{
         style: 'HYBRID',
         apiKey: 'AIzaSyBjlDmwuON9lJbPMDlh_LI3zGpGtpK9erc',
     },
-},{
+},/*{
     id: 'stamenTerrain',
     type: 'external',
     title: 'Terrain',
@@ -60,11 +62,14 @@ const defaultBasemaps = [{
         url: '//cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
     },
-}];
+}*/];
 
 const basemaps = (state = defaultBasemaps, action) => {
 
     switch (action.type) {
+
+        case types.BASEMAP_ADD:
+            return state;
 
         default:
             return state
@@ -73,3 +78,4 @@ const basemaps = (state = defaultBasemaps, action) => {
 };
 
 export default basemaps;
+

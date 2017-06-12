@@ -1116,51 +1116,9 @@ export default function getInstance(init) {
     gis.api = api;
     gis.store = store;
 
-    /*
-    gis.layer = GIS.core.getLayers(gis);
-    gis.thematicLayers = [gis.layer.thematic1, gis.layer.thematic2, gis.layer.thematic3, gis.layer.thematic4];
-
-    // https://github.com/dhis2/dhis2-gis/issues/9
-    gis.orderedLayers = [
-        gis.layer.googleHybrid,
-        gis.layer.googleStreets,
-        gis.layer.openStreetMap,
-        gis.layer.osmLight,
-        gis.layer.earthEngine,
-        gis.layer.thematic4,
-        gis.layer.thematic3,
-        gis.layer.thematic2,
-        gis.layer.thematic1,
-        gis.layer.boundary,
-        gis.layer.facility,
-        gis.layer.event
-    ];
-
-    gis.overlayLayers = [
-        gis.layer.earthEngine,
-        gis.layer.thematic4,
-        gis.layer.thematic3,
-        gis.layer.thematic2,
-        gis.layer.thematic1,
-        gis.layer.boundary,
-        gis.layer.external,
-        gis.layer.facility,
-        gis.layer.event
-    ];
-    */
-
     gis.relocate = {}; // Relocate organisation units
 
-    // gis.instance = GIS.core.getMap(gis);
-
     GIS.core.instances.push(gis);
-
-    /*
-    gis.instance.on('contextmenu', evt => {
-        const menu = GIS.core.ContextMenu(gis, null, null, evt.latlng);
-        menu.showAt([evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y]);
-    });
-    */
 
     return gis;
 };

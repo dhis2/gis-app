@@ -82,6 +82,9 @@ Ext.onReady( function() {
                 // Remove loading mask
                 const maskEl = document.getElementById('loading-mask');
                 maskEl.parentNode.removeChild(maskEl);
+
+
+
             }
         };
 

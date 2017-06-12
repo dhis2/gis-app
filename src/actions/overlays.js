@@ -9,6 +9,12 @@ export const addOverlay = (layer) => ({
     payload: layer,
 });
 
+// Remover an overlay
+export const removeOverlay = (id) => ({
+    type: types.OVERLAY_REMOVE,
+    id,
+});
+
 // Edit overlay
 export const editOverlay = (layer) => ({
     type: types.OVERLAY_EDIT,
@@ -43,12 +49,6 @@ export const getOverlay = (layer) => (dispatch) => {
         dispatch(loaded());
     });
 };
-
-// Remover an overlay
-export const removeOverlay = (id) => ({
-    type: types.OVERLAY_REMOVE,
-    id,
-});
 
 // Expand/collapse overlay card
 export const toggleOverlayExpand = (id) => ({

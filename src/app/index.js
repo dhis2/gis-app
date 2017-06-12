@@ -7,7 +7,6 @@ import LayerWidgetFacility from './LayerWidgetFacility.js';
 import LayerWidgetThematic from './LayerWidgetThematic.js';
 import LayerWidgetBoundary from './LayerWidgetBoundary.js';
 import LayerWidgetEarthEngine from './LayerWidgetEarthEngine.js';
-import LayerWidgetExternal from './LayerWidgetExternal.js';
 import FavoriteWindow from './FavoriteWindow.js';
 import SharingWindow from './SharingWindow.js';
 import DownloadWindow from './DownloadWindow.js';
@@ -23,7 +22,6 @@ GIS.app = {
     LayerWidgetThematic,
     LayerWidgetBoundary,
     LayerWidgetEarthEngine,
-    LayerWidgetExternal,
     FavoriteWindow,
     SharingWindow,
     DownloadWindow,

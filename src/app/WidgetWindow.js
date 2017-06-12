@@ -3,7 +3,6 @@ import LayerWidgetFacility from './LayerWidgetFacility';
 import LayerWidgetThematic from './LayerWidgetThematic';
 import LayerWidgetBoundary from './LayerWidgetBoundary';
 import LayerWidgetEarthEngine from './LayerWidgetEarthEngine';
-import LayerWidgetExternal from './LayerWidgetExternal';
 
 const layerType = {
     event: LayerWidgetEvent,
@@ -11,7 +10,6 @@ const layerType = {
     thematic: LayerWidgetThematic,
     boundary: LayerWidgetBoundary,
     earthEngine: LayerWidgetEarthEngine,
-    external: LayerWidgetExternal,
 };
 
 // Window container for layer widgets

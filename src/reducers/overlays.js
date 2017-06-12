@@ -20,19 +20,7 @@ const defaultOverlays = [{
     title: 'Boundaries',
     img: 'images/layers/boundaries.png',
     opacity: 1,
-},/*{
-    type: 'external',
-    title: 'Labels',
-    img: 'images/layers/labels.png',
-    opacity: 0.9,
-    config: {
-        mapService: 'XYZ',
-        url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_only_labels/{z}/{x}/{y}.png',
-        attribution: '&copy; <a href=\\\"http://www.openstreetmap.org/copyright\\\">OpenStreetMap</a>, <a href=\\\"https://carto.com/attributions\\\">CARTO</a>',
-        mapLayerPosition: 'OVERLAY',
-        imageFormat: 'PNG',
-    },
-},*/{
+},{
     type: 'earthEngine',
     title: 'Population density',
     img: 'images/layers/population.png',

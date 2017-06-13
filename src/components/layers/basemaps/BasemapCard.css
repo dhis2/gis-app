@@ -16,3 +16,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+
+.BasemapCard-toolbar {
+    background-color: #eee;
+    height: 32px;
+    padding-left: 7px;
+}

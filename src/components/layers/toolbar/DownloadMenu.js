@@ -17,6 +17,25 @@ const styles = {
     },
 };
 
+// TODO: Use layer name rather than id as file name
+const downloadGeoJson = ({ id, data }) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: data,
+    };
+
+    const blob = new Blob([JSON.stringify(geojson)], {type: 'application/json;charset=utf-8'});
+
+    FileSaver.saveAs(blob, id + '.geojson');
+};
+
+const downloadStyle = ( id ) => {
+    const sld = createSld(); // TODO: Make generic
+    const blob = new Blob([sld], {type: 'application/xml;charset=utf-8'});
+
+    FileSaver.saveAs(blob, id + '.sld');
+};
+
 const DownloadMenu = ({ id, data }) => (
     <MenuItem
         primaryText='Download ...'
@@ -40,25 +59,6 @@ const DownloadMenu = ({ id, data }) => (
 DownloadMenu.propTypes = {
     id: PropTypes.string.isRequired,
     data: PropTypes.array,
-};
-
-// TODO: Use layer name rather than id as file name
-const downloadGeoJson = ({ id, data }) => {
-    const geojson = {
-        type: 'FeatureCollection',
-        features: data,
-    };
-
-    const blob = new Blob([JSON.stringify(geojson)], {type: 'application/json;charset=utf-8'});
-
-    FileSaver.saveAs(blob, id + '.geojson');
-};
-
-const downloadStyle = ( id ) => {
-    const sld = createSld(); // TODO: Make generic
-    const blob = new Blob([sld], {type: 'application/xml;charset=utf-8'});
-
-    FileSaver.saveAs(blob, id + '.sld');
 };
 
 export default DownloadMenu;

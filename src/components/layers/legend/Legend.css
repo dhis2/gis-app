@@ -1,0 +1,18 @@
+.Legend {
+    padding: 8px 16px 16px 32px;
+    margin: 0;
+}
+
+.Legend-description {
+    padding-bottom: 16px;
+}
+
+.Legend-unit {
+    margin-left: 32px;
+    line-height: 24px;
+}
+
+.Legend-source {
+    padding-top: 16px;
+    font-size: 12px;
+}

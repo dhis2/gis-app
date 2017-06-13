@@ -7,7 +7,7 @@ import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off
 import { grey600 } from 'material-ui/styles/colors';
 import SortableHandle from './SortableHandle';
 import OverlayToolbar from '../toolbar/OverlayToolbar';
-import Legend from '../../legend/Legend';
+import Legend from '../legend/Legend';
 
 const styles = {
     root: {
@@ -39,10 +39,6 @@ const styles = {
     body: {
         padding: 0,
     },
-    legend: {
-        padding: '8px 16px 16px 32px',
-        margin: 0,
-    }
 };
 
 const OverlayCard = (props) => {
@@ -95,12 +91,7 @@ const OverlayCard = (props) => {
                 </IconButton>
             </CardHeader>
             <CardText expandable={true} style={styles.body}>
-                {legend &&
-                <Legend
-                    {...legend}
-                    style={styles.legend}
-                />
-                }
+                {legend && <Legend {...legend} />}
                 <OverlayToolbar
                     layer={layer}
                     onEdit={() => editOverlay(layer)}
@@ -115,24 +106,12 @@ const OverlayCard = (props) => {
 
 OverlayCard.propTypes= {
     layer: PropTypes.object,
-};
-
-/*
-OverlayCard.propTypes= {
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    subtitle: PropTypes.string,
-    opacity: PropTypes.number,
-    legend: PropTypes.object,
-    visible: PropTypes.bool,
-    expanded: PropTypes.bool,
-};
-*/
-
-OverlayCard.defaultProps = {
-    opacity: 1,
-    isVisible: true,
-    isExpanded: true,
+    editOverlay: PropTypes.func.isRequired,
+    removeOverlay: PropTypes.func.isRequired,
+    changeOverlayOpacity: PropTypes.func.isRequired,
+    toggleOverlayExpand: PropTypes.func.isRequired,
+    toggleOverlayVisibility: PropTypes.func.isRequired,
+    toggleDataTable: PropTypes.func.isRequired,
 };
 
 export default OverlayCard;

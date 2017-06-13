@@ -8,7 +8,7 @@ import { HEADER_HEIGHT, LAYERS_PANEL_WIDTH } from '../../constants/layout';
 
 const style = {
     position: 'absolute',
-    top: HEADER_HEIGHT + 18,
+    top: HEADER_HEIGHT + 15,
     left: LAYERS_PANEL_WIDTH,
     width: 24,
     height: 40,
@@ -18,6 +18,7 @@ const style = {
     zIndex: 1100,
 };
 
+// Thiss expand/collapse toggle is separate from LayersPanel to avoid overflow issue
 const LayersToggle = ({ isOpen, openLayersPanel, closeLayersPanel }) => (isOpen ?
     <IconButton onClick={closeLayersPanel} style={style} disableTouchRipple={true}>
         <CollapseIcon color={grey800} />

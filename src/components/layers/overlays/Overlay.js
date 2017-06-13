@@ -14,13 +14,8 @@ const Overlay = ({ overlay, onClick }) => {
 };
 
 Overlay.propTypes = {
-    img: PropTypes.string,
-    title: PropTypes.string.isRequired,
+    overlay: PropTypes.object.isRequired,
     onClick: PropTypes.func.isRequired,
-};
-
-Overlay.defaultProps = {
-    title: '',
 };
 
 export default Overlay;

@@ -1,28 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LegendItem from './LegendItem';
+import './Legend.css';
 
-const styles = {
-    description: {
-        paddingBottom: 16,
-    },
-    unit: {
-        marginLeft: 32,
-        lineHeight: '24px',
-    },
-    source: {
-        paddingTop: 16,
-        fontSize: 12,
-    },
-}
-
-const Legend = ({ style, description, unit, items, source, sourceUrl, attribution }) => (
-    <dl style={style}>
+const Legend = ({ description, unit, items, source, sourceUrl, attribution }) => (
+    <dl className='Legend'>
         {description  &&
-            <div style={styles.description}>{description}</div>
+            <div className='Legend-description'>{description}</div>
         }
         {unit && items &&
-            <div style={styles.unit}>{unit}</div>
+            <div className='Legend-unit'>{unit}</div>
         }
         {items && items.map((item, index) => (
             <LegendItem
@@ -31,7 +18,7 @@ const Legend = ({ style, description, unit, items, source, sourceUrl, attributio
             />
         ))}
         {source && (
-            <div style={styles.source}>
+            <div className='Legend-source'>
                 Source:&nbsp;
                 {sourceUrl ? (
                     <a href={sourceUrl}>{source}</a>
@@ -44,7 +31,6 @@ const Legend = ({ style, description, unit, items, source, sourceUrl, attributio
 );
 
 Legend.propTypes = {
-    style: PropTypes.object,
     description: PropTypes.string,
     unit: PropTypes.string,
     items: PropTypes.array,

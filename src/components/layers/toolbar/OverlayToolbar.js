@@ -11,7 +11,6 @@ import { grey600 } from 'material-ui/styles/colors'; // http://www.material-ui.c
 import OpacitySlider from './OpacitySlider';
 import DownloadMenu from './DownloadMenu';
 import OpenAsMenu from './OpenAsMenu';
-import './OverlayToolbar.css';
 
 const styles = {
     toolbar: {
@@ -39,69 +38,66 @@ const styles = {
     },
 };
 
-const OverlayToolbar = ({ layer, onEdit, onRemove, toggleDataTable, onOpacityChange }) => {
+const OverlayToolbar = ({ layer, onEdit, onRemove, toggleDataTable, onOpacityChange }) => (
+    <Toolbar style={styles.toolbar}>
+        <ToolbarGroup>
+            {onEdit && layer.type !== 'external' &&
+                <IconButton
+                    onClick={() => onEdit(layer)}
+                    tooltip="Edit"
+                    tooltipPosition="top-center"
+                    style={styles.button}
+                >
+                    <ContentCreateIcon color={grey600} />
+                </IconButton>
+            }
 
-    return (
-        <Toolbar style={styles.toolbar}>
-            <ToolbarGroup>
-                {onEdit && layer.type !== 'external' &&
+            {layer.type === 'thematic' &&
+                <IconButton
+                    onClick={() => toggleDataTable(layer.id)}
+                    tooltip="Data table"
+                    tooltipPosition="top-center"
+                    style={styles.button}
+                >
+                    <ActionDataTableIcon color={grey600} />
+                </IconButton>
+            }
+
+            <OpacitySlider
+                {...layer}
+                onChange={opacity => onOpacityChange(layer.id, opacity)}
+            />
+        </ToolbarGroup>
+
+        <ToolbarGroup>
+            {onRemove &&
+                <IconButton
+                    onClick={onRemove}
+                    tooltip="Delete"
+                    tooltipPosition="top-center"
+                    style={styles.button}
+                >
+                    <ActionDeleteIcon color={grey600}/>
+                </IconButton>
+            }
+
+            {true === false && //    TODO
+                <IconMenu iconButtonElement={
                     <IconButton
-                        onClick={() => onEdit(layer)}
-                        tooltip="Edit"
+                        tooltip="More"
                         tooltipPosition="top-center"
-                        style={styles.button}
+                        style={styles.moreButton}
                     >
-                        <ContentCreateIcon color={grey600} />
+                        <NavigationMoreIcon color={grey600} />
                     </IconButton>
-                }
-
-                {layer.type === 'thematic' &&
-                    <IconButton
-                        onClick={() => toggleDataTable(layer.id)}
-                        tooltip="Data table"
-                        tooltipPosition="top-center"
-                        style={styles.button}
-                    >
-                        <ActionDataTableIcon color={grey600} />
-                    </IconButton>
-                }
-
-                <OpacitySlider
-                    {...layer}
-                    onChange={opacity => onOpacityChange(layer.id, opacity)}
-                />
-            </ToolbarGroup>
-
-            <ToolbarGroup>
-                {onRemove &&
-                    <IconButton
-                        onClick={onRemove}
-                        tooltip="Delete"
-                        tooltipPosition="top-center"
-                        style={styles.button}
-                    >
-                        <ActionDeleteIcon color={grey600}/>
-                    </IconButton>
-                }
-
-                {true === false && //    TODO
-                    <IconMenu iconButtonElement={
-                        <IconButton
-                            tooltip="More"
-                            tooltipPosition="top-center"
-                            style={styles.moreButton}
-                        >
-                            <NavigationMoreIcon color={grey600} />
-                        </IconButton>
-                    } listStyle={styles.menuList}>
-                        <OpenAsMenu {...layer} />
-                        <DownloadMenu {...layer} />
-                    </IconMenu>
-                }
-            </ToolbarGroup>
-        </Toolbar>
-    )
-};
+                } listStyle={styles.menuList}>
+                    <OpenAsMenu {...layer} />
+                    <DownloadMenu {...layer} />
+                </IconMenu>
+            }
+        </ToolbarGroup>
+    </Toolbar>
+);
 
 OverlayToolbar.propTypes = {
     layer: PropTypes.object,

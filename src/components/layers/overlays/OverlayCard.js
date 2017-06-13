@@ -6,7 +6,7 @@ import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
 import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
 import { grey600 } from 'material-ui/styles/colors';
 import SortableHandle from './SortableHandle';
-import OverlayToolbar from './OverlayToolbar';
+import OverlayToolbar from '../toolbar/OverlayToolbar';
 import Legend from '../../legend/Legend';
 
 const styles = {

@@ -7,6 +7,7 @@ import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off
 import Slider from 'material-ui/Slider';
 import { grey600 } from 'material-ui/styles/colors';
 import BasemapList from './BasemapList';
+import OpacitySlider from '../toolbar/OpacitySlider';
 import './BasemapCard.css';
 
 const styles = {
@@ -79,11 +80,9 @@ const BasemapCard = (props) => {
             <CardText expandable={true} style={styles.body}>
                 <BasemapList {...props} />
                 <div className='LayerToolbar'>
-                    <Slider
-                        className={'LayerToolbar-slider'}
-                        defaultValue={opacity}
-                        onChange={(evt, opacity) => changeBasemapOpacity(opacity)}
-                        sliderStyle={styles.slider}
+                    <OpacitySlider
+                        opacity={opacity}
+                        onChange={opacity => changeBasemapOpacity(opacity)}
                     />
                 </div>
             </CardText>

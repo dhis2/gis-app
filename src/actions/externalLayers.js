@@ -66,6 +66,7 @@ const externalLayerConfig = (layer) => {
         title: layer.name,
         subtitle: layer.mapLayerPosition === 'BASEMAP' ? 'External basemap' : 'External layer', // TODO: i18n
         // img: layer.img, // TODO: Get from Web API
+        opacity: 1,
         config,
     }
 };

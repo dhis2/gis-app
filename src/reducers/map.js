@@ -221,6 +221,11 @@ const map = (state = defaultState, action) => {
             };
 
         case types.OVERLAY_ADD:
+            // Check to only allow external layers to be added once
+            if (state.overlays.filter(l => l.id === action.payload.id).length) {
+                return state;
+            }
+
             return {
                 ...state,
                 overlays: [

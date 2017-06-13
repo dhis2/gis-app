@@ -35,6 +35,44 @@ class Map extends Component {
 
         this.node.appendChild(map.getContainer()); // Append map container to DOM
 
+        // Add zoom control
+        map.addControl({
+            type: 'zoom',
+            position: 'topright'
+        });
+
+        // Add fit bounds control
+        map.addControl({
+            type: 'fitBounds',
+            position: 'topright'
+        });
+
+        // Add scale control
+        map.addControl({
+            type: 'scale',
+            imperial: false
+        });
+
+        /*
+        L.control.geocoder(gis.init.systemInfo.mapzenSearchKey, {
+            position: 'topright',
+            attribution: null,
+            panToPoint: null
+        }).addTo(map);
+        */
+
+        // Add measurement control
+        map.addControl({
+            type: 'measure',
+            position: 'topright',
+            primaryLengthUnit: 'kilometers',
+            secondaryLengthUnit: 'miles',
+            primaryAreaUnit: 'hectares',
+            secondaryAreaUnit: 'acres',
+            activeColor: '#ffa500',
+            completedColor: '#ffa500'
+        });
+
         if (isArray(bounds)) {
             map.fitBounds(bounds);
         } else if (isNumeric(latitude) && isNumeric(longitude) && isNumeric(zoom)) {

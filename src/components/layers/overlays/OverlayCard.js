@@ -53,7 +53,7 @@ const OverlayCard = (props) => {
         changeOverlayOpacity,
         toggleOverlayExpand,
         toggleOverlayVisibility,
-        openDataTable,
+        toggleDataTable,
     } = props;
 
     const {
@@ -104,7 +104,7 @@ const OverlayCard = (props) => {
                 <OverlayToolbar
                     layer={layer}
                     onEdit={() => editOverlay(layer)}
-                    onDataTableShow={openDataTable}
+                    toggleDataTable={toggleDataTable}
                     onOpacityChange={changeOverlayOpacity}
                     onRemove={() => removeOverlay(id)}
                 />

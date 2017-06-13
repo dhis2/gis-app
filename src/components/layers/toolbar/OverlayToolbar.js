@@ -39,7 +39,7 @@ const styles = {
     },
 };
 
-const OverlayToolbar = ({ layer, onEdit, onRemove, onDataTableShow, onOpacityChange }) => {
+const OverlayToolbar = ({ layer, onEdit, onRemove, toggleDataTable, onOpacityChange }) => {
 
     return (
         <Toolbar style={styles.toolbar}>
@@ -55,9 +55,9 @@ const OverlayToolbar = ({ layer, onEdit, onRemove, onDataTableShow, onOpacityCha
                     </IconButton>
                 }
 
-                {onDataTableShow && layer.type === 'thematic' &&
+                {layer.type === 'thematic' &&
                     <IconButton
-                        onClick={() => onDataTableShow(layer.id)}
+                        onClick={() => toggleDataTable(layer.id)}
                         tooltip="Data table"
                         tooltipPosition="top-center"
                         style={styles.button}
@@ -84,7 +84,7 @@ const OverlayToolbar = ({ layer, onEdit, onRemove, onDataTableShow, onOpacityCha
                     </IconButton>
                 }
 
-                {true === true &&
+                {true === false && //    TODO
                     <IconMenu iconButtonElement={
                         <IconButton
                             tooltip="More"

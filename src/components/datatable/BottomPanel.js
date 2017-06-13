@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import CloseIcon from 'material-ui/svg-icons/navigation/cancel';
 import ResizeHandle from './ResizeHandle';
 import DataTable from '../../containers/DataTable';
 import { LAYERS_PANEL_WIDTH, HEADER_HEIGHT } from '../../constants/layout';
 import './BottomPanel.css';
+
+const styles = {
+  closeIcon: {
+      width: 16,
+      height: 16,
+  },
+};
 
 // Container for DataTable
 class BottomPanel extends Component {
@@ -16,6 +24,7 @@ class BottomPanel extends Component {
             width,
             height,
             resizeDataTable,
+            closeDataTable,
         } = this.props;
 
         if (dataTableOpen) {
@@ -34,6 +43,13 @@ class BottomPanel extends Component {
                     className='BottomPanel'
                     style={style}
                 >
+                    <CloseIcon
+                        className='BottomPanel-close'
+                        onClick={closeDataTable}
+                        style={styles.closeIcon}
+                        color='#777'
+                        hoverColor='#333'
+                    />
                     <ResizeHandle
                         maxHeight={maxHeight}
                         onResize={(height) => this.onResize(height)}

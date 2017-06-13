@@ -6,3 +6,11 @@
     background: #fff;
     box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.1);
 }
+
+.BottomPanel-close {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    z-index: 100;
+    cursor: pointer;
+}

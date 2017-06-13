@@ -1,37 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Drawer from 'material-ui/Drawer';
-import IconButton from 'material-ui/IconButton';
-import CollapseIcon from 'material-ui/svg-icons/navigation/chevron-left';
-import ExpandIcon from 'material-ui/svg-icons/navigation/chevron-right';
-import { grey800 } from 'material-ui/styles/colors';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import Basemap from '../../containers/Basemap';
 import Overlay from '../../containers/Overlay';
 import { HEADER_HEIGHT, LAYERS_PANEL_WIDTH } from '../../constants/layout';
-
-const styles = {
-    collapse: { // Collapse button
-        position: 'absolute',
-        top: 8,
-        right: -24,
-        width: 24,
-        height: 40,
-        padding: 0,
-        background: '#fff',
-        boxShadow: '3px 1px 5px -1px rgba(0, 0, 0, 0.2)',
-    },
-    expand: { // Expand button
-        position: 'absolute',
-        top: 8,
-        right: -32,
-        width: 24,
-        height: 40,
-        padding: '0 0 0 1px',
-        background: '#fff',
-        boxShadow: '3px 1px 5px -1px rgba(0, 0, 0, 0.2)',
-    },
-};
 
 const SortableLayer = SortableElement(Overlay);
 
@@ -48,59 +21,42 @@ const SortableLayersList = SortableContainer(({ overlays }) => (
     </div>
 ));
 
-const LayersPanel = (props) => {
-    const {
-        basemap,
-        basemaps,
-        overlays,
-        sortOverlays,
-        layersPanelOpen,
-        openLayersPanel,
-        closeLayersPanel
-    } = props;
+const style = {
+    position: 'absolute',
+    top: HEADER_HEIGHT,
+    height: 'auto',
+    bottom: 0,
+    backgroundColor: '#fafafa',
+    boxShadow: '0 3px 10px 0 rgba(0, 0, 0, 0.227451)',
+    zIndex: 1049,
+    overflowX: 'hidden',
+    overflowY: 'auto',
+};
 
-    let toggleButton;
+const LayersPanel = ({ layersPanelOpen, basemap, basemaps, overlays, sortOverlays }) => (
+    <Drawer
+        open={layersPanelOpen}
+        containerStyle={style}
+        width={LAYERS_PANEL_WIDTH}
+    >
+        <SortableLayersList
+            overlays={overlays}
+            onSortEnd={sortOverlays}
+            useDragHandle={true}
+        />
+        <Basemap
+            {...basemap}
+            basemaps={basemaps}
+        />
+    </Drawer>
+);
 
-    if (layersPanelOpen) {
-        toggleButton = (<IconButton onClick={closeLayersPanel} style={styles.collapse} disableTouchRipple={true}>
-            <CollapseIcon color={grey800} />
-        </IconButton>);
-    } else {
-        toggleButton = (<IconButton onClick={openLayersPanel} style={styles.expand} disableTouchRipple={true}>
-            <ExpandIcon color={grey800} />
-        </IconButton>);
-    }
-
-    const style = {
-        position: 'absolute',
-        top: HEADER_HEIGHT,
-        height: 'auto',
-        bottom: 0,
-        backgroundColor: '#fafafa',
-        boxShadow: '0 3px 10px 0 rgba(0, 0, 0, 0.227451)',
-        zIndex: 1049,
-        overflowX: 'hidden',
-        overflowY: 'auto',
-    };
-
-        return (
-        <Drawer
-            open={layersPanelOpen}
-            containerStyle={style}
-            width={LAYERS_PANEL_WIDTH}
-        >
-            {toggleButton}
-            <SortableLayersList
-                overlays={overlays}
-                onSortEnd={sortOverlays}
-                useDragHandle={true}
-            />
-            <Basemap
-                {...basemap}
-                basemaps={basemaps}
-            />
-        </Drawer>
-    );
+LayersPanel.propTypes = {
+    layersPanelOpen: PropTypes.bool.isRequired,
+    basemap: PropTypes.object.isRequired,
+    basemaps: PropTypes.array.isRequired,
+    overlays: PropTypes.array.isRequired,
+    sortOverlays: PropTypes.func.isRequired,
 };
 
 export default LayersPanel;

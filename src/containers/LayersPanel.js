@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import LayersPanel from '../components/layers/LayersPanel'
 import { requestOverlayLoad, sortOverlays } from '../actions/overlays';
-import { openLayersPanel, closeLayersPanel } from '../actions/ui';
 
 const mapStateToProps = (state) => ({
     basemap: {
@@ -15,5 +14,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
     mapStateToProps,
-    { requestOverlayLoad, sortOverlays, openLayersPanel, closeLayersPanel, }
+    { requestOverlayLoad, sortOverlays }
 )(LayersPanel);

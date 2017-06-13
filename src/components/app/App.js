@@ -5,6 +5,7 @@ import AppMenu from '../../containers/AppMenu';
 import AddLayerDialog from '../../containers/AddLayerDialog';
 import FavoritesDialog from '../../containers/FavoritesDialog';
 import LayersPanel from '../../containers/LayersPanel';
+import LayersToggle from '../../containers/LayersToggle';
 import Map from '../../containers/Map';
 import BottomPanel from "../../containers/BottomPanel";
 import OverlayEdit from '../../containers/OverlayEdit';
@@ -24,12 +25,14 @@ const App = () => (
                 <AddLayerDialog />
                 <FavoritesDialog />
                 <LayersPanel />
+                <LayersToggle />
                 <Map />
                 <BottomPanel />
                 <OverlayEdit />
                 <ContextMenu />
                 <OrgUnitDialog />
                 <RelocateDialog />
+
             </div>
         </MapProvider>
     </MuiThemeProvider>

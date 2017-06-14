@@ -3,8 +3,7 @@ import BottomPanel from '../components/datatable/BottomPanel';
 import { closeDataTable, resizeDataTable } from '../actions/dataTable';
 
 const mapStateToProps = (state) => ({
-    // dataTableOpen: state.ui.dataTableOpen && state.dataTable,
-    dataTableOpen: state.dataTable,
+    dataTableOpen: state.dataTable ? true : false,
     dataTableHeight: state.ui.dataTableHeight,
     layersPanelOpen: state.ui.layersPanelOpen,
     width: state.ui.width,

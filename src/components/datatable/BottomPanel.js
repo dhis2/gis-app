@@ -72,4 +72,14 @@ class BottomPanel extends Component {
     }
 }
 
+BottomPanel.propTypes = {
+    layersPanelOpen: PropTypes.bool.isRequired,
+    dataTableOpen: PropTypes.bool.isRequired,
+    dataTableHeight: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    resizeDataTable: PropTypes.func.isRequired,
+    closeDataTable: PropTypes.func.isRequired,
+};
+
 export default BottomPanel;

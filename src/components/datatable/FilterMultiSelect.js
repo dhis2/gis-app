@@ -113,14 +113,6 @@ class FilterMultiSelect extends Component {
             </SelectField>
         )
     }
-
-
 }
-
-
-
-
-
-
 
 export default FilterMultiSelect;

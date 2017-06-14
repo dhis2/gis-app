@@ -141,6 +141,8 @@ class DataTable extends Component {
 
 DataTable.propTypes = {
     data: PropTypes.array.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
 };
 
 DataTable.defaultProps = {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FilterInput from '../../containers/FilterInput';
 import FilterMultiSelect from '../../containers/FilterMultiSelect';
 import './ColumnHeader.css';
@@ -6,7 +7,7 @@ import { SortIndicator } from 'react-virtualized';
 
 // Replacement for https://github.com/bvaughn/react-virtualized/blob/master/source/Table/defaultHeaderRenderer.js
 
-const ColumnHeader = ({ columnData, dataKey, label, type, sortBy, sortDirection }) => (
+const ColumnHeader = ({ dataKey, label, type, sortBy, sortDirection }) => (
     <div className='ColumnHeader'>
         <span className='ColumnHeader-label' title={label}>{label}</span>
         {sortBy === dataKey ? <SortIndicator sortDirection={sortDirection} /> : null}
@@ -22,5 +23,13 @@ const ColumnHeader = ({ columnData, dataKey, label, type, sortBy, sortDirection 
         }
     </div>
 );
+
+ColumnHeader.propTypes = {
+    dataKey: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    sortBy: PropTypes.string.isRequired,
+    sortDirection: PropTypes.string.isRequired,
+};
 
 export default ColumnHeader;

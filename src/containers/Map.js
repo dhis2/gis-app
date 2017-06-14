@@ -6,7 +6,7 @@ const mapStateToProps = (state) => ({
     ...state.map,
     basemaps: state.basemaps,
     layersPanelOpen: state.ui.layersPanelOpen,
-    dataTableOpen: state.ui.dataTableOpen,
+    dataTableOpen: state.dataTable,
     dataTableHeight: state.ui.dataTableHeight,
 });
 

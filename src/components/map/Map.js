@@ -53,7 +53,7 @@ class Map extends Component {
             imperial: false
         });
 
-        // TODO: Use key from Web API
+        // TODO: Use mapzen key from Web API
         map.addControl({
             type: 'search',
             apiKey: 'search-Se1CFzK', // gis.init.systemInfo.mapzenSearchKey
@@ -129,7 +129,6 @@ class Map extends Component {
             bottom: dataTableOpen ? dataTableHeight : 0,
             right: 0,
         };
-
 
         return (
             <div ref={node => this.node = node} style={style}>

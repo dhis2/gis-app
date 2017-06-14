@@ -51,7 +51,7 @@ class DataTable extends Component {
                     label='Index'
                     width={72}
                     className='right'
-                    headerRenderer={(props) => <ColumnHeader type='number' {...props}  />}
+                    headerRenderer={props => <ColumnHeader type='number' {...props}  />}
                 />
                 <Column
                     dataKey='name'
@@ -70,7 +70,7 @@ class DataTable extends Component {
                     dataKey='legend'
                     label='Legend'
                     width={100}
-                    headerRenderer={(props) => <ColumnHeader type='multiselect' {...props}  />}
+                    headerRenderer={(props) => <ColumnHeader type='string' {...props}  />}
                 />
                 <Column
                     dataKey='range'
@@ -138,5 +138,13 @@ class DataTable extends Component {
         });
     }
 }
+
+DataTable.propTypes = {
+    data: PropTypes.array.isRequired,
+};
+
+DataTable.defaultProps = {
+    data: [],
+};
 
 export default DataTable;

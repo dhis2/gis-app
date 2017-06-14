@@ -33,24 +33,6 @@ const ui = (state = defaultState, action) => {
                 layersPanelOpen: false,
             };
 
-        case 'DATA_TABLE_OPEN':
-            return {
-                ...state,
-                dataTableOpen: true,
-            };
-
-        case 'DATA_TABLE_CLOSE':
-            return {
-                ...state,
-                dataTableOpen: false,
-            };
-
-        case 'DATA_TABLE_TOGGLE':
-            return {
-                ...state,
-                dataTableOpen: !state.dataTableOpen,
-            };
-
         case types.OVERLAYS_DIALOG_OPEN_REQUESTED:
             return {
                 ...state,

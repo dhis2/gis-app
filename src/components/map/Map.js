@@ -53,24 +53,15 @@ class Map extends Component {
             imperial: false
         });
 
-        /*
-        L.control.geocoder(gis.init.systemInfo.mapzenSearchKey, {
-            position: 'topright',
-            attribution: null,
-            panToPoint: null
-        }).addTo(map);
-        */
+        // TODO: Use key from Web API
+        map.addControl({
+            type: 'search',
+            apiKey: 'search-Se1CFzK', // gis.init.systemInfo.mapzenSearchKey
+        });
 
         // Add measurement control
         map.addControl({
             type: 'measure',
-            position: 'topright',
-            primaryLengthUnit: 'kilometers',
-            secondaryLengthUnit: 'miles',
-            primaryAreaUnit: 'hectares',
-            secondaryAreaUnit: 'acres',
-            activeColor: '#ffa500',
-            completedColor: '#ffa500'
         });
 
         if (isArray(bounds)) {

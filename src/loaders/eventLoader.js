@@ -12,7 +12,7 @@ let paramString;
 let filterTypes = {
     'IN': '=',
     'LE': '<=',
-}
+};
 
 const loadEvents = () => {
     apiFetch(`analytics/events/query/${layer.program.id}.json${paramString}`)
@@ -160,7 +160,7 @@ const eventLoader = (config, cb) =>  {
     let eventCoordinateFieldName; // Name of event coordinate field to show in popup
     let legendItemName = '' // TODO: i18n
 
-    // Set title to prgram name
+    // Set title to program name
     layer.title = layer.program.name;
 
     // Build param string
@@ -175,7 +175,7 @@ const eventLoader = (config, cb) =>  {
     paramString += 'stage=' + layer.programStage.id;
 
     // Period
-    if (layer.filters) {
+    if (isArray(layer.filters) && layer.filters.length) {
         paramString += '&filter=pe:' + layer.filters[0].items[0].id;
     } else {
         paramString += '&startDate=' + layer.startDate;
@@ -193,8 +193,6 @@ const eventLoader = (config, cb) =>  {
             if (element.dimension !== 'dx') { // API sometimes returns empty dx filter
                 paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
 
-                // console.log('element', element);
-
                 if (element.filter) {
                     const filter = element.filter.split(':');
                     const type = filterTypes[filter[0]];
@@ -207,7 +205,7 @@ const eventLoader = (config, cb) =>  {
                 }
 
 
-       }
+            }
         });
     }
 
@@ -221,11 +219,8 @@ const eventLoader = (config, cb) =>  {
         }]
     };
 
-    if (layer.filters) {
+    if (isArray(layer.filters) && layer.filters.length) {
         const period = layer.filters[0].items[0].id.replace(/_/g, ' ').toLowerCase();
-
-        // console.log('### period', period);
-
         layer.legend.description += period;
     } else {
         layer.legend.description += layer.startDate + ' – '+ layer.endDate;

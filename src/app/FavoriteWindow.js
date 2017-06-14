@@ -88,6 +88,7 @@ export default function FavoriteWindow(gis) {
 
                     // add
                     view.layer = layer.type;
+                    view.name = layer.title;
                     view.hidden = !layer.isVisible;
 
                     views.push(view);
@@ -102,6 +103,8 @@ export default function FavoriteWindow(gis) {
                     basemap: basemap.isVisible ? basemap.id : 'none',
                     mapViews: views
                 };
+
+                console.log('#', config);
 
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'maps/'),

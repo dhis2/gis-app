@@ -13,6 +13,13 @@ const styles = {
     container: {
         paddingBottom: 0,
     },
+    headerText: {
+        position: 'relative',
+        width: 210,
+        top: '50%',
+        transform: 'translateY(-50%)',
+        paddingRight: 0,
+    },
     visibility: {
         width: 56,
         height: 56,
@@ -21,19 +28,9 @@ const styles = {
         right: 32,
         top: 0,
     },
-    headerText: {
-        position: 'relative',
-        width: 210,
-        top: '50%',
-        transform: 'translateY(-50%)',
-        paddingRight: 0,
-    },
     body: {
         padding: 0,
     },
-    slider: {
-        margin: 8
-    }
 };
 
 // Basemap card shown in left layers panel

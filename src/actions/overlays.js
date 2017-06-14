@@ -37,7 +37,7 @@ export const requestOverlayLoad = (id) => ({
 // Load overlay data
 // http://redux.js.org/docs/advanced/AsyncActions.html
 export const getOverlay = (layer) => (dispatch) => {
-    dispatch(loading()); // Gives error: Warning: setState(...): Cannot update during an existing state transition
+    dispatch(loading());
 
     return fetchOverlay(layer).then(layer => {
         if (layer.editCounter === 1) { // Add new layer

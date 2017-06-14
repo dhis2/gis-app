@@ -17,7 +17,6 @@ export function classify(features, values, options, legend) {
 
         // Make sure that last bounds is exactly max value.
         bounds[bounds.length - 1] = options.maxValue;
-        // console.log('##', bounds)
 
         options.bounds = bounds;
 
@@ -89,7 +88,7 @@ export function getClass(value, bounds) {
     }
 
     return null;
-};
+}
 
 export function getColorsByRgbInterpolation(firstColor, lastColor, nbColors) {
     const colors = [];

@@ -1,7 +1,7 @@
 import { apiFetch } from '../util/api';
 import { toGeoJson } from '../util/map';
 import { arraySort } from '../util/array';
-import { classify } from '../util/thematic';
+import { classify, getColorsByRgbInterpolation } from '../util/thematic';
 import isObject from 'd2-utilizr/lib/isObject';
 import isArray from 'd2-utilizr/lib/isArray';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
@@ -93,9 +93,6 @@ class ThematicLoader {
             gis.alert(GIS.i18n.no_valid_coordinates_found); // TODO
             return;
         }
-
-        // layer.featureStore.loadFeatures(features.slice(0)); // TODO
-        // layer.features = features;
 
         // const response = gis.api.response.Response(data); // validate - TODO: needed?
         const featureMap = {};
@@ -201,7 +198,7 @@ class ThematicLoader {
                         this.createLegend();
                     }
                 })
-                .catch(this.createLegend); // TODO
+                .catch(err => console.error(err)); // TODO
         }
     }
 
@@ -247,6 +244,7 @@ class ThematicLoader {
 
     createLegend() {
         const layer = this.layer;
+        const method = layer.method;
         const metaData = this.metaData;
         const bounds = this.bounds;
         const colors = this.colors;
@@ -315,7 +313,7 @@ class ThematicLoader {
 
         layer.subtitle = metaData.names[id] || name || id;
 
-        if (layer.method === 1 && layer.legendSet) { // Predefined legend
+        if (method === 1 && layer.legendSet) { // Predefined legend
             for (let i = 0; i < bounds.length - 1; i++) {
                 const name = legendNames[i];
                 const label = bounds[i] + ' - ' + bounds[i + 1];
@@ -334,14 +332,39 @@ class ThematicLoader {
 
                 legend.items.push(item);
             }
-        }
-        else { // Automatic legend
+        } else if (method === 2) { // equal intervals
+            for (let i = 0; i <= options.numClasses; i++) {
+                bounds[i] = options.minValue + i * (options.maxValue - options.minValue) / options.numClasses;
+
+            }
+            options.bounds = bounds;
+
+            if (!options.colors.length) { // Backward compability
+                options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
+            }
+
+            for (let i = 0; i < options.bounds.length - 1; i++) {
+                legend.items.push({
+                    color: options.colors[i],
+                    range: options.bounds[i].toFixed(1) + ' - ' + options.bounds[i + 1].toFixed(1), //  + ' (' + (options.count[i + 1] || 0) + ')',
+                });
+            }
+        } else if (method === 3) { // quantiles
+            console.log('### quantiles');
+
+
+
+
+
+
+            /*
             for (let i = 0; i < options.bounds.length - 1; i++) {
                 legend.items.push({
                     color: options.colors[i],
                     name: options.bounds[i].toFixed(1) + ' - ' + options.bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')',
                 });
             }
+            */
         }
 
         // Apply classification

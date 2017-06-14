@@ -8,25 +8,19 @@ import { grey600 } from 'material-ui/styles/colors';
 import SortableHandle from './SortableHandle';
 import OverlayToolbar from '../toolbar/OverlayToolbar';
 import Legend from '../legend/Legend';
+import './OverlayCard.css';
 
 const styles = {
-    root: {
-        zIndex: 1100,
-    },
     container: {
         paddingBottom: 0,
-        clear: 'both',
-    },
-    header: {
-        height: 56,
-        paddingRight: 8,
-        marginRight: -8,
-        fontSize: 10,
     },
     headerText: {
         position: 'relative',
+        width: 200,
         top: '50%',
+        left: 16,
         transform: 'translateY(-50%)',
+        paddingRight: 0,
     },
     visibility: {
         width: 56,
@@ -63,19 +57,16 @@ const OverlayCard = (props) => {
 
     return (
         <Card
-            style={styles.root}
+            className='OverlayCard'
             containerStyle={styles.container}
             expanded={isExpanded}
             onExpandChange={() => toggleOverlayExpand(id)}
         >
             <CardHeader
+                className='OverlayCard-header'
                 title={title}
                 subtitle={subtitle}
                 showExpandableButton={true}
-                style={{
-                    ...styles.header,
-                    paddingLeft: 34
-                }}
                 textStyle={styles.headerText}
             >
                 <SortableHandle color={grey600} />

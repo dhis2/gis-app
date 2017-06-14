@@ -350,21 +350,39 @@ class ThematicLoader {
                 });
             }
         } else if (method === 3) { // quantiles
-            console.log('### quantiles');
+            const binSize = Math.round(values.length / options.numClasses);
+            let binLastValPos = (binSize === 0) ? 0 : binSize;
 
+            if (values.length > 0) {
+                bounds[0] = values[0];
+                for (let i = 1; i < options.numClasses; i++) {
+                    bounds[i] = values[binLastValPos];
+                    binLastValPos += binSize;
 
+                    if (binLastValPos > values.length - 1) {
+                        binLastValPos = values.length - 1;
+                    }
+                }
+                bounds.push(values[values.length - 1]);
+            }
 
+            for (let j = 0; j < bounds.length; j++) {
+                bounds[j] = parseFloat(bounds[j]);
+            }
 
+            options.bounds = bounds;
 
+            if (!options.colors.length) { // Backward compability
+                options.colors = getColorsByRgbInterpolation(options.colorLow, options.colorHigh, options.numClasses);
+            }
 
-            /*
+            // TODO: Reuse same loop above
             for (let i = 0; i < options.bounds.length - 1; i++) {
                 legend.items.push({
                     color: options.colors[i],
-                    name: options.bounds[i].toFixed(1) + ' - ' + options.bounds[i + 1].toFixed(1) + ' (' + (options.count[i + 1] || 0) + ')',
+                    range: options.bounds[i].toFixed(1) + ' - ' + options.bounds[i + 1].toFixed(1), //  + ' (' + (options.count[i + 1] || 0) + ')',
                 });
             }
-            */
         }
 
         // Apply classification

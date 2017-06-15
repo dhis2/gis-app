@@ -465,16 +465,9 @@ export default function LayerWidgetEarthEngine(gis, layer) {
         map: layer.map,
         layer: layer,
         menu: layer.menu,
-
         reset: reset,
         setGui: setGui,
         getView: getView,
-
-        listeners: {
-            added: function() {
-                layer.accordion = this;
-            }
-        }
     });
 
 };

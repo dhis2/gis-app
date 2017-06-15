@@ -6,12 +6,6 @@ export default class EarthEngineLayer extends Layer {
         const props = this.props;
         const map = this.context.map;
 
-        /* TODO
-         if (typeof view.config === 'string') { // From database as favorite
-         view.config = JSON.parse(view.config);
-         }
-         */
-
         const config = {
             type: 'earthEngine',
             pane: props.id,
@@ -27,6 +21,8 @@ export default class EarthEngineLayer extends Layer {
         if (props.params) {
             config.params = props.params;
         }
+
+        console.log('props', props, config);
 
         config.accessToken = (callback) => {
             apiFetch('tokens/google')

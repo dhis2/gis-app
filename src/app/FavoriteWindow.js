@@ -91,6 +91,18 @@ export default function FavoriteWindow(gis) {
                     view.name = layer.title;
                     view.hidden = !layer.isVisible;
 
+                    // TODO: Temp fix
+                    if (view.layer === 'earthEngine') {
+                        view.config = JSON.stringify({
+                            band: view.band,
+                            datasetId: view.datasetId,
+                            mask: view.mask,
+                            params: view.params,
+                        });
+                    }
+
+                    console.log('view', view);
+
                     views.push(view);
                 });
 

@@ -185,9 +185,14 @@ const createLegend = (params) => {
 
 
 const earthEngineLoader = (config, callback) =>  {
+    if (typeof config.config === 'string') { // From database as favorite
+        config = JSON.parse(config.config);
+    }
+
     const dataset = datasets[config.datasetId];
 
-    // TODO: Is this a deep copy?
+    console.log('config', config, dataset);
+
     const layer = {
         ...config,
         ...dataset,

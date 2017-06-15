@@ -722,9 +722,6 @@ export default function LayerWidgetBoundary(gis, layer) {
             return this.panels[0];
         },
         listeners: {
-            added() {
-                layer.accordion = this;
-            },
             render() {
                 toolMenu.clickHandler('level');
             }

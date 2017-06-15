@@ -21,6 +21,9 @@ export function parseFavorite({id, name, basemap, mapViews, user}) { // TODO: Ad
             view.type = view.layer.replace(/\d$/, ''); // Remove thematic number
             view.title = view.name;
             view.isLoaded = false;
+
+            console.log(view);
+
             return view;
         });
     }

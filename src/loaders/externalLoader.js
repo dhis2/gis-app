@@ -7,6 +7,7 @@ const externalLoader = (layer, callback) =>  {
     }
 
     layer.type = 'external';
+    layer.subtitle = 'External layer'; // TODO
     layer.isLoaded = true;
 
     // TODO: Add legend support

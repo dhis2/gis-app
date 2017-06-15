@@ -182,19 +182,21 @@ const createLegend = (params) => {
     });
 };
 
-
-
 const earthEngineLoader = (config, callback) =>  {
+    let layerConfig = {};
+    let dataset;
+
     if (typeof config.config === 'string') { // From database as favorite
-        config = JSON.parse(config.config);
+        layerConfig = JSON.parse(config.config);
+        dataset = datasets[layerConfig.datasetId];
+        delete (config.config);
+    } else {
+        dataset = datasets[config.datasetId];
     }
-
-    const dataset = datasets[config.datasetId];
-
-    console.log('config', config, dataset);
 
     const layer = {
         ...config,
+        ...layerConfig,
         ...dataset,
     };
 

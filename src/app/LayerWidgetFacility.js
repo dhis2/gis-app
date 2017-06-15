@@ -696,7 +696,7 @@ export default function LayerWidgetFacility(gis, layer) {
         Ext.apply(view, labelPanel.getConfig());
 
         view.areaRadius = areaRadius.getValue() ? areaRadius.getNumber() : null;
-        view.opacity = layer.layerOpacity;
+        view.opacity = layer.opacity;
 
         return validateView(view);
     };
@@ -774,9 +774,6 @@ export default function LayerWidgetFacility(gis, layer) {
             return this.panels[0];
         },
         listeners: {
-            added() {
-                layer.accordion = this;
-            },
             render() {
                 toolMenu.clickHandler('level');
             }

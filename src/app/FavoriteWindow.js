@@ -68,6 +68,7 @@ export default function FavoriteWindow(gis) {
 
                     // Remove properties used by UI, but not handled by server
                     delete view.id;
+                    delete view.title;
                     delete view.type;
                     delete view.data;
                     delete view.isLoading;
@@ -92,16 +93,34 @@ export default function FavoriteWindow(gis) {
                     view.hidden = !layer.isVisible;
 
                     // TODO: Temp fix
+                    if (view.layer === 'external') {
+                        view.config = JSON.stringify(view.config);
+                    }
+
                     if (view.layer === 'earthEngine') {
                         view.config = JSON.stringify({
                             band: view.band,
                             datasetId: view.datasetId,
                             mask: view.mask,
+                            aggregation: view.aggregation,
                             params: view.params,
-                        });
-                    }
+                            methods: view.methods,
+                            filter: view.filter,
+                            resolution: view.resolution,
+                            projection: view.projection,
 
-                    console.log('view', view);
+                        });
+
+                        delete view.band;
+                        delete view.datasetId;
+                        delete view.mask;
+                        delete view.aggregation;
+                        delete view.params;
+                        delete view.methods;
+                        delete view.filter;
+                        delete view.resolution;
+                        delete view.projection;
+                    }
 
                     views.push(view);
                 });
@@ -115,8 +134,6 @@ export default function FavoriteWindow(gis) {
                     basemap: basemap.isVisible ? basemap.id : 'none',
                     mapViews: views
                 };
-
-                console.log('#', config);
 
                 Ext.Ajax.request({
                     url: encodeURI(gis.init.apiPath + 'maps/'),

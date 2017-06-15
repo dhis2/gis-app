@@ -46,9 +46,8 @@ const onDataLoad = (data) => {
         };
     });
 
-    // Store features for search
-    // layer.featureStore.loadFeatures(features.slice(0));
     layer.data = features;
+    layer.title = 'Boundaries'; // TODO
 
     callback(layer);
 };

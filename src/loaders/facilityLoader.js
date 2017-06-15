@@ -94,6 +94,7 @@ const onDataLoad = (groupSet, facilities, layer, callback) => {
     }
 
     layer.data = features;
+    layer.title = 'Facilities'; // TODO
     layer.legend = createLegend(groupSet);
 
     callback(layer);

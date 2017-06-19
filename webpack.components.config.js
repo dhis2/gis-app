@@ -18,6 +18,7 @@ module.exports = {
                 include: [
                     path.resolve(__dirname, 'src'),
                     path.resolve(__dirname, './components'),
+                    path.resolve(__dirname, 'node_modules/dhis2-gis-api'),
                 ],
                 loader: 'babel-loader',
             },

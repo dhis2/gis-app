@@ -2,8 +2,12 @@ export function apiFetch(url, method, body) {
     const options = {
         headers: {
             ...gis.init.defaultHeaders,
-        },
+        }
     };
+
+    if (!gis.init.defaultHeaders['Authorization']) {
+        options.credentials = 'include';
+    }
 
     if (method && body) {
         options.method = method;

@@ -1,21 +1,22 @@
 {
-    "version": "0.1.1",
-    "name": "DHIS 2 GIS",
-    "description": "The GIS app",
+    "version": "0.0.2",
+    "name": "GIS App beta",
+    "description": "The new GIS App for DHIS2 is available for testing.",
     "launch_path": "/index.html",
+    "appType": "APP",
     "icons": {
-        "16": "/img/icons/mortar-16.png",
-        "48": "/img/icons/mortar-48.png",
-        "128": "/img/icons/mortar-128.png"
+        "16": "/images/gisapp-16.png",
+        "48": "/images/gisapp-48.png",
+        "128": "/images/gisapp-128.png"
     },
     "developer": {
-        "name": "Jan Henrik Øverland",
-        "url": "https://launchpad.net/~janhenrik-overland"
+        "name": "Bjørn Sandvik",
+        "url": "https://github.com/turban"
     },
     "default_locale": "en",
     "activities": {
         "dhis": {
-            "href": ".."
+            "href": "*"
         }
     }
 }

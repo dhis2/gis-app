@@ -106,7 +106,6 @@ Ext.onReady( function() {
                 const context = JSON.parse(r.responseText).activities.dhis;
 
                 init.contextPath = context.href;
-
                 init.apiPath = init.contextPath + '/api/' + GIS.apiVersion + '/';
                 init.analyticsPath = init.contextPath + '/api/25/'; // TODO: Only use apiPath
                 init.defaultHeaders = {};
@@ -377,8 +376,6 @@ Ext.onReady( function() {
                                         requests.push({
                                             url: encodeURI(init.apiPath + 'configuration/infrastructuralPeriodType.json'),
                                             success(r) {
-
-
                                                 var obj = JSON.parse(r.responseText);
 
                                                 init.systemSettings.infrastructuralPeriodType = isObject(obj) ? obj : {id: 'Yearly', code: 'Yearly', name: 'Yearly'};
@@ -388,7 +385,8 @@ Ext.onReady( function() {
 
                                         // option sets
                                         requests.push({
-                                            url: '.',
+                                            // url: '.', // TODO: Gives error when installed from app store - it seems to be the same what is loaded here
+                                            url: encodeURI(init.apiPath + 'system/info.json'),
                                             disableCaching: false,
                                             success() {
                                                 var store = dhis2.gis.store;

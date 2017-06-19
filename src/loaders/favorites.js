@@ -22,8 +22,6 @@ export function parseFavorite({id, name, basemap, mapViews, user}) { // TODO: Ad
             view.title = view.name;
             view.isLoaded = false;
 
-            console.log(view);
-
             return view;
         });
     }

@@ -21,7 +21,7 @@ export const filterData = (data, filters) => {
 
 // Simple check if string contains another string
 export const stringFilter = (string, filter) => {
-    return string.toLowerCase().indexOf(filter.toLowerCase()) !== -1;
+    return ('' + string).toLowerCase().indexOf(filter.toLowerCase()) !== -1;
 };
 
 // Numeric filter supporting AND, OR, GREATER THAN, LESS THAN or equal number

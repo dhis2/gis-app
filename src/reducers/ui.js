@@ -5,7 +5,7 @@ const defaultState = {
     height: typeof window === 'object' ? window.innerHeight : null,
     layersPanelOpen: true,
     dataTableOpen: false,
-    dataTableHeight: 200,
+    dataTableHeight: 300,
     overlaysDialogOpen: false,
     favoritesDialogOpen: false,
     mapContextMenu: true,

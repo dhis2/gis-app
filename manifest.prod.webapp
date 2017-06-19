@@ -1,7 +1,7 @@
 {
-    "version": "0.0.2",
-    "name": "GIS App beta",
-    "description": "The new GIS App for DHIS2 is available for testing.",
+    "version": "0.0.4",
+    "name": "Maps Preview",
+    "description": "The new Maps app for DHIS2 is available for testing.",
     "launch_path": "/index.html",
     "appType": "APP",
     "icons": {

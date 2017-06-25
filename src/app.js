@@ -1066,7 +1066,7 @@ Ext.onReady( function() {
                         'Authorization': 'Basic ' + btoa(context.auth)
                     };
 
-                    init.defaultHeaders['Authorization'] = 'Basic ' + btoa(context.auth); // Used by fetch
+                  init.defaultHeaders['Authorization'] = 'Basic ' + btoa(context.auth); // Used by fetch
                 }
 
                 // system info
@@ -1337,7 +1337,7 @@ Ext.onReady( function() {
                                                     store.getKeys('optionSets').done( function(keys) {
                                                         if (keys.length === 0) {
                                                             Ext.Ajax.request({
-                                                                url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false'),
+                                                              url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false'),
                                                                 success: function(r) {
                                                                     var sets = JSON.parse(r.responseText).optionSets;
 
@@ -1368,12 +1368,16 @@ Ext.onReady( function() {
                                                                                 return;
                                                                             }
 
+                                                                            // const test = '&filter=id:IN:' + ids.join(';');
+                                                                            // console.log('NEW', test);
+
                                                                             for (var i = 0; i < ids.length; i++) {
                                                                                 url += '&filter=id:eq:' + ids[i];
                                                                             }
 
+                                                                            // TODO: Problematic with long URLs
                                                                             Ext.Ajax.request({
-                                                                                url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false' + url),
+                                                                              url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false' + url),
                                                                                 success: function(r) {
                                                                                     var sets = JSON.parse(r.responseText).optionSets;
 

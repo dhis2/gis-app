@@ -178,9 +178,7 @@ Ext.onReady(function() {
                         return;
                     }
 
-                    for (var i = 0; i < ids.length; i++) {
-                        url += '&filter=id:eq:' + ids[i];
-                    }
+                    url += '&filter=id:in:[' + ids.join(',') + ']';
 
                     Ext.Ajax.request(optionSetConfig);
                 }

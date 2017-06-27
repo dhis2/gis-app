@@ -164,7 +164,7 @@ export default function LayerHandlerEvent(gis, layer) {
 
             if (!rows.length) {
                 gis.alert('No event coordinates found');
-                gis.mask.hide();
+                // gis.mask.hide();
                 return;
             }
 

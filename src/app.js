@@ -933,43 +933,6 @@ Ext.onReady( function() {
                 }
             }
 
-            // TODO: Add missing base code
-            /*
-            if (base.length) {
-
-                // hide base layer
-                if (arrayContains(['false', 'none', 'no', 'off'], base)) {
-                    for (var i = 0, item; i < layersPanel.layerItems.length; i++) {
-                        item = layersPanel.layerItems[i];
-
-                        if (item.layer.layerType === gis.conf.finals.layer.type_base && item.layer.visibility) {
-                            item.disableItem();
-                        }
-                    }
-                }
-                else {
-                    var isEnabled = false;
-
-                    for (var i = 0, item; i < layersPanel.layerItems.length; i++) {
-                        item = layersPanel.layerItems[i];
-
-                        if (item.layer.layerType === gis.conf.finals.layer.type_base) {
-                            if (base === item.layer.id) {
-                                item.enableItem();
-                                isEnabled = true;
-                            }
-                            else {
-                                item.disableItem();
-                            }
-                        }
-                    }
-
-                    if (!isEnabled) {
-                        layersPanel.layerItems[layersPanel.layerItems.length - 1].enableItem();
-                    }
-                }
-            }*/
-
             // remove params from url
             if (id || session || base) {
                 history.pushState(null, null, '.')
@@ -1368,14 +1331,8 @@ Ext.onReady( function() {
                                                                                 return;
                                                                             }
 
-                                                                            // const test = '&filter=id:IN:' + ids.join(';');
-                                                                            // console.log('NEW', test);
+                                                                            url += '&filter=id:in:[' + ids.join(',') + ']';
 
-                                                                            for (var i = 0; i < ids.length; i++) {
-                                                                                url += '&filter=id:eq:' + ids[i];
-                                                                            }
-
-                                                                            // TODO: Problematic with long URLs
                                                                             Ext.Ajax.request({
                                                                               url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName|rename(name),version,options[code,displayName|rename(name)]&paging=false' + url),
                                                                                 success: function(r) {

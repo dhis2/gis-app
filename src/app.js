@@ -1395,9 +1395,7 @@ Ext.onReady( function() {
                                                                                 return;
                                                                             }
 
-                                                                            for (var i = 0; i < ids.length; i++) {
-                                                                                url += '&filter=id:eq:' + ids[i];
-                                                                            }
+                                                                            url += '&filter=id:in:[' + ids.join(',') + ']';
 
                                                                             Ext.Ajax.request({
                                                                                 url: encodeURI(contextPath + '/api/optionSets.json?fields=id,displayName~rename(name),version,options[code,displayName~rename(name)]&paging=false' + url),

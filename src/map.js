@@ -170,9 +170,7 @@ Ext.onReady(function() {
                         return;
                     }
 
-                    ids.forEach(id => {
-                        url += '&filter=id:eq:' + id;
-                    });
+                    url += '&filter=id:in:[' + ids.join(',') + ']';
 
                     Ext.Ajax.request(optionSetConfig);
                 }

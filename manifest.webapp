@@ -1,5 +1,5 @@
 {
-    "version": "0.1.1",
+    "version": "24.0.5",
     "name": "DHIS 2 GIS",
     "description": "The GIS app",
     "launch_path": "/index.html",

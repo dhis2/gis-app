@@ -1,3 +1,4 @@
+import 'babel-polyfill'; // Required for IE 11
 import GIS from './core/index.js';
 import app from './app/index.js';
 import isObject from 'd2-utilizr/lib/isObject';
@@ -8,7 +9,7 @@ import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 import log from 'loglevel';
 
 log.setLevel(log.levels.INFO); // TODO: Use DEBUG for development
-log.info('Loading: GIS app 27.0.9'); // TODO: Use manifest
+log.info('Loading: GIS app 27.0.10'); // TODO: Use manifest
 
 window.GIS = GIS;
 

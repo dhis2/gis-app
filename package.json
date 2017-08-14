@@ -1,6 +1,6 @@
 {
   "name": "gis-app",
-  "version": "28.0.0",
+  "version": "28.0.1",
   "description": "GIS Web App for DHIS 2",
   "main": "build/index.js",
   "scripts": {
@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/dhis2/gis-app#readme",
   "dependencies": {
-    "babel-polyfill": "^6.23.0",
     "d2-utilizr": "^0.2.13",
     "d3-time-format": "^2.0.5",
     "dhis2-gis-api": "27.0.12",

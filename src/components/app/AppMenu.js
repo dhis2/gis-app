@@ -52,6 +52,7 @@ const AppMenu = ({ openOverlaysDialog, openFavoritesDialog, openAboutDialog }) =
             />
             <FlatButton
                 label="Home"
+                onTouchTap={() => window.location.href = '../dhis-web-commons-about/redirect.action'} // TODO - get base url
                 style={styles.button}
             />
         </ToolbarGroup>

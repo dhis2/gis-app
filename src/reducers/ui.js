@@ -8,6 +8,7 @@ const defaultState = {
     dataTableHeight: 300,
     overlaysDialogOpen: false,
     favoritesDialogOpen: false,
+    aboutDialogOpen: false,
     mapContextMenu: true,
 };
 
@@ -61,6 +62,30 @@ const ui = (state = defaultState, action) => {
             return {
                 ...state,
                 dataTableHeight: action.height,
+            };
+
+        case types.FAVORITES_DIALOG_OPEN_REQUESTED:
+            return {
+                ...state,
+                favoritesDialogOpen: true,
+            };
+
+        case types.FAVORITES_DIALOG_CLOSE_REQUESTED:
+            return {
+                ...state,
+                favoritesDialogOpen: false,
+            };
+
+        case types.ABOUT_DIALOG_OPEN_REQUESTED:
+            return {
+                ...state,
+                aboutDialogOpen: true,
+            };
+
+        case types.ABOUT_DIALOG_CLOSE_REQUESTED:
+            return {
+                ...state,
+                aboutDialogOpen: false,
             };
 
         default:

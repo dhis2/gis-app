@@ -108,7 +108,8 @@ Ext.define('Ext.ux.field.ColorScale', {
         }
 
         // Assume palette string
-        if (typeof value === 'string' && value.includes('#')) {
+        // if (typeof value === 'string' && value.includes('#')) { // Don't work in IE 11
+        if (typeof value === 'string' && value.indexOf('#') !== -1) {
             value = paletteIdMap[value];
         }
 

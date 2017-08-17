@@ -12,6 +12,7 @@ import OverlayEdit from '../../containers/OverlayEdit';
 import ContextMenu from '../../containers/ContextMenu';
 import OrgUnitDialog from '../../containers/OrgUnitDialog';
 import RelocateDialog from '../../containers/RelocateDialog';
+import AboutDialog from '../../containers/AboutDialog';
 import MapProvider from '../map/MapProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -32,7 +33,7 @@ const App = () => (
                 <ContextMenu />
                 <OrgUnitDialog />
                 <RelocateDialog />
-
+                <AboutDialog />
             </div>
         </MapProvider>
     </MuiThemeProvider>

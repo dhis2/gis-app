@@ -22,7 +22,7 @@ const styles = {
     },
 };
 
-const AppMenu = ({ openOverlaysDialog, openFavoritesDialog }) => (
+const AppMenu = ({ openOverlaysDialog, openFavoritesDialog, openAboutDialog }) => (
     <Toolbar
         style={styles.toolbar}
         className="dhis-gis-menu"
@@ -47,6 +47,7 @@ const AppMenu = ({ openOverlaysDialog, openFavoritesDialog }) => (
         <ToolbarGroup lastChild={true} style={styles.lastToolbar}>
             <FlatButton
                 label="About"
+                onTouchTap={openAboutDialog}
                 style={styles.button}
             />
             <FlatButton

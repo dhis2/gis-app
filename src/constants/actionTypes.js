@@ -80,3 +80,5 @@ export const LOADED = 'LOADED';
 /* SYSTEM SETTINGS */
 export const SYSTEM_DATA_SET = 'SYSTEM_DATA_SET';
 
+/* USER */
+export const USER_SET = 'USER_SET';

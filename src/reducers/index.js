@@ -10,6 +10,7 @@ import orgUnit from './orgUnit';
 import relocate from './relocate';
 import loading from './loading';
 import system from './system';
+import user from './user';
 
 export default combineReducers({
     ui,
@@ -23,4 +24,5 @@ export default combineReducers({
     relocate,
     loading,
     system,
+    user,
 });

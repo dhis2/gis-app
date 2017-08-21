@@ -10,7 +10,8 @@ import { render } from 'react-dom';
 import Root from './components/Root';
 import debounce from 'lodash.debounce';
 import storeFactory from './store';
-import { loadSystemInfo, loadSystemSettings } from './actions/system'; //
+import { loadSystemInfo, loadSystemSettings } from './actions/system';
+import { loadUser } from './actions/user';
 import { fetchExternalLayers } from './actions/externalLayers';
 import { resizeScreen } from './actions/ui';
 

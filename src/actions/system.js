@@ -1,5 +1,6 @@
 import * as types from '../constants/actionTypes';
-import { apiFetch } from '../util/api';
+import { apiFetch, urlFetch } from '../util/api';
+import { loadUser } from './user';
 import { loading, loaded } from './loading';
 
 export const setSystemData = (data) => ({
@@ -8,13 +9,14 @@ export const setSystemData = (data) => ({
 });
 
 // Load system info
-export const loadSystemInfo = () => (dispatch) => {
+export const loadSystemInfo = () => (dispatch, getState) => {
     dispatch(loading());
 
     return apiFetch('system/info.json')
         .then(res => res.json())
         .then(data => {
             dispatch(setSystemData(data));
+            dispatch(loadUser());
             dispatch(loaded());
         }).catch(error => {
             console.log('Error: ', error); // TODO

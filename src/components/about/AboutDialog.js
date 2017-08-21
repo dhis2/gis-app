@@ -7,7 +7,7 @@ const style = {
   padding: 5
 };
 
-const AboutDialog = ({ system, aboutDialogOpen, closeAboutDialog }) => {
+const AboutDialog = ({ system, user, aboutDialogOpen, closeAboutDialog }) => {
 
     const actions = [
         <FlatButton
@@ -27,7 +27,7 @@ const AboutDialog = ({ system, aboutDialogOpen, closeAboutDialog }) => {
             <div style={style}><b>{GIS.i18n.time_since_last_data_update}</b>: {system.intervalSinceLastAnalyticsTableSuccess}</div>
             <div style={style}><b>{GIS.i18n.version}</b>: {system.version}</div>
             <div style={style}><b>{GIS.i18n.revision}</b>: {system.revision}</div>
-            <div style={style}><b>{GIS.i18n.username}</b>: TODO</div>
+            <div style={style}><b>{GIS.i18n.username}</b>: {user.username}</div>
         </Dialog>
     );
 };

@@ -1,8 +1,5 @@
 import React from 'react';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import TableIcon from 'material-ui/svg-icons/image/grid-on';
-import ChartIcon from 'material-ui/svg-icons/editor/show-chart';
-import MapIcon from 'material-ui/svg-icons/maps/map';
 import FlatButton from 'material-ui/FlatButton';
 import { HEADER_HEIGHT } from '../../constants/layout';
 
@@ -22,7 +19,7 @@ const styles = {
     },
 };
 
-const AppMenu = ({ openOverlaysDialog, openFavoritesDialog, openAboutDialog }) => (
+const AppMenu = ({ openOverlaysDialog, openFavoritesDialog, openAboutDialog, contextPath }) => (
     <Toolbar
         style={styles.toolbar}
         className="dhis-gis-menu"
@@ -52,7 +49,7 @@ const AppMenu = ({ openOverlaysDialog, openFavoritesDialog, openAboutDialog }) =
             />
             <FlatButton
                 label="Home"
-                onTouchTap={() => window.location.href = '../dhis-web-commons-about/redirect.action'} // TODO - get base url
+                onTouchTap={() => window.location.href = contextPath + '/dhis-web-commons-about/redirect.action'}
                 style={styles.button}
             />
         </ToolbarGroup>

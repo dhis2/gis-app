@@ -4,6 +4,7 @@ import { closeAboutDialog } from '../actions/about';
 
 const mapStateToProps = state => ({
     aboutDialogOpen: state.ui.aboutDialogOpen,
+    system: state.system,
 });
 
 export default connect(

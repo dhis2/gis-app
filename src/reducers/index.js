@@ -9,6 +9,7 @@ import contextMenu from './contextMenu';
 import orgUnit from './orgUnit';
 import relocate from './relocate';
 import loading from './loading';
+import system from './system';
 
 export default combineReducers({
     ui,
@@ -21,4 +22,5 @@ export default combineReducers({
     orgUnit,
     relocate,
     loading,
+    system,
 });

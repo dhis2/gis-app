@@ -3,7 +3,12 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-const AboutDialog = ({ aboutDialogOpen, closeAboutDialog }) => {
+const style = {
+  padding: 5
+};
+
+const AboutDialog = ({ system, aboutDialogOpen, closeAboutDialog }) => {
+
     const actions = [
         <FlatButton
             label='Close' // TODO: i18n
@@ -19,7 +24,10 @@ const AboutDialog = ({ aboutDialogOpen, closeAboutDialog }) => {
             open={aboutDialogOpen}
             onRequestClose={closeAboutDialog}
         >
-            Info coming here
+            <div style={style}><b>{GIS.i18n.time_since_last_data_update}</b>: {system.intervalSinceLastAnalyticsTableSuccess}</div>
+            <div style={style}><b>{GIS.i18n.version}</b>: {system.version}</div>
+            <div style={style}><b>{GIS.i18n.revision}</b>: {system.revision}</div>
+            <div style={style}><b>{GIS.i18n.username}</b>: TODO</div>
         </Dialog>
     );
 };

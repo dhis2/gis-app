@@ -82,3 +82,6 @@ export const SYSTEM_DATA_SET = 'SYSTEM_DATA_SET';
 
 /* USER */
 export const USER_SET = 'USER_SET';
+
+/* PROGRAMS */
+export const PROGRAMS_SET = 'PROGRAMS_SET';

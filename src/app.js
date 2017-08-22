@@ -11,7 +11,7 @@ import Root from './components/Root';
 import debounce from 'lodash.debounce';
 import storeFactory from './store';
 import { loadSystemInfo, loadSystemSettings } from './actions/system';
-import { loadUser } from './actions/user';
+import { loadPrograms } from './actions/programs';
 import { fetchExternalLayers } from './actions/externalLayers';
 import { resizeScreen } from './actions/ui';
 
@@ -26,7 +26,9 @@ render(
 GIS.onLoad = () => {
     store.dispatch(loadSystemInfo());
     store.dispatch(loadSystemSettings());
+    store.dispatch(loadSystemSettings());
     store.dispatch(fetchExternalLayers());
+    store.dispatch(loadPrograms()); // TODO: Better to load on demand
 };
 
 // Window resize listener: http://stackoverflow.com/questions/35073669/window-resize-react-redux

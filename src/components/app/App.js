@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MapProvider from '../map/MapProvider';
 import AppMenu from '../../containers/AppMenu';
 import AddLayerDialog from '../../containers/AddLayerDialog';
 import FavoritesDialog from '../../containers/FavoritesDialog';
@@ -13,7 +14,7 @@ import ContextMenu from '../../containers/ContextMenu';
 import OrgUnitDialog from '../../containers/OrgUnitDialog';
 import RelocateDialog from '../../containers/RelocateDialog';
 import AboutDialog from '../../containers/AboutDialog';
-import MapProvider from '../map/MapProvider';
+import EventDialog from '../../containers/EventDialog';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
@@ -34,6 +35,7 @@ const App = () => (
                 <OrgUnitDialog />
                 <RelocateDialog />
                 <AboutDialog />
+                <EventDialog />
             </div>
         </MapProvider>
     </MuiThemeProvider>

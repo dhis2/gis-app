@@ -9,7 +9,7 @@ export const setSystemData = (data) => ({
 });
 
 // Load system info
-export const loadSystemInfo = () => (dispatch, getState) => {
+export const loadSystemInfo = () => (dispatch) => {
     dispatch(loading());
 
     return apiFetch('system/info.json')

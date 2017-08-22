@@ -11,6 +11,7 @@ import relocate from './relocate';
 import loading from './loading';
 import system from './system';
 import user from './user';
+import programs from './programs';
 
 export default combineReducers({
     ui,
@@ -25,4 +26,5 @@ export default combineReducers({
     loading,
     system,
     user,
+    programs
 });

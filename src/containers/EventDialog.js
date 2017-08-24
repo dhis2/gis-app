@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import EventDialog from '../components/event/EventDialog';
-import { closeAboutDialog } from '../actions/about';
+import { loadPrograms, loadProgramStages, loadProgramStageDataElements } from '../actions/programs';
 
 const mapStateToProps = state => ({
     programs: state.programs
@@ -8,5 +8,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { closeAboutDialog, }
+    { loadPrograms, loadProgramStages, loadProgramStageDataElements }
 )(EventDialog);

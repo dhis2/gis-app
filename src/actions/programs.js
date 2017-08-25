@@ -20,6 +20,13 @@ export const setProgramAttributes = (programId, payload) => ({
     payload,
 });
 
+export const setProgramStageDataElements = (programId, programStageId, payload) => ({
+    type: types.PROGRAM_STAGE_DATA_ELEMENTS_SET,
+    programId,
+    programStageId,
+    payload,
+});
+
 // Load programs
 export const loadPrograms = () => (dispatch) => {
     dispatch(loading());
@@ -37,10 +44,6 @@ export const loadPrograms = () => (dispatch) => {
 // Load program stages
 export const loadProgramStages = (programId) => (dispatch) => {
     dispatch(loading());
-
-    // console.log('load program stages', programId);
-
-    // url: encodeURI(gis.init.apiPath + 'programs.json?filter=id:eq:' + programId + '&fields=programStages[id,displayName~rename(name)],programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]]&paging=false'),
 
     return apiFetch('programs.json?filter=id:eq:' + programId + '&fields=programStages[id,displayName~rename(name)],programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]]&paging=false')
         .then(res => res.json())
@@ -60,9 +63,6 @@ export const loadProgramStages = (programId) => (dispatch) => {
             dispatch(setProgramStages(programId, stages));
             dispatch(setProgramAttributes(programId, attributes));
 
-            // console.log('program stages', program, stages, attributes);
-
-            // dispatch(setPrograms(data.programs));
             dispatch(loaded());
         }).catch(error => {
             console.log('Error: ', error); // TODO
@@ -70,13 +70,20 @@ export const loadProgramStages = (programId) => (dispatch) => {
 };
 
 // Load program stage data elements
-export const loadProgramStageDataElements = (stageId) => (dispatch) => {
+export const loadProgramStageDataElements = (programId, programStageId) => (dispatch) => {
+    dispatch(loading());
 
-    // url: encodeURI(gis.init.apiPath + 'programStages.json?filter=id:eq:' + stageId + '&fields=programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType,optionSet[id,displayName~rename(name)]]]'),
+    return apiFetch('programStages.json?filter=id:eq:' + programStageId + '&fields=programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType,optionSet[id,displayName~rename(name)]]]')
+        .then(res => res.json())
+        .then(data => {
+            const objects = data.programStages;
 
+            if (data.programStages.length) {
+                const dataElements = arrayPluck(data.programStages[0].programStageDataElements, 'dataElement');
 
-
+                dispatch(setProgramStageDataElements(programId, programStageId, dataElements));
+            }
+        }).catch(error => {
+            console.log('Error: ', error); // TODO
+        });
 };
-
-
-

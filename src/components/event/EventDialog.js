@@ -27,9 +27,9 @@ class EventDialog extends Component {
 
     state = {
         programId: null,
-        // program: null,
         programStageId: null,
-        stages: []
+        stages: [],
+        dataElements: [],
     };
 
     componentDidUpdate(prevProps) { // TODO: best place?
@@ -37,8 +37,11 @@ class EventDialog extends Component {
 
         if (program) {
             if (program.stages && this.state.stages !== program.stages) {
+                const stage = program.stages.filter(s => s.id === this.state.programStageId)[0];
+
                 this.setState({
-                   stages: program.stages
+                   stages: program.stages,
+                   dataElements: stage ? stage.dataElements : [],
                 });
             }
         }
@@ -49,21 +52,22 @@ class EventDialog extends Component {
 
         if (!program.stages) {
             this.props.loadProgramStages(program.id);
-            // console.log('Load stages for program: ', program.id);
         }
 
-        // console.log('#', program, programId, this.props.programs);
-        this.setState({ programId })
+        this.setState({ programId });
     }
 
     onProgramStageSelect(programStageId) {
-        console.log('onProgramStageSelect', programStageId);
-
+        this.props.loadProgramStageDataElements(this.state.programId, programStageId);
         this.setState({ programStageId });
     }
 
     render() {
-        const programs = this.props.programs;
+        const { programs } = this.props;
+        const { programId, programStageId, stages, dataElements } = this.state;
+
+        console.log('#', dataElements);
+
 
         return (
             <Dialog
@@ -77,13 +81,13 @@ class EventDialog extends Component {
                         <div style={styles.content}>
                             <ProgramSelect
                                 items={programs}
-                                value={this.state.programId}
+                                value={programId}
                                 onChange={programId => this.onProgramSelect(programId)}
                             />
-                            {this.state.programId ?
+                            {programId ?
                                 <ProgramStageSelect
-                                    items={this.state.stages}
-                                    value={this.state.programStageId}
+                                    items={stages}
+                                    value={programStageId}
                                     onChange={programStageId => this.onProgramStageSelect(programStageId)}
                                 />
                             : null}

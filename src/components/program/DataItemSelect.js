@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-
+import React from 'react';
 import SelectField from '../d2-ui/SelectField';
 
-const DataItemsSelect = (props) => (
+const DataItemSelect = (props) => (
     <SelectField
         label='Style by data item' // TODO: i18n
         {...props}
     />
 );
 
-export default DataItemsSelect;
+export default DataItemSelect;

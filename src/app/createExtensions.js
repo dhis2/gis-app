@@ -1075,6 +1075,8 @@ export default function createExtensions(gis) {
                     pageSize = pageSize || 100;
 
                     dhis2.gis.store.get('optionSets', optionSetId).done( function(obj) {
+                        console.log('option set', optionSetId, obj);
+
                         if (Ext.isObject(obj) && Ext.isArray(obj.options) && obj.options.length) {
                             var data = [];
 
@@ -1099,6 +1101,7 @@ export default function createExtensions(gis) {
                             }
 
                             store.removeAll();
+
                             store.loadData(data.slice(0, pageSize));
 
                         }

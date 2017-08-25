@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-
+import React from 'react';
 import SelectField from '../d2-ui/SelectField';
 
 const ProgramSelect = (props) => (

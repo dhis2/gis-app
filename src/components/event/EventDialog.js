@@ -7,7 +7,8 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
-// import RelativePeriodsSelect from '../periods/RelativePeriodsSelect';
+import DataItemSelect from '../program/DataItemSelect';
+import DataElement from './DataElement';
 
 const styles = {
     body: {
@@ -28,6 +29,7 @@ class EventDialog extends Component {
     state = {
         programId: null,
         programStageId: null,
+        dataElementId: null,
         stages: [],
         dataElements: [],
     };
@@ -62,12 +64,37 @@ class EventDialog extends Component {
         this.setState({ programStageId });
     }
 
+    onDataElementSelect(dataElementId) {
+        const dataElement = this.state.dataElements.filter(d => d.id === dataElementId)[0];
+
+        if (dataElement.optionSet) {
+            if (!this.props.optionSets[dataElement.optionSet.id]) {
+                this.props.loadOptionSet(dataElement.optionSet.id);
+            }
+        }
+
+        this.setState({ dataElementId });
+    }
+
     render() {
-        const { programs } = this.props;
-        const { programId, programStageId, stages, dataElements } = this.state;
+        const { programs, optionSets } = this.props;
+        const {
+            programId,
+            programStageId,
+            dataElementId,
+            stages,
+            dataElements
+        } = this.state;
+        let dataElement;
+        let optionSet;
 
-        console.log('#', dataElements);
+        if (dataElementId) {
+            dataElement = dataElements.filter(d => d.id === dataElementId)[0];
 
+            if (dataElement.optionSet) {
+                optionSet = optionSets[dataElement.optionSet.id];
+            }
+        }
 
         return (
             <Dialog
@@ -89,6 +116,21 @@ class EventDialog extends Component {
                                     items={stages}
                                     value={programStageId}
                                     onChange={programStageId => this.onProgramStageSelect(programStageId)}
+                                />
+                            : null}
+
+                            {programStageId ?
+                                <DataItemSelect
+                                    items={dataElements}
+                                    value={dataElementId}
+                                    onChange={dataElementId => this.onDataElementSelect(dataElementId)}
+                                />
+                            : null}
+
+                            {dataElement ?
+                                <DataElement
+                                    {...dataElement}
+                                    optionSet={optionSet ? optionSet : null}
                                 />
                             : null}
                         </div>

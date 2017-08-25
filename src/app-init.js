@@ -401,6 +401,8 @@ Ext.onReady( function() {
                                                                 success(r) {
                                                                     var sets = JSON.parse(r.responseText).optionSets;
 
+                                                                    console.log('sets', sets);
+
                                                                     if (sets.length) {
                                                                         store.setAll('optionSets', sets).done(fn);
                                                                     }

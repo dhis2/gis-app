@@ -23,6 +23,8 @@ class EventLayer extends Layer {
             popup: this.onEventClick.bind(this),
         };
 
+        // console.log('data', data);
+
         if (props.eventClustering) {
             if (isArray(data)) {
                 config.type = 'clientCluster';

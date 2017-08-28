@@ -2,6 +2,12 @@ import * as types from '../constants/actionTypes';
 
 const defaultOverlays = [{
     type: 'event',
+    preview: true,
+    title: 'Events Preview',
+    img: 'images/layers/events.png',
+    opacity: 0.95,
+},{
+    type: 'event',
     title: 'Events',
     img: 'images/layers/events.png',
     opacity: 0.95,

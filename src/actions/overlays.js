@@ -21,6 +21,11 @@ export const editOverlay = (layer) => ({
     payload: layer
 });
 
+// Cancel overlay (stop editing)
+export const cancelOverlay = () => ({
+    type: types.OVERLAY_CANCEL,
+});
+
 // Update existing overlay
 export const updateOverlay = (layer) => ({
     type: types.OVERLAY_UPDATE,

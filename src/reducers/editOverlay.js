@@ -6,6 +6,9 @@ const editOverlay = (state = null, {type, payload}) => {
             delete payload.img;
             return payload;
 
+        case 'OVERLAY_CANCEL':
+            return null;
+
         default:
             return state;
 

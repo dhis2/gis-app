@@ -1139,6 +1139,8 @@ export default function LayerWidgetEvent(gis, layer) {
 
         dataElementSelected.items.items.forEach(panel => view.columns.push(panel.getRecord()));
 
+        // console.log('columns', view.columns);
+
         view.rows = [{
             dimension: 'ou',
             items: treePanel.getDimension().items

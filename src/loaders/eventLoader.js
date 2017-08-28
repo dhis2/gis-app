@@ -15,6 +15,8 @@ let filterTypes = {
 };
 
 const loadEvents = () => {
+    // console.log(`analytics/events/query/${layer.program.id}.json${paramString}`);
+
     apiFetch(`analytics/events/query/${layer.program.id}.json${paramString}`)
         .then(response => response.json())
         .then(data => onDataLoad(data, layer, callback))
@@ -96,6 +98,10 @@ const onDataLoad = (data) => {
                 }
             } else { // Use event location
                 coord = [properties.longitude, properties.latitude];
+            }
+
+            if (layer.styleByDataItem && properties[layer.styleByDataItem.id] && layer.styleByDataItem.options[properties[layer.styleByDataItem.id]]) {
+                properties.color = layer.styleByDataItem.options[properties[layer.styleByDataItem.id]].color;
             }
 
             if (isValidCoordinate(coord)) {
@@ -198,7 +204,6 @@ const eventLoader = (config, cb) =>  {
                     const type = filterTypes[filter[0]];
                     const items = filter[1].split(';').join(', ');
 
-
                     // const filter = filters[element.filter.split(':')[0]];
 
                     legendItemName += element.name + ' ' + type + ' ' + items;
@@ -234,7 +239,6 @@ const eventLoader = (config, cb) =>  {
 
     // Only events with coordinates
     paramString += '&coordinatesOnly=true';
-
 
     if (spatialSupport && layer.eventClustering) { // Get event count to decide on client vs server cluster
         apiFetch('analytics/events/count/' + layer.program.id + '.json' + paramString)

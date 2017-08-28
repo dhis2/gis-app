@@ -27,11 +27,14 @@ const styles = {
 };
 
 class Option extends Component {
-    // console.log(props);
 
-    state = {
-        color: '#333333',
-    };
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+            color: props.color || '#333333',
+        };
+    }
 
     render() {
         return (

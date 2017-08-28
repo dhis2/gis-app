@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import FlatButton from 'material-ui/FlatButton';
 // import { Step, Stepper, StepLabel, StepContent } from 'material-ui/Stepper';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -23,7 +24,6 @@ const styles = {
         minHeight: 300,
     },
 };
-
 
 class EventDialog extends Component {
 
@@ -55,6 +55,59 @@ class EventDialog extends Component {
                 }
             }
         }
+
+        this.onLayerChange();
+    }
+
+    onLayerChange() {
+        const config = {
+            type: "event",
+            title: "Events",
+            opacity: 0.95,
+            id: "overlay-0",
+            isNew: true,
+            program: {
+                id: "eBAyeGv0exc",
+                name: "Inpatient morbidity and mortality"
+            },
+            programStage: {
+                id: "Zj7UnCAulEk",
+                name: "Single-Event Inpatient morbidity and mortality"
+            },
+            startDate: "2016-08-28",
+            endDate: "2017-08-28",
+            columns: [{
+                dimension: "oZg33kd9taw",
+                name: "Gender",
+            }],
+            rows: [{
+                dimension: "ou",
+                items: [{
+                    id: "ImspTQPwCqd"
+                }]
+            }],
+            eventClustering: false,
+            eventPointColor: "333333",
+            eventPointRadius: 6,
+            styleByDataItem: {
+                id: 'oZg33kd9taw',
+                name: 'Gender',
+                options: {
+                    'Male': {
+                        name: 'Male',
+                        color: 'black',
+                    },
+                    'Female': {
+                        name: 'Female',
+                        color: 'red',
+                    }
+                }
+            },
+            isLoaded: false,
+            editCounter: 1
+        };
+
+        this.props.onChange(config);
     }
 
     onProgramSelect(programId) {
@@ -70,6 +123,7 @@ class EventDialog extends Component {
             dataElementId: null,
             stages: [],
             dataElements: [],
+            styleByDataItem: null
         });
     }
 
@@ -111,59 +165,53 @@ class EventDialog extends Component {
         }
 
         return (
-            <Dialog
-                title='Event layer' // TODO: i18n
-                bodyStyle={styles.body}
-                titleStyle={styles.title}
-                open={true}
-            >
-                <Tabs>
-                    <Tab label='Data'>
-                        <div style={styles.content}>
-                            <ProgramSelect
-                                items={programs}
-                                value={programId}
-                                onChange={programId => this.onProgramSelect(programId)}
+            <Tabs>
+                <Tab label='Data'>
+                    <div style={styles.content}>
+                        <ProgramSelect
+                            items={programs}
+                            value={programId}
+                            onChange={programId => this.onProgramSelect(programId)}
+                        />
+                        {programId ?
+                            <ProgramStageSelect
+                                items={stages}
+                                value={programStageId}
+                                onChange={programStageId => this.onProgramStageSelect(programStageId)}
                             />
-                            {programId ?
-                                <ProgramStageSelect
-                                    items={stages}
-                                    value={programStageId}
-                                    onChange={programStageId => this.onProgramStageSelect(programStageId)}
-                                />
+                        : null}
+                    </div>
+                </Tab>
+                <Tab label='Filter'>
+                    <div style={styles.content}>
+
+                    </div>
+                </Tab>
+                <Tab label='Organisation units'>
+                    <div style={styles.content}>
+
+                    </div>
+                </Tab>
+                <Tab label='Style'>
+                    <div style={styles.content}>
+                        {programStageId ?
+                            <DataItemSelect
+                                items={dataElements}
+                                value={dataElementId}
+                                onChange={dataElementId => this.onDataElementSelect(dataElementId)}
+                            />
                             : null}
-                        </div>
-                    </Tab>
-                    <Tab label='Filter'>
-                        <div style={styles.content}>
 
-                        </div>
-                    </Tab>
-                    <Tab label='Organisation units'>
-                        <div style={styles.content}>
-
-                        </div>
-                    </Tab>
-                    <Tab label='Options'>
-                        <div style={styles.content}>
-                            {programStageId ?
-                                <DataItemSelect
-                                    items={dataElements}
-                                    value={dataElementId}
-                                    onChange={dataElementId => this.onDataElementSelect(dataElementId)}
-                                />
-                                : null}
-
-                            {dataElement ?
-                                <DataElement
-                                    {...dataElement}
-                                    optionSet={optionSet ? optionSet : null}
-                                />
-                                : null}
-                        </div>
-                    </Tab>
-                </Tabs>
-            </Dialog>
+                        {dataElement ?
+                            <DataElement
+                                {...dataElement}
+                                optionSet={optionSet ? optionSet : null}
+                                onChange={(config) => console.log('onStyleChange', config)}
+                            />
+                            : null}
+                    </div>
+                </Tab>
+            </Tabs>
         );
     }
 }

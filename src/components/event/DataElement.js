@@ -2,11 +2,11 @@ import React from 'react';
 import OptionSet from './OptionSet';
 
 const DataElement = (props) => {
-    const { optionSet } = props;
+    const { optionSet, onChange } = props;
 
     return (
         <div>
-            {optionSet ? <OptionSet {...optionSet} /> : null}
+            {optionSet ? <OptionSet {...optionSet} onChange={onChange} /> : null}
         </div>
     );
 };

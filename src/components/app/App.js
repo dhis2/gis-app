@@ -14,7 +14,6 @@ import ContextMenu from '../../containers/ContextMenu';
 import OrgUnitDialog from '../../containers/OrgUnitDialog';
 import RelocateDialog from '../../containers/RelocateDialog';
 import AboutDialog from '../../containers/AboutDialog';
-import EventDialog from '../../containers/EventDialog';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
@@ -35,10 +34,11 @@ const App = () => (
                 <OrgUnitDialog />
                 <RelocateDialog />
                 <AboutDialog />
-                <EventDialog />
+
             </div>
         </MapProvider>
     </MuiThemeProvider>
 );
 
 export default App;
+

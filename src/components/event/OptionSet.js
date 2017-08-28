@@ -5,7 +5,7 @@ const OptionSet = (props) => {
     // console.log(props);
 
     return (
-        <div>
+        <div style={{ marginTop: 20 }}>
             {props.options.map(option => (
                 <Option
                     key={option.code}

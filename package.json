@@ -43,6 +43,7 @@
     "npm": "^5.0.3",
     "promise-polyfill": "6.0.2",
     "prop-types": "^15.5.10",
+    "react-color": "^2.13.5",
     "react-redux": "^5.0.5",
     "react-sortable-hoc": "^0.6.3",
     "react-tap-event-plugin": "^2.0.1",

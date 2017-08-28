@@ -20,6 +20,7 @@ const styles = {
     },
     content: {
         padding: '0 24px 16px',
+        minHeight: 300,
     },
 };
 
@@ -36,15 +37,22 @@ class EventDialog extends Component {
 
     componentDidUpdate(prevProps) { // TODO: best place?
         const program = this.props.programs.filter(p => p.id === this.state.programId)[0];
+        const programStageId = this.state.programStageId;
 
         if (program) {
-            if (program.stages && this.state.stages !== program.stages) {
-                const stage = program.stages.filter(s => s.id === this.state.programStageId)[0];
+            const stages = program.stages;
+
+            if (stages && this.state.stages !== stages) {
+                let stage = stages.filter(s => s.id === programStageId)[0];
 
                 this.setState({
-                   stages: program.stages,
+                   stages: stages,
                    dataElements: stage ? stage.dataElements : [],
                 });
+
+                if (!stage && stages.length === 1) {
+                    this.onProgramStageSelect(stages[0].id);
+                }
             }
         }
     }
@@ -56,7 +64,13 @@ class EventDialog extends Component {
             this.props.loadProgramStages(program.id);
         }
 
-        this.setState({ programId });
+        this.setState({
+            programId,
+            programStageId: null,
+            dataElementId: null,
+            stages: [],
+            dataElements: [],
+        });
     }
 
     onProgramStageSelect(programStageId) {
@@ -118,21 +132,6 @@ class EventDialog extends Component {
                                     onChange={programStageId => this.onProgramStageSelect(programStageId)}
                                 />
                             : null}
-
-                            {programStageId ?
-                                <DataItemSelect
-                                    items={dataElements}
-                                    value={dataElementId}
-                                    onChange={dataElementId => this.onDataElementSelect(dataElementId)}
-                                />
-                            : null}
-
-                            {dataElement ?
-                                <DataElement
-                                    {...dataElement}
-                                    optionSet={optionSet ? optionSet : null}
-                                />
-                            : null}
                         </div>
                     </Tab>
                     <Tab label='Filter'>
@@ -147,8 +146,20 @@ class EventDialog extends Component {
                     </Tab>
                     <Tab label='Options'>
                         <div style={styles.content}>
-                            <p>Style by data item</p>
-                            <p>Filter</p>
+                            {programStageId ?
+                                <DataItemSelect
+                                    items={dataElements}
+                                    value={dataElementId}
+                                    onChange={dataElementId => this.onDataElementSelect(dataElementId)}
+                                />
+                                : null}
+
+                            {dataElement ?
+                                <DataElement
+                                    {...dataElement}
+                                    optionSet={optionSet ? optionSet : null}
+                                />
+                                : null}
                         </div>
                     </Tab>
                 </Tabs>

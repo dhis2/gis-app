@@ -9,7 +9,7 @@ import LayersPanel from '../../containers/LayersPanel';
 import LayersToggle from '../../containers/LayersToggle';
 import Map from '../../containers/Map';
 import BottomPanel from "../../containers/BottomPanel";
-import OverlayEdit from '../../containers/OverlayEdit';
+import LayerEdit from '../../containers/LayerEdit';
 import ContextMenu from '../../containers/ContextMenu';
 import OrgUnitDialog from '../../containers/OrgUnitDialog';
 import RelocateDialog from '../../containers/RelocateDialog';
@@ -29,7 +29,7 @@ const App = () => (
                 <LayersToggle />
                 <Map />
                 <BottomPanel />
-                <OverlayEdit />
+                <LayerEdit />
                 <ContextMenu />
                 <OrgUnitDialog />
                 <RelocateDialog />

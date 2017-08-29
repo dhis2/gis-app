@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
-import OverlayEdit from '../components/edit/OverlayEdit';
+import LayerEdit from '../components/edit/LayerEdit';
 import { getOverlay, cancelOverlay } from '../actions/overlays';
 
 const mapStateToProps = (state) => ({
-    layer: state.editOverlay,
+    layer: state.layerEdit,
 });
 
 export default connect(
     mapStateToProps,
     { getOverlay, cancelOverlay }
-)(OverlayEdit);
+)(LayerEdit);

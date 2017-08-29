@@ -20,14 +20,14 @@ const styles = {
         fontSize: 18,
     },
     /*
-    content: {
-        padding: '0 24px 16px',
-        minHeight: 300,
-    },
-    */
+     content: {
+     padding: '0 24px 16px',
+     minHeight: 300,
+     },
+     */
 };
 
-class OverlayEdit extends Component {
+class LayerEdit extends Component {
 
     componentDidUpdate(prevProps) {
         const props = this.props;
@@ -80,7 +80,9 @@ class OverlayEdit extends Component {
     }
 
     addLayer() {
-        this.props.getOverlay(this.config);
+        this.props.layer.id = 'overlay-1'; // TODO
+
+        this.props.getOverlay(this.props.layer);
         this.closeDialog();
     }
 
@@ -124,14 +126,15 @@ class OverlayEdit extends Component {
             >
                 {layer.type === 'event' ?
                     <EventDialog
-                        onChange={(config) => this.onLayerChange(config)}
+                        {...layer}
+                        // onChange={(config) => this.onLayerChange(config)}
                     />
-                : null}
+                    : null}
             </Dialog>
         );
     }
 }
 
-export default OverlayEdit;
+export default LayerEdit;
 
 

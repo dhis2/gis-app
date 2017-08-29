@@ -6,6 +6,39 @@ const defaultOverlays = [{
     title: 'Events Preview',
     img: 'images/layers/events.png',
     opacity: 0.95,
+    program: {
+        id: "eBAyeGv0exc",
+        name: "Inpatient morbidity and mortality",
+    },
+    "programStage": {
+        "id": "Zj7UnCAulEk",
+        "name": "Single-Event Inpatient morbidity and mortality"
+    },
+    "startDate": "2016-08-29",
+    "endDate": "2017-08-29",
+    "columns":[{
+        "dimension": "oZg33kd9taw",
+        "name":"Gender"
+    }],
+    "rows": [{
+        "dimension": "ou",
+        "items": [{
+            "id":"ImspTQPwCqd"
+        }]
+    }],
+    "eventClustering": false,
+    "eventPointColor": "333333",
+    "eventPointRadius":6,
+    "isLoaded": false,
+    "editCounter": 1,
+    "legend": {
+        "description": "Period: 2016-08-29 – 2017-08-29",
+        "items": [{
+            "radius": 6,
+            "color": "#333333",
+            "name": "Event"
+        }]
+    }
 },{
     type: 'event',
     title: 'Events',

@@ -6,7 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 const D2SelectField = ({ label, items, value, onChange, style }) => (
     <SelectField
         floatingLabelText={label}
-        onChange={(event, index, value) => onChange(value)}
+        onChange={(event, index) => onChange(items[index])}
         value={value}
         style={style}
     >

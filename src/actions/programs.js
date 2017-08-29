@@ -20,9 +20,8 @@ export const setProgramAttributes = (programId, payload) => ({
     payload,
 });
 
-export const setProgramStageDataElements = (programId, programStageId, payload) => ({
+export const setProgramStageDataElements = (programStageId, payload) => ({
     type: types.PROGRAM_STAGE_DATA_ELEMENTS_SET,
-    programId,
     programStageId,
     payload,
 });
@@ -41,7 +40,7 @@ export const loadPrograms = () => (dispatch) => {
         });
 };
 
-// Load program stages
+// Load program stages and tracked entity attributes
 export const loadProgramStages = (programId) => (dispatch) => {
     dispatch(loading());
 
@@ -54,14 +53,8 @@ export const loadProgramStages = (programId) => (dispatch) => {
                 // TODO: Error handling
             }
 
-            const stages = program.programStages;
-            const attributes = arrayPluck(program.programTrackedEntityAttributes, 'trackedEntityAttribute');
-
-            // Mark as attribute
-            attributes.forEach(attribute => attribute.isAttribute = true); // TODO: Needed?
-
-            dispatch(setProgramStages(programId, stages));
-            dispatch(setProgramAttributes(programId, attributes));
+            dispatch(setProgramStages(programId, program.programStages));
+            dispatch(setProgramAttributes(programId, arrayPluck(program.programTrackedEntityAttributes, 'trackedEntityAttribute')));
 
             dispatch(loaded());
         }).catch(error => {
@@ -70,7 +63,7 @@ export const loadProgramStages = (programId) => (dispatch) => {
 };
 
 // Load program stage data elements
-export const loadProgramStageDataElements = (programId, programStageId) => (dispatch) => {
+export const loadProgramStageDataElements = (programStageId) => (dispatch) => {
     dispatch(loading());
 
     return apiFetch('programStages.json?filter=id:eq:' + programStageId + '&fields=programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType,optionSet[id,displayName~rename(name)]]]')
@@ -81,7 +74,7 @@ export const loadProgramStageDataElements = (programId, programStageId) => (disp
             if (data.programStages.length) {
                 const dataElements = arrayPluck(data.programStages[0].programStageDataElements, 'dataElement');
 
-                dispatch(setProgramStageDataElements(programId, programStageId, dataElements));
+                dispatch(setProgramStageDataElements(programStageId, dataElements));
             }
         }).catch(error => {
             console.log('Error: ', error); // TODO

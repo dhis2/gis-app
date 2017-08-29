@@ -28,7 +28,6 @@ GIS.onLoad = () => {
     store.dispatch(loadSystemSettings());
     store.dispatch(loadSystemSettings());
     store.dispatch(fetchExternalLayers());
-    store.dispatch(loadPrograms()); // TODO: Better to load on demand
 };
 
 // Window resize listener: http://stackoverflow.com/questions/35073669/window-resize-react-redux

@@ -74,8 +74,17 @@ const onDataLoad = (data) => {
     }
 
     const updateFeatures = function() {
+        let colorByOption;
+
         // Find header names and keys
         data.headers.forEach(header => names[header.name] = header.column);
+
+        // Color by option set
+        if (layer.styleDataElement && layer.styleDataElement.optionSet && layer.styleDataElement.optionSet.options) {
+            colorByOption = {};
+            layer.styleDataElement.optionSet.options.forEach(o => colorByOption[o.code] = o.color);
+        }
+
 
         // Create GeoJSON features
         rows.forEach(row => {
@@ -100,8 +109,8 @@ const onDataLoad = (data) => {
                 coord = [properties.longitude, properties.latitude];
             }
 
-            if (layer.styleByDataItem && properties[layer.styleByDataItem.id] && layer.styleByDataItem.options[properties[layer.styleByDataItem.id]]) {
-                properties.color = layer.styleByDataItem.options[properties[layer.styleByDataItem.id]].color;
+            if (colorByOption) {
+                properties.color = colorByOption[properties[layer.styleDataElement.id]]
             }
 
             if (isValidCoordinate(coord)) {
@@ -230,6 +239,8 @@ const eventLoader = (config, cb) =>  {
     } else {
         layer.legend.description += layer.startDate + ' – '+ layer.endDate;
     }
+
+    // console.log(JSON.stringify(layer));
 
     // If coordinate field other than event coordinate
     if (layer.eventCoordinateField) {

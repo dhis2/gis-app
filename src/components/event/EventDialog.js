@@ -4,7 +4,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import DataItemSelect from '../program/DataItemSelect';
-import DataElement from './DataElement';
+import DataElementStyle from './DataElementStyle';
 
 const styles = {
     body: {
@@ -58,10 +58,10 @@ class EventDialog extends Component {
             styleDataElement,
             programStages,
             dataElements,
-            // optionSets,
+            optionSets,
             loadProgramStages,
             loadProgramStageDataElements,
-            // loadOptionSet,
+            loadOptionSet,
             setProgramStage,
         } = this.props;
 
@@ -94,18 +94,6 @@ class EventDialog extends Component {
                 }
             }
         }
-
-        /*
-        if (styleDataElement && styleDataElement !== prev.styleDataElement) {
-
-            // Load option set for data element
-            if (styleDataElement.optionSet && !optionSets[styleDataElement.optionSet.id]) {
-                loadOptionSet(styleDataElement.optionSet.id);
-            }
-
-        }
-        */
-
     }
 
     render() {
@@ -119,7 +107,7 @@ class EventDialog extends Component {
             styleDataElement,
             setProgram,
             setProgramStage,
-            loadStyleDataElement
+            setStyleDataElement
         } = this.props;
 
         return (
@@ -140,19 +128,6 @@ class EventDialog extends Component {
                                 onChange={setProgramStage}
                             />
                         : null}
-                        {dataElements ?
-                            <DataItemSelect
-                                items={dataElements.filter(d => d.optionSet)}
-                                value={styleDataElement ? styleDataElement.id : null}
-                                onChange={loadStyleDataElement}
-                            />
-                        : null}
-                        {styleDataElement && styleDataElement.optionSet ?
-                            <DataElement
-                                {...styleDataElement}
-                                onChange={(code, color) => console.log('onStyleChange', code, color)}
-                            />
-                        : null}
                     </div>
                 </Tab>
                 <Tab label='Filter'>
@@ -165,6 +140,19 @@ class EventDialog extends Component {
                 </Tab>
                 <Tab label='Style'>
                     <div style={styles.content}>
+                        {dataElements ?
+                            <DataItemSelect
+                                items={dataElements.filter(d => d.optionSet)}
+                                value={styleDataElement ? styleDataElement.id : null}
+                                onChange={setStyleDataElement}
+                            />
+                        : null}
+                        {styleDataElement ?
+                            <DataElementStyle
+                                {...styleDataElement}
+                                onChange={(code, color) => console.log('onStyleChange', code, color)}
+                            />
+                        : null}
                     </div>
                 </Tab>
             </Tabs>

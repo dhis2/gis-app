@@ -46,6 +46,22 @@ const layerEdit = (state = null, action) => {
                 styleDataElement: action.dataElement,
             };
 
+        // Set options to data element option set
+        case 'LAYER_EDIT_STYLE_DATA_ELEMENT_OPTIONS_SET':
+            return {
+                ...state,
+                styleDataElement: {
+                    ...state.styleDataElement,
+                    optionSet: {
+                        ...state.styleDataElement.optionSet,
+                        options: action.options,
+                    },
+                },
+            };
+
+            return state;
+
+
         default:
             return state;
 

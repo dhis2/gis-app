@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import EventDialog from '../components/event/EventDialog';
 import { loadPrograms, loadProgramStages, loadProgramStageDataElements } from '../actions/programs';
 import { loadOptionSet } from '../actions/optionSets';
-import { setProgram, setProgramStage, loadStyleDataElement } from '../actions/layerEdit';
+import { setProgram, setProgramStage, setStyleDataElement } from '../actions/layerEdit';
 
 const mapStateToProps = (state) => {
     const layer = state.layerEdit;
@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
         programs: state.programs,
         programStages: state.programStages[programId],
         dataElements: state.programStageDataElements[programStageId], // Remove filter
-        // optionSets: state.optionSets,
+        optionSets: state.optionSets,
     };
 };
 
@@ -26,6 +26,6 @@ export default connect(
         loadOptionSet,
         setProgram,
         setProgramStage,
-        loadStyleDataElement,
+        setStyleDataElement,
     }
 )(EventDialog);

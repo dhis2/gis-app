@@ -16,10 +16,7 @@ const defaultOverlays = [{
     },
     "startDate": "2016-08-29",
     "endDate": "2017-08-29",
-    "columns":[{
-        "dimension": "oZg33kd9taw",
-        "name":"Gender"
-    }],
+    // "columns":[],
     "rows": [{
         "dimension": "ou",
         "items": [{

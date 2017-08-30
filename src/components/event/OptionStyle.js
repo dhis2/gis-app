@@ -10,7 +10,7 @@ const styles = {
     }
 };
 
-class Option extends Component {
+class OptionStyle extends Component {
 
     /*
     constructor(props, context) {
@@ -25,7 +25,9 @@ class Option extends Component {
     // onChange={color => this.setState({ color })}
 
     render() {
-        const { code, name, color, onChange } = this.props;
+        const { code, name, color } = this.props;
+
+        // console.log(this.props);
 
         return (
             <div>
@@ -34,6 +36,6 @@ class Option extends Component {
             </div>
         );
     }
-};
+}
 
-export default Option;
+export default OptionStyle;

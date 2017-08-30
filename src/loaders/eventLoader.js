@@ -77,10 +77,8 @@ const onDataLoad = (data) => {
 
         // Color by option set
         if (layer.styleDataElement && layer.styleDataElement.optionSet && layer.styleDataElement.optionSet.options) {
-            colorByOption = {};
-            layer.styleDataElement.optionSet.options.forEach(o => colorByOption[o.code] = o.color);
+            colorByOption = layer.styleDataElement.optionSet.options;
         }
-
 
         // Create GeoJSON features
         rows.forEach(row => {
@@ -106,7 +104,7 @@ const onDataLoad = (data) => {
             }
 
             if (colorByOption) {
-                properties.color = colorByOption[properties[layer.styleDataElement.id]]
+                properties.color = colorByOption[properties[layer.styleDataElement.id]];
             }
 
             if (isValidCoordinate(coord)) {
@@ -196,6 +194,19 @@ const eventLoader = (config, cb) =>  {
     // Organisation units
     if (layer.rows[0] && layer.rows[0].dimension === 'ou' && isArray(layer.rows[0].items)) {
         paramString += '&dimension=ou:' + layer.rows[0].items.map(ou => ou.id).join(';');
+    }
+
+
+    // Include field for data element used for styling - TODO: Move?
+    if (layer.styleDataElement) {
+        if (!layer.columns) {
+            layer.columns = [];
+        }
+
+        layer.columns.push({
+            dimension: layer.styleDataElement.id,
+            name: layer.styleDataElement.name,
+        });
     }
 
     // Dimension

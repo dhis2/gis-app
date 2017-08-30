@@ -13,13 +13,10 @@ export const loadSystemInfo = () => (dispatch) => {
     dispatch(loading());
 
     return apiFetch('system/info.json')
-        .then(res => res.json())
         .then(data => {
             dispatch(setSystemData(data));
             dispatch(loadUser());
             dispatch(loaded());
-        }).catch(error => {
-            console.log('Error: ', error); // TODO
         });
 };
 
@@ -28,11 +25,8 @@ export const loadSystemSettings = () => (dispatch) => {
     dispatch(loading());
 
     return apiFetch('systemSettings.json?key=keyCalendar&key=keyDateFormat&key=keyGoogleMapsApiKey&key=keyMapzenSearchApiKey')
-        .then(res => res.json())
         .then(data => {
             dispatch(setSystemData(data));
             dispatch(loaded());
-        }).catch(error => {
-            console.log('Error: ', error); // TODO
         });
 };

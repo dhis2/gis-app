@@ -12,11 +12,8 @@ export const loadUser = () => (dispatch, getState) => {
     dispatch(loading());
 
     return urlFetch(getState().system.contextPath + '/api/me/user-account.json')
-        .then(res => res.json())
         .then(data => {
             dispatch(setUser(data));
             dispatch(loaded());
-        }).catch(error => {
-            console.log('Error: ', error); // TODO
         });
 };

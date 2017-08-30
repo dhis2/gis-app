@@ -32,7 +32,6 @@ export const loadStyleDataElement = (dataElement) => (dispatch, getState) => {
         } else {
             // TODO: Reuse function in actions/optionSets.js
             return apiFetch('optionSets.json?fields=id,displayName~rename(name),version,options[code,displayName~rename(name)]&paging=false&filter=id:eq:' + optionSet.id)
-                .then(res => res.json())
                 .then(data => {
                     const optSet = data.optionSets[0];
 
@@ -46,8 +45,6 @@ export const loadStyleDataElement = (dataElement) => (dispatch, getState) => {
                     dispatch(setStyleDataElement(dataElement));
 
                     dispatch(loaded());
-                }).catch(error => {
-                    console.log('Error: ', error); // TODO
                 });
         }
     }

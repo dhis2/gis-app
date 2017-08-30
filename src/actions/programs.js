@@ -1,25 +1,28 @@
 import * as types from '../constants/actionTypes';
 import { apiFetch } from '../util/api';
-import { loading, loaded } from './loading';
 import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 
+// Set all programs
 export const setPrograms = (data) => ({
     type: types.PROGRAMS_SET,
     payload: data,
 });
 
+// Set program stages for one program
 export const setProgramStages = (programId, payload) => ({
     type: types.PROGRAM_STAGES_SET,
     programId,
     payload,
 });
 
+// Set tracked entity attributes for one program
 export const setProgramAttributes = (programId, payload) => ({
     type: types.PROGRAM_ATTRIBUTES_SET,
     programId,
     payload,
 });
 
+// Set data elements for one program stage
 export const setProgramStageDataElements = (programStageId, payload) => ({
     type: types.PROGRAM_STAGE_DATA_ELEMENTS_SET,
     programStageId,
@@ -28,55 +31,22 @@ export const setProgramStageDataElements = (programStageId, payload) => ({
 
 // Load programs
 export const loadPrograms = () => (dispatch) => {
-    dispatch(loading());
-
     return apiFetch('programs.json?fields=id,displayName~rename(name)&paging=false')
-        .then(res => res.json())
-        .then(data => {
-            dispatch(setPrograms(data.programs));
-            dispatch(loaded());
-        }).catch(error => {
-            console.log('Error: ', error); // TODO
-        });
+        .then(data => dispatch(setPrograms(data.programs)));
 };
 
-// Load program stages and tracked entity attributes
-export const loadProgramStages = (programId) => (dispatch) => {
-    dispatch(loading());
+// Load program stages
+export const loadProgramStages = (programId) => (dispatch) =>
+    apiFetch(`programs/${programId}.json?fields=programStages[id,displayName~rename(name)]&paging=false`)
+        .then(data => dispatch(setProgramStages(programId, data.programStages)));
 
-    return apiFetch('programs.json?filter=id:eq:' + programId + '&fields=programStages[id,displayName~rename(name)],programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]]&paging=false')
-        .then(res => res.json())
-        .then(data => {
-            const program = data.programs[0];
-
-            if (!program) {
-                // TODO: Error handling
-            }
-
-            dispatch(setProgramStages(programId, program.programStages));
-            dispatch(setProgramAttributes(programId, arrayPluck(program.programTrackedEntityAttributes, 'trackedEntityAttribute')));
-
-            dispatch(loaded());
-        }).catch(error => {
-            console.log('Error: ', error); // TODO
-        });
-};
+// Load program tracked entity attributes
+export const loadProgramTrackedEntityAttributes = (programId) => (dispatch) =>
+    apiFetch(`programs/${programId}.json?fields=programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]]&paging=false`)
+        .then(data => dispatch(setProgramAttributes(programId, arrayPluck(data.programTrackedEntityAttributes, 'trackedEntityAttribute'))));
 
 // Load program stage data elements
 export const loadProgramStageDataElements = (programStageId) => (dispatch) => {
-    dispatch(loading());
-
-    return apiFetch('programStages.json?filter=id:eq:' + programStageId + '&fields=programStageDataElements[dataElement[id,' + gis.init.namePropertyUrl + ',valueType,optionSet[id,displayName~rename(name)]]]')
-        .then(res => res.json())
-        .then(data => {
-            const objects = data.programStages;
-
-            if (data.programStages.length) {
-                const dataElements = arrayPluck(data.programStages[0].programStageDataElements, 'dataElement');
-
-                dispatch(setProgramStageDataElements(programStageId, dataElements));
-            }
-        }).catch(error => {
-            console.log('Error: ', error); // TODO
-        });
+    return apiFetch(`programStages/${programStageId}.json?fields=programStageDataElements[dataElement[id,${gis.init.namePropertyUrl},valueType,optionSet[id,displayName~rename(name)]]]`)
+        .then(data => dispatch(setProgramStageDataElements(programStageId, arrayPluck(data.programStageDataElements, 'dataElement'))));
 };

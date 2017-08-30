@@ -182,7 +182,6 @@ class ThematicLoader {
 
             // TODO: Not sure why this is needed
             apiFetch(`${elementUrl}.json?fields=legendSet[id,displayName~rename(name)]&paging=false&filter=id:eq:${id}`)
-                .then(response => response.json())
                 .then(data => {
                     const elements = data[elementUrl];
                     let set;
@@ -197,8 +196,7 @@ class ThematicLoader {
                     } else {
                         this.createLegend();
                     }
-                })
-                .catch(err => console.error(err)); // TODO
+                });
         }
     }
 
@@ -210,7 +208,6 @@ class ThematicLoader {
         const names = this.names;
 
         apiFetch(`legendSets/${layer.legendSet.id}.json?fields=${fields}`)
-            .then(response => response.json())
             .then(data => {
                 const legendItems = data.legends;
 
@@ -238,8 +235,7 @@ class ThematicLoader {
 
                 this.createLegend()
 
-            })
-            .catch(error => console.log('Parsing failed: ', error)); // TODO
+            }); // TODO
     }
 
     createLegend() {

@@ -15,12 +15,8 @@ let filterTypes = {
 };
 
 const loadEvents = () => {
-    // console.log(`analytics/events/query/${layer.program.id}.json${paramString}`);
-
     apiFetch(`analytics/events/query/${layer.program.id}.json${paramString}`)
-        .then(response => response.json())
-        .then(data => onDataLoad(data, layer, callback))
-        .catch(error => console.log('Parsing failed: ', error)); // TODO
+        .then(data => onDataLoad(data, layer, callback));
 };
 
 const onDataLoad = (data) => {
@@ -253,9 +249,7 @@ const eventLoader = (config, cb) =>  {
 
     if (spatialSupport && layer.eventClustering) { // Get event count to decide on client vs server cluster
         apiFetch('analytics/events/count/' + layer.program.id + '.json' + paramString)
-            .then(response => response.json())
-            .then(data => onEventCountLoad(data))
-            .catch(error => console.log('Parsing failed: ', error)); // TODO
+            .then(data => onEventCountLoad(data));
     } else {
         loadEvents();
     }

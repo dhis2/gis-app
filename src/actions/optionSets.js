@@ -9,17 +9,10 @@ export const addOptionSet = (data) => ({
 });
 
 // Load option set
-export const loadOptionSet = (id) => (dispatch) => {
-    dispatch(loading());
+export const loadOptionSet = (id) => (dispatch) =>
+    apiFetch(`optionSets/${id}.json?fields=id,displayName~rename(name),version,options[code,displayName~rename(name)]&paging=false`)
+        .then(data => console.log(data));
+        // .then(data => dispatch(addOptionSet(data.optionSets[0])));
 
-    return apiFetch('optionSets.json?fields=id,displayName~rename(name),version,options[code,displayName~rename(name)]&paging=false&filter=id:eq:' + id)
-        .then(res => res.json())
-        .then(data => {
-            dispatch(addOptionSet(data.optionSets[0]));
-            dispatch(loaded());
-        }).catch(error => {
-            console.log('Error: ', error); // TODO
-        });
-};
 
 

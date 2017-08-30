@@ -15,7 +15,9 @@ export function apiFetch(url, method, body) {
         options.body = JSON.stringify(body);
     }
 
-    return fetch(encodeURI(gis.init.analyticsPath + url), options);
+    return fetch(encodeURI(gis.init.apiPath + url), options)
+        .then(res => res.json())
+        .catch(error => console.log('Error: ', error)); // TODO: Better error handling
 }
 
 export function urlFetch(url, method, body) {
@@ -35,5 +37,7 @@ export function urlFetch(url, method, body) {
         options.body = JSON.stringify(body);
     }
 
-    return fetch(encodeURI(url), options);
+    return fetch(encodeURI(url), options)
+        .then(res => res.json())
+        .catch(error => console.log('Error: ', error)); // TODO: Better error handling
 }

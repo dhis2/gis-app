@@ -24,9 +24,7 @@ export default class EarthEngineLayer extends Layer {
 
         config.accessToken = (callback) => {
             apiFetch('tokens/google')
-                .then(response => response.json())
-                .then(json => callback(json))
-                .catch(error => console.log('parsing failed', error));
+                .then(json => callback(json));
         };
 
         this.layer = map.createLayer(config);

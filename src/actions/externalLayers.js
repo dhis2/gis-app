@@ -17,11 +17,8 @@ export const removeExternalOverlay = (id) => ({
 });
 
 // Fetch external layers from Web API
-export const fetchExternalLayers = () => (dispatch) => {
-    dispatch(loading());
-
-    return apiFetch('externalMapLayers.json?fields=id,displayName~rename(name),service,url,attribution,mapService,layer,imageFormat,mapLayerPosition,legendSet,legendSetUrl&paging=false')
-        .then(res => res.json())
+export const fetchExternalLayers = () => (dispatch) =>
+    apiFetch('externalMapLayers.json?fields=id,displayName~rename(name),service,url,attribution,mapService,layer,imageFormat,mapLayerPosition,legendSet,legendSetUrl&paging=false')
         .then(data => {
             if (data && isArray(data.externalMapLayers)) {
                 data.externalMapLayers.forEach(layer => {
@@ -33,11 +30,7 @@ export const fetchExternalLayers = () => (dispatch) => {
                     }
                 });
             }
-            dispatch(loaded());
-        }).catch(error => {
-            console.log('Error: ', error); // TODO
         });
-};
 
 // Create external layer config object
 const externalLayerConfig = (layer) => {

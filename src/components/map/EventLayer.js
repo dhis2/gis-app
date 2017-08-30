@@ -33,12 +33,7 @@ class EventLayer extends Layer {
                 const self = this;
                 config.load = function(params, callback) {
                     apiFetch(`${data}&bbox=${params.bbox}&clusterSize=${params.clusterSize}&includeClusterPoints=${params.includeClusterPoints}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        callback(params.tileId, self.toGeoJson(data));
-
-                    })
-                    .catch(error => console.log('Loading event cluster failed: ', error));
+                        .then(data => callback(params.tileId, self.toGeoJson(data)));
                 }
             }
         }
@@ -66,7 +61,6 @@ class EventLayer extends Layer {
         const namePropertyUrl = gis.init.namePropertyUrl; // TODO
 
         apiFetch(`programStages/${props.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${namePropertyUrl},optionSet]]`)
-            .then(response => response.json())
             .then(data => {
                 if (data.programStageDataElements) {
                     data.programStageDataElements.forEach(el => {
@@ -78,15 +72,13 @@ class EventLayer extends Layer {
                         }
                     });
                 }
-            })
-            .catch(error => console.log('Parsing failed: ', error)); // TODO
+            });
     }
 
     onEventClick(feature, callback) {
         const coord = feature.geometry.coordinates;
 
         apiFetch('events/' + feature.id + '.json')
-            .then(response => response.json())
             .then(data => {
                 const time = data.eventDate.substring(0, 10) + ' ' + data.eventDate.substring(11, 16);
                 const dataValues = data.dataValues;
@@ -118,8 +110,7 @@ class EventLayer extends Layer {
                 callback(content);
 
 
-            })
-            .catch(error => console.log('Parsing failed: ', error)); // TODO
+            });
 
     }
 

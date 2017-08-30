@@ -6,7 +6,7 @@ Ext.isIE = (/trident/.test(Ext.userAgent));
 Ext.isIE11 = Ext.isIE && (/rv:11.0/.test(Ext.userAgent));
 
 window.GIS = {
-    apiVersion: 26,
+    apiVersion: 27,
     core: {
         instances: [],
         getInstance,

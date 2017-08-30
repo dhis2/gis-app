@@ -82,9 +82,7 @@ const boundaryLoader = (config, cb) =>  {
     // gis.init.apiPath + 'geoFeatures.json' + params;
 
     apiFetch(`geoFeatures.json${params}`)
-        .then(response => response.json())
-        .then(data => onDataLoad(data, layer, callback))
-        .catch(error => console.log('Parsing failed: ', error)); // TODO
+        .then(data => onDataLoad(data, layer, callback));
 
 };
 

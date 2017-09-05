@@ -3,8 +3,10 @@ import React, { Component } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
-import DataItemSelect from '../program/DataItemSelect';
-import DataElementStyle from './DataElementStyle';
+import DataItemFilters from '../dataitem/DataItemFilters';
+import DataItemSelect from '../dataitem/DataItemSelect';
+import DataItemStyle from '../dataitem/DataItemStyle';
+import OrgUnitSelect from '../orgunits/OrgUnitSelect';
 
 const styles = {
     body: {
@@ -103,12 +105,20 @@ class EventDialog extends Component {
             programStage,
             programStages,
             dataElements,
+            columns = [],
+            rows = [],
+            filters = [],
             // optionSets,
+            startDate,
+            endDate,
             styleDataElement,
             setProgram,
             setProgramStage,
             setStyleDataElement
         } = this.props;
+
+        const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
+        const period = filters.filter(r => r.dimension === 'pe')[0];
 
         return (
             <Tabs>
@@ -128,14 +138,29 @@ class EventDialog extends Component {
                                 onChange={setProgramStage}
                             />
                         : null}
+                        <div style={{ marginTop: 30 }}>
+                            {period ?
+                                <div>Period: {period.items[0].id}</div>
+                            : null }
+                            <div>Start date: {startDate}</div>
+                            <div>End date: {endDate}</div>
+                        </div>
                     </div>
                 </Tab>
                 <Tab label='Filter'>
                     <div style={styles.content}>
+                        <DataItemFilters
+                            filters={columns.filter(c => c.filter)}
+                        />
                     </div>
                 </Tab>
                 <Tab label='Organisation units'>
                     <div style={styles.content}>
+                        {orgUnits ?
+                            <OrgUnitSelect
+                                items={orgUnits.items}
+                            />
+                        : null}
                     </div>
                 </Tab>
                 <Tab label='Style'>
@@ -148,7 +173,7 @@ class EventDialog extends Component {
                             />
                         : null}
                         {styleDataElement ?
-                            <DataElementStyle
+                            <DataItemStyle
                                 {...styleDataElement}
                                 onChange={(code, color) => console.log('onStyleChange', code, color)}
                             />

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import RelocateDialog from '../components/orgUnit/RelocateDialog';
+import RelocateDialog from '../components/orgunits/RelocateDialog';
 import { changeOrgUnitCoordinate, stopRelocateOrgUnit} from '../actions/orgUnit';
 
 const mapStateToProps = state => ({

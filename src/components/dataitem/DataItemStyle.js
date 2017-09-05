@@ -1,10 +1,10 @@
 import React from 'react';
 import OptionSetStyle from '../../containers/OptionSetStyle';
 
-const DataElementStyle = ({ optionSet }) => (
+const DataItemStyle = ({ optionSet }) => (
     <div>
         {optionSet ? <OptionSetStyle {...optionSet} /> : null}
     </div>
 );
 
-export default DataElementStyle;
+export default DataItemStyle;

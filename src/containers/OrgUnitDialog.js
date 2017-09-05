@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import OrgUnitDialog from '../components/orgUnit/OrgUnitDialog';
+import OrgUnitDialog from '../components/orgunits/OrgUnitDialog';
 import { closeOrgUnit } from '../actions/orgUnit';
 
 const mapStateToProps = state => ({

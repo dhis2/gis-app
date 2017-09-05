@@ -164,6 +164,8 @@ const eventLoader = (config, cb) =>  {
     layer = config;
     callback = cb;
 
+    console.log('layer config', config);
+
     const spatialSupport = gis.init.systemInfo.databaseInfo.spatialSupport;
     const displayElements = {}; // Data elements to display in event popup
     let eventCoordinateFieldName; // Name of event coordinate field to show in popup

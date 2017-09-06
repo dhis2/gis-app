@@ -25,3 +25,18 @@ export const setStyleOptions = (options) => ({
     type: types.LAYER_EDIT_STYLE_DATA_ELEMENT_OPTIONS_SET,
     options,
 });
+
+export const setEventClustering = (checked) => ({
+    type: types.LAYER_EDIT_EVENT_CLUSTERING_SET,
+    checked,
+});
+
+export const setEventPointRadius = (radius) => ({
+    type: types.LAYER_EDIT_EVENT_POINT_RADIUS_SET,
+    radius,
+});
+
+export const setEventPointColor = (color) => ({
+    type: types.LAYER_EDIT_EVENT_POINT_COLOR_SET,
+    color,
+});

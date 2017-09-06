@@ -33,8 +33,8 @@ const defaultOverlays = [{
     }],
     // startDate: '2016-08-29',
     // endDate: '2017-08-29',
-    eventClustering: false,
-    eventPointColor: '333333',
+    eventClustering: true,
+    eventPointColor: '#333333',
     eventPointRadius: 6,
     editCounter: 1,
     /*

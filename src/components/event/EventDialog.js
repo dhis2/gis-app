@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import Checkbox from 'material-ui/Checkbox';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import DataItemFilters from '../dataitem/DataItemFilters';
 import DataItemSelect from '../dataitem/DataItemSelect';
 import DataItemStyle from '../dataitem/DataItemStyle';
 import OrgUnitSelect from '../orgunits/OrgUnitSelect';
+import NumberField from '../d2-ui/NumberField';
+import ColorPicker from '../d2-ui/ColorPicker';
 
 const styles = {
     body: {
@@ -20,6 +23,13 @@ const styles = {
         padding: '0 24px 16px',
         minHeight: 300,
     },
+    checkbox: {
+        marginTop: 24,
+    },
+    numberField: {
+        display: 'block',
+        width: 100,
+    }
 };
 
 
@@ -64,7 +74,7 @@ class EventDialog extends Component {
             loadProgramStages,
             loadProgramStageDataElements,
             loadOptionSet,
-            setProgramStage,
+            setProgramStage
         } = this.props;
 
         if (program) {
@@ -111,10 +121,15 @@ class EventDialog extends Component {
             // optionSets,
             startDate,
             endDate,
+            eventClustering,
+            eventPointColor,
+            eventPointRadius,
             styleDataElement,
             setProgram,
             setProgramStage,
-            setStyleDataElement
+            setStyleDataElement,
+            setEventClustering,
+            setEventPointRadius,
         } = this.props;
 
         const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
@@ -165,6 +180,22 @@ class EventDialog extends Component {
                 </Tab>
                 <Tab label='Style'>
                     <div style={styles.content}>
+                        <Checkbox
+                            label='Group nearby events (clustering)'
+                            checked={eventClustering}
+                            onCheck={(event, isChecked) => setEventClustering(isChecked)}
+                            style={styles.checkbox}
+                        />
+                        <NumberField
+                            label='Point radius'
+                            value={eventPointRadius}
+                            onChange={setEventPointRadius}
+                            style={styles.numberField}
+                        />
+                        <ColorPicker
+                            color={eventPointColor}
+                            onChange={newColor => console.log('color', newColor)}
+                        />
                         {dataElements ?
                             <DataItemSelect
                                 items={dataElements.filter(d => d.optionSet)}

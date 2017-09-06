@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import EventDialog from '../components/event/EventDialog';
 import { loadPrograms, loadProgramStages, loadProgramStageDataElements } from '../actions/programs';
 import { loadOptionSet } from '../actions/optionSets';
-import { setProgram, setProgramStage, setStyleDataElement } from '../actions/layerEdit';
+import { setProgram, setProgramStage, setStyleDataElement, setEventClustering, setEventPointRadius } from '../actions/layerEdit';
 
 const mapStateToProps = (state) => {
     const layer = state.layerEdit;
@@ -27,5 +27,7 @@ export default connect(
         setProgram,
         setProgramStage,
         setStyleDataElement,
+        setEventClustering,
+        setEventPointRadius
     }
 )(EventDialog);

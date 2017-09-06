@@ -1,15 +1,3 @@
-const eventLayerTest = {
-    type: 'event',
-    preview: true,
-    title: 'Events Preview',
-    opacity: 0.95,
-    program: {
-        id: "eBAyeGv0exc",
-        name: "Inpatient morbidity and mortality",
-    },
-};
-
-// const layerEdit = (state = eventLayerTest, action) => {
 const layerEdit = (state = null, action) => {
 
     switch (action.type) {
@@ -61,6 +49,17 @@ const layerEdit = (state = null, action) => {
 
             return state;
 
+        case 'LAYER_EDIT_EVENT_POINT_RADIUS_SET':
+            return {
+                ...state,
+                eventPointRadius: action.radius,
+            };
+
+        case 'LAYER_EDIT_EVENT_POINT_COLOR_SET':
+            return {
+                ...state,
+                eventPointColor: action.color,
+            };
 
         default:
             return state;

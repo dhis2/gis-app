@@ -18,7 +18,7 @@ class EventLayer extends Layer {
             type: 'dots',
             pane: props.id,
             data: data,
-            color: '#' + props.eventPointColor,
+            color: props.eventPointColor,
             radius: props.eventPointRadius,
             popup: this.onEventClick.bind(this),
         };

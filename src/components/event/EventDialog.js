@@ -129,6 +129,7 @@ class EventDialog extends Component {
             setProgramStage,
             setStyleDataElement,
             setEventClustering,
+            setEventPointColor,
             setEventPointRadius,
         } = this.props;
 
@@ -192,10 +193,13 @@ class EventDialog extends Component {
                             onChange={setEventPointRadius}
                             style={styles.numberField}
                         />
-                        <ColorPicker
-                            color={eventPointColor}
-                            onChange={newColor => console.log('color', newColor)}
-                        />
+                        <div>
+                            Color:
+                            <ColorPicker
+                                color={eventPointColor}
+                                onChange={setEventPointColor}
+                            />
+                        </div>
                         {dataElements ?
                             <DataItemSelect
                                 items={dataElements.filter(d => d.optionSet)}

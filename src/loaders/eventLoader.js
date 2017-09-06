@@ -213,6 +213,8 @@ const eventLoader = (config, cb) =>  {
 
     // Dimension
     if (layer.columns) {
+        console.log('layer.columns', layer.columns);
+
         layer.columns.forEach(element => {
             if (element.dimension !== 'dx') { // API sometimes returns empty dx filter
                 paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
@@ -232,15 +234,41 @@ const eventLoader = (config, cb) =>  {
         });
     }
 
+
+
     // Create legend
     layer.legend = {
         description: 'Period: ', // TODO: i18n
-        items: [{
-            radius: layer.eventPointRadius,
-            color: '#' + layer.eventPointColor,
-            name: legendItemName || 'Event', // TODO: i18n
-        }]
+        items: []
     };
+
+    if (layer.styleDataElement) { // Style by data element
+        const optionSet = layer.styleDataElement.optionSet;
+
+        if (optionSet && optionSet.options) {
+            layer.legend.items = Object.keys(optionSet.options).map(option => ({
+                name: option,
+                color: optionSet.options[option],
+                radius: layer.eventPointRadius,
+            }));
+
+            layer.legend.items.push({
+                radius: layer.eventPointRadius,
+                color: layer.eventPointColor,
+                name: 'Other', // TODO: i18n
+            });
+        }
+
+    } else {
+        console.log('####', legendItemName);
+
+
+        layer.legend.items.push({
+            radius: layer.eventPointRadius,
+            color: layer.eventPointColor,
+            name: legendItemName || 'Event', // TODO: i18n
+        });
+    }
 
     if (isArray(layer.filters) && layer.filters.length) {
         const period = layer.filters[0].items[0].id.replace(/_/g, ' ').toLowerCase();

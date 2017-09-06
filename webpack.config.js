@@ -1,5 +1,5 @@
-var webpack = require('webpack');
-var webpackBaseConfig = require('./webpack-base-config');
+const webpack = require('webpack');
+const webpackBaseConfig = require('./webpack-base-config');
 
 webpackBaseConfig.devServer = {
     contentBase: './',

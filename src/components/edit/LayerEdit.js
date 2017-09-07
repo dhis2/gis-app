@@ -104,27 +104,16 @@ class LayerEdit extends Component {
             return null;
         }
 
-
-        const addButton = <FlatButton
-            label="Add layer"
-            primary={true}
-            onTouchTap={() => this.addLayer()}
-            // disabled={true}
-        />;
-
-        const cancelButton = <FlatButton
-            label="Cancel"
-            primary={true}
-            onTouchTap={() => this.closeDialog()}
-        />;
-
         return (
             <Dialog
                 title={layer.title} // TODO: i18n
                 bodyStyle={styles.body}
                 titleStyle={styles.title}
                 open={true}
-                actions={[cancelButton, addButton]}
+                actions={[
+                    <Button color='primary' onClick={() => this.closeDialog()}>Cancel</Button>,
+                    <Button color='primary' onClick={() => this.addLayer()}>Add layer</Button>
+                ]}
             >
                 {layer.type === 'event' ?
                     <EventDialog
@@ -132,13 +121,6 @@ class LayerEdit extends Component {
                         // onChange={(config) => this.onLayerChange(config)}
                     />
                 : null}
-
-                <Button>Add layer</Button>
-                <Button raised color='primary'>Add layer</Button>
-                <Button raised color='accent'>Add layer</Button>
-                <Button raised color='accent' disabled>Add layer</Button>
-                <div>_</div>
-
             </Dialog>
         );
     }

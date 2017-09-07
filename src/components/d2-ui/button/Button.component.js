@@ -4,15 +4,15 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
-// D2 button component
-// Modeled after Material UI v1: https://material-ui-1dab0.firebaseapp.com/api/button/
-// Props:
-// raised (boolean, default false) - if true, the button will use raised styling.
-// fab (boolean, default false) - If true, will use floating action button styling.
-// disabled (boolean, default false) - If true, the button will be disabled.
-// color ('default', 'primary', 'accent') - The color of the component (from theme palette).
-// onClick (function) - Callback function fired when the button is touch-tapped.
-// children * (node) - The content of the button.
+/**
+ * D2 button component, modeled after Material UI v1
+ * @property {boolean} raised - If true, the button will use raised styling.
+ * @property {boolean} fab - If true, will use floating action button styling.
+ * @property {boolean} disabled - If true, the button will be disabled.
+ * @property {string} color - The theme color of the component ('default', 'primary', 'accent').
+ * @property {function} onClick - Callback function fired when the button is touch-tapped.
+ * @property {node} children - The content of the button.
+ */
 const Button = ({ raised, fab, color, disabled, onClick, children }) => {
     const MuiButton = raised ? RaisedButton : fab ? FloatingActionButton: FlatButton;
 
@@ -22,7 +22,7 @@ const Button = ({ raised, fab, color, disabled, onClick, children }) => {
             primary={color === 'primary'}
             secondary={color === 'accent'}
             disabled={disabled}
-            onClick={onClick}
+            onTouchTap={onClick}
         >
             {typeof children !== 'string' ? children : null}
         </MuiButton>

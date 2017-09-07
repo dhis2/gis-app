@@ -11,6 +11,7 @@ import OrgUnitSelect from '../orgunits/OrgUnitSelect';
 import NumberField from '../d2-ui/NumberField';
 import ColorPicker from '../d2-ui/ColorPicker';
 
+
 const styles = {
     body: {
         padding: 0,
@@ -166,6 +167,7 @@ class EventDialog extends Component {
                 <Tab label='Filter'>
                     <div style={styles.content}>
                         <DataItemFilters
+                            dataItems={dataElements}
                             filters={columns.filter(c => c.filter)}
                         />
                     </div>
@@ -202,6 +204,7 @@ class EventDialog extends Component {
                         </div>
                         {dataElements ?
                             <DataItemSelect
+                                label='Style by data item'
                                 items={dataElements.filter(d => d.optionSet)}
                                 value={styleDataElement ? styleDataElement.id : null}
                                 onChange={setStyleDataElement}

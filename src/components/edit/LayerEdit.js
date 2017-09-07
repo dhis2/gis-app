@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import Button from '../d2-ui/button/Button.component';
 import WidgetWindow from '../../app/WidgetWindow';
 import EventDialog from '../../containers/EventDialog';
 
@@ -103,17 +104,18 @@ class LayerEdit extends Component {
             return null;
         }
 
-        const cancelButton = <FlatButton
-            label="Cancel"
-            primary={true}
-            onTouchTap={() => this.closeDialog()}
-        />;
 
         const addButton = <FlatButton
             label="Add layer"
             primary={true}
             onTouchTap={() => this.addLayer()}
             // disabled={true}
+        />;
+
+        const cancelButton = <FlatButton
+            label="Cancel"
+            primary={true}
+            onTouchTap={() => this.closeDialog()}
         />;
 
         return (
@@ -129,7 +131,14 @@ class LayerEdit extends Component {
                         {...layer}
                         // onChange={(config) => this.onLayerChange(config)}
                     />
-                    : null}
+                : null}
+
+                <Button>Add layer</Button>
+                <Button raised color='primary'>Add layer</Button>
+                <Button raised color='accent'>Add layer</Button>
+                <Button raised color='accent' disabled>Add layer</Button>
+                <div>_</div>
+
             </Dialog>
         );
     }

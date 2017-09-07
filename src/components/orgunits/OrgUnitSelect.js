@@ -1,4 +1,5 @@
 import React from 'react';
+// import OrgUnitTree from 'd2-ui/lib/org-unit-tree/OrgUnitTree.component';
 
 const OrgUnitSelect = ({ items }) => (
     <div>Organisation units

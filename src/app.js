@@ -4,8 +4,6 @@ import app from './app/index.js';
 import appInit from './app-init';
 import '../scss/app.scss';
 
-console.log(React);
-
 // New React stuff
 import React from 'react';
 import { render } from 'react-dom';

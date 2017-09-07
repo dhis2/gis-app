@@ -1,17 +1,31 @@
 import React from 'react';
+import FilterItem from './FilterItem';
 
-const DataItemFilters = ({ filters }) => (
-    <div>FILTERS
-
-        {filters.map((item, index) => (
-            <div
-                key={index}
-            >{item.dimension} {item.name} {item.filter}</div>
-        ))}
-
-    </div>
+// https://react.rocks/example/react-redux-test
 
 
-);
+
+const DataItemFilters = ({filters, dataItems}) => {
+
+    return (
+        <div>
+            {filters.map((item, index) => (
+                <FilterItem
+                    key={index}
+                    dataItems={dataItems}
+                    {...item}
+                />
+            ))}
+
+            <div>Add filter btn</div>
+
+        </div>
+
+
+    )
+
+
+}
+;
 
 export default DataItemFilters;

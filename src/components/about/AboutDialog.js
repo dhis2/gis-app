@@ -1,7 +1,7 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'd2-ui/lib/button/Button';
 
 const style = {
   padding: 5
@@ -10,11 +10,10 @@ const style = {
 const AboutDialog = ({ system, user, aboutDialogOpen, closeAboutDialog }) => {
 
     const actions = [
-        <FlatButton
-            label='Close' // TODO: i18n
-            primary={true}
-            onTouchTap={closeAboutDialog}
-        />,
+        <Button
+            color='primary'
+            onClick={closeAboutDialog}
+        >Close</Button>,
     ];
 
     return (
@@ -31,7 +30,5 @@ const AboutDialog = ({ system, user, aboutDialogOpen, closeAboutDialog }) => {
         </Dialog>
     );
 };
-
-
 
 export default AboutDialog;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'd2-ui/lib/button/Button';
 import OverlayList from './OverlayList'
 
 const styles = {
@@ -17,11 +17,10 @@ const styles = {
 
 const AddLayerDialog = ({ overlaysDialogOpen, overlays, onRequestClose, onLayerSelect }) => {
     const actions = [
-        <FlatButton
-            label="Cancel"
-            primary={true}
-            onTouchTap={onRequestClose}
-        />,
+        <Button
+            color='primary'
+            onClick={onRequestClose}
+        >Cancel</Button>,
     ];
 
     return (

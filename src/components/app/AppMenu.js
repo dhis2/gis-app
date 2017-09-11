@@ -1,6 +1,6 @@
 import React from 'react';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'd2-ui/lib/button/Button';
 import { HEADER_HEIGHT } from '../../constants/layout';
 
 const styles = {
@@ -25,33 +25,29 @@ const AppMenu = ({ openOverlaysDialog, openFavoritesDialog, openAboutDialog, con
         className="dhis-gis-menu"
     >
         <ToolbarGroup firstChild={true}>
-            <FlatButton
-                label="Add layer"
-                onTouchTap={openOverlaysDialog}
+            <Button
+                onClick={openOverlaysDialog}
                 style={styles.button}
-            />
-            <FlatButton
-                label="Favorites"
-                onTouchTap={openFavoritesDialog}
+            >Add layer</Button>
+            <Button
+                onClick={openFavoritesDialog}
                 style={styles.button}
-            />
-            <FlatButton
-                label="Share"
+            >Favorites</Button>
+            <Button
                 disabled={true}
+                onClick={() => {}}
                 style={styles.button}
-            />
+            >Share</Button>
         </ToolbarGroup>
         <ToolbarGroup lastChild={true} style={styles.lastToolbar}>
-            <FlatButton
-                label="About"
-                onTouchTap={openAboutDialog}
+            <Button
+                onClick={openAboutDialog}
                 style={styles.button}
-            />
-            <FlatButton
-                label="Home"
-                onTouchTap={() => window.location.href = contextPath + '/dhis-web-commons-about/redirect.action'}
+            >About</Button>
+            <Button
+                onClick={() => window.location.href = contextPath + '/dhis-web-commons-about/redirect.action'}
                 style={styles.button}
-            />
+            >Home</Button>
         </ToolbarGroup>
     </Toolbar>
 );

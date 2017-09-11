@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
-import MenuItem from 'material-ui/MenuItem';
 
 const D2NumberField = ({ label, value, onChange, style }) => (
     <TextField

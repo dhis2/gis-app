@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import Button from '../d2-ui/button/Button.component';
+import Button from 'd2-ui/lib/button/Button';
 import WidgetWindow from '../../app/WidgetWindow';
 import EventDialog from '../../containers/EventDialog';
 

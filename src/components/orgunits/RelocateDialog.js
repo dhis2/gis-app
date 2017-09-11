@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'd2-ui/lib/button/Button';
 
 const style = {
     position: 'absolute',
@@ -32,10 +32,7 @@ const RelocateDialog = (props, context) => {
         return (
             <Paper style={style}>
                 Click the map where you want to relocate facility <strong>{props.feature.properties.name}</strong>
-                <FlatButton
-                    label="Cancel"
-                    onTouchTap={props.stopRelocateOrgUnit}
-                />
+                <Button onClick={props.stopRelocateOrgUnit}>Cancel</Button>
             </Paper>
         );
     } else {

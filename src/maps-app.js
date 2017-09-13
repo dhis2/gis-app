@@ -66,6 +66,8 @@ getManifest('manifest.webapp')
 
         config.schemas = [
             'organisationUnit',
+            'program',
+            'programStage'
         ];
     })
     .then(getUserSettings)
@@ -108,8 +110,6 @@ getManifest('manifest.webapp')
                 document.getElementById('app')
             );
         });
-
-
 
     }, (err) => {
         log.error('Failed to initialize D2:', JSON.stringify(err));

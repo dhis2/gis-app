@@ -1,6 +1,8 @@
 import * as types from '../constants/actionTypes';
 import { apiFetch } from '../util/api';
 import arrayPluck from 'd2-utilizr/lib/arrayPluck';
+import { getInstance as getD2 } from 'd2/lib/d2';
+
 
 // Set all programs
 export const setPrograms = (data) => ({
@@ -30,15 +32,40 @@ export const setProgramStageDataElements = (programStageId, payload) => ({
 });
 
 // Load programs
+/*
 export const loadPrograms = () => (dispatch) => {
     return apiFetch('programs.json?fields=id,displayName~rename(name)&paging=false')
         .then(data => dispatch(setPrograms(data.programs)));
 };
+*/
+
+// fields: 'id,programStages[id,displayName~rename(name)]'
+
+export const loadPrograms = () => (dispatch) => {
+    getD2()
+        .then(d2 => d2.models.programs.list({
+            paging: false,
+            fields: 'id,programStages[id,displayName~rename(name)]',
+        }))
+        .then(programs => console.log('programs', programs));
+};
+
+
+
+/*
+export const loadProgramStages = (programId) => (dispatch) =>
+    getD2()
+        .then(d2 => d2.models.program.get(programId, { fields: 'id,programStages[id,displayName~rename(name)]' })})
+        .then(program => dispatch(setProgramStages(programId, program.programStages)));
+*/
+
+
 
 // Load program stages
 export const loadProgramStages = (programId) => (dispatch) =>
     apiFetch(`programs/${programId}.json?fields=programStages[id,displayName~rename(name)]&paging=false`)
         .then(data => dispatch(setProgramStages(programId, data.programStages)));
+
 
 // Load program tracked entity attributes
 export const loadProgramTrackedEntityAttributes = (programId) => (dispatch) =>

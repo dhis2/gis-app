@@ -5,7 +5,7 @@ import { openFavoritesDialog } from '../actions/favorites';
 import { openAboutDialog } from '../actions/about';
 
 const mapStateToProps = state => ({
-    contextPath: state.system.contextPath,
+    // contextPath: state.system.contextPath,
 });
 
 export default connect(

@@ -9,8 +9,6 @@ import contextMenu from './contextMenu';
 import orgUnit from './orgUnit';
 import relocate from './relocate';
 import loading from './loading';
-import system from './system';
-import user from './user';
 import programs from './programs';
 import programStages from './programStages';
 import programStageDataElements from './programStageDataElements';
@@ -28,8 +26,6 @@ export default combineReducers({
     orgUnit,
     relocate,
     loading,
-    system,
-    user,
     programs,
     programStages,
     programStageDataElements,

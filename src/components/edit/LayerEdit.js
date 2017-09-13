@@ -110,8 +110,16 @@ class LayerEdit extends Component {
                 titleStyle={styles.title}
                 open={true}
                 actions={[
-                    <Button color='primary' onClick={() => this.closeDialog()}>Cancel</Button>,
-                    <Button color='primary' onClick={() => this.addLayer()}>Add layer</Button>
+                    <Button
+                        color='primary'
+                        onClick={() => this.closeDialog()}
+                        selector='cancel'
+                    >Cancel</Button>,
+                    <Button
+                        color='primary'
+                        onClick={() => this.addLayer()}
+                        selector='add'
+                    >Add layer</Button>
                 ]}
             >
                 {layer.type === 'event' ?

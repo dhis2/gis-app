@@ -36,7 +36,6 @@ const App = ({ d2 }) => (
                     <OrgUnitDialog />
                     <RelocateDialog />
                     <AboutDialog />
-
                 </div>
             </MapProvider>
         </MuiThemeProvider>

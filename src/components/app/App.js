@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import AppWithD2 from 'd2-ui/lib/app/AppWithD2.component';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MapProvider from '../map/MapProvider';
 import AppMenu from '../../containers/AppMenu';
@@ -18,26 +19,28 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
 
-const App = () => (
-    <MuiThemeProvider>
-        <MapProvider>
-            <div id="dhis-gis-container">
-                <AppMenu />
-                <AddLayerDialog />
-                <FavoritesDialog />
-                <LayersPanel />
-                <LayersToggle />
-                <Map />
-                <BottomPanel />
-                <LayerEdit />
-                <ContextMenu />
-                <OrgUnitDialog />
-                <RelocateDialog />
-                <AboutDialog />
+const App = ({ d2 }) => (
+    <AppWithD2 d2={d2}>
+        <MuiThemeProvider>
+            <MapProvider>
+                <div id="dhis-gis-container">
+                    <AppMenu />
+                    <AddLayerDialog />
+                    <FavoritesDialog />
+                    <LayersPanel />
+                    <LayersToggle />
+                    <Map />
+                    <BottomPanel />
+                    <LayerEdit />
+                    <ContextMenu />
+                    <OrgUnitDialog />
+                    <RelocateDialog />
+                    <AboutDialog />
 
-            </div>
-        </MapProvider>
-    </MuiThemeProvider>
+                </div>
+            </MapProvider>
+        </MuiThemeProvider>
+    </AppWithD2>
 );
 
 export default App;

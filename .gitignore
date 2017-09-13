@@ -8,3 +8,6 @@ coverage
 target
 *.gzip
 .nyc_output
+
+manifest.webapp
+dev_manifest.webapp

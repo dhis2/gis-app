@@ -1,8 +1,5 @@
 import * as types from '../constants/actionTypes';
-import { apiFetch } from '../util/api';
-import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 import { getInstance as getD2 } from 'd2/lib/d2';
-
 
 // Set all programs
 export const setPrograms = (data) => ({
@@ -57,13 +54,13 @@ export const loadProgramTrackedEntityAttributes = (programId) => (dispatch) =>
       fields: 'programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]]',
       paging: false,
     }))
-    .then(program => dispatch(setProgramAttributes(programId, arrayPluck(program.programTrackedEntityAttributes.toArray(), 'trackedEntityAttribute'))));
+    .then(program => dispatch(setProgramAttributes(programId, program.programTrackedEntityAttributes.toArray().map(d => d.trackedEntityAttribute))));
 
 // Load program stage data elements
 export const loadProgramStageDataElements = (programStageId) => (dispatch) =>
   getD2()
     .then(d2 => d2.models.programStage.get(programStageId, {
-      fields: 'programStageDataElements[dataElement[id,${gis.init.namePropertyUrl},valueType,optionSet[id,displayName~rename(name)]]]',
+      fields: `programStageDataElements[dataElement[id,${gis.init.namePropertyUrl},valueType,optionSet[id,displayName~rename(name)]]]`,
       paging: false,
     }))
-    .then(programStage => dispatch(setProgramStageDataElements(programStageId, arrayPluck(programStage.programStageDataElements, 'dataElement'))));
+    .then(programStage => dispatch(setProgramStageDataElements(programStageId, programStage.programStageDataElements.map(d => d.dataElement))));

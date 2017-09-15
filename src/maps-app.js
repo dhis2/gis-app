@@ -51,7 +51,7 @@ render(
 
 // Temporary fix to know that initial data is loaded
 GIS.onLoad = () => {
-    // store.dispatch(fetchExternalLayers());
+    store.dispatch(fetchExternalLayers());
 };
 
 // Window resize listener: http://stackoverflow.com/questions/35073669/window-resize-react-redux
@@ -67,7 +67,8 @@ getManifest('manifest.webapp')
         config.schemas = [
             'organisationUnit',
             'program',
-            'programStage'
+            'programStage',
+            'externalMapLayer'
         ];
     })
     .then(getUserSettings)

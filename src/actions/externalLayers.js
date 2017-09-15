@@ -1,7 +1,5 @@
-import isArray from 'd2-utilizr/lib/isArray';
 import * as types from '../constants/actionTypes';
-import { apiFetch } from '../util/api';
-import { loading, loaded } from './loading';
+import { getInstance as getD2 } from 'd2/lib/d2';
 import { addBasemap } from './basemap';
 
 // Add external overlay
@@ -18,19 +16,20 @@ export const removeExternalOverlay = (id) => ({
 
 // Fetch external layers from Web API
 export const fetchExternalLayers = () => (dispatch) =>
-    apiFetch('externalMapLayers.json?fields=id,displayName~rename(name),service,url,attribution,mapService,layer,imageFormat,mapLayerPosition,legendSet,legendSetUrl&paging=false')
-        .then(data => {
-            if (data && isArray(data.externalMapLayers)) {
-                data.externalMapLayers.forEach(layer => {
-                    const config = externalLayerConfig(layer);
-                    if (layer.mapLayerPosition === 'BASEMAP') {
-                        dispatch(addBasemap(config));
-                    } else { // OVERLAY
-                        dispatch(addExternalOverlay(config));
-                    }
-                });
-            }
-        });
+  getD2()
+    .then(d2 => d2.models.externalMapLayers.list({
+      fields: 'id,displayName~rename(name),service,url,attribution,mapService,layer,imageFormat,mapLayerPosition,legendSet,legendSetUrl',
+      paging: false,
+    }))
+    .then(mapLayers => mapLayers.forEach(layer => {
+        const config = externalLayerConfig(layer);
+
+        if (layer.mapLayerPosition === 'BASEMAP') {
+            dispatch(addBasemap(config));
+        } else { // OVERLAY
+            dispatch(addExternalOverlay(config));
+        }
+    }));
 
 // Create external layer config object
 const externalLayerConfig = (layer) => {

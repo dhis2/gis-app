@@ -64,11 +64,13 @@ getManifest('manifest.webapp')
         log.info(`Loading: ${manifest.name} v${manifest.version}`);
         log.info(`Built ${manifest.manifest_generated_at}`);
 
+        // Include all API endpoints in use by this app
         config.schemas = [
             'organisationUnit',
             'program',
             'programStage',
-            'externalMapLayer'
+            'externalMapLayer',
+            'optionSet'
         ];
     })
     .then(getUserSettings)

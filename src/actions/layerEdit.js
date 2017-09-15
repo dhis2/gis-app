@@ -1,6 +1,5 @@
 import * as types from '../constants/actionTypes';
-import { apiFetch } from '../util/api';
-import { addOptionSet, getOptionSet } from './optionSets';
+import { getOptionSet } from './optionSets';
 
 // Set program used
 export const setProgram = (program) => ({

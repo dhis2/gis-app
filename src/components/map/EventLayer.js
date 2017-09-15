@@ -10,6 +10,8 @@ class EventLayer extends Layer {
         const data = props.data;
         const map = this.context.map;
 
+        console.log('####');
+
         // Data elements to display in event popup
         this.displayElements = {};
 

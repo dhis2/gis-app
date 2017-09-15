@@ -32,48 +32,38 @@ export const setProgramStageDataElements = (programStageId, payload) => ({
 });
 
 // Load programs
-/*
-export const loadPrograms = () => (dispatch) => {
-    return apiFetch('programs.json?fields=id,displayName~rename(name)&paging=false')
-        .then(data => dispatch(setPrograms(data.programs)));
-};
-*/
-
-// fields: 'id,programStages[id,displayName~rename(name)]'
-
 export const loadPrograms = () => (dispatch) => {
     getD2()
         .then(d2 => d2.models.programs.list({
+            fields: 'id,displayName~rename(name)',
             paging: false,
-            fields: 'id,programStages[id,displayName~rename(name)]',
         }))
-        .then(programs => console.log('programs', programs));
+        .then(programs => dispatch(setPrograms(programs.toArray())));
 };
-
-
-
-/*
-export const loadProgramStages = (programId) => (dispatch) =>
-    getD2()
-        .then(d2 => d2.models.program.get(programId, { fields: 'id,programStages[id,displayName~rename(name)]' })})
-        .then(program => dispatch(setProgramStages(programId, program.programStages)));
-*/
-
-
 
 // Load program stages
 export const loadProgramStages = (programId) => (dispatch) =>
-    apiFetch(`programs/${programId}.json?fields=programStages[id,displayName~rename(name)]&paging=false`)
-        .then(data => dispatch(setProgramStages(programId, data.programStages)));
+  getD2()
+    .then(d2 => d2.models.program.get(programId, {
+      fields: 'id,programStages[id,displayName~rename(name)]',
+      paging: false,
+    }))
+    .then(program => dispatch(setProgramStages(programId, program.programStages.toArray())));
 
-
-// Load program tracked entity attributes
+// Load program tracked entity attributes - TODO: In use?
 export const loadProgramTrackedEntityAttributes = (programId) => (dispatch) =>
-    apiFetch(`programs/${programId}.json?fields=programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]]&paging=false`)
-        .then(data => dispatch(setProgramAttributes(programId, arrayPluck(data.programTrackedEntityAttributes, 'trackedEntityAttribute'))));
+  getD2()
+    .then(d2 => d2.models.program.get(programId, {
+      fields: 'programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]]',
+      paging: false,
+    }))
+    .then(program => dispatch(setProgramAttributes(programId, arrayPluck(program.programTrackedEntityAttributes.toArray(), 'trackedEntityAttribute'))));
 
 // Load program stage data elements
-export const loadProgramStageDataElements = (programStageId) => (dispatch) => {
-    return apiFetch(`programStages/${programStageId}.json?fields=programStageDataElements[dataElement[id,${gis.init.namePropertyUrl},valueType,optionSet[id,displayName~rename(name)]]]`)
-        .then(data => dispatch(setProgramStageDataElements(programStageId, arrayPluck(data.programStageDataElements, 'dataElement'))));
-};
+export const loadProgramStageDataElements = (programStageId) => (dispatch) =>
+  getD2()
+    .then(d2 => d2.models.programStage.get(programStageId, {
+      fields: 'programStageDataElements[dataElement[id,${gis.init.namePropertyUrl},valueType,optionSet[id,displayName~rename(name)]]]',
+      paging: false,
+    }))
+    .then(programStage => dispatch(setProgramStageDataElements(programStageId, arrayPluck(programStage.programStageDataElements, 'dataElement'))));

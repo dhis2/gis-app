@@ -1,9 +1,8 @@
-import { apiFetch } from '../util/api';
+// import { apiFetch } from '../util/api';
 import { toGeoJson } from '../util/map';
 import isArray from 'd2-utilizr/lib/isArray';
-import isObject from 'd2-utilizr/lib/isObject';
-import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 import arrayUnique from 'd2-utilizr/lib/arrayUnique';
+import { getInstance as getD2 } from 'd2/lib/d2';
 
 let layer;
 let callback;
@@ -16,7 +15,7 @@ const onDataLoad = (data) => {
     let levels = [];
 
     if (!data.length) {
-        gis.mask.hide();
+        // gis.mask.hide();
         gis.alert(GIS.i18n.no_valid_coordinates_found);
         return;
     }
@@ -56,8 +55,12 @@ const boundaryLoader = (config, cb) =>  {
     layer = config;
     callback = cb;
 
+    // console.log('##', layer.rows[0].items);
+
     // TODO: Reuse code from thematicLoader?
-    const items = layer.rows[0].items;
+    const items = layer.rows[0].items.map(item => item.id);
+    let userOrgUnits;
+
     const propertyMap = {
         'name': 'name',
         'displayName': 'name',
@@ -65,24 +68,30 @@ const boundaryLoader = (config, cb) =>  {
         'displayShortName': 'shortName'
     };
 
+
+
     const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty; // TODO
     // const displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name'; // xLayoutt ?
-    const displayProperty = propertyMap[keyAnalysisDisplayProperty] || 'name';
+    const displayProperty = (propertyMap[keyAnalysisDisplayProperty] || 'name').toUpperCase();
 
-    let params = '?ou=ou:' + items.map(item => item.id).join(';') + '&displayProperty=' + displayProperty.toUpperCase();
+    let params = '?ou=ou:' + items.join(';') + '&displayProperty=' + displayProperty;
 
+    // Seems not to be in use (might be supported in old
     if (isArray(layer.userOrgUnit) && layer.userOrgUnit.length) {
-        params += '&userOrgUnit=' + layer.userOrgUnit.map(unit => unit).join(';');
+        userOrgUnits = layer.userOrgUnit.map(unit => unit);
+        params += '&userOrgUnit=' + userOrgUnits.join(';');
     }
 
-    if (isArray(layer.userOrgUnit) && layer.userOrgUnit.length) {
-        params += '&userOrgUnit=' + layer.userOrgUnit.map(unit => unit).join(';');
-    }
 
-    // gis.init.apiPath + 'geoFeatures.json' + params;
 
-    apiFetch(`geoFeatures.json${params}`)
-        .then(data => onDataLoad(data, layer, callback));
+    getD2()
+        .then((d2) => d2.geoFeatures
+            .byOrgUnit(items)
+            .byUserOrgUnit(userOrgUnits)
+            .displayProperty(displayProperty)
+            .getAll()
+        )
+        .then((data) => onDataLoad(data, layer, callback));
 
 };
 

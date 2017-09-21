@@ -1,5 +1,4 @@
 import * as types from '../constants/actionTypes';
-import { getInstance as getD2 } from 'd2/lib/d2';
 
 // Set all programs
 export const setPrograms = (data) => ({
@@ -28,39 +27,25 @@ export const setProgramStageDataElements = (programStageId, payload) => ({
     payload,
 });
 
-// Load programs
-export const loadPrograms = () => (dispatch) => {
-    getD2()
-        .then(d2 => d2.models.programs.list({
-            fields: 'id,displayName~rename(name)',
-            paging: false,
-        }))
-        .then(programs => dispatch(setPrograms(programs.toArray())));
-};
+// Load all programs
+export const loadPrograms = () => ({
+    type: types.PROGRAMS_LOAD,
+});
 
-// Load program stages
-export const loadProgramStages = (programId) => (dispatch) =>
-  getD2()
-    .then(d2 => d2.models.program.get(programId, {
-      fields: 'id,programStages[id,displayName~rename(name)]',
-      paging: false,
-    }))
-    .then(program => dispatch(setProgramStages(programId, program.programStages.toArray())));
+// Load all stages for one program
+export const loadProgramStages = (programId) => ({
+    type: types.PROGRAM_STAGES_LOAD,
+    programId,
+});
 
 // Load program tracked entity attributes - TODO: In use?
-export const loadProgramTrackedEntityAttributes = (programId) => (dispatch) =>
-  getD2()
-    .then(d2 => d2.models.program.get(programId, {
-      fields: 'programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]]',
-      paging: false,
-    }))
-    .then(program => dispatch(setProgramAttributes(programId, program.programTrackedEntityAttributes.toArray().map(d => d.trackedEntityAttribute))));
+export const loadProgramTrackedEntityAttributes = (programId) => ({
+    type: types.PROGRAM_ATTRIBUTES_LOAD,
+    programId,
+});
 
 // Load program stage data elements
-export const loadProgramStageDataElements = (programStageId) => (dispatch) =>
-  getD2()
-    .then(d2 => d2.models.programStage.get(programStageId, {
-      fields: `programStageDataElements[dataElement[id,${gis.init.namePropertyUrl},valueType,optionSet[id,displayName~rename(name)]]]`,
-      paging: false,
-    }))
-    .then(programStage => dispatch(setProgramStageDataElements(programStageId, programStage.programStageDataElements.map(d => d.dataElement))));
+export const loadProgramStageDataElements = (programStageId) => ({
+    type: types.PROGRAM_STAGE_DATA_ELEMENTS_LOAD,
+    programStageId,
+});

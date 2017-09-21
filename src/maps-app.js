@@ -17,7 +17,7 @@ import Root from './components/Root';
 import debounce from 'lodash.debounce';
 import storeFactory from './store';
 import { loadPrograms } from './actions/programs';
-import { fetchExternalLayers } from './actions/externalLayers';
+import { loadExternalLayers } from './actions/externalLayers';
 import { resizeScreen } from './actions/ui';
 
 const dhisDevConfig = DHIS_CONFIG; // eslint-disable-line
@@ -51,7 +51,7 @@ render(
 
 // Temporary fix to know that initial data is loaded
 GIS.onLoad = () => {
-    store.dispatch(fetchExternalLayers());
+    store.dispatch(loadExternalLayers());
 };
 
 // Window resize listener: http://stackoverflow.com/questions/35073669/window-resize-react-redux
@@ -78,7 +78,7 @@ getManifest('manifest.webapp')
     .then(init)
     .then((d2) => {
         // App init
-        log.debug('D2 initialized', d2);
+        // log.debug('D2 initialized', d2);
 
         if (!d2.currentUser.authorities.has('F_SYSTEM_SETTING')) {
             document.write(d2.i18n.getTranslation('access_denied'));

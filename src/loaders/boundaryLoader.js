@@ -55,11 +55,8 @@ const boundaryLoader = (config, cb) =>  {
     layer = config;
     callback = cb;
 
-    // console.log('##', layer.rows[0].items);
-
     // TODO: Reuse code from thematicLoader?
-    const items = layer.rows[0].items.map(item => item.id);
-    let userOrgUnits;
+    const orgUnits = layer.rows[0].items.map(item => item.id);
 
     const propertyMap = {
         'name': 'name',
@@ -68,26 +65,14 @@ const boundaryLoader = (config, cb) =>  {
         'displayShortName': 'shortName'
     };
 
-
-
     const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty; // TODO
-    // const displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name'; // xLayoutt ?
     const displayProperty = (propertyMap[keyAnalysisDisplayProperty] || 'name').toUpperCase();
 
-    let params = '?ou=ou:' + items.join(';') + '&displayProperty=' + displayProperty;
-
-    // Seems not to be in use (might be supported in old
-    if (isArray(layer.userOrgUnit) && layer.userOrgUnit.length) {
-        userOrgUnits = layer.userOrgUnit.map(unit => unit);
-        params += '&userOrgUnit=' + userOrgUnits.join(';');
-    }
-
-
+    let params = '?ou=ou:' + orgUnits.join(';') + '&displayProperty=' + displayProperty;
 
     getD2()
         .then((d2) => d2.geoFeatures
-            .byOrgUnit(items)
-            .byUserOrgUnit(userOrgUnits)
+            .byOrgUnit(orgUnits)
             .displayProperty(displayProperty)
             .getAll()
         )

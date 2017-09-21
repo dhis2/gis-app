@@ -93,6 +93,7 @@ class EventDialog extends Component {
 
                 // Load program stages
                 if (program !== prev.program) {
+                    console.log('Load program stages');
                     loadProgramStages(program.id);
                 }
             }

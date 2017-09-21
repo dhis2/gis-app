@@ -22,9 +22,9 @@ export const loadExternalLayers = (action$) =>
                     console.log('config', config);
 
                     if (layer.mapLayerPosition === 'BASEMAP') {
-                        return addBasemap(config);
+                        addBasemap(config);
                     } else { // OVERLAY
-                        return addExternalOverlay(config);
+                        addExternalOverlay(config);
                     }
                 })))
                 .catch(errorActionCreator(types.EXTERNAL_LAYERS_LOAD_ERROR))

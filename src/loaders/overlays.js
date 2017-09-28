@@ -25,6 +25,11 @@ function parseOverlay(layer, callback) {
 }
 
 export function fetchOverlay(layer) {
+
+    if (layer.type = 'facility') {
+        return facilityLoader(layer);
+    }
+
     return new Promise((resolve, reject) => {
         const Loader = layerType[layer.type];
 

@@ -1,6 +1,5 @@
 // import { apiFetch } from '../util/api';
 import { toGeoJson } from '../util/map';
-import isArray from 'd2-utilizr/lib/isArray';
 import arrayUnique from 'd2-utilizr/lib/arrayUnique';
 import { getInstance as getD2 } from 'd2/lib/d2';
 

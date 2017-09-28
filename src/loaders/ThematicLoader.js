@@ -6,6 +6,7 @@ import isObject from 'd2-utilizr/lib/isObject';
 import isArray from 'd2-utilizr/lib/isArray';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
+import { getInstance as getD2 } from 'd2/lib/d2';
 
 class ThematicLoader {
 
@@ -32,11 +33,14 @@ class ThematicLoader {
         const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty; // TODO
         const displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[layer.displayProperty] || 'name';
 
-        let orgUnitParams = '?ou=ou:' + orgUnits.map(item => item.id).join(';') + '&displayProperty=' + displayProperty.toUpperCase();
+        // let orgUnitParams = '?ou=ou:' + orgUnits.map(item => item.id).join(';') + '&displayProperty=' + displayProperty.toUpperCase();
+        const orgUnitParams = orgUnits.map(item => item.id);
 
+        /* Seems to be not in use
         if (isArray(layer.userOrgUnit) && layer.userOrgUnit.length) {
             orgUnitParams += '&userOrgUnit=' + layer.userOrgUnit.join(';');
         }
+        */
 
         // ou
         let dataParams = '?dimension=ou:' + ouItems.map(item => item.id).join(';');
@@ -69,17 +73,21 @@ class ThematicLoader {
             dataParams += '&aggregationType=' + layer.aggregationType;
         }
 
-        // console.log(orgUnitParams, dataParams);
-        // return gis.init.apiPath + 'geoFeatures.json' + params;
+        getD2()
+            .then((d2) => {
+                const orgUnitReq = d2.geoFeatures
+                    .byOrgUnit(orgUnitParams)
+                    .displayProperty(displayProperty.toUpperCase())
+                    .getAll();
 
-        const orgUnitReq = apiFetch(`geoFeatures.json${orgUnitParams}`);
-        const dataReq = apiFetch(`analytics.json${dataParams}`);
+                const dataReq = apiFetch(`analytics.json${dataParams}`);
 
-        // Load data from API
-        Promise.all([orgUnitReq, dataReq])
-            .then(response => Promise.all(response.map(r => r.json())))
-            .then(data => this.onLoad(data[0], data[1]))
-            .catch(error => console.log('Parsing failed: ', error));
+                // Load data from API
+                Promise.all([orgUnitReq, dataReq])
+                    .then(data => this.onLoad(data[0], data[1]))
+                    .catch(error => console.log('Parsing failed: ', error));
+
+            });
     }
 
     // Called when org units and data is loaded
@@ -172,8 +180,13 @@ class ThematicLoader {
                 'de': 'dataElements',
                 'ds': 'dataSets'
             };
+
+
+
             const elementUrl = elementMap[layer.columns[0].objectName];
             const id = layer.columns[0].items[0].id;
+
+
 
             if (!elementUrl) {
                 this.createLegend();
@@ -235,7 +248,7 @@ class ThematicLoader {
 
                 this.createLegend()
 
-            }); // TODO
+            });
     }
 
     createLegend() {
@@ -250,19 +263,20 @@ class ThematicLoader {
 
         // All dimensions
         const dimensions = arrayClean([].concat(layer.columns || [], layer.rows || [], layer.filters || []));
-        const peIds = metaData[this.dimConf.period.objectName];
+        // const peIds = metaData[this.dimConf.period.objectName];
+        const peIds = metaData.dimensions[this.dimConf.period.objectName];
 
         for (let i = 0, dimension; i < dimensions.length; i++) {
             dimension = dimensions[i];
 
             for (let j = 0, item; j < dimension.items.length; j++) {
                 item = dimension.items[j];
-                item.name = metaData.names[item.id];
+                item.name = metaData.items[item.id];
             }
         }
 
         // Period name without changing the id
-        layer.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]];
+        layer.filters[0].items[0].name = metaData.items[peIds[peIds.length - 1]];
 
         const options = { // Classification options
             indicator: gis.conf.finals.widget.value, // TODO
@@ -301,13 +315,13 @@ class ThematicLoader {
         let name = layer.columns[0].items[0].name;
 
         // legend.title = (metaData.names[id] || name || id) + (aggregationType ? ` (${aggregationType})` : '');
-        layer.title = (metaData.names[id] || name || id) + (this.aggregationType ? ` (${this.aggregationType})` : '');
+        layer.title = (metaData.items[id] ? metaData.items[id].name : name || id) + (this.aggregationType ? ` (${this.aggregationType})` : '');
 
         // period
         id = layer.filters[0].items[0].id;
         name = layer.filters[0].items[0].name;
 
-        layer.subtitle = metaData.names[id] || name || id;
+        layer.subtitle = (metaData.items[id] ? metaData.items[id].name : name || id);
 
         if (method === 1 && layer.legendSet) { // Predefined legend
             for (let i = 0; i < bounds.length - 1; i++) {

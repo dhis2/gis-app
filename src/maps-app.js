@@ -67,6 +67,7 @@ getManifest('manifest.webapp')
         // Include all API endpoints in use by this app
         config.schemas = [
             'organisationUnit',
+            'organisationUnitGroupSet',
             'program',
             'programStage',
             'externalMapLayer',

@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import Button from 'd2-ui/lib/button/Button';
 import WidgetWindow from '../../app/WidgetWindow';
 import EventDialog from '../../containers/EventDialog';
+import FacilityDialog from '../../containers/FacilityDialog';
 
 // Only create one widget per layer (will be changed when we switch to react)
 const widgets = {};
@@ -80,9 +81,15 @@ class LayerEdit extends Component {
     }
 
     addLayer() {
-        this.props.layer.id = 'overlay-1'; // TODO
+        const layer = {
+            ...this.props.layer,
+            id: 'overlay-1', // TODO
+            isNew: true,
+        };
 
-        this.props.getOverlay(this.props.layer);
+        console.log('getOverlay', layer);
+
+        this.props.getOverlay(layer);
         this.closeDialog();
     }
 
@@ -125,9 +132,13 @@ class LayerEdit extends Component {
                 {layer.type === 'event' ?
                     <EventDialog
                         {...layer}
-                        // onChange={(config) => this.onLayerChange(config)}
                     />
                 : null}
+                {layer.type === 'facility' ?
+                    <FacilityDialog
+                        {...layer}
+                    />
+                    : null}
             </Dialog>
         );
     }

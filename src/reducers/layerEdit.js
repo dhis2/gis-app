@@ -1,15 +1,17 @@
+import * as types from '../constants/actionTypes';
+
 const layerEdit = (state = null, action) => {
 
     switch (action.type) {
 
-        case 'OVERLAY_EDIT':
+        case types.OVERLAY_EDIT:
             delete action.payload.img;
             return action.payload;
 
-        case 'OVERLAY_CANCEL':
+        case types.OVERLAY_CANCEL:
             return null;
 
-        case 'LAYER_EDIT_PROGRAM_SET':
+        case types.LAYER_EDIT_PROGRAM_SET:
             return {
                 ...state,
                 program: {
@@ -19,7 +21,7 @@ const layerEdit = (state = null, action) => {
                 styleDataElement: null,
             };
 
-        case 'LAYER_EDIT_PROGRAM_STAGE_SET':
+        case types.LAYER_EDIT_PROGRAM_STAGE_SET:
             return {
                 ...state,
                 programStage: {
@@ -28,14 +30,14 @@ const layerEdit = (state = null, action) => {
                 styleDataElement: null,
             };
 
-        case 'LAYER_EDIT_STYLE_DATA_ELEMENT_SET':
+        case types.LAYER_EDIT_STYLE_DATA_ELEMENT_SET:
             return {
                 ...state,
                 styleDataElement: action.dataElement,
             };
 
         // Set options to data element option set
-        case 'LAYER_EDIT_STYLE_DATA_ELEMENT_OPTIONS_SET':
+        case types.LAYER_EDIT_STYLE_DATA_ELEMENT_OPTIONS_SET:
             return {
                 ...state,
                 styleDataElement: {
@@ -49,16 +51,24 @@ const layerEdit = (state = null, action) => {
 
             return state;
 
-        case 'LAYER_EDIT_EVENT_POINT_RADIUS_SET':
+        case types.LAYER_EDIT_EVENT_POINT_RADIUS_SET:
             return {
                 ...state,
                 eventPointRadius: action.radius,
             };
 
-        case 'LAYER_EDIT_EVENT_POINT_COLOR_SET':
+        case types.LAYER_EDIT_EVENT_POINT_COLOR_SET:
             return {
                 ...state,
                 eventPointColor: action.color,
+            };
+
+        case types.LAYER_EDIT_ORGANISATION_UNIT_GROUP_SET:
+            return {
+                ...state,
+                organisationUnitGroupSet: {
+                    ...action.organisationUnitGroupSet,
+                },
             };
 
         default:

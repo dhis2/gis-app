@@ -56,6 +56,18 @@ const defaultOverlays = [{
     opacity: 0.95,
 },{
     type: 'facility',
+    preview: true,
+    title: 'Facilities Preview',
+    img: 'images/layers/facilities.png',
+    opacity: 1,
+    rows: [{
+        dimension: 'ou',
+        items:[{
+            id: 'LEVEL-4'
+        }]
+    }]
+},{
+    type: 'facility',
     title: 'Facilities',
     img: 'images/layers/facilities.png',
     opacity: 1,

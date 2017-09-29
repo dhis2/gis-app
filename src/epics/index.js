@@ -4,6 +4,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/concatMapTo';
 import 'rxjs/add/observable/empty';
+import orgUnits from './orgUnits';
 import programsEpics from './programs';
 import optionSetsEpics from './optionSets';
 import externalLayersEpics from './externalLayers';
@@ -14,4 +15,5 @@ const errorEpic = (action$) =>
         .do((action) => console.error(action.error))
         .concatMapTo(Observable.empty()); // Avoid infinite loop, same as .map(action => Observable.empty()).concatAll()
 
-export default combineEpics(programsEpics, optionSetsEpics, externalLayersEpics, errorEpic);
+
+export default combineEpics(orgUnits, programsEpics, optionSetsEpics, externalLayersEpics, errorEpic);

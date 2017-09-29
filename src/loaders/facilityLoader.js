@@ -15,8 +15,11 @@ const facilityLoader = (config) => new Promise((resolve, reject) => {
     };
     const displayProperty = (propertyMap[keyAnalysisDisplayProperty] || 'name').toUpperCase();
 
+    console.log('facility loader', groupSetId, items, config);
+
     getD2()
         .then((d2) => {
+            // TODO: Check if already in redux store?
             const groupSetReq = d2.models.organisationUnitGroupSet.get(groupSetId, {
                 fields: `organisationUnitGroups[id,${namePropertyUrl},symbol]`,
             }).then(groupSet =>
@@ -42,6 +45,7 @@ const facilityLoader = (config) => new Promise((resolve, reject) => {
 
             Promise.all([groupSetReq, facilitiesReq])
                 .then(([groupSet, facilities]) => {
+
                     // Convert API response to GeoJSON features
                     const features = facilities.map(facility => {
                         const id = facility.dimensions[groupSetId];

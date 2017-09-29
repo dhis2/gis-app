@@ -7,6 +7,7 @@ import layerEdit from './layerEdit';
 import dataTable from './dataTable';
 import contextMenu from './contextMenu';
 import orgUnit from './orgUnit';
+import orgUnitGroupSets from './orgUnitGroupSets';
 import relocate from './relocate';
 import loading from './loading';
 import programs from './programs';
@@ -24,6 +25,7 @@ export default combineReducers({
     dataTable,
     contextMenu,
     orgUnit,
+    orgUnitGroupSets,
     relocate,
     loading,
     programs,

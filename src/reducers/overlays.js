@@ -6,7 +6,7 @@ const defaultOverlays = [{
     title: 'Events Preview',
     img: 'images/layers/events.png',
     opacity: 0.95,
-    /*
+
     program: {
         id: 'eBAyeGv0exc',
         name: 'Inpatient morbidity and mortality'
@@ -15,6 +15,7 @@ const defaultOverlays = [{
         id: 'Zj7UnCAulEk',
         name: 'Single-Event Inpatient morbidity and mortality'
     },
+
     columns: [{
         dimension: 'qrur9Dvnyt5',
         name: 'Age in years',
@@ -32,13 +33,12 @@ const defaultOverlays = [{
             id: 'LAST_YEAR'
         }]
     }],
-    */
-    // startDate: '2016-08-29',
-    // endDate: '2017-08-29',
-    // eventClustering: true,
-    // eventPointColor: '#333333',
-    // eventPointRadius: 6,
-    // editCounter: 1,
+    startDate: '2016-08-29',
+    endDate: '2017-08-29',
+    eventClustering: true,
+    eventPointColor: '#333333',
+    eventPointRadius: 6,
+    editCounter: 1,
     /*
      legend: {
      description: 'Period: 2016-08-29 – 2017-08-29',

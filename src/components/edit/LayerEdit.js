@@ -41,6 +41,7 @@ class LayerEdit extends Component {
                 id = 'overlay-' + nextOverlayId++;
                 layer.id = id;
                 layer.isNew = true;
+                // layer.isLoaded = false;
             } else {
                 layer.isNew = false;
             }
@@ -83,11 +84,13 @@ class LayerEdit extends Component {
     addLayer() {
         const layer = {
             ...this.props.layer,
-            id: 'overlay-1', // TODO
+            id: 'overlay-' + nextOverlayId++, // TODO
             isNew: true,
+            isLoaded: false,
+            editCounter: 1
         };
 
-        console.log('getOverlay', layer);
+        // console.log('getOverlay', layer);
 
         this.props.getOverlay(layer);
         this.closeDialog();
@@ -145,5 +148,3 @@ class LayerEdit extends Component {
 }
 
 export default LayerEdit;
-
-

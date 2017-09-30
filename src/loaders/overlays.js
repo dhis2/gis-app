@@ -26,7 +26,7 @@ function parseOverlay(layer, callback) {
 
 export function fetchOverlay(layer) {
 
-    if (layer.type = 'facility') {
+    if (layer.type === 'facility') {
         return facilityLoader(layer);
     }
 

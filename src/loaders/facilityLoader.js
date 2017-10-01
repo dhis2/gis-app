@@ -1,26 +1,18 @@
 import isObject from 'd2-utilizr/lib/isObject';
 import { getInstance as getD2 } from 'd2/lib/d2';
 import {isValidCoordinate} from '../util/map';
+import { getDisplayPropertyUrl } from '../util/helpers';
 
 const facilityLoader = (config) => new Promise((resolve, reject) => {
-    const namePropertyUrl = gis.init.namePropertyUrl; // TODO
-    const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty; // TODO
     const groupSetId = config.organisationUnitGroupSet.id;
-    const items = config.rows[0].items.map(item => item.id);
-    const propertyMap = {
-        name: 'name',
-        displayName: 'name',
-        shortName: 'shortName',
-        displayShortName: 'shortName',
-    };
-    const displayProperty = (propertyMap[keyAnalysisDisplayProperty] || 'name').toUpperCase();
-
-    // console.log('facility loader', groupSetId, items, config);
+    const orgUnits = config.rows[0].items.map(item => item.id);
 
     getD2()
         .then((d2) => {
             const i18n = d2.i18n.getTranslation.bind(d2.i18n);
-            console.log('d2', d2);
+            const contextPath = d2.system.systemInfo.contextPath;
+            const displayProperty = d2.currentUser.settings.keyAnalysisDisplayProperty || 'name';
+            const namePropertyUrl = getDisplayPropertyUrl(displayProperty);
 
             const groupSetReq = d2.models.organisationUnitGroupSet.get(groupSetId, {
                 fields: `organisationUnitGroups[id,${namePropertyUrl},symbol]`,
@@ -33,8 +25,8 @@ const facilityLoader = (config) => new Promise((resolve, reject) => {
             );
 
             const facilitiesReq = d2.geoFeatures
-                .byOrgUnit(items)
-                .displayProperty(displayProperty)
+                .byOrgUnit(orgUnits)
+                .displayProperty(displayProperty.toUpperCase())
                 .getAll({
                     includeGroupSets: true,
                 })
@@ -51,7 +43,7 @@ const facilityLoader = (config) => new Promise((resolve, reject) => {
                     // Convert API response to GeoJSON features
                     const features = facilities.map(facility => {
                         const id = facility.dimensions[groupSetId];
-                        // const group = groupSet[id];
+                        const group = groupSet[id];
 
                         return {
                             type: 'Feature',
@@ -59,9 +51,9 @@ const facilityLoader = (config) => new Promise((resolve, reject) => {
                             properties: {
                                 id: facility.id,
                                 name: facility.na,
-                                label: facility.na + ' (' + groupSet[id].name + ')',
+                                label: `${facility.na} (${group.name})`,
                                 icon: {
-                                    iconUrl: gis.init.contextPath + '/images/orgunitgroup/' + groupSet[id].symbol,
+                                    iconUrl: `${contextPath}/images/orgunitgroup/${group.symbol}`,
                                     iconSize: [16, 16],
                                 }
                             },
@@ -78,7 +70,7 @@ const facilityLoader = (config) => new Promise((resolve, reject) => {
                         title: i18n('facilities'),
                         legend: {
                             items: Object.keys(groupSet).map(id => ({
-                                image: gis.init.contextPath + '/images/orgunitgroup/' + groupSet[id].symbol, // TODO
+                                image: `${contextPath}/images/orgunitgroup/${groupSet[id].symbol}`,
                                 name: groupSet[id].name,
                             })),
                         },

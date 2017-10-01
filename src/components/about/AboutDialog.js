@@ -7,22 +7,10 @@ const style = {
   padding: 5
 };
 
-const AboutDialog = (props, context) => {
-    const { aboutDialogOpen, closeAboutDialog } = props;
-    const d2 = context.d2;
-    let system;
-    let user;
-    let i18n;
-
-    // TODO: Possible to render after d2 is available?
-
-    if (d2) {
-        system = d2.system.systemInfo;
-        user = d2.currentUser;
-        i18n = d2.i18n.getTranslation.bind(d2.i18n);
-    } else {
-        return false;
-    }
+const AboutDialog = ({ aboutDialogOpen, closeAboutDialog }, { d2 }) => {
+    const system = d2.system.systemInfo;
+    const user = d2.currentUser;
+    const i18n = d2.i18n.getTranslation.bind(d2.i18n);
 
     return (
         <Dialog

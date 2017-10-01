@@ -109,10 +109,14 @@ getManifest('manifest.webapp')
             // Load current system settings and configuration
             // settingsActions.load();
 
-            render(
-                <Root d2={getD2()} store={store} />,
+            getD2().then(d2 => {
+              render(
+                <Root d2={d2} store={store} />,
                 document.getElementById('app')
-            );
+              );
+            });
+
+
         });
 
     }, (err) => {

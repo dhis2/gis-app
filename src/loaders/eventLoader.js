@@ -1,9 +1,126 @@
-// TODO: Use d2? Make promise based? Wrap in closure?
-
+import { getInstance as getD2 } from 'd2/lib/d2';
 import { isValidCoordinate } from '../util/map';
 import { apiFetch } from '../util/api';
-import isArray from 'd2-utilizr/lib/isArray';
 import isString from 'd2-utilizr/lib/isString';
+
+const eventLoader = (config) =>
+  addEventClusterOptions(config)
+    .then(addStyleDataElement)
+    .then(addEventData);
+
+// Creates a param string from config object
+const getParamString = (config) => {
+    let paramString = '?';
+
+    // Program stage
+    paramString += 'stage=' + config.programStage.id;
+
+    // Period
+    if (Array.isArray(config.filters) && config.filters.length) {
+        paramString += '&filter=pe:' + config.filters[0].items[0].id;
+    } else {
+        paramString += '&startDate=' + config.startDate;
+        paramString += '&endDate=' + config.endDate;
+    }
+
+    // Organisation units
+    if (config.rows[0] && config.rows[0].dimension === 'ou' && Array.isArray(config.rows[0].items)) {
+        paramString += '&dimension=ou:' + config.rows[0].items.map(ou => ou.id).join(';');
+    }
+
+    // Dimensions
+    config.columns.forEach(element => {
+        if (element.dimension !== 'dx') { // API sometimes returns empty dx filter
+            paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
+        }
+    });
+
+    return paramString;
+};
+
+const addEventClusterOptions = (config) => getD2().then((d2) => {
+    const spatialSupport = d2.system.systemInfo.databaseInfo.spatialSupport;
+    const paramString = getParamString(config);
+
+    if (!spatialSupport && !config.eventClustering) {
+      return config;
+    }
+
+    // Get event count to decide on client vs server cluster
+    return apiFetch(`analytics/events/count/${config.program.id}.json${paramString}`)
+        .then(response => {
+            if (response.extent) {
+                const extent = response.extent.match(/([-\d\.]+)/g);
+                config.bounds = [[extent[1], extent[0]], [extent[3], extent[2]]];
+            }
+
+            if (response.count > 2000) { // Server clustering if more than 2000 events
+                config.data = `analytics/events/cluster/${config.program.id}.json${paramString}`;
+            }
+
+            return config;
+        });
+});
+
+const addStyleDataElement = (config) => {
+  const styleDataElement = config.styleDataElement;
+
+  // Include field for data element used for styling
+  if (styleDataElement) {
+    config.columns = [...config.columns, {
+      dimension: styleDataElement.id,
+      name: styleDataElement.name,
+    }];
+  }
+
+  return config;
+};
+
+const addEventData = (config) => {
+    const paramString = getParamString(config);
+
+    if (config.data) {
+        return config;
+    }
+
+    return apiFetch(`analytics/events/query/${config.program.id}.json${paramString}`)
+        .then(data => parseEventData(config, data));
+};
+
+const parseEventData = (config, data) => {
+  const names = { ...data.metaData.names };
+  const features = data.rows.map(row => createEventFeature(config, data.headers, row));
+
+  config.data = features;
+  config.isLoaded = true;
+  config.isExpanded = true;
+  config.isVisible = true;
+
+  return config;
+};
+
+const createEventFeature = (config, headers, event) => {
+    const properties = event.reduce((props, value, i) => ({
+        // properties[data.headers[i].name] = booleanNames[value] || data.metaData.optionNames[value] || names[value] || value;
+        ...props,
+        [headers[i].name]: value,
+    }), {});
+
+    const coordinates = [properties.longitude, properties.latitude];
+
+    return {
+        type: 'Feature',
+        id: properties.psi,
+        properties,
+        geometry: {
+            type: 'Point',
+            coordinates,
+        }
+    };
+};
+
+
+/*
 
 let layer;
 let callback;
@@ -13,6 +130,7 @@ let filterTypes = {
     'IN': '=',
     'LE': '<=',
 };
+
 
 const loadEvents = () => {
     apiFetch(`analytics/events/query/${layer.program.id}.json${paramString}`)
@@ -296,5 +414,7 @@ const eventLoader = (config, cb) =>  {
     }
 
 };
+
+*/
 
 export default eventLoader;

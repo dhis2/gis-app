@@ -1,6 +1,6 @@
 import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import AppWithD2 from 'd2-ui/lib/app/AppWithD2.component';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MapProvider from '../map/MapProvider';
 import AppMenu from '../../containers/AppMenu';
@@ -19,28 +19,42 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
 
-const App = ({ d2 }) => (
-    <AppWithD2 d2={d2}>
-        <MuiThemeProvider>
-            <MapProvider>
-                <div id="dhis-gis-container">
-                    <AppMenu />
-                    <AddLayerDialog />
-                    <FavoritesDialog />
-                    <LayersPanel />
-                    <LayersToggle />
-                    <Map />
-                    <BottomPanel />
-                    <LayerEdit />
-                    <ContextMenu />
-                    <OrgUnitDialog />
-                    <RelocateDialog />
-                    <AboutDialog />
-                </div>
-            </MapProvider>
-        </MuiThemeProvider>
-    </AppWithD2>
-);
+// Makes d2 available in all child components
+// Not using AppWithD2 from d2-ui because it requires d2 to be a promise
+class App extends Component {
+
+    static childContextTypes = {
+        d2: PropTypes.object.isRequired,
+    };
+
+    getChildContext() {
+        return {
+            d2: this.props.d2
+        };
+    }
+
+    render () {
+        return (
+            <MuiThemeProvider>
+                <MapProvider>
+                    <div id="dhis-gis-container">
+                        <AppMenu />
+                        <AddLayerDialog />
+                        <FavoritesDialog />
+                        <LayersPanel />
+                        <LayersToggle />
+                        <Map />
+                        <BottomPanel />
+                        <LayerEdit />
+                        <ContextMenu />
+                        <OrgUnitDialog />
+                        <RelocateDialog />
+                        <AboutDialog />
+                    </div>
+                </MapProvider>
+            </MuiThemeProvider>
+        )
+    }
+}
 
 export default App;
-

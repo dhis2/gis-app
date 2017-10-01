@@ -24,15 +24,15 @@ function parseOverlay(layer, callback) {
     callback(layer);
 }
 
+// TODO: Rewrite when all loaders ar promises
 export function fetchOverlay(layer) {
+    const Loader = layerType[layer.type];
 
-    if (layer.type === 'facility') {
-        return facilityLoader(layer);
+    if (layer.type === 'event' || layer.type === 'facility') {
+        return Loader(layer);
     }
 
     return new Promise((resolve, reject) => {
-        const Loader = layerType[layer.type];
-
         if (Loader) {
             if (layer.type === 'thematic') { // TODO: Remove check when all loaders are classes
                 new Loader(layer, config => parseOverlay(config, resolve));

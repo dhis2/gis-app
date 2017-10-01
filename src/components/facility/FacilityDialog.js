@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import OrgUnitGroupSetSelect from '../orgunits/OrgUnitGroupSetSelect';
 
@@ -26,9 +26,11 @@ const styles = {
 
 class FacilityDialog extends Component {
 
-    componentDidMount() {
-        console.log('componentDidMount');
+    static contextTypes = {
+        d2: PropTypes.object,
+    };
 
+    componentDidMount() {
         const {
             orgUnitGroupSets,
             loadOrgUnitGroupSets
@@ -56,9 +58,12 @@ class FacilityDialog extends Component {
             setOrganisationUnitGroupSet,
         } = this.props;
 
+        const d2 = this.context.d2;
+        const i18n = d2.i18n.getTranslation.bind(d2.i18n);
+
         return (
             <Tabs>
-                <Tab label='Group set'>
+                <Tab label={i18n('group_set')}>
                     <div style={styles.content}>
                         {orgUnitGroupSets ?
                             <OrgUnitGroupSetSelect
@@ -69,10 +74,10 @@ class FacilityDialog extends Component {
                         : null}
                     </div>
                 </Tab>
-                <Tab label='Organisation units'>
+                <Tab label={i18n('organisation_units')}>
 
                 </Tab>
-                <Tab label='Style'>
+                <Tab label={i18n('style')}>
 
                 </Tab>
             </Tabs>

@@ -1,5 +1,5 @@
-import { getInstance as getD2 } from 'd2/lib/d2';
 import isObject from 'd2-utilizr/lib/isObject';
+import { getInstance as getD2 } from 'd2/lib/d2';
 import {isValidCoordinate} from '../util/map';
 
 const facilityLoader = (config) => new Promise((resolve, reject) => {
@@ -15,11 +15,13 @@ const facilityLoader = (config) => new Promise((resolve, reject) => {
     };
     const displayProperty = (propertyMap[keyAnalysisDisplayProperty] || 'name').toUpperCase();
 
-    console.log('facility loader', groupSetId, items, config);
+    // console.log('facility loader', groupSetId, items, config);
 
     getD2()
         .then((d2) => {
-            // TODO: Check if already in redux store?
+            const i18n = d2.i18n.getTranslation.bind(d2.i18n);
+            console.log('d2', d2);
+
             const groupSetReq = d2.models.organisationUnitGroupSet.get(groupSetId, {
                 fields: `organisationUnitGroups[id,${namePropertyUrl},symbol]`,
             }).then(groupSet =>
@@ -73,7 +75,7 @@ const facilityLoader = (config) => new Promise((resolve, reject) => {
                     resolve({
                         ...config,
                         data: features,
-                        title: 'Facilities', // TODO: i18n
+                        title: i18n('facilities'),
                         legend: {
                             items: Object.keys(groupSet).map(id => ({
                                 image: gis.init.contextPath + '/images/orgunitgroup/' + groupSet[id].symbol, // TODO

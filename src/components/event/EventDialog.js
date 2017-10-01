@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import Checkbox from 'material-ui/Checkbox';
 import ProgramSelect from '../program/ProgramSelect';
@@ -35,6 +35,10 @@ const styles = {
 
 
 class EventDialog extends Component {
+
+    static contextTypes = {
+        d2: PropTypes.object,
+    };
 
     componentDidMount() {
         const {
@@ -138,9 +142,12 @@ class EventDialog extends Component {
         const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
         const period = filters.filter(r => r.dimension === 'pe')[0];
 
+        const d2 = this.context.d2;
+        const i18n = d2.i18n.getTranslation.bind(d2.i18n);
+
         return (
             <Tabs>
-                <Tab label='Data'>
+                <Tab label={i18n('data')}>
                     <div style={styles.content}>
                         {programs ?
                             <ProgramSelect
@@ -165,7 +172,7 @@ class EventDialog extends Component {
                         </div>
                     </div>
                 </Tab>
-                <Tab label='Filter'>
+                <Tab label={i18n('filter')}>
                     <div style={styles.content}>
                         <DataItemFilters
                             dataItems={dataElements}
@@ -173,7 +180,7 @@ class EventDialog extends Component {
                         />
                     </div>
                 </Tab>
-                <Tab label='Organisation units'>
+                <Tab label={i18n('organisation_units')}>
                     <div style={styles.content}>
                         {orgUnits ?
                             <OrgUnitSelect
@@ -182,16 +189,16 @@ class EventDialog extends Component {
                         : null}
                     </div>
                 </Tab>
-                <Tab label='Style'>
+                <Tab label={i18n('style')}>
                     <div style={styles.content}>
                         <Checkbox
-                            label='Group nearby events (clustering)'
+                            label={i18n('group_nearby_events_(clustering)')}
                             checked={eventClustering}
                             onCheck={(event, isChecked) => setEventClustering(isChecked)}
                             style={styles.checkbox}
                         />
                         <NumberField
-                            label='Point radius'
+                            label={i18n('point_radius')}
                             value={eventPointRadius}
                             onChange={setEventPointRadius}
                             style={styles.numberField}
@@ -205,7 +212,7 @@ class EventDialog extends Component {
                         </div>
                         {dataElements ?
                             <DataItemSelect
-                                label='Style by data item'
+                                label={i18n('style_by_data_item')}
                                 items={dataElements.filter(d => d.optionSet)}
                                 value={styleDataElement ? styleDataElement.id : null}
                                 onChange={setStyleDataElement}

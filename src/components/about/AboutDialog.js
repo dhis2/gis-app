@@ -26,7 +26,7 @@ const AboutDialog = (props, context) => {
 
     return (
         <Dialog
-            title='About DHIS 2 Maps' // TODO: i18n
+            title={i18n('about_dhis2_maps')}
             actions={[
                 <Button
                     color='primary'

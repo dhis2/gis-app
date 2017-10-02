@@ -1,22 +1,25 @@
 // TODO: Refactoring needed
+import React from 'react';
+import { render } from 'react-dom';
+import log from 'loglevel';
+import debounce from 'lodash.debounce';
+import { init, config, getUserSettings, getManifest, getInstance as getD2 } from 'd2/lib/d2';
+
 import GIS from './core/index.js';
 import app from './app/index.js';
 import appInit from './app-init';
 import '../scss/app.scss';
 
-// New React stuff
-import React from 'react';
-import { render } from 'react-dom';
-import log from 'loglevel';
-import { init, config, getUserSettings, getManifest, getInstance as getD2 } from 'd2/lib/d2';
+
 // import LoadingMask from 'd2-ui/lib/loading-mask/LoadingMask.component';
 
-import configOptionStore from './store/configOptionStore'; // TODO: Needen?
+import configOptionStore from './store/configOptionStore'; // TODO: Needend?
 
 import Root from './components/Root';
-import debounce from 'lodash.debounce';
+
 import storeFactory from './store';
-import { loadPrograms } from './actions/programs';
+// import { loadPrograms } from './actions/programs';
+import { loadOrgUnitTree } from './actions/orgUnitTree';
 import { loadExternalLayers } from './actions/externalLayers';
 import { resizeScreen } from './actions/ui';
 
@@ -42,14 +45,11 @@ function configI18n(userSettings) {
     config.i18n.sources.add(`i18n/i18n_app.properties`);
 }
 
-/*
-render(
-    <Root store={store} />,
-    document.getElementById('app')
-);
-*/
-
 // Temporary fix to know that initial data is loaded
+
+
+store.dispatch(loadOrgUnitTree());
+
 GIS.onLoad = () => {
     store.dispatch(loadExternalLayers());
 };
@@ -71,7 +71,7 @@ getManifest('manifest.webapp')
             'program',
             'programStage',
             'externalMapLayer',
-            'optionSet'
+            'optionSet',
         ];
     })
     .then(getUserSettings)

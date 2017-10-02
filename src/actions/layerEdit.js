@@ -43,6 +43,11 @@ export const setEventPointColor = (color) => ({
     color,
 });
 
+export const toggleOrganisationUnit = (orgUnit) => ({
+    type: types.LAYER_EDIT_ORGANISATIOM_UNIT_TOGGLE,
+    orgUnit,
+});
+
 // Set organisation unit group set (facility layer)
 export const setOrganisationUnitGroupSet = (organisationUnitGroupSet) => ({
     type: types.LAYER_EDIT_ORGANISATION_UNIT_GROUP_SET,

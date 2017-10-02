@@ -10,7 +10,7 @@ import DataItemStyle from '../dataitem/DataItemStyle';
 import OrgUnitSelect from '../orgunits/OrgUnitSelect';
 import NumberField from '../d2-ui/NumberField';
 import ColorPicker from '../d2-ui/ColorPicker';
-
+import OrgUnitTree from '../../containers/OrgUnitTree';
 
 const styles = {
     body: {
@@ -32,7 +32,6 @@ const styles = {
         width: 100,
     }
 };
-
 
 class EventDialog extends Component {
 
@@ -145,6 +144,18 @@ class EventDialog extends Component {
         const d2 = this.context.d2;
         const i18n = d2.i18n.getTranslation.bind(d2.i18n);
 
+
+        // console.log('orgUnits', v)
+
+        /*
+        {orgUnits ?
+            <OrgUnitSelect
+                items={orgUnits.items}
+            />
+            : null}
+       */
+
+
         return (
             <Tabs>
                 <Tab label={i18n('data')}>
@@ -182,11 +193,9 @@ class EventDialog extends Component {
                 </Tab>
                 <Tab label={i18n('organisation_units')}>
                     <div style={styles.content}>
-                        {orgUnits ?
-                            <OrgUnitSelect
-                                items={orgUnits.items}
-                            />
-                        : null}
+                        <OrgUnitTree
+                            selected={orgUnits ? orgUnits.items.map((orgUnit) => orgUnit.path) : []}
+                        />
                     </div>
                 </Tab>
                 <Tab label={i18n('style')}>
@@ -230,6 +239,5 @@ class EventDialog extends Component {
         );
     }
 }
-
 
 export default EventDialog;

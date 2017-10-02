@@ -52,11 +52,6 @@ const defaultOverlays = [{
      }
      */
 },{
-    type: 'event',
-    title: 'Events',
-    img: 'images/layers/events.png',
-    opacity: 0.95,
-},{
     type: 'facility',
     preview: true,
     title: 'Facilities Preview',
@@ -65,9 +60,26 @@ const defaultOverlays = [{
     rows: [{
         dimension: 'ou',
         items:[{
-            id: 'LEVEL-4'
+          id: 'LEVEL-4'
         }]
     }]
+},{
+    type: 'thematic',
+    preview: true,
+    title: 'Thematic Preview',
+    img: 'images/layers/thematic.png',
+    opacity: 0.8,
+},{
+    type: 'boundary',
+    preview: true,
+    title: 'Boundaries Preview',
+    img: 'images/layers/boundaries.png',
+    opacity: 1,
+},{
+    type: 'event',
+    title: 'Events',
+    img: 'images/layers/events.png',
+    opacity: 0.95,
 },{
     type: 'facility',
     title: 'Facilities',

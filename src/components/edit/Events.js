@@ -7,7 +7,6 @@ import ProgramStageSelect from '../program/ProgramStageSelect';
 import DataItemFilters from '../dataitem/DataItemFilters';
 import DataItemSelect from '../dataitem/DataItemSelect';
 import DataItemStyle from '../dataitem/DataItemStyle';
-import OrgUnitSelect from '../orgunits/OrgUnitSelect';
 import NumberField from '../d2-ui/NumberField';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnitTree from '../../containers/OrgUnitTree';

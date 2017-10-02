@@ -26,16 +26,12 @@ class OrgUnitTree extends Component {
             return null;
         }
 
-        console.log('selected', root.path);
-
-        // onSelectClick
-
         return (
             <div style={styles.container}>
                 <D2OrgUnitTree
                     style={{ background: 'red' }}
                     root={root}
-                    selected={selected}
+                    selected={selected.filter((item) => item.path).map(item => item.path)}
                     initiallyExpanded={[root.path]}
                     hideCheckboxes={true}
                     hideMemberCount={true}

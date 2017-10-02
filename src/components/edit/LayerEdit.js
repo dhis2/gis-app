@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import Button from 'd2-ui/lib/button/Button';
 import WidgetWindow from '../../app/WidgetWindow';
-import EventDialog from '../../containers/EventDialog';
-import FacilityDialog from '../../containers/FacilityDialog';
+import Events from '../../containers/Events';
+import Facilities from '../../containers/Facilities';
+import Thematic from '../../containers/Thematic';
+import Boundaries from '../../containers/Boundaries';
 
 // Only create one widget per layer (will be changed when we switch to react)
 const widgets = {};
@@ -132,16 +134,10 @@ class LayerEdit extends Component {
                     >Add layer</Button>
                 ]}
             >
-                {layer.type === 'event' ?
-                    <EventDialog
-                        {...layer}
-                    />
-                : null}
-                {layer.type === 'facility' ?
-                    <FacilityDialog
-                        {...layer}
-                    />
-                    : null}
+                {layer.type === 'event' ? <Events {...layer} /> : null}
+                {layer.type === 'facility' ? <Facilities {...layer} /> : null}
+                {layer.type === 'thematic' ? <Thematic {...layer} /> : null}
+                {layer.type === 'boundary' ? <Boundaries {...layer} /> : null}
             </Dialog>
         );
     }

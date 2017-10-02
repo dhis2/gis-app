@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import FacilityDialog from '../components/facility/FacilityDialog';
+import Facilities from '../components/edit/Facilities';
 import { loadOrgUnitGroupSets } from '../actions/orgUnitGroupSets';
 import {
     setOrganisationUnitGroupSet
@@ -16,4 +16,4 @@ export default connect(
         loadOrgUnitGroupSets,
         setOrganisationUnitGroupSet,
     }
-)(FacilityDialog);
+)(Facilities);

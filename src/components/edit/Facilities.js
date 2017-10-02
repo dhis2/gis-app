@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import OrgUnitGroupSetSelect from '../orgunits/OrgUnitGroupSetSelect';
+import OrgUnitTree from '../../containers/OrgUnitTree';
 
 const styles = {
     body: {
@@ -12,7 +13,7 @@ const styles = {
         fontSize: 18,
     },
     content: {
-        padding: '0 24px 16px',
+        padding: '0 24px',
         minHeight: 300,
     },
     checkbox: {
@@ -53,11 +54,13 @@ class FacilityDialog extends Component {
 
     render() {
         const {
+            rows = [],
             orgUnitGroupSets,
             organisationUnitGroupSet,
             setOrganisationUnitGroupSet,
         } = this.props;
 
+        const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
         const d2 = this.context.d2;
         const i18n = d2.i18n.getTranslation.bind(d2.i18n);
 
@@ -75,7 +78,11 @@ class FacilityDialog extends Component {
                     </div>
                 </Tab>
                 <Tab label={i18n('organisation_units')}>
-
+                    <div style={styles.content}>
+                        <OrgUnitTree
+                            selected={orgUnits ? orgUnits.items : []}
+                        />
+                    </div>
                 </Tab>
                 <Tab label={i18n('style')}>
 

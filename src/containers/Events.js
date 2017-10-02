@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import EventDialog from '../components/event/EventDialog';
+import Events from '../components/edit/Events';
 import { loadPrograms, loadProgramStages, loadProgramStageDataElements } from '../actions/programs';
 import { loadOptionSet } from '../actions/optionSets';
 import {
@@ -38,4 +38,4 @@ export default connect(
         setEventPointColor,
         setEventPointRadius
     }
-)(EventDialog);
+)(Events);

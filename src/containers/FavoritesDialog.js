@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import FavoritesDialog from '../components/favorite/FavoritesDialog';
+import FavoritesDialog from '../components/favorites/FavoritesDialog';
 import { getFavorite, closeFavoritesDialog } from '../actions/favorites';
 
 const mapStateToProps = (state) => ({

@@ -71,29 +71,27 @@ const layerEdit = (state = null, action) => {
                 },
             };
 
-        case types.LAYER_EDIT_ORGANISATIOM_UNIT_TOGGLE:
-            if (state.rows) {
-                const items = state.rows.filter(r => r.dimension === 'ou')[0];
+      case types.LAYER_EDIT_ORGANISATIOM_UNIT_TOGGLE:
+            const rows = state.rows || [];
+            const ouDim = rows.filter(r => r.dimension === 'ou')[0];
+            const items = ouDim ? ouDim.items.filter((item) => item.id !== action.orgUnit.id) : [];
+            const newRows = rows.filter(r => r.dimension !== 'ou');
 
-                console.log('reducer items', items);
-
-            } else {
-                return {
-                    ...state,
-                    rows: [{
-                        dimension: 'ou',
-                        items: [action.orgUnit]
-                    }]
-                }
+            if (!ouDim || ouDim.items.length === items.length) { // Don't exist already
+                items.push(action.orgUnit);
             }
 
+            if (items.length) {
+                newRows.push({
+                  dimension: 'ou',
+                  items,
+                });
+            }
 
-
-            // console.log('action', action.orgUnit, state.rows);
-
-
-            return state;
-
+            return {
+                ...state,
+                rows: newRows,
+            };
 
         default:
             return state;

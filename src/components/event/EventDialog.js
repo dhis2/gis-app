@@ -21,7 +21,7 @@ const styles = {
         fontSize: 18,
     },
     content: {
-        padding: '0 24px 16px',
+        padding: '0 24px',
         minHeight: 300,
     },
     checkbox: {

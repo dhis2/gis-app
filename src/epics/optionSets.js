@@ -11,7 +11,7 @@ export const loadOptionSet = (action$) =>
         .ofType(types.OPTION_SET_LOAD)
         .concatMap((action) =>
             getD2()
-                .then(d2 => d2.models.optionSets.get(acgtion.id, {
+                .then(d2 => d2.models.optionSets.get(action.id, {
                     fields: 'id,displayName~rename(name),version,options[code,displayName~rename(name)]',
                     paging: false,
                 }))

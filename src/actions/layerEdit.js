@@ -53,3 +53,21 @@ export const setOrganisationUnitGroupSet = (organisationUnitGroupSet) => ({
     type: types.LAYER_EDIT_ORGANISATION_UNIT_GROUP_SET,
     organisationUnitGroupSet,
 });
+
+// Set relative period
+export const setRelativePeriod = (period) => ({
+    type: types.LAYER_EDIT_RELATIVE_PERIOD_SET,
+    period,
+});
+
+// Set start date
+export const setStartDate = (startDate) => ({
+    type: types.LAYER_EDIT_START_DATE_SET,
+    startDate,
+});
+
+// Set end date
+export const setEndDate = (endDate) => ({
+    type: types.LAYER_EDIT_END_DATE_SET,
+    endDate,
+});

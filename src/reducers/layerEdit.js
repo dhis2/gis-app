@@ -30,6 +30,34 @@ const layerEdit = (state = null, action) => {
                 styleDataElement: null,
             };
 
+        case types.LAYER_EDIT_RELATIVE_PERIOD_SET:
+            const filters = state.filters || [];
+            const newFilters = filters.filter(r => r.dimension !== 'pe');
+
+            newFilters.push({
+                dimension: 'pe',
+                items: [{
+                    id: action.period.id,
+                }],
+            });
+
+            return {
+                ...state,
+                filters: newFilters,
+            };
+
+        case types.LAYER_EDIT_START_DATE_SET:
+            return {
+                ...state,
+                startDate: action.startDate,
+            };
+
+        case types.LAYER_EDIT_END_DATE_SET:
+            return {
+                ...state,
+                endDate: action.endDate,
+            };
+
         case types.LAYER_EDIT_STYLE_DATA_ELEMENT_SET:
             return {
                 ...state,

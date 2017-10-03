@@ -4,12 +4,11 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import Checkbox from 'material-ui/Checkbox';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
-import RelativePeriodsSelect from '../../containers/RelativePeriodsSelect';
+import PeriodSelect from '../d2-ui/PeriodSelect';
 import DataItemFilters from '../dataitem/DataItemFilters';
 import DataItemSelect from '../dataitem/DataItemSelect';
 import DataItemStyle from '../dataitem/DataItemStyle';
 import NumberField from '../d2-ui/NumberField';
-import DatePicker from '../d2-ui/DatePicker';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnitTree from '../../containers/OrgUnitTree';
 
@@ -129,6 +128,9 @@ class EventDialog extends Component {
             styleDataElement,
             setProgram,
             setProgramStage,
+            setRelativePeriod,
+            setStartDate,
+            setEndDate,
             setStyleDataElement,
             setEventClustering,
             setEventPointColor,
@@ -160,19 +162,13 @@ class EventDialog extends Component {
                             />
                         : null}
                         <div>
-                            <RelativePeriodsSelect
-                                value={period ? period.items[0].id : null}
-                                onChange={(value) => console.log(value)}
-                            />
-                            <DatePicker
-                                label='Start date'
-                                value={new Date(startDate)}
-                                onChange={(value) => console.log(value)}
-                            />
-                            <DatePicker
-                                label='End date'
-                                value={new Date(endDate)}
-                                onChange={(value) => console.log(value)}
+                            <PeriodSelect
+                                period={period}
+                                startDate={startDate}
+                                endDate={endDate}
+                                setRelativePeriod={setRelativePeriod}
+                                setStartDate={setStartDate}
+                                setEndate={setEndDate}
                             />
                         </div>
                     </div>

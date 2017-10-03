@@ -42,6 +42,8 @@ const addEventClusterOptions = (config) => getD2().then((d2) => {
     const spatialSupport = d2.system.systemInfo.databaseInfo.spatialSupport;
     const paramString = getParamString(config);
 
+    // console.log('config', JSON.stringify(config.filters));
+
     if (!spatialSupport && !config.eventClustering) {
       return config;
     }

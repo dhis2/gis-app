@@ -19,6 +19,7 @@ import Root from './components/Root';
 
 import storeFactory from './store';
 // import { loadPrograms } from './actions/programs';
+import { translateRelativePeriods } from './actions/periods';
 import { loadOrgUnitTree } from './actions/orgUnitTree';
 import { loadExternalLayers } from './actions/externalLayers';
 import { resizeScreen } from './actions/ui';
@@ -47,7 +48,7 @@ function configI18n(userSettings) {
 
 // Temporary fix to know that initial data is loaded
 
-
+store.dispatch(translateRelativePeriods());
 store.dispatch(loadOrgUnitTree());
 
 GIS.onLoad = () => {
@@ -96,6 +97,7 @@ getManifest('manifest.webapp')
             api.get('userSettings', { useFallback: false }),
         ]).then((results) => {
             // Locales
+            /*
             const locales = (results[0] || []).map(locale => ({ id: locale.locale, displayName: locale.name }));
 
             const userSettingsNoFallback = results[1];
@@ -105,6 +107,7 @@ getManifest('manifest.webapp')
                 userSettingsNoFallback,
             });
             log.debug('Got settings options:', configOptionStore.getState());
+            */
 
             // Load current system settings and configuration
             // settingsActions.load();

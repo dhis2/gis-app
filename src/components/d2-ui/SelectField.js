@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SelectField from 'material-ui/SelectField';
+import MuiSelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
-const D2SelectField = ({ label, items, value, onChange, style }) => (
-    <SelectField
+const SelectField = ({ label, items, value, onChange, style }) => (
+    <MuiSelectField
         floatingLabelText={label}
         onChange={(event, index) => onChange(items[index])}
         value={value}
@@ -17,10 +17,10 @@ const D2SelectField = ({ label, items, value, onChange, style }) => (
                 primaryText={item.name}
             />
         ))}
-    </SelectField>
+    </MuiSelectField>
 );
 
-D2SelectField.propTypes = {
+SelectField.propTypes = {
     label: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -28,4 +28,4 @@ D2SelectField.propTypes = {
     style: PropTypes.object,
 };
 
-export default D2SelectField;
+export default SelectField;

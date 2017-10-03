@@ -4,10 +4,12 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import Checkbox from 'material-ui/Checkbox';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
+import RelativePeriodsSelect from '../../containers/RelativePeriodsSelect';
 import DataItemFilters from '../dataitem/DataItemFilters';
 import DataItemSelect from '../dataitem/DataItemSelect';
 import DataItemStyle from '../dataitem/DataItemStyle';
 import NumberField from '../d2-ui/NumberField';
+import DatePicker from '../d2-ui/DatePicker';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnitTree from '../../containers/OrgUnitTree';
 
@@ -70,13 +72,10 @@ class EventDialog extends Component {
         const {
             program,
             programStage,
-            styleDataElement,
             programStages,
             dataElements,
-            optionSets,
             loadProgramStages,
             loadProgramStageDataElements,
-            loadOptionSet,
             setProgramStage
         } = this.props;
 
@@ -122,7 +121,6 @@ class EventDialog extends Component {
             columns = [],
             rows = [],
             filters = [],
-            // optionSets,
             startDate,
             endDate,
             eventClustering,
@@ -143,18 +141,6 @@ class EventDialog extends Component {
         const d2 = this.context.d2;
         const i18n = d2.i18n.getTranslation.bind(d2.i18n);
 
-
-        // console.log('orgUnits', v)
-
-        /*
-        {orgUnits ?
-            <OrgUnitSelect
-                items={orgUnits.items}
-            />
-            : null}
-       */
-
-
         return (
             <Tabs>
                 <Tab label={i18n('data')}>
@@ -173,12 +159,21 @@ class EventDialog extends Component {
                                 onChange={setProgramStage}
                             />
                         : null}
-                        <div style={{ marginTop: 30 }}>
-                            {period ?
-                                <div>Period: {period.items[0].id}</div>
-                            : null }
-                            <div>Start date: {startDate}</div>
-                            <div>End date: {endDate}</div>
+                        <div>
+                            <RelativePeriodsSelect
+                                value={period ? period.items[0].id : null}
+                                onChange={(value) => console.log(value)}
+                            />
+                            <DatePicker
+                                label='Start date'
+                                value={new Date(startDate)}
+                                onChange={(value) => console.log(value)}
+                            />
+                            <DatePicker
+                                label='End date'
+                                value={new Date(endDate)}
+                                onChange={(value) => console.log(value)}
+                            />
                         </div>
                     </div>
                 </Tab>

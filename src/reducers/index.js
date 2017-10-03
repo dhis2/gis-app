@@ -16,6 +16,7 @@ import programStages from './programStages';
 import programStageDataElements from './programStageDataElements';
 import programTrackedEntityAttributes from './programTrackedEntityAttributes';
 import optionSets from './optionSets';
+import relativePeriods from './relativePeriods';
 
 export default combineReducers({
     ui,
@@ -34,5 +35,6 @@ export default combineReducers({
     programStages,
     programStageDataElements,
     programTrackedEntityAttributes,
-    optionSets
+    optionSets,
+    relativePeriods,
 });

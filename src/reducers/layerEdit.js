@@ -34,12 +34,14 @@ const layerEdit = (state = null, action) => {
             const filters = state.filters || [];
             const newFilters = filters.filter(r => r.dimension !== 'pe');
 
-            newFilters.push({
-                dimension: 'pe',
-                items: [{
-                    id: action.period.id,
-                }],
-            });
+            if (action.period.id !== 'START_END_DATES') {
+                newFilters.push({
+                    dimension: 'pe',
+                    items: [{
+                        id: action.period.id,
+                    }],
+                });
+            }
 
             return {
                 ...state,

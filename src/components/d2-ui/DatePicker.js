@@ -5,12 +5,13 @@ import { timeFormat } from 'd3-time-format';
 
 const formatTime = timeFormat("%Y-%m-%d");
 
-const DatePicker = ({ label, value, onChange, style }) => (
+const DatePicker = ({ label, value, onChange, style, textFieldStyle }) => (
     <MuiDatePicker
         floatingLabelText={label}
         onChange={(event, date) => onChange(formatTime(date))}
         value={new Date(value)}
         style={style}
+        textFieldStyle={textFieldStyle}
     />
 );
 
@@ -19,6 +20,7 @@ DatePicker.propTypes = {
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     style: PropTypes.object,
+    textFieldStyle: PropTypes.object,
 };
 
 export default DatePicker;

@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import SelectField from '../d2-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
-const RelativePeriodsSelect = ({ periods = [], value, onChange }) => (
+const RelativePeriodsSelect = ({ periods = [], value, onChange, style }) => (
     <SelectField
         label='Period'
         items={periods}
         value={value}
         onChange={onChange}
-        style={{ marginRight: 24 }}
+        style={style}
     />
 );
 

@@ -1,4 +1,7 @@
 export const relativePeriods = [
+    {id: 'START_END_DATES', i18n: 'start_end_dates'},
+    {id: 'TODAY', i18n: 'today'},
+    {id: 'YESTERDAY', i18n: 'yesterday'},
     {id: 'THIS_WEEK', i18n: 'this_week'},
     {id: 'LAST_WEEK', i18n: 'last_week'},
     {id: 'LAST_4_WEEKS', i18n: 'last_4_weeks'},

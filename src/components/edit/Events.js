@@ -4,7 +4,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import Checkbox from 'material-ui/Checkbox';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
-import PeriodSelect from '../d2-ui/PeriodSelect';
+import PeriodSelect from '../../containers/PeriodSelect';
 import DataItemFilters from '../dataitem/DataItemFilters';
 import DataItemSelect from '../dataitem/DataItemSelect';
 import DataItemStyle from '../dataitem/DataItemStyle';
@@ -120,17 +120,12 @@ class EventDialog extends Component {
             columns = [],
             rows = [],
             filters = [],
-            startDate,
-            endDate,
             eventClustering,
             eventPointColor,
             eventPointRadius,
             styleDataElement,
             setProgram,
             setProgramStage,
-            setRelativePeriod,
-            setStartDate,
-            setEndDate,
             setStyleDataElement,
             setEventClustering,
             setEventPointColor,
@@ -161,16 +156,7 @@ class EventDialog extends Component {
                                 onChange={setProgramStage}
                             />
                         : null}
-                        <div>
-                            <PeriodSelect
-                                period={period}
-                                startDate={startDate}
-                                endDate={endDate}
-                                setRelativePeriod={setRelativePeriod}
-                                setStartDate={setStartDate}
-                                setEndate={setEndDate}
-                            />
-                        </div>
+                        <PeriodSelect />
                     </div>
                 </Tab>
                 <Tab label={i18n('filter')}>

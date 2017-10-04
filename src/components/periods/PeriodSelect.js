@@ -16,12 +16,12 @@ const styles = {
         float: 'left',
     },
     datePicker: {
-        width: 150,
+        width: 120,
         float: 'left',
         marginRight: 24,
     },
     dateField: {
-        width: 150,
+        width: 112,
     },
 };
 

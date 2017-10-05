@@ -5,7 +5,7 @@ import Checkbox from 'material-ui/Checkbox';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import PeriodSelect from '../../containers/PeriodSelect';
-import DataItemFilters from '../dataitem/DataItemFilters';
+import DataItemFilters from '../../containers/DataItemFilters';
 import DataItemSelect from '../dataitem/DataItemSelect';
 import DataItemStyle from '../dataitem/DataItemStyle';
 import NumberField from '../d2-ui/NumberField';
@@ -163,7 +163,7 @@ class EventDialog extends Component {
                     <div style={styles.content}>
                         <DataItemFilters
                             dataItems={dataElements}
-                            filters={columns.filter(c => c.filter)}
+                            filters={columns.filter(c => c.filter !== undefined)}
                         />
                     </div>
                 </Tab>

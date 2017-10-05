@@ -1,6 +1,7 @@
 import * as types from '../constants/actionTypes';
 
 const layerEdit = (state = null, action) => {
+    let columns;
 
     switch (action.type) {
 
@@ -58,6 +59,51 @@ const layerEdit = (state = null, action) => {
             return {
                 ...state,
                 endDate: action.endDate,
+            };
+
+        case types.LAYER_EDIT_DATA_ELEMENT_FILTER_ADD:
+            return {
+                ...state,
+                columns: [
+                    ...state.columns,
+                    action.filter || {
+                        dimension: null,
+                        name: null,
+                        filter: null,
+                    }
+                ]
+            };
+
+        case types.LAYER_EDIT_DATA_ELEMENT_FILTER_REMOVE:
+            columns = state.columns.filter(c => c.filter !== undefined); // Also used for style data element without filter
+
+            if (!columns || !columns[action.index]) {
+                return state;
+            }
+
+            return {
+                ...state,
+                columns: [
+                    ...state.columns.filter(c => c.filter === undefined),
+                    ...columns.filter((c, i) => i !== action.index)
+                ]
+            };
+
+        case types.LAYER_EDIT_DATA_ELEMENT_FILTER_CHANGE:
+            columns = state.columns.filter(c => c.filter !== undefined); // Also used for style data element without filter
+
+            if (!columns || !columns[action.index]) {
+                return state;
+            }
+
+            columns[action.index] = action.filter;
+
+            return {
+                ...state,
+                columns: [
+                    ...state.columns.filter(c => c.filter === undefined),
+                    ...columns
+                ]
             };
 
         case types.LAYER_EDIT_STYLE_DATA_ELEMENT_SET:

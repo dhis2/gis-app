@@ -13,6 +13,22 @@ export const setProgramStage = (programStage) => ({
     programStage,
 });
 
+export const addDataElementFilter = (filter) => ({
+    type: types.LAYER_EDIT_DATA_ELEMENT_FILTER_ADD,
+    filter,
+});
+
+export const removeDataElementFilter = (index) => ({
+    type: types.LAYER_EDIT_DATA_ELEMENT_FILTER_REMOVE,
+    index,
+});
+
+export const changeDataElementFilter = (index, filter) => ({
+    type: types.LAYER_EDIT_DATA_ELEMENT_FILTER_CHANGE,
+    index,
+    filter,
+});
+
 // Set data element used for styling (event layer)
 export const setStyleDataElement = (dataElement) => ({
     type: types.LAYER_EDIT_STYLE_DATA_ELEMENT_SET,

@@ -9,7 +9,7 @@ import './DataTable.css';
 class DataTable extends Component {
 
     constructor(props, context) {
-        super(props);
+        super(props, context);
 
         // Default sort
         const sortBy = 'index';

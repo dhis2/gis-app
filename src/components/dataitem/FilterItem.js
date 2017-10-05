@@ -10,12 +10,15 @@ import RemoveIcon from 'material-ui/svg-icons/navigation/close';
 const styles = {
     container: {
         height: 64,
-        marginTop: 24,
+        marginTop: 8,
         padding: '0px 8px',
         background: '#f4f4f4',
+        position: 'relative',
     },
     removeBtn: {
-        top: -16,
+        position: 'absolute',
+        top: 8,
+        right: 8,
     }
 };
 
@@ -40,7 +43,7 @@ class FilterItem extends Component {
     }
 
     render() {
-        const { dataItems, dimension, filter } = this.props;
+        const { dataItems, index, dimension, filter, onRemove } = this.props;
         let dataItem;
 
         if (dataItems && dimension) {
@@ -68,7 +71,7 @@ class FilterItem extends Component {
                 {dataItem ?
                     <DataItemValue />
                 : null}
-                <IconButton tooltip="Remove filter" style={styles.removeBtn}>
+                <IconButton tooltip="Remove filter" style={styles.removeBtn} onClick={() => onRemove(index)}>
                     <RemoveIcon/>
                 </IconButton>
             </div>

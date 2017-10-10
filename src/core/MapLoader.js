@@ -206,6 +206,8 @@ export default function MapLoader(gis, isSession, applyConfig) {
     const loader = {
         load(views) {
 
+            console.log('load', views);
+
             if (gis.mask && !gis.skipMask) {
                 gis.mask.show();
             }

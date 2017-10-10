@@ -11,6 +11,14 @@ const operators = {
         { id: 'LT', name: '<' },
         { id: 'LE', name: '<=' },
         { id: 'NE', name: '!=' }
+    ],
+    NUMBER: [
+        { id: 'EQ', name: '=' },
+        { id: 'GT', name: '>' },
+        { id: 'GE', name: '>=' },
+        { id: 'LT', name: '<' },
+        { id: 'LE', name: '<=' },
+        { id: 'NE', name: '!=' }
     ]
 };
 
@@ -55,7 +63,7 @@ const DataItemFilterOperator = ({ valueType, filter, onChange }, { d2 }) => {
             : null}
             <TextField
                 label={i18n('value')}
-                type={valueType === 'INTEGER' ? 'number' : 'text'}
+                type={valueType === 'INTEGER' || valueType === 'NUMBER' ? 'number' : 'text'}
                 value={value}
                 onChange={newValue => onChange(`${operator}:${newValue}`)}
                 style={styles.value}

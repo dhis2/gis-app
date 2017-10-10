@@ -31,7 +31,7 @@ class OrgUnitTree extends Component {
                 <D2OrgUnitTree
                     style={{ background: 'red' }}
                     root={root}
-                    selected={selected.filter((item) => item.path).map(item => item.path)}
+                    selected={selected}
                     initiallyExpanded={[root.path]}
                     hideCheckboxes={true}
                     hideMemberCount={true}

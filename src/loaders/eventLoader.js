@@ -6,7 +6,8 @@ import isString from 'd2-utilizr/lib/isString';
 const eventLoader = (config) =>
   addEventClusterOptions(config)
     .then(addStyleDataElement)
-    .then(addEventData);
+    .then(addEventData)
+    .then(addStyling);
 
 // Creates a param string from config object
 const getParamString = (config) => {
@@ -119,6 +120,27 @@ const createEventFeature = (config, headers, event) => {
             coordinates,
         }
     };
+};
+
+const addStyling = (config) => {
+    let colorByOption;
+
+    // Color by option set
+    if (config.styleDataElement && config.styleDataElement.optionSet && config.styleDataElement.optionSet.options) {
+        colorByOption = config.styleDataElement.optionSet.options;
+    }
+
+    console.log('#', config);
+
+    if (colorByOption) {
+        config.data = config.data.map(f => {
+            // properties.color = colorByOption[properties[layer.styleDataElement.id]];
+
+            return f;
+        });
+    }
+
+    return config
 };
 
 

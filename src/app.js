@@ -8,7 +8,7 @@ import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 import log from 'loglevel';
 
 log.setLevel(log.levels.INFO); // TODO: Use DEBUG for development
-log.info('Loading: GIS app 28.0.8'); // TODO: Use manifest
+log.info('Loading: GIS app 28.0.9'); // TODO: Use manifest
 
 window.GIS = GIS;
 
@@ -938,8 +938,6 @@ Ext.onReady( function() {
             }
             else if (isString(session) && GIS.isSessionStorage && isObject(JSON.parse(sessionStorage.getItem('dhis2'))) && session in JSON.parse(sessionStorage.getItem('dhis2'))) {
                 layout = gis.api.layout.Layout(JSON.parse(sessionStorage.getItem('dhis2'))[session]);
-
-                console.log('layout session storage', JSON.stringify(layout), sessionStorage.getItem('dhis2'));
 
                 if (layout) {
                     GIS.core.MapLoader(gis, true).load([layout]);

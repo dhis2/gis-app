@@ -8,7 +8,6 @@ import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 export default function MapLoader(gis, isSession, applyConfig) {
 
     const layersReady = [];
-    const onMapReady = gis.map.onReady;
     let layersToLoad;
 
     const getMap = function() {
@@ -124,6 +123,8 @@ export default function MapLoader(gis, isSession, applyConfig) {
 
     // Use callback function when map is fully rendered
     const onLayerReady = function(evt) {
+        const onMapReady = gis.map ? gis.map.onReady : null;
+
         layersReady.push(evt.target);
 
         if (layersToLoad === layersReady.length && onMapReady && isFunction(onMapReady)) {

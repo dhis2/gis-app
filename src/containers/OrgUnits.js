@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import OrgUnitTree from '../components/orgunits/OrgUnitTree';
+import OrgUnits from '../components/orgunits/OrgUnits';
 import { toggleOrganisationUnit } from '../actions/layerEdit';
 
 const mapStateToProps = state => ({
@@ -9,4 +9,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     { toggleOrganisationUnit, }
-)(OrgUnitTree);
+)(OrgUnits);

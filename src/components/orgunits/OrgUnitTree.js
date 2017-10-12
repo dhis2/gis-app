@@ -4,10 +4,15 @@ import D2OrgUnitTree from 'd2-ui/lib/org-unit-tree/OrgUnitTree.component';
 
 const styles = {
     container: {
-        marginTop: 16,
-        height: 300,
-        width: '80%',
+        marginTop: 24,
+        padding: 8,
+        width: 456,
+        height: 270,
+        overflowX: 'hidden',
         overflowY: 'auto',
+        boxShadow: '0px 0px 4px 1px rgba(0,0,0,0.2)',
+        float: 'left',
+        position: 'relative',
     },
     label: {
         cursor: 'pointer',
@@ -15,37 +20,41 @@ const styles = {
     selectedLabel: {
         cursor: 'pointer',
     },
+    disabled: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: 50000,
+        overflow: 'hidden',
+        background: 'rgba(255,255,255,0.8)',
+    }
 };
 
-class OrgUnitTree extends Component {
-
-    render() {
-        const { root, selected, toggleOrganisationUnit } = this.props;
-
-        if (!root) {
-            return null;
-        }
-
-        return (
-            <div style={styles.container}>
-                <D2OrgUnitTree
-                    style={{ background: 'red' }}
-                    root={root}
-                    selected={selected}
-                    initiallyExpanded={[root.path]}
-                    hideCheckboxes={true}
-                    hideMemberCount={true}
-                    onSelectClick={(evt, orgUnit) => toggleOrganisationUnit({
-                        id: orgUnit.id,
-                        path: orgUnit.path,
-                    })}
-                    labelStyle={styles.label}
-                    selectedLabelStyle={styles.selectedLabel}
-                />
-            </div>
-        );
-    }
-
-}
+const OrgUnitTree = ({ root, selected, disabled, onClick }) => root ? (
+    <div
+        style={{
+            ...styles.container,
+            overflowY: disabled ? 'hidden' : 'auto',
+        }}
+    >
+        <D2OrgUnitTree
+            root={root}
+            selected={selected.map(item => item.path)}
+            initiallyExpanded={[root.path]}
+            hideCheckboxes={true}
+            hideMemberCount={true}
+            onSelectClick={(evt, orgUnit) => !disabled ? onClick({
+                id: orgUnit.id,
+                path: orgUnit.path,
+            }) : null}
+            labelStyle={styles.label}
+            selectedLabelStyle={styles.selectedLabel}
+        />
+        {disabled ?
+            <div style={styles.disabled} />
+        : null}
+    </div>
+) : null;
 
 export default OrgUnitTree;

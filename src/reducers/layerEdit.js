@@ -2,6 +2,10 @@ import * as types from '../constants/actionTypes';
 
 const layerEdit = (state = null, action) => {
     let columns;
+    let rows;
+    let ouDim;
+    let items;
+    let newRows;
 
     switch (action.type) {
 
@@ -148,10 +152,10 @@ const layerEdit = (state = null, action) => {
             };
 
       case types.LAYER_EDIT_ORGANISATIOM_UNIT_TOGGLE:
-            const rows = state.rows || [];
-            const ouDim = rows.filter(r => r.dimension === 'ou')[0];
-            const items = ouDim ? ouDim.items.filter((item) => item.id !== action.orgUnit.id) : [];
-            const newRows = rows.filter(r => r.dimension !== 'ou');
+            rows = state.rows || [];
+            ouDim = rows.filter(r => r.dimension === 'ou')[0];
+            items = ouDim ? ouDim.items.filter((item) => item.id !== action.orgUnit.id) : [];
+            newRows = rows.filter(r => r.dimension !== 'ou');
 
             if (!ouDim || ouDim.items.length === items.length) { // Don't exist already
                 items.push(action.orgUnit);

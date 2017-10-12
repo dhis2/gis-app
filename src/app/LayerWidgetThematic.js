@@ -413,6 +413,8 @@ export default function LayerWidgetThematic(gis, layer) {
         }
     });
 
+    console.log('dimConf', dimConf);
+
     const indicatorGroup = Ext.create('Ext.form.field.ComboBox', {
         cls: 'gis-combo',
         fieldLabel: GIS.i18n.indicator_group,

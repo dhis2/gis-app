@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import OrgUnitTree from '../../containers/OrgUnitTree';
+import OrgUnitTree from '../../containers/OrgUnits';
 
 const styles = {
   content: {

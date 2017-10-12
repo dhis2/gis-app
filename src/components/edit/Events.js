@@ -10,7 +10,7 @@ import DataItemSelect from '../dataitem/DataItemSelect';
 import DataItemStyle from '../dataitem/DataItemStyle';
 import NumberField from '../d2-ui/NumberField';
 import ColorPicker from '../d2-ui/ColorPicker';
-import OrgUnitTree from '../../containers/OrgUnitTree';
+import OrgUnits from '../../containers/OrgUnits';
 
 const styles = {
     body: {
@@ -22,7 +22,8 @@ const styles = {
     },
     content: {
         padding: '0 24px',
-        minHeight: 300,
+        height: 300,
+        overflow: 'hidden',
     },
     checkbox: {
         marginTop: 24,
@@ -169,8 +170,8 @@ class EventDialog extends Component {
                 </Tab>
                 <Tab label={i18n('organisation_units')}>
                     <div style={styles.content}>
-                        <OrgUnitTree
-                            selected={orgUnits ? orgUnits.items.map((orgUnit) => orgUnit.path) : []}
+                        <OrgUnits
+                            items={orgUnits ? orgUnits.items : []}
                         />
                     </div>
                 </Tab>

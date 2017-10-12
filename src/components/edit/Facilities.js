@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import OrgUnitGroupSetSelect from '../orgunits/OrgUnitGroupSetSelect';
-import OrgUnitTree from '../../containers/OrgUnitTree';
+import OrgUnitTree from '../../containers/OrgUnits';
 
 const styles = {
     body: {

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import FirstLevel from './UserOrgUnitsFirstLevel';
 import SecondLevel from './UserOrgUnitsSecondLevel';
 import ThirdLevel from './UserOrgUnitsThirdLevel';
 import Checkbox from '../d2-ui/Checkbox';
-// import PropTypes from 'prop-types';
 
 const styles = {
     container: {
@@ -74,5 +74,9 @@ const UserOrgUnits = ({ selected, onClick }) => (
     </div>
 );
 
+UserOrgUnits.propTypes = {
+    selected:  PropTypes.array,
+    onClick: PropTypes.func,
+};
 
 export default UserOrgUnits;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import D2OrgUnitTree from 'd2-ui/lib/org-unit-tree/OrgUnitTree.component';
 
 const styles = {
@@ -56,5 +56,12 @@ const OrgUnitTree = ({ root, selected, disabled, onClick }) => root ? (
         : null}
     </div>
 ) : null;
+
+OrgUnitTree.propTypes = {
+    root: PropTypes.object,
+    selected:  PropTypes.array,
+    disabled: PropTypes.bool,
+    onClick: PropTypes.func,
+};
 
 export default OrgUnitTree;

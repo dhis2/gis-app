@@ -6,6 +6,7 @@ import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import PeriodSelect from '../../containers/PeriodSelect';
 import DataItemFilters from '../../containers/DataItemFilters';
+import ImageSelect from '../d2-ui/ImageSelect';
 import DataItemSelect from '../dataitem/DataItemSelect';
 import DataItemStyle from '../dataitem/DataItemStyle';
 import NumberField from '../d2-ui/NumberField';
@@ -23,13 +24,28 @@ const styles = {
     content: {
         padding: '0 24px',
         height: 300,
-        overflow: 'hidden',
+        overflowY: 'auto',
     },
-    checkbox: {
+    leftColumn: {
         marginTop: 24,
+        width: '40%',
+        float: 'left',
     },
-    numberField: {
+    cluster: {
+        height: 160,
+    },
+    colorRadius: {
+        clear: 'both',
+        height: 130,
+    },
+    color: {
         display: 'block',
+        float: 'left',
+        width: 140,
+    },
+    radius: {
+        display: 'block',
+        float: 'left',
         width: 100,
     }
 };
@@ -177,28 +193,43 @@ class EventDialog extends Component {
                 </Tab>
                 <Tab label={i18n('style')}>
                     <div style={styles.content}>
-                        <Checkbox
-                            label={i18n('group_nearby_events_(clustering)')}
-                            checked={eventClustering}
-                            onCheck={(event, isChecked) => setEventClustering(isChecked)}
-                            style={styles.checkbox}
-                        />
-                        <NumberField
-                            label={i18n('point_radius')}
-                            value={eventPointRadius}
-                            onChange={setEventPointRadius}
-                            style={styles.numberField}
-                        />
-                        <div>
-                            Color:
-                            <ColorPicker
-                                color={eventPointColor}
-                                onChange={setEventPointColor}
-                            />
+                        <div style={styles.leftColumn}>
+                            <div># Coordinate field #</div>
+                            <div style={styles.cluster}>
+                                <ImageSelect
+                                    id="cluster"
+                                    img="images/cluster.png"
+                                    title="Group events"
+                                    onClick={() => setEventClustering(true)}
+                                    isSelected={eventClustering}
+                                />
+                                <ImageSelect
+                                    id="nocluster"
+                                    img="images/nocluster.png"
+                                    title="View all events"
+                                    onClick={() => setEventClustering(false)}
+                                    isSelected={!eventClustering}
+                                />
+                            </div>
+                            <div style={styles.colorRadius}>
+                                <div style={styles.color}>
+                                    Color:
+                                    <ColorPicker
+                                        color={eventPointColor}
+                                        onChange={setEventPointColor}
+                                    />
+                                </div>
+                                <NumberField
+                                    label={i18n('point_radius')}
+                                    value={eventPointRadius}
+                                    onChange={setEventPointRadius}
+                                    style={styles.radius}
+                                />
+                            </div>
                         </div>
                         {dataElements ?
                             <DataItemSelect
-                                label={i18n('style_by_data_item')}
+                                label={i18n('style_by_data_element')}
                                 items={dataElements.filter(d => d.optionSet)}
                                 value={styleDataElement ? styleDataElement.id : null}
                                 onChange={setStyleDataElement}

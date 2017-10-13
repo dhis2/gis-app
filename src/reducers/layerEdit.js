@@ -131,6 +131,12 @@ const layerEdit = (state = null, action) => {
 
             return state;
 
+        case types.LAYER_EDIT_EVENT_CLUSTERING_SET:
+            return {
+                ...state,
+                eventClustering: action.checked,
+            };
+
         case types.LAYER_EDIT_EVENT_POINT_RADIUS_SET:
             return {
                 ...state,

@@ -32,7 +32,7 @@ export const loadProgramStages = (action$) =>
                 .catch(errorActionCreator(types.PROGRAM_STAGES_LOAD_ERROR))
         );
 
-// Load program tracked entity attributes - TODO: In use?
+// Load program tracked entity attributes
 export const loadProgramTrackedEntityAttributes = (action$) =>
     action$
         .ofType(types.PROGRAM_ATTRIBUTES_LOAD)
@@ -42,7 +42,7 @@ export const loadProgramTrackedEntityAttributes = (action$) =>
                     fields: 'programTrackedEntityAttributes[trackedEntityAttribute[id,displayName~rename(name),valueType,optionSet[id,displayName~rename(name)]]]',
                     paging: false,
                 }))
-                .then(program => setProgramAttributes(action.programId, program.programTrackedEntityAttributes.toArray().map(d => d.trackedEntityAttribute)))
+                .then(program => setProgramAttributes(action.programId, program.programTrackedEntityAttributes.map(d => d.trackedEntityAttribute)))
                 .catch(errorActionCreator(types.PROGRAM_ATTRIBUTES_LOAD_ERROR))
         );
 

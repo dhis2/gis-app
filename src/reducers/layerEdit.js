@@ -131,6 +131,17 @@ const layerEdit = (state = null, action) => {
 
             return state;
 
+        case types.LAYER_EDIT_EVENT_COORDINATE_FIELD_SET:
+            const newState = { ...state };
+
+            if (action.fieldId === 'event') { // Default
+                delete newState.eventCoordinateField;
+            } else {
+                newState.eventCoordinateField = action.fieldId;
+            }
+
+            return newState;
+
         case types.LAYER_EDIT_EVENT_CLUSTERING_SET:
             return {
                 ...state,

@@ -6,6 +6,7 @@ import DatePicker from '../d2-ui/DatePicker';
 const styles = {
     container: {
         width: '100%',
+        height: 74,
     },
     periods: {
         float: 'left',

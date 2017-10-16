@@ -41,6 +41,12 @@ export const setStyleOptions = (options) => ({
     options,
 });
 
+// Set coordinate field
+export const setEventCoordinateField = (fieldId) => ({
+    type: types.LAYER_EDIT_EVENT_COORDINATE_FIELD_SET,
+    fieldId,
+});
+
 // Set if event clustering should be used (event layer)
 export const setEventClustering = (checked) => ({
     type: types.LAYER_EDIT_EVENT_CLUSTERING_SET,

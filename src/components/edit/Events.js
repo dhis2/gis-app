@@ -5,6 +5,7 @@ import Checkbox from 'material-ui/Checkbox';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import PeriodSelect from '../../containers/PeriodSelect';
+import SelectField from '../d2-ui/SelectField';
 import DataItemFilters from '../../containers/DataItemFilters';
 import ImageSelect from '../d2-ui/ImageSelect';
 import DataItemSelect from '../dataitem/DataItemSelect';
@@ -58,19 +59,25 @@ class EventDialog extends Component {
 
     componentDidMount() {
         const {
-            program,
             programs,
+            program,
+            programAttributes,
             programStage,
             programStages,
             loadPrograms,
             loadProgramStages,
             dataElements,
-            loadProgramStageDataElements
+            loadProgramStageDataElements,
+            loadProgramTrackedEntityAttributes,
         } = this.props;
 
         // Load programs
         if (!programs) {
             loadPrograms();
+        }
+
+        if (program && !programAttributes) {
+            loadProgramTrackedEntityAttributes(program.id);
         }
 
         // Load program stages if program is selected
@@ -87,15 +94,22 @@ class EventDialog extends Component {
     componentDidUpdate(prev) {
         const {
             program,
+            programAttributes,
             programStage,
             programStages,
             dataElements,
             loadProgramStages,
             loadProgramStageDataElements,
+            loadProgramTrackedEntityAttributes,
             setProgramStage
         } = this.props;
 
         if (program) {
+
+            if (!programAttributes) {
+                loadProgramTrackedEntityAttributes(program.id);
+            }
+
             if (programStages) {
                 if (!programStage) {
                     if (programStages !== prev.programStages) {
@@ -110,7 +124,7 @@ class EventDialog extends Component {
 
                 // Load program stages
                 if (program !== prev.program) {
-                    console.log('Load program stages');
+                    // console.log('Load program stages');
                     loadProgramStages(program.id);
                 }
             }
@@ -129,14 +143,16 @@ class EventDialog extends Component {
 
     render() {
         const {
-            program,
             programs,
+            program,
+            programAttributes,
             programStage,
             programStages,
             dataElements,
             columns = [],
             rows = [],
             filters = [],
+            eventCoordinateField,
             eventClustering,
             eventPointColor,
             eventPointRadius,
@@ -144,6 +160,7 @@ class EventDialog extends Component {
             setProgram,
             setProgramStage,
             setStyleDataElement,
+            setEventCoordinateField,
             setEventClustering,
             setEventPointColor,
             setEventPointRadius,
@@ -154,6 +171,15 @@ class EventDialog extends Component {
 
         const d2 = this.context.d2;
         const i18n = d2.i18n.getTranslation.bind(d2.i18n);
+
+        // Create an array of possible coordinate fields
+        const coordinateFields = [{
+            id: 'event',
+            name: i18n('event_location')
+        }].concat(
+            (programAttributes || [])
+                .concat(dataElements || [])
+                .filter(field => field.valueType === 'COORDINATE'));
 
         return (
             <Tabs>
@@ -174,6 +200,12 @@ class EventDialog extends Component {
                             />
                         : null}
                         <PeriodSelect />
+                        <SelectField
+                            label={i18n('coordinate_field')}
+                            items={coordinateFields}
+                            value={eventCoordinateField || 'event'}
+                            onChange={field => setEventCoordinateField(field.id)}
+                        />
                     </div>
                 </Tab>
                 <Tab label={i18n('filter')}>
@@ -194,19 +226,18 @@ class EventDialog extends Component {
                 <Tab label={i18n('style')}>
                     <div style={styles.content}>
                         <div style={styles.leftColumn}>
-                            <div># Coordinate field #</div>
                             <div style={styles.cluster}>
                                 <ImageSelect
                                     id="cluster"
                                     img="images/cluster.png"
-                                    title="Group events"
+                                    title={i18n('group_events')}
                                     onClick={() => setEventClustering(true)}
                                     isSelected={eventClustering}
                                 />
                                 <ImageSelect
                                     id="nocluster"
                                     img="images/nocluster.png"
-                                    title="View all events"
+                                    title={i18n('view_all_events')}
                                     onClick={() => setEventClustering(false)}
                                     isSelected={!eventClustering}
                                 />

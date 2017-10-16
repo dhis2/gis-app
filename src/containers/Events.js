@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
 import Events from '../components/edit/Events';
-import { loadPrograms, loadProgramStages, loadProgramStageDataElements } from '../actions/programs';
+import { loadPrograms, loadProgramTrackedEntityAttributes, loadProgramStages, loadProgramStageDataElements } from '../actions/programs';
 import { loadOptionSet } from '../actions/optionSets';
 import {
     setProgram,
     setProgramStage,
     setStyleDataElement,
+    setEventCoordinateField,
     setEventClustering,
     setEventPointColor,
     setEventPointRadius
@@ -18,8 +19,9 @@ const mapStateToProps = (state) => {
 
     return {
         programs: state.programs,
+        programAttributes: state.programTrackedEntityAttributes[programId],
         programStages: state.programStages[programId],
-        dataElements: state.programStageDataElements[programStageId], // Remove filter
+        dataElements: state.programStageDataElements[programStageId],
         optionSets: state.optionSets,
     };
 };
@@ -28,12 +30,14 @@ export default connect(
     mapStateToProps,
     {
         loadPrograms,
+        loadProgramTrackedEntityAttributes,
         loadProgramStages,
         loadProgramStageDataElements,
         loadOptionSet,
         setProgram,
         setProgramStage,
         setStyleDataElement,
+        setEventCoordinateField,
         setEventClustering,
         setEventPointColor,
         setEventPointRadius

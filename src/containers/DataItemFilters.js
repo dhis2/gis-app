@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import DataItemFilters from '../components/dataitem/DataItemFilters';
+import DataItemFilters from '../components/dataelement/DataElementFilters';
 import { addDataElementFilter, removeDataElementFilter, changeDataElementFilter } from '../actions/layerEdit';
 
 export default connect(

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'd2-ui/lib/button/Button';
-import DataItemFilter from './DataItemFilter';
+import DataItemFilter from './DataElementFilter';
 
 // https://react.rocks/example/react-redux-test
 
@@ -14,7 +14,7 @@ const styles = {
     }
 };
 
-class DataItemFilters extends Component {
+class DataElementFilters extends Component {
 
     static contextTypes = {
         d2: PropTypes.object,
@@ -55,4 +55,4 @@ class DataItemFilters extends Component {
 
 }
 
-export default DataItemFilters;
+export default DataElementFilters;

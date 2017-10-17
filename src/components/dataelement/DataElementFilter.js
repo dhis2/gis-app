@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import DataItemSelect from './DataItemSelect';
-import DataItemFilterOperator from './DataItemFilterOperator';
+import DataElementSelect from './DataElementSelect';
+import DataElementFilterOperator from './DataElementFilterOperator';
 import IconButton from 'material-ui/IconButton';
 import RemoveIcon from 'material-ui/svg-icons/navigation/close';
 
@@ -27,7 +27,7 @@ const styles = {
     }
 };
 
-class DataItemFilter extends Component {
+class DataElementFilter extends Component {
 
     onChange(dimension, filter) {
         const { index, dataItems, onChange } = this.props;
@@ -59,7 +59,7 @@ class DataItemFilter extends Component {
         return (
             <div style={styles.container}>
                 {dataItems ?
-                    <DataItemSelect
+                    <DataElementSelect
                         label='Data item'
                         items={dataItems}
                         value={dataItem ? dataItem.id : null}
@@ -69,7 +69,7 @@ class DataItemFilter extends Component {
                 : null}
 
                 {dataItem ?
-                    <DataItemFilterOperator
+                    <DataElementFilterOperator
                         valueType={dataItem.valueType}
                         filter={filter}
                         onChange={filter => this.onChange(dimension, filter)}
@@ -89,4 +89,4 @@ class DataItemFilter extends Component {
 
 }
 
-export default DataItemFilter;
+export default DataElementFilter;

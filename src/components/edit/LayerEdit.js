@@ -21,13 +21,10 @@ const styles = {
     title: {
         padding: '8px 16px',
         fontSize: 18,
+        // background: '#1E88E5',
+        // background: '#fff',
+        // color: '#fff',
     },
-    /*
-     content: {
-     padding: '0 24px 16px',
-     minHeight: 300,
-     },
-     */
 };
 
 class LayerEdit extends Component {

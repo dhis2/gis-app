@@ -41,7 +41,7 @@ export default class ColorPicker extends Component {
                 backgroundColor: color,
                 // position: 'relative',
                 marginRight: 12,
-                width: 24,
+                width: 40,
                 height: 24,
                 // lineHeight: 2.5,
                 // marginTop: 10,
@@ -60,7 +60,7 @@ export default class ColorPicker extends Component {
                 overflow: 'visible',
                 zIndex: 1000,
                 top: 10,
-                left: 120,
+                left: 75,
             }
         };
 

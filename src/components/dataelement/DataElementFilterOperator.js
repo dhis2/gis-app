@@ -38,7 +38,7 @@ const styles = {
     }
 };
 
-const DataItemFilterOperator = ({ valueType, filter, onChange }, { d2 }) => {
+const DataElementFilterOperator = ({ valueType, filter, onChange }, { d2 }) => {
     const items = operators[valueType];
     const i18n = d2.i18n.getTranslation.bind(d2.i18n);
     let operator;
@@ -73,9 +73,9 @@ const DataItemFilterOperator = ({ valueType, filter, onChange }, { d2 }) => {
 };
 
 
-DataItemFilterOperator.contextTypes = {
+DataElementFilterOperator.contextTypes = {
     d2: PropTypes.object
 };
 
 
-export default DataItemFilterOperator;
+export default DataElementFilterOperator;

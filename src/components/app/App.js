@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import appTheme from './app.theme';
 import MapProvider from '../map/MapProvider';
 import AppMenu from '../../containers/AppMenu';
 import AddLayerDialog from '../../containers/AddLayerDialog';
@@ -35,7 +36,7 @@ class App extends Component {
 
     render () {
         return (
-            <MuiThemeProvider>
+            <MuiThemeProvider muiTheme={appTheme}>
                 <MapProvider>
                     <div id="dhis-gis-container">
                         <AppMenu />

@@ -6,7 +6,7 @@ const style = {
     marginRight: 24,
 };
 
-const DataItemSelect = (props) => (
+const DataElementSelect = (props) => (
     <SelectField
         // label='Style by data item' // TODO: i18n
         style={style}
@@ -14,4 +14,4 @@ const DataItemSelect = (props) => (
     />
 );
 
-export default DataItemSelect;
+export default DataElementSelect;

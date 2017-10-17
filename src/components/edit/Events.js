@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import Checkbox from 'material-ui/Checkbox';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import PeriodSelect from '../../containers/PeriodSelect';
 import SelectField from '../d2-ui/SelectField';
 import DataItemFilters from '../../containers/DataItemFilters';
 import ImageSelect from '../d2-ui/ImageSelect';
-import DataItemSelect from '../dataitem/DataItemSelect';
-import DataItemStyle from '../dataitem/DataItemStyle';
+import DataItemSelect from '../dataelement/DataElementSelect';
+import DataItemStyle from '../dataelement/DataElementStyle';
 import NumberField from '../d2-ui/NumberField';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnits from '../../containers/OrgUnits';
@@ -33,21 +32,29 @@ const styles = {
         float: 'left',
     },
     cluster: {
-        height: 160,
+        height: 150,
     },
     colorRadius: {
         clear: 'both',
         height: 130,
     },
     color: {
+        marginTop: 16,
         display: 'block',
         float: 'left',
-        width: 140,
+        width: 66,
+    },
+    colorLabel: {
+        marginRight: 16,
+        marginBottom: 4,
+        lineHeight: '18px',
+        color: 'rgba(0, 0, 0, 0.3)',
+        fontSize: 12,
     },
     radius: {
         display: 'block',
         float: 'left',
-        width: 100,
+        width: 54,
     }
 };
 
@@ -244,14 +251,14 @@ class EventDialog extends Component {
                             </div>
                             <div style={styles.colorRadius}>
                                 <div style={styles.color}>
-                                    Color:
+                                    <div style={styles.colorLabel}>{i18n('color')}</div>
                                     <ColorPicker
                                         color={eventPointColor}
                                         onChange={setEventPointColor}
                                     />
                                 </div>
                                 <NumberField
-                                    label={i18n('point_radius')}
+                                    label={i18n('radius')}
                                     value={eventPointRadius}
                                     onChange={setEventPointRadius}
                                     style={styles.radius}
@@ -261,7 +268,8 @@ class EventDialog extends Component {
                         {dataElements ?
                             <DataItemSelect
                                 label={i18n('style_by_data_element')}
-                                items={dataElements.filter(d => d.optionSet)}
+                                // items={dataElements.filter(d => d.optionSet)}
+                                items={dataElements}
                                 value={styleDataElement ? styleDataElement.id : null}
                                 onChange={setStyleDataElement}
                             />

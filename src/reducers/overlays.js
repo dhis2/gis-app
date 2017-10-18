@@ -97,6 +97,13 @@ const defaultOverlays = [{
     opacity: 1,
 },{
     type: 'earthEngine',
+    preview: true,
+    title: 'Population Preview',
+    img: 'images/layers/population.png',
+    subtitle: '2010',
+    opacity: 0.9,
+},{
+    type: 'earthEngine',
     title: 'Population density',
     img: 'images/layers/population.png',
     subtitle: '2010',

@@ -9,7 +9,7 @@ import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 import log from 'loglevel';
 
 log.setLevel(log.levels.INFO); // TODO: Use DEBUG for development
-log.info('Loading: GIS app 27.0.14'); // TODO: Use manifest
+log.info('Loading: GIS app 27.0.15'); // TODO: Use manifest
 
 window.GIS = GIS;
 
@@ -1138,7 +1138,7 @@ Ext.onReady( function() {
 
                                         // calendar
                                         (function() {
-                                            var dhis2PeriodUrl = 'dhis2/dhis2.period.js',
+                                            var dhis2PeriodUrl = init.contextPath + '/dhis-web-commons/javascripts/dhis2/dhis2.period.js',
                                                 defaultCalendarId = 'gregorian',
                                                 calendarIdMap = {'iso8601': defaultCalendarId},
                                                 calendarId = calendarIdMap[init.systemInfo.calendar] || init.systemInfo.calendar || defaultCalendarId,

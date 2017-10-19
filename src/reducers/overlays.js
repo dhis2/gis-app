@@ -21,14 +21,13 @@ const defaultOverlays = [{
         name: 'Age in years',
         filter: 'LT:50'
     }],
-    /*
     rows: [{
         dimension: 'ou',
         items: [{
-            id: 'ImspTQPwCqd'
+            id: 'ImspTQPwCqd',
+            path: "/ImspTQPwCqd"
         }]
     }],
-    */
     filters: [{
         dimension: 'pe',
         items: [{

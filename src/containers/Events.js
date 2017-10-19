@@ -23,6 +23,7 @@ const mapStateToProps = (state) => {
         programStages: state.programStages[programId],
         dataElements: state.programStageDataElements[programStageId],
         optionSets: state.optionSets,
+        orgUnitTree: state.orgUnitTree,
     };
 };
 

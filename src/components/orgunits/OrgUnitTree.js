@@ -41,6 +41,7 @@ const OrgUnitTree = ({ root, selected, disabled, onClick }) => root ? (
         <D2OrgUnitTree
             root={root}
             selected={selected.map(item => item.path)}
+            // selected={selected.length ? selected.map(item => item.path) : [root.path]}
             initiallyExpanded={[root.path]}
             hideCheckboxes={true}
             hideMemberCount={true}

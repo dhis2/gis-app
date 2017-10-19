@@ -1,69 +1,37 @@
 import { getInstance as getD2 } from 'd2/lib/d2';
 import { isValidCoordinate } from '../util/map';
-import { apiFetch } from '../util/api';
-import isString from 'd2-utilizr/lib/isString';
+
+// Look at: https://github.com/dhis2/maintenance-app/blob/master/src/App/appStateStore.js
 
 const eventLoader = (config) =>
   addEventClusterOptions(config)
     .then(addStyleDataElement)
     .then(addEventData)
-    .then(addStyling);
+    .then(addStyling)
+    .then(addLegend);
 
-// Creates a param string from config object
-const getParamString = (config) => {
-    let paramString = '?';
-
-    // Program stage
-    paramString += 'stage=' + config.programStage.id;
-
-    // Period
-    if (Array.isArray(config.filters) && config.filters.length) {
-        paramString += '&filter=pe:' + config.filters[0].items[0].id;
-    } else {
-        paramString += '&startDate=' + config.startDate;
-        paramString += '&endDate=' + config.endDate;
-    }
-
-    // Organisation units
-    if (config.rows[0] && config.rows[0].dimension === 'ou' && Array.isArray(config.rows[0].items)) {
-        paramString += '&dimension=ou:' + config.rows[0].items.map(ou => ou.id).join(';');
-    }
-
-    // Dimensions
-    config.columns.forEach(element => {
-        if (element.dimension !== 'dx') { // API sometimes returns empty dx filter
-            paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
-        }
-    });
-
-    return paramString;
-};
-
-const addEventClusterOptions = (config) => getD2().then((d2) => {
+const addEventClusterOptions = async (config) => {
+    const d2 = await getD2();
     const spatialSupport = d2.system.systemInfo.databaseInfo.spatialSupport;
-    const paramString = getParamString(config);
-
-    console.log('config', config);
 
     if (!spatialSupport && !config.eventClustering) {
-      return config;
+        return config;
     }
 
-    // Get event count to decide on client vs server cluster
-    return apiFetch(`analytics/events/count/${config.program.id}.json${paramString}`)
-        .then(response => {
-            if (response.extent) {
-                const extent = response.extent.match(/([-\d\.]+)/g);
-                config.bounds = [[extent[1], extent[0]], [extent[3], extent[2]]];
-            }
+    const analyticsEvents = await getAnalyticsEvents(config);
+    const response = await analyticsEvents.getCount();
 
-            if (response.count > 2000) { // Server clustering if more than 2000 events
-                config.data = `analytics/events/cluster/${config.program.id}.json${paramString}`;
-            }
+    if (response.extent) {
+        const extent = response.extent.match(/([-\d\.]+)/g);
+        config.bounds = [[extent[1], extent[0]], [extent[3], extent[2]]];
+    }
 
-            return config;
-        });
-});
+    if (response.count > 2000) { // Server clustering if more than 2000 events
+        // config.data = `analytics/events/cluster/${config.program.id}.json${paramString}`; // TODO: get from d2
+    }
+
+    return config;
+};
 
 const addStyleDataElement = (config) => {
   const styleDataElement = config.styleDataElement;
@@ -79,15 +47,15 @@ const addStyleDataElement = (config) => {
   return config;
 };
 
-const addEventData = (config) => {
-    const paramString = getParamString(config);
-
+const addEventData = async (config) => {
     if (config.data) {
         return config;
     }
 
-    return apiFetch(`analytics/events/query/${config.program.id}.json${paramString}`)
-        .then(data => parseEventData(config, data));
+    const analyticsEvents = await getAnalyticsEvents(config);
+    const data = await analyticsEvents.getQuery();
+
+    return parseEventData(config, data);
 };
 
 const parseEventData = (config, data) => {
@@ -101,6 +69,122 @@ const parseEventData = (config, data) => {
 
   return config;
 };
+
+const addStyling = (config) => {
+    let colorByOption;
+
+    // Color by option set
+    if (config.styleDataElement && config.styleDataElement.optionSet && config.styleDataElement.optionSet.options) {
+        colorByOption = config.styleDataElement.optionSet.options;
+    }
+
+    if (colorByOption) {
+        config.data = config.data.map(f => {
+            // properties.color = colorByOption[properties[layer.styleDataElement.id]];
+
+            return f;
+        });
+    }
+
+    return config
+};
+
+const addLegend = async (config) => {
+    const { eventPointRadius, eventPointColor, styleDataElement, columns, } = config;
+    const d2 = await getD2();
+
+    const legend = {
+        description: d2.i18n.getTranslation('period') + ': ',
+        items: []
+    };
+
+    let legendItemName = ''; // TODO
+
+    /*
+    if (columns) {
+        columns.forEach(element => {
+                if (element.filter) {
+                    const filter = element.filter.split(':');
+                    const type = filterTypes[filter[0]];
+                    const items = filter[1].split(';').join(', ');
+
+                    // const filter = filters[element.filter.split(':')[0]];
+
+                    legendItemName += element.name + ' ' + type + ' ' + items;
+                }
+
+
+            }
+        });
+    }
+    */
+
+    if (styleDataElement) {
+        const optionSet = styleDataElement.optionSet;
+
+        if (optionSet && optionSet.options) {
+            legend.items = Object.keys(optionSet.options).map(option => ({
+                name: option,
+                color: optionSet.options[option],
+                radius: eventPointRadius,
+            }));
+
+            layer.legend.items.push({
+                radius: eventPointRadius,
+                color: eventPointColor,
+                name: d2.i18n.getTranslation('other')
+            });
+        }
+    } else {
+        legend.items.push({
+            radius: eventPointRadius,
+            color: eventPointColor,
+            name: legendItemName || d2.i18n.getTranslation('event'),
+        });
+    }
+
+    config.legend = legend;
+
+    return config;
+};
+
+
+/*** Helper functions below ***/
+
+const getAnalyticsEvents = async (config) => {
+    const d2 = await getD2();
+    const { program, programStage, rows, columns, filters, startDate, endDate } = config;
+
+    const analyticsEvents = d2.analytics.events
+        .setProgram(program.id)
+        .addParameters({
+            stage: programStage.id,
+        });
+
+    if (Array.isArray(filters) && filters.length) {
+        analyticsEvents.addFilter('pe:' + filters[0].items[0].id);
+    } else {
+        analyticsEvents.addParameters({
+            startDate: startDate,
+            endDate: endDate,
+        });
+    }
+
+    // Organisation units
+    if (rows[0] && rows[0].dimension === 'ou' && Array.isArray(rows[0].items)) {
+        analyticsEvents.addDimension('ou:' + rows[0].items.map(ou => ou.id).join(';'));
+    }
+
+    // Dimensions
+    columns.forEach(el => {
+        if (el.dimension !== 'dx') { // API sometimes returns empty dx filter
+            analyticsEvents.addDimension(el.dimension + (el.filter ? ':' + el.filter : ''));
+        }
+    });
+
+    return analyticsEvents;
+};
+
 
 const createEventFeature = (config, headers, event) => {
     const properties = event.reduce((props, value, i) => ({
@@ -122,26 +206,38 @@ const createEventFeature = (config, headers, event) => {
     };
 };
 
-const addStyling = (config) => {
-    let colorByOption;
 
-    // Color by option set
-    if (config.styleDataElement && config.styleDataElement.optionSet && config.styleDataElement.optionSet.options) {
-        colorByOption = config.styleDataElement.optionSet.options;
-    }
+/*
+ // Creates a param string from config object
+ const getParamString = (config) => {
+ let paramString = '?';
 
-    console.log('#', config);
+ // Program stage
+ paramString += 'stage=' + config.programStage.id;
 
-    if (colorByOption) {
-        config.data = config.data.map(f => {
-            // properties.color = colorByOption[properties[layer.styleDataElement.id]];
+ // Period
+ if (Array.isArray(config.filters) && config.filters.length) {
+ paramString += '&filter=pe:' + config.filters[0].items[0].id;
+ } else {
+ paramString += '&startDate=' + config.startDate;
+ paramString += '&endDate=' + config.endDate;
+ }
 
-            return f;
-        });
-    }
+ // Organisation units
+ if (config.rows[0] && config.rows[0].dimension === 'ou' && Array.isArray(config.rows[0].items)) {
+ paramString += '&dimension=ou:' + config.rows[0].items.map(ou => ou.id).join(';');
+ }
 
-    return config
-};
+ // Dimensions
+ config.columns.forEach(element => {
+ if (element.dimension !== 'dx') { // API sometimes returns empty dx filter
+ paramString += '&dimension=' + element.dimension + (element.filter ? ':' + element.filter : '');
+ }
+ });
+
+ return paramString;
+ };
+ */
 
 
 /*

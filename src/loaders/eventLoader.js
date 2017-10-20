@@ -8,7 +8,8 @@ const eventLoader = (config) =>
     .then(addStyleDataElement)
     .then(addEventData)
     .then(addStyling)
-    .then(addLegend);
+    .then(addLegend)
+    .then(addStatus);
 
 const addEventClusterOptions = async (config) => {
     const d2 = await getD2();
@@ -33,10 +34,10 @@ const addEventClusterOptions = async (config) => {
     return config;
 };
 
+// Include column for data element used for styling
 const addStyleDataElement = (config) => {
   const styleDataElement = config.styleDataElement;
 
-  // Include field for data element used for styling
   if (styleDataElement) {
     config.columns = [...config.columns, {
       dimension: styleDataElement.id,
@@ -52,41 +53,41 @@ const addEventData = async (config) => {
         return config;
     }
 
+    const d2 = await getD2();
     const analyticsEvents = await getAnalyticsEvents(config);
     const data = await analyticsEvents.getQuery();
+    const { metadata, headers, rows } = data;
+    const names = {
+        ...data.metaData.names, // TODO: In use?
+        ...data.metaData.optionNames, // TODO: In use? See below
+        true: d2.i18n.getTranslation('yes'),
+        false: d2.i18n.getTranslation('no'),
+    };
 
-    return parseEventData(config, data);
-};
+    config.data = rows
+      .map(row => createEventFeature(headers, names, row))
+      .filter(feature => isValidCoordinate(feature.geometry.coordinates));
 
-const parseEventData = (config, data) => {
-  const names = { ...data.metaData.names };
-  const features = data.rows.map(row => createEventFeature(config, data.headers, row));
-
-  config.data = features;
-  config.isLoaded = true;
-  config.isExpanded = true;
-  config.isVisible = true;
-
-  return config;
+    return config;
 };
 
 const addStyling = (config) => {
+    const { styleDataElement, data } = config;
     let colorByOption;
 
     // Color by option set
-    if (config.styleDataElement && config.styleDataElement.optionSet && config.styleDataElement.optionSet.options) {
-        colorByOption = config.styleDataElement.optionSet.options;
+    if (styleDataElement && styleDataElement.optionSet && styleDataElement.optionSet.options) {
+      colorByOption = styleDataElement.optionSet.options;
     }
 
-    if (colorByOption) {
-        config.data = config.data.map(f => {
-            // properties.color = colorByOption[properties[layer.styleDataElement.id]];
-
-            return f;
-        });
+    if (Array.isArray(data) && colorByOption) {
+        data.forEach(feature => {
+            return feature.properties.color = colorByOption[feature.properties[styleDataElement.id]];
+          }
+        );
     }
 
-    return config
+    return config;
 };
 
 const addLegend = async (config) => {
@@ -129,7 +130,7 @@ const addLegend = async (config) => {
                 radius: eventPointRadius,
             }));
 
-            layer.legend.items.push({
+            legend.items.push({
                 radius: eventPointRadius,
                 color: eventPointColor,
                 name: d2.i18n.getTranslation('other')
@@ -148,6 +149,13 @@ const addLegend = async (config) => {
     return config;
 };
 
+const addStatus = (config) => {
+    config.isLoaded = true;
+    config.isExpanded = true;
+    config.isVisible = true;
+
+    return config;
+};
 
 /*** Helper functions below ***/
 
@@ -186,14 +194,18 @@ const getAnalyticsEvents = async (config) => {
 };
 
 
-const createEventFeature = (config, headers, event) => {
+const createEventFeature = (headers, names, event) => {
     const properties = event.reduce((props, value, i) => ({
-        // properties[data.headers[i].name] = booleanNames[value] || data.metaData.optionNames[value] || names[value] || value;
         ...props,
-        [headers[i].name]: value,
+        [headers[i].name]: names[value] || value,
     }), {});
 
     const coordinates = [properties.longitude, properties.latitude];
+
+    // TODO: remove
+    if (properties.longitude !== 0.0) {
+        // console.log('properties', properties);
+    }
 
     return {
         type: 'Feature',

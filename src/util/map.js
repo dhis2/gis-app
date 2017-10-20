@@ -9,9 +9,7 @@ export function isValidCoordinate(coord) {
         && coord[0] >= -180
         && coord[0] <= 180
         && coord[1] >= -90
-        && coord[1] <= 90
-        && Number(coord[0]) !== 0 // TODO: Should not be in the db (0,0 are valid coordinates)
-        && Number(coord[1]) !== 0;
+        && coord[1] <= 90;
 }
 
 export function toGeoJson(organisationUnits, levelOrder) {

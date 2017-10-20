@@ -1,4 +1,5 @@
 import { getInstance as getD2 } from 'd2/lib/d2';
+import isString from 'd2-utilizr/lib/isString';
 import { isValidCoordinate } from '../util/map';
 
 // Look at: https://github.com/dhis2/maintenance-app/blob/master/src/App/appStateStore.js
@@ -58,14 +59,24 @@ const addEventData = async (config) => {
     const data = await analyticsEvents.getQuery();
     const { metadata, headers, rows } = data;
     const names = {
-        ...data.metaData.names, // TODO: In use?
-        ...data.metaData.optionNames, // TODO: In use? See below
+        // ...data.metaData.names, // TODO: In use?
+        // ...data.metaData.optionNames, // TODO: In use? See below
         true: d2.i18n.getTranslation('yes'),
         false: d2.i18n.getTranslation('no'),
     };
 
+    // names[header.name] = header.column;
+
+    // Find header names and keys - TODO: Needed?
+    headers.forEach(header => names[header.name] = header.column);
+
+
+    console.log('rows', rows);
+
+    // data.headers.forEach(header => names[header.name] = header.column);
+
     config.data = rows
-      .map(row => createEventFeature(headers, names, row))
+      .map(row => createEventFeature(config, headers, names, row))
       .filter(feature => isValidCoordinate(feature.geometry.coordinates));
 
     return config;
@@ -154,6 +165,8 @@ const addStatus = (config) => {
     config.isExpanded = true;
     config.isVisible = true;
 
+    console.log('final config', config);
+
     return config;
 };
 
@@ -161,12 +174,13 @@ const addStatus = (config) => {
 
 const getAnalyticsEvents = async (config) => {
     const d2 = await getD2();
-    const { program, programStage, rows, columns, filters, startDate, endDate } = config;
+    const { program, programStage, rows, columns, filters, startDate, endDate, eventCoordinateField } = config;
 
     const analyticsEvents = d2.analytics.events
         .setProgram(program.id)
         .addParameters({
             stage: programStage.id,
+            coordinatesOnly: true,
         });
 
     if (Array.isArray(filters) && filters.length) {
@@ -190,21 +204,41 @@ const getAnalyticsEvents = async (config) => {
         }
     });
 
+    // If coordinate field other than event coordinate
+    if (eventCoordinateField) {
+        analyticsEvents
+            .addDimension(eventCoordinateField) // Used by analytics/events/query/
+            .addParameters({
+                coordinateField: eventCoordinateField, // Used by analytics/events/count and analytics/events/cluster
+            });
+    }
+
     return analyticsEvents;
 };
 
 
-const createEventFeature = (headers, names, event) => {
+const createEventFeature = (config, headers, names, event) => {
     const properties = event.reduce((props, value, i) => ({
         ...props,
         [headers[i].name]: names[value] || value,
     }), {});
 
-    const coordinates = [properties.longitude, properties.latitude];
+    if (properties.psi === 'wh2Ps1XJCAG') {
+      console.log(properties);
+    }
 
-    // TODO: remove
-    if (properties.longitude !== 0.0) {
-        // console.log('properties', properties);
+    let coordinates;
+
+    if (config.eventCoordinateField) { // If coordinate field other than event location
+        const eventCoord = properties[config.eventCoordinateField];
+
+        if (Array.isArray(eventCoord)) {
+          coordinates = eventCoord;
+        } else if (isString(eventCoord)) {
+          coordinates = JSON.parse(eventCoord);
+        }
+    } else { // Use event location
+        coordinates = [properties.longitude, properties.latitude]; // Event location
     }
 
     return {

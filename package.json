@@ -7,6 +7,7 @@
     "validate": "npm ls --depth 0",
     "start": "./node_modules/.bin/d2-manifest --href='http://localhost:8080' --manifest.activities.dhis.auth='admin:district' package.json manifest.webapp && webpack-dev-server",
     "build": "rm -rf build && webpack --config webpack.config.prod.js && cp -r dhis2 build && cp -r extjs build && mkdir -p build/src/custom && cp -r src/custom build/src && cp index.html build && cp -r css build/css && cp src/app.js build/src/app.js && cp manifest.webapp build/manifest.webapp && cp -r i18n build && cp -r images build",
+    "lint": "./node_modules/eslint/bin/eslint.js src",
     "test": "TZ=UTC jest",
     "test-watch": "npm run test -- --watch",
     "test-cov": "npm test -- --coverage",
@@ -103,8 +104,7 @@
     "webpack-uglify-js-plugin": "^1.1.9"
   },
   "pre-commit": [
-    "test",
-    "lint"
+    "test"
   ],
   "manifest.webapp": {
     "name": "DHIS 2 Maps App",

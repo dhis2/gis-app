@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
-import SelectField from '../d2-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'd2-ui/lib/select-field/SelectField';
 
 const RelativePeriodsSelect = ({ periods = [], value, onChange, style }) => (
     <SelectField

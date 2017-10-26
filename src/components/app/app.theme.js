@@ -3,8 +3,6 @@ import { fade } from 'material-ui/utils/colorManipulator';
 import Spacing from 'material-ui/styles/spacing';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-console.log('spacing', Spacing);
-
 // Copied from https://github.com/dhis2/maintenance-app/blob/master/src/App/app.theme.js - TODO: Add to d2-ui?
 const theme = {
     spacing: Spacing,
@@ -29,8 +27,5 @@ const muiTheme = getMuiTheme(theme, {
         backgroundColor: 'rgb(39, 102, 150)',
     },
 });
-
-
-console.log('muiTheme', muiTheme);
 
 export default muiTheme;

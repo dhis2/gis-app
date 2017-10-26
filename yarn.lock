@@ -1981,18 +1981,9 @@ d2-manifest@^1.0.0:
     minimist "^1.1.0"
     readline-sync "^1.4.1"
 
-d2-ui@^28.0.0-0:
-  version "28.0.0-0"
-  resolved "https://registry.yarnpkg.com/d2-ui/-/d2-ui-28.0.0-0.tgz#81b3022ffbd7afc13e2125d57bd5f4c3539f0c88"
-  dependencies:
-    d2 "^27.0.0-8"
-    loglevel "^1.4.1"
-    material-ui "^0.18.7"
-    prop-types "^15.5.10"
-    react "^15.6.1"
-    react-dom "^15.6.1"
-    react-tap-event-plugin "^2.0.1"
-    rxjs "^5.4.2"
+d2-ui@^28.0.3:
+  version "28.0.3"
+  resolved "https://registry.yarnpkg.com/d2-ui/-/d2-ui-28.0.3.tgz#19db647610a4d95403c0b90257f14e6ea91b57bf"
 
 d2-utilizr@^0.2.15:
   version "0.2.15"
@@ -2006,9 +1997,9 @@ d2-utilizr@^0.2.15:
     lodash.isset "^4.3.0"
     lodash.isstring "^4.0.1"
 
-d2@^27.0.0, d2@^27.0.0-8:
-  version "27.0.0"
-  resolved "https://registry.yarnpkg.com/d2/-/d2-27.0.0.tgz#bcd81663ab762aa4646eaac3c34e46692baa4e51"
+d2@^28.2.0:
+  version "28.2.0"
+  resolved "https://registry.yarnpkg.com/d2/-/d2-28.2.0.tgz#3eda63bc8611ff220add58202139e8593653d1be"
   dependencies:
     whatwg-fetch "^2.0.3"
 
@@ -5389,22 +5380,6 @@ material-colors@^1.2.1:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/material-colors/-/material-colors-1.2.5.tgz#5292593e6754cb1bcc2b98030e4e0d6a3afc9ea1"
 
-material-ui@^0.18.7:
-  version "0.18.7"
-  resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-0.18.7.tgz#b87af16357e6966b36c23d489eb2ed70746d25f8"
-  dependencies:
-    babel-runtime "^6.23.0"
-    inline-style-prefixer "^3.0.2"
-    keycode "^2.1.8"
-    lodash.merge "^4.6.0"
-    lodash.throttle "^4.1.1"
-    prop-types "^15.5.7"
-    react-event-listener "^0.4.5"
-    react-transition-group "^1.1.2"
-    recompose "0.24.0"
-    simple-assign "^0.1.0"
-    warning "^3.0.0"
-
 material-ui@^0.19.1:
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-0.19.1.tgz#6be8072c3d1df9a2c93a840afab47952f2af5653"
@@ -7246,7 +7221,7 @@ rx-lite@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/rx-lite/-/rx-lite-3.1.2.tgz#19ce502ca572665f3b647b10939f97fd1615f102"
 
-rxjs@^5.4.2, rxjs@^5.4.3:
+rxjs@^5.4.3:
   version "5.4.3"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.4.3.tgz#0758cddee6033d68e0fd53676f0f3596ce3d483f"
   dependencies:

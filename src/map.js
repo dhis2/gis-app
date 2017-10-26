@@ -372,6 +372,8 @@ Ext.onReady(function() {
     };
 
     GIS.plugin.getMap = function(config) {
+        console.log('getMap', config);
+
         if (isString(config.url) && config.url.split('').pop() === '/') {
             config.url = config.url.substr(0, config.url.length - 1);
         }

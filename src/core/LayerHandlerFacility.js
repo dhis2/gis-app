@@ -16,6 +16,7 @@ export default function LayerHandlerFacility(gis, layer) {
 	};
 
 	const loadOrganisationUnits = function(view, orgUnitGroups) {
+        const userOrgUnit = gis.map && gis.map.userOrgUnit ? gis.map.userOrgUnit : view.userOrgUnit;
 		const items = view.rows[0].items;
 		const propertyMap = {
 			'name': 'name',
@@ -30,8 +31,8 @@ export default function LayerHandlerFacility(gis, layer) {
 
 			params += '&displayProperty=' + displayProperty.toUpperCase();
 
-			if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
-				params += '&userOrgUnit=' + view.userOrgUnit.map(unit => unit).join(';');
+			if (isArray(userOrgUnit) && userOrgUnit.length) {
+				params += '&userOrgUnit=' + userOrgUnit.map(unit => unit).join(';');
 			}
 
 			return gis.init.apiPath + 'geoFeatures.json' + params + '&includeGroupSets=true';

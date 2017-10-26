@@ -6,7 +6,7 @@ import arrayContains from 'd2-utilizr/lib/arrayContains';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 
 export default function MapLoader(gis, isSession, applyConfig) {
-
+    const userOrgUnit = gis.map.userOrgUnit;
     const layersReady = [];
     let layersToLoad;
 
@@ -15,6 +15,7 @@ export default function MapLoader(gis, isSession, applyConfig) {
 
         const success = function(r) {
             gis.map = r;
+            gis.map.userOrgUnit = userOrgUnit; // From dashboard
             setMap();
         };
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import TextField from 'd2-ui/lib/text-field/TextField';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import PeriodSelect from '../../containers/PeriodSelect';
@@ -9,7 +10,6 @@ import DataItemFilters from '../../containers/DataItemFilters';
 import ImageSelect from '../d2-ui/ImageSelect';
 import DataItemSelect from '../dataelement/DataElementSelect';
 import DataItemStyle from '../dataelement/DataElementStyle';
-import NumberField from '../d2-ui/NumberField';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnits from '../../containers/OrgUnits';
 
@@ -257,7 +257,8 @@ class EventDialog extends Component {
                                         onChange={setEventPointColor}
                                     />
                                 </div>
-                                <NumberField
+                                <TextField
+                                    type='number'
                                     label={i18n('radius')}
                                     value={eventPointRadius}
                                     onChange={setEventPointRadius}

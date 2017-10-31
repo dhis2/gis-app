@@ -2,6 +2,7 @@ import Layer from './Layer';
 import isString from 'd2-utilizr/lib/isString';
 import isArray from 'd2-utilizr/lib/isArray';
 import { apiFetch } from '../../util/api';
+import { getAnalyticsEvents } from '../../util/helpers';
 
 class EventLayer extends Layer {
 
@@ -9,8 +10,7 @@ class EventLayer extends Layer {
         const props = this.props;
         const data = props.data;
         const map = this.context.map;
-
-        console.log('####');
+        let eventLoader;
 
         // Data elements to display in event popup
         this.displayElements = {};
@@ -28,14 +28,20 @@ class EventLayer extends Layer {
         if (props.eventClustering) {
             if (isArray(data)) {
                 config.type = 'clientCluster';
-            } else if (isString(data)) {
+            } else {
                 config.type = 'serverCluster';
                 config.bounds = props.bounds;
 
-                const self = this;
-                config.load = function(params, callback) {
-                    apiFetch(`${data}&bbox=${params.bbox}&clusterSize=${params.clusterSize}&includeClusterPoints=${params.includeClusterPoints}`)
-                        .then(data => callback(params.tileId, self.toGeoJson(data)));
+                config.load = async (params, callback) => {
+                    eventLoader = eventLoader || await getAnalyticsEvents(props);
+
+                    const clusterData = await eventLoader.getCluster({
+                        bbox: params.bbox,
+                        clusterSize: params.clusterSize,
+                        includeClusterPoints: params.includeClusterPoints,
+                    });
+
+                    callback(params.tileId, this.toGeoJson(clusterData));
                 }
             }
         }

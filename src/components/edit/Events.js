@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
+// import SelectField from '../d2-ui/SelectField';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import PeriodSelect from '../../containers/PeriodSelect';

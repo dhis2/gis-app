@@ -5,6 +5,7 @@ class Layer extends PureComponent {
 
     static contextTypes = {
         map: PropTypes.object,
+        d2: PropTypes.object,
     };
 
     static propTypes = {
@@ -26,21 +27,17 @@ class Layer extends PureComponent {
     componentWillMount() {
         this.createPane();
         this.createLayer();
-        // console.log('layer componentWillMount');
     }
 
     componentDidMount() {
         const map = this.context.map;
         map.addLayer(this.layer);
         this.onLayerAdd();
-        // console.log('layer componentDidMount');
     }
 
     componentDidUpdate(prev) {
         const { id, index, opacity, isVisible, editCounter } = this.props;
         const map = this.context.map;
-
-        // console.log('LAYER componentDidUpdate', id, index);
 
         // Create new map if new id of editCounter is increased
         if (id !== prev.id || editCounter !== prev.editCounter) {
@@ -65,7 +62,6 @@ class Layer extends PureComponent {
 
     componentWillUnmount() {
         this.removeLayer();
-        // console.log('layer componentWillUnmount');
     }
 
     // Create custom pane to control layer ordering: http://leafletjs.com/examples/map-panes/

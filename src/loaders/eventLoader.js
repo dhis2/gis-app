@@ -1,6 +1,7 @@
 import { getInstance as getD2 } from 'd2/lib/d2';
 import isString from 'd2-utilizr/lib/isString';
 import { isValidCoordinate } from '../util/map';
+import { getAnalyticsEvents } from '../util/helpers';
 
 // Look at: https://github.com/dhis2/maintenance-app/blob/master/src/App/appStateStore.js
 
@@ -29,7 +30,7 @@ const addEventClusterOptions = async (config) => {
     }
 
     if (response.count > 2000) { // Server clustering if more than 2000 events
-        // config.data = `analytics/events/cluster/${config.program.id}.json${paramString}`; // TODO: get from d2
+        config.serverCluster = true;
     }
 
     return config;
@@ -50,7 +51,7 @@ const addStyleDataElement = (config) => {
 };
 
 const addEventData = async (config) => {
-    if (config.data) {
+    if (config.serverCluster) {
         return config;
     }
 
@@ -69,11 +70,6 @@ const addEventData = async (config) => {
 
     // Find header names and keys - TODO: Needed?
     headers.forEach(header => names[header.name] = header.column);
-
-
-    console.log('rows', rows);
-
-    // data.headers.forEach(header => names[header.name] = header.column);
 
     config.data = rows
       .map(row => createEventFeature(config, headers, names, row))
@@ -170,6 +166,7 @@ const addStatus = (config) => {
 
 /*** Helper functions below ***/
 
+/*
 const getAnalyticsEvents = async (config) => {
     const d2 = await getD2();
     const { program, programStage, rows, columns, filters, startDate, endDate, eventCoordinateField } = config;
@@ -213,6 +210,7 @@ const getAnalyticsEvents = async (config) => {
 
     return analyticsEvents;
 };
+*/
 
 
 const createEventFeature = (config, headers, names, event) => {

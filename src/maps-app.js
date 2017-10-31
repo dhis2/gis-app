@@ -97,7 +97,6 @@ getManifest('manifest.webapp')
             api.get('userSettings', { useFallback: false }),
         ]).then((results) => {
             // Locales
-            /*
             const locales = (results[0] || []).map(locale => ({ id: locale.locale, displayName: locale.name }));
 
             const userSettingsNoFallback = results[1];
@@ -107,7 +106,6 @@ getManifest('manifest.webapp')
                 userSettingsNoFallback,
             });
             log.debug('Got settings options:', configOptionStore.getState());
-            */
 
             // Load current system settings and configuration
             // settingsActions.load();

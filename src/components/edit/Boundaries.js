@@ -22,8 +22,8 @@ class Boundaries extends Component {
         } = this.props;
 
         const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
-        const d2 = this.context.d2;
-        const i18n = d2.i18n.getTranslation.bind(d2.i18n);
+        // const d2 = this.context.d2;
+        // const i18n = d2.i18n.getTranslation.bind(d2.i18n);
 
         return (
             <Tabs>

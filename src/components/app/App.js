@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import appTheme from './app.theme';
 import MapProvider from '../map/MapProvider';
 import AppMenu from '../../containers/AppMenu';
@@ -16,7 +17,6 @@ import ContextMenu from '../../containers/ContextMenu';
 import OrgUnitDialog from '../../containers/OrgUnitDialog';
 import RelocateDialog from '../../containers/RelocateDialog';
 import AboutDialog from '../../containers/AboutDialog';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();
 

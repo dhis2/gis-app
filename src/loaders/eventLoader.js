@@ -165,8 +165,6 @@ const addStatus = (config) => {
     config.isExpanded = true;
     config.isVisible = true;
 
-    console.log('final config', config);
-
     return config;
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import SelectField from '../d2-ui/SelectField';
+import SelectField from 'd2-ui/lib/select-field/SelectField';
 
 const style = {
     marginTop: -8,

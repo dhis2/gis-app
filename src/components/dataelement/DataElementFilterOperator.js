@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'd2-ui/lib/text-field/TextField';
-import SelectField from '../d2-ui/SelectField';
+import SelectField from 'd2-ui/lib/select-field/SelectField';
 
 const operators = {
     INTEGER: [

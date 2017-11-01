@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, Tab } from 'material-ui/Tabs';
+import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 // import SelectField from '../d2-ui/SelectField';

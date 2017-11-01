@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, Tab } from 'material-ui/Tabs';
+import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import OrgUnitGroupSetSelect from '../orgunits/OrgUnitGroupSetSelect';
 import OrgUnitTree from '../../containers/OrgUnits';
 

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
+import Menu, { MenuItem } from 'd2-ui/lib/menu/Menu';
 import ArrowUpIcon from 'material-ui/svg-icons/navigation/arrow-upward';
 import ArrowDownIcon from 'material-ui/svg-icons/navigation/arrow-downward';
 import InfoIcon from 'material-ui/svg-icons/action/info-outline';
@@ -11,9 +10,8 @@ import EditLocationIcon from 'material-ui/svg-icons/action/room';
 // https://github.com/callemall/material-ui/issues/2866
 const anchorEl = document.getElementById('context-menu');
 
-const ContextMenu = props => {
-    const feature = props.feature;
-    const layerType = props.layerType;
+const ContextMenu = (props) => {
+    const { feature, layerType } = props;
     const iconColor = '#777';
     const iconDisabledColor = '#eee';
     let isRelocate;
@@ -25,27 +23,6 @@ const ContextMenu = props => {
         isRelocate = !!GIS.app ? !!gis.init.user.isAdmin : false;
         isPlugin = gis.plugin;
     }
-
-    const style = {
-        list: {
-            paddingTop: 4,
-            paddingBottom: 4,
-        },
-        menuItem: {
-            fontSize: 12,
-            lineHeight: '24px',
-            minHeight: '24px',
-        },
-        menuItemInner: {
-            padding: '0 8px 0 34px',
-        },
-        icon: {
-            margin: 3,
-            left: 6,
-            width: 18,
-            height: 18,
-        }
-    };
 
     if (props.position) {
         anchorEl.style.left = props.position[0] + 'px';
@@ -60,105 +37,88 @@ const ContextMenu = props => {
     return (
         <Popover
             open={props.position ? true : false}
-            style={style.popover}
             anchorEl={anchorEl}
             onRequestClose={props.onClose}
         >
-            <Menu autoWidth={true} style={style.menu} listStyle={style.list} menuItemStyle={style.menuItem} >
-
+            <Menu>
                 {layerType !== 'facility' && feature &&
                     <MenuItem
-                        primaryText={GIS.i18n.drill_up_one_level}
                         disabled={!attr.hasCoordinatesUp}
-                        onTouchTap={() => props.onDrill(props.layerId, attr.grandParentId, attr.grandParentParentGraph, parseInt(attr.level) - 1)}
-                        innerDivStyle={style.menuItemInner}
+                        onClick={() => props.onDrill(props.layerId, attr.grandParentId, attr.grandParentParentGraph, parseInt(attr.level) - 1)}
                         leftIcon={
                             <ArrowUpIcon
                                 color={attr.hasCoordinatesUp ? iconColor : iconDisabledColor}
                                 style={style.icon}
                             />
                         }
-                    />
+                    >{GIS.i18n.drill_up_one_level}</MenuItem>
                 }
 
                 {layerType !== 'facility' && feature &&
                     <MenuItem
-                        primaryText={GIS.i18n.drill_down_one_level}
                         disabled={!attr.hasCoordinatesDown}
-                        onTouchTap={() => props.onDrill(props.layerId, attr.id, attr.parentGraph, parseInt(attr.level) + 1)}
-                        innerDivStyle={style.menuItemInner}
+                        onClick={() => props.onDrill(props.layerId, attr.id, attr.parentGraph, parseInt(attr.level) + 1)}
                         leftIcon={
                             <ArrowDownIcon
                                 color={attr.hasCoordinatesDown ? iconColor : iconDisabledColor}
                                 style={style.icon}
                             />
                         }
-                    />
+                    >{GIS.i18n.drill_down_one_level}</MenuItem>
                 }
 
                 {isRelocate && isPoint &&
                     <MenuItem
-                        primaryText={GIS.i18n.relocate}
-                        onTouchTap={() => props.onRelocateStart(props.layerId, feature)}
-                        innerDivStyle={style.menuItemInner}
+                        onClick={() => props.onRelocateStart(props.layerId, feature)}
                         leftIcon={
                             <EditLocationIcon
                                 style={style.icon}
                             />
                         }
-                    />
+                    >{GIS.i18n.relocate}</MenuItem>
                 }
 
                 {isRelocate && isPoint &&
                     <MenuItem
-                        primaryText={GIS.i18n.swap_lon_lat}
-                        onTouchTap={() => props.onSwapCoordinate(props.layerId, feature.id, feature.geometry.coordinates.slice(0).reverse())}
-                        innerDivStyle={style.menuItemInner}
+                        onClick={() => props.onSwapCoordinate(props.layerId, feature.id, feature.geometry.coordinates.slice(0).reverse())}
                         leftIcon={
                             <EditLocationIcon
                                 style={style.icon}
                             />
                         }
-                    />
+                    >{GIS.i18n.swap_lon_lat}</MenuItem>
                 }
 
                 {!isPlugin && feature &&
                     <MenuItem
-                        primaryText={GIS.i18n.show_information_sheet}
-                        onTouchTap={() => props.onShowInformation(attr)}
+                        onClick={() => props.onShowInformation(attr)}
                         innerDivStyle={style.menuItemInner}
                         leftIcon={
                             <InfoIcon
                                 style={style.icon}
                             />
                         }
-                    />
+                    >{GIS.i18n.show_information_sheet}</MenuItem>
                 }
 
                 {layerType === 'earthEngine' &&
                     <MenuItem
-                        primaryText={GIS.i18n.show + ' todo'}
-                        onTouchTap={() => props.onShowValue()}
+                        onClick={() => props.onShowValue()}
                         innerDivStyle={style.menuItemInner}
                         leftIcon={
                             <InfoIcon
                                 style={style.icon}
                             />
                         }
-                    />
+                    >{GIS.i18n.show + ' todo'}</MenuItem>
                 }
 
                 {props.coordinate && !isPoint &&
                     <MenuItem
-                        primaryText="Show longitude/latitude"
-                        onTouchTap={() => props.showCoordinate(props.coordinate)}
-                        innerDivStyle={style.menuItemInner}
-                        leftIcon={
-                            <EditLocationIcon
-                                style={style.icon}
-                            />
-                        }
-                    />
+                        onClick={() => props.showCoordinate(props.coordinate)}
+                        leftIcon='room'
+                        disabled={true}
+                    >Show longitude/latitude</MenuItem>
                 }
             </Menu>
         </Popover>

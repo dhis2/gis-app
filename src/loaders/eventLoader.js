@@ -14,6 +14,9 @@ const eventLoader = (config) =>
     .then(addStatus);
 
 const addEventClusterOptions = async (config) => {
+    console.log('event config', config);
+
+
     const d2 = await getD2();
     const spatialSupport = d2.system.systemInfo.databaseInfo.spatialSupport;
 

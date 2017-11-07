@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
-import OptionSetStyle from '../components/optionSet/OptionSetStyle';
+import DataElementFilter from '../components/dataelement/DataElementFilter';
 import { loadOptionSet } from '../actions/optionSets';
-import { setStyleOptions } from '../actions/layerEdit';
 
 const mapStateToProps = (state) => ({
     optionSets: state.optionSets,
@@ -9,6 +8,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(
     mapStateToProps,
-    { loadOptionSet, setStyleOptions }
-)(OptionSetStyle);
-
+    { loadOptionSet }
+)(DataElementFilter);

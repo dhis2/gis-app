@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'd2-ui/lib/button/Button';
-import DataItemFilter from './DataElementFilter';
+import DataElementFilterRow from './DataElementFilterRow';
 
 // https://react.rocks/example/react-redux-test
+// https://docs.dhis2.org/master/en/developer/html/webapi_metadata_object_filter.html
 
 const styles = {
     container: {
@@ -25,19 +26,19 @@ class DataElementFilters extends Component {
         const i18n = d2.i18n.getTranslation.bind(d2.i18n);
         const {
             filters,
-            dataItems,
+            dataElements,
             addDataElementFilter,
             removeDataElementFilter,
-            changeDataElementFilter
+            changeDataElementFilter,
         } = this.props;
 
         return (
             <div style={styles.container}>
                 {filters.map((item, index) => (
-                    <DataItemFilter
+                    <DataElementFilterRow
                         key={index}
                         index={index}
-                        dataItems={dataItems}
+                        dataElements={dataElements}
                         onChange={changeDataElementFilter}
                         onRemove={removeDataElementFilter}
                         {...item}

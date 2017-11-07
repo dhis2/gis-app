@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
-// import SelectField from '../d2-ui/SelectField';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import PeriodSelect from '../../containers/PeriodSelect';
-import DataItemFilters from '../../containers/DataItemFilters';
+import DataElementFilters from '../../containers/DataElementFilters';
 import ImageSelect from '../d2-ui/ImageSelect';
-import DataItemSelect from '../dataelement/DataElementSelect';
-import DataItemStyle from '../dataelement/DataElementStyle';
+import DataElementSelect from '../dataelement/DataElementSelect';
+import DataElementStyle from '../dataelement/DataElementStyle';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnits from '../../containers/OrgUnits';
 
@@ -121,7 +120,6 @@ class EventDialog extends Component {
             if (programStages) {
                 if (!programStage) {
                     if (programStages !== prev.programStages) {
-
                         // Select program stage if only one
                         if (programStages.length === 1) {
                             setProgramStage(programStages[0]);
@@ -129,7 +127,6 @@ class EventDialog extends Component {
                     }
                 }
             } else {
-
                 // Load program stages
                 if (program !== prev.program) {
                     // console.log('Load program stages');
@@ -140,7 +137,6 @@ class EventDialog extends Component {
 
         if (programStage) {
             if (!dataElements) {
-
                 // Load program stage data elements
                 if (programStage !== prev.programStage) {
                     loadProgramStageDataElements(programStage.id);
@@ -218,8 +214,8 @@ class EventDialog extends Component {
                 </Tab>
                 <Tab label={i18n('filter')}>
                     <div style={styles.content}>
-                        <DataItemFilters
-                            dataItems={dataElements}
+                        <DataElementFilters
+                            dataElements={dataElements}
                             filters={columns.filter(c => c.filter !== undefined)}
                         />
                     </div>
@@ -268,7 +264,7 @@ class EventDialog extends Component {
                             </div>
                         </div>
                         {dataElements ?
-                            <DataItemSelect
+                            <DataElementSelect
                                 label={i18n('style_by_data_element')}
                                 // items={dataElements.filter(d => d.optionSet)}
                                 items={dataElements}
@@ -277,7 +273,7 @@ class EventDialog extends Component {
                             />
                         : null}
                         {styleDataElement ?
-                            <DataItemStyle
+                            <DataElementStyle
                                 {...styleDataElement}
                                 onChange={(code, color) => console.log('onStyleChange', code, color)}
                             />

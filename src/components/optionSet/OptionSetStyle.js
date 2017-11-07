@@ -32,9 +32,7 @@ class OptionSetStyle extends Component {
             loadOptionSet(id);
         } else {
             const byName = {}; // TODO: Use by code when API support it
-
             optionSets[id].options.forEach((option, index) => byName[option.name] = colors[index] || '#ffffff');
-
             setStyleOptions(byName);
         }
     }

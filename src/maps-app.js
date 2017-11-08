@@ -2,7 +2,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import log from 'loglevel';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/fp/debounce';
 import { init, config, getUserSettings, getManifest, getInstance as getD2 } from 'd2/lib/d2';
 
 import GIS from './core/index.js';
@@ -56,7 +56,8 @@ GIS.onLoad = () => {
 };
 
 // Window resize listener: http://stackoverflow.com/questions/35073669/window-resize-react-redux
-window.addEventListener('resize', debounce(() => store.dispatch(resizeScreen(window.innerWidth, window.innerHeight)), 150));
+
+window.addEventListener('resize', debounce(150, () => store.dispatch(resizeScreen(window.innerWidth, window.innerHeight))));
 
 getManifest('manifest.webapp')
     .then((manifest) => {

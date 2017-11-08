@@ -9,7 +9,7 @@ const DatePicker = ({ label, value, onChange, style, textFieldStyle }) => (
     <MuiDatePicker
         floatingLabelText={label}
         onChange={(event, date) => onChange(formatTime(date))}
-        value={new Date(value)}
+        value={value ? new Date(value) : null}
         style={style}
         textFieldStyle={textFieldStyle}
     />

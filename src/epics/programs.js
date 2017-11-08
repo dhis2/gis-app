@@ -1,6 +1,7 @@
 import { combineEpics } from 'redux-observable';
 import { getInstance as getD2 } from 'd2/lib/d2';
 import 'rxjs/add/operator/concatMap';
+import sortBy from 'lodash/fp/sortBy';
 import * as types from '../constants/actionTypes';
 import { setPrograms, setProgramStages, setProgramAttributes, setProgramStageDataElements } from '../actions/programs';
 import { errorActionCreator } from '../actions/helpers';
@@ -56,7 +57,8 @@ export const loadProgramStageDataElements = (action$) =>
                     fields: `programStageDataElements[dataElement[id,${gis.init.namePropertyUrl},valueType,optionSet[id,displayName~rename(name)]]]`,
                     paging: false,
                 }))
-                .then(programStage => setProgramStageDataElements(action.programStageId, programStage.programStageDataElements.map(d => d.dataElement)))
+                .then(programStage => sortBy('name', programStage.programStageDataElements.map(d => d.dataElement)))
+                .then(dataElements => setProgramStageDataElements(action.programStageId, dataElements))
                 .catch(errorActionCreator(types.PROGRAM_STAGE_DATA_ELEMENTS_LOAD_ERROR))
         );
 

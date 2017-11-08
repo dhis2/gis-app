@@ -266,8 +266,7 @@ class EventDialog extends Component {
                         {dataElements ?
                             <DataElementSelect
                                 label={i18n('style_by_data_element')}
-                                // items={dataElements.filter(d => d.optionSet)}
-                                items={dataElements}
+                                items={dataElements.filter(d => !['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'].includes(d.valueType))}
                                 value={styleDataElement ? styleDataElement.id : null}
                                 onChange={setStyleDataElement}
                             />

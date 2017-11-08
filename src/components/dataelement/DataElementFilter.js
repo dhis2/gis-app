@@ -4,45 +4,7 @@ import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 import Checkbox from 'material-ui/Checkbox';
 import OptionSetSelect from '../optionSet/OptionSetSelect';
-
-const operators = { // TODO: Don't repeat operators
-    INTEGER: [
-        { id: 'EQ', name: '=' },
-        { id: 'GT', name: '>' },
-        { id: 'GE', name: '>=' },
-        { id: 'LT', name: '<' },
-        { id: 'LE', name: '<=' },
-        { id: 'NE', name: '!=' }
-    ],
-    INTEGER_POSITIVE: [
-        { id: 'EQ', name: '=' },
-        { id: 'GT', name: '>' },
-        { id: 'GE', name: '>=' },
-        { id: 'LT', name: '<' },
-        { id: 'LE', name: '<=' },
-        { id: 'NE', name: '!=' }
-    ],
-    NUMBER: [
-        { id: 'EQ', name: '=' },
-        { id: 'GT', name: '>' },
-        { id: 'GE', name: '>=' },
-        { id: 'LT', name: '<' },
-        { id: 'LE', name: '<=' },
-        { id: 'NE', name: '!=' }
-    ],
-    DATE: [
-        { id: 'EQ', name: '=' },
-        { id: 'GT', name: '>' },
-        { id: 'GE', name: '>=' },
-        { id: 'LT', name: '<' },
-        { id: 'LE', name: '<=' },
-        { id: 'NE', name: '!=' }
-    ],
-    TEXT: [
-        { id: 'IN', name: 'is' },     // TODO: i18n
-        { id: '!IN', name: 'is not' } // TODO: i18n
-    ],
-};
+import DatePicker from '../d2-ui/DatePicker';
 
 const styles = {
     container: {
@@ -55,7 +17,7 @@ const styles = {
         width: 120,
         float: 'left',
     },
-    value: {
+    textField: {
         marginRight: 16,
         width: 216,
         top: -8,
@@ -64,13 +26,36 @@ const styles = {
         marginTop: 26,
         marginLeft: -4,
     },
+    datePicker: {
+        float: 'left',
+    },
+    dateField: {
+        width: 216,
+        top: -8,
+    }
 };
 
 const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptionSet, onChange }, { d2 }) => {
-    const items = operators[valueType];
     const i18n = d2.i18n.getTranslation.bind(d2.i18n);
+    let operators;
     let operator;
     let value;
+
+    if (['NUMBER', 'INTEGER', 'INTEGER_POSITIVE', 'DATE'].includes(valueType)) {
+        operators = [
+            { id: 'EQ', name: '=' },
+            { id: 'GT', name: '>' },
+            { id: 'GE', name: '>=' },
+            { id: 'LT', name: '<' },
+            { id: 'LE', name: '<=' },
+            { id: 'NE', name: '!=' }
+        ];
+    } else if (optionSet) {
+        operators = [
+            { id: 'IN', name: i18n('is') },
+            { id: '!IN', name: i18n('is_not') },
+        ];
+    }
 
     if (optionSet && !optionSets[optionSet.id]) {
         loadOptionSet(optionSet.id);
@@ -80,19 +65,20 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
         const splitFilter = filter.split(':');
         operator = splitFilter[0];
         value = splitFilter[1];
-    } else if (items) {
-        operator = items[0].id;
+    } else if (operators) {
+        operator = operators[0].id;
     }
 
-    console.log('valueType', filter, valueType, operator, value);
+    // console.log('valueType', filter, valueType, operator, value);
+    console.log('valueType', valueType);
 
     return (
         <div style={styles.container}>
 
-            {items ?
+            {operators ?
                 <SelectField
                     label={i18n('operator')}
-                    items={items}
+                    items={operators}
                     value={operator}
                     onChange={newOperator => onChange(`${newOperator.id}:${value}`)}
                     style={styles.operator}
@@ -107,13 +93,13 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
                 />
             : null}
 
-            {valueType === 'INTEGER' || valueType === 'INTEGER_POSITIVE' || valueType === 'NUMBER' ?
+            {['NUMBER', 'INTEGER', 'INTEGER_POSITIVE'].includes(valueType) ?
                 <TextField
                     label={i18n('value')}
-                    type={valueType === 'INTEGER' || valueType === 'NUMBER' ? 'number' : 'text'}
+                    type='number'
                     value={value}
                     onChange={newValue => onChange(`${operator}:${newValue}`)}
-                    style={styles.value}
+                    style={styles.textField}
                 />
             : null}
 
@@ -125,6 +111,16 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
                     style={styles.checkbox}
                 />
             : null}
+
+            {valueType === 'DATE' ?
+                <DatePicker
+                    label={i18n('date')}
+                    value={value}
+                    onChange={(date) => onChange(`${operator}:${date}`)}
+                    style={styles.datePicker}
+                    textFieldStyle={styles.dateField}
+                />
+                : null}
 
         </div>
     )

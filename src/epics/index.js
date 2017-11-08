@@ -8,7 +8,6 @@ import orgUnitsEpis from './orgUnits';
 import programsEpics from './programs';
 import optionSetsEpics from './optionSets';
 import externalLayersEpics from './externalLayers';
-import periodsEpics from './periods';
 
 const errorEpic = (action$) =>
     action$
@@ -17,4 +16,4 @@ const errorEpic = (action$) =>
         .concatMapTo(Observable.empty()); // Avoid infinite loop, same as .map(action => Observable.empty()).concatAll()
 
 
-export default combineEpics(orgUnitsEpis, programsEpics, optionSetsEpics, externalLayersEpics, periodsEpics, errorEpic);
+export default combineEpics(orgUnitsEpis, programsEpics, optionSetsEpics, externalLayersEpics, errorEpic);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import i18next from 'i18next';
 import Button from 'd2-ui/lib/button/Button';
 import DataElementFilterRow from './DataElementFilterRow';
 
@@ -17,13 +18,7 @@ const styles = {
 
 class DataElementFilters extends Component {
 
-    static contextTypes = {
-        d2: PropTypes.object,
-    };
-
     render() {
-        const d2 = this.context.d2;
-        const i18n = d2.i18n.getTranslation.bind(d2.i18n);
         const {
             filters,
             dataElements,
@@ -49,7 +44,7 @@ class DataElementFilters extends Component {
                     raised color='accent'
                     onClick={() => addDataElementFilter()}
                     style={styles.button}
-                >{i18n('add_filter')}</Button>
+                >{i18next.t('Add filter')}</Button>
             </div>
         )
     }

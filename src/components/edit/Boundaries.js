@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import i18next from 'i18next';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import OrgUnitTree from '../../containers/OrgUnits';
 
@@ -12,29 +13,23 @@ const styles = {
 
 class Boundaries extends Component {
 
-    static contextTypes = {
-      d2: PropTypes.object,
-    };
-
     render() {
         const {
             rows = [],
         } = this.props;
 
         const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
-        // const d2 = this.context.d2;
-        // const i18n = d2.i18n.getTranslation.bind(d2.i18n);
 
         return (
             <Tabs>
-                <Tab label={i18n('organisation_units')}>
+                <Tab label={i18next.t('Organisation units')}>
                     <div style={styles.content}>
                         <OrgUnitTree
                             selected={orgUnits ? orgUnits.items : []}
                         />
                     </div>
                 </Tab>
-                <Tab label={i18n('style')}>
+                <Tab label={i18next.t('Style')}>
 
                 </Tab>
             </Tabs>

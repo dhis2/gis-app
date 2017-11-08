@@ -22,10 +22,11 @@ import Root from './components/Root';
 
 import storeFactory from './store';
 // import { loadPrograms } from './actions/programs';
-import { translateRelativePeriods } from './actions/periods';
+import { setRelativePeriods } from './actions/periods';
 import { loadOrgUnitTree } from './actions/orgUnitTree';
 import { loadExternalLayers } from './actions/externalLayers';
 import { resizeScreen } from './actions/ui';
+import { relativePeriods } from './constants/periods';
 
 const dhisDevConfig = DHIS_CONFIG; // eslint-disable-line
 
@@ -39,17 +40,7 @@ function getAbsoluteUrl(url) {
 
 const store = storeFactory();
 
-function configI18n(userSettings) {
-    // Sources
-    /*
-    const uiLocale = userSettings.keyUiLocale;
-
-    if (uiLocale !== 'en') {
-        config.i18n.sources.add(`i18n/i18n_app_${uiLocale}.properties`);
-    }
-    config.i18n.sources.add(`i18n/i18n_app.properties`);
-    */
-
+const configI18n = (userSettings) => {
     i18next
         .use(XHR)
         .init({
@@ -65,11 +56,18 @@ function configI18n(userSettings) {
                 i18next.changeLanguage(uiLocale);
             }
         });
-}
+
+    // Translate relative periods
+    store.dispatch(setRelativePeriods(relativePeriods.map(p => ({
+        id: p.id,
+        name: i18next.t(p.name),
+    }))));
+};
+
 
 // Temporary fix to know that initial data is loaded
 
-store.dispatch(translateRelativePeriods());
+// store.dispatch(translateRelativePeriods());
 store.dispatch(loadOrgUnitTree());
 
 GIS.onLoad = () => {
@@ -105,7 +103,7 @@ getManifest('manifest.webapp')
         // log.debug('D2 initialized', d2);
 
         if (!d2.currentUser.authorities.has('F_SYSTEM_SETTING')) {
-            document.write(d2.i18n.getTranslation('access_denied'));
+            document.write(i18next.t('Access denied'));
             return;
         }
 

@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import isObject from 'd2-utilizr/lib/isObject';
 import { getInstance as getD2 } from 'd2/lib/d2';
 import {isValidCoordinate} from '../util/map';
@@ -9,7 +10,6 @@ const facilityLoader = (config) => new Promise((resolve, reject) => {
 
     getD2()
         .then((d2) => {
-            const i18n = d2.i18n.getTranslation.bind(d2.i18n);
             const contextPath = d2.system.systemInfo.contextPath;
             const displayProperty = d2.currentUser.settings.keyAnalysisDisplayProperty || 'name';
             const namePropertyUrl = getDisplayPropertyUrl(displayProperty);
@@ -67,7 +67,7 @@ const facilityLoader = (config) => new Promise((resolve, reject) => {
                     resolve({
                         ...config,
                         data: features,
-                        title: i18n('facilities'),
+                        title: i18next.t('Facilities'),
                         legend: {
                             items: Object.keys(groupSet).map(id => ({
                                 image: `${contextPath}/images/orgunitgroup/${groupSet[id].symbol}`,

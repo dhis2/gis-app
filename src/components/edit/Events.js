@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import i18next from 'i18next';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
@@ -59,10 +60,6 @@ const styles = {
 };
 
 class EventDialog extends Component {
-
-    static contextTypes = {
-        d2: PropTypes.object,
-    };
 
     componentDidMount() {
         const {
@@ -173,13 +170,10 @@ class EventDialog extends Component {
         const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
         const period = filters.filter(r => r.dimension === 'pe')[0];
 
-        const d2 = this.context.d2;
-        const i18n = d2.i18n.getTranslation.bind(d2.i18n);
-
         // Create an array of possible coordinate fields
         const coordinateFields = [{
             id: 'event',
-            name: i18n('event_location')
+            name: i18next.t('Event location'),
         }].concat(
             (programAttributes || [])
                 .concat(dataElements || [])
@@ -187,7 +181,7 @@ class EventDialog extends Component {
 
         return (
             <Tabs>
-                <Tab label={i18n('data')}>
+                <Tab label={i18next.t('data')}>
                     <div style={styles.content}>
                         {programs ?
                             <ProgramSelect
@@ -205,14 +199,14 @@ class EventDialog extends Component {
                         : null}
                         <PeriodSelect />
                         <SelectField
-                            label={i18n('coordinate_field')}
+                            label={i18next.t('Coordinate field')}
                             items={coordinateFields}
                             value={eventCoordinateField || 'event'}
                             onChange={field => setEventCoordinateField(field.id)}
                         />
                     </div>
                 </Tab>
-                <Tab label={i18n('filter')}>
+                <Tab label={i18next.t('Filter')}>
                     <div style={styles.content}>
                         <DataElementFilters
                             dataElements={dataElements}
@@ -220,35 +214,35 @@ class EventDialog extends Component {
                         />
                     </div>
                 </Tab>
-                <Tab label={i18n('organisation_units')}>
+                <Tab label={i18next.t('Organisation units')}>
                     <div style={styles.content}>
                         <OrgUnits
                             items={orgUnits ? orgUnits.items : []}
                         />
                     </div>
                 </Tab>
-                <Tab label={i18n('style')}>
+                <Tab label={i18next.t('Style')}>
                     <div style={styles.content}>
                         <div style={styles.leftColumn}>
                             <div style={styles.cluster}>
                                 <ImageSelect
-                                    id="cluster"
-                                    img="images/cluster.png"
-                                    title={i18n('group_events')}
+                                    id='cluster'
+                                    img='images/cluster.png'
+                                    title={i18next.t('Group events')}
                                     onClick={() => setEventClustering(true)}
                                     isSelected={eventClustering}
                                 />
                                 <ImageSelect
-                                    id="nocluster"
-                                    img="images/nocluster.png"
-                                    title={i18n('view_all_events')}
+                                    id='nocluster'
+                                    img='images/nocluster.png'
+                                    title={i18next.t('View all events')}
                                     onClick={() => setEventClustering(false)}
                                     isSelected={!eventClustering}
                                 />
                             </div>
                             <div style={styles.colorRadius}>
                                 <div style={styles.color}>
-                                    <div style={styles.colorLabel}>{i18n('color')}</div>
+                                    <div style={styles.colorLabel}>{i18next.t('Color')}</div>
                                     <ColorPicker
                                         color={eventPointColor}
                                         onChange={setEventPointColor}
@@ -256,7 +250,7 @@ class EventDialog extends Component {
                                 </div>
                                 <TextField
                                     type='number'
-                                    label={i18n('radius')}
+                                    label={i18next.t('Radius')}
                                     value={eventPointRadius}
                                     onChange={setEventPointRadius}
                                     style={styles.radius}
@@ -265,7 +259,7 @@ class EventDialog extends Component {
                         </div>
                         {dataElements ?
                             <DataElementSelect
-                                label={i18n('style_by_data_element')}
+                                label={i18next.t('Style by data element')}
                                 items={dataElements.filter(d => !['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'].includes(d.valueType))}
                                 value={styleDataElement ? styleDataElement.id : null}
                                 onChange={setStyleDataElement}

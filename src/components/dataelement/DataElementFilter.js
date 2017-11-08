@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import i18next from 'i18next';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 import Checkbox from 'material-ui/Checkbox';
@@ -35,8 +36,7 @@ const styles = {
     }
 };
 
-const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptionSet, onChange }, { d2 }) => {
-    const i18n = d2.i18n.getTranslation.bind(d2.i18n);
+const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptionSet, onChange }) => {
     let operators;
     let operator;
     let value;
@@ -77,7 +77,7 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
 
             {operators ?
                 <SelectField
-                    label={i18n('operator')}
+                    label={i18next.t('Operator')}
                     items={operators}
                     value={operator}
                     onChange={newOperator => onChange(`${newOperator.id}:${value}`)}
@@ -95,7 +95,7 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
 
             {['NUMBER', 'INTEGER', 'INTEGER_POSITIVE'].includes(valueType) ?
                 <TextField
-                    label={i18n('value')}
+                    label={i18next.t('Value')}
                     type='number'
                     value={value}
                     onChange={newValue => onChange(`${operator}:${newValue}`)}
@@ -105,7 +105,7 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
 
             {valueType === 'BOOLEAN' ?
                 <Checkbox
-                    label='Yes'
+                    label={i18next.t('Yes')}
                     checked={value == 1 ? true : false}
                     onCheck={(event, isChecked) => onChange(isChecked ? 'IN:1' : 'IN:0' )}
                     style={styles.checkbox}
@@ -114,7 +114,7 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
 
             {valueType === 'DATE' ?
                 <DatePicker
-                    label={i18n('date')}
+                    label={i18next.t('Date')}
                     value={value}
                     onChange={(date) => onChange(`${operator}:${date}`)}
                     style={styles.datePicker}

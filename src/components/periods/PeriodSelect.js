@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import i18next from 'i18next';
 import RelativePeriodsSelect from '../../containers/RelativePeriodsSelect';
 import DatePicker from '../d2-ui/DatePicker';
 
@@ -26,37 +27,34 @@ const styles = {
     },
 };
 
-const PeriodSelect = ({ period, startDate, endDate, setRelativePeriod, setStartDate, setEndDate }, { d2 }) => {
-    const i18n = d2.i18n.getTranslation.bind(d2.i18n);
+const PeriodSelect = ({ period, startDate, endDate, setRelativePeriod, setStartDate, setEndDate }) => (
+    <div style={styles.container}>
+        <RelativePeriodsSelect
+            value={period ? period : 'START_END_DATES'}
+            onChange={setRelativePeriod}
+            style={styles.periods}
+        />
+        {!period ?
+            <div style={styles.dates}>
+                <DatePicker
+                    label={i18next.t('Start date')}
+                    value={startDate}
+                    onChange={setStartDate}
+                    style={styles.datePicker}
+                    textFieldStyle={styles.dateField}
+                />
+                <DatePicker
+                    label={i18next.t('End date')}
+                    value={endDate}
+                    onChange={setEndDate}
+                    style={styles.datePicker}
+                    textFieldStyle={styles.dateField}
+                />
+            </div>
+        : null}
+    </div>
+);
 
-    return (
-        <div style={styles.container}>
-            <RelativePeriodsSelect
-                value={period ? period : 'START_END_DATES'}
-                onChange={setRelativePeriod}
-                style={styles.periods}
-            />
-            {!period ?
-                <div style={styles.dates}>
-                    <DatePicker
-                        label={i18n('start_date')}
-                        value={startDate}
-                        onChange={setStartDate}
-                        style={styles.datePicker}
-                        textFieldStyle={styles.dateField}
-                    />
-                    <DatePicker
-                        label={i18n('end_date')}
-                        value={endDate}
-                        onChange={setEndDate}
-                        style={styles.datePicker}
-                        textFieldStyle={styles.dateField}
-                    />
-                </div>
-            : null}
-        </div>
-    );
-};
 
 PeriodSelect.contextTypes = {
     d2: PropTypes.object

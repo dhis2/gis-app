@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import { getInstance as getD2 } from 'd2/lib/d2';
 import isString from 'd2-utilizr/lib/isString';
 import { isValidCoordinate } from '../util/map';
@@ -65,8 +66,8 @@ const addEventData = async (config) => {
     const names = {
         // ...data.metaData.names, // TODO: In use?
         // ...data.metaData.optionNames, // TODO: In use? See below
-        true: d2.i18n.getTranslation('yes'),
-        false: d2.i18n.getTranslation('no'),
+        true: i18next.t('Yes'),
+        false: i18next.t('No'),
     };
 
     // names[header.name] = header.column;
@@ -105,7 +106,7 @@ const addLegend = async (config) => {
     const d2 = await getD2();
 
     const legend = {
-        description: d2.i18n.getTranslation('period') + ': ',
+        description: i18next.t('Period') + ': ',
         items: []
     };
 
@@ -143,14 +144,14 @@ const addLegend = async (config) => {
             legend.items.push({
                 radius: eventPointRadius,
                 color: eventPointColor,
-                name: d2.i18n.getTranslation('other')
+                name: i18next.t('Other')
             });
         }
     } else {
         legend.items.push({
             radius: eventPointRadius,
             color: eventPointColor,
-            name: legendItemName || d2.i18n.getTranslation('event'),
+            name: legendItemName || i18next.t('Event'),
         });
     }
 

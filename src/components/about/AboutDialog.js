@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import i18next from 'i18next';
 import Dialog from 'material-ui/Dialog';
 import Button from 'd2-ui/lib/button/Button';
 
@@ -10,11 +11,10 @@ const style = {
 const AboutDialog = ({ aboutDialogOpen, closeAboutDialog }, { d2 }) => {
     const system = d2.system.systemInfo;
     const user = d2.currentUser;
-    const i18n = d2.i18n.getTranslation.bind(d2.i18n);
 
     return (
         <Dialog
-            title={i18n('about_dhis2_maps')}
+            title={i18next.t('About DHIS 2 Maps')}
             actions={[
                 <Button
                     color='primary'
@@ -24,10 +24,10 @@ const AboutDialog = ({ aboutDialogOpen, closeAboutDialog }, { d2 }) => {
             open={aboutDialogOpen}
             onRequestClose={closeAboutDialog}
         >
-            <div style={style}><b>{i18n('time_since_last_data_update')}</b>: {system.intervalSinceLastAnalyticsTableSuccess}</div>
-            <div style={style}><b>{i18n('version')}</b>: {system.version}</div>
-            <div style={style}><b>{i18n('revision')}</b>: {system.revision}</div>
-            <div style={style}><b>{i18n('username')}</b>: {user.username}</div>
+            <div style={style}><b>{i18next.t('Time since last data update')}</b>: {system.intervalSinceLastAnalyticsTableSuccess}</div>
+            <div style={style}><b>{i18next.t('Version')}</b>: {system.version}</div>
+            <div style={style}><b>{i18next.t('Revision')}</b>: {system.revision}</div>
+            <div style={style}><b>{i18next.t('Username')}</b>: {user.username}</div>
         </Dialog>
     );
 };

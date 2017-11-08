@@ -4,6 +4,9 @@ import { render } from 'react-dom';
 import log from 'loglevel';
 import debounce from 'lodash/fp/debounce';
 import { init, config, getUserSettings, getManifest, getInstance as getD2 } from 'd2/lib/d2';
+import i18next from 'i18next';
+import XHR from 'i18next-xhr-backend';
+
 
 import GIS from './core/index.js';
 import app from './app/index.js';
@@ -38,12 +41,30 @@ const store = storeFactory();
 
 function configI18n(userSettings) {
     // Sources
+    /*
     const uiLocale = userSettings.keyUiLocale;
 
     if (uiLocale !== 'en') {
         config.i18n.sources.add(`i18n/i18n_app_${uiLocale}.properties`);
     }
     config.i18n.sources.add(`i18n/i18n_app.properties`);
+    */
+
+    i18next
+        .use(XHR)
+        .init({
+            returnEmptyString: false,
+            fallbackLng: false,
+            keySeparator: '|',
+            backend: {
+                loadPath: '/i18n/{{lng}}.json'
+            }
+        }, (err, t) => {
+            const uiLocale = userSettings.keyUiLocale;
+            if (uiLocale && uiLocale !== 'en') {
+                i18next.changeLanguage(uiLocale);
+            }
+        });
 }
 
 // Temporary fix to know that initial data is loaded

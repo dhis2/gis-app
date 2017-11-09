@@ -13,18 +13,18 @@ export const setProgramStage = (programStage) => ({
     programStage,
 });
 
-export const addDataElementFilter = (filter) => ({
-    type: types.LAYER_EDIT_DATA_ELEMENT_FILTER_ADD,
+export const addFilter = (filter) => ({
+    type: types.LAYER_EDIT_FILTER_ADD,
     filter,
 });
 
-export const removeDataElementFilter = (index) => ({
-    type: types.LAYER_EDIT_DATA_ELEMENT_FILTER_REMOVE,
+export const removeFilter = (index) => ({
+    type: types.LAYER_EDIT_FILTER_REMOVE,
     index,
 });
 
-export const changeDataElementFilter = (index, filter) => ({
-    type: types.LAYER_EDIT_DATA_ELEMENT_FILTER_CHANGE,
+export const changeFilter = (index, filter) => ({
+    type: types.LAYER_EDIT_FILTER_CHANGE,
     index,
     filter,
 });

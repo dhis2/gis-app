@@ -2,47 +2,41 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import i18next from 'i18next';
 import Button from 'd2-ui/lib/button/Button';
-import DataElementFilterRow from './DataElementFilterRow';
-
-// https://react.rocks/example/react-redux-test
-// https://docs.dhis2.org/master/en/developer/html/webapi_metadata_object_filter.html
+import FilterRow from './FilterRow';
 
 const styles = {
-    container: {
-        marginTop: 24,
-    },
     button: {
-        marginTop: 16,
+        marginTop: 8,
     }
 };
 
-class DataElementFilters extends Component {
+class FilterGroup extends Component {
 
     render() {
         const {
             filters,
             dataElements,
-            addDataElementFilter,
-            removeDataElementFilter,
-            changeDataElementFilter,
+            addFilter,
+            removeFilter,
+            changeFilter,
         } = this.props;
 
         return (
-            <div style={styles.container}>
+            <div>
                 {filters.map((item, index) => (
-                    <DataElementFilterRow
+                    <FilterRow
                         key={index}
                         index={index}
                         dataElements={dataElements}
-                        onChange={changeDataElementFilter}
-                        onRemove={removeDataElementFilter}
+                        onChange={changeFilter}
+                        onRemove={removeFilter}
                         {...item}
                     />
                 ))}
 
                 <Button
                     raised color='accent'
-                    onClick={() => addDataElementFilter()}
+                    onClick={() => addFilter()}
                     style={styles.button}
                 >{i18next.t('Add filter')}</Button>
             </div>
@@ -51,4 +45,4 @@ class DataElementFilters extends Component {
 
 }
 
-export default DataElementFilters;
+export default FilterGroup;

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import DataElementFilter from '../components/dataelement/DataElementFilter';
+import FilterSelect from '../components/filter/FilterSelect';
 import { loadOptionSet } from '../actions/optionSets';
 
 const mapStateToProps = (state) => ({
@@ -9,4 +9,4 @@ const mapStateToProps = (state) => ({
 export default connect(
     mapStateToProps,
     { loadOptionSet }
-)(DataElementFilter);
+)(FilterSelect);

@@ -8,7 +8,7 @@ const Basemap = ({ id, img, title, isSelected, onClick }) => {
     };
 
     return (
-        <div className='Basemap' title={title} onTouchTap={() => onClick(id)}>
+        <div className='Basemap' title={title} onClick={() => onClick(id)}>
             <div className='Basemap-image-container' style={borderStyle}>
                 {img ? <img src={img} className='Basemap-image' /> : <div className='Basemap-no-image'>External basemap</div>}
             </div>

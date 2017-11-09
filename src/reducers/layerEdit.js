@@ -22,6 +22,7 @@ const layerEdit = (state = null, action) => {
                 program: {
                     ...action.program,
                 },
+                columns: [],
                 programStage: null,
                 styleDataElement: null,
             };
@@ -32,6 +33,7 @@ const layerEdit = (state = null, action) => {
                 programStage: {
                     ...action.programStage,
                 },
+                columns: [],
                 styleDataElement: null,
             };
 
@@ -65,7 +67,7 @@ const layerEdit = (state = null, action) => {
                 endDate: action.endDate,
             };
 
-        case types.LAYER_EDIT_DATA_ELEMENT_FILTER_ADD:
+        case types.LAYER_EDIT_FILTER_ADD:
             return {
                 ...state,
                 columns: [
@@ -78,7 +80,7 @@ const layerEdit = (state = null, action) => {
                 ]
             };
 
-        case types.LAYER_EDIT_DATA_ELEMENT_FILTER_REMOVE:
+        case types.LAYER_EDIT_FILTER_REMOVE:
             columns = state.columns.filter(c => c.filter !== undefined); // Also used for style data element without filter
 
             if (!columns || !columns[action.index]) {
@@ -93,7 +95,7 @@ const layerEdit = (state = null, action) => {
                 ]
             };
 
-        case types.LAYER_EDIT_DATA_ELEMENT_FILTER_CHANGE:
+        case types.LAYER_EDIT_FILTER_CHANGE:
             columns = state.columns.filter(c => c.filter !== undefined); // Also used for style data element without filter
 
             if (!columns || !columns[action.index]) {

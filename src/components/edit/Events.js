@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import i18next from 'i18next';
+import sortBy from 'lodash/fp/sortBy';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import PeriodSelect from '../../containers/PeriodSelect';
-import DataElementFilters from '../../containers/DataElementFilters';
+import DataElementFilters from '../../containers/FilterGroup';
 import ImageSelect from '../d2-ui/ImageSelect';
-import DataElementSelect from '../dataelement/DataElementSelect';
-import DataElementStyle from '../dataelement/DataElementStyle';
+import DataElementSelect from '../dataitem/DataItemSelect';
+import DataElementStyle from '../dataitem/DataItemStyle';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnits from '../../containers/OrgUnits';
 
@@ -23,12 +24,18 @@ const styles = {
         fontSize: 18,
     },
     content: {
-        padding: '0 24px',
+        display: 'flex',
+        flexFlow: 'row wrap',
+        justifyContent: 'space-between',
+        padding: 12,
         height: 300,
         overflowY: 'auto',
     },
+    selectField: {
+        flexGrow: 1,
+        margin: '0 12px',
+    },
     leftColumn: {
-        marginTop: 24,
         width: '40%',
         float: 'left',
     },
@@ -146,10 +153,10 @@ class EventDialog extends Component {
         const {
             programs,
             program,
-            programAttributes,
+            programAttributes = [],
             programStage,
             programStages,
-            dataElements,
+            dataElements = [],
             columns = [],
             rows = [],
             filters = [],
@@ -170,14 +177,15 @@ class EventDialog extends Component {
         const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
         const period = filters.filter(r => r.dimension === 'pe')[0];
 
-        // Create an array of possible coordinate fields
+        // Merge data elements and program attributes, filter out items not supported, and sort the result
+        const dataItems = sortBy('name', [ ...programAttributes, ...dataElements ]
+            .filter(item => !['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'].includes(item.valueType))
+        );
+
         const coordinateFields = [{
             id: 'event',
             name: i18next.t('Event location'),
-        }].concat(
-            (programAttributes || [])
-                .concat(dataElements || [])
-                .filter(field => field.valueType === 'COORDINATE'));
+        }, ...dataItems.filter(field => field.valueType === 'COORDINATE')];
 
         return (
             <Tabs>
@@ -188,6 +196,7 @@ class EventDialog extends Component {
                                 items={programs}
                                 value={program ? program.id : null}
                                 onChange={setProgram}
+                                style={styles.selectField}
                             />
                         : null}
                         {programStages ?
@@ -195,6 +204,7 @@ class EventDialog extends Component {
                                 items={programStages}
                                 value={programStage ? programStage.id : null}
                                 onChange={setProgramStage}
+                                style={styles.selectField}
                             />
                         : null}
                         <PeriodSelect />
@@ -203,15 +213,18 @@ class EventDialog extends Component {
                             items={coordinateFields}
                             value={eventCoordinateField || 'event'}
                             onChange={field => setEventCoordinateField(field.id)}
+                            style={styles.selectField}
                         />
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Filter')}>
                     <div style={styles.content}>
-                        <DataElementFilters
-                            dataElements={dataElements}
-                            filters={columns.filter(c => c.filter !== undefined)}
-                        />
+                        {programStage ?
+                            <DataElementFilters
+                                dataElements={dataItems}
+                                filters={columns.filter(c => c.filter !== undefined)}
+                            />
+                        : <div>{i18next.t('Filtering is available after selecting a program stage.')}</div>}
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Organisation units')}>
@@ -260,7 +273,7 @@ class EventDialog extends Component {
                         {dataElements ?
                             <DataElementSelect
                                 label={i18next.t('Style by data element')}
-                                items={dataElements.filter(d => !['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'].includes(d.valueType))}
+                                items={dataItems}
                                 value={styleDataElement ? styleDataElement.id : null}
                                 onChange={setStyleDataElement}
                             />

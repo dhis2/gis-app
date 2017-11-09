@@ -4,7 +4,6 @@ import D2OrgUnitTree from 'd2-ui/lib/org-unit-tree/OrgUnitTree.component';
 
 const styles = {
     container: {
-        marginTop: 24,
         padding: 8,
         width: 456,
         height: 270,

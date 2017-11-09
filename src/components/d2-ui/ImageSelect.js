@@ -8,7 +8,7 @@ const ImageSelect = ({ id, img, title, isSelected, onClick }) => {
     };
 
     return (
-        <div className='ImageSelect' title={title} onTouchTap={() => onClick(id)}>
+        <div className='ImageSelect' title={title} onClick={() => onClick(id)}>
             <div className='ImageSelect-image-container' style={borderStyle}>
                 {img ? <img src={img} className='ImageSelect-image' /> : <div className='ImageSelect-no-image'></div>}
             </div>

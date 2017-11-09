@@ -7,7 +7,6 @@ import Checkbox from '../d2-ui/Checkbox';
 
 const styles = {
     container: {
-        marginTop: 24,
         padding: '8px 16px',
         width: 240,
         height: 270,

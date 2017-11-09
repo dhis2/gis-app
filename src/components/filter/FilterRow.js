@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import DataElementSelect from './DataElementSelect';
-import DataElementFilter from '../../containers/DataElementFilter';
+import DataItemSelect from '../dataitem/DataItemSelect';
+import FilterSelect from '../../containers/FilterSelect';
 import IconButton from 'material-ui/IconButton';
 import RemoveIcon from 'material-ui/svg-icons/navigation/close';
 
@@ -9,7 +9,7 @@ import RemoveIcon from 'material-ui/svg-icons/navigation/close';
 const styles = {
     container: {
         height: 64,
-        marginTop: 8,
+        marginBottom: 8,
         padding: '0px 8px',
         background: '#f4f4f4',
         position: 'relative',
@@ -27,7 +27,7 @@ const styles = {
     }
 };
 
-class DataElementFilterRow extends Component {
+class FilterRow extends Component {
 
     onChange(dimension, filter) {
         const { index, dataElements, onChange } = this.props;
@@ -59,7 +59,7 @@ class DataElementFilterRow extends Component {
         return (
             <div style={styles.container}>
                 {dataElements ?
-                    <DataElementSelect
+                    <DataItemSelect
                         label='Data item'
                         items={dataElements}
                         value={dataElement ? dataElement.id : null}
@@ -69,7 +69,7 @@ class DataElementFilterRow extends Component {
                 : null}
 
                 {dataElement ?
-                    <DataElementFilter
+                    <FilterSelect
                         {...dataElement}
                         filter={filter}
                         onChange={filter => this.onChange(dimension, filter)}
@@ -89,4 +89,4 @@ class DataElementFilterRow extends Component {
 
 }
 
-export default DataElementFilterRow;
+export default FilterRow;

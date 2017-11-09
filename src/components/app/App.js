@@ -2,7 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+// import injectTapEventPlugin from 'react-tap-event-plugin';
 import appTheme from './app.theme';
 import MapProvider from '../map/MapProvider';
 import AppMenu from '../../containers/AppMenu';
@@ -18,7 +18,7 @@ import OrgUnitDialog from '../../containers/OrgUnitDialog';
 import RelocateDialog from '../../containers/RelocateDialog';
 import AboutDialog from '../../containers/AboutDialog';
 
-injectTapEventPlugin();
+// injectTapEventPlugin();
 
 // Makes d2 available in all child components
 // Not using AppWithD2 from d2-ui because it requires d2 to be a promise

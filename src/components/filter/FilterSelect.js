@@ -33,10 +33,13 @@ const styles = {
     dateField: {
         width: 216,
         top: -8,
-    }
+    },
 };
 
-const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptionSet, onChange }) => {
+// https://react.rocks/example/react-redux-test
+// https://docs.dhis2.org/master/en/developer/html/webapi_metadata_object_filter.html
+
+const FilterSelect = ({ valueType, filter, optionSet, optionSets, loadOptionSet, onChange }) => {
     let operators;
     let operator;
     let value;
@@ -52,8 +55,15 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
         ];
     } else if (optionSet) {
         operators = [
-            { id: 'IN', name: i18n('is') },
-            { id: '!IN', name: i18n('is_not') },
+            { id: 'IN', name: i18next.t('is') },
+            { id: '!IN', name: i18next.t('is_not') },
+        ];
+    } else if (['TEXT', 'LONG_TEXT'].includes(valueType)) {
+        operators = [
+            { id: 'LIKE', name: i18next.t('contains') },
+            { id: '!LIKE', name: i18next.t('doesn\'t contains') },
+            { id: 'EQ', name: i18next.t('is') },
+            { id: '!EQ', name: i18next.t('is not') },
         ];
     }
 
@@ -69,7 +79,6 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
         operator = operators[0].id;
     }
 
-    // console.log('valueType', filter, valueType, operator, value);
     console.log('valueType', valueType);
 
     return (
@@ -103,6 +112,15 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
                 />
             : null}
 
+            {['TEXT', 'LONG_TEXT'].includes(valueType) && !optionSet ?
+                <TextField
+                    label={i18next.t('Value')}
+                    value={value || ''}
+                    onChange={newValue => onChange(`${operator}:${newValue}`)}
+                    style={styles.textField}
+                />
+            : null}
+
             {valueType === 'BOOLEAN' ?
                 <Checkbox
                     label={i18next.t('Yes')}
@@ -120,16 +138,10 @@ const DataElementFilter = ({ valueType, filter, optionSet, optionSets, loadOptio
                     style={styles.datePicker}
                     textFieldStyle={styles.dateField}
                 />
-                : null}
+            : null}
 
         </div>
     )
 };
 
-
-DataElementFilter.contextTypes = {
-    d2: PropTypes.object
-};
-
-
-export default DataElementFilter;
+export default FilterSelect;

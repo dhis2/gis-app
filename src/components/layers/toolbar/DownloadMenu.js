@@ -43,12 +43,12 @@ const DownloadMenu = ({ id, data }) => (
         menuItems={[
             <MenuItem
                 primaryText='Organisation units (GeoJSON)'
-                onTouchTap={() => downloadGeoJson(id, data)}
+                onClick={() => downloadGeoJson(id, data)}
                 style={styles.menuItem}
             />,
             <MenuItem
                 primaryText='Style (SLD)'
-                onTouchTap={() => downloadStyle(id)}
+                onClick={() => downloadStyle(id)}
                 style={styles.menuItem}
             />,
         ]}

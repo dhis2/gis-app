@@ -95,6 +95,7 @@ const webpackConfig = {
             'material-ui': path.resolve('./node_modules/material-ui'),
         },
     },
+    /*
     externals: [
         {
             'react': 'var React',
@@ -111,12 +112,13 @@ const webpackConfig = {
         /^react-dom$/,
         // /^rx$/,
     ],
+    */
     plugins: [
         new HTMLWebpackPlugin({
             template: 'index.html',
             vendorScripts: [
                 "polyfill.min.js",
-                `${scriptPrefix}/dhis-web-core-resource/react-15/react-15${isDevBuild ? '' : '.min'}.js`,
+                // `${scriptPrefix}/dhis-web-core-resource/react-16/react-16${isDevBuild ? '' : '.min'}.js`,
                 `${scriptPrefix}/dhis-web-core-resource/rxjs/4.1.0/rx.all${isDevBuild ? '' : '.min'}.js`,
                 `${scriptPrefix}/dhis-web-core-resource/lodash/4.15.0/lodash${isDevBuild ? '' : '.min'}.js`,
             ]

@@ -1,0 +1,114 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"POT-Creation-Date: 2017-11-09T11:58:41.881Z\n"
+"PO-Revision-Date: 2017-11-09T11:58:41.881Z\n"
+
+msgid "Access denied"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Event"
+msgstr ""
+
+msgid "Facilities"
+msgstr ""
+
+msgid "About DHIS 2 Maps"
+msgstr ""
+
+msgid "Time since last data update"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Revision"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Operator"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Add filter"
+msgstr ""
+
+msgid "Organisation units"
+msgstr ""
+
+msgid "Style"
+msgstr ""
+
+msgid "Event location"
+msgstr ""
+
+msgid "data"
+msgstr ""
+
+msgid "Coordinate field"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Group events"
+msgstr ""
+
+msgid "View all events"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Radius"
+msgstr ""
+
+msgid "Style by data element"
+msgstr ""
+
+msgid "Group set"
+msgstr ""
+
+msgid "Start date"
+msgstr ""
+
+msgid "End date"
+msgstr ""
+
+msgid "Add layer"
+msgstr ""
+
+msgid "Favorites"
+msgstr ""
+
+msgid "Share"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "Home"
+msgstr ""

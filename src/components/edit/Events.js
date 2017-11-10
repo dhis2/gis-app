@@ -27,13 +27,17 @@ const styles = {
         display: 'flex',
         flexFlow: 'row wrap',
         justifyContent: 'space-between',
+        alignContent: 'flex-start',
         padding: 12,
         height: 300,
         overflowY: 'auto',
     },
     selectField: {
-        flexGrow: 1,
-        margin: '0 12px',
+        flex: '50%',
+        minWidth: 230,
+        boxSizing: 'border-box',
+        borderLeft: '12px solid #fff',
+        borderRight: '12px solid #fff',
     },
     leftColumn: {
         width: '40%',
@@ -215,6 +219,8 @@ class EventDialog extends Component {
                             onChange={field => setEventCoordinateField(field.id)}
                             style={styles.selectField}
                         />
+                        { /* Placeholder div to avoid coordinate field getting full width */ }
+                        <div style={styles.selectField}></div>
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Filter')}>

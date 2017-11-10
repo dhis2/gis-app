@@ -10,15 +10,16 @@ const styles = {
     container: {
         height: 64,
         marginBottom: 8,
-        padding: '0px 8px',
+        padding: '0 56px 0 8px',
         background: '#f4f4f4',
         position: 'relative',
         clear: 'both',
     },
     select: {
-        marginTop: -8,
+        top: -8,
         marginRight: 24,
         float: 'left',
+        width: 'calc((100% - 48px) / 7 * 3)',
     },
     removeBtn: {
         position: 'absolute',

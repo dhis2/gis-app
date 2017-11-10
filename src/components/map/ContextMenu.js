@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'material-ui/Popover';
-import Menu, { MenuItem } from 'd2-ui/lib/menu/Menu';
+//import Menu, { MenuItem } from 'd2-ui/lib/menu/Menu';
+import Menu, { MenuItem } from 'material-ui/Menu';
 import ArrowUpIcon from 'material-ui/svg-icons/navigation/arrow-upward';
 import ArrowDownIcon from 'material-ui/svg-icons/navigation/arrow-downward';
 import InfoIcon from 'material-ui/svg-icons/action/info-outline';

@@ -8,30 +8,25 @@ import OptionSetSelect from '../optionSet/OptionSetSelect';
 import DatePicker from '../d2-ui/DatePicker';
 
 const styles = {
-    container: {
-        float: 'left',
-        height: 64,
-    },
     operator: {
-        marginTop: -8,
-        marginRight: 24,
-        width: 120,
         float: 'left',
+        top: -8,
+        marginRight: 24,
+        width: 'calc((100% - 48px) / 7)',
     },
     textField: {
-        marginRight: 16,
-        width: 216,
+        float: 'left',
         top: -8,
+        width: 'calc((100% - 48px) / 7 * 3)',
     },
     checkbox: {
+        float: 'left',
         marginTop: 26,
         marginLeft: -4,
-    },
-    datePicker: {
-        float: 'left',
+        width: 'calc((100% - 48px) / 7 * 4)',
     },
     dateField: {
-        width: 216,
+        width: 'calc((100% - 48px) / 7 * 3)',
         top: -8,
     },
 };
@@ -81,67 +76,70 @@ const FilterSelect = ({ valueType, filter, optionSet, optionSets, loadOptionSet,
 
     console.log('valueType', valueType);
 
-    return (
-        <div style={styles.container}>
+    return [
+        (operators ?
+            <SelectField
+                key='operator'
+                label={i18next.t('Operator')}
+                items={operators}
+                value={operator}
+                onChange={newOperator => onChange(`${newOperator.id}:${value}`)}
+                style={styles.operator}
+            />
+        : null),
 
-            {operators ?
-                <SelectField
-                    label={i18next.t('Operator')}
-                    items={operators}
-                    value={operator}
-                    onChange={newOperator => onChange(`${newOperator.id}:${value}`)}
-                    style={styles.operator}
-                />
-            : null}
+        (optionSet && optionSets[optionSet.id] ?
+            <OptionSetSelect
+                key='optionset'
+                options={optionSets[optionSet.id].options}
+                value={value ? value.split(';') : null}
+                onChange={newValue => onChange(`${operator}:${newValue.join(';')}`)}
+                style={styles.textField}
+            />
+        : null),
 
-            {optionSet && optionSets[optionSet.id] ?
-                <OptionSetSelect
-                    options={optionSets[optionSet.id].options}
-                    value={value ? value.split(';') : null}
-                    onChange={newValue => onChange(`${operator}:${newValue.join(';')}`)}
-                />
-            : null}
+        (['NUMBER', 'INTEGER', 'INTEGER_POSITIVE'].includes(valueType) ?
+            <TextField
+                key='number'
+                label={i18next.t('Value')}
+                type='number'
+                value={value}
+                onChange={newValue => onChange(`${operator}:${newValue}`)}
+                style={styles.textField}
+            />
+        : null),
 
-            {['NUMBER', 'INTEGER', 'INTEGER_POSITIVE'].includes(valueType) ?
-                <TextField
-                    label={i18next.t('Value')}
-                    type='number'
-                    value={value}
-                    onChange={newValue => onChange(`${operator}:${newValue}`)}
-                    style={styles.textField}
-                />
-            : null}
+        (['TEXT', 'LONG_TEXT'].includes(valueType) && !optionSet ?
+            <TextField
+                key='text'
+                label={i18next.t('Value')}
+                value={value || ''}
+                onChange={newValue => onChange(`${operator}:${newValue}`)}
+                style={styles.textField}
+            />
+        : null),
 
-            {['TEXT', 'LONG_TEXT'].includes(valueType) && !optionSet ?
-                <TextField
-                    label={i18next.t('Value')}
-                    value={value || ''}
-                    onChange={newValue => onChange(`${operator}:${newValue}`)}
-                    style={styles.textField}
-                />
-            : null}
+        (valueType === 'BOOLEAN' ?
+            <Checkbox
+                key='checkbox'
+                label={i18next.t('Yes')}
+                checked={value == 1 ? true : false}
+                onCheck={(event, isChecked) => onChange(isChecked ? 'IN:1' : 'IN:0' )}
+                style={styles.checkbox}
+            />
+        : null),
 
-            {valueType === 'BOOLEAN' ?
-                <Checkbox
-                    label={i18next.t('Yes')}
-                    checked={value == 1 ? true : false}
-                    onCheck={(event, isChecked) => onChange(isChecked ? 'IN:1' : 'IN:0' )}
-                    style={styles.checkbox}
-                />
-            : null}
-
-            {valueType === 'DATE' ?
-                <DatePicker
-                    label={i18next.t('Date')}
-                    value={value}
-                    onChange={(date) => onChange(`${operator}:${date}`)}
-                    style={styles.datePicker}
-                    textFieldStyle={styles.dateField}
-                />
-            : null}
-
-        </div>
-    )
+        (valueType === 'DATE' ?
+            <DatePicker
+                key='date'
+                label={i18next.t('Date')}
+                value={value}
+                onChange={(date) => onChange(`${operator}:${date}`)}
+                style={styles.datePicker}
+                textFieldStyle={styles.dateField}
+            />
+        : null)
+    ];
 };
 
 export default FilterSelect;

@@ -3,16 +3,6 @@ import PropTypes from 'prop-types';
 import D2OrgUnitTree from 'd2-ui/lib/org-unit-tree/OrgUnitTree.component';
 
 const styles = {
-    container: {
-        padding: 8,
-        width: 456,
-        height: 270,
-        overflowX: 'hidden',
-        overflowY: 'auto',
-        boxShadow: '0px 0px 4px 1px rgba(0,0,0,0.2)',
-        float: 'left',
-        position: 'relative',
-    },
     label: {
         cursor: 'pointer',
     },
@@ -30,10 +20,10 @@ const styles = {
     }
 };
 
-const OrgUnitTree = ({ root, selected, disabled, onClick }) => root ? (
+const OrgUnitTree = ({ root, selected, disabled, onClick, style }) => root ? (
     <div
         style={{
-            ...styles.container,
+            ...style,
             overflowY: disabled ? 'hidden' : 'auto',
         }}
     >

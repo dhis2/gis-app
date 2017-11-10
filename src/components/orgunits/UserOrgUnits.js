@@ -6,13 +6,16 @@ import ThirdLevel from './UserOrgUnitsThirdLevel';
 import Checkbox from '../d2-ui/Checkbox';
 
 const styles = {
+    /*
     container: {
+        margin: 8,
         padding: '8px 16px',
         width: 240,
         height: 270,
         boxShadow: '0px 0px 4px 1px rgba(0,0,0,0.2)',
         float: 'right',
     },
+    */
     title: {
         marginBottom: 24,
     },
@@ -49,8 +52,8 @@ const levels = [{
 }];
 
 
-const UserOrgUnits = ({ selected, onClick }) => (
-    <div style={styles.container}>
+const UserOrgUnits = ({ selected, onClick, style }) => (
+    <div style={style}>
         <div style={styles.title}>User organisation units</div>
         {levels.map(level => {
             const LevelIcon = level.icon;

@@ -5,6 +5,10 @@ import Button from 'd2-ui/lib/button/Button';
 import FilterRow from './FilterRow';
 
 const styles = {
+    container: {
+        width: '100%',
+        padding: 12,
+    },
     button: {
         marginTop: 8,
     }
@@ -22,7 +26,7 @@ class FilterGroup extends Component {
         } = this.props;
 
         return (
-            <div>
+            <div style={styles.container}>
                 {filters.map((item, index) => (
                     <FilterRow
                         key={index}

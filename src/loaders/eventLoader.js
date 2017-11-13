@@ -8,7 +8,7 @@ import { getAnalyticsEvents } from '../util/helpers';
 
 const eventLoader = (config) =>
   addEventClusterOptions(config)
-    .then(addStyleDataElement)
+    .then(addStyleDataItem)
     .then(addEventData)
     .then(addStyling)
     .then(addLegend)
@@ -41,13 +41,13 @@ const addEventClusterOptions = async (config) => {
 };
 
 // Include column for data element used for styling
-const addStyleDataElement = (config) => {
-  const styleDataElement = config.styleDataElement;
+const addStyleDataItem = (config) => {
+  const styleDataItem = config.styleDataItem;
 
-  if (styleDataElement) {
+  if (styleDataItem) {
     config.columns = [...config.columns, {
-      dimension: styleDataElement.id,
-      name: styleDataElement.name,
+      dimension: styleDataItem.id,
+      name: styleDataItem.name,
     }];
   }
 
@@ -62,6 +62,7 @@ const addEventData = async (config) => {
     const d2 = await getD2();
     const analyticsEvents = await getAnalyticsEvents(config);
     const data = await analyticsEvents.getQuery();
+
     const { metadata, headers, rows } = data;
     const names = {
         // ...data.metaData.names, // TODO: In use?
@@ -83,17 +84,20 @@ const addEventData = async (config) => {
 };
 
 const addStyling = (config) => {
-    const { styleDataElement, data } = config;
+    const { styleDataItem, data } = config;
     let colorByOption;
 
     // Color by option set
-    if (styleDataElement && styleDataElement.optionSet && styleDataElement.optionSet.options) {
-      colorByOption = styleDataElement.optionSet.options;
+    if (styleDataItem && styleDataItem.optionSet && styleDataItem.optionSet.options) {
+      colorByOption = styleDataItem.optionSet.options;
     }
+
+    // console.log('colorByOption', colorByOption, styleDataItem);
 
     if (Array.isArray(data) && colorByOption) {
         data.forEach(feature => {
-            return feature.properties.color = colorByOption[feature.properties[styleDataElement.id]];
+            // console.log(colorByOption[feature.properties[styleDataItem.id]], feature.properties[styleDataItem.id], feature.properties);
+            return feature.properties.color = colorByOption[feature.properties[styleDataItem.id]];
           }
         );
     }
@@ -102,7 +106,7 @@ const addStyling = (config) => {
 };
 
 const addLegend = async (config) => {
-    const { eventPointRadius, eventPointColor, styleDataElement, columns, } = config;
+    const { eventPointRadius, eventPointColor, styleDataItem, columns, } = config;
     const d2 = await getD2();
 
     const legend = {
@@ -131,8 +135,8 @@ const addLegend = async (config) => {
     }
     */
 
-    if (styleDataElement) {
-        const optionSet = styleDataElement.optionSet;
+    if (styleDataItem) {
+        const optionSet = styleDataItem.optionSet;
 
         if (optionSet && optionSet.options) {
             legend.items = Object.keys(optionSet.options).map(option => ({

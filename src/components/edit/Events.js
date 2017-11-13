@@ -45,7 +45,7 @@ const styles = {
         float: 'left',
     },
     cluster: {
-        height: 150,
+        margin: -12,
     },
     colorRadius: {
         clear: 'both',
@@ -67,12 +67,12 @@ const styles = {
     radius: {
         display: 'block',
         float: 'left',
-        width: 54,
+        width: 64,
     },
     dataItemSelect: {
         width: '100%',
         top: -16,
-    }
+    },
 };
 
 class EventDialog extends Component {

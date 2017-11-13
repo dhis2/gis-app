@@ -20,11 +20,11 @@ const defaultOverlays = [{
         dimension: 'qrur9Dvnyt5',
         name: 'Age in years',
         filter: 'LT:50'
-    },{
+    }/*,{
         dimension: "SWfdB5lX0fk",
         name: "Pregnant",
         filter: "IN:1"
-    }],
+    }*/],
     rows: [{
         dimension: 'ou',
         items: [{
@@ -40,7 +40,7 @@ const defaultOverlays = [{
     }],
     startDate: '2016-08-29',
     endDate: '2017-08-29',
-    eventClustering: true,
+    eventClustering: false,
     eventPointColor: '#333333',
     eventPointRadius: 6,
     editCounter: 1,

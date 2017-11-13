@@ -30,14 +30,14 @@ export const changeFilter = (index, filter) => ({
 });
 
 // Set data element used for styling (event layer)
-export const setStyleDataElement = (dataElement) => ({
-    type: types.LAYER_EDIT_STYLE_DATA_ELEMENT_SET,
-    dataElement,
+export const setStyleDataItem = (dataItem) => ({
+    type: types.LAYER_EDIT_STYLE_DATA_ITEM_SET,
+    dataItem,
 });
 
 // Set options for style data element with option set (options are loaded separately) (event layer)
 export const setStyleOptions = (options) => ({
-    type: types.LAYER_EDIT_STYLE_DATA_ELEMENT_OPTIONS_SET,
+    type: types.LAYER_EDIT_STYLE_DATA_ITEM_OPTIONS_SET,
     options,
 });
 

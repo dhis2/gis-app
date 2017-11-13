@@ -112,20 +112,20 @@ const layerEdit = (state = null, action) => {
                 ]
             };
 
-        case types.LAYER_EDIT_STYLE_DATA_ELEMENT_SET:
+        case types.LAYER_EDIT_STYLE_DATA_ITEM_SET:
             return {
                 ...state,
-                styleDataElement: action.dataElement,
+                styleDataItem: action.dataItem,
             };
 
         // Set options to data element option set
-        case types.LAYER_EDIT_STYLE_DATA_ELEMENT_OPTIONS_SET:
+        case types.LAYER_EDIT_STYLE_DATA_ITEM_OPTIONS_SET:
             return {
                 ...state,
-                styleDataElement: {
-                    ...state.styleDataElement,
+                styleDataItem: {
+                    ...state.styleDataItem,
                     optionSet: {
-                        ...state.styleDataElement.optionSet,
+                        ...state.styleDataItem.optionSet,
                         options: action.options,
                     },
                 },

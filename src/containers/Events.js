@@ -5,7 +5,7 @@ import { loadOptionSet } from '../actions/optionSets';
 import {
     setProgram,
     setProgramStage,
-    setStyleDataElement,
+    setStyleDataItem,
     setEventCoordinateField,
     setEventClustering,
     setEventPointColor,
@@ -37,7 +37,7 @@ export default connect(
         loadOptionSet,
         setProgram,
         setProgramStage,
-        setStyleDataElement,
+        setStyleDataItem,
         setEventCoordinateField,
         setEventClustering,
         setEventPointColor,

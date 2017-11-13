@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import i18next from 'i18next';
 import RelativePeriodsSelect from '../../containers/RelativePeriodsSelect';
@@ -57,11 +57,7 @@ const PeriodSelect = ({ period, startDate, endDate, setRelativePeriod, setStartD
         : null)
     ];
 
-PeriodSelect.contextTypes = {
-    d2: PropTypes.object
-};
-
- PeriodSelect.propTypes = {
+PeriodSelect.propTypes = {
     period: PropTypes.string,
     startDate: PropTypes.string,
     endDate: PropTypes.string,

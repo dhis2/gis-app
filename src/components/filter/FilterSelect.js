@@ -74,7 +74,7 @@ const FilterSelect = ({ valueType, filter, optionSet, optionSets, loadOptionSet,
         operator = operators[0].id;
     }
 
-    console.log('valueType', valueType);
+    // console.log('valueType', valueType);
 
     return [
         (operators ?

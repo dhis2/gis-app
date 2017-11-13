@@ -10,8 +10,8 @@ import ProgramStageSelect from '../program/ProgramStageSelect';
 import PeriodSelect from '../../containers/PeriodSelect';
 import DataElementFilters from '../../containers/FilterGroup';
 import ImageSelect from '../d2-ui/ImageSelect';
-import DataElementSelect from '../dataitem/DataItemSelect';
-import DataElementStyle from '../dataitem/DataItemStyle';
+import DataItemSelect from '../dataitem/DataItemSelect';
+import DataItemStyle from '../dataitem/DataItemStyle';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnits from '../../containers/OrgUnits';
 
@@ -39,8 +39,9 @@ const styles = {
         borderLeft: '12px solid #fff',
         borderRight: '12px solid #fff',
     },
-    leftColumn: {
-        width: '40%',
+    column: {
+        width: 'calc(50% - 12px)',
+        padding: 12,
         float: 'left',
     },
     cluster: {
@@ -67,6 +68,10 @@ const styles = {
         display: 'block',
         float: 'left',
         width: 54,
+    },
+    dataItemSelect: {
+        width: '100%',
+        top: -16,
     }
 };
 
@@ -168,10 +173,10 @@ class EventDialog extends Component {
             eventClustering,
             eventPointColor,
             eventPointRadius,
-            styleDataElement,
+            styleDataItem,
             setProgram,
             setProgramStage,
-            setStyleDataElement,
+            setStyleDataItem,
             setEventCoordinateField,
             setEventClustering,
             setEventPointColor,
@@ -242,7 +247,7 @@ class EventDialog extends Component {
                 </Tab>
                 <Tab label={i18next.t('Style')}>
                     <div style={styles.content}>
-                        <div style={styles.leftColumn}>
+                        <div style={styles.column}>
                             <div style={styles.cluster}>
                                 <ImageSelect
                                     id='cluster'
@@ -276,20 +281,23 @@ class EventDialog extends Component {
                                 />
                             </div>
                         </div>
-                        {dataElements ?
-                            <DataElementSelect
-                                label={i18next.t('Style by data element')}
-                                items={dataItems}
-                                value={styleDataElement ? styleDataElement.id : null}
-                                onChange={setStyleDataElement}
-                            />
-                        : null}
-                        {styleDataElement ?
-                            <DataElementStyle
-                                {...styleDataElement}
-                                onChange={(code, color) => console.log('onStyleChange', code, color)}
-                            />
-                        : null}
+                        <div style={styles.column}>
+                            {dataElements ?
+                                <DataItemSelect
+                                    label={i18next.t('Style by data item')}
+                                    items={dataItems}
+                                    value={styleDataItem ? styleDataItem.id : null}
+                                    onChange={setStyleDataItem}
+                                    style={styles.dataItemSelect}
+                                />
+                            : null}
+                            {styleDataItem ?
+                                <DataItemStyle
+                                    {...styleDataItem}
+                                    onChange={(code, color) => console.log('onStyleChange', code, color)}
+                                />
+                            : null}
+                        </div>
                     </div>
                 </Tab>
             </Tabs>

@@ -5,10 +5,10 @@ import SelectField from 'd2-ui/lib/select-field/SelectField';
 import ColorScaleSelect from 'd2-ui/lib/legend/ColorScaleSelect.component';
 
 const classificationTypes = [{
-    id: 'intervals',
+    id: 2,
     name: 'Equal Intervals',
 }, {
-    id: 'quantile',
+    id: 3,
     name: 'Equal counts'
 }];
 
@@ -25,26 +25,26 @@ const styles = {
     },
 };
 
-const NumberStyle = ({ classification, classes }) => (
+const Classification = ({method, classes, colorScale, setClassification, setColorScale }) => (
     <div>
         <SelectField
             label={i18next.t('Classification')}
-            value={classification || classificationTypes[0].id}
+            value={method || 2}
             items={classificationTypes}
-            onChange={() => {}}
+            onChange={method =>setClassification(method.id)}
             style={styles.selectField}
         />
         <ColorScaleSelect
             label={i18next.t('Classes')}
-            onChange={() => {}}
+            onChange={colorScale => setColorScale(colorScale)}
             style={styles.colorScaleSelect}
             classesStyle={styles.classes}
         />
     </div>
 );
 
-NumberStyle.propTypes = {
+Classification.propTypes = {
 
 };
 
-export default NumberStyle;
+export default Classification;

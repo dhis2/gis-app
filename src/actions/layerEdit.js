@@ -41,6 +41,17 @@ export const setStyleOptions = (options) => ({
     options,
 });
 
+// Set classification style (method, classes, colorScale)
+export const setClassification = (method) => ({
+    type: types.LAYER_EDIT_CLASSIFICATION_SET,
+    method,
+});
+
+export const setColorScale = (colorScale) => ({
+    type: types.LAYER_EDIT_COLOR_SCALE_SET,
+    colorScale,
+});
+
 // Set coordinate field
 export const setEventCoordinateField = (fieldId) => ({
     type: types.LAYER_EDIT_EVENT_COORDINATE_FIELD_SET,

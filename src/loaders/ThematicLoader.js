@@ -1,7 +1,7 @@
 import { apiFetch } from '../util/api';
 import { toGeoJson } from '../util/map';
 import { arraySort } from '../util/array';
-import { classify, getColorsByRgbInterpolation } from '../util/thematic';
+import { classify, getColorsByRgbInterpolation } from '../util/classify';
 import isObject from 'd2-utilizr/lib/isObject';
 import isArray from 'd2-utilizr/lib/isArray';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
@@ -14,6 +14,9 @@ class ThematicLoader {
         this.layer = layer;
         this.callback = callback;
         this.dimConf = gis.conf.finals.dimension; // TODO
+
+
+        console.log('config', layer);
 
         this.load(layer);
     }

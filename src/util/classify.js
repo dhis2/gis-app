@@ -1,7 +1,96 @@
 // Utils for thematic mapping
 
+import curryRight from 'lodash/fp/curryRight';
+
+
+export const classify = (features, options) => {
+    const { method, classes, colorScale } = options;
+    const values = features.map(feature => Number(feature.properties.value)).sort((a, b) => a - b);
+    const bins = getClassBins(values, method, classes);
+    const getClassIndex = curryRight(getClass)(bins);
+
+    // console.log('bins', bins, getClassIndex(20));
+
+    if (bins.length) {
+       features.forEach(feature => {
+           feature.properties.color = colorScale[getClassIndex(feature.properties.value) - 1];
+           // console.log(feature.properties.value, getClassIndex(feature.properties.value), feature.properties.color);
+       });
+    }
+
+
+    console.log(bins);
+};
+
+
+
+// export function getClass()
+
+// Returns class number
+export function getClass(value, bins) {
+    if (value >= bins[0]) {
+        for (let i = 1; i < bins.length; i++) {
+            if (value < bins[i]) {
+                return i;
+            }
+        }
+        if (value === bins[bins.length - 1]) {
+            return bins.length - 1;
+        }
+    }
+
+    return null;
+}
+
+export const getClassBins = (values, method, numClasses) => {
+    const minValue = values[0];
+    const maxValue = values[values.length - 1];
+    let bins;
+
+    if (method === 2) { // Equal intervals - TODO: Use constant
+        bins = getEqualIntervals(minValue, maxValue, numClasses);
+    } else if (method === 3) { // Quantiles - TODO: Use constant
+        bins = getQuantiles(values, numClasses);
+    }
+
+    return bins;
+};
+
+export const getEqualIntervals = (minValue, maxValue, numClasses) => {
+    const bins = [];
+    const binSize = (maxValue - minValue) / numClasses;
+
+    for (let i = 0; i < numClasses; i++) {
+        bins.push(minValue + (i * binSize));
+    }
+
+    bins.push(maxValue);
+
+    return bins;
+};
+
+// Values had to be ordered!
+export const getQuantiles = (values, numClasses) => {
+    const minValue = values[0];
+    const maxValue = values[values.length - 1];
+    const bins = [];
+    const binCount = Math.round(values.length / numClasses);
+    let binLastValPos = (binCount === 0) ? 0 : binCount;
+
+    if (values.length > 0) {
+        bins[0] = minValue;
+        for (let i = 1; i < numClasses; i++) {
+            bins[i] = values[binLastValPos];
+            binLastValPos += binCount;
+        }
+        bins.push(maxValue);
+    }
+
+    return bins;
+};
+
 // Classify data
-export function classify(features, values, options, legend) {
+export function classify_old(features, values, options, legend) {
     const method = options.method;
     let bounds = [];
     let colors = [];
@@ -74,21 +163,7 @@ export function classify(features, values, options, legend) {
     }
 }
 
-// Returns class number
-export function getClass(value, bounds) {
-    if (value >= bounds[0]) {
-        for (let i = 1; i < bounds.length; i++) {
-            if (value < bounds[i]) {
-                return i;
-            }
-        }
-        if (value === bounds[bounds.length - 1]) {
-            return bounds.length - 1;
-        }
-    }
 
-    return null;
-}
 
 export function getColorsByRgbInterpolation(firstColor, lastColor, nbColors) {
     const colors = [];

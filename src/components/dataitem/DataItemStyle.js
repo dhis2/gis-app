@@ -1,17 +1,31 @@
 import React from 'react';
 import BooleanStyle from './BooleanStyle';
 import OptionSetStyle from '../../containers/OptionSetStyle';
-import NumberStyle from '../style/NumberStyle';
+import Classification from '../../containers/Classification';
 
 const style = {
     marginTop: -24,
 };
 
-const DataElementStyle = ({ id, valueType, name, optionSet }) => (
+const DataElementStyle = ({ method, classes, colorScale, id, valueType, name, optionSet }) => (
     <div style={style}>
-        {valueType === 'INTEGER' ? <NumberStyle /> : null}
-        {valueType === 'BOOLEAN' ? <BooleanStyle /> : null}
-        {optionSet ? <OptionSetStyle {...optionSet} /> : null}
+        {valueType === 'INTEGER' ?
+            <Classification
+                method={method}
+                classes={classes}
+                colorScale={colorScale}
+            />
+        : null}
+
+        {valueType === 'BOOLEAN' ?
+            <BooleanStyle />
+        : null}
+
+        {optionSet ?
+            <OptionSetStyle
+                {...optionSet}
+            />
+        : null}
     </div>
 );
 

@@ -16,11 +16,11 @@ const defaultOverlays = [{
         name: 'Single-Event Inpatient morbidity and mortality'
     },
 
-    columns: [{
+    columns: [/*{
         dimension: 'qrur9Dvnyt5',
         name: 'Age in years',
         filter: 'LT:50'
-    }/*,{
+    },{
         dimension: "SWfdB5lX0fk",
         name: "Pregnant",
         filter: "IN:1"

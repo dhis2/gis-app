@@ -6,6 +6,7 @@ const layerEdit = (state = null, action) => {
     let ouDim;
     let items;
     let newRows;
+    let newState;
 
     switch (action.type) {
 
@@ -120,7 +121,8 @@ const layerEdit = (state = null, action) => {
 
         // Set options to data element option set
         case types.LAYER_EDIT_STYLE_DATA_ITEM_OPTIONS_SET:
-            return {
+
+            newState = {
                 ...state,
                 styleDataItem: {
                     ...state.styleDataItem,
@@ -131,10 +133,41 @@ const layerEdit = (state = null, action) => {
                 },
             };
 
-            return state;
+            delete newState.method;
+            delete newState.classes;
+            delete newState.colorScale;
+
+            return newState;
+
+        case types.LAYER_EDIT_CLASSIFICATION_SET:
+            newState = {
+                ...state,
+                method: action.method,
+            };
+
+            if (newState.styleDataItem) {
+                delete newState.styleDataItem.optionSet;
+            }
+
+            return newState;
+
+
+        case types.LAYER_EDIT_COLOR_SCALE_SET:
+            newState = {
+                ...state,
+                colorScale: action.colorScale,
+                classes: action.colorScale.length,
+                method: state.method || 2, // TODO: Make constant
+            };
+
+            if (newState.styleDataItem) {
+                delete newState.styleDataItem.optionSet;
+            }
+
+            return newState;
 
         case types.LAYER_EDIT_EVENT_COORDINATE_FIELD_SET:
-            const newState = { ...state };
+            newState = { ...state };
 
             if (action.fieldId === 'event') { // Default
                 delete newState.eventCoordinateField;

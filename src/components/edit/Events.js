@@ -174,6 +174,9 @@ class EventDialog extends Component {
             eventPointColor,
             eventPointRadius,
             styleDataItem,
+            method,
+            classes,
+            colorScale,
             setProgram,
             setProgramStage,
             setStyleDataItem,
@@ -293,8 +296,10 @@ class EventDialog extends Component {
                             : null}
                             {styleDataItem ?
                                 <DataItemStyle
+                                    method={method}
+                                    classes={classes}
+                                    colorScale={colorScale}
                                     {...styleDataItem}
-                                    onChange={(code, color) => console.log('onStyleChange', code, color)}
                                 />
                             : null}
                         </div>

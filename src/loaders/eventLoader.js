@@ -3,6 +3,7 @@ import { getInstance as getD2 } from 'd2/lib/d2';
 import isString from 'd2-utilizr/lib/isString';
 import { isValidCoordinate } from '../util/map';
 import { getAnalyticsEvents } from '../util/helpers';
+import { getClassBins, getClass } from '../util/classify';
 
 // Look at: https://github.com/dhis2/maintenance-app/blob/master/src/App/appStateStore.js
 
@@ -15,8 +16,7 @@ const eventLoader = (config) =>
     .then(addStatus);
 
 const addEventClusterOptions = async (config) => {
-    console.log('event config', config);
-
+    // console.log('event config', config);
 
     const d2 = await getD2();
     const spatialSupport = d2.system.systemInfo.databaseInfo.spatialSupport;
@@ -36,6 +36,8 @@ const addEventClusterOptions = async (config) => {
     if (response.count > 2000) { // Server clustering if more than 2000 events
         config.serverCluster = true;
     }
+
+    config.legend = {};
 
     return config;
 };
@@ -59,7 +61,6 @@ const addEventData = async (config) => {
         return config;
     }
 
-    const d2 = await getD2();
     const analyticsEvents = await getAnalyticsEvents(config);
     const data = await analyticsEvents.getQuery();
 
@@ -84,35 +85,36 @@ const addEventData = async (config) => {
 };
 
 const addStyling = (config) => {
-    const { styleDataItem, data } = config;
-    let colorByOption;
+    const { method, classes, colorScale, styleDataItem, data, legend } = config;
 
-    // Color by option set
-    if (styleDataItem && styleDataItem.optionSet && styleDataItem.optionSet.options) {
-      colorByOption = styleDataItem.optionSet.options;
-    }
+    if (Array.isArray(data) && styleDataItem) {
+        // Set value to be styleDataItem
+        data.forEach(feature => feature.properties.value = feature.properties[styleDataItem.id]);
 
-    // console.log('colorByOption', colorByOption, styleDataItem);
+        // console.log(styleDataItem, method, classes, colorScale, data);
 
-    if (Array.isArray(data) && colorByOption) {
-        data.forEach(feature => {
-            // console.log(colorByOption[feature.properties[styleDataItem.id]], feature.properties[styleDataItem.id], feature.properties);
-            return feature.properties.color = colorByOption[feature.properties[styleDataItem.id]];
-          }
-        );
+        if (method && classes && colorScale) {
+            const values = data.map(feature => Number(feature.properties.value)).sort((a, b) => a - b);
+            const bins = getClassBins(values, method, classes);
+
+            data.forEach(feature => feature.properties.color = colorScale[getClass(feature.properties.value, bins) -1]);
+
+            console.log('data', data);
+
+            // classify(data, config);
+        } else if (styleDataItem.optionSet && styleDataItem.optionSet.options) { // Color by option set
+            data.forEach(feature => feature.properties.color = styleDataItem.optionSet.options[feature.properties.value]);
+        }
     }
 
     return config;
 };
 
 const addLegend = async (config) => {
-    const { eventPointRadius, eventPointColor, styleDataItem, columns, } = config;
+    const { legend, eventPointRadius, eventPointColor, styleDataItem, columns, } = config;
     const d2 = await getD2();
 
-    const legend = {
-        description: i18next.t('Period') + ': ',
-        items: []
-    };
+    legend.description = i18next.t('Period') + ': ';
 
     let legendItemName = ''; // TODO
 

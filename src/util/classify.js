@@ -27,20 +27,22 @@ export const classify = (features, options) => {
 // export function getClass()
 
 // Returns class number
-export function getClass(value, bins) {
+export const getClass = (value, bins) => {
     if (value >= bins[0]) {
         for (let i = 1; i < bins.length; i++) {
             if (value < bins[i]) {
                 return i;
             }
         }
+
+        // If value is the highest number, use the last bin index
         if (value === bins[bins.length - 1]) {
             return bins.length - 1;
         }
     }
 
     return null;
-}
+};
 
 export const getClassBins = (values, method, numClasses) => {
     const minValue = values[0];

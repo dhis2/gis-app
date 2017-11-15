@@ -12,27 +12,55 @@ const styles = {
         float: 'left',
         top: -8,
         marginRight: 24,
-        width: 'calc((100% - 48px) / 7)',
+        width: 'calc((100% - 48px) / 8 * 2)',
     },
     textField: {
         float: 'left',
         top: -8,
-        width: 'calc((100% - 48px) / 7 * 3)',
+        width: 'calc((100% - 48px) / 8 * 3)',
     },
     checkbox: {
         float: 'left',
         marginTop: 26,
         marginLeft: -4,
-        width: 'calc((100% - 48px) / 7 * 4)',
+        width: 'calc((100% - 48px) / 8 * 5)',
     },
     dateField: {
-        width: 'calc((100% - 48px) / 7 * 3)',
+        width: 'calc((100% - 48px) / 8 * 3)',
         top: -8,
     },
 };
 
 // https://react.rocks/example/react-redux-test
 // https://docs.dhis2.org/master/en/developer/html/webapi_metadata_object_filter.html
+
+/* Value Types: https://play.dhis2.org/demo/api/schemas/dataElement
+- TEXT
+- LONG_TEXT
+- LETTER
+- PHONE_NUMBER
+- EMAIL
+- BOOLEAN
+- TRUE_ONLY
+- DATE
+- DATETIME
+- TIME
+- NUMBER
+- UNIT_INTERVAL
+- PERCENTAGE
+- INTEGER
+- INTEGER_POSITIVE
+- INTEGER_NEGATIVE
+- INTEGER_ZERO_OR_POSITIVE
+- TRACKER_ASSOCIATE
+- USERNAME
+- FILE_RESOURCE
+- COORDINATE
+- ORGANISATION_UNIT
+- AGE
+- URL
+*/
+
 
 const FilterSelect = ({ valueType, filter, optionSet, optionSets, loadOptionSet, onChange }) => {
     let operators;
@@ -50,8 +78,8 @@ const FilterSelect = ({ valueType, filter, optionSet, optionSets, loadOptionSet,
         ];
     } else if (optionSet) {
         operators = [
-            { id: 'IN', name: i18next.t('is') },
-            { id: '!IN', name: i18next.t('is_not') },
+            { id: 'IN', name: i18next.t('one of') },
+            { id: '!IN', name: i18next.t('not one of') },
         ];
     } else if (['TEXT', 'LONG_TEXT'].includes(valueType)) {
         operators = [
@@ -83,7 +111,7 @@ const FilterSelect = ({ valueType, filter, optionSet, optionSets, loadOptionSet,
                 label={i18next.t('Operator')}
                 items={operators}
                 value={operator}
-                onChange={newOperator => onChange(`${newOperator.id}:${value}`)}
+                onChange={newOperator => onChange(`${newOperator.id}:${value ? value : ''}`)}
                 style={styles.operator}
             />
         : null),

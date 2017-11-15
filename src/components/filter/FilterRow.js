@@ -19,7 +19,7 @@ const styles = {
         top: -8,
         marginRight: 24,
         float: 'left',
-        width: 'calc((100% - 48px) / 7 * 3)',
+        width: 'calc((100% - 48px) / 8 * 3)',
     },
     removeBtn: {
         position: 'absolute',

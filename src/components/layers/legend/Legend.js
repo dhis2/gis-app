@@ -3,10 +3,16 @@ import PropTypes from 'prop-types';
 import LegendItem from './LegendItem';
 import './Legend.css';
 
-const Legend = ({ description, unit, items, source, sourceUrl, attribution }) => (
+const Legend = ({ description, period, filters, unit, items, source, sourceUrl, attribution }) => (
     <dl className='Legend'>
-        {description  &&
+        {description &&
             <div className='Legend-description'>{description}</div>
+        }
+        {period &&
+            <div className='Legend-period'>{period}</div>
+        }
+        {filters &&
+            <div className='Legend-filters'>{filters.join(', ')}</div>
         }
         {unit && items &&
             <div className='Legend-unit'>{unit}</div>

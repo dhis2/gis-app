@@ -39,6 +39,7 @@ const webpackConfig = {
     output: {
         path: __dirname + '/build',
         filename: 'maps-app.js',
+        chunkFilename: '[name].bundle.js',
         publicPath: isDevBuild ? 'http://localhost:8082/' : './',
     },
     module: {

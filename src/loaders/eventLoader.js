@@ -4,20 +4,41 @@ import isString from 'd2-utilizr/lib/isString';
 import { isValidCoordinate } from '../util/map';
 import { getAnalyticsEvents } from '../util/helpers';
 import { getClassBins, getClass } from '../util/classify';
+import { getNumericLegendItems, getCategoryLegendItems } from '../util/legend';
+import {
+    getFiltersFromColumns,
+    getFiltersAsText,
+    getPeriodNameFromFilters,
+} from '../util/analytics';
 
 // Look at: https://github.com/dhis2/maintenance-app/blob/master/src/App/appStateStore.js
 
 const eventLoader = (config) =>
-  addEventClusterOptions(config)
+  addEventClusterOptions(initialize(config))
     .then(addStyleDataItem)
     .then(addEventData)
     .then(addStyling)
     .then(addLegend)
     .then(addStatus);
 
-const addEventClusterOptions = async (config) => {
-    // console.log('event config', config);
+const initialize = (config) => {
+    const period = getPeriodNameFromFilters(config.filters) || `${config.startDate} - ${config.endDate}`;
+    const filters = getFiltersFromColumns(config.columns);
+    const legend = {
+        period: `${i18next.t('Period')}: ${period}`,
+    };
 
+    if (filters) {
+        legend.filters = getFiltersAsText(filters);
+    }
+
+    return {
+        ...config,
+        legend,
+    };
+};
+
+const addEventClusterOptions = async (config) => {
     const d2 = await getD2();
     const spatialSupport = d2.system.systemInfo.databaseInfo.spatialSupport;
 
@@ -36,8 +57,6 @@ const addEventClusterOptions = async (config) => {
     if (response.count > 2000) { // Server clustering if more than 2000 events
         config.serverCluster = true;
     }
-
-    config.legend = {};
 
     return config;
 };
@@ -85,25 +104,40 @@ const addEventData = async (config) => {
 };
 
 const addStyling = (config) => {
-    const { method, classes, colorScale, styleDataItem, data, legend } = config;
+    const { method, classes, colorScale, styleDataItem, data, legend, eventPointColor, eventPointRadius } = config;
+    const hasData = Array.isArray(data) && data.length;
+    const styleByNumeric = method && classes && colorScale;
+    const styleByOptionSet = styleDataItem && styleDataItem.optionSet && styleDataItem.optionSet.options;
 
-    if (Array.isArray(data) && styleDataItem) {
-        // Set value to be styleDataItem
-        data.forEach(feature => feature.properties.value = feature.properties[styleDataItem.id]);
+    if (hasData) {
+        if (styleDataItem) {
+            // Set value property to value of styleDataItem
+            data.forEach(feature => feature.properties.value = feature.properties[styleDataItem.id]);
+            legend.unit = styleDataItem.name;
 
-        // console.log(styleDataItem, method, classes, colorScale, data);
+            if (styleByNumeric) {
+                const values = data.map(feature => Number(feature.properties.value)).sort((a, b) => a - b);
+                const bins = getClassBins(values, method, classes);
 
-        if (method && classes && colorScale) {
-            const values = data.map(feature => Number(feature.properties.value)).sort((a, b) => a - b);
-            const bins = getClassBins(values, method, classes);
+                data.forEach(feature => feature.properties.color = colorScale[getClass(Number(feature.properties.value), bins) - 1]);
+                legend.items = getNumericLegendItems(bins, colorScale, eventPointRadius);
+            } else if (styleByOptionSet) {
+                data.forEach(feature => feature.properties.color = styleDataItem.optionSet.options[feature.properties.value]);
+                legend.items = getCategoryLegendItems(styleDataItem.optionSet.options, eventPointRadius);
+            }
 
-            data.forEach(feature => feature.properties.color = colorScale[getClass(feature.properties.value, bins) -1]);
-
-            console.log('data', data);
-
-            // classify(data, config);
-        } else if (styleDataItem.optionSet && styleDataItem.optionSet.options) { // Color by option set
-            data.forEach(feature => feature.properties.color = styleDataItem.optionSet.options[feature.properties.value]);
+            legend.items.push({
+                name: i18next.t('Not set'),
+                color: eventPointColor,
+                radius: eventPointRadius,
+            });
+        } else { // Simple style
+            legend.items = [{
+                // name: legendItemName || i18next.t('Event'),
+                name: i18next.t('Event'),
+                color: eventPointColor,
+                radius: eventPointRadius,
+            }];
         }
     }
 
@@ -114,9 +148,11 @@ const addLegend = async (config) => {
     const { legend, eventPointRadius, eventPointColor, styleDataItem, columns, } = config;
     const d2 = await getD2();
 
-    legend.description = i18next.t('Period') + ': ';
 
-    let legendItemName = ''; // TODO
+    // legend.items = legend.items || [];
+
+
+    // let legendItemName = ''; // TODO
 
     /*
     if (columns) {
@@ -137,6 +173,7 @@ const addLegend = async (config) => {
     }
     */
 
+    /*
     if (styleDataItem) {
         const optionSet = styleDataItem.optionSet;
 
@@ -160,6 +197,7 @@ const addLegend = async (config) => {
             name: legendItemName || i18next.t('Event'),
         });
     }
+    */
 
     config.legend = legend;
 

@@ -4,7 +4,7 @@ import isArray from 'd2-utilizr/lib/isArray';
 // Fetch favorite
 export function fetchFavorite(id) {
     const fields = gis.conf.url.mapFields.join(','); // TODO
-    return apiFetch(`maps/${id}.json?fields=${fields}`).then(res => res.json());
+    return apiFetch(`maps/${id}.json?fields=${fields}`);
 }
 
 // Parse favorite (can be removed if we change the format on the server)
@@ -13,7 +13,7 @@ export function parseFavorite({id, name, basemap, mapViews, user}) { // TODO: Ad
         id,
         name,
         user,
-        basemap
+        basemap,
     };
 
     if (isArray(mapViews)) {

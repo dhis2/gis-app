@@ -15,7 +15,22 @@ export const getAnalyticsEvents = async (config) => {
     const d2 = await getD2();
     const { program, programStage, rows, columns, filters, startDate, endDate, eventCoordinateField } = config;
 
+    /*
     const analyticsEvents = d2.analytics.events
+        .setProgram(program.id)
+        .addParameters({
+            stage: programStage.id,
+            coordinatesOnly: true,
+        });
+    */
+
+    // TODO: Temp solution to clear dimension and filters
+    const analyticsEvents = d2.analytics.events;
+
+    analyticsEvents.dimensions = [];
+    analyticsEvents.filters = [];
+
+    analyticsEvents
         .setProgram(program.id)
         .addParameters({
             stage: programStage.id,

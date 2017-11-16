@@ -119,7 +119,8 @@ const webpackConfig = {
             template: 'index.html',
             vendorScripts: [
                 "polyfill.min.js",
-                // `${scriptPrefix}/dhis-web-core-resource/react-16/react-16${isDevBuild ? '' : '.min'}.js`,
+                `${scriptPrefix}/dhis-web-core-resource/react/16.1.1/umd/react.${isDevBuild ? 'development' : 'production.min'}.js`,
+                `${scriptPrefix}/dhis-web-core-resource/react-dom/16.1.1/umd/react-dom.${isDevBuild ? 'development' : 'production.min'}.js`,
                 `${scriptPrefix}/dhis-web-core-resource/rxjs/4.1.0/rx.all${isDevBuild ? '' : '.min'}.js`,
                 `${scriptPrefix}/dhis-web-core-resource/lodash/4.15.0/lodash${isDevBuild ? '' : '.min'}.js`,
             ]

@@ -36,7 +36,7 @@ class Layer extends PureComponent {
     }
 
     componentDidUpdate(prev) {
-        const { id, index, opacity, isVisible, editCounter } = this.props;
+        const { id, index, opacity, isVisible, editCounter, data } = this.props;
         const map = this.context.map;
 
         // Create new map if new id of editCounter is increased

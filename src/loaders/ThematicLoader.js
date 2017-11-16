@@ -16,7 +16,7 @@ class ThematicLoader {
         this.dimConf = gis.conf.finals.dimension; // TODO
 
 
-        console.log('config', layer);
+        console.log('ThematicLoader', layer);
 
         this.load(layer);
     }

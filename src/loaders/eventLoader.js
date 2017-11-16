@@ -18,14 +18,12 @@ const eventLoader = (config) =>
     .then(addStyleDataItem)
     .then(addEventData)
     .then(addStyling)
-    .then(addLegend)
     .then(addStatus);
 
 const initialize = (config) => {
-    const period = getPeriodNameFromFilters(config.filters) || `${config.startDate} - ${config.endDate}`;
     const filters = getFiltersFromColumns(config.columns);
     const legend = {
-        period: `${i18next.t('Period')}: ${period}`,
+        period: getPeriodNameFromFilters(config.filters) || `${config.startDate} - ${config.endDate}`
     };
 
     if (filters) {
@@ -34,6 +32,7 @@ const initialize = (config) => {
 
     return {
         ...config,
+        title: config.programStage.name,
         legend,
     };
 };
@@ -133,73 +132,12 @@ const addStyling = (config) => {
             });
         } else { // Simple style
             legend.items = [{
-                // name: legendItemName || i18next.t('Event'),
                 name: i18next.t('Event'),
                 color: eventPointColor,
                 radius: eventPointRadius,
             }];
         }
     }
-
-    return config;
-};
-
-const addLegend = async (config) => {
-    const { legend, eventPointRadius, eventPointColor, styleDataItem, columns, } = config;
-    const d2 = await getD2();
-
-
-    // legend.items = legend.items || [];
-
-
-    // let legendItemName = ''; // TODO
-
-    /*
-    if (columns) {
-        columns.forEach(element => {
-                if (element.filter) {
-                    const filter = element.filter.split(':');
-                    const type = filterTypes[filter[0]];
-                    const items = filter[1].split(';').join(', ');
-
-                    // const filter = filters[element.filter.split(':')[0]];
-
-                    legendItemName += element.name + ' ' + type + ' ' + items;
-                }
-
-
-            }
-        });
-    }
-    */
-
-    /*
-    if (styleDataItem) {
-        const optionSet = styleDataItem.optionSet;
-
-        if (optionSet && optionSet.options) {
-            legend.items = Object.keys(optionSet.options).map(option => ({
-                name: option,
-                color: optionSet.options[option],
-                radius: eventPointRadius,
-            }));
-
-            legend.items.push({
-                radius: eventPointRadius,
-                color: eventPointColor,
-                name: i18next.t('Other')
-            });
-        }
-    } else {
-        legend.items.push({
-            radius: eventPointRadius,
-            color: eventPointColor,
-            name: legendItemName || i18next.t('Event'),
-        });
-    }
-    */
-
-    config.legend = legend;
 
     return config;
 };

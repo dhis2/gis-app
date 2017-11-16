@@ -34,7 +34,7 @@ export function fetchOverlay(layer) {
 
     return new Promise((resolve, reject) => {
         if (Loader) {
-            if (layer.type === 'thematic') { // TODO: Remove check when all loaders are classes
+            if (layer.type === 'thematic') {
                 new Loader(layer, config => parseOverlay(config, resolve));
             } else {
                 Loader(layer, config => parseOverlay(config, resolve));

@@ -43,17 +43,6 @@ const defaultOverlays = [{
     eventClustering: false,
     eventPointColor: '#333333',
     eventPointRadius: 6,
-    editCounter: 1,
-    /*
-     legend: {
-     description: 'Period: 2016-08-29 – 2017-08-29',
-     items: [{
-     radius: 6,
-     color: '#333333',
-     name: 'Event'
-     }]
-     }
-     */
 },{
     type: 'facility',
     preview: true,

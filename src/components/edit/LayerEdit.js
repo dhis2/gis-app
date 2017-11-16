@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
+import i18next from 'i18next';
 import Button from 'd2-ui/lib/button/Button';
 import WidgetWindow from '../../app/WidgetWindow';
 import Events from '../../containers/Events';
@@ -30,29 +31,35 @@ const styles = {
 class LayerEdit extends Component {
 
     componentDidUpdate(prevProps) {
-        const props = this.props;
+        const { layer, getOverlay } = this.props;
 
-        if (props.layer) {
-            const layer = {...props.layer};
-            let id = layer.id;
+        // console.log('componentDidUpdate');
+
+        /*
+        if (layer) {
+            const config = { ...layer };
+            let id = config.id;
 
             if (!id) { // New layer
+                // console.log('new layer');
                 id = 'overlay-' + nextOverlayId++;
-                layer.id = id;
-                layer.isNew = true;
+                config.id = id;
+                config.isNew = true;
                 // layer.isLoaded = false;
             } else {
-                layer.isNew = false;
+                // console.log('edit layer');
+
+                config.isNew = false;
             }
 
-            if (layer.type === 'external') { // External layers has no edit widget
-                layer.editCounter = 1;
-                props.getOverlay(layer);
-            } else  if (!layer.preview) { // TODO
+            if (config.type === 'external') { // External layers has no edit widget
+                config.editCounter = 1;
+                getOverlay(config);
+            } else  if (!config.preview) { // TODO
                 if (!widgets[id]) {
                     editCounter[id] = 0;
 
-                    widgets[id] = WidgetWindow(gis, layer, (editedLayer) => {
+                    widgets[id] = WidgetWindow(gis, config, (editedLayer) => {
                         editedLayer.isLoaded = false;
 
                         editedLayer.editCounter = ++editCounter[editedLayer.id];
@@ -63,35 +70,45 @@ class LayerEdit extends Component {
 
                         // console.log('editedLayer', JSON.stringify(editedLayer));
 
-                        props.getOverlay(editedLayer);
+                        getOverlay(editedLayer);
                     });
 
-                    if (layer.isLoaded) { // Loaded as favorite
+                    if (config.isLoaded) { // Loaded as favorite
                         widgets[id].show();
                         editCounter[id]++;
-                        widgets[id].setLayer(layer);
+                        widgets[id].setLayer(config);
                     }
                 } else {
-                    layer.isNew = false;
+                    config.isNew = false;
                 }
 
                 widgets[id].show();
             }
         }
+        */
     }
 
     addLayer() {
-        const layer = {
-            ...this.props.layer,
-            id: 'overlay-' + nextOverlayId++, // TODO
-            isNew: true,
+        const { layer, getOverlay } = this.props;
+
+        const config = {
+            ...layer,
+            id: 'overlay-' + nextOverlayId++,
             isLoaded: false,
-            editCounter: 1
         };
 
-        // console.log('getOverlay', layer);
+        getOverlay(config);
+        this.closeDialog();
+    }
 
-        this.props.getOverlay(layer);
+    updateLayer() {
+        const { layer, getOverlay } = this.props;
+
+        getOverlay({
+            ...layer,
+            isLoaded: false,
+        });
+
         this.closeDialog();
     }
 
@@ -104,17 +121,16 @@ class LayerEdit extends Component {
         // console.log('onLayerChange', config);
     }
 
-    // React rendering will happen here later :-)
     render() {
-        const layer = this.props.layer;
+        const config = this.props.layer;
 
-        if (!layer || !layer.preview) {
+        if (!config || !config.preview) {
             return null;
         }
 
         return (
             <Dialog
-                title={layer.title} // TODO: i18n
+                title={config.title} // TODO: i18n
                 bodyStyle={styles.body}
                 titleStyle={styles.title}
                 open={true}
@@ -123,18 +139,26 @@ class LayerEdit extends Component {
                         color='primary'
                         onClick={() => this.closeDialog()}
                         selector='cancel'
-                    >Cancel</Button>,
-                    <Button
-                        color='primary'
-                        onClick={() => this.addLayer()}
-                        selector='add'
-                    >Add layer</Button>
+                    >{i18next.t('Cancel')}</Button>,
+                    (config.editCounter ?
+                        <Button
+                            color='primary'
+                            onClick={() => this.updateLayer()}
+                            selector='update'
+                        >{i18next.t('Update layer')}</Button>
+                    :
+                        <Button
+                            color='primary'
+                            onClick={() => this.addLayer()}
+                            selector='add'
+                        >{i18next.t('Add layer')}</Button>
+                    )
                 ]}
             >
-                {layer.type === 'event' ? <Events {...layer} /> : null}
-                {layer.type === 'facility' ? <Facilities {...layer} /> : null}
-                {layer.type === 'thematic' ? <Thematic {...layer} /> : null}
-                {layer.type === 'boundary' ? <Boundaries {...layer} /> : null}
+                {config.type === 'event' ? <Events {...config} /> : null}
+                {config.type === 'facility' ? <Facilities {...config} /> : null}
+                {config.type === 'thematic' ? <Thematic {...config} /> : null}
+                {config.type === 'boundary' ? <Boundaries {...config} /> : null}
             </Dialog>
         );
     }

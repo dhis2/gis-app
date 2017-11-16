@@ -7,7 +7,7 @@ const OverlayList = ({ overlays, onLayerSelect }) => (
     <div className='OverlayList'>
         {overlays.map((overlay, index) => (
             <Overlay
-                key={`basemap-${index}`}
+                key={`overlay-${index}`}
                 onClick={onLayerSelect}
                 overlay={overlay}
             />

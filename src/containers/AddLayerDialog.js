@@ -10,9 +10,13 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     onRequestClose: () => dispatch(closeOverlaysDialog()),
     onLayerSelect: layer => {
+
         // console.log('###', layer);
         dispatch(closeOverlaysDialog());
-        dispatch(editOverlay({...layer}));
+        dispatch(editOverlay({
+            ...layer,
+            editCounter: 0,
+        }));
     },
 });
 

@@ -1,13 +1,240 @@
+import i18next from 'i18next';
+import { getInstance as getD2 } from 'd2/lib/d2';
 import { apiFetch } from '../util/api';
 import { toGeoJson } from '../util/map';
-import { arraySort } from '../util/array';
-import { classify, getColorsByRgbInterpolation } from '../util/classify';
-import isObject from 'd2-utilizr/lib/isObject';
-import isArray from 'd2-utilizr/lib/isArray';
-import arrayFrom from 'd2-utilizr/lib/arrayFrom';
-import arrayClean from 'd2-utilizr/lib/arrayClean';
-import { getInstance as getD2 } from 'd2/lib/d2';
+import { getClass } from '../util/classify';
 
+import {
+    loadLegendSet,
+    getBinsFromLegendItems,
+    getColorScaleFromLegendItems,
+    getLabelsFromLegendItems,
+} from '../util/legend';
+
+import {
+    getOrgUnitsFromRows,
+    getPeriodsFromFilters,
+    getDataItemsFromColumns,
+    getDisplayProperty,
+    getDimensionIndexFromHeaders,
+} from '../util/analytics';
+
+const thematicLoader = (config) =>
+    initialize(config)
+      .then(addData)
+      .then(addStatus);
+
+const initialize = async (config) => { // To return a promise
+
+    // console.log('thematic loader', config);
+
+    return {
+      ...config,
+    };
+};
+
+
+const addData = async (config) => {
+    const {
+        rows,
+        columns,
+        filters,
+        displayProperty,
+        userOrgUnit,
+        valueType,
+        relativePeriodDate,
+        aggregationType,
+        legendSet,
+    } = config;
+
+    const d2 = await getD2();
+    const orgUnits = getOrgUnitsFromRows(rows);
+    const periods = getPeriodsFromFilters(filters);
+    const dataItems = getDataItemsFromColumns(columns); // dx dimension
+    const isOperand = columns[0].dimension === gis.conf.finals.dimension.operand.objectName; // TODO
+    const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty; // TODO
+    const displayProppertyUpper = getDisplayProperty(displayProperty).toUpperCase();
+
+    /*
+    const analyticsData = d2.analytics.aggregate
+      .addFilter('pe:' + periods[0].id);
+    */
+
+    let orgUnitParams = orgUnits.map(item => item.id);
+    let dataParams = '?dimension=ou:' + orgUnits.map(item => item.id).join(';');
+
+    if (Array.isArray(userOrgUnit) && userOrgUnit.length) {
+        dataParams += '&userOrgUnit=' + userOrgUnit.join(';');
+        orgUnitParams += '&userOrgUnit=' + userOrgUnit.join(';');
+    }
+
+    dataParams += '&dimension=dx:' + dataItems.map(item => isOperand ? item.id.split('.')[0] : item.id).join(';');
+
+    if (valueType === 'ds') {
+        dataParams += '.REPORTING_RATE';
+    }
+
+    dataParams += isOperand ? '&dimension=co' : '';
+    dataParams += '&filter=pe:' + periods.map(item => item.id).join(';');
+    dataParams += '&displayProperty=' + displayProppertyUpper;
+
+    if (relativePeriodDate) {
+        dataParams += '&relativePeriodDate=' + relativePeriodDate;
+    }
+
+    if (aggregationType) {
+        dataParams += '&aggregationType=' + aggregationType;
+    }
+
+    const orgUnitReq = d2.geoFeatures
+      .byOrgUnit(orgUnitParams)
+      .displayProperty(displayProppertyUpper)
+      .getAll();
+
+    const dataReq = apiFetch(`analytics.json${dataParams}`);
+
+    // Load data from API
+    const data = await Promise.all([orgUnitReq, dataReq]);
+    const features = toGeoJson(data[0], 'ASC');
+    const analyticsData = data[1];
+    const metaData = analyticsData.metaData;
+    const headers = analyticsData.headers;
+    const aggregationTypeLower = aggregationType ? i18next.t(aggregationType).toLowerCase() : '';
+    const ouIndex = getDimensionIndexFromHeaders(headers, 'organisationUnit');
+    const valueIndex = getDimensionIndexFromHeaders(headers, 'value');
+    const featureMap = {};
+    const valueMap = {};
+    const valueFeatures = []; // only include features with values
+    const values = []; // to find min and max values
+
+    // Feature map
+    features.forEach(feature => {
+        featureMap[feature.id] = true;
+    });
+
+    // Value map
+    analyticsData.rows.forEach(row => {
+        valueMap[row[ouIndex]] = parseFloat(row[valueIndex]);
+    });
+
+    features.forEach(feature => {
+        const id = feature.id;
+
+        if (featureMap.hasOwnProperty(id) && valueMap.hasOwnProperty(id)) {
+            feature.properties.value = valueMap[id];
+            feature.properties.aggregationType = aggregationTypeLower;
+            valueFeatures.push(feature);
+            values.push(valueMap[id]);
+        }
+    });
+
+    // Sort values in ascending order
+    values.sort((a, b) => a - b);
+
+    if (legendSet) { // Pre-defined legend set
+        const legend = await loadLegendSet(legendSet);
+        const legendItems = legend.legends;
+        const bins = getBinsFromLegendItems(legendItems);
+        const colorScale = getColorScaleFromLegendItems(legendItems);
+        const labels = getLabelsFromLegendItems(legendItems);
+
+        // console.log('labels', labels, legendItems);
+        // console.log('gis.conf.finals.widget.value', gis.conf.finals.widget.value, valueFeatures[0]);
+
+        valueFeatures.forEach(feature => {
+            const prop = feature.properties;
+            const value = prop.value; // TODO prev: gis.conf.finals.widget.value
+            const classNumber = getClass(value, bins);
+            prop.color = colorScale[classNumber];
+            console.log(value, classNumber, prop.color);
+        });
+
+
+        /*
+        prop = features[i].properties;
+        value = prop[options.indicator];
+        classNumber = getClass(value, bounds);
+        legendItem = legend.items[classNumber - 1];
+
+        prop.color = options.colors[classNumber - 1];
+        prop.radius = (value - options.minValue) / (options.maxValue - options.minValue) * (options.maxSize - options.minSize) + options.minSize;
+        prop.legend = legendItem.name;
+
+        // Count features in each class
+        if (!options.count[classNumber]) {
+          options.count[classNumber] = 1;
+        } else {
+          options.count[classNumber]++;
+        }
+        */
+
+
+
+
+    } else { // Custom legend
+        const elementMap = {
+            'in': 'indicators',
+            'de': 'dataElements',
+            'ds': 'dataSets'
+        };
+
+        const elementUrl = elementMap[columns[0].objectName];
+        const id = columns[0].items[0].id;
+
+        /*
+        if (!elementUrl) {
+            this.createLegend();
+            return;
+        }
+        */
+
+        // TODO: Not sure why this is needed
+        /*
+        apiFetch(`${elementUrl}.json?fields=legendSet[id,displayName~rename(name)]&paging=false&filter=id:eq:${id}`)
+          .then(data => {
+              const elements = data[elementUrl];
+              let set;
+
+              if (arrayFrom(elements).length) {
+                set = isObject(elements[0]) ? elements[0].legendSet || null : null;
+              }
+
+              if (set) {
+                layer.legendSet = set;
+                this.loadLegendSet();
+              } else {
+                this.createLegend();
+              }
+          });
+        */
+    }
+
+    console.log('Create legend');
+
+    config.data = valueFeatures;
+    // config.isLoaded = true;
+
+
+    return config;
+};
+
+
+const addStatus = (config) => {
+  config.isLoaded = true;
+  config.isExpanded = true;
+  config.isVisible = true;
+
+  console.log('status!!', config);
+
+  return config;
+};
+
+
+export default thematicLoader;
+
+
+
+/*
 class ThematicLoader {
 
     constructor(layer, callback) {
@@ -39,11 +266,10 @@ class ThematicLoader {
         // let orgUnitParams = '?ou=ou:' + orgUnits.map(item => item.id).join(';') + '&displayProperty=' + displayProperty.toUpperCase();
         const orgUnitParams = orgUnits.map(item => item.id);
 
-        /* Seems to be not in use
-        if (isArray(layer.userOrgUnit) && layer.userOrgUnit.length) {
-            orgUnitParams += '&userOrgUnit=' + layer.userOrgUnit.join(';');
-        }
-        */
+        // Seems to be not in use
+        // if (isArray(layer.userOrgUnit) && layer.userOrgUnit.length) {
+        //     orgUnitParams += '&userOrgUnit=' + layer.userOrgUnit.join(';');
+        // }
 
         // ou
         let dataParams = '?dimension=ou:' + ouItems.map(item => item.id).join(';');
@@ -117,12 +343,11 @@ class ThematicLoader {
         let valueIndex;
 
         if (!data) {
-            /* TODO
-             if (gis.mask) {
-             gis.mask.hide();
-             }
-             */
-            return;
+            // TODO
+            // if (gis.mask) {
+            // gis.mask.hide();
+            // }
+            // return;
         }
 
         // ou index, value index
@@ -410,3 +635,4 @@ class ThematicLoader {
 }
 
 export default ThematicLoader;
+*/

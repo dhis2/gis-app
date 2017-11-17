@@ -1,6 +1,6 @@
 import eventLoader from './eventLoader';
 import facilityLoader from './facilityLoader';
-import ThematicLoader from './ThematicLoader';
+import thematicLoader from './thematicLoader';
 import boundaryLoader from './boundaryLoader';
 import earthEngineLoader from './earthEngineLoader';
 import externalLoader from './externalLoader';
@@ -8,7 +8,7 @@ import externalLoader from './externalLoader';
 const layerType = {
     event: eventLoader,
     facility: facilityLoader,
-    thematic: ThematicLoader,
+    thematic: thematicLoader,
     boundary: boundaryLoader,
     earthEngine: earthEngineLoader,
     external: externalLoader,
@@ -28,7 +28,7 @@ function parseOverlay(layer, callback) {
 export function fetchOverlay(layer) {
     const Loader = layerType[layer.type];
 
-    if (layer.type === 'event' || layer.type === 'facility') {
+    if (layer.type === 'event' || layer.type === 'facility' || layer.type === 'thematic') {
         return Loader(layer);
     }
 

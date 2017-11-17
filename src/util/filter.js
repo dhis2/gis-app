@@ -3,6 +3,10 @@ import isString from 'd2-utilizr/lib/isString';
 
 // Filters an array of object with a set of filters
 export const filterData = (data, filters) => {
+    if (!filters) {
+        return data;
+    }
+
     const fieldIds = Object.keys(filters);
     let filteredData = [...data];
 

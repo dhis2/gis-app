@@ -4,7 +4,10 @@ import isString from 'd2-utilizr/lib/isString';
 import { isValidCoordinate } from '../util/map';
 import { getAnalyticsEvents } from '../util/helpers';
 import { getClassBins, getClass } from '../util/classify';
-import { getNumericLegendItems, getCategoryLegendItems } from '../util/legend';
+import {
+    getNumericLegendItems,
+    getCategoryLegendItems,
+} from '../util/legend';
 import {
     getFiltersFromColumns,
     getFiltersAsText,
@@ -14,13 +17,14 @@ import {
 // Look at: https://github.com/dhis2/maintenance-app/blob/master/src/App/appStateStore.js
 
 const eventLoader = (config) =>
-  addEventClusterOptions(initialize(config))
+  initialize(config)
+    .then(addEventClusterOptions)
     .then(addStyleDataItem)
     .then(addEventData)
     .then(addStyling)
     .then(addStatus);
 
-const initialize = (config) => {
+const initialize = async (config) => { // To return a promise
     const filters = getFiltersFromColumns(config.columns);
     const legend = {
         period: getPeriodNameFromFilters(config.filters) || `${config.startDate} - ${config.endDate}`

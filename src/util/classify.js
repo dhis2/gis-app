@@ -18,7 +18,6 @@ export const classify = (features, options) => {
        });
     }
 
-
     console.log(bins);
 };
 

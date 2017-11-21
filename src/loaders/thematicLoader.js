@@ -1,5 +1,6 @@
 import i18next from 'i18next';
 import { getInstance as getD2 } from 'd2/lib/d2';
+import store from '../store';
 import { apiFetch } from '../util/api';
 import { toGeoJson } from '../util/map';
 import { getClass } from '../util/classify';
@@ -26,7 +27,7 @@ const thematicLoader = (config) =>
 
 const initialize = async (config) => { // To return a promise
 
-    // console.log('thematic loader', config);
+    console.log('thematic loader store', store.getState());
 
     return {
       ...config,
@@ -54,11 +55,6 @@ const addData = async (config) => {
     const isOperand = columns[0].dimension === gis.conf.finals.dimension.operand.objectName; // TODO
     const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty; // TODO
     const displayProppertyUpper = getDisplayProperty(displayProperty).toUpperCase();
-
-    /*
-    const analyticsData = d2.analytics.aggregate
-      .addFilter('pe:' + periods[0].id);
-    */
 
     let orgUnitParams = orgUnits.map(item => item.id);
     let dataParams = '?dimension=ou:' + orgUnits.map(item => item.id).join(';');
@@ -146,7 +142,7 @@ const addData = async (config) => {
             const value = prop.value; // TODO prev: gis.conf.finals.widget.value
             const classNumber = getClass(value, bins);
             prop.color = colorScale[classNumber];
-            console.log(value, classNumber, prop.color);
+            // console.log(value, classNumber, prop.color);
         });
 
 
@@ -209,7 +205,7 @@ const addData = async (config) => {
         */
     }
 
-    console.log('Create legend');
+    // console.log('Create legend');
 
     config.data = valueFeatures;
     // config.isLoaded = true;
@@ -224,7 +220,7 @@ const addStatus = (config) => {
   config.isExpanded = true;
   config.isVisible = true;
 
-  console.log('status!!', config);
+  // console.log('status!!', config);
 
   return config;
 };

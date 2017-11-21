@@ -20,7 +20,8 @@ import configOptionStore from './store/configOptionStore'; // TODO: Needend?
 
 import Root from './components/Root';
 
-import storeFactory from './store';
+// import storeFactory from './store';
+import store from './store';
 // import { loadPrograms } from './actions/programs';
 import { setRelativePeriods } from './actions/periods';
 import { loadOrgUnitTree } from './actions/orgUnitTree';
@@ -38,7 +39,7 @@ function getAbsoluteUrl(url) {
     return a.href;
 }
 
-const store = storeFactory();
+// const store = storeFactory();
 
 const configI18n = (userSettings) => {
     i18next

@@ -9,9 +9,6 @@ class ThematicLayer extends Layer {
         const valueFilter = props.valueFilter || { gt: null, lt: null, };
         const map = this.context.map;
 
-        console.log('################', props.dataFilters, props.data);
-
-
         const data = filterData(props.data, props.dataFilters);
 
         const config = {

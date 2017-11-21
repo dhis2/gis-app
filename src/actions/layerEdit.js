@@ -109,3 +109,15 @@ export const setEndDate = (endDate) => ({
     type: types.LAYER_EDIT_END_DATE_SET,
     endDate,
 });
+
+// Set value type (thematic)
+export const setValueType = (valueType) => ({
+    type: types.LAYER_EDIT_VALUE_TYPE_SET,
+    valueType,
+});
+
+// Set indicator group (thematic)
+export const setIndicatorGroup = (groupId) => ({
+    type: types.LAYER_EDIT_INDICATOR_GROUP_SET,
+    groupId,
+});

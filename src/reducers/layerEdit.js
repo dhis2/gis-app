@@ -38,6 +38,18 @@ const layerEdit = (state = null, action) => {
                 styleDataElement: null,
             };
 
+        case types.LAYER_EDIT_VALUE_TYPE_SET:
+            return {
+                ...state,
+                valueType: action.valueType
+            };
+
+        case types.LAYER_EDIT_INDICATOR_GROUP_SET:
+            return {
+                ...state,
+                indicatorGroup: action.groupId
+            };
+
         case types.LAYER_EDIT_RELATIVE_PERIOD_SET:
             const filters = state.filters || [];
             const newFilters = filters.filter(r => r.dimension !== 'pe');

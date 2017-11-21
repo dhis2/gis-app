@@ -35,7 +35,7 @@ class LayerEdit extends Component {
 
         // console.log('componentDidUpdate');
 
-        /*
+
         if (layer) {
             const config = { ...layer };
             let id = config.id;
@@ -85,7 +85,7 @@ class LayerEdit extends Component {
                 widgets[id].show();
             }
         }
-        */
+
     }
 
     addLayer() {

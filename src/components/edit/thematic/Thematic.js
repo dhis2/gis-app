@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import i18next from 'i18next';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
-import ItemTypeSelect from './ItemTypeSelect';
+import ValueTypeSelect from './ValueTypeSelect';
 import IndicatorGroupSelect from '../../indicator/IndicatorGroupSelect';
 import OrgUnitTree from '../../../containers/OrgUnits';
 
@@ -16,6 +16,13 @@ const styles = {
         height: 300,
         overflowY: 'auto',
     },
+    selectField: {
+        flex: '50%',
+        minWidth: 230,
+        boxSizing: 'border-box',
+        borderLeft: '12px solid #fff',
+        borderRight: '12px solid #fff',
+    },
 };
 
 class Thematic extends Component {
@@ -23,18 +30,26 @@ class Thematic extends Component {
     render() {
         const {
             rows = [],
+            valueType,
         } = this.props;
 
         const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
 
-        console.log('dimConf',  gis.conf.finals.dimension, gis.conf);
+        // console.log('dimConf',  gis.conf.finals.dimension, gis.conf);
 
         return (
             <Tabs>
                 <Tab label={i18next.t('data')}>
                     <div style={styles.content}>
-                        <ItemTypeSelect />
-                        <IndicatorGroupSelect />
+                        <ValueTypeSelect
+                            value={valueType}
+                            style={styles.selectField}
+                        />
+                        {!valueType || valueType === 'in' ?
+                            <IndicatorGroupSelect
+                                style={styles.selectField}
+                            />
+                        : null}
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Organisation units')}>

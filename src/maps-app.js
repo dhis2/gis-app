@@ -94,6 +94,7 @@ getManifest('manifest.webapp')
             'programStage',
             'externalMapLayer',
             'optionSet',
+            'indicatorGroup',
         ];
     })
     .then(getUserSettings)

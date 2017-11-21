@@ -42,13 +42,21 @@ export const loadLegendSet = async (legendSet) => {
     //});
 };
 
+export const formatLegendItems = (legendItems) => {
+    const sortedItems = sortBy('startValue', legendItems);
+    return sortedItems.map(item => ({
+        color: item.color,
+        name: item.name,
+        range: item.startValue + ' - ' + item.endValue,
+    }));
+};
+
 export const getBinsFromLegendItems = (legendItems) => {
   const sortedItems = sortBy('startValue', legendItems);
   const lastItem = sortedItems[sortedItems.length -1 ];
   const bins = sortedItems.map(item => item.startValue);
 
   bins.push(lastItem.endValue);
-
   return bins;
 };
 

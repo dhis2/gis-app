@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Thematic from '../components/edit/Thematic';
+import Thematic from '../components/edit/thematic/Thematic';
 
 const mapStateToProps = (state) => ({
 });

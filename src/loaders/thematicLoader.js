@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 import { getInstance as getD2 } from 'd2/lib/d2';
-import store from '../store';
+// import store from '../store';
 import { apiFetch } from '../util/api';
 import { toGeoJson } from '../util/map';
 import { getClass } from '../util/classify';
@@ -10,6 +10,7 @@ import {
     getBinsFromLegendItems,
     getColorScaleFromLegendItems,
     getLabelsFromLegendItems,
+    formatLegendItems,
 } from '../util/legend';
 
 import {
@@ -27,10 +28,13 @@ const thematicLoader = (config) =>
 
 const initialize = async (config) => { // To return a promise
 
-    console.log('thematic loader store', store.getState());
+    // console.log('thematic loader store', store.getState());
+
+    const legend = {};
 
     return {
-      ...config,
+        ...config,
+        legend,
     };
 };
 
@@ -46,6 +50,7 @@ const addData = async (config) => {
         relativePeriodDate,
         aggregationType,
         legendSet,
+        legend,
     } = config;
 
     const d2 = await getD2();
@@ -141,9 +146,11 @@ const addData = async (config) => {
             const prop = feature.properties;
             const value = prop.value; // TODO prev: gis.conf.finals.widget.value
             const classNumber = getClass(value, bins);
-            prop.color = colorScale[classNumber];
+            prop.color = colorScale[classNumber - 1];
             // console.log(value, classNumber, prop.color);
         });
+
+        config.legend.items = formatLegendItems(legendItems);
 
 
         /*
@@ -210,6 +217,8 @@ const addData = async (config) => {
     config.data = valueFeatures;
     // config.isLoaded = true;
 
+
+    console.log('config', config);
 
     return config;
 };

@@ -1,9 +1,10 @@
 import React from 'react';
+import i18next from 'i18next';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 
 const ProgramStageSelect = (props) => (
     <SelectField
-        label='Stage' // TODO: i18n
+        label={i18next.t('Stage')}
         {...props}
     />
 );

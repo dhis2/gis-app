@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 
-const RelativePeriodsSelect = ({ periods = [], value, onChange, style }) => (
+const RelativePeriodSelect = ({ periods = [], value, onChange, style }) => (
     <SelectField
         label='Period'
         items={periods}
@@ -12,4 +12,4 @@ const RelativePeriodsSelect = ({ periods = [], value, onChange, style }) => (
     />
 );
 
-export default RelativePeriodsSelect;
+export default RelativePeriodSelect;

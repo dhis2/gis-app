@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import i18next from 'i18next';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import ValueTypeSelect from './ValueTypeSelect';
+import AggregationTypeSelect from './AggregationTypeSelect';
 import IndicatorGroupSelect from '../../indicator/IndicatorGroupSelect';
+import ThematicPeriodSelect from '../../periods/ThematicPeriodSelect';
 import OrgUnitTree from '../../../containers/OrgUnits';
 
 const styles = {
@@ -50,6 +52,12 @@ class Thematic extends Component {
                                 style={styles.selectField}
                             />
                         : null}
+                        <ThematicPeriodSelect
+                            style={styles.selectField}
+                        />
+                        <AggregationTypeSelect
+                            style={styles.selectField}
+                        />
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Organisation units')}>

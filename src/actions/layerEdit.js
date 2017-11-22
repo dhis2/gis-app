@@ -121,3 +121,27 @@ export const setIndicatorGroup = (groupId) => ({
     type: types.LAYER_EDIT_INDICATOR_GROUP_SET,
     groupId,
 });
+
+// Set indicator (thematic)
+export const setIndicator = (indicator) => ({
+    type: types.LAYER_EDIT_INDICATOR_SET,
+    indicator,
+});
+
+// Set period type (thematic)
+export const setPeriodType = (periodType) => ({
+    type: types.LAYER_EDIT_PERIOD_TYPE_SET,
+    periodType,
+});
+
+// Set period (thematic)
+export const setPeriod = (period) => ({
+    type: types.LAYER_EDIT_PERIOD_SET,
+    period,
+});
+
+// Set aggregation type (thematic)
+export const setAggregationType = (aggregationType) => ({
+    type: types.LAYER_EDIT_AGGREGATION_TYPE_SET,
+    aggregationType,
+});

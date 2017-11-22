@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import PeriodSelect from '../components/periods/PeriodSelect';
+import PeriodSelect from '../components/periods/EventPeriodSelect';
 import {
     setRelativePeriod,
     setStartDate,

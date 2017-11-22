@@ -41,14 +41,48 @@ const layerEdit = (state = null, action) => {
         case types.LAYER_EDIT_VALUE_TYPE_SET:
             return {
                 ...state,
-                valueType: action.valueType
+                valueType: action.valueType,
             };
 
         case types.LAYER_EDIT_INDICATOR_GROUP_SET:
             return {
                 ...state,
-                indicatorGroup: action.groupId
+                indicatorGroup: action.groupId,
             };
+
+        case types.LAYER_EDIT_INDICATOR_SET:
+            return {
+                ...state,
+                columns: [{
+                    dimension: 'dx',
+                    objectName: 'in',
+                    items: [{
+                        id: action.indicator.id,
+                        name: action.indicator.name,
+                        dimensionItemType: 'INDICATOR',
+                    }]
+                }]
+            };
+
+        case types.LAYER_EDIT_PERIOD_TYPE_SET:
+            return {
+                ...state,
+                periodType: action.periodType,
+            };
+
+        case types.LAYER_EDIT_PERIOD_SET:
+            return {
+                ...state,
+                filters: [{
+                    dimension: 'pe',
+                    items: [{
+                        id: action.period,
+
+                    }]
+                }]
+            };
+
+            return state;
 
         case types.LAYER_EDIT_RELATIVE_PERIOD_SET:
             const filters = state.filters || [];
@@ -78,6 +112,12 @@ const layerEdit = (state = null, action) => {
             return {
                 ...state,
                 endDate: action.endDate,
+            };
+
+        case types.LAYER_EDIT_AGGREGATION_TYPE_SET:
+            return {
+                ...state,
+                aggregationType: action.aggregationType,
             };
 
         case types.LAYER_EDIT_FILTER_ADD:

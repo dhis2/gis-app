@@ -1,3 +1,18 @@
+export const periodTypes = [
+    {id: 'relativePeriods', name: 'Relative'},
+    {id: 'Daily', name: 'Daily'},
+    {id: 'Weekly', name: 'Weekly'},
+    {id: 'Monthly', name: 'Monthly'},
+    {id: 'BiMonthly', name: 'Bi-monthly'},
+    {id: 'Quarterly', name: 'Quarterly'},
+    {id: 'SixMonthly', name: 'Six-monthly'},
+    {id: 'SixMonthlyApril', name: 'Six-monthly April'},
+    {id: 'Yearly', name: 'Yearly'},
+    {id: 'FinancialOct', name: 'Financial year (Start October)'},
+    {id: 'FinancialJuly', name: 'Financial year (Start July)'},
+    {id: 'FinancialApril', name: 'Financial year (Start April)'}
+];
+
 export const relativePeriods = [
     {id: 'START_END_DATES', name: 'Start/end dates'},
     {id: 'TODAY', name: 'Today'},

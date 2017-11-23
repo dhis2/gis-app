@@ -38,7 +38,7 @@ export const loadProgramStages = (programId) => ({
     programId,
 });
 
-// Load program tracked entity attributes - TODO: In use?
+// Load program tracked entity attributes
 export const loadProgramTrackedEntityAttributes = (programId) => ({
     type: types.PROGRAM_ATTRIBUTES_LOAD,
     programId,

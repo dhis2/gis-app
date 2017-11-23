@@ -15,16 +15,23 @@ const styles = {
         justifyContent: 'space-between',
         alignContent: 'flex-start',
         padding: 12,
-        height: 300,
+        // height: 300,
         overflowY: 'auto',
     },
-    selectField: {
+    flexField: {
         flex: '50%',
         minWidth: 230,
         boxSizing: 'border-box',
         borderLeft: '12px solid #fff',
         borderRight: '12px solid #fff',
     },
+    flexFull: {
+        flex: '100%',
+        background: 'yellow',
+        boxSizing: 'border-box',
+        borderLeft: '12px solid #fff',
+        borderRight: '12px solid #fff',
+    }
 };
 
 class Thematic extends Component {
@@ -37,26 +44,24 @@ class Thematic extends Component {
 
         const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
 
-        // console.log('dimConf',  gis.conf.finals.dimension, gis.conf);
-
         return (
             <Tabs>
                 <Tab label={i18next.t('data')}>
                     <div style={styles.content}>
                         <ValueTypeSelect
                             value={valueType}
-                            style={styles.selectField}
+                            style={styles.flexField}
                         />
                         {!valueType || valueType === 'in' ?
                             <IndicatorGroupSelect
-                                style={styles.selectField}
+                                style={styles.flexField}
                             />
                         : null}
                         <ThematicPeriodSelect
-                            style={styles.selectField}
+                            style={styles.flexFull}
                         />
                         <AggregationTypeSelect
-                            style={styles.selectField}
+                            style={styles.flexField}
                         />
                     </div>
                 </Tab>

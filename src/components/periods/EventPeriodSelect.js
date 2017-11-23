@@ -25,7 +25,7 @@ const styles = {
     },
 };
 
-const EventPeriodSelect = ({ period, startDate, endDate, setPeriod, setStartDate, setEndDate, style }) => [
+export const EventPeriodSelect = ({ period, startDate, endDate, setPeriod, setStartDate, setEndDate, style }) => [
     <RelativePeriodSelect
         key='period'
         startEndDates={true}

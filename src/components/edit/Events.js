@@ -8,7 +8,8 @@ import SelectField from 'd2-ui/lib/select-field/SelectField';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
 import EventPeriodSelect from '../periods/EventPeriodSelect';
-import DataElementFilters from '../../containers/FilterGroup';
+// import FilterGroup from '../../containers/FilterGroup';
+import FilterGroup from '../filter/FilterGroup';
 import ImageSelect from '../d2-ui/ImageSelect';
 import DataItemSelect from '../dataitem/DataItemSelect';
 import DataItemStyle from '../dataitem/DataItemStyle';
@@ -32,7 +33,7 @@ const styles = {
         height: 300,
         overflowY: 'auto',
     },
-    selectField: {
+    flexField: {
         flex: '50%',
         minWidth: 230,
         boxSizing: 'border-box',
@@ -76,33 +77,18 @@ const styles = {
 };
 
 class EventDialog extends Component {
-
+    /*
     componentDidMount() {
         const {
-            programs,
             program,
             programAttributes,
-            programStage,
-            programStages,
-            loadPrograms,
-            loadProgramStages,
             dataElements,
             loadProgramStageDataElements,
             loadProgramTrackedEntityAttributes,
         } = this.props;
 
-        // Load programs
-        if (!programs) {
-            loadPrograms();
-        }
-
         if (program && !programAttributes) {
             loadProgramTrackedEntityAttributes(program.id);
-        }
-
-        // Load program stages if program is selected
-        if (program && !programStages) {
-            loadProgramStages(program.id);
         }
 
         // Load program stage data elements if program stage is selected
@@ -118,33 +104,14 @@ class EventDialog extends Component {
             programStage,
             programStages,
             dataElements,
-            loadProgramStages,
             loadProgramStageDataElements,
             loadProgramTrackedEntityAttributes,
-            setProgramStage
         } = this.props;
 
-        if (program) {
 
+        if (program) {
             if (!programAttributes) {
                 loadProgramTrackedEntityAttributes(program.id);
-            }
-
-            if (programStages) {
-                if (!programStage) {
-                    if (programStages !== prev.programStages) {
-                        // Select program stage if only one
-                        if (programStages.length === 1) {
-                            setProgramStage(programStages[0]);
-                        }
-                    }
-                }
-            } else {
-                // Load program stages
-                if (program !== prev.program) {
-                    // console.log('Load program stages');
-                    loadProgramStages(program.id);
-                }
             }
         }
 
@@ -157,14 +124,11 @@ class EventDialog extends Component {
             }
         }
     }
+    */
 
     render() {
         const {
-            programs,
-            program,
             programAttributes = [],
-            programStage,
-            programStages,
             dataElements = [],
             columns = [],
             rows = [],
@@ -177,8 +141,6 @@ class EventDialog extends Component {
             method,
             classes,
             colorScale,
-            setProgram,
-            setProgramStage,
             setStyleDataItem,
             setEventCoordinateField,
             setEventClustering,
@@ -203,44 +165,26 @@ class EventDialog extends Component {
             <Tabs>
                 <Tab label={i18next.t('data')}>
                     <div style={styles.content}>
-                        {programs ?
-                            <ProgramSelect
-                                items={programs}
-                                value={program ? program.id : null}
-                                onChange={setProgram}
-                                style={styles.selectField}
-                            />
-                        : null}
-                        {programStages ?
-                            <ProgramStageSelect
-                                items={programStages}
-                                value={programStage ? programStage.id : null}
-                                onChange={setProgramStage}
-                                style={styles.selectField}
-                            />
-                        : null}
-                        <EventPeriodSelect
-                            style={styles.selectField}
-                        />
+                        <ProgramSelect style={styles.flexField} />
+                        <ProgramStageSelect style={styles.flexField} />
+                        <EventPeriodSelect style={styles.flexField} />
                         <SelectField
                             label={i18next.t('Coordinate field')}
                             items={coordinateFields}
                             value={eventCoordinateField || 'event'}
                             onChange={field => setEventCoordinateField(field.id)}
-                            style={styles.selectField}
+                            style={styles.flexField}
                         />
-                        { /* Placeholder div to avoid coordinate field getting full width */ }
-                        <div style={styles.selectField}></div>
+                        { /* Placeholder div to avoid last field getting full width */ }
+                        <div style={styles.flexField}></div>
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Filter')}>
                     <div style={styles.content}>
-                        {programStage ?
-                            <DataElementFilters
-                                dataElements={dataItems}
-                                filters={columns.filter(c => c.filter !== undefined)}
-                            />
-                        : <div>{i18next.t('Filtering is available after selecting a program stage.')}</div>}
+                        <FilterGroup
+                            // dataElements={dataItems}
+                            // filters={columns.filter(c => c.filter !== undefined)}
+                        />
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Organisation units')}>

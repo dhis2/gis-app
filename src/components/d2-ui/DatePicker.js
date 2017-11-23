@@ -6,8 +6,6 @@ import { timeFormat } from 'd3-time-format';
 const formatTime = timeFormat("%Y-%m-%d");
 
 const DatePicker = ({ label, value, onChange, style, textFieldStyle }) => {
-    console.log('date', value);
-
     return (
         <MuiDatePicker
             floatingLabelText={label}

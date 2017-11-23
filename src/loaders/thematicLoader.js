@@ -15,7 +15,7 @@ import {
 
 import {
     getOrgUnitsFromRows,
-    getPeriodsFromFilters,
+    getPeriodFromFilters,
     getDataItemsFromColumns,
     getDisplayProperty,
     getDimensionIndexFromHeaders,
@@ -55,11 +55,11 @@ const addData = async (config) => {
 
     const d2 = await getD2();
     const orgUnits = getOrgUnitsFromRows(rows);
-    const periods = getPeriodsFromFilters(filters);
+    const period = getPeriodFromFilters(filters);
     const dataItems = getDataItemsFromColumns(columns); // dx dimension
     const isOperand = columns[0].dimension === gis.conf.finals.dimension.operand.objectName; // TODO
     const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty; // TODO
-    const displayProppertyUpper = getDisplayProperty(displayProperty).toUpperCase();
+    const displayPropertyUpper = getDisplayProperty(displayProperty).toUpperCase();
 
     let orgUnitParams = orgUnits.map(item => item.id);
     let dataParams = '?dimension=ou:' + orgUnits.map(item => item.id).join(';');
@@ -76,8 +76,8 @@ const addData = async (config) => {
     }
 
     dataParams += isOperand ? '&dimension=co' : '';
-    dataParams += '&filter=pe:' + periods.map(item => item.id).join(';');
-    dataParams += '&displayProperty=' + displayProppertyUpper;
+    dataParams += `&filter=pe:${period.id}`; // '&filter=pe:' + periods.map(item => item.id).join(';');
+    dataParams += '&displayProperty=' + displayPropertyUpper;
 
     if (relativePeriodDate) {
         dataParams += '&relativePeriodDate=' + relativePeriodDate;

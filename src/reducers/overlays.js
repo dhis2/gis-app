@@ -7,6 +7,7 @@ const defaultOverlays = [{
     img: 'images/layers/events.png',
     opacity: 0.95,
 
+    /*
     program: {
         id: 'eBAyeGv0exc',
         name: 'Inpatient morbidity and mortality'
@@ -16,7 +17,7 @@ const defaultOverlays = [{
         name: 'Single-Event Inpatient morbidity and mortality'
     },
 
-    columns: [/*{
+    columns: [{
         dimension: 'qrur9Dvnyt5',
         name: 'Age in years',
         filter: 'LT:50'
@@ -24,7 +25,7 @@ const defaultOverlays = [{
         dimension: "SWfdB5lX0fk",
         name: "Pregnant",
         filter: "IN:1"
-    }*/],
+    }],
     rows: [{
         dimension: 'ou',
         items: [{
@@ -43,6 +44,7 @@ const defaultOverlays = [{
     eventClustering: false,
     eventPointColor: '#333333',
     eventPointRadius: 6,
+    */
 },{
     type: 'facility',
     preview: true,

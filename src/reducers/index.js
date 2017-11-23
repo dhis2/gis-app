@@ -18,7 +18,6 @@ import programTrackedEntityAttributes from './programTrackedEntityAttributes';
 import indicators from './indicators';
 import indicatorGroups from './indicatorGroups';
 import optionSets from './optionSets';
-import relativePeriods from './relativePeriods';
 
 export default combineReducers({
     ui,
@@ -40,5 +39,4 @@ export default combineReducers({
     indicators,
     indicatorGroups,
     optionSets,
-    relativePeriods,
 });

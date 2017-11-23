@@ -11,7 +11,8 @@ import {
 import {
     getFiltersFromColumns,
     getFiltersAsText,
-    getPeriodNameFromFilters,
+    getPeriodFromFilters,
+    getPeriodNameFromId,
 } from '../util/analytics';
 
 // Look at: https://github.com/dhis2/maintenance-app/blob/master/src/App/appStateStore.js
@@ -25,9 +26,13 @@ const eventLoader = (config) =>
     .then(addStatus);
 
 const initialize = async (config) => { // To return a promise
+    console.log('config', config);
+
     const filters = getFiltersFromColumns(config.columns);
+    const period = getPeriodFromFilters(config.filters);
+    const periodName = getPeriodNameFromId(period.id) || `${config.startDate} - ${config.endDate}`;
     const legend = {
-        period: getPeriodNameFromFilters(config.filters) || `${config.startDate} - ${config.endDate}`
+        period: periodName,
     };
 
     if (filters) {

@@ -1,4 +1,5 @@
 import * as types from '../constants/actionTypes';
+import { setFiltersFromPeriod } from '../util/analytics';
 
 const layerEdit = (state = null, action) => {
     let columns;
@@ -65,41 +66,18 @@ const layerEdit = (state = null, action) => {
             };
 
         case types.LAYER_EDIT_PERIOD_TYPE_SET:
+
+
             return {
                 ...state,
                 periodType: action.periodType,
+                filters: null,
             };
 
         case types.LAYER_EDIT_PERIOD_SET:
             return {
                 ...state,
-                filters: [{
-                    dimension: 'pe',
-                    items: [{
-                        id: action.period,
-
-                    }]
-                }]
-            };
-
-            return state;
-
-        case types.LAYER_EDIT_RELATIVE_PERIOD_SET:
-            const filters = state.filters || [];
-            const newFilters = filters.filter(r => r.dimension !== 'pe');
-
-            if (action.period.id !== 'START_END_DATES') {
-                newFilters.push({
-                    dimension: 'pe',
-                    items: [{
-                        id: action.period.id,
-                    }],
-                });
-            }
-
-            return {
-                ...state,
-                filters: newFilters,
+                filters: setFiltersFromPeriod(action.period),
             };
 
         case types.LAYER_EDIT_START_DATE_SET:
@@ -173,7 +151,6 @@ const layerEdit = (state = null, action) => {
 
         // Set options to data element option set
         case types.LAYER_EDIT_STYLE_DATA_ITEM_OPTIONS_SET:
-
             newState = {
                 ...state,
                 styleDataItem: {

@@ -92,19 +92,25 @@ export const setOrganisationUnitGroupSet = (organisationUnitGroupSet) => ({
     organisationUnitGroupSet,
 });
 
-// Set relative period
-export const setRelativePeriod = (period) => ({
-    type: types.LAYER_EDIT_RELATIVE_PERIOD_SET,
+// Set period type (thematic)
+export const setPeriodType = (periodType) => ({
+    type: types.LAYER_EDIT_PERIOD_TYPE_SET,
+    periodType,
+});
+
+// Set period (event & thematic)
+export const setPeriod = (period) => ({
+    type: types.LAYER_EDIT_PERIOD_SET,
     period,
 });
 
-// Set start date
+// Set start date (event)
 export const setStartDate = (startDate) => ({
     type: types.LAYER_EDIT_START_DATE_SET,
     startDate,
 });
 
-// Set end date
+// Set end date (event)
 export const setEndDate = (endDate) => ({
     type: types.LAYER_EDIT_END_DATE_SET,
     endDate,
@@ -126,18 +132,6 @@ export const setIndicatorGroup = (groupId) => ({
 export const setIndicator = (indicator) => ({
     type: types.LAYER_EDIT_INDICATOR_SET,
     indicator,
-});
-
-// Set period type (thematic)
-export const setPeriodType = (periodType) => ({
-    type: types.LAYER_EDIT_PERIOD_TYPE_SET,
-    periodType,
-});
-
-// Set period (thematic)
-export const setPeriod = (period) => ({
-    type: types.LAYER_EDIT_PERIOD_SET,
-    period,
 });
 
 // Set aggregation type (thematic)

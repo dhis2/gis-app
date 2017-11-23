@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
 import i18next from 'i18next';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 import { periodTypes } from '../../constants/periods';
@@ -14,6 +13,7 @@ const PeriodTypeSelect = (props) => {
             name: i18next.t(period.name),
         }));
     }
+
     return (
         <SelectField
             label={i18next.t('Period type')}

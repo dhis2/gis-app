@@ -23,11 +23,9 @@ import Root from './components/Root';
 // import storeFactory from './store';
 import store from './store';
 // import { loadPrograms } from './actions/programs';
-import { setRelativePeriods } from './actions/periods';
 import { loadOrgUnitTree } from './actions/orgUnitTree';
 import { loadExternalLayers } from './actions/externalLayers';
 import { resizeScreen } from './actions/ui';
-import { relativePeriods } from './constants/periods';
 
 const dhisDevConfig = DHIS_CONFIG; // eslint-disable-line
 
@@ -57,12 +55,6 @@ const configI18n = (userSettings) => {
                 i18next.changeLanguage(uiLocale);
             }
         });
-
-    // Translate relative periods
-    store.dispatch(setRelativePeriods(relativePeriods.map(p => ({
-        id: p.id,
-        name: i18next.t(p.name),
-    }))));
 };
 
 

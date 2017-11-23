@@ -14,7 +14,6 @@ export const periodTypes = [
 ];
 
 export const relativePeriods = [
-    {id: 'START_END_DATES', name: 'Start/end dates'},
     {id: 'TODAY', name: 'Today'},
     {id: 'YESTERDAY', name: 'Yesterday'},
     {id: 'THIS_WEEK', name: 'This week'},

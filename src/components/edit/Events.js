@@ -7,7 +7,7 @@ import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
-import PeriodSelect from '../../containers/PeriodSelect';
+import EventPeriodSelect from '../periods/EventPeriodSelect';
 import DataElementFilters from '../../containers/FilterGroup';
 import ImageSelect from '../d2-ui/ImageSelect';
 import DataItemSelect from '../dataitem/DataItemSelect';
@@ -187,7 +187,7 @@ class EventDialog extends Component {
         } = this.props;
 
         const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
-        const period = filters.filter(r => r.dimension === 'pe')[0];
+        // const period = filters.filter(r => r.dimension === 'pe')[0];
 
         // Merge data elements and program attributes, filter out items not supported, and sort the result
         const dataItems = sortBy('name', [ ...programAttributes, ...dataElements ]
@@ -219,7 +219,9 @@ class EventDialog extends Component {
                                 style={styles.selectField}
                             />
                         : null}
-                        <PeriodSelect />
+                        <EventPeriodSelect
+                            style={styles.selectField}
+                        />
                         <SelectField
                             label={i18next.t('Coordinate field')}
                             items={coordinateFields}

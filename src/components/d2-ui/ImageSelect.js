@@ -21,7 +21,7 @@ ImageSelect.propTypes = {
     id: PropTypes.string.isRequired,
     img: PropTypes.string,
     title: PropTypes.string,
-    isSelected: PropTypes.bool.isRequired,
+    isSelected: PropTypes.bool,
     onClick: PropTypes.func.isRequired,
 };
 

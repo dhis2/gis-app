@@ -19,28 +19,39 @@ export const getDataItemsFromColumns = (columns) => {
   return (dataItems && dataItems.items) ? dataItems.items : null;
 };
 
-export const getPeriodsFromFilters = (filters) => {
+
+/* PERIOD HANDLING */
+
+export const getPeriodFromFilters = (filters) => {
   if (!Array.isArray(filters)) {
     return null;
   }
 
+  // Maps app only support one period so far
   const period = filters.filter(item => item.dimension === 'pe')[0];
-  return (period && period.items) ? period.items : null;
-};
-
-export const getPeriodNameFromFilters = (filters) => {
-    if (!Array.isArray(filters)) {
-        return null;
-    }
-
-    const periods = getPeriodsFromFilters(filters);
-    return periods ? getPeriodNameFromId(periods[0].id) : null;
+  return (period && period.items) ? period.items[0] : null;
 };
 
 export const getPeriodNameFromId = (id) => {
     const period = relativePeriods.filter(period => period.id === id)[0];
     return period ? i18next.t(period.name) : null;
 };
+
+export const setFiltersFromPeriod = (period) => {
+    return [{
+        dimension: 'pe',
+        items: [{ ...period }],
+    }];
+};
+
+
+
+
+
+
+
+
+
 
 export const getFiltersFromColumns = (columns) => {
   if (!Array.isArray(columns)) {

@@ -89,7 +89,7 @@ const addData = async (config) => {
 
     const orgUnitReq = d2.geoFeatures
       .byOrgUnit(orgUnitParams)
-      .displayProperty(displayProppertyUpper)
+      .displayProperty(displayPropertyUpper)
       .getAll();
 
     const dataReq = apiFetch(`analytics.json${dataParams}`);

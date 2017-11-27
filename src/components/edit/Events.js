@@ -5,10 +5,8 @@ import sortBy from 'lodash/fp/sortBy';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
-import ProgramSelect from '../program/ProgramSelect';
-import ProgramStageSelect from '../program/ProgramStageSelect';
+import EventProgramSelect from '../program/EventProgramSelect';
 import EventPeriodSelect from '../periods/EventPeriodSelect';
-// import FilterGroup from '../../containers/FilterGroup';
 import FilterGroup from '../filter/FilterGroup';
 import ImageSelect from '../d2-ui/ImageSelect';
 import DataItemSelect from '../dataitem/DataItemSelect';
@@ -165,9 +163,12 @@ class EventDialog extends Component {
             <Tabs>
                 <Tab label={i18next.t('data')}>
                     <div style={styles.content}>
-                        <ProgramSelect style={styles.flexField} />
-                        <ProgramStageSelect style={styles.flexField} />
-                        <EventPeriodSelect style={styles.flexField} />
+                        <EventProgramSelect
+                            style={styles.flexField}
+                        />
+                        <EventPeriodSelect
+                            style={styles.flexField}
+                        />
                         <SelectField
                             label={i18next.t('Coordinate field')}
                             items={coordinateFields}

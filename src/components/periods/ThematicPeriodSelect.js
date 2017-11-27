@@ -7,30 +7,42 @@ import PeriodSelect from './PeriodSelect';
 import { getPeriodFromFilters } from '../../util/analytics';
 import { setPeriodType, setPeriod } from '../../actions/layerEdit';
 
-const ThematicPeriodSelect = ({ periodType, period, setPeriodType, setPeriod, style}) => [
-    <PeriodTypeSelect
-        key='type'
-        value={periodType}
-        onChange={type => setPeriodType(type.id)}
-        style={style}
-    />,
-    (periodType === 'relativePeriods' ?
-        <RelativePeriodSelect
-            key='relative'
-            period={period ? period.id : null}
-            onChange={setPeriod}
+const styles = {
+    container: {
+        flex: '100%',
+        display: 'flex',
+        flexFlow: 'row wrap',
+        justifyContent: 'space-between',
+        alignContent: 'flex-start',
+    },
+};
+
+const ThematicPeriodSelect = ({ periodType, period, setPeriodType, setPeriod, style}) => (
+    <div style={styles.container}>
+        <PeriodTypeSelect
+            key='type'
+            value={periodType}
+            onChange={type => setPeriodType(type.id)}
             style={style}
         />
-    : periodType ?
-        <PeriodSelect
-            key='periods'
-            periodType={periodType}
-            period={period ? period.id : null}
-            onChange={setPeriod}
-            style={style}
-        />
-    : null),
-];
+        {periodType === 'relativePeriods' ?
+            <RelativePeriodSelect
+                key='relative'
+                period={period ? period.id : null}
+                onChange={setPeriod}
+                style={style}
+            />
+            : periodType ?
+                <PeriodSelect
+                    key='periods'
+                    periodType={periodType}
+                    period={period ? period.id : null}
+                    onChange={setPeriod}
+                    style={style}
+                />
+                : null}
+    </div>
+);
 
 
 ThematicPeriodSelect.propTypes = {

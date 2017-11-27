@@ -15,8 +15,6 @@ export const AggregationTypeSelect = ({ aggregationType, setAggregationType, sty
         }));
     }
 
-    console.log(aggregationType);
-
     return (
         <SelectField
             label={i18next.t('Aggregation type')}
@@ -26,7 +24,6 @@ export const AggregationTypeSelect = ({ aggregationType, setAggregationType, sty
             style={style}
         />
     );
-
 };
 
 export default connect(

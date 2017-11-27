@@ -25,13 +25,6 @@ const styles = {
         borderLeft: '12px solid #fff',
         borderRight: '12px solid #fff',
     },
-    flexFull: {
-        flex: '100%',
-        background: 'yellow',
-        boxSizing: 'border-box',
-        borderLeft: '12px solid #fff',
-        borderRight: '12px solid #fff',
-    }
 };
 
 class Thematic extends Component {
@@ -58,7 +51,7 @@ class Thematic extends Component {
                             />
                         : null}
                         <ThematicPeriodSelect
-                            style={styles.flexFull}
+                            style={styles.flexField}
                         />
                         <AggregationTypeSelect
                             style={styles.flexField}

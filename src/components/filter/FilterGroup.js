@@ -96,13 +96,9 @@ export const FilterGroup = ({
 
 export default connect(
     (state) => {
-
-
-        console.log('connect');
-
         return {
             filters: (state.layerEdit.columns || []).filter(c => c.filter !== undefined),
-                programAttributes: state.layerEdit.program && state.programTrackedEntityAttributes[state.layerEdit.program.id],
+            programAttributes: state.layerEdit.program && state.programTrackedEntityAttributes[state.layerEdit.program.id],
             dataElements: state.layerEdit.programStage && state.programStageDataElements[state.layerEdit.programStage.id],
             program: state.layerEdit.program,
             programStage: state.layerEdit.programStage,

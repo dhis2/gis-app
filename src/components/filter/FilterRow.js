@@ -31,8 +31,8 @@ const styles = {
 class FilterRow extends Component {
 
     onChange(dimension, filter) {
-        const { index, dataElements, onChange } = this.props;
-        const name = dataElements.filter(d => d.id === dimension)[0].name;
+        const { index, dataItems, onChange } = this.props;
+        const name = dataItems.filter(d => d.id === dimension)[0].name;
 
         if (dimension !== this.props.dimension) { // New dimension
             onChange(index, {
@@ -50,28 +50,28 @@ class FilterRow extends Component {
     }
 
     render() {
-        const { dataElements, dimension, filter, index, onRemove } = this.props;
-        let dataElement;
+        const { dataItems, dimension, filter, index, onRemove } = this.props;
+        let dataItem;
 
-        if (dataElements && dimension) {
-            dataElement = dataElements.filter(d => d.id === dimension)[0];
+        if (dataItems && dimension) {
+            dataItem = dataItems.filter(d => d.id === dimension)[0];
         }
 
         return (
             <div style={styles.container}>
-                {dataElements ?
+                {dataItems ?
                     <DataItemSelect
                         label='Data item'
-                        items={dataElements}
-                        value={dataElement ? dataElement.id : null}
+                        items={dataItems}
+                        value={dataItem ? dataItem.id : null}
                         onChange={dimension => this.onChange(dimension.id, filter)}
                         style={styles.select}
                     />
                 : null}
 
-                {dataElement ?
+                {dataItem ?
                     <FilterSelect
-                        {...dataElement}
+                        {...dataItem}
                         filter={filter}
                         onChange={filter => this.onChange(dimension, filter)}
                     />

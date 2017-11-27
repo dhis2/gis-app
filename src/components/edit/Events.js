@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import i18next from 'i18next';
 import sortBy from 'lodash/fp/sortBy';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
-import EventProgramSelect from '../program/EventProgramSelect';
+import ProgramSelect from '../program/ProgramSelect';
+import ProgramStageSelect from '../program/ProgramStageSelect';
 import EventPeriodSelect from '../periods/EventPeriodSelect';
 import FilterGroup from '../filter/FilterGroup';
 import ImageSelect from '../d2-ui/ImageSelect';
@@ -13,6 +15,15 @@ import DataItemSelect from '../dataitem/DataItemSelect';
 import DataItemStyle from '../dataitem/DataItemStyle';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnits from '../../containers/OrgUnits';
+import {
+    setProgram,
+    setProgramStage,
+    setStyleDataItem,
+    setEventCoordinateField,
+    setEventClustering,
+    setEventPointColor,
+    setEventPointRadius
+} from '../../actions/layerEdit';
 
 const styles = {
     body: {
@@ -37,6 +48,13 @@ const styles = {
         boxSizing: 'border-box',
         borderLeft: '12px solid #fff',
         borderRight: '12px solid #fff',
+    },
+    flexFull: {
+        flex: '100%',
+        display: 'flex',
+        flexFlow: 'row wrap',
+        justifyContent: 'space-between',
+        alignContent: 'flex-start',
     },
     column: {
         width: 'calc(50% - 12px)',
@@ -75,62 +93,12 @@ const styles = {
 };
 
 class EventDialog extends Component {
-    /*
-    componentDidMount() {
-        const {
-            program,
-            programAttributes,
-            dataElements,
-            loadProgramStageDataElements,
-            loadProgramTrackedEntityAttributes,
-        } = this.props;
-
-        if (program && !programAttributes) {
-            loadProgramTrackedEntityAttributes(program.id);
-        }
-
-        // Load program stage data elements if program stage is selected
-        if (programStage && !dataElements) {
-            loadProgramStageDataElements(programStage.id);
-        }
-    }
-
-    componentDidUpdate(prev) {
-        const {
-            program,
-            programAttributes,
-            programStage,
-            programStages,
-            dataElements,
-            loadProgramStageDataElements,
-            loadProgramTrackedEntityAttributes,
-        } = this.props;
-
-
-        if (program) {
-            if (!programAttributes) {
-                loadProgramTrackedEntityAttributes(program.id);
-            }
-        }
-
-        if (programStage) {
-            if (!dataElements) {
-                // Load program stage data elements
-                if (programStage !== prev.programStage) {
-                    loadProgramStageDataElements(programStage.id);
-                }
-            }
-        }
-    }
-    */
-
     render() {
         const {
             programAttributes = [],
             dataElements = [],
             columns = [],
             rows = [],
-            filters = [],
             eventCoordinateField,
             eventClustering,
             eventPointColor,
@@ -139,6 +107,10 @@ class EventDialog extends Component {
             method,
             classes,
             colorScale,
+            program,
+            programStage,
+            setProgram,
+            setProgramStage,
             setStyleDataItem,
             setEventCoordinateField,
             setEventClustering,
@@ -163,9 +135,19 @@ class EventDialog extends Component {
             <Tabs>
                 <Tab label={i18next.t('data')}>
                     <div style={styles.content}>
-                        <EventProgramSelect
-                            style={styles.flexField}
-                        />
+                        <div style={styles.flexFull}>
+                            <ProgramSelect
+                                program={program}
+                                onChange={setProgram}
+                                style={styles.flexField}
+                            />
+                            <ProgramStageSelect
+                                program={program}
+                                programStage={programStage}
+                                onChange={setProgramStage}
+                                style={styles.flexField}
+                            />
+                        </div>
                         <EventPeriodSelect
                             style={styles.flexField}
                         />
@@ -176,15 +158,15 @@ class EventDialog extends Component {
                             onChange={field => setEventCoordinateField(field.id)}
                             style={styles.flexField}
                         />
-                        { /* Placeholder div to avoid last field getting full width */ }
                         <div style={styles.flexField}></div>
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Filter')}>
                     <div style={styles.content}>
                         <FilterGroup
-                            // dataElements={dataItems}
-                            // filters={columns.filter(c => c.filter !== undefined)}
+                            program={program}
+                            programStage={programStage}
+                            filters={columns.filter(c => c.filter !== undefined)}
                         />
                     </div>
                 </Tab>
@@ -257,4 +239,31 @@ class EventDialog extends Component {
     }
 }
 
-export default EventDialog;
+
+
+const mapStateToProps = (state) => {
+    const layer = state.layerEdit;
+    const programId = layer.program ? layer.program.id : null;
+    const programStageId = layer.programStage ? layer.programStage.id : null;
+
+    return {
+        // programAttributes: state.programTrackedEntityAttributes[programId],
+        // programStages: state.programStages[programId],
+        // dataElements: state.programStageDataElements[programStageId],
+        // optionSets: state.optionSets,
+        // orgUnitTree: state.orgUnitTree,
+    };
+};
+
+export default connect(
+    null,
+    {
+        setProgram,
+        setProgramStage,
+        setStyleDataItem,
+        setEventCoordinateField,
+        setEventClustering,
+        setEventPointColor,
+        setEventPointRadius
+    }
+)(EventDialog);

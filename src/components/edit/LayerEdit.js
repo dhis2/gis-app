@@ -3,9 +3,9 @@ import Dialog from 'material-ui/Dialog';
 import i18next from 'i18next';
 import Button from 'd2-ui/lib/button/Button';
 import WidgetWindow from '../../app/WidgetWindow';
-import Events from '../../containers/Events';
+import Events from './Events';
 import Facilities from '../../containers/Facilities';
-import Thematic from '../../containers/Thematic';
+import Thematic from './thematic/Thematic';
 import Boundaries from '../../containers/Boundaries';
 
 // Only create one widget per layer (will be changed when we switch to react)

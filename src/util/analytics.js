@@ -1,14 +1,9 @@
 import i18next from 'i18next';
 import { relativePeriods } from '../constants/periods';
 
-export const getOrgUnitsFromRows = (rows) => {
-    if (!Array.isArray(rows)) {
-        return null;
-    }
 
-    const orgUnits = rows.filter(item => item.dimension === 'ou')[0];
-    return (orgUnits && orgUnits.items) ? orgUnits.items : null;
-};
+
+/* DATA ITEMS */
 
 export const getDataItemsFromColumns = (columns) => {
   if (!Array.isArray(columns)) {
@@ -19,8 +14,29 @@ export const getDataItemsFromColumns = (columns) => {
   return (dataItems && dataItems.items) ? dataItems.items : null;
 };
 
+export const getIndicatorFromColumns = columns => {
+    if (!Array.isArray(columns)) {
+        return null;
+    }
 
-/* PERIOD HANDLING */
+    const indicator = columns.filter(item => item.objectName === 'in')[0];
+    return (indicator && indicator.items) ? indicator.items[0] : null;
+};
+
+
+/* ORGANISATION UNITS */
+
+export const getOrgUnitsFromRows = (rows) => {
+    if (!Array.isArray(rows)) {
+        return null;
+    }
+
+    const orgUnits = rows.filter(item => item.dimension === 'ou')[0];
+    return (orgUnits && orgUnits.items) ? orgUnits.items : null;
+};
+
+
+/* PERIOD */
 
 export const getPeriodFromFilters = (filters) => {
   if (!Array.isArray(filters)) {
@@ -43,13 +59,6 @@ export const setFiltersFromPeriod = (period) => {
         items: [{ ...period }],
     }];
 };
-
-
-
-
-
-
-
 
 
 

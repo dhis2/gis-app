@@ -88,6 +88,8 @@ getManifest('manifest.webapp')
             'optionSet',
             'indicator',
             'indicatorGroup',
+            'dataElement',
+            'dataElementGroup',
         ];
     })
     .then(getUserSettings)

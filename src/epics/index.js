@@ -9,6 +9,7 @@ import programsEpics from './programs';
 import indicatorsEpics from './indicators';
 import optionSetsEpics from './optionSets';
 import externalLayersEpics from './externalLayers';
+import dataElementsEpics from './dataElements';
 
 const errorEpic = (action$) =>
     action$
@@ -16,5 +17,12 @@ const errorEpic = (action$) =>
         .do((action) => console.error(action.error))
         .concatMapTo(Observable.empty()); // Avoid infinite loop, same as .map(action => Observable.empty()).concatAll()
 
-
-export default combineEpics(orgUnitsEpis, programsEpics, indicatorsEpics, optionSetsEpics, externalLayersEpics, errorEpic);
+export default combineEpics(
+    orgUnitsEpis,
+    programsEpics,
+    indicatorsEpics,
+    optionSetsEpics,
+    externalLayersEpics,
+    dataElementsEpics,
+    errorEpic
+);

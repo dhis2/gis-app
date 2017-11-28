@@ -9,10 +9,25 @@ import IndicatorGroupSelect from '../../indicator/IndicatorGroupSelect';
 import GroupIndicatorSelect from '../../indicator/GroupIndicatorSelect';
 import ProgramSelect from '../../program/ProgramSelect';
 import ProgramIndicatorSelect from '../../program/ProgramIndicatorSelect';
+import DataElementGroupSelect  from '../../dataElement/DataElementGroupSelect';
+import DataElementSelect  from '../../dataElement/DataElementSelect';
 import ThematicPeriodSelect from '../../periods/ThematicPeriodSelect';
 import OrgUnitTree from '../../../containers/OrgUnits';
-import { setIndicatorGroup, setIndicator, setProgram, setProgramIndicator } from '../../../actions/layerEdit';
-import { getOrgUnitsFromRows, getIndicatorFromColumns, getProgramIndicatorFromColumns } from '../../../util/analytics';
+
+import {
+    setIndicatorGroup,
+    setIndicator,
+    setProgram,
+    setProgramIndicator,
+    setDataElementGroup,
+    setDataElement,
+} from '../../../actions/layerEdit';
+
+import {
+    getOrgUnitsFromRows,
+    getIndicatorFromColumns,
+    getProgramIndicatorFromColumns,
+} from '../../../util/analytics';
 
 const styles = {
     content: { // TODO: reuse styles
@@ -47,17 +62,16 @@ const ThematicDialog = (props) => {
         valueType,
         indicatorGroup,
         program,
+        dataElementGroup,
         setIndicatorGroup,
         setIndicator,
         setProgram,
         setProgramIndicator,
+        setDataElementGroup,
+        setDataElement,
     } = props;
 
-    const orgUnits = getOrgUnitsFromRows(rows);
-    const indicator = getIndicatorFromColumns(columns);
-    const programIndicator = getProgramIndicatorFromColumns(columns);
-
-    console.log('programIndicator', programIndicator, setProgramIndicator);
+    console.log('valueType', valueType, dataElementGroup);
 
     return (
         <Tabs>
@@ -78,7 +92,7 @@ const ThematicDialog = (props) => {
                             <GroupIndicatorSelect
                                 key='indicator'
                                 indicatorGroup={indicatorGroup}
-                                indicator={indicator}
+                                indicator={getIndicatorFromColumns(columns)}
                                 onChange={setIndicator}
                                 style={styles.flexField}
                             />,
@@ -93,10 +107,24 @@ const ThematicDialog = (props) => {
                             <ProgramIndicatorSelect
                                 key='indicator'
                                 program={program}
-                                programIndicator={programIndicator}
+                                programIndicator={getProgramIndicatorFromColumns(columns)}
                                 onChange={setProgramIndicator}
                                 style={styles.flexField}
                             />
+                        ]}
+                        {valueType === 'de' && [
+                            <DataElementGroupSelect
+                                key='group'
+                                dataElementGroup={dataElementGroup}
+                                onChange={setDataElementGroup}
+                                style={styles.flexField}
+                            />,
+                            <DataElementSelect
+                                key='element'
+                                dataElementGroup={dataElementGroup}
+                                onChange={setDataElement}
+                                style={styles.flexField}
+                            />,
                         ]}
                     </div>
                     <ThematicPeriodSelect
@@ -110,7 +138,7 @@ const ThematicDialog = (props) => {
             <Tab label={i18next.t('Organisation units')}>
                 <div style={styles.content}>
                     <OrgUnitTree
-                        selected={orgUnits}
+                        selected={getOrgUnitsFromRows(rows)}
                     />
                 </div>
             </Tab>
@@ -124,7 +152,7 @@ const ThematicDialog = (props) => {
 
 export default connect(
     null,
-    { setIndicatorGroup, setIndicator, setProgram, setProgramIndicator }
+    { setIndicatorGroup, setIndicator, setProgram, setProgramIndicator, setDataElementGroup, setDataElement }
 )(ThematicDialog);
 
 

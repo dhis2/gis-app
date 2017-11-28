@@ -79,9 +79,21 @@ const layerEdit = (state = null, action) => {
                 }]
             };
 
+        case types.LAYER_EDIT_DATA_ELEMENT_GROUP_SET:
+            return {
+                ...state,
+                dataElementGroup: {
+                    id: action.dataElementGroup.id,
+                    name: action.dataElementGroup.name,
+                },
+            };
+
+        case types.LAYER_EDIT_DATA_ELEMENT_SET:
+            console.log('LAYER_EDIT_DATA_ELEMENT_SET');
+
+            return state;
+
         case types.LAYER_EDIT_PERIOD_TYPE_SET:
-
-
             return {
                 ...state,
                 periodType: action.periodType,

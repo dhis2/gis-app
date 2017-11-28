@@ -19,6 +19,8 @@ import programIndicators from './programIndicators';
 import indicators from './indicators';
 import indicatorGroups from './indicatorGroups';
 import optionSets from './optionSets';
+import dataElementGroups from './dataElementGroups';
+import dataElements from './dataElements';
 
 export default combineReducers({
     ui,
@@ -41,4 +43,6 @@ export default combineReducers({
     indicators,
     indicatorGroups,
     optionSets,
+    dataElementGroups,
+    dataElements,
 });

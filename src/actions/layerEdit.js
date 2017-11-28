@@ -35,6 +35,18 @@ export const setProgramIndicator = (programIndicator) => ({
     programIndicator,
 });
 
+// Set program indicator used (thematic)
+export const setDataElementGroup = (dataElementGroup) => ({
+    type: types.LAYER_EDIT_DATA_ELEMENT_GROUP_SET,
+    dataElementGroup,
+});
+
+// Set program indicator used (thematic)
+export const setDataElement = (dataElement) => ({
+    type: types.LAYER_EDIT_DATA_ELEMENT_SET,
+    dataElement,
+});
+
 // Set data element used for styling (event)
 export const setStyleDataItem = (dataItem) => ({
     type: types.LAYER_EDIT_STYLE_DATA_ITEM_SET,

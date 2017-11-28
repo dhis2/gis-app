@@ -74,6 +74,8 @@ export default function LayerWidgetThematic(gis, layer) {
         setTotalsProxy(uid, preventLoad, callbackFn) {
             let path;
 
+            console.log(gis.init.namePropertyUrl);
+
             if (isString(uid)) {
                 path = '/dataElements.json?fields=dimensionItem~rename(id),' + gis.init.namePropertyUrl + '&domainType=aggregate&paging=false&filter=dataElementGroups.id:eq:' + uid;
             }

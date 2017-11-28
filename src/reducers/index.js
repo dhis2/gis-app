@@ -15,6 +15,7 @@ import programs from './programs';
 import programStages from './programStages';
 import programStageDataElements from './programStageDataElements';
 import programTrackedEntityAttributes from './programTrackedEntityAttributes';
+import programIndicators from './programIndicators';
 import indicators from './indicators';
 import indicatorGroups from './indicatorGroups';
 import optionSets from './optionSets';
@@ -36,6 +37,7 @@ export default combineReducers({
     programStages,
     programStageDataElements,
     programTrackedEntityAttributes,
+    programIndicators,
     indicators,
     indicatorGroups,
     optionSets,

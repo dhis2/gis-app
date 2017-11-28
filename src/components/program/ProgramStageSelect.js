@@ -16,7 +16,7 @@ export class ProgramStageSelect extends Component {
     };
 
     componentDidUpdate() {
-        const { program, programStage, programStages, loadProgramStages, setProgramStage } = this.props;
+        const { program, programStage, programStages, loadProgramStages, onChange } = this.props;
 
         if (program) {
             const stages = programStages[program.id];
@@ -28,7 +28,7 @@ export class ProgramStageSelect extends Component {
 
             // Select first program stage if only one
             if (program && !programStage && stages && stages.length === 1) {
-                setProgramStage(stages[0]);
+                onChange(stages[0]);
             }
         }
     }

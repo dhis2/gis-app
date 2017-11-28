@@ -23,6 +23,15 @@ export const getIndicatorFromColumns = columns => {
     return (indicator && indicator.items) ? indicator.items[0] : null;
 };
 
+export const getProgramIndicatorFromColumns = columns => {
+    if (!Array.isArray(columns)) {
+        return null;
+    }
+
+    const indicator = columns.filter(item => item.objectName === 'pi')[0];
+    return (indicator && indicator.items) ? indicator.items[0] : null;
+};
+
 
 /* ORGANISATION UNITS */
 

@@ -7,11 +7,12 @@ import ValueTypeSelect from './ValueTypeSelect';
 import AggregationTypeSelect from './AggregationTypeSelect';
 import IndicatorGroupSelect from '../../indicator/IndicatorGroupSelect';
 import GroupIndicatorSelect from '../../indicator/GroupIndicatorSelect';
-import ThematicProgramIndicatorSelect from '../../program/ThematicProgramIndicatorSelect';
+import ProgramSelect from '../../program/ProgramSelect';
+import ProgramIndicatorSelect from '../../program/ProgramIndicatorSelect';
 import ThematicPeriodSelect from '../../periods/ThematicPeriodSelect';
 import OrgUnitTree from '../../../containers/OrgUnits';
-import { setIndicatorGroup, setIndicator } from '../../../actions/layerEdit';
-import { getIndicatorFromColumns, getOrgUnitsFromRows } from '../../../util/analytics';
+import { setIndicatorGroup, setIndicator, setProgram, setProgramIndicator } from '../../../actions/layerEdit';
+import { getOrgUnitsFromRows, getIndicatorFromColumns, getProgramIndicatorFromColumns } from '../../../util/analytics';
 
 const styles = {
     content: { // TODO: reuse styles
@@ -45,14 +46,18 @@ const ThematicDialog = (props) => {
         columns,
         valueType,
         indicatorGroup,
+        program,
         setIndicatorGroup,
-        setIndicator
+        setIndicator,
+        setProgram,
+        setProgramIndicator,
     } = props;
 
     const orgUnits = getOrgUnitsFromRows(rows);
     const indicator = getIndicatorFromColumns(columns);
+    const programIndicator = getProgramIndicatorFromColumns(columns);
 
-    console.log('indicator', indicator);
+    console.log('programIndicator', programIndicator, setProgramIndicator);
 
     return (
         <Tabs>
@@ -79,8 +84,17 @@ const ThematicDialog = (props) => {
                             />,
                         ]}
                         {valueType === 'pi' && [
-                            <ThematicProgramIndicatorSelect
+                            <ProgramSelect
                                 key='program'
+                                program={program}
+                                onChange={setProgram}
+                                style={styles.flexField}
+                            />,
+                            <ProgramIndicatorSelect
+                                key='indicator'
+                                program={program}
+                                programIndicator={programIndicator}
+                                onChange={setProgramIndicator}
                                 style={styles.flexField}
                             />
                         ]}
@@ -110,7 +124,7 @@ const ThematicDialog = (props) => {
 
 export default connect(
     null,
-    { setIndicatorGroup, setIndicator }
+    { setIndicatorGroup, setIndicator, setProgram, setProgramIndicator }
 )(ThematicDialog);
 
 

@@ -1,8 +1,9 @@
 import { combineEpics } from 'redux-observable';
 import { getInstance as getD2 } from 'd2/lib/d2';
 import 'rxjs/add/operator/concatMap';
+import sortBy from 'lodash/fp/sortBy';
 import * as types from '../constants/actionTypes';
-import { setPrograms, setProgramStages, setProgramAttributes, setProgramStageDataElements } from '../actions/programs';
+import { setPrograms, setProgramStages, setProgramAttributes, setProgramIndicators, setProgramStageDataElements } from '../actions/programs';
 import { errorActionCreator } from '../actions/helpers';
 
 export const loadPrograms = (action$) =>
@@ -25,11 +26,25 @@ export const loadProgramStages = (action$) =>
         .concatMap((action) =>
             getD2()
                 .then(d2 => d2.models.program.get(action.programId, {
-                    fields: 'id,programStages[id,displayName~rename(name)]',
+                    fields: 'programStages[id,displayName~rename(name)]',
                     paging: false,
                 }))
                 .then(program => setProgramStages(action.programId, program.programStages.toArray()))
                 .catch(errorActionCreator(types.PROGRAM_STAGES_LOAD_ERROR))
+        );
+
+// Load program indicators
+export const loadProgramIndicators = (action$) =>
+    action$
+        .ofType(types.PROGRAM_INDICATORS_LOAD)
+        .concatMap((action) =>
+            getD2()
+                .then(d2 => d2.models.program.get(action.programId, {
+                    fields: 'programIndicators[dimensionItem~rename(id),displayName~rename(name)]',
+                    paging: false,
+                }))
+                .then(program => setProgramIndicators(action.programId, sortBy('name', program.programIndicators)))
+                .catch(errorActionCreator(types.PROGRAM_INDICATORS_LOAD_ERROR))
         );
 
 // Load program tracked entity attributes
@@ -61,4 +76,4 @@ export const loadProgramStageDataElements = (action$) =>
                 .catch(errorActionCreator(types.PROGRAM_STAGE_DATA_ELEMENTS_LOAD_ERROR))
         );
 
-export default combineEpics(loadPrograms, loadProgramStages, loadProgramTrackedEntityAttributes, loadProgramStageDataElements);
+export default combineEpics(loadPrograms, loadProgramStages, loadProgramIndicators, loadProgramTrackedEntityAttributes, loadProgramStageDataElements);

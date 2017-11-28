@@ -39,9 +39,7 @@ export class ProgramSelect extends Component {
             />
         );
     }
-
 }
-
 
 export default connect(
     (state) => ({

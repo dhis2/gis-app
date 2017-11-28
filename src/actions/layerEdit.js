@@ -1,18 +1,6 @@
 import * as types from '../constants/actionTypes';
 import { getOptionSet } from './optionSets';
 
-// Set program used (event layer)
-export const setProgram = (program) => ({
-    type: types.LAYER_EDIT_PROGRAM_SET,
-    program,
-});
-
-// Set program stage used (event layer)
-export const setProgramStage = (programStage) => ({
-    type: types.LAYER_EDIT_PROGRAM_STAGE_SET,
-    programStage,
-});
-
 export const addFilter = (filter) => ({
     type: types.LAYER_EDIT_FILTER_ADD,
     filter,
@@ -29,7 +17,25 @@ export const changeFilter = (index, filter) => ({
     filter,
 });
 
-// Set data element used for styling (event layer)
+// Set program used (event and thematic)
+export const setProgram = (program) => ({
+    type: types.LAYER_EDIT_PROGRAM_SET,
+    program,
+});
+
+// Set program stage used (event)
+export const setProgramStage = (programStage) => ({
+    type: types.LAYER_EDIT_PROGRAM_STAGE_SET,
+    programStage,
+});
+
+// Set program indicator used (thematic)
+export const setProgramIndicator = (programIndicator) => ({
+    type: types.LAYER_EDIT_PROGRAM_INDICATOR_SET,
+    programIndicator,
+});
+
+// Set data element used for styling (event)
 export const setStyleDataItem = (dataItem) => ({
     type: types.LAYER_EDIT_STYLE_DATA_ITEM_SET,
     dataItem,
@@ -58,7 +64,7 @@ export const setEventCoordinateField = (fieldId) => ({
     fieldId,
 });
 
-// Set if event clustering should be used (event layer)
+// Set if event clustering should be used (event)
 export const setEventClustering = (checked) => ({
     type: types.LAYER_EDIT_EVENT_CLUSTERING_SET,
     checked,

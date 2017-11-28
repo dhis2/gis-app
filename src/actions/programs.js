@@ -20,6 +20,14 @@ export const setProgramAttributes = (programId, payload) => ({
     payload,
 });
 
+
+// Set program indicators for one program
+export const setProgramIndicators = (programId, payload) => ({
+    type: types.PROGRAM_INDICATORS_SET,
+    programId,
+    payload,
+});
+
 // Set data elements for one program stage
 export const setProgramStageDataElements = (programStageId, payload) => ({
     type: types.PROGRAM_STAGE_DATA_ELEMENTS_SET,
@@ -38,6 +46,12 @@ export const loadProgramStages = (programId) => ({
     programId,
 });
 
+// Load all indicators for one program
+export const loadProgramIndicators = (programId) => ({
+    type: types.PROGRAM_INDICATORS_LOAD,
+    programId,
+});
+
 // Load program tracked entity attributes
 export const loadProgramTrackedEntityAttributes = (programId) => ({
     type: types.PROGRAM_ATTRIBUTES_LOAD,
@@ -49,3 +63,4 @@ export const loadProgramStageDataElements = (programStageId) => ({
     type: types.PROGRAM_STAGE_DATA_ELEMENTS_LOAD,
     programStageId,
 });
+

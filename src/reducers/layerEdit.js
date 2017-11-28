@@ -65,6 +65,20 @@ const layerEdit = (state = null, action) => {
                 }]
             };
 
+        case types.LAYER_EDIT_PROGRAM_INDICATOR_SET:
+            return {
+                ...state,
+                columns: [{
+                    dimension: 'dx',
+                    objectName: 'pi',
+                    items: [{
+                        id: action.programIndicator.id,
+                        name: action.programIndicator.name,
+                        dimensionItemType: 'PROGRAM_INDICATOR',
+                    }]
+                }]
+            };
+
         case types.LAYER_EDIT_PERIOD_TYPE_SET:
 
 

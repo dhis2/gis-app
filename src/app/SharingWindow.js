@@ -179,7 +179,7 @@ export default function SharingWindow(gis, sharing) {
         handler: function(b) {
             var id = userGroupField.getValue(),
                 name = userGroupField.getRawValue(),
-                userGroupAccesses = getBody().object.userGroupAccesses;
+                userGroupAccesses = getBody().object.userGroupAccesses || [];
 
             userGroupField.clearValue();
             b.disable();

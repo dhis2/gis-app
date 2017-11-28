@@ -2,7 +2,6 @@ import isArray from 'd2-utilizr/lib/isArray';
 import isObject from 'd2-utilizr/lib/isObject';
 import isFunction from 'd2-utilizr/lib/isFunction';
 import arrayClean from 'd2-utilizr/lib/arrayClean';
-import arrayDifference from 'd2-utilizr/lib/arrayDifference';
 import arrayFrom from 'd2-utilizr/lib/arrayFrom';
 import arraySort from 'd2-utilizr/lib/arraySort';
 
@@ -10,6 +9,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
     // Load organisation units
     const loadOrganisationUnits = function (view) {
+        const userOrgUnit = gis.map && gis.map.userOrgUnit ? gis.map.userOrgUnit : view.userOrgUnit;
         const items = view.rows[0].items;
         const propertyMap = {
             'name': 'name',
@@ -24,8 +24,8 @@ export default function LayerHandlerThematic(gis, layer) {
 
             params += '&displayProperty=' + displayProperty.toUpperCase();
 
-            if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
-                params += '&userOrgUnit=' + view.userOrgUnit.join(';');
+            if (isArray(userOrgUnit) && userOrgUnit.length) {
+                params += '&userOrgUnit=' + userOrgUnit.join(';');
             }
 
             return gis.init.apiPath + 'geoFeatures.json' + params;
@@ -62,6 +62,7 @@ export default function LayerHandlerThematic(gis, layer) {
         view = view || layer.view;
         features = features || layer.featureStore.features;
 
+        const userOrgUnit = gis.map && gis.map.userOrgUnit ? gis.map.userOrgUnit : view.userOrgUnit;
         const dimConf = gis.conf.finals.dimension;
         const dxItems = view.columns[0].items;
         const isOperand = view.columns[0].dimension === dimConf.operand.objectName;
@@ -94,8 +95,8 @@ export default function LayerHandlerThematic(gis, layer) {
         // display property
         paramString += '&displayProperty=' + displayProperty.toUpperCase();
 
-        if (isArray(view.userOrgUnit) && view.userOrgUnit.length) {
-            paramString += '&userOrgUnit=' + view.userOrgUnit.join(';');
+        if (isArray(userOrgUnit) && userOrgUnit.length) {
+            paramString += '&userOrgUnit=' + userOrgUnit.join(';');
         }
 
         // relative period date

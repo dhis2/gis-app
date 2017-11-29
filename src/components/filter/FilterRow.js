@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import DataItemSelect from '../dataitem/DataItemSelect';
+import DataItemSelect from '../dataItem/DataItemSelect';
 import FilterSelect from '../../containers/FilterSelect';
 import IconButton from 'material-ui/IconButton';
 import RemoveIcon from 'material-ui/svg-icons/navigation/close';
@@ -50,7 +50,7 @@ class FilterRow extends Component {
     }
 
     render() {
-        const { dataItems, dimension, filter, index, onRemove } = this.props;
+        const { program, programStage, dataItems, dimension, filter, index, onRemove } = this.props;
         let dataItem;
 
         if (dataItems && dimension) {
@@ -59,15 +59,14 @@ class FilterRow extends Component {
 
         return (
             <div style={styles.container}>
-                {dataItems ?
-                    <DataItemSelect
-                        label='Data item'
-                        items={dataItems}
-                        value={dataItem ? dataItem.id : null}
-                        onChange={dimension => this.onChange(dimension.id, filter)}
-                        style={styles.select}
-                    />
-                : null}
+                <DataItemSelect
+                    program={program}
+                    programStage={programStage}
+                    // items={dataItems}
+                    value={dataItem ? dataItem.id : null}
+                    onChange={dimension => this.onChange(dimension.id, filter)}
+                    style={styles.select}
+                />
 
                 {dataItem ?
                     <FilterSelect

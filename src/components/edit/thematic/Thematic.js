@@ -11,6 +11,7 @@ import ProgramSelect from '../../program/ProgramSelect';
 import ProgramIndicatorSelect from '../../program/ProgramIndicatorSelect';
 import DataElementGroupSelect  from '../../dataElement/DataElementGroupSelect';
 import DataElementSelect  from '../../dataElement/DataElementSelect';
+import DataItemSelect from '../../dataItem/DataItemSelect';
 import ThematicPeriodSelect from '../../periods/ThematicPeriodSelect';
 import OrgUnitTree from '../../../containers/OrgUnits';
 
@@ -82,7 +83,7 @@ const ThematicDialog = (props) => {
                         style={styles.flexField}
                     />
                     <div style={styles.flexFull}>
-                        {(!valueType || valueType === 'in') && [
+                        {(!valueType || valueType === 'in') && [ // Indicator (default)
                             <IndicatorGroupSelect
                                 key='group'
                                 indicatorGroup={indicatorGroup}
@@ -97,7 +98,7 @@ const ThematicDialog = (props) => {
                                 style={styles.flexField}
                             />,
                         ]}
-                        {valueType === 'pi' && [
+                        {valueType === 'pi' && [ // Program indicator
                             <ProgramSelect
                                 key='program'
                                 program={program}
@@ -112,7 +113,7 @@ const ThematicDialog = (props) => {
                                 style={styles.flexField}
                             />
                         ]}
-                        {valueType === 'de' && [
+                        {valueType === 'de' && [ // Data element
                             <DataElementGroupSelect
                                 key='group'
                                 dataElementGroup={dataElementGroup}
@@ -125,6 +126,24 @@ const ThematicDialog = (props) => {
                                 onChange={setDataElement}
                                 style={styles.flexField}
                             />,
+                        ]}
+                        {valueType === 'di' && [ // Event data items
+                            <ProgramSelect
+                                key='program'
+                                program={program}
+                                onChange={setProgram}
+                                style={styles.flexField}
+                            />,
+                            <DataItemSelect
+                                key='item'
+                                // items={dataItems}
+                                // value={styleDataItem ? styleDataItem.id : null}
+                                onChange={console.log}
+                                style={styles.flexField}
+                            />
+                        ]}
+                        {valueType === 'ds' && [ // Reporting rates
+                            <div>Reporting rates</div>,
                         ]}
                     </div>
                     <ThematicPeriodSelect

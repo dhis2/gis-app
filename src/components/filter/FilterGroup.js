@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import i18next from 'i18next';
-import sortBy from 'lodash/fp/sortBy';
 import Button from 'd2-ui/lib/button/Button';
 import FilterRow from './FilterRow';
-import { loadProgramTrackedEntityAttributes, loadProgramStageDataElements } from '../../actions/programs';
 import { addFilter, removeFilter, changeFilter } from '../../actions/layerEdit';
 
 const styles = {
@@ -23,32 +21,11 @@ const styles = {
 
 class FilterGroup extends Component {
 
-    componentDidUpdate() {
-        const {
-            program,
-            programStage,
-            programAttributes,
-            dataElements,
-            loadProgramTrackedEntityAttributes,
-            loadProgramStageDataElements
-        } = this.props;
-
-        if (program && programAttributes[program.id]) {
-            loadProgramTrackedEntityAttributes(program.id);
-        }
-
-        if (programStage && !dataElements[programStage.id]) {
-            loadProgramStageDataElements(programStage.id);
-        }
-    }
-
     render() {
         const {
             filters = [],
             program,
             programStage,
-            programAttributes,
-            dataElements,
             addFilter,
             removeFilter,
             changeFilter,
@@ -62,18 +39,14 @@ class FilterGroup extends Component {
             );
         }
 
-        // Merge data elements and program attributes, filter out items not supported, and sort the result
-        const dataItems = sortBy('name', [ ...programAttributes[program.id] || [], ...dataElements[programStage.id] || [] ]
-            .filter(item => !['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'].includes(item.valueType))
-        );
-
         return (
             <div style={styles.container}>
                 {filters.map((item, index) => (
                     <FilterRow
                         key={index}
                         index={index}
-                        dataItems={dataItems}
+                        program={program}
+                        programStage={programStage}
                         onChange={changeFilter}
                         onRemove={removeFilter}
                         {...item}
@@ -87,17 +60,11 @@ class FilterGroup extends Component {
             </div>
         );
     }
-
 }
 
 export default connect(
-    (state) => {
-        return {
-            programAttributes: state.programTrackedEntityAttributes,
-            dataElements: state.programStageDataElements,
-        };
-    },
-    { addFilter, removeFilter, changeFilter, loadProgramTrackedEntityAttributes, loadProgramStageDataElements }
+    null,
+    { addFilter, removeFilter, changeFilter }
 )(FilterGroup);
 
 

@@ -11,8 +11,8 @@ import ProgramStageSelect from '../program/ProgramStageSelect';
 import EventPeriodSelect from '../periods/EventPeriodSelect';
 import FilterGroup from '../filter/FilterGroup';
 import ImageSelect from '../d2-ui/ImageSelect';
-import DataItemSelect from '../dataitem/DataItemSelect';
-import DataItemStyle from '../dataitem/DataItemStyle';
+import DataItemSelect from '../dataItem/DataItemSelect';
+import DataItemStyle from '../dataItem/DataItemStyle';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnits from '../../containers/OrgUnits';
 import {

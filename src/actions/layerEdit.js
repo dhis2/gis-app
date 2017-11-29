@@ -152,6 +152,12 @@ export const setIndicator = (indicator) => ({
     indicator,
 });
 
+// Set data set item (reporting rate, thematic)
+export const setDataSetItem = (dataSetItem) => ({
+    type: types.LAYER_EDIT_DATA_SET_ITEM_SET,
+    dataSetItem,
+});
+
 // Set aggregation type (thematic)
 export const setAggregationType = (aggregationType) => ({
     type: types.LAYER_EDIT_AGGREGATION_TYPE_SET,

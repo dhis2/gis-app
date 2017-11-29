@@ -2,7 +2,7 @@ import i18next from 'i18next';
 import { getInstance as getD2 } from 'd2/lib/d2';
 import isString from 'd2-utilizr/lib/isString';
 import { isValidCoordinate } from '../util/map';
-import { getAnalyticsEvents } from '../util/helpers';
+import { getAnalyticsRequest } from '../util/helpers';
 import { getClassBins, getClass } from '../util/classify';
 import {
     getNumericLegendItems,
@@ -54,8 +54,8 @@ const addEventClusterOptions = async (config) => {
         return config;
     }
 
-    const analyticsEvents = await getAnalyticsEvents(config);
-    const response = await analyticsEvents.getCount();
+    const analyticsRequest = await getAnalyticsRequest(config);
+    const response = await d2.analytics.events.getCount(analyticsRequest);
 
     if (response.extent) {
         const extent = response.extent.match(/([-\d\.]+)/g);
@@ -88,8 +88,11 @@ const addEventData = async (config) => {
         return config;
     }
 
-    const analyticsEvents = await getAnalyticsEvents(config);
-    const data = await analyticsEvents.getQuery();
+    const d2 = await getD2();
+    const analyticsRequest = await getAnalyticsRequest(config);
+    const data = await d2.analytics.events.getQuery(analyticsRequest);
+
+    console.log(data);
 
     const { metadata, headers, rows } = data;
     const names = {

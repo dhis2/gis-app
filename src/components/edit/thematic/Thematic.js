@@ -12,6 +12,7 @@ import ProgramIndicatorSelect from '../../program/ProgramIndicatorSelect';
 import DataElementGroupSelect  from '../../dataElement/DataElementGroupSelect';
 import DataElementSelect  from '../../dataElement/DataElementSelect';
 import DataItemSelect from '../../dataItem/DataItemSelect';
+import DataSetsSelect from '../../dataSets/DataSetsSelect';
 import ThematicPeriodSelect from '../../periods/ThematicPeriodSelect';
 import OrgUnitTree from '../../../containers/OrgUnits';
 
@@ -22,12 +23,14 @@ import {
     setProgramIndicator,
     setDataElementGroup,
     setDataElement,
+    setDataSetItem,
 } from '../../../actions/layerEdit';
 
 import {
     getOrgUnitsFromRows,
     getIndicatorFromColumns,
     getProgramIndicatorFromColumns,
+    getReportingRateFromColumns,
 } from '../../../util/analytics';
 
 const styles = {
@@ -70,6 +73,7 @@ const ThematicDialog = (props) => {
         setProgramIndicator,
         setDataElementGroup,
         setDataElement,
+        setDataSetItem,
     } = props;
 
     console.log('valueType', valueType, dataElementGroup);
@@ -136,15 +140,20 @@ const ThematicDialog = (props) => {
                             />,
                             <DataItemSelect
                                 key='item'
-                                // items={dataItems}
+                                program={program}
                                 // value={styleDataItem ? styleDataItem.id : null}
                                 onChange={console.log}
                                 style={styles.flexField}
                             />
                         ]}
-                        {valueType === 'ds' && [ // Reporting rates
-                            <div>Reporting rates</div>,
-                        ]}
+                        {valueType === 'ds' && ( // Reporting rates
+                            <DataSetsSelect
+                                key='item'
+                                dataSet={getReportingRateFromColumns(columns)}
+                                onChange={setDataSetItem}
+                                style={styles.flexField}
+                            />
+                        )}
                     </div>
                     <ThematicPeriodSelect
                         style={styles.flexField}
@@ -171,7 +180,7 @@ const ThematicDialog = (props) => {
 
 export default connect(
     null,
-    { setIndicatorGroup, setIndicator, setProgram, setProgramIndicator, setDataElementGroup, setDataElement }
+    { setIndicatorGroup, setIndicator, setProgram, setProgramIndicator, setDataElementGroup, setDataElement, setDataSetItem }
 )(ThematicDialog);
 
 

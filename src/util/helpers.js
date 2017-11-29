@@ -11,61 +11,56 @@ const displayPropertyMap = {
 export const getDisplayPropertyUrl = (name) => (displayPropertyMap[name] || 'displayName') + '~rename(name)';
 
 
-export const getAnalyticsEvents = async (config) => {
+export const getAnalyticsRequest = async (config) => {
     const d2 = await getD2();
     const { program, programStage, rows, columns, filters, startDate, endDate, eventCoordinateField } = config;
 
-    /*
-    const analyticsEvents = d2.analytics.events
-        .setProgram(program.id)
-        .addParameters({
-            stage: programStage.id,
-            coordinatesOnly: true,
-        });
-    */
+    let analyticsRequest = new d2.analytics.request()
+        .withProgram(program.id)
+        .withStage(programStage.id)
+        .withCoordinatesOnly(true);
+
 
     // TODO: Temp solution to clear dimension and filters
-    const analyticsEvents = d2.analytics.events;
+    // const analyticsEvents = d2.analytics.events;
+    //analyticsEvents.dimensions = [];
+    //analyticsEvents.filters = [];
 
-    analyticsEvents.dimensions = [];
-    analyticsEvents.filters = [];
-
+    /*
     analyticsEvents
         .setProgram(program.id)
         .addParameters({
             stage: programStage.id,
             coordinatesOnly: true,
         });
+        */
 
     if (Array.isArray(filters) && filters.length) {
-        analyticsEvents.addFilter('pe:' + filters[0].items[0].id);
+        analyticsRequest = analyticsRequest.addPeriodFilter(filters[0].items[0].id);
     } else {
-        analyticsEvents.addParameters({
-            startDate: startDate,
-            endDate: endDate,
-        });
+        analyticsRequest = analyticsRequest
+            .withStartDate(startDate)
+            .withEndDate(endDate);
     }
 
     // Organisation units
     if (rows[0] && rows[0].dimension === 'ou' && Array.isArray(rows[0].items)) {
-        analyticsEvents.addDimension('ou:' + rows[0].items.map(ou => ou.id).join(';'));
+        analyticsRequest = analyticsRequest.addOrgUnitDimension(rows[0].items.map(ou => ou.id));
     }
 
     // Dimensions
     columns.forEach(el => {
         if (el.dimension !== 'dx') { // API sometimes returns empty dx filter
-            analyticsEvents.addDimension(el.dimension + (el.filter ? ':' + el.filter : ''));
+            analyticsRequest = analyticsRequest.addDimension(el.dimension, el.filter);
         }
     });
 
     // If coordinate field other than event coordinate
     if (eventCoordinateField) {
-        analyticsEvents
+        analyticsRequest = analyticsRequest
             .addDimension(eventCoordinateField) // Used by analytics/events/query/
-            .addParameters({
-                coordinateField: eventCoordinateField, // Used by analytics/events/count and analytics/events/cluster
-            });
+            .withCoorindateField(eventCoordinateField); // Used by analytics/events/count and analytics/events/cluster
     }
 
-    return analyticsEvents;
+    return analyticsRequest;
 };

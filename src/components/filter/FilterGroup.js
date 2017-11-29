@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import i18next from 'i18next';
+import sortBy from 'lodash/fp/sortBy';
 import Button from 'd2-ui/lib/button/Button';
 import FilterRow from './FilterRow';
+import { combineDataItems } from '../../util/analytics';
 import { addFilter, removeFilter, changeFilter } from '../../actions/layerEdit';
 
 const styles = {
@@ -24,6 +26,7 @@ class FilterGroup extends Component {
     render() {
         const {
             filters = [],
+            dataItems,
             program,
             programStage,
             addFilter,
@@ -45,6 +48,7 @@ class FilterGroup extends Component {
                     <FilterRow
                         key={index}
                         index={index}
+                        dataItems={dataItems}
                         program={program}
                         programStage={programStage}
                         onChange={changeFilter}
@@ -63,7 +67,13 @@ class FilterGroup extends Component {
 }
 
 export default connect(
-    null,
+    (state, { program, programStage }) => ({
+        dataItems: combineDataItems(
+            state.programTrackedEntityAttributes[program.id],
+            state.programStageDataElements[programStage.id],
+            ['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'], // Exclude these value types
+        )
+    }),
     { addFilter, removeFilter, changeFilter }
 )(FilterGroup);
 

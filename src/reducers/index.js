@@ -21,6 +21,7 @@ import indicatorGroups from './indicatorGroups';
 import optionSets from './optionSets';
 import dataElementGroups from './dataElementGroups';
 import dataElements from './dataElements';
+import dataSets from './dataSets';
 
 export default combineReducers({
     ui,
@@ -45,4 +46,5 @@ export default combineReducers({
     optionSets,
     dataElementGroups,
     dataElements,
+    dataSets,
 });

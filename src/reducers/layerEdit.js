@@ -93,6 +93,29 @@ const layerEdit = (state = null, action) => {
 
             return state;
 
+        case types.LAYER_EDIT_DATA_SET_ITEM_SET:
+            console.log('LAYER_EDIT_DATA_SET_ITEM_SET', {
+                dimension: 'dx',
+                objectName: 'ds',
+                items: [{
+                    id: action.dataSetItem.id,
+                    name: action.dataSetItem.name,
+                    dimensionItemType: 'REPORTING_RATE',
+                }]
+            });
+            return {
+                ...state,
+                columns: [{
+                    dimension: 'dx',
+                    objectName: 'ds',
+                    items: [{
+                        id: action.dataSetItem.id,
+                        name: action.dataSetItem.name,
+                        dimensionItemType: 'REPORTING_RATE',
+                    }]
+                }]
+            };
+
         case types.LAYER_EDIT_PERIOD_TYPE_SET:
             return {
                 ...state,

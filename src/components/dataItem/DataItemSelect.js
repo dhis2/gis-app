@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
 import i18next from 'i18next';
 import { connect } from 'react-redux';
-import sortBy from 'lodash/fp/sortBy';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
+import { combineDataItems } from '../../util/analytics';
 import { loadProgramTrackedEntityAttributes, loadProgramStageDataElements } from '../../actions/programs';
 
 export class DataItemSelect extends Component {
 
     componentDidMount() {
+        this.loadDataItems();
+    }
+
+    componentDidUpdate() {
+        this.loadDataItems();
+    }
+
+    // TODO: Make sure data load is only triggered once
+    // TODO: Don't call more than needed
+    loadDataItems() {
         const {
             program,
             programStage,
@@ -16,6 +26,8 @@ export class DataItemSelect extends Component {
             loadProgramTrackedEntityAttributes,
             loadProgramStageDataElements
         } = this.props;
+
+        // console.log('loadDataItems', program, programAttributes);
 
         if (program && !programAttributes[program.id]) {
             loadProgramTrackedEntityAttributes(program.id);
@@ -38,13 +50,14 @@ export class DataItemSelect extends Component {
             style,
         } = this.props;
 
-
-        if (!program && !programStage) {
+        if (!program) {
             return null;
         }
-        // Merge data elements and program attributes, filter out items not supported, and sort the result
-        const dataItems = sortBy('name', [ ...programAttributes[program.id] || [], ...dataElements[programStage.id] || [] ]
-            .filter(item => !['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'].includes(item.valueType))
+
+        const dataItems = combineDataItems(
+            programAttributes[program.id],
+            programStage ? dataElements[programStage.id] : [],
+            ['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'] // Exclude some value types
         );
 
         return (

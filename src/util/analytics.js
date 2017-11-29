@@ -1,7 +1,6 @@
 import i18next from 'i18next';
+import sortBy from 'lodash/fp/sortBy';
 import { relativePeriods } from '../constants/periods';
-
-
 
 /* DATA ITEMS */
 
@@ -32,6 +31,14 @@ export const getProgramIndicatorFromColumns = columns => {
     return (indicator && indicator.items) ? indicator.items[0] : null;
 };
 
+export const getReportingRateFromColumns = columns => {
+    if (!Array.isArray(columns)) {
+        return null;
+    }
+
+    const dataItem = columns.filter(item => item.objectName === 'ds')[0];
+    return (dataItem && dataItem.items) ? dataItem.items[0] : null;
+};
 
 /* ORGANISATION UNITS */
 
@@ -134,5 +141,11 @@ export const getFilterOperatorAsText = (id) => ({
   'LIKE': i18next.t('contains'),
   '!LIKE': i18next.t('doesn\'t contains'),
 }[id]);
+
+// Combine data items into one array and exclude certain value types
+export const combineDataItems = (dataItemsA = [], dataItemsB = [], excludeTypes = []) =>
+    sortBy('name', [ ...dataItemsA, ...dataItemsB ]
+        .filter(item => !excludeTypes.includes(item.valueType)));
+
 
 

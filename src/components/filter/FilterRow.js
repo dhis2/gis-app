@@ -50,7 +50,7 @@ class FilterRow extends Component {
     }
 
     render() {
-        const { program, programStage, dataItems, dimension, filter, index, onRemove } = this.props;
+        const { index, dimension, filter, dataItems, program, programStage, onRemove } = this.props;
         let dataItem;
 
         if (dataItems && dimension) {
@@ -60,15 +60,14 @@ class FilterRow extends Component {
         return (
             <div style={styles.container}>
                 <DataItemSelect
+                    items={dataItems}
+                    value={dimension || null}
                     program={program}
                     programStage={programStage}
-                    // items={dataItems}
-                    value={dataItem ? dataItem.id : null}
-                    onChange={dimension => this.onChange(dimension.id, filter)}
+                    onChange={dataItem => this.onChange(dataItem.id, filter)}
                     style={styles.select}
                 />
-
-                {dataItem ?
+                {dimension ?
                     <FilterSelect
                         {...dataItem}
                         filter={filter}
@@ -84,9 +83,7 @@ class FilterRow extends Component {
                 </IconButton>
             </div>
         )
-
     }
-
 }
 
 export default FilterRow;

@@ -14,7 +14,11 @@ import DataElementSelect  from '../../dataElement/DataElementSelect';
 import DataItemSelect from '../../dataItem/DataItemSelect';
 import DataSetsSelect from '../../dataSets/DataSetsSelect';
 import ThematicPeriodSelect from '../../periods/ThematicPeriodSelect';
-import OrgUnitTree from '../../../containers/OrgUnits';
+import OrgUnitTree from '../../orgunits/OrgUnitTree';
+import OrgUnitGroupSelect from '../../orgunits/OrgUnitGroupSelect';
+import OrgUnitLevelSelect from '../../orgunits/OrgUnitLevelSelect';
+import UserOrgUnits from '../../orgunits/UserOrgUnits';
+
 
 import {
     setIndicatorGroup,
@@ -43,7 +47,7 @@ const styles = {
         // height: 300,
         overflowY: 'auto',
     },
-    flexField: {
+    flexHalf: {
         flex: '50%',
         minWidth: 230,
         boxSizing: 'border-box',
@@ -84,7 +88,7 @@ const ThematicDialog = (props) => {
                 <div style={styles.content}>
                     <ValueTypeSelect
                         value={valueType}
-                        style={styles.flexField}
+                        style={styles.flexHalf}
                     />
                     <div style={styles.flexFull}>
                         {(!valueType || valueType === 'in') && [ // Indicator (default)
@@ -92,14 +96,14 @@ const ThematicDialog = (props) => {
                                 key='group'
                                 indicatorGroup={indicatorGroup}
                                 onChange={setIndicatorGroup}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />,
                             <GroupIndicatorSelect
                                 key='indicator'
                                 indicatorGroup={indicatorGroup}
                                 indicator={getIndicatorFromColumns(columns)}
                                 onChange={setIndicator}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />,
                         ]}
                         {valueType === 'pi' && [ // Program indicator
@@ -107,14 +111,14 @@ const ThematicDialog = (props) => {
                                 key='program'
                                 program={program}
                                 onChange={setProgram}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />,
                             <ProgramIndicatorSelect
                                 key='indicator'
                                 program={program}
                                 programIndicator={getProgramIndicatorFromColumns(columns)}
                                 onChange={setProgramIndicator}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />
                         ]}
                         {valueType === 'de' && [ // Data element
@@ -122,13 +126,13 @@ const ThematicDialog = (props) => {
                                 key='group'
                                 dataElementGroup={dataElementGroup}
                                 onChange={setDataElementGroup}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />,
                             <DataElementSelect
                                 key='element'
                                 dataElementGroup={dataElementGroup}
                                 onChange={setDataElement}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />,
                         ]}
                         {valueType === 'di' && [ // Event data items
@@ -136,14 +140,14 @@ const ThematicDialog = (props) => {
                                 key='program'
                                 program={program}
                                 onChange={setProgram}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />,
                             <DataItemSelect
                                 key='item'
                                 program={program}
                                 // value={styleDataItem ? styleDataItem.id : null}
                                 onChange={console.log}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />
                         ]}
                         {valueType === 'ds' && ( // Reporting rates
@@ -151,23 +155,34 @@ const ThematicDialog = (props) => {
                                 key='item'
                                 dataSet={getReportingRateFromColumns(columns)}
                                 onChange={setDataSetItem}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />
                         )}
                     </div>
                     <ThematicPeriodSelect
-                        style={styles.flexField}
+                        style={styles.flexHalf}
                     />
                     <AggregationTypeSelect
-                        style={styles.flexField}
+                        style={styles.flexHalf}
                     />
                 </div>
             </Tab>
             <Tab label={i18next.t('Organisation units')}>
                 <div style={styles.content}>
-                    <OrgUnitTree
-                        selected={getOrgUnitsFromRows(rows)}
-                    />
+                    <div style={styles.flexHalf}>
+                        <OrgUnitTree />
+                    </div>
+                    <div style={styles.flexHalf}>
+                        <OrgUnitLevelSelect
+                            onChange={console.log}
+                        />
+                        <OrgUnitGroupSelect
+                            onChange={console.log}
+                        />
+                        <UserOrgUnits
+                            onChange={console.log}
+                        />
+                    </div>
                 </div>
             </Tab>
             <Tab label={i18next.t('Style')}>
@@ -184,3 +199,19 @@ export default connect(
 )(ThematicDialog);
 
 
+/*
+#####
+<div style={styles.content}>
+    <OrgUnitTree
+        selected={getOrgUnitsFromRows(rows)}
+    />
+</div>
+<div>
+<OrgUnitGroupSelect
+onChange={console.log}
+/>
+<OrgUnitLevelSelect
+onChange={console.log}
+/>
+</div>
+    */

@@ -23,7 +23,7 @@ import Root from './components/Root';
 // import storeFactory from './store';
 import store from './store';
 // import { loadPrograms } from './actions/programs';
-import { loadOrgUnitTree } from './actions/orgUnitTree';
+import { loadOrgUnitTree } from './actions/orgUnits';
 import { loadExternalLayers } from './actions/externalLayers';
 import { resizeScreen } from './actions/ui';
 
@@ -81,7 +81,9 @@ getManifest('manifest.webapp')
         // Include all API endpoints in use by this app
         config.schemas = [
             'organisationUnit',
+            'organisationUnitGroup',
             'organisationUnitGroupSet',
+            'organisationUnitLevel',
             'program',
             'programStage',
             'externalMapLayer',

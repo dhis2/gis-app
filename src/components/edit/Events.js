@@ -14,7 +14,8 @@ import ImageSelect from '../d2-ui/ImageSelect';
 import DataItemSelect from '../dataItem/DataItemSelect';
 import DataItemStyle from '../dataItem/DataItemStyle';
 import ColorPicker from '../d2-ui/ColorPicker';
-import OrgUnits from '../../containers/OrgUnits';
+import OrgUnitTree from '../orgunits/OrgUnitTree';
+
 import {
     setProgram,
     setProgramStage,
@@ -172,8 +173,8 @@ class EventDialog extends Component {
                 </Tab>
                 <Tab label={i18next.t('Organisation units')}>
                     <div style={styles.content}>
-                        <OrgUnits
-                            items={orgUnits ? orgUnits.items : []}
+                        <OrgUnitTree
+                            // items={orgUnits ? orgUnits.items : []}
                         />
                     </div>
                 </Tab>

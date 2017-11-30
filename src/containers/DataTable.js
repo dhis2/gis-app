@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import DataTable from '../components/datatable/DataTable';
-import { selectOrgUnit, unselectOrgUnit } from '../actions/orgUnit';
+import { selectOrgUnit, unselectOrgUnit } from '../actions/orgUnits';
 import { setDataFilter, clearDataFilter } from '../actions/dataFilters';
 import { filterData } from '../util/filter';
 

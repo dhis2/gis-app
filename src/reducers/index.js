@@ -8,7 +8,9 @@ import dataTable from './dataTable';
 import contextMenu from './contextMenu';
 import orgUnit from './orgUnit';
 import orgUnitTree from './orgUnitTree';
+import orgUnitGroups from './orgUnitGroups';
 import orgUnitGroupSets from './orgUnitGroupSets';
+import orgUnitLevels from './orgUnitLevels';
 import relocate from './relocate';
 import loading from './loading';
 import programs from './programs';
@@ -34,6 +36,8 @@ export default combineReducers({
     orgUnit,
     orgUnitTree,
     orgUnitGroupSets,
+    orgUnitGroups,
+    orgUnitLevels,
     relocate,
     loading,
     programs,

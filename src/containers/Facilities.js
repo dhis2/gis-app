@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Facilities from '../components/edit/Facilities';
-import { loadOrgUnitGroupSets } from '../actions/orgUnitGroupSets';
+import { loadOrgUnitGroupSets } from '../actions/orgUnits';
 import {
     setOrganisationUnitGroupSet
 } from '../actions/layerEdit';

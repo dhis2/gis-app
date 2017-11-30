@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import ContextMenu from '../components/map/ContextMenu';
 import { closeContextMenu, openCoordinatePopup } from '../actions/map';
 import { drillOverlay } from '../actions/overlays';
-import { openOrgUnit, startRelocateOrgUnit, changeOrgUnitCoordinate} from '../actions/orgUnit';
+import { openOrgUnit, startRelocateOrgUnit, changeOrgUnitCoordinate} from '../actions/orgUnits';
 
 const mapStateToProps = state => ({
     ...state.contextMenu

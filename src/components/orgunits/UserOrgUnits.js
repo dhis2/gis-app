@@ -61,7 +61,7 @@ const UserOrgUnits = ({ selected, onClick, style }) => (
                 <div key={level.id} style={styles.level}>
                     <Checkbox
                         label={level.label}
-                        checked={selected.some(item => item.id === level.id)}
+                        // checked={selected.some(item => item.id === level.id)}
                         onCheck={isChecked => onClick({
                             id: level.id,
                         })}

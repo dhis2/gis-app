@@ -28,6 +28,9 @@ import {
     setDataElementGroup,
     setDataElement,
     setDataSetItem,
+    setOrgUnitLevels,
+    setOrgUnitGroups,
+    setUserOrgUnits,
 } from '../../../actions/layerEdit';
 
 import {
@@ -35,6 +38,9 @@ import {
     getIndicatorFromColumns,
     getProgramIndicatorFromColumns,
     getReportingRateFromColumns,
+    getOrgUnitLevelsFromRows,
+    getOrgUnitGroupsFromRows,
+    getUserOrgUnitsFromRows,
 } from '../../../util/analytics';
 
 const styles = {
@@ -78,9 +84,12 @@ const ThematicDialog = (props) => {
         setDataElementGroup,
         setDataElement,
         setDataSetItem,
+        setOrgUnitLevels,
+        setOrgUnitGroups,
+        setUserOrgUnits,
     } = props;
 
-    console.log('valueType', valueType, dataElementGroup);
+    console.log(rows);
 
     return (
         <Tabs>
@@ -170,17 +179,23 @@ const ThematicDialog = (props) => {
             <Tab label={i18next.t('Organisation units')}>
                 <div style={styles.content}>
                     <div style={styles.flexHalf}>
-                        <OrgUnitTree />
+                        <OrgUnitTree
+                            // selected={getOrgUnitsFromRows(rows)}
+                        />
                     </div>
                     <div style={styles.flexHalf}>
                         <OrgUnitLevelSelect
-                            onChange={console.log}
+                            orgUnitLevel={getOrgUnitLevelsFromRows(rows)}
+                            onChange={setOrgUnitLevels}
                         />
                         <OrgUnitGroupSelect
-                            onChange={console.log}
+                            orgUnitGroup={getOrgUnitGroupsFromRows(rows)}
+                            onChange={setOrgUnitGroups}
+
                         />
                         <UserOrgUnits
-                            onChange={console.log}
+                            selected={getUserOrgUnitsFromRows(rows)}
+                            onChange={setUserOrgUnits}
                         />
                     </div>
                 </div>
@@ -195,23 +210,17 @@ const ThematicDialog = (props) => {
 
 export default connect(
     null,
-    { setIndicatorGroup, setIndicator, setProgram, setProgramIndicator, setDataElementGroup, setDataElement, setDataSetItem }
+    {
+        setIndicatorGroup,
+        setIndicator,
+        setProgram,
+        setProgramIndicator,
+        setDataElementGroup,
+        setDataElement,
+        setDataSetItem,
+        setOrgUnitLevels,
+        setOrgUnitGroups,
+        setUserOrgUnits,
+    }
 )(ThematicDialog);
 
-
-/*
-#####
-<div style={styles.content}>
-    <OrgUnitTree
-        selected={getOrgUnitsFromRows(rows)}
-    />
-</div>
-<div>
-<OrgUnitGroupSelect
-onChange={console.log}
-/>
-<OrgUnitLevelSelect
-onChange={console.log}
-/>
-</div>
-    */

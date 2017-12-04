@@ -1,5 +1,10 @@
 import * as types from '../constants/actionTypes';
-import { setFiltersFromPeriod } from '../util/analytics';
+import {
+    setFiltersFromPeriod,
+    addOrgUnitLevelsToRows,
+    addOrgUnitGroupsToRows,
+    addUserOrgUnitsToRows,
+} from '../util/analytics';
 
 const layerEdit = (state = null, action) => {
     let columns;
@@ -273,12 +278,24 @@ const layerEdit = (state = null, action) => {
                 eventPointColor: action.color,
             };
 
-        case types.LAYER_EDIT_ORGANISATION_UNIT_GROUP_SET:
+        case types.LAYER_EDIT_ORGANISATION_UNIT_LEVELS_SET:
             return {
                 ...state,
-                organisationUnitGroupSet: {
-                    ...action.organisationUnitGroupSet,
-                },
+                rows: addOrgUnitLevelsToRows(state.rows, action.levels),
+            };
+
+        case types.LAYER_EDIT_ORGANISATION_UNIT_GROUPS_SET:
+            return {
+                ...state,
+                rows: addOrgUnitGroupsToRows(state.rows, action.groups),
+            };
+
+        case types.LAYER_EDIT_USER_ORGANISATION_UNITS_SET:
+            console.log('#', action.userOrgUnits);
+
+            return {
+                ...state,
+                rows: addUserOrgUnitsToRows(state.rows, action.userOrgUnits),
             };
 
       case types.LAYER_EDIT_ORGANISATIOM_UNIT_TOGGLE:

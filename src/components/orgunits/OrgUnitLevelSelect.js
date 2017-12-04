@@ -8,7 +8,7 @@ import { loadOrgUnitLevels } from '../../actions/orgUnits';
 export class OrgUnitLevelSelect extends Component {
 
     static propTypes = {
-        orgUnitLevel: PropTypes.object,
+        orgUnitLevel: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
         orgUnitLevels: PropTypes.array,
         onChange: PropTypes.func.isRequired,
         style: PropTypes.object,
@@ -33,7 +33,7 @@ export class OrgUnitLevelSelect extends Component {
             <SelectField
                 label={i18next.t('Select levels')}
                 items={orgUnitLevels}
-                value={orgUnitLevel ? orgUnitLevel.id : null}
+                value={orgUnitLevel}
                 multiple={true}
                 onChange={onChange}
                 style={style}

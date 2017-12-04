@@ -163,3 +163,21 @@ export const setAggregationType = (aggregationType) => ({
     type: types.LAYER_EDIT_AGGREGATION_TYPE_SET,
     aggregationType,
 });
+
+// Set org. unit levels (facility, thematic, boundary)
+export const setOrgUnitLevels = (levels) => ({
+    type: types.LAYER_EDIT_ORGANISATION_UNIT_LEVELS_SET,
+    levels,
+});
+
+// Set org. unit levels (facility, thematic, boundary)
+export const setOrgUnitGroups = (groups) => ({
+    type: types.LAYER_EDIT_ORGANISATION_UNIT_GROUPS_SET,
+    groups,
+});
+
+// Set user org. unit levels (event, facility, thematic, boundary)
+export const setUserOrgUnits = (userOrgUnits) => ({
+    type: types.LAYER_EDIT_USER_ORGANISATION_UNITS_SET,
+    userOrgUnits,
+});

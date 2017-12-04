@@ -8,7 +8,7 @@ import { loadOrgUnitGroups } from '../../actions/orgUnits';
 export class OrgUnitGroupSelect extends Component {
 
     static propTypes = {
-        orgUnitGroup: PropTypes.object,
+        orgUnitGroup: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
         orgUnitGroups: PropTypes.array,
         onChange: PropTypes.func.isRequired,
         style: PropTypes.object,
@@ -33,7 +33,7 @@ export class OrgUnitGroupSelect extends Component {
             <SelectField
                 label={i18next.t('Select groups')}
                 items={orgUnitGroups}
-                value={orgUnitGroup ? orgUnitGroup.id : null}
+                value={orgUnitGroup}
                 multiple={true}
                 onChange={onChange}
                 style={style}

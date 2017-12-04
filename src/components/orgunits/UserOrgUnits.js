@@ -51,8 +51,7 @@ const levels = [{
     icon: ThirdLevel,
 }];
 
-
-const UserOrgUnits = ({ selected, onClick, style }) => (
+const UserOrgUnits = ({ selected, onChange, style }) => (
     <div style={style}>
         <div style={styles.title}>User organisation units</div>
         {levels.map(level => {
@@ -61,10 +60,9 @@ const UserOrgUnits = ({ selected, onClick, style }) => (
                 <div key={level.id} style={styles.level}>
                     <Checkbox
                         label={level.label}
-                        // checked={selected.some(item => item.id === level.id)}
-                        onCheck={isChecked => onClick({
-                            id: level.id,
-                        })}
+                        checked={selected.indexOf(level.id) !== -1}
+                        onCheck={isChecked => onChange(isChecked ? [...selected, level.id] : selected.filter(id => id !== level.id))}
+                        // onCheck={isChecked => console.log(selected)}
                         style={styles.checkbox}
                         labelStyle={styles.checkboxLabel}
                         iconStyle={styles.checkboxIcon}
@@ -78,7 +76,7 @@ const UserOrgUnits = ({ selected, onClick, style }) => (
 
 UserOrgUnits.propTypes = {
     selected:  PropTypes.array,
-    onClick: PropTypes.func,
+    onChange: PropTypes.func,
 };
 
 export default UserOrgUnits;

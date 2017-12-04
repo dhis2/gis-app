@@ -1,5 +1,6 @@
 import i18next from 'i18next';
 import sortBy from 'lodash/fp/sortBy';
+import negate from 'lodash/fp/negate';
 import { relativePeriods } from '../constants/periods';
 
 /* DATA ITEMS */
@@ -40,19 +41,72 @@ export const getReportingRateFromColumns = columns => {
     return (dataItem && dataItem.items) ? dataItem.items[0] : null;
 };
 
-/* ORGANISATION UNITS */
+/* DIMENSIONS */
 
-export const getOrgUnitsFromRows = (rows) => {
-    if (!Array.isArray(rows)) {
-        return null;
-    }
+const createDimension = (dimension, items) => ({ dimension, items });
 
+/* ORGANISATION UNIT */
+
+export const getOrgUnitsFromRows = (rows = []) => {
     const orgUnits = rows.filter(item => item.dimension === 'ou')[0];
-    return (orgUnits && orgUnits.items) ? orgUnits.items : null;
+    return (orgUnits && orgUnits.items) ? orgUnits.items : [];
 };
 
+/* ORGANISATION UNIT LEVELS */
 
-/* PERIOD */
+const isOrgUnitLevel = (ou) => ou.id.substring(0, 6) === 'LEVEL-';
+const getIdFromOrgUnitLevel = (ou) => ou.id.substring(6);
+const createOrgUnitLevel = (id) => ({ id: `LEVEL-${id}` });
+
+export const getOrgUnitLevelsFromRows = (rows = []) =>
+    getOrgUnitsFromRows(rows)
+        .filter(isOrgUnitLevel)
+        .map(getIdFromOrgUnitLevel);
+
+export const addOrgUnitLevelsToRows = (rows = [], levels = []) => [
+    createDimension('ou', [
+        ...getOrgUnitsFromRows(rows).filter(negate(isOrgUnitLevel)),
+        ...levels.map(createOrgUnitLevel),
+    ])
+];
+
+/* ORGANISATION UNIT GROUPS */
+
+const isOrgUnitGroup = (ou) => ou.id.substring(0, 9) === 'OU_GROUP-';
+const getIdFromOrgUnitGroup = (ou) => ou.id.substring(9);
+const createOrgUnitGroup = (id) => ({ id: `OU_GROUP-${id}` });
+
+export const getOrgUnitGroupsFromRows = (rows = []) =>
+    getOrgUnitsFromRows(rows)
+        .filter(isOrgUnitGroup)
+        .map(getIdFromOrgUnitGroup);
+
+export const addOrgUnitGroupsToRows = (rows = [], levels = []) => [
+    createDimension('ou', [
+        ...getOrgUnitsFromRows(rows).filter(negate(isOrgUnitGroup)),
+        ...levels.map(createOrgUnitGroup),
+    ])
+];
+
+/* USER ORGANISATION UNITS */
+
+const isUserOrgUnit = (ou) => ou.id.substring(0, 12) === 'USER_ORGUNIT';
+const getIdFromUserOrgUnit = (ou) => ou.id;
+const createUserOrgUnit = (id) => ({ id });
+
+export const getUserOrgUnitsFromRows = (rows = []) =>
+    getOrgUnitsFromRows(rows)
+        .filter(isUserOrgUnit)
+        .map(getIdFromUserOrgUnit);
+
+export const addUserOrgUnitsToRows = (rows = [], userOrgUnits = []) => [
+    createDimension('ou', [
+        ...getOrgUnitsFromRows(rows).filter(negate(isUserOrgUnit)),
+        ...userOrgUnits.map(createUserOrgUnit),
+    ])
+];
+
+/* PERIODS */
 
 export const getPeriodFromFilters = (filters) => {
   if (!Array.isArray(filters)) {
@@ -75,6 +129,8 @@ export const setFiltersFromPeriod = (period) => {
         items: [{ ...period }],
     }];
 };
+
+
 
 
 

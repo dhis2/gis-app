@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CloseIcon from 'material-ui/svg-icons/navigation/cancel';
+import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 import ResizeHandle from './ResizeHandle';
 import DataTable from '../../containers/DataTable';
 import { LAYERS_PANEL_WIDTH, HEADER_HEIGHT } from '../../constants/layout';
@@ -43,12 +43,11 @@ class BottomPanel extends Component {
                     className='BottomPanel'
                     style={style}
                 >
-                    <CloseIcon
+                    <SvgIcon
+                        icon='Cancel'
                         className='BottomPanel-close'
-                        onClick={closeDataTable}
+                        // onClick={closeDataTable} // TODO: Wrapp in IconButton cmp
                         style={styles.closeIcon}
-                        color='#777'
-                        hoverColor='#333'
                     />
                     <ResizeHandle
                         maxHeight={maxHeight}

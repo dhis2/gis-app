@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'material-ui/Popover';
-//import Menu, { MenuItem } from 'd2-ui/lib/menu/Menu';
 import Menu, { MenuItem } from 'material-ui/Menu';
-import ArrowUpIcon from 'material-ui/svg-icons/navigation/arrow-upward';
-import ArrowDownIcon from 'material-ui/svg-icons/navigation/arrow-downward';
-import InfoIcon from 'material-ui/svg-icons/action/info-outline';
-import EditLocationIcon from 'material-ui/svg-icons/action/room';
+import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 
 // https://github.com/callemall/material-ui/issues/2866
 const anchorEl = document.getElementById('context-menu');
@@ -47,7 +43,8 @@ const ContextMenu = (props) => {
                         disabled={!attr.hasCoordinatesUp}
                         onClick={() => props.onDrill(props.layerId, attr.grandParentId, attr.grandParentParentGraph, parseInt(attr.level) - 1)}
                         leftIcon={
-                            <ArrowUpIcon
+                            <SvgIcon
+                                icon='ArrowUpward'
                                 color={attr.hasCoordinatesUp ? iconColor : iconDisabledColor}
                                 style={style.icon}
                             />
@@ -60,7 +57,8 @@ const ContextMenu = (props) => {
                         disabled={!attr.hasCoordinatesDown}
                         onClick={() => props.onDrill(props.layerId, attr.id, attr.parentGraph, parseInt(attr.level) + 1)}
                         leftIcon={
-                            <ArrowDownIcon
+                            <SvgIcon
+                                icon='ArrowDownward'
                                 color={attr.hasCoordinatesDown ? iconColor : iconDisabledColor}
                                 style={style.icon}
                             />
@@ -72,7 +70,8 @@ const ContextMenu = (props) => {
                     <MenuItem
                         onClick={() => props.onRelocateStart(props.layerId, feature)}
                         leftIcon={
-                            <EditLocationIcon
+                            <SvgIcon
+                                icon='Room'
                                 style={style.icon}
                             />
                         }
@@ -83,7 +82,8 @@ const ContextMenu = (props) => {
                     <MenuItem
                         onClick={() => props.onSwapCoordinate(props.layerId, feature.id, feature.geometry.coordinates.slice(0).reverse())}
                         leftIcon={
-                            <EditLocationIcon
+                            <SvgIcon
+                                icon='Room'
                                 style={style.icon}
                             />
                         }
@@ -95,7 +95,8 @@ const ContextMenu = (props) => {
                         onClick={() => props.onShowInformation(attr)}
                         innerDivStyle={style.menuItemInner}
                         leftIcon={
-                            <InfoIcon
+                            <SvgIcon
+                                icon='InfoOutline'
                                 style={style.icon}
                             />
                         }
@@ -107,7 +108,8 @@ const ContextMenu = (props) => {
                         onClick={() => props.onShowValue()}
                         innerDivStyle={style.menuItemInner}
                         leftIcon={
-                            <InfoIcon
+                            <SvgIcon
+                                icon='InfoOutline'
                                 style={style.icon}
                             />
                         }

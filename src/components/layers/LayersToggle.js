@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
-import CollapseIcon from 'material-ui/svg-icons/navigation/chevron-left';
-import ExpandIcon from 'material-ui/svg-icons/navigation/chevron-right';
+import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 import { grey800 } from 'material-ui/styles/colors';
 import { HEADER_HEIGHT, LAYERS_PANEL_WIDTH } from '../../constants/layout';
 
@@ -21,11 +20,11 @@ const style = {
 // Thiss expand/collapse toggle is separate from LayersPanel to avoid overflow issue
 const LayersToggle = ({ isOpen, openLayersPanel, closeLayersPanel }) => (isOpen ?
     <IconButton onClick={closeLayersPanel} style={style} disableTouchRipple={true}>
-        <CollapseIcon color={grey800} />
+        <SvgIcon icon="ChevronLeft" color={grey800} />
     </IconButton>
 :
     <IconButton onClick={openLayersPanel} style={{...style, left: 0}} disableTouchRipple={true}>
-        <ExpandIcon color={grey800} />
+        <SvgIcon icon="ChevronRight" color={grey800} />
     </IconButton>
 );
 

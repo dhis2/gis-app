@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import DataItemSelect from '../dataItem/DataItemSelect';
 import FilterSelect from '../../containers/FilterSelect';
 import IconButton from 'material-ui/IconButton';
-import RemoveIcon from 'material-ui/svg-icons/navigation/close';
+import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 
 // https://react.rocks/example/react-redux-test
 
@@ -79,7 +79,7 @@ class FilterRow extends Component {
                     style={styles.removeBtn}
                     onClick={() => onRemove(index)}
                 >
-                    <RemoveIcon/>
+                    <SvgIcon icon='Close' />
                 </IconButton>
             </div>
         )

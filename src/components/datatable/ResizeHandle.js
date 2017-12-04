@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DragIcon from 'material-ui/svg-icons/editor/drag-handle';
-import { grey400 } from 'material-ui/styles/colors';
+import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 import './ResizeHandle.css';
 
 const ResizeHandle = ({ onResize, onResizeEnd, minHeight, maxHeight }) => {
@@ -43,7 +42,7 @@ const ResizeHandle = ({ onResize, onResizeEnd, minHeight, maxHeight }) => {
             onDrag={(evt) => onDrag(evt)}
             onDragEnd={(evt) => onDragEnd(evt)}
         >
-            <DragIcon color={grey400} />
+            <SvgIcon icon='DragHandle' />
         </div>
     );
 };

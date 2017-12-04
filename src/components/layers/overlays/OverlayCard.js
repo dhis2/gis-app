@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
-import ActionVisibilityIcon from 'material-ui/svg-icons/action/visibility';
-import ActionVisibilityOffIcon from 'material-ui/svg-icons/action/visibility-off';
+import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 import { grey600 } from 'material-ui/styles/colors';
 import SortableHandle from './SortableHandle';
 import OverlayToolbar from '../toolbar/OverlayToolbar';
@@ -74,11 +73,10 @@ const OverlayCard = (props) => {
                     style={styles.visibility}
                     onClick={() => toggleOverlayVisibility(id)}
                     tooltip="Toggle visibility">
-                    {isVisible ? (
-                        <ActionVisibilityIcon color={grey600} />
-                    ) : (
-                        <ActionVisibilityOffIcon color={grey600} />
-                    )}
+                    <SvgIcon
+                        icon={isVisible ? 'Visibility' : 'VisibilityOff'}
+                        color={grey600}
+                    />
                 </IconButton>
             </CardHeader>
             <CardText expandable={true} style={styles.body}>

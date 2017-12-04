@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
-import ContentCreateIcon from 'material-ui/svg-icons/content/create';
-import ActionDataTableIcon from 'material-ui/svg-icons/action/view-list';
-import ActionDeleteIcon from 'material-ui/svg-icons/action/delete';
-import NavigationMoreIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { grey600 } from 'material-ui/styles/colors'; // http://www.material-ui.com/#/customization/colors
+import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 import OpacitySlider from './OpacitySlider';
 import DownloadMenu from './DownloadMenu';
 import OpenAsMenu from './OpenAsMenu';
@@ -48,7 +44,7 @@ const OverlayToolbar = ({ layer, onEdit, onRemove, toggleDataTable, onOpacityCha
                     tooltipPosition="top-center"
                     style={styles.button}
                 >
-                    <ContentCreateIcon color={grey600} />
+                    <SvgIcon icon='Create' />
                 </IconButton>
             }
 
@@ -59,7 +55,7 @@ const OverlayToolbar = ({ layer, onEdit, onRemove, toggleDataTable, onOpacityCha
                     tooltipPosition="top-center"
                     style={styles.button}
                 >
-                    <ActionDataTableIcon color={grey600} />
+                    <SvgIcon icon='ViewList' />
                 </IconButton>
             }
 
@@ -77,7 +73,7 @@ const OverlayToolbar = ({ layer, onEdit, onRemove, toggleDataTable, onOpacityCha
                     tooltipPosition="top-center"
                     style={styles.button}
                 >
-                    <ActionDeleteIcon color={grey600}/>
+                    <SvgIcon icon='Delete' />
                 </IconButton>
             }
 
@@ -88,7 +84,7 @@ const OverlayToolbar = ({ layer, onEdit, onRemove, toggleDataTable, onOpacityCha
                         tooltipPosition="top-center"
                         style={styles.moreButton}
                     >
-                        <NavigationMoreIcon color={grey600} />
+                        <SvgIcon icon='MoreVert' />
                     </IconButton>
                 } listStyle={styles.menuList}>
                     <OpenAsMenu {...layer} />

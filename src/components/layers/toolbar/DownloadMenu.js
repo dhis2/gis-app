@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MenuItem from 'material-ui/MenuItem';
-import NavigationArrowIcon from 'material-ui/svg-icons/navigation-arrow-drop-right';
-import { grey600 } from 'material-ui/styles/colors';
+import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 import FileSaver from 'file-saver'; // https://github.com/eligrey/FileSaver.js
 import { createSld } from '../../../util/sld';
 
@@ -39,7 +38,7 @@ const downloadStyle = ( id ) => {
 const DownloadMenu = ({ id, data }) => (
     <MenuItem
         primaryText='Download ...'
-        rightIcon={<NavigationArrowIcon color={grey600} style={styles.icon} />}
+        rightIcon={<SvgIcon icon='ArrowDropRight' style={styles.icon} />}
         menuItems={[
             <MenuItem
                 primaryText='Organisation units (GeoJSON)'

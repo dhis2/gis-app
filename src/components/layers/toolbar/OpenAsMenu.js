@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MenuItem from 'material-ui/MenuItem';
-import NavigationArrowIcon from 'material-ui/svg-icons/navigation-arrow-drop-right';
-import { grey600 } from 'material-ui/styles/colors';
+import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 
 const styles = {
     icon: {
@@ -18,7 +17,7 @@ const styles = {
 const OpenAsMenu = ({ id }) => (
     <MenuItem
         primaryText='Open as ...'
-        rightIcon={<NavigationArrowIcon color={grey600} style={styles.icon} />}
+        rightIcon={<SvgIcon icon='ArrowDropRight' style={styles.icon} />}
         menuItems={[
             <MenuItem primaryText="Pivot" style={styles.menuItem} />,
             <MenuItem primaryText="Chart" style={styles.menuItem} />,

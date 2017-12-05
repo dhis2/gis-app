@@ -4,6 +4,7 @@ import {
     addOrgUnitLevelsToRows,
     addOrgUnitGroupsToRows,
     addUserOrgUnitsToRows,
+    toggleOrgUnitNodeInRows,
 } from '../util/analytics';
 
 const layerEdit = (state = null, action) => {
@@ -291,33 +292,15 @@ const layerEdit = (state = null, action) => {
             };
 
         case types.LAYER_EDIT_USER_ORGANISATION_UNITS_SET:
-            console.log('#', action.userOrgUnits);
-
             return {
                 ...state,
                 rows: addUserOrgUnitsToRows(state.rows, action.userOrgUnits),
             };
 
-      case types.LAYER_EDIT_ORGANISATIOM_UNIT_TOGGLE:
-            rows = state.rows || [];
-            ouDim = rows.filter(r => r.dimension === 'ou')[0];
-            items = ouDim ? ouDim.items.filter((item) => item.id !== action.orgUnit.id) : [];
-            newRows = rows.filter(r => r.dimension !== 'ou');
-
-            if (!ouDim || ouDim.items.length === items.length) { // Don't exist already
-                items.push(action.orgUnit);
-            }
-
-            if (items.length) {
-                newRows.push({
-                  dimension: 'ou',
-                  items,
-                });
-            }
-
+        case types.LAYER_EDIT_ORGANISATIOM_UNIT_TOGGLE:
             return {
                 ...state,
-                rows: newRows,
+                rows: toggleOrgUnitNodeInRows(state.rows, action.orgUnit),
             };
 
         default:

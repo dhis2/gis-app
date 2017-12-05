@@ -6,6 +6,15 @@ import { loadOrgUnitTree } from '../../actions/orgUnits';
 import { toggleOrganisationUnit } from '../../actions/layerEdit';
 
 const styles = {
+    container: {
+        position: 'relative',
+        marginTop: 12,
+        height: 300,
+        padding: 8,
+        overflow: 'auto',
+        boxShadow: '0px 0px 4px 1px rgba(0,0,0,0.2)',
+
+    },
     label: {
         cursor: 'pointer',
     },
@@ -16,10 +25,16 @@ const styles = {
         position: 'absolute',
         top: 0,
         left: 0,
-        width: '100%',
-        height: 50000,
-        overflow: 'hidden',
-        background: 'rgba(255,255,255,0.8)',
+        bottom: 0,
+        right: 0,
+        background: 'rgba(255,255,255,0.95)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        padding: 40,
+        lineHeight: '30px',
+        fontStyle: 'italic',
     }
 };
 
@@ -47,16 +62,15 @@ export class OrgUnitTree extends Component {
             return null;
         }
 
+        // disabled={items.some(item => item.id.includes('USER_ORGUNIT'))}
+
+        console.log('selected', selected)
+
         return (
-            <div
-                style={{
-                    ...style,
-                    // overflowY: disabled ? 'hidden' : 'auto',
-                }}
-            >
+            <div style={styles.container}>
                 <D2OrgUnitTree
                     root={root}
-                    // selected={selected.map(item => item.path)}
+                    selected={selected.map(item => item.path)}
                     // selected={selected.length ? selected.map(item => item.path) : [root.path]}
                     initiallyExpanded={[root.path]}
                     hideCheckboxes={true}
@@ -69,8 +83,10 @@ export class OrgUnitTree extends Component {
                     selectedLabelStyle={styles.selectedLabel}
                 />
                 {disabled ?
-                    <div style={styles.disabled} />
-                    : null}
+                    <div style={styles.disabled}>
+                        It’s not possible to combine user organisation units and select individual units.
+                    </div>
+                : null}
             </div>
         );
     }

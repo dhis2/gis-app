@@ -1,42 +1,27 @@
 import i18next from 'i18next';
 import sortBy from 'lodash/fp/sortBy';
 import negate from 'lodash/fp/negate';
+import { isValidUid } from 'd2/lib/uid';
 import { relativePeriods } from '../constants/periods';
 
 /* DATA ITEMS */
 
-export const getDataItemsFromColumns = (columns) => {
-  if (!Array.isArray(columns)) {
-    return null;
-  }
-
+export const getDataItemsFromColumns = (columns = []) => {
   const dataItems = columns.filter(item => item.dimension === 'dx')[0];
   return (dataItems && dataItems.items) ? dataItems.items : null;
 };
 
-export const getIndicatorFromColumns = columns => {
-    if (!Array.isArray(columns)) {
-        return null;
-    }
-
+export const getIndicatorFromColumns = (columns = []) => {
     const indicator = columns.filter(item => item.objectName === 'in')[0];
     return (indicator && indicator.items) ? indicator.items[0] : null;
 };
 
-export const getProgramIndicatorFromColumns = columns => {
-    if (!Array.isArray(columns)) {
-        return null;
-    }
-
+export const getProgramIndicatorFromColumns = (columns = []) => {
     const indicator = columns.filter(item => item.objectName === 'pi')[0];
     return (indicator && indicator.items) ? indicator.items[0] : null;
 };
 
-export const getReportingRateFromColumns = columns => {
-    if (!Array.isArray(columns)) {
-        return null;
-    }
-
+export const getReportingRateFromColumns = (columns = []) => {
     const dataItem = columns.filter(item => item.objectName === 'ds')[0];
     return (dataItem && dataItem.items) ? dataItem.items[0] : null;
 };
@@ -45,11 +30,29 @@ export const getReportingRateFromColumns = columns => {
 
 const createDimension = (dimension, items) => ({ dimension, items });
 
+
 /* ORGANISATION UNIT */
 
 export const getOrgUnitsFromRows = (rows = []) => {
     const orgUnits = rows.filter(item => item.dimension === 'ou')[0];
     return (orgUnits && orgUnits.items) ? orgUnits.items : [];
+};
+
+/* ORGANISATION UNIT NODES */
+
+const isOrgUnitNode = (ou) => isValidUid(ou.id);
+
+export const getOrgUnitNodesFromRows = (rows = []) =>
+    getOrgUnitsFromRows(rows).filter(isOrgUnitNode);
+
+export const toggleOrgUnitNodeInRows = (rows = [], orgUnit) => {
+    const orgUnits = getOrgUnitsFromRows(rows);
+    const hasOrgUnit = orgUnits.some(ou => ou.id === orgUnit.id);
+    return [
+        createDimension('ou',
+            hasOrgUnit ? orgUnits.filter(ou => ou.id !== orgUnit.id) : [ ...orgUnits, { ...orgUnit } ]
+        )
+    ];
 };
 
 /* ORGANISATION UNIT LEVELS */
@@ -108,14 +111,10 @@ export const addUserOrgUnitsToRows = (rows = [], userOrgUnits = []) => [
 
 /* PERIODS */
 
-export const getPeriodFromFilters = (filters) => {
-  if (!Array.isArray(filters)) {
-    return null;
-  }
-
-  // Maps app only support one period so far
-  const period = filters.filter(item => item.dimension === 'pe')[0];
-  return (period && period.items) ? period.items[0] : null;
+export const getPeriodFromFilters = (filters = []) => {
+    // Maps app only support one period so far
+    const period = filters.filter(item => item.dimension === 'pe')[0];
+    return (period && period.items) ? period.items[0] : null;
 };
 
 export const getPeriodNameFromId = (id) => {
@@ -134,68 +133,60 @@ export const setFiltersFromPeriod = (period) => {
 
 
 
-export const getFiltersFromColumns = (columns) => {
-  if (!Array.isArray(columns)) {
-    return null;
-  }
-
-  const filters = columns.filter(item => item.filter);
-  return filters.length ? filters : null;
+export const getFiltersFromColumns = (columns = []) => {
+    const filters = columns.filter(item => item.filter);
+    return filters.length ? filters : null;
 };
 
 // TODO: Remove dependancy to global variables
 export const getDimensionIndexFromHeaders = (headers, dimension) => {
-  if (!Array.isArray(headers) || !dimension) {
-    return null;
-  }
+    if (!Array.isArray(headers) || !dimension) {
+        return null;
+    }
 
-  const dim = gis.conf.finals.dimension[dimension];
+    const dim = gis.conf.finals.dimension[dimension];
 
-  if (!dim) {
-      return null;
-  }
+    if (!dim) {
+        return null;
+    }
 
-  // TODO: findIndex is not supported by IE, is it transpiled?
-  return headers.findIndex(item => item.name === dim.dimensionName);
+    // TODO: findIndex is not supported by IE, is it transpiled?
+    return headers.findIndex(item => item.name === dim.dimensionName);
 };
 
 
 
 // TODO: Remove dependancy to global variables
 export const getDisplayProperty = (displayProperty) => {
-  const propertyMap = {
-    'name': 'name',
-    'displayName': 'name',
-    'shortName': 'shortName',
-    'displayShortName': 'shortName'
-  };
-  const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty;
-  return propertyMap[keyAnalysisDisplayProperty] || propertyMap[displayProperty] || 'name';
+    const propertyMap = {
+        'name': 'name',
+        'displayName': 'name',
+        'shortName': 'shortName',
+        'displayShortName': 'shortName'
+    };
+    const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty;
+    return propertyMap[keyAnalysisDisplayProperty] || propertyMap[displayProperty] || 'name';
 };
 
-export const getFiltersAsText = (filters) => {
-  if (!Array.isArray(filters)) {
-    return null;
-  }
-
-  return filters.map(({ name, filter }) => {
-    const [ operator, value ] = filter.split(':');
-    return `${name} ${getFilterOperatorAsText(operator)} ${value}`;
-  });
+export const getFiltersAsText = (filters = []) => {
+    return filters.map(({ name, filter }) => {
+        const [ operator, value ] = filter.split(':');
+        return `${name} ${getFilterOperatorAsText(operator)} ${value}`;
+    });
 };
 
 // TODO: Cache?
 export const getFilterOperatorAsText = (id) => ({
-  'EQ': '=',
-  'GT': '>',
-  'GE': '>=',
-  'LT': '<',
-  'LE': '<=',
-  'NE': '!=',
-  'IN': i18next.t('one of'),
-  '!IN': i18next.t('not one of'),
-  'LIKE': i18next.t('contains'),
-  '!LIKE': i18next.t('doesn\'t contains'),
+    'EQ': '=',
+    'GT': '>',
+    'GE': '>=',
+    'LT': '<',
+    'LE': '<=',
+    'NE': '!=',
+    'IN': i18next.t('one of'),
+    '!IN': i18next.t('not one of'),
+    'LIKE': i18next.t('contains'),
+    '!LIKE': i18next.t('doesn\'t contains'),
 }[id]);
 
 // Combine data items into one array and exclude certain value types

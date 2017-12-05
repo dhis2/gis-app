@@ -5,6 +5,11 @@ import i18next from 'i18next';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 import { loadOrgUnitLevels } from '../../actions/orgUnits';
 
+const style = {
+    width: '100%',
+    marginTop: -7,
+};
+
 export class OrgUnitLevelSelect extends Component {
 
     static propTypes = {
@@ -23,7 +28,7 @@ export class OrgUnitLevelSelect extends Component {
     }
 
     render() {
-        const { orgUnitLevel, orgUnitLevels, onChange, style } = this.props;
+        const { orgUnitLevel, orgUnitLevels, onChange } = this.props;
 
         if (!orgUnitLevels) {
             return null; // TODO: Add loading indicator

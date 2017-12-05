@@ -17,7 +17,7 @@ import ThematicPeriodSelect from '../../periods/ThematicPeriodSelect';
 import OrgUnitTree from '../../orgunits/OrgUnitTree';
 import OrgUnitGroupSelect from '../../orgunits/OrgUnitGroupSelect';
 import OrgUnitLevelSelect from '../../orgunits/OrgUnitLevelSelect';
-import UserOrgUnits from '../../orgunits/UserOrgUnits';
+import UserOrgUnits from '../../orgunits/UserOrgUnitsSelect';
 
 
 import {
@@ -31,13 +31,14 @@ import {
     setOrgUnitLevels,
     setOrgUnitGroups,
     setUserOrgUnits,
+    toggleOrganisationUnit,
 } from '../../../actions/layerEdit';
 
 import {
-    getOrgUnitsFromRows,
     getIndicatorFromColumns,
     getProgramIndicatorFromColumns,
     getReportingRateFromColumns,
+    getOrgUnitNodesFromRows,
     getOrgUnitLevelsFromRows,
     getOrgUnitGroupsFromRows,
     getUserOrgUnitsFromRows,
@@ -87,9 +88,13 @@ const ThematicDialog = (props) => {
         setOrgUnitLevels,
         setOrgUnitGroups,
         setUserOrgUnits,
+        toggleOrganisationUnit,
     } = props;
 
-    console.log(rows);
+    const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
+
+    console.log('selectedUserOrgUnits', selectedUserOrgUnits);
+
 
     return (
         <Tabs>
@@ -180,7 +185,9 @@ const ThematicDialog = (props) => {
                 <div style={styles.content}>
                     <div style={styles.flexHalf}>
                         <OrgUnitTree
-                            // selected={getOrgUnitsFromRows(rows)}
+                            selected={getOrgUnitNodesFromRows(rows)}
+                            onClick={toggleOrganisationUnit}
+                            disabled={selectedUserOrgUnits.length ? true : false}
                         />
                     </div>
                     <div style={styles.flexHalf}>
@@ -194,7 +201,7 @@ const ThematicDialog = (props) => {
 
                         />
                         <UserOrgUnits
-                            selected={getUserOrgUnitsFromRows(rows)}
+                            selected={selectedUserOrgUnits}
                             onChange={setUserOrgUnits}
                         />
                     </div>
@@ -221,6 +228,7 @@ export default connect(
         setOrgUnitLevels,
         setOrgUnitGroups,
         setUserOrgUnits,
+        toggleOrganisationUnit,
     }
 )(ThematicDialog);
 

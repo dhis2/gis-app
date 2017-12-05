@@ -99,11 +99,6 @@ export const toggleOrganisationUnit = (orgUnit) => ({
     orgUnit,
 });
 
-export const toggleUserOrganisationUnit = (orgUnit) => ({
-    type: types.LAYER_EDIT_USER_ORGANISATIOM_UNIT_TOGGLE,
-    orgUnit,
-});
-
 // Set organisation unit group set (facility layer)
 export const setOrganisationUnitGroupSet = (organisationUnitGroupSet) => ({
     type: types.LAYER_EDIT_ORGANISATION_UNIT_GROUP_SET,

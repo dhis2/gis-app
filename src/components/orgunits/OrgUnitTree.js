@@ -9,6 +9,7 @@ const styles = {
     container: {
         position: 'relative',
         marginTop: 12,
+        width: '100%',
         height: 300,
         padding: 8,
         overflow: 'auto',
@@ -56,22 +57,17 @@ export class OrgUnitTree extends Component {
     }
 
     render() {
-        const { root, selected, disabled, onClick, style } = this.props;
+        const { root, selected, disabled, onClick } = this.props;
 
         if (!root) { // TODO: Add loading indicator
             return null;
         }
-
-        // disabled={items.some(item => item.id.includes('USER_ORGUNIT'))}
-
-        console.log('selected', selected)
 
         return (
             <div style={styles.container}>
                 <D2OrgUnitTree
                     root={root}
                     selected={selected.map(item => item.path)}
-                    // selected={selected.length ? selected.map(item => item.path) : [root.path]}
                     initiallyExpanded={[root.path]}
                     hideCheckboxes={true}
                     hideMemberCount={true}

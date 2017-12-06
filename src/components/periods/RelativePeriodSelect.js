@@ -21,7 +21,7 @@ const RelativePeriodSelect = ({ startEndDates, period, onChange, style }) => {
         <SelectField
             label={i18next.t('Period')}
             items={periods}
-            value={period}
+            value={period.id}
             onChange={onChange}
             style={style}
         />

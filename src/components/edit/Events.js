@@ -8,13 +8,15 @@ import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 import ProgramSelect from '../program/ProgramSelect';
 import ProgramStageSelect from '../program/ProgramStageSelect';
-import EventPeriodSelect from '../periods/EventPeriodSelect';
+import RelativePeriodSelect from '../periods/RelativePeriodSelect';
+import DatePicker from '../d2-ui/DatePicker';
 import FilterGroup from '../filter/FilterGroup';
 import ImageSelect from '../d2-ui/ImageSelect';
 import DataItemSelect from '../dataItem/DataItemSelect';
 import DataItemStyle from '../dataItem/DataItemStyle';
 import ColorPicker from '../d2-ui/ColorPicker';
 import OrgUnitTree from '../orgunits/OrgUnitTree';
+import UserOrgUnitsSelect from '../orgunits/UserOrgUnitsSelect';
 
 import {
     setProgram,
@@ -23,8 +25,19 @@ import {
     setEventCoordinateField,
     setEventClustering,
     setEventPointColor,
-    setEventPointRadius
+    setEventPointRadius,
+    setUserOrgUnits,
+    toggleOrganisationUnit,
+    setPeriod,
+    setStartDate,
+    setEndDate,
 } from '../../actions/layerEdit';
+
+import {
+    getPeriodFromFilters,
+    getOrgUnitNodesFromRows,
+    getUserOrgUnitsFromRows,
+} from '../../util/analytics';
 
 const styles = {
     body: {
@@ -40,15 +53,8 @@ const styles = {
         justifyContent: 'space-between',
         alignContent: 'flex-start',
         padding: 12,
-        height: 300,
+        height: 330,
         overflowY: 'auto',
-    },
-    flexField: {
-        flex: '50%',
-        minWidth: 230,
-        boxSizing: 'border-box',
-        borderLeft: '12px solid #fff',
-        borderRight: '12px solid #fff',
     },
     flexFull: {
         flex: '100%',
@@ -56,6 +62,19 @@ const styles = {
         flexFlow: 'row wrap',
         justifyContent: 'space-between',
         alignContent: 'flex-start',
+    },
+    flexHalf: {
+        flex: '50%',
+        minWidth: 230,
+        boxSizing: 'border-box',
+        borderLeft: '12px solid #fff',
+        borderRight: '12px solid #fff',
+    },
+    flexQuarter: {
+        flex: '25%',
+        boxSizing: 'border-box',
+        borderLeft: '12px solid #fff',
+        borderRight: '12px solid #fff',
     },
     column: {
         width: 'calc(50% - 12px)',
@@ -100,6 +119,9 @@ class EventDialog extends Component {
             dataElements = [],
             columns = [],
             rows = [],
+            filters = [],
+            startDate,
+            endDate,
             eventCoordinateField,
             eventClustering,
             eventPointColor,
@@ -117,15 +139,23 @@ class EventDialog extends Component {
             setEventClustering,
             setEventPointColor,
             setEventPointRadius,
+            setUserOrgUnits,
+            toggleOrganisationUnit,
+            setPeriod,
+            setStartDate,
+            setEndDate,
         } = this.props;
 
-        const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
-        // const period = filters.filter(r => r.dimension === 'pe')[0];
+        // const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
+
+        const period = getPeriodFromFilters(filters) || { id: 'START_END_DATES' };
 
         // Merge data elements and program attributes, filter out items not supported, and sort the result
         const dataItems = sortBy('name', [ ...programAttributes, ...dataElements ]
-            .filter(item => !['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'].includes(item.valueType))
+             .filter(item => !['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'].includes(item.valueType))
         );
+
+        const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
 
         const coordinateFields = [{
             id: 'event',
@@ -140,26 +170,47 @@ class EventDialog extends Component {
                             <ProgramSelect
                                 program={program}
                                 onChange={setProgram}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />
                             <ProgramStageSelect
                                 program={program}
                                 programStage={programStage}
                                 onChange={setProgramStage}
-                                style={styles.flexField}
+                                style={styles.flexHalf}
                             />
                         </div>
-                        <EventPeriodSelect
-                            style={styles.flexField}
+                        <RelativePeriodSelect
+                            period={period}
+                            startEndDates={true}
+                            onChange={setPeriod}
+                            style={styles.flexHalf}
                         />
+                        {period.id === 'START_END_DATES' && [
+                            <DatePicker
+                                key='startdate'
+                                label={i18next.t('Start date')}
+                                value={startDate}
+                                onChange={setStartDate}
+                                style={styles.flexQuarter}
+                                // textFieldStyle={styles.dateField}
+                            />,
+                            <DatePicker
+                                key='enddate'
+                                label={i18next.t('End date')}
+                                value={endDate}
+                                onChange={setEndDate}
+                                style={styles.flexQuarter}
+                                // textFieldStyle={styles.dateField}
+                            />
+                        ]}
                         <SelectField
                             label={i18next.t('Coordinate field')}
                             items={coordinateFields}
                             value={eventCoordinateField || 'event'}
                             onChange={field => setEventCoordinateField(field.id)}
-                            style={styles.flexField}
+                            style={styles.flexHalf}
                         />
-                        <div style={styles.flexField}></div>
+                        <div style={styles.flexHalf}></div>
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Filter')}>
@@ -167,15 +218,25 @@ class EventDialog extends Component {
                         <FilterGroup
                             program={program}
                             programStage={programStage}
-                            filters={columns.filter(c => c.filter !== undefined)}
+                            // filters={columns.filter(c => c.filter !== undefined)}
                         />
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Organisation units')}>
                     <div style={styles.content}>
-                        <OrgUnitTree
-                            // items={orgUnits ? orgUnits.items : []}
-                        />
+                        <div style={styles.flexHalf}>
+                            <OrgUnitTree
+                                selected={getOrgUnitNodesFromRows(rows)}
+                                onClick={toggleOrganisationUnit}
+                                disabled={selectedUserOrgUnits.length ? true : false}
+                            />
+                        </div>
+                        <div style={styles.flexHalf}>
+                            <UserOrgUnitsSelect
+                                selected={selectedUserOrgUnits}
+                                onChange={setUserOrgUnits}
+                            />
+                        </div>
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Style')}>
@@ -242,20 +303,6 @@ class EventDialog extends Component {
 
 
 
-const mapStateToProps = (state) => {
-    const layer = state.layerEdit;
-    const programId = layer.program ? layer.program.id : null;
-    const programStageId = layer.programStage ? layer.programStage.id : null;
-
-    return {
-        // programAttributes: state.programTrackedEntityAttributes[programId],
-        // programStages: state.programStages[programId],
-        // dataElements: state.programStageDataElements[programStageId],
-        // optionSets: state.optionSets,
-        // orgUnitTree: state.orgUnitTree,
-    };
-};
-
 export default connect(
     null,
     {
@@ -265,6 +312,11 @@ export default connect(
         setEventCoordinateField,
         setEventClustering,
         setEventPointColor,
-        setEventPointRadius
+        setEventPointRadius,
+        setUserOrgUnits,
+        toggleOrganisationUnit,
+        setPeriod,
+        setStartDate,
+        setEndDate,
     }
 )(EventDialog);

@@ -4,39 +4,63 @@ import negate from 'lodash/fp/negate';
 import { isValidUid } from 'd2/lib/uid';
 import { relativePeriods } from '../constants/periods';
 
+/* DIMENSIONS */
+
+const createDimension = (dimension, items, props) => ({ dimension, items, ...props });
+
+const getDimension = (dimension, arr) => arr.filter(item => item.dimension === dimension)[0];
+
+const getDimensionItems = (dimension, arr) => {
+    const dataItems = getDimension(dimension, arr);
+    return (dataItems && dataItems.items) ? dataItems.items : [];
+};
+
 /* DATA ITEMS */
 
-export const getDataItemsFromColumns = (columns = []) => {
-  const dataItems = columns.filter(item => item.dimension === 'dx')[0];
-  return (dataItems && dataItems.items) ? dataItems.items : null;
-};
+export const getDataItemsFromColumns = (columns = []) => getDimensionItems('dx', columns);
+
+/* INDICATORS */
 
 export const getIndicatorFromColumns = (columns = []) => {
     const indicator = columns.filter(item => item.objectName === 'in')[0];
     return (indicator && indicator.items) ? indicator.items[0] : null;
 };
 
-export const getProgramIndicatorFromColumns = (columns = []) => {
-    const indicator = columns.filter(item => item.objectName === 'pi')[0];
-    return (indicator && indicator.items) ? indicator.items[0] : null;
-};
+export const setIndicatorInColumns = (indicator) => [
+    createDimension('dx', [{
+        id: indicator.id,
+        name: indicator.name,
+        dimensionItemType: 'INDICATOR',
+    }], { objectName: 'in' })
+];
 
-export const getReportingRateFromColumns = (columns = []) => {
-    const dataItem = columns.filter(item => item.objectName === 'ds')[0];
-    return (dataItem && dataItem.items) ? dataItem.items[0] : null;
-};
+/* PROGRAM INDICATORS */
 
-/* DIMENSIONS */
+export const getProgramIndicatorFromColumns = (columns = []) => getDimensionItems('pi', columns);
 
-const createDimension = (dimension, items) => ({ dimension, items });
+export const setProgramIndicatorInColumns = (programIndicator) => [
+    createDimension('dx', [{
+        id: programIndicator.id,
+        name: programIndicator.name,
+        dimensionItemType: 'PROGRAM_INDICATOR',
+    }], { objectName: 'pi' })
+];
 
+/* REPORTING RATES */
+
+export const getReportingRateFromColumns = (columns = []) => getDimensionItems('ds', columns);
+
+export const setReportingRateInColumns = (dataSetItem) => [
+    createDimension('dx', [{
+        id: dataSetItem.id,
+        name: dataSetItem.name,
+        dimensionItemType: 'REPORTING_RATE',
+    }], { objectName: 'ds' })
+];
 
 /* ORGANISATION UNIT */
 
-export const getOrgUnitsFromRows = (rows = []) => {
-    const orgUnits = rows.filter(item => item.dimension === 'ou')[0];
-    return (orgUnits && orgUnits.items) ? orgUnits.items : [];
-};
+export const getOrgUnitsFromRows = (rows = []) => getDimensionItems('ou', rows) || [];
 
 /* ORGANISATION UNIT NODES */
 
@@ -111,27 +135,16 @@ export const addUserOrgUnitsToRows = (rows = [], userOrgUnits = []) => [
 
 /* PERIODS */
 
-export const getPeriodFromFilters = (filters = []) => {
-    // Maps app only support one period so far
-    const period = filters.filter(item => item.dimension === 'pe')[0];
-    return (period && period.items) ? period.items[0] : null;
-};
+export const getPeriodFromFilters = (filters = []) => getDimensionItems('pe', filters)[0];
 
 export const getPeriodNameFromId = (id) => {
     const period = relativePeriods.filter(period => period.id === id)[0];
     return period ? i18next.t(period.name) : null;
 };
 
-export const setFiltersFromPeriod = (period) => {
-    return [{
-        dimension: 'pe',
-        items: [{ ...period }],
-    }];
-};
-
-
-
-
+export const setFiltersFromPeriod = (period) => [
+    createDimension('pe', [ { ...period } ])
+];
 
 export const getFiltersFromColumns = (columns = []) => {
     const filters = columns.filter(item => item.filter);

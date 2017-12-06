@@ -68,11 +68,11 @@ class FilterGroup extends Component {
 
 export default connect(
     (state, { program, programStage }) => ({
-        dataItems: combineDataItems(
+        dataItems: (program && programStage) ? combineDataItems(
             state.programTrackedEntityAttributes[program.id],
             state.programStageDataElements[programStage.id],
             ['FILE_RESOURCE', 'ORGANISATION_UNIT', 'COORDINATE'], // Exclude these value types
-        )
+        ) : [],
     }),
     { addFilter, removeFilter, changeFilter }
 )(FilterGroup);

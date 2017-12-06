@@ -17,7 +17,7 @@ import ThematicPeriodSelect from '../../periods/ThematicPeriodSelect';
 import OrgUnitTree from '../../orgunits/OrgUnitTree';
 import OrgUnitGroupSelect from '../../orgunits/OrgUnitGroupSelect';
 import OrgUnitLevelSelect from '../../orgunits/OrgUnitLevelSelect';
-import UserOrgUnits from '../../orgunits/UserOrgUnitsSelect';
+import UserOrgUnitsSelect from '../../orgunits/UserOrgUnitsSelect';
 
 
 import {
@@ -51,7 +51,7 @@ const styles = {
         justifyContent: 'space-between',
         alignContent: 'flex-start',
         padding: 12,
-        // height: 300,
+        height: 330,
         overflowY: 'auto',
     },
     flexHalf: {
@@ -92,9 +92,6 @@ const ThematicDialog = (props) => {
     } = props;
 
     const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
-
-    console.log('selectedUserOrgUnits', selectedUserOrgUnits);
-
 
     return (
         <Tabs>
@@ -200,7 +197,7 @@ const ThematicDialog = (props) => {
                             onChange={setOrgUnitGroups}
 
                         />
-                        <UserOrgUnits
+                        <UserOrgUnitsSelect
                             selected={selectedUserOrgUnits}
                             onChange={setUserOrgUnits}
                         />

@@ -1,6 +1,9 @@
 import * as types from '../constants/actionTypes';
 import {
     setFiltersFromPeriod,
+    setIndicatorInColumns,
+    setProgramIndicatorInColumns,
+    setReportingRateInColumns,
     addOrgUnitLevelsToRows,
     addOrgUnitGroupsToRows,
     addUserOrgUnitsToRows,
@@ -9,10 +12,6 @@ import {
 
 const layerEdit = (state = null, action) => {
     let columns;
-    let rows;
-    let ouDim;
-    let items;
-    let newRows;
     let newState;
 
     switch (action.type) {
@@ -60,29 +59,13 @@ const layerEdit = (state = null, action) => {
         case types.LAYER_EDIT_INDICATOR_SET:
             return {
                 ...state,
-                columns: [{
-                    dimension: 'dx',
-                    objectName: 'in',
-                    items: [{
-                        id: action.indicator.id,
-                        name: action.indicator.name,
-                        dimensionItemType: 'INDICATOR',
-                    }]
-                }]
+                columns: setIndicatorInColumns(action.indicator),
             };
 
         case types.LAYER_EDIT_PROGRAM_INDICATOR_SET:
             return {
                 ...state,
-                columns: [{
-                    dimension: 'dx',
-                    objectName: 'pi',
-                    items: [{
-                        id: action.programIndicator.id,
-                        name: action.programIndicator.name,
-                        dimensionItemType: 'PROGRAM_INDICATOR',
-                    }]
-                }]
+                columns: setProgramIndicatorInColumns(action.programIndicator),
             };
 
         case types.LAYER_EDIT_DATA_ELEMENT_GROUP_SET:
@@ -100,26 +83,9 @@ const layerEdit = (state = null, action) => {
             return state;
 
         case types.LAYER_EDIT_DATA_SET_ITEM_SET:
-            console.log('LAYER_EDIT_DATA_SET_ITEM_SET', {
-                dimension: 'dx',
-                objectName: 'ds',
-                items: [{
-                    id: action.dataSetItem.id,
-                    name: action.dataSetItem.name,
-                    dimensionItemType: 'REPORTING_RATE',
-                }]
-            });
             return {
                 ...state,
-                columns: [{
-                    dimension: 'dx',
-                    objectName: 'ds',
-                    items: [{
-                        id: action.dataSetItem.id,
-                        name: action.dataSetItem.name,
-                        dimensionItemType: 'REPORTING_RATE',
-                    }]
-                }]
+                columns: setReportingRateInColumns(action.dataSetItem),
             };
 
         case types.LAYER_EDIT_PERIOD_TYPE_SET:

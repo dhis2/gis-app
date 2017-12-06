@@ -6,6 +6,7 @@ const defaultOverlays = [{
     title: 'Events Preview',
     img: 'images/layers/events.png',
     opacity: 0.95,
+    /*
     program: {
         id: 'eBAyeGv0exc',
         name: 'Inpatient morbidity and mortality'
@@ -41,6 +42,7 @@ const defaultOverlays = [{
     eventClustering: false,
     eventPointColor: '#333333',
     eventPointRadius: 6,
+    */
 },{
     type: 'facility',
     preview: true,

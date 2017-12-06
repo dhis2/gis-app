@@ -16,9 +16,7 @@ import { EVENT_COLOR, EVENT_RADIUS } from '../constants/layers';
 
 // Look at: https://github.com/dhis2/maintenance-app/blob/master/src/App/appStateStore.js
 
-const eventLoader = (config) => initialize(config);
-
-const initialize = async (config) => { // To return a promise
+const eventLoader = async (config) => { // Returns a promise
     const {
         classes,
         colorScale,
@@ -58,14 +56,8 @@ const initialize = async (config) => { // To return a promise
     if (spatialSupport && eventClustering) {
         const response = await d2.analytics.events.getCount(analyticsRequest);
 
-        if (response.extent) {
-            const extent = response.extent.match(/([-\d\.]+)/g);
-            bounds = [[extent[1], extent[0]], [extent[3], extent[2]]];
-        }
-
-        if (response.count > 2000) { // Server clustering if more than 2000 events
-            serverCluster = true;
-        }
+        bounds = getBounds(response.extent);
+        serverCluster = useServerCluster(response.count);
     } else {
         const response = await d2.analytics.events.getQuery(analyticsRequest);
 
@@ -132,6 +124,17 @@ const initialize = async (config) => { // To return a promise
         isVisible: true,
     };
 };
+
+const getBounds = (bbox) => {
+    if (!bbox) {
+        return null;
+    }
+    const extent = bbox.match(/([-\d\.]+)/g);
+    return [[extent[1], extent[0]], [extent[3], extent[2]]]
+};
+
+// Server clustering if more than 2000 events
+const useServerCluster = (count) => count > 2000; // TODO: Use constant
 
 const getAnalyticsRequest = async (program, programStage, period, startDate, endDate, orgUnits, dataItems, eventCoordinateField) => {
     const d2 = await getD2();

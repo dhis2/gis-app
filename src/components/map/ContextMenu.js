@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Popover from 'material-ui/Popover';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
+import { closeContextMenu, openCoordinatePopup } from '../../actions/map';
+import { drillOverlay } from '../../actions/overlays';
+import { openOrgUnit, startRelocateOrgUnit, changeOrgUnitCoordinate} from '../../actions/orgUnits';
 
 // https://github.com/callemall/material-ui/issues/2866
 const anchorEl = document.getElementById('context-menu');
@@ -128,4 +132,30 @@ const ContextMenu = (props) => {
     );
 };
 
-export default ContextMenu;
+const mapStateToProps = state => ({
+    ...state.contextMenu
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    onClose: () => dispatch(closeContextMenu()),
+    onDrill: (layerId, parentId, parentGraph, level) => dispatch(drillOverlay(layerId, parentId, parentGraph, level)),
+    onShowInformation: attr => {
+        dispatch(closeContextMenu());
+        dispatch(openOrgUnit(attr));
+    },
+    showCoordinate: coord => {
+        dispatch(closeContextMenu());
+        dispatch(openCoordinatePopup(coord));
+    },
+    onRelocateStart: (layerId, feature) => {
+        dispatch(closeContextMenu());
+        console.log('startRelocateOrgUnit', layerId, feature);
+        dispatch(startRelocateOrgUnit(layerId, feature));
+    },
+    onSwapCoordinate: (layerId, featureId, coordinate) => {
+        dispatch(closeContextMenu());
+        dispatch(changeOrgUnitCoordinate(layerId, featureId, coordinate));
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContextMenu);

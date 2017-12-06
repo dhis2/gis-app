@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import i18next from 'i18next';
 import Button from 'd2-ui/lib/button/Button';
 import WidgetWindow from '../../app/WidgetWindow';
-import Events from './Events';
-import Facilities from '../../containers/Facilities';
-import Thematic from './thematic/Thematic';
-import Boundaries from '../../containers/Boundaries';
+import EventDialog from './EventDialog';
+import FacilityDialog from './FacilityDialog';
+import ThematicDialog from './thematic/ThematicDialog';
+import BoundaryDialog from './BoundaryDialog';
+import { getOverlay, cancelOverlay } from '../../actions/overlays';
 
 // Only create one widget per layer (will be changed when we switch to react)
 const widgets = {};
@@ -155,13 +157,18 @@ class LayerEdit extends Component {
                     )
                 ]}
             >
-                {config.type === 'event' ? <Events {...config} /> : null}
-                {config.type === 'facility' ? <Facilities {...config} /> : null}
-                {config.type === 'thematic' ? <Thematic {...config} /> : null}
-                {config.type === 'boundary' ? <Boundaries {...config} /> : null}
+                {config.type === 'event' ? <EventDialog {...config} /> : null}
+                {config.type === 'facility' ? <FacilityDialog {...config} /> : null}
+                {config.type === 'thematic' ? <ThematicDialog {...config} /> : null}
+                {config.type === 'boundary' ? <BoundaryDialog {...config} /> : null}
             </Dialog>
         );
     }
 }
 
-export default LayerEdit;
+export default connect(
+    (state) => ({
+        layer: state.layerEdit,
+    }),
+    { getOverlay, cancelOverlay }
+)(LayerEdit);

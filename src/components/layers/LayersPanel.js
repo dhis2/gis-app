@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Drawer from 'material-ui/Drawer';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import Basemap from '../../containers/Basemap';
-import Overlay from '../../containers/Overlay';
+import BasemapCard from '../layers/basemaps/BasemapCard';
+import OverlayCard from '../layers/overlays/OverlayCard';
+import { requestOverlayLoad, sortOverlays } from '../../actions/overlays';
 import { HEADER_HEIGHT, LAYERS_PANEL_WIDTH } from '../../constants/layout';
 
-const SortableLayer = SortableElement(Overlay);
+const SortableLayer = SortableElement(OverlayCard);
 
 // Draggable layers - last layer on top
 const SortableLayersList = SortableContainer(({ overlays }) => (
@@ -44,7 +46,7 @@ const LayersPanel = ({ layersPanelOpen, basemap, basemaps, overlays, sortOverlay
             onSortEnd={sortOverlays}
             useDragHandle={true}
         />
-        <Basemap
+        <BasemapCard
             {...basemap}
             basemaps={basemaps}
         />
@@ -59,4 +61,17 @@ LayersPanel.propTypes = {
     sortOverlays: PropTypes.func.isRequired,
 };
 
-export default LayersPanel;
+const mapStateToProps = (state) => ({
+    basemap: {
+        ...state.basemaps.filter(b => b.id === state.map.basemap.id)[0],
+        ...state.map.basemap,
+    },
+    overlays: state.map.overlays,
+    basemaps: state.basemaps,
+    layersPanelOpen: state.ui.layersPanelOpen,
+});
+
+export default connect(
+    mapStateToProps,
+    { requestOverlayLoad, sortOverlays }
+)(LayersPanel);

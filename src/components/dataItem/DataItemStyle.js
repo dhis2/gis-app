@@ -1,13 +1,9 @@
 import React from 'react';
 import BooleanStyle from './BooleanStyle';
-import OptionSetStyle from '../../containers/OptionSetStyle';
-import Classification from '../../containers/Classification';
+import OptionSetStyle from '../optionSet/OptionSetStyle';
+import Classification from '../style/Classification';
 
-const style = {
-    marginTop: -24,
-};
-
-const DataElementStyle = ({ method, classes, colorScale, id, valueType, name, optionSet }) => (
+const DataElementStyle = ({ method, classes, colorScale, id, valueType, name, optionSet, style }) => (
     <div style={style}>
         {valueType === 'INTEGER' ?
             <Classification

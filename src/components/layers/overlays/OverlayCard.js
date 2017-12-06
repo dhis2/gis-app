@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
@@ -7,6 +8,8 @@ import { grey600 } from 'material-ui/styles/colors';
 import SortableHandle from './SortableHandle';
 import OverlayToolbar from '../toolbar/OverlayToolbar';
 import Legend from '../legend/Legend';
+import { editOverlay, removeOverlay, changeOverlayOpacity, toggleOverlayExpand, toggleOverlayVisibility } from '../../../actions/overlays';
+import { toggleDataTable } from '../../../actions/dataTable';
 import './OverlayCard.css';
 
 const styles = {
@@ -93,7 +96,7 @@ const OverlayCard = (props) => {
     )
 };
 
-OverlayCard.propTypes= {
+OverlayCard.propTypes = {
     layer: PropTypes.object,
     editOverlay: PropTypes.func.isRequired,
     removeOverlay: PropTypes.func.isRequired,
@@ -103,4 +106,7 @@ OverlayCard.propTypes= {
     toggleDataTable: PropTypes.func.isRequired,
 };
 
-export default OverlayCard;
+export default connect(
+    null,
+    { editOverlay, removeOverlay, changeOverlayOpacity, toggleOverlayExpand, toggleOverlayVisibility, toggleDataTable }
+)(OverlayCard);

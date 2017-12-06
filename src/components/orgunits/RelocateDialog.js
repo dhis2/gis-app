@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import Button from 'd2-ui/lib/button/Button';
+import { changeOrgUnitCoordinate, stopRelocateOrgUnit} from '../../actions/orgUnits';
 
 const style = {
     position: 'absolute',
@@ -51,6 +53,10 @@ RelocateDialog.contextTypes = {
 };
 
 
-
-export default RelocateDialog;
+export default connect(
+    state => ({
+        ...state.relocate
+    }),
+    { changeOrgUnitCoordinate, stopRelocateOrgUnit, }
+)(RelocateDialog);
 

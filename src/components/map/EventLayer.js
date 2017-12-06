@@ -1,8 +1,7 @@
 import Layer from './Layer';
-import isString from 'd2-utilizr/lib/isString';
-import isArray from 'd2-utilizr/lib/isArray';
 import { apiFetch } from '../../util/api';
 import { getAnalyticsEvents } from '../../util/helpers';
+import { EVENT_COLOR, EVENT_RADIUS } from '../../constants/styles';
 
 class EventLayer extends Layer {
 
@@ -20,13 +19,13 @@ class EventLayer extends Layer {
             type: 'dots',
             pane: props.id,
             data: data,
-            color: props.eventPointColor,
-            radius: props.eventPointRadius,
+            color: props.eventPointColor || EVENT_COLOR,
+            radius: props.eventPointRadius || EVENT_RADIUS,
             popup: this.onEventClick.bind(this),
         };
 
         if (props.eventClustering) {
-            if (isArray(data)) {
+            if (Array.isArray(data)) {
                 config.type = 'clientCluster';
             } else {
                 config.type = 'serverCluster';
@@ -45,6 +44,7 @@ class EventLayer extends Layer {
                 }
             }
         }
+
 
         // Create and add event layer based on config object
         this.layer = map.createLayer(config).addTo(map);
@@ -92,7 +92,7 @@ class EventLayer extends Layer {
                 const dataValues = data.dataValues;
                 let content = '<table><tbody>';
 
-                if (isArray(dataValues)) {
+                if (Array.isArray(dataValues)) {
                     dataValues.forEach(dataValue => {
                         const displayEl = this.displayElements[dataValue.dataElement];
 

@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
 import Dialog from 'material-ui/Dialog';
 import Button from 'd2-ui/lib/button/Button';
 import OverlayList from './OverlayList'
+import { editOverlay, closeOverlaysDialog } from '../../../actions/overlays';
 
 const styles = {
     contentStyle: {
@@ -52,4 +54,21 @@ AddLayerDialog.defaultProps = {
     overlays: [],
 };
 
-export default AddLayerDialog;
+const mapStateToProps = (state) => ({
+    overlays: state.overlays,
+    overlaysDialogOpen: state.ui.overlaysDialogOpen,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    onRequestClose: () => dispatch(closeOverlaysDialog()),
+    onLayerSelect: layer => {
+
+        dispatch(closeOverlaysDialog());
+        dispatch(editOverlay({
+            ...layer,
+            editCounter: 0,
+        }));
+    },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddLayerDialog);

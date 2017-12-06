@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import { setDataFilter, clearDataFilter } from '../../actions/dataFilters';
 import './FilterMultiSelect.css';
 
 const names = [
@@ -115,4 +117,22 @@ class FilterMultiSelect extends Component {
     }
 }
 
-export default FilterMultiSelect;
+// Avoid needing to pass filter and actions to every input field
+const mapStateToProps = (state) => {
+    const overlay = state.dataTable ? state.map.overlays.filter(layer => layer.id === state.dataTable)[0] : null;
+
+    if (overlay) {
+        return {
+            layerId: overlay.id,
+            filters: overlay.dataFilters
+        }
+    }
+
+    return null;
+};
+
+export default connect(
+    mapStateToProps,
+    { setDataFilter, clearDataFilter }
+)(FilterMultiSelect);
+

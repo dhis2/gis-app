@@ -27,8 +27,6 @@ export class DataItemSelect extends Component {
             loadProgramStageDataElements
         } = this.props;
 
-        // console.log('loadDataItems', program, programAttributes);
-
         if (program && !programAttributes[program.id]) {
             loadProgramTrackedEntityAttributes(program.id);
         }

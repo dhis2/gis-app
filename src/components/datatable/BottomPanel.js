@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 import ResizeHandle from './ResizeHandle';
-import DataTable from '../../containers/DataTable';
+import DataTable from '../datatable/DataTable';
 import { LAYERS_PANEL_WIDTH, HEADER_HEIGHT } from '../../constants/layout';
+import { closeDataTable, resizeDataTable } from '../../actions/dataTable';
 import './BottomPanel.css';
 
 const styles = {
@@ -81,4 +83,13 @@ BottomPanel.propTypes = {
     closeDataTable: PropTypes.func.isRequired,
 };
 
-export default BottomPanel;
+export default connect(
+    (state) => ({
+        dataTableOpen: state.dataTable ? true : false,
+        dataTableHeight: state.ui.dataTableHeight,
+        layersPanelOpen: state.ui.layersPanelOpen,
+        width: state.ui.width,
+        height: state.ui.height,
+    }),
+    { closeDataTable, resizeDataTable }
+)(BottomPanel);

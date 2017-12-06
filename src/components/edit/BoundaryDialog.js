@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import i18next from 'i18next';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import OrgUnitTree from '../orgunits/OrgUnitTree';
@@ -11,7 +12,7 @@ const styles = {
     },
 };
 
-class Boundaries extends Component {
+class BoundaryDialog extends Component {
 
     render() {
         const {
@@ -37,4 +38,9 @@ class Boundaries extends Component {
     }
 }
 
-export default Boundaries;
+export default connect(
+    (state) => ({
+
+    }),
+    {}
+)(BoundaryDialog);

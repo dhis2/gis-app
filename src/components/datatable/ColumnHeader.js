@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FilterInput from '../../containers/FilterInput';
-import FilterMultiSelect from '../../containers/FilterMultiSelect';
+import FilterInput from './FilterInput';
+import FilterMultiSelect from './FilterMultiSelect';
 import './ColumnHeader.css';
 import { SortIndicator } from 'react-virtualized';
 

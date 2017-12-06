@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
 import { grey800 } from 'material-ui/styles/colors';
+import { openLayersPanel, closeLayersPanel } from '../../actions/ui';
 import { HEADER_HEIGHT, LAYERS_PANEL_WIDTH } from '../../constants/layout';
 
 const style = {
@@ -34,4 +36,9 @@ LayersToggle.propTypes = {
     closeLayersPanel: PropTypes.func.isRequired,
 };
 
-export default LayersToggle;
+export default connect(
+    (state) => ({
+        isOpen: state.ui.layersPanelOpen,
+    }),
+    { openLayersPanel, closeLayersPanel, }
+)(LayersToggle);

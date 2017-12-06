@@ -4,16 +4,9 @@ import isString from 'd2-utilizr/lib/isString';
 import { isValidCoordinate } from '../util/map';
 import { getAnalyticsRequest } from '../util/helpers';
 import { getClassBins, getClass } from '../util/classify';
-import {
-    getNumericLegendItems,
-    getCategoryLegendItems,
-} from '../util/legend';
-import {
-    getFiltersFromColumns,
-    getFiltersAsText,
-    getPeriodFromFilters,
-    getPeriodNameFromId,
-} from '../util/analytics';
+import { getNumericLegendItems, getCategoryLegendItems } from '../util/legend';
+import { getFiltersFromColumns, getFiltersAsText, getPeriodFromFilters, getPeriodNameFromId } from '../util/analytics';
+import { EVENT_COLOR, EVENT_RADIUS } from '../constants/styles';
 
 // Look at: https://github.com/dhis2/maintenance-app/blob/master/src/App/appStateStore.js
 
@@ -26,14 +19,11 @@ const eventLoader = (config) =>
     .then(addStatus);
 
 const initialize = async (config) => { // To return a promise
-    console.log('config', config);
-
     const filters = getFiltersFromColumns(config.columns);
     const period = getPeriodFromFilters(config.filters);
-    const periodName = getPeriodNameFromId(period.id) || `${config.startDate} - ${config.endDate}`;
-    const legend = {
-        period: periodName,
-    };
+
+    const periodName = period ? getPeriodNameFromId(period.id) : `${config.startDate} - ${config.endDate}`;
+    const legend = { period: periodName };
 
     if (filters) {
         legend.filters = getFiltersAsText(filters);
@@ -49,6 +39,8 @@ const initialize = async (config) => { // To return a promise
 const addEventClusterOptions = async (config) => {
     const d2 = await getD2();
     const spatialSupport = d2.system.systemInfo.databaseInfo.spatialSupport;
+
+    console.log('config', config);
 
     if (!spatialSupport && !config.eventClustering) {
         return config;
@@ -139,14 +131,14 @@ const addStyling = (config) => {
 
             legend.items.push({
                 name: i18next.t('Not set'),
-                color: eventPointColor,
-                radius: eventPointRadius,
+                color: eventPointColor || EVENT_COLOR,
+                radius: eventPointRadius || EVENT_RADIUS,
             });
         } else { // Simple style
             legend.items = [{
                 name: i18next.t('Event'),
-                color: eventPointColor,
-                radius: eventPointRadius,
+                color: eventPointColor || EVENT_COLOR,
+                radius: eventPointRadius || EVENT_RADIUS,
             }];
         }
     }
@@ -163,6 +155,46 @@ const addStatus = (config) => {
 };
 
 /*** Helper functions below ***/
+
+
+const createEventFeature = (config, headers, names, event) => {
+    const properties = event.reduce((props, value, i) => ({
+        ...props,
+        [headers[i].name]: names[value] || value,
+    }), {});
+
+    /*
+    if (properties.psi === 'wh2Ps1XJCAG') {
+        console.log(properties);
+    }
+    */
+
+    let coordinates;
+
+    if (config.eventCoordinateField) { // If coordinate field other than event location
+        const eventCoord = properties[config.eventCoordinateField];
+
+        if (Array.isArray(eventCoord)) {
+            coordinates = eventCoord;
+        } else if (isString(eventCoord)) {
+            coordinates = JSON.parse(eventCoord);
+        }
+    } else { // Use event location
+        coordinates = [properties.longitude, properties.latitude]; // Event location
+    }
+
+    return {
+        type: 'Feature',
+        id: properties.psi,
+        properties,
+        geometry: {
+            type: 'Point',
+            coordinates,
+        }
+    };
+};
+
+
 
 /*
 const getAnalyticsEvents = async (config) => {
@@ -211,40 +243,7 @@ const getAnalyticsEvents = async (config) => {
 */
 
 
-const createEventFeature = (config, headers, names, event) => {
-    const properties = event.reduce((props, value, i) => ({
-        ...props,
-        [headers[i].name]: names[value] || value,
-    }), {});
 
-    if (properties.psi === 'wh2Ps1XJCAG') {
-      console.log(properties);
-    }
-
-    let coordinates;
-
-    if (config.eventCoordinateField) { // If coordinate field other than event location
-        const eventCoord = properties[config.eventCoordinateField];
-
-        if (Array.isArray(eventCoord)) {
-          coordinates = eventCoord;
-        } else if (isString(eventCoord)) {
-          coordinates = JSON.parse(eventCoord);
-        }
-    } else { // Use event location
-        coordinates = [properties.longitude, properties.latitude]; // Event location
-    }
-
-    return {
-        type: 'Feature',
-        id: properties.psi,
-        properties,
-        geometry: {
-            type: 'Point',
-            coordinates,
-        }
-    };
-};
 
 
 /*

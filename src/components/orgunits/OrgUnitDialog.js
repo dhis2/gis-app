@@ -1,8 +1,9 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import isArray from 'd2-utilizr/lib/isArray';
+import { connect } from 'react-redux';
 import isNumeric from 'd2-utilizr/lib/isNumeric';
 import isString from 'd2-utilizr/lib/isString';
+import { closeOrgUnit } from '../../actions/orgUnits';
 
 // TODO: Reactify!
 let infrastructuralWindow;
@@ -116,7 +117,7 @@ const showInfo = function(att) {
                 const generator = gis.init.periodGenerator;
                 let periods = generator.filterFuturePeriodsExceptCurrent(generator.generateReversedPeriods(periodType, undefined)) || [];
 
-                if (isArray(periods) && periods.length) {
+                if (Array.isArray(periods) && periods.length) {
                     periods.forEach(period => period.id = period.iso);
                     periods = periods.slice(0,5);
                 }
@@ -300,7 +301,7 @@ const showInfo = function(att) {
                 }
             }
 
-            if (isArray(ou.organisationUnitGroups) && ou.organisationUnitGroups.length) {
+            if (Array.isArray(ou.organisationUnitGroups) && ou.organisationUnitGroups.length) {
                 let html = '';
 
                 ou.organisationUnitGroups.forEach((group, index) => {
@@ -339,5 +340,10 @@ class OrgUnitDialog extends Component {
 
 }
 
-export default OrgUnitDialog;
+export default connect(
+    state => ({
+        ...state.orgUnit
+    }),
+    { closeOrgUnit, }
+)(OrgUnitDialog);
 

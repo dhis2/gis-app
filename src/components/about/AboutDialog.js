@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import i18next from 'i18next';
 import Dialog from 'material-ui/Dialog';
 import Button from 'd2-ui/lib/button/Button';
+import { closeAboutDialog } from '../../actions/about';
 
 const style = {
   padding: 5
@@ -36,4 +38,9 @@ AboutDialog.contextTypes = {
     d2: PropTypes.object
 };
 
-export default AboutDialog;
+export default connect(
+    (state) => ({
+        aboutDialogOpen: state.ui.aboutDialogOpen,
+    }),
+    { closeAboutDialog, }
+)(AboutDialog);

@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import i18next from 'i18next';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 import Checkbox from 'material-ui/Checkbox';
 import OptionSetSelect from '../optionSet/OptionSetSelect';
 import DatePicker from '../d2-ui/DatePicker';
+import { loadOptionSet } from '../../actions/optionSets';
 
 const styles = {
     operator: {
@@ -170,4 +172,9 @@ const FilterSelect = ({ valueType, filter, optionSet, optionSets, loadOptionSet,
     ];
 };
 
-export default FilterSelect;
+export default connect(
+    (state) => ({
+        optionSets: state.optionSets,
+    }),
+    { loadOptionSet }
+)(FilterSelect);

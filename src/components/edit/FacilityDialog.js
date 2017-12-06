@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import i18next from 'i18next';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import OrgUnitGroupSetSelect from '../orgunits/OrgUnitGroupSetSelect';
 import OrgUnitTree from '../orgunits/OrgUnitTree';
+import { loadOrgUnitGroupSets } from '../../actions/orgUnits';
+import { setOrganisationUnitGroupSet } from '../../actions/layerEdit';
 
 const styles = {
     body: {
@@ -87,5 +90,8 @@ class FacilityDialog extends Component {
     }
 }
 
-
-export default FacilityDialog;
+export default connect(
+    (state) => ({
+        orgUnitGroupSets: state.orgUnitGroupSets,
+    }), { loadOrgUnitGroupSets, setOrganisationUnitGroupSet }
+)(FacilityDialog);

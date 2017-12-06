@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Table, Column } from 'react-virtualized';
 import ColumnHeader from './ColumnHeader';
 import ColorCell from './ColorCell';
+import { selectOrgUnit, unselectOrgUnit } from '../../actions/orgUnits';
+import { setDataFilter, clearDataFilter } from '../../actions/dataFilters';
+import { filterData } from '../../util/filter';
 import './DataTable.css';
 
 // Using react component to keep sorting state, which is only used within the data table.
@@ -149,4 +153,23 @@ DataTable.defaultProps = {
     data: [],
 };
 
-export default DataTable;
+const mapStateToProps = (state) => {
+    const overlay = state.dataTable ? state.map.overlays.filter(layer => layer.id === state.dataTable)[0] : null;
+
+    if (overlay) {
+        const data = filterData(overlay.data.map((d, i) => ({
+            ...d.properties,
+            index: i,
+            type: d.geometry.type,
+        })), overlay.dataFilters);
+
+        return { data };
+    }
+
+    return null;
+};
+
+export default connect(
+    mapStateToProps,
+    { selectOrgUnit, unselectOrgUnit, setDataFilter, clearDataFilter }
+)(DataTable);

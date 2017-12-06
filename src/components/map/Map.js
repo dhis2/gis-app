@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { isNumeric } from 'd2-utilizr';
 import Layer from './Layer';
 import EventLayer from './EventLayer';
 import FacilityLayer from './FacilityLayer';
@@ -7,7 +9,7 @@ import ThematicLayer from './ThematicLayer';
 import BoundaryLayer from './BoundaryLayer';
 import EarthEngineLayer from './EarthEngineLayer';
 import ExternalLayer from './ExternalLayer';
-import { isArray, isNumeric } from 'd2-utilizr';
+import { openContextMenu, closeCoordinatePopup } from '../../actions/map';
 import { HEADER_HEIGHT, LAYERS_PANEL_WIDTH } from '../../constants/layout';
 
 const layerType = {
@@ -64,7 +66,7 @@ class Map extends Component {
             type: 'measure',
         });
 
-        if (isArray(bounds)) {
+        if (Array.isArray(bounds)) {
             map.fitBounds(bounds);
         } else if (isNumeric(latitude) && isNumeric(longitude) && isNumeric(zoom)) {
             map.setView([latitude, longitude], zoom);
@@ -150,4 +152,16 @@ class Map extends Component {
     }
 }
 
-export default Map;
+const mapStateToProps = (state) => ({
+    ...state.map,
+    basemaps: state.basemaps,
+    layersPanelOpen: state.ui.layersPanelOpen,
+    dataTableOpen: state.dataTable,
+    dataTableHeight: state.ui.dataTableHeight,
+});
+
+export default connect(
+    mapStateToProps,
+    { openContextMenu, closeCoordinatePopup, }
+)(Map);
+

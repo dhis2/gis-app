@@ -1,5 +1,7 @@
 import { Component } from 'react';
+import { connect } from 'react-redux'
 import FavoriteWindow from '../../app/FavoriteWindow';
+import { getFavorite, closeFavoritesDialog } from '../../actions/favorites';
 
 class FavoritesDialog extends Component {
 
@@ -32,5 +34,17 @@ class FavoritesDialog extends Component {
 
 }
 
+const mapStateToProps = (state) => ({
+    map: {...state.map},
+    favoritesDialogOpen: state.ui.favoritesDialogOpen,
+});
 
-export default FavoritesDialog;
+const mapDispatchToProps = (dispatch) => ({
+    closeFavoritesDialog: () => dispatch(closeFavoritesDialog()),
+    onFavoriteSelect: (id) => {
+        dispatch(closeFavoritesDialog());
+        dispatch(getFavorite(id));
+    },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FavoritesDialog);

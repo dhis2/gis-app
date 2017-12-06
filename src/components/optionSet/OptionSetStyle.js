@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import CircularProgress from 'material-ui/CircularProgress';
 import OptionStyle from './OptionStyle';
+import { loadOptionSet } from '../../actions/optionSets';
+import { setStyleOptions } from '../../actions/layerEdit';
 
 // From ColorBrewer
 const colors = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928'];
@@ -50,4 +53,13 @@ class OptionSetStyle extends Component {
     }
 }
 
-export default OptionSetStyle;
+const mapStateToProps = (state) => ({
+    optionSets: state.optionSets,
+});
+
+export default connect(
+    (state) => ({
+        optionSets: state.optionSets,
+    }),
+    { loadOptionSet, setStyleOptions }
+)(OptionSetStyle);

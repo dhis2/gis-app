@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { setDataFilter, clearDataFilter } from '../../actions/dataFilters';
 import './FilterInput.css';
 
 // http://adazzle.github.io/react-data-grid/examples.html#/custom-filters
@@ -38,4 +40,21 @@ FilterInput.propTypes = {
     clearDataFilter: PropTypes.func.isRequired,
 };
 
-export default FilterInput;
+// Avoid needing to pass filter and actions to every input field
+const mapStateToProps = (state) => {
+    const overlay = state.dataTable ? state.map.overlays.filter(layer => layer.id === state.dataTable)[0] : null;
+
+    if (overlay) {
+        return {
+            layerId: overlay.id,
+            filters: overlay.dataFilters
+        }
+    }
+
+    return null;
+};
+
+export default connect(
+    mapStateToProps,
+    { setDataFilter, clearDataFilter }
+)(FilterInput);

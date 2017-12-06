@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
 import i18next from 'i18next';
 import { Toolbar, ToolbarGroup } from 'material-ui/Toolbar';
 import Button from 'd2-ui/lib/button/Button';
+import { openOverlaysDialog } from '../../actions/overlays';
+import { openFavoritesDialog } from '../../actions/favorites';
+import { openAboutDialog } from '../../actions/about';
 import { HEADER_HEIGHT } from '../../constants/layout';
 
 const styles = {
@@ -58,4 +62,7 @@ AppMenu.contextTypes = {
   d2: PropTypes.object
 };
 
-export default AppMenu;
+export default connect(
+    null,
+    { openOverlaysDialog, openFavoritesDialog, openAboutDialog }
+)(AppMenu);

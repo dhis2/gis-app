@@ -1,7 +1,7 @@
 import Layer from './Layer';
 import { apiFetch } from '../../util/api';
 import { getAnalyticsEvents } from '../../util/helpers';
-import { EVENT_COLOR, EVENT_RADIUS } from '../../constants/styles';
+import { EVENT_COLOR, EVENT_RADIUS } from '../../constants/layers';
 
 class EventLayer extends Layer {
 

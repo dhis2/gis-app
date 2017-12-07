@@ -216,9 +216,7 @@ const addData = async (config) => {
 
     config.data = valueFeatures;
     // config.isLoaded = true;
-
-
-    console.log('config', config);
+    
 
     return config;
 };

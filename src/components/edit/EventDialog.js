@@ -188,7 +188,7 @@ export class EventDialog extends Component {
                         <FilterGroup
                             program={program}
                             programStage={programStage}
-                            // filters={columns.filter(c => c.filter !== undefined)}
+                            filters={columns.filter(c => c.filter !== undefined)}
                         />
                     </div>
                 </Tab>

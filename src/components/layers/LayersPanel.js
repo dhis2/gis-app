@@ -12,7 +12,7 @@ const SortableLayer = SortableElement(OverlayCard);
 
 // Draggable layers - last layer on top
 const SortableLayersList = SortableContainer(({ overlays }) => (
-    <div>
+    <div style={{ zIndex: 3000 }}>
         {overlays.map((overlay, index) => (
             <SortableLayer
                 key={overlay.id}
@@ -30,7 +30,6 @@ const style = {
     bottom: 0,
     backgroundColor: '#fafafa',
     boxShadow: '0 3px 10px 0 rgba(0, 0, 0, 0.227451)',
-    zIndex: 1049,
     overflowX: 'hidden',
     overflowY: 'auto',
 };

@@ -1,15 +1,38 @@
 import Layer from './Layer';
+import { getInstance as getD2 } from 'd2/lib/d2';
 import { apiFetch } from '../../util/api';
-import { getAnalyticsEvents } from '../../util/helpers';
+import { getAnalyticsRequest, addStyleDataItem } from '../../loaders/eventLoader';
+import { getOrgUnitsFromRows, getPeriodFromFilters } from '../../util/analytics';
 import { EVENT_COLOR, EVENT_RADIUS } from '../../constants/layers';
 
 class EventLayer extends Layer {
 
-    createLayer(callback) {
-        const props = this.props;
-        const data = props.data;
+    createLayer (callback) {
+        const {
+            bounds,
+            columns,
+            data,
+            endDate,
+            eventClustering,
+            eventCoordinateField,
+            eventPointColor,
+            eventPointRadius,
+            filters,
+            id,
+            program,
+            programStage,
+            rows,
+            serverCluster,
+            startDate,
+            styleDataItem,
+        } = this.props;
+
+        const orgUnits = getOrgUnitsFromRows(rows);
+        const period = getPeriodFromFilters(filters);
+        const dataItems = addStyleDataItem(columns, styleDataItem);
         const map = this.context.map;
-        let eventLoader;
+        let d2;
+        let eventRequest;
 
         // Data elements to display in event popup
         this.displayElements = {};
@@ -17,34 +40,38 @@ class EventLayer extends Layer {
         // Default props = no cluster
         const config = {
             type: 'dots',
-            pane: props.id,
+            pane: id,
             data: data,
-            color: props.eventPointColor || EVENT_COLOR,
-            radius: props.eventPointRadius || EVENT_RADIUS,
+            color: eventPointColor || EVENT_COLOR,
+            radius: eventPointRadius || EVENT_RADIUS,
             popup: this.onEventClick.bind(this),
         };
 
-        if (props.eventClustering) {
-            if (Array.isArray(data)) {
-                config.type = 'clientCluster';
-            } else {
+        // console.log('serverCluster', serverCluster);
+
+        if (eventClustering) {
+            if (serverCluster) {
+
                 config.type = 'serverCluster';
-                config.bounds = props.bounds;
+                config.bounds = bounds;
 
                 config.load = async (params, callback) => {
-                    eventLoader = eventLoader || await getAnalyticsEvents(props);
+                    d2 = d2 || await getD2();
+                    eventRequest = eventRequest || await getAnalyticsRequest(program, programStage, period, startDate, endDate, orgUnits, dataItems, eventCoordinateField);
 
-                    const clusterData = await eventLoader.getCluster({
-                        bbox: params.bbox,
-                        clusterSize: params.clusterSize,
-                        includeClusterPoints: params.includeClusterPoints,
-                    });
+                    eventRequest = eventRequest
+                        .withBbox(params.bbox)
+                        .withClusterSize(params.clusterSize)
+                        .withIncludeClusterPoints(params.includeClusterPoints);
+
+                    const clusterData = await d2.analytics.events.getCluster(eventRequest);
 
                     callback(params.tileId, this.toGeoJson(clusterData));
                 }
+            } else {
+                config.type = 'clientCluster';
             }
         }
-
 
         // Create and add event layer based on config object
         this.layer = map.createLayer(config).addTo(map);
@@ -129,7 +156,7 @@ class EventLayer extends Layer {
         // Convert headers to object for easier lookup
         data.headers.forEach((h, i) => header[h.name] = i);
 
-        if (isArray(data.rows)) {
+        if (Array.isArray(data.rows)) {
             data.rows.forEach(row => {
                 const extent = row[header.extent].match(/([-\d\.]+)/g);
                 const coords = row[header.center].match(/([-\d\.]+)/g);

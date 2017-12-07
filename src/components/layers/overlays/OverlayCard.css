@@ -1,6 +1,6 @@
 .OverlayCard {
     clear: both;
-    z-index: 1100;
+    z-index: 2000!important;
 }
 
 .OverlayCard-header {

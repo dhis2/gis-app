@@ -37,7 +37,7 @@ const eventLoader = async (config) => { // Returns a promise
 
     const orgUnits = getOrgUnitsFromRows(rows);
     const period = getPeriodFromFilters(filters);
-    const dataItems = addStyleDataItem(getDataItemsFromColumns(columns), styleDataItem);
+    const dataItems = addStyleDataItem(columns, styleDataItem);
     const dataFilters = getFiltersFromColumns(columns);
     const d2 = await getD2();
     const spatialSupport = d2.system.systemInfo.databaseInfo.spatialSupport;
@@ -55,12 +55,12 @@ const eventLoader = async (config) => { // Returns a promise
 
     if (spatialSupport && eventClustering) {
         const response = await d2.analytics.events.getCount(analyticsRequest);
-
         bounds = getBounds(response.extent);
         serverCluster = useServerCluster(response.count);
-    } else {
-        const response = await d2.analytics.events.getQuery(analyticsRequest);
+    }
 
+    if (!serverCluster) {
+        const response = await d2.analytics.events.getQuery(analyticsRequest);
         const names = {
             // ...data.metaData.names, // TODO: In use?
             // ...data.metaData.optionNames, // TODO: In use? See below
@@ -91,10 +91,10 @@ const eventLoader = async (config) => { // Returns a promise
                     const bins = getClassBins(values, method, classes);
 
                     data.forEach(feature => feature.properties.color = colorScale[getClass(Number(feature.properties.value), bins) - 1]);
-                    legend.items = getNumericLegendItems(bins, colorScale, eventPointRadius);
+                    legend.items = getNumericLegendItems(bins, colorScale, eventPointRadius || EVENT_RADIUS);
                 } else if (styleByOptionSet) {
                     data.forEach(feature => feature.properties.color = styleDataItem.optionSet.options[feature.properties.value]);
-                    legend.items = getCategoryLegendItems(styleDataItem.optionSet.options, eventPointRadius);
+                    legend.items = getCategoryLegendItems(styleDataItem.optionSet.options, eventPointRadius || EVENT_RADIUS);
                 }
 
                 legend.items.push({
@@ -125,6 +125,9 @@ const eventLoader = async (config) => { // Returns a promise
     };
 };
 
+
+
+
 const getBounds = (bbox) => {
     if (!bbox) {
         return null;
@@ -136,7 +139,8 @@ const getBounds = (bbox) => {
 // Server clustering if more than 2000 events
 const useServerCluster = (count) => count > 2000; // TODO: Use constant
 
-const getAnalyticsRequest = async (program, programStage, period, startDate, endDate, orgUnits, dataItems, eventCoordinateField) => {
+// Also used to query for server cluster in map/EventLayer.js
+export const getAnalyticsRequest = async (program, programStage, period, startDate, endDate, orgUnits, dataItems, eventCoordinateField) => {
     const d2 = await getD2();
 
     let analyticsRequest = new d2.analytics.request()
@@ -149,6 +153,8 @@ const getAnalyticsRequest = async (program, programStage, period, startDate, end
         .withEndDate(endDate);
 
     analyticsRequest = analyticsRequest.addOrgUnitDimension(orgUnits.map(ou => ou.id));
+
+    console.log('dataItems', dataItems);
 
     dataItems.forEach(item => {
         analyticsRequest = analyticsRequest.addDimension(item.dimension, item.filter);
@@ -165,7 +171,7 @@ const getAnalyticsRequest = async (program, programStage, period, startDate, end
 
 
 // Include column for data element used for styling
-const addStyleDataItem = (dataItems, styleDataItem)  =>
+export const addStyleDataItem = (dataItems, styleDataItem)  =>
     styleDataItem ? [
         ...dataItems, styleDataItem && {
             dimension: styleDataItem.id,

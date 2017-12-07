@@ -12,6 +12,7 @@ import { editOverlay, removeOverlay, changeOverlayOpacity, toggleOverlayExpand, 
 import { toggleDataTable } from '../../../actions/dataTable';
 import './OverlayCard.css';
 
+
 const styles = {
     container: {
         paddingBottom: 0,

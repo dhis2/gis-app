@@ -14,33 +14,12 @@ const layerType = {
     external: externalLoader,
 };
 
-// TODO: Add to function below
-function parseOverlay(layer, callback) {
-    layer.isLoaded = true;
-    layer.isExpanded = true;
-    layer.isVisible = true;
-    layer.dataFilters = layer.dataFilters || {}; // TODO: Get from Web API?
-
-    callback(layer);
-}
-
-// TODO: Rewrite when all loaders ar promises
-export function fetchOverlay(layer) {
+export const fetchOverlay = (layer) => {
     const Loader = layerType[layer.type];
 
-    if (layer.type === 'event' || layer.type === 'facility' || layer.type === 'thematic') {
+    if (Loader) {
         return Loader(layer);
+    } else {
+        reject('Unknown layer type.'); // TODO
     }
-
-    return new Promise((resolve, reject) => {
-        if (Loader) {
-            if (layer.type === 'thematic') {
-                new Loader(layer, config => parseOverlay(config, resolve));
-            } else {
-                Loader(layer, config => parseOverlay(config, resolve));
-            }
-        } else {
-            reject('Unknown layer type.')
-        }
-    });
-}
+};

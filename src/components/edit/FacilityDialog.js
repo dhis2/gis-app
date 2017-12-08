@@ -5,52 +5,52 @@ import i18next from 'i18next';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import OrgUnitGroupSetSelect from '../orgunits/OrgUnitGroupSetSelect';
 import OrgUnitTree from '../orgunits/OrgUnitTree';
-import { loadOrgUnitGroupSets } from '../../actions/orgUnits';
-import { setOrganisationUnitGroupSet } from '../../actions/layerEdit';
+import OrgUnitGroupSelect from '../orgunits/OrgUnitGroupSelect';
+import OrgUnitLevelSelect from '../orgunits/OrgUnitLevelSelect';
+import UserOrgUnitsSelect from '../orgunits/UserOrgUnitsSelect';
+
+import {
+    setOrganisationUnitGroupSet,
+    setOrgUnitLevels,
+    setOrgUnitGroups,
+    setUserOrgUnits,
+    toggleOrganisationUnit,
+} from '../../actions/layerEdit';
+
+import {
+    getOrgUnitNodesFromRows,
+    getOrgUnitLevelsFromRows,
+    getOrgUnitGroupsFromRows,
+    getUserOrgUnitsFromRows,
+} from '../../util/analytics';
 
 const styles = {
-    body: {
-        padding: 0,
+    content: { // TODO: reuse styles
+        display: 'flex',
+        flexFlow: 'row wrap',
+        justifyContent: 'space-between',
+        alignContent: 'flex-start',
+        padding: 12,
+        height: 330,
+        overflowY: 'auto',
     },
-    title: {
-        padding: '8px 16px',
-        fontSize: 18,
+    flexHalf: {
+        flex: '50%',
+        minWidth: 230,
+        boxSizing: 'border-box',
+        borderLeft: '12px solid #fff',
+        borderRight: '12px solid #fff',
     },
-    content: {
-        padding: '0 24px',
-        minHeight: 300,
-    },
-    checkbox: {
-        marginTop: 24,
-    },
-    numberField: {
-        display: 'block',
-        width: 100,
+    flexFull: {
+        flex: '100%',
+        display: 'flex',
+        flexFlow: 'row wrap',
+        justifyContent: 'space-between',
+        alignContent: 'flex-start',
     }
 };
 
 class FacilityDialog extends Component {
-
-    componentDidMount() {
-        const {
-            orgUnitGroupSets,
-            loadOrgUnitGroupSets
-        } = this.props;
-
-        // Load programs
-        if (!orgUnitGroupSets) {
-            console.log('load orgUnitGroupSets');
-            loadOrgUnitGroupSets();
-        }
-    }
-
-    componentDidUpdate(prev) {
-        // console.log('componentDidUpdate', this.props.organisationUnitGroupSet ? this.props.organisationUnitGroupSet.name : null);
-    }
-
-    load() {
-
-    }
 
     render() {
         const {
@@ -58,28 +58,49 @@ class FacilityDialog extends Component {
             orgUnitGroupSets,
             organisationUnitGroupSet,
             setOrganisationUnitGroupSet,
+            setOrgUnitLevels,
+            setOrgUnitGroups,
+            setUserOrgUnits,
+            toggleOrganisationUnit,
         } = this.props;
 
-        const orgUnits = rows.filter(r => r.dimension === 'ou')[0];
+        const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
 
         return (
             <Tabs>
                 <Tab label={i18next.t('Group set')}>
                     <div style={styles.content}>
-                        {orgUnitGroupSets ?
-                            <OrgUnitGroupSetSelect
-                                items={orgUnitGroupSets}
-                                value={organisationUnitGroupSet ? organisationUnitGroupSet.id : null}
-                                onChange={setOrganisationUnitGroupSet}
-                            />
-                        : null}
+                        <OrgUnitGroupSetSelect
+                            value={organisationUnitGroupSet}
+                            onChange={setOrganisationUnitGroupSet}
+                            style={styles.flexHalf}
+                        />
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Organisation units')}>
                     <div style={styles.content}>
-                        <OrgUnitTree
-                            selected={orgUnits ? orgUnits.items : []}
-                        />
+                        <div style={styles.flexHalf}>
+                            <OrgUnitTree
+                                selected={getOrgUnitNodesFromRows(rows)}
+                                onClick={toggleOrganisationUnit}
+                                disabled={selectedUserOrgUnits.length ? true : false}
+                            />
+                        </div>
+                        <div style={styles.flexHalf}>
+                            <OrgUnitLevelSelect
+                                orgUnitLevel={getOrgUnitLevelsFromRows(rows)}
+                                onChange={setOrgUnitLevels}
+                            />
+                            <OrgUnitGroupSelect
+                                orgUnitGroup={getOrgUnitGroupsFromRows(rows)}
+                                onChange={setOrgUnitGroups}
+
+                            />
+                            <UserOrgUnitsSelect
+                                selected={selectedUserOrgUnits}
+                                onChange={setUserOrgUnits}
+                            />
+                        </div>
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Style')}>
@@ -91,7 +112,11 @@ class FacilityDialog extends Component {
 }
 
 export default connect(
-    (state) => ({
-        orgUnitGroupSets: state.orgUnitGroupSets,
-    }), { loadOrgUnitGroupSets, setOrganisationUnitGroupSet }
+    null, {
+        setOrganisationUnitGroupSet,
+        setOrgUnitLevels,
+        setOrgUnitGroups,
+        setUserOrgUnits,
+        toggleOrganisationUnit,
+    }
 )(FacilityDialog);

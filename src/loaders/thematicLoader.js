@@ -21,25 +21,7 @@ import {
     getDimensionIndexFromHeaders,
 } from '../util/analytics';
 
-const thematicLoader = (config) =>
-    initialize(config)
-      .then(addData)
-      .then(addStatus);
-
-const initialize = async (config) => { // To return a promise
-
-    // console.log('thematic loader store', store.getState());
-
-    const legend = {};
-
-    return {
-        ...config,
-        legend,
-    };
-};
-
-
-const addData = async (config) => {
+const thematicLoader = async (config) => {
     const {
         rows,
         columns,
@@ -50,7 +32,6 @@ const addData = async (config) => {
         relativePeriodDate,
         aggregationType,
         legendSet,
-        legend,
     } = config;
 
     const d2 = await getD2();
@@ -60,6 +41,8 @@ const addData = async (config) => {
     const isOperand = columns[0].dimension === gis.conf.finals.dimension.operand.objectName; // TODO
     const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty; // TODO
     const displayPropertyUpper = getDisplayProperty(displayProperty).toUpperCase();
+
+    config.legend = {}; // TODO
 
     let orgUnitParams = orgUnits.map(item => item.id);
     let dataParams = '?dimension=ou:' + orgUnits.map(item => item.id).join(';');
@@ -150,6 +133,7 @@ const addData = async (config) => {
             // console.log(value, classNumber, prop.color);
         });
 
+
         config.legend.items = formatLegendItems(legendItems);
 
 
@@ -215,21 +199,11 @@ const addData = async (config) => {
     // console.log('Create legend');
 
     config.data = valueFeatures;
-    // config.isLoaded = true;
-    
+    config.isLoaded = true;
+    config.isExpanded = true;
+    config.isVisible = true;
 
     return config;
-};
-
-
-const addStatus = (config) => {
-  config.isLoaded = true;
-  config.isExpanded = true;
-  config.isVisible = true;
-
-  // console.log('status!!', config);
-
-  return config;
 };
 
 

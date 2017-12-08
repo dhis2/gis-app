@@ -1,23 +1,52 @@
-// import { apiFetch } from '../util/api';
-import { toGeoJson } from '../util/map';
+import i18next from 'i18next';
 import arrayUnique from 'd2-utilizr/lib/arrayUnique';
 import { getInstance as getD2 } from 'd2/lib/d2';
+import { toGeoJson } from '../util/map';
+// import { getDisplayPropertyUrl } from '../util/helpers';
+import { getOrgUnitsFromRows } from '../util/analytics';
 
-let layer;
-let callback;
+const colors = ['black', 'blue', 'red', 'green', 'yellow'];
+const weights = [2, 1, 0.75, 0.5, 0.5];
 
-const onDataLoad = (data) => {
-    const features = toGeoJson(data, 'ASC');
-    const colors = ['black', 'blue', 'red', 'green', 'yellow'];
-    const weights = [2, 1, 0.75, 0.5, 0.5];
-    const levelStyle = {};
-    let levels = [];
+const boundaryLoader = async (config) => { // Returns a promise
+    console.log('config', config);
+
+
+    const { rows, radiusLow } = config;
+    const orgUnits = getOrgUnitsFromRows(rows);
+    const orgUnitParams = orgUnits.map(item => item.id);
+
+    const d2 = await getD2();
+
+    const propertyMap = {
+        'name': 'name',
+        'displayName': 'name',
+        'shortName': 'shortName',
+        'displayShortName': 'shortName'
+    };
+
+    const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty; // TODO
+    const displayProperty = (propertyMap[keyAnalysisDisplayProperty] || 'name').toUpperCase();
+
+    const data = await d2.geoFeatures
+        .byOrgUnit(orgUnitParams)
+        .displayProperty(displayProperty)
+        .getAll();
 
     if (!data.length) {
-        // gis.mask.hide();
-        gis.alert(GIS.i18n.no_valid_coordinates_found);
+        console.log('No data!');
+        // gis.alert(GIS.i18n.no_valid_coordinates_found); // TODO
         return;
     }
+
+    // console.log(data);
+
+    const features = toGeoJson(data, 'ASC');
+
+    // console.log(features);
+
+    const levelStyle = {};
+    let levels = [];
 
     for (let i = 0; i < data.length; i++) {
         levels.push(parseInt(data[i].le));
@@ -32,51 +61,31 @@ const onDataLoad = (data) => {
         };
     }
 
-    // Apply feature styles
-    for (let i = 0, feature; i < features.length; i++) {
-        feature = features[i];
-        feature.properties.style = levelStyle[feature.properties.level];
-    }
-
     features.forEach(feature => {
+        feature.properties.style = levelStyle[feature.properties.level];
         feature.properties.labelStyle = {
-            paddingTop: feature.geometry.type === 'Point' ? 5 + (layer.radiusLow || 5) + 'px' : '0'
+            paddingTop: feature.geometry.type === 'Point' ? 5 + (radiusLow || 5) + 'px' : '0'
         };
     });
 
-    layer.data = features;
-    layer.title = 'Boundaries'; // TODO
+    /*
+    labelFontSize: "11px"
+    labelFontStyle: "normal"
+    labels: false
+    opacity: 1
+    radiusLow: 4
+    */
 
-    callback(layer);
-};
-
-const boundaryLoader = (config, cb) =>  {
-    layer = config;
-    callback = cb;
-
-    // TODO: Reuse code from thematicLoader?
-    const orgUnits = layer.rows[0].items.map(item => item.id);
-
-    const propertyMap = {
-        'name': 'name',
-        'displayName': 'name',
-        'shortName': 'shortName',
-        'displayShortName': 'shortName'
+    return {
+        ...config,
+        data: features,
+        title: i18next.t('Boundaries'),
+        isLoaded: true,
+        isExpanded: true,
+        isVisible: true,
     };
-
-    const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty; // TODO
-    const displayProperty = (propertyMap[keyAnalysisDisplayProperty] || 'name').toUpperCase();
-
-    let params = '?ou=ou:' + orgUnits.join(';') + '&displayProperty=' + displayProperty;
-
-    getD2()
-        .then((d2) => d2.geoFeatures
-            .byOrgUnit(orgUnits)
-            .displayProperty(displayProperty)
-            .getAll()
-        )
-        .then((data) => onDataLoad(data, layer, callback));
-
 };
 
 export default boundaryLoader;
+
+

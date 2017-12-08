@@ -30,6 +30,8 @@ export default class BoundaryLayer extends Layer {
             config.style.radius = props.radiusLow;
         }
 
+        console.log('##', config);
+
         this.layer = map.createLayer(config);
 
         this.layer.on('click', this.onFeatureClick, this);

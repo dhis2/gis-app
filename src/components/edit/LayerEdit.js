@@ -62,21 +62,13 @@ class LayerEdit extends Component {
                     editCounter[id] = 0;
 
                     widgets[id] = WidgetWindow(gis, config, (editedLayer) => {
-                        editedLayer.isLoaded = false;
-
-                        editedLayer.editCounter = ++editCounter[editedLayer.id];
-
-                        editedLayer.isNew = layer.isNew;
-
                         widgets[id].hide();
-
-                        // console.log('editedLayer', JSON.stringify(editedLayer));
-
                         getOverlay(editedLayer);
                     });
 
                     if (config.isLoaded) { // Loaded as favorite
                         widgets[id].show();
+                        console.log('####');
                         editCounter[id]++;
                         widgets[id].setLayer(config);
                     }

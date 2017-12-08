@@ -245,6 +245,12 @@ const layerEdit = (state = null, action) => {
                 eventPointColor: action.color,
             };
 
+        case types.LAYER_EDIT_ORGANISATION_UNIT_GROUP_SET:
+            return {
+                ...state,
+                organisationUnitGroupSet: action.organisationUnitGroupSet,
+            };
+
         case types.LAYER_EDIT_ORGANISATION_UNIT_LEVELS_SET:
             return {
                 ...state,

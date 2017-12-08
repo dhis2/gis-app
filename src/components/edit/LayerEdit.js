@@ -8,7 +8,16 @@ import EventDialog from './EventDialog';
 import FacilityDialog from './FacilityDialog';
 import ThematicDialog from './thematic/ThematicDialog';
 import BoundaryDialog from './BoundaryDialog';
+import EarthEngineDialog from './EarthEngineDialog';
 import { getOverlay, cancelOverlay } from '../../actions/overlays';
+
+const layerType = {
+    event: EventDialog,
+    facility: FacilityDialog,
+    thematic: ThematicDialog,
+    boundary: BoundaryDialog,
+    earthEngine: EarthEngineDialog,
+};
 
 // Only create one widget per layer (will be changed when we switch to react)
 const widgets = {};
@@ -24,9 +33,6 @@ const styles = {
     title: {
         padding: '8px 16px',
         fontSize: 18,
-        // background: '#1E88E5',
-        // background: '#fff',
-        // color: '#fff',
     },
 };
 
@@ -35,22 +41,15 @@ class LayerEdit extends Component {
     componentDidUpdate(prevProps) {
         const { layer, getOverlay } = this.props;
 
-        // console.log('componentDidUpdate');
-
-
         if (layer) {
             const config = { ...layer };
             let id = config.id;
 
             if (!id) { // New layer
-                // console.log('new layer');
                 id = 'overlay-' + nextOverlayId++;
                 config.id = id;
                 config.isNew = true;
-                // layer.isLoaded = false;
             } else {
-                // console.log('edit layer');
-
                 config.isNew = false;
             }
 
@@ -122,6 +121,14 @@ class LayerEdit extends Component {
             return null;
         }
 
+        const LayerDialog = layerType[config.type];
+
+
+        if (!LayerDialog) {
+            return null;
+            // reject('Unknown layer type.'); // TODO
+        }
+
         return (
             <Dialog
                 title={config.title} // TODO: i18n
@@ -149,10 +156,7 @@ class LayerEdit extends Component {
                     )
                 ]}
             >
-                {config.type === 'event' ? <EventDialog {...config} /> : null}
-                {config.type === 'facility' ? <FacilityDialog {...config} /> : null}
-                {config.type === 'thematic' ? <ThematicDialog {...config} /> : null}
-                {config.type === 'boundary' ? <BoundaryDialog {...config} /> : null}
+                <LayerDialog {...config} />
             </Dialog>
         );
     }

@@ -1,18 +1,22 @@
 import isString from 'd2-utilizr/lib/isString';
 
-const externalLoader = (layer, callback) =>  {
-    if (isString(layer.config)) { // From database as favorite
-        layer.config = JSON.parse(layer.config);
-        layer.title = layer.config.name;
+const externalLoader = async (config) => { // Returns a promise
+    if (isString(config.config)) { // From database as favorite
+        config.config = JSON.parse(layer.config);
+        config.title = layer.config.name;
     }
-
-    layer.type = 'external';
-    layer.subtitle = 'External layer'; // TODO
-    layer.isLoaded = true;
 
     // TODO: Add legend support
 
-    callback(layer);
+    return {
+        ...config,
+        type: 'external',
+        subtitle: 'External layer',
+        isLoaded: true,
+        isExpanded: true,
+        isVisible: true,
+    };
+
 };
 
 export default externalLoader;

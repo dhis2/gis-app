@@ -27,6 +27,8 @@ export default class EarthEngineLayer extends Layer {
                 .then(json => callback(json));
         };
 
+        console.log('ee config', config);
+
         this.layer = map.createLayer(config);
     }
 }

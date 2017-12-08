@@ -151,6 +151,39 @@ const datasets = {
 };
 
 
+const earthEngineLoader = async (config) => { // Returns a promise
+    let layerConfig = {};
+    let dataset;
+
+    if (typeof config.config === 'string') { // From database as favorite
+        layerConfig = JSON.parse(config.config);
+        dataset = datasets[layerConfig.datasetId];
+        delete (config.config);
+    } else {
+        dataset = datasets[config.datasetId];
+    }
+
+    const layer = {
+        ...config,
+        ...layerConfig,
+        ...dataset,
+    };
+
+    // Create legend items from params
+    if (layer.legend && !layer.legend.items && layer.params) {
+        layer.legend.items = createLegend(layer.params);
+    }
+
+    return {
+        ...layer,
+        isLoaded: true,
+        isExpanded: true,
+        isVisible: true,
+    };
+};
+
+
+
 // TODO: This function is currently duplicated from  GIS API
 const createLegend = (params) => {
     const min = params.min;
@@ -182,30 +215,6 @@ const createLegend = (params) => {
     });
 };
 
-const earthEngineLoader = (config, callback) =>  {
-    let layerConfig = {};
-    let dataset;
 
-    if (typeof config.config === 'string') { // From database as favorite
-        layerConfig = JSON.parse(config.config);
-        dataset = datasets[layerConfig.datasetId];
-        delete (config.config);
-    } else {
-        dataset = datasets[config.datasetId];
-    }
-
-    const layer = {
-        ...config,
-        ...layerConfig,
-        ...dataset,
-    };
-
-    // Create legend items from params
-    if (layer.legend && !layer.legend.items && layer.params) {
-        layer.legend.items = createLegend(layer.params);
-    }
-
-    callback(layer);
-};
 
 export default earthEngineLoader;

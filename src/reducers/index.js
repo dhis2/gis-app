@@ -24,6 +24,7 @@ import optionSets from './optionSets';
 import dataElementGroups from './dataElementGroups';
 import dataElements from './dataElements';
 import dataSets from './dataSets';
+import earthEngine from './earthEngine';
 
 export default combineReducers({
     ui,
@@ -51,4 +52,5 @@ export default combineReducers({
     dataElementGroups,
     dataElements,
     dataSets,
+    earthEngine,
 });

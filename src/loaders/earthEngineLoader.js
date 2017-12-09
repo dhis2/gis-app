@@ -215,6 +215,5 @@ const createLegend = (params) => {
     });
 };
 
-
-
 export default earthEngineLoader;
+

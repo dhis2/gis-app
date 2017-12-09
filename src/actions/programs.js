@@ -20,7 +20,6 @@ export const setProgramAttributes = (programId, payload) => ({
     payload,
 });
 
-
 // Set program indicators for one program
 export const setProgramIndicators = (programId, payload) => ({
     type: types.PROGRAM_INDICATORS_SET,

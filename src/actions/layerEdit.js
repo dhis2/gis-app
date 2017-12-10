@@ -177,20 +177,16 @@ export const setUserOrgUnits = (userOrgUnits) => ({
     userOrgUnits,
 });
 
-// Set min value (EE)
-export const setMin = (min) => ({
-  type: types.LAYER_EDIT_MIN_SET,
-  min,
+// Set layer params (EE)
+export const setParams = (min, max, palette) => ({
+    type: types.LAYER_EDIT_PARAMS_SET,
+    min,
+    max,
+    palette,
 });
 
-// Set max value (EE)
-export const setMax = (max) => ({
-  type: types.LAYER_EDIT_MAX_SET,
-  max,
-});
-
-// Set number of steps (EE)
-export const setSteps = (steps) => ({
-  type: types.LAYER_EDIT_STEPS_SET,
-  steps,
+// Set collection filter (EE)
+export const setFilter = (filter) => ({
+    type: types.LAYER_EDIT_FILTER_SET,
+    filter,
 });

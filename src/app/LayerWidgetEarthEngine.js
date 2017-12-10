@@ -305,7 +305,7 @@ export default function LayerWidgetEarthEngine(gis, layer) {
                 callback(dataset);
             }
         }
-    }
+    };
 
     // Combo with periods
     const collectionCombo = Ext.create('Ext.form.field.ComboBox', {

@@ -275,22 +275,20 @@ const layerEdit = (state = null, action) => {
                 rows: toggleOrgUnitNodeInRows(state.rows, action.orgUnit),
             };
 
-        case types.LAYER_EDIT_MIN_SET:
+        case types.LAYER_EDIT_PARAMS_SET:
             return {
                 ...state,
-                min: action.min,
+                params: {
+                    min: action.min,
+                    max: action.max,
+                    palette: action.palette,
+                },
             };
 
-        case types.LAYER_EDIT_MAX_SET:
+        case types.LAYER_EDIT_FILTER_SET:
             return {
                 ...state,
-                max: action.max,
-            };
-
-        case types.LAYER_EDIT_STEPS_SET:
-            return {
-                ...state,
-                steps: action.steps,
+                filter: action.filter,
             };
 
         default:

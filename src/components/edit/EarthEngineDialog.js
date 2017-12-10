@@ -2,43 +2,50 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import i18next from 'i18next';
-import ColorScaleSelect from 'd2-ui/lib/legend/ColorScaleSelect.component';
+import ColorScaleSelect from '../d2-ui/ColorScaleSelect';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import Collection from '../earthengine/Collection';
-import { setMin, setMax, setSteps, setColors } from '../../actions/layerEdit';
+import { setParams, setFilter } from '../../actions/layerEdit';
+import { getColorScale, getColorPalette } from '../../util/colorscale';
 
 const styles = {};
 
 class EarthEngineDialog extends Component {
+    constructor(...args) {
+        super(...args);
 
-    getConfig(id) {
-        switch (id) {
+        this.state = {
+            steps: 5,
+        };
+    }
 
-            case 'USGS/SRTMGL1_003':
-                return {
-                    id: 'USGS/SRTMGL1_003',
-                    name: GIS.i18n.elevation,
-                    description: 'Elevation above sea-level. You can adjust the min and max values so it better representes the terrain in your region.',
-                    valueLabel: GIS.i18n.min_max_elevation,
-                    min: 0,
-                    max: 1500,
-                    minValue: 0,
-                    maxValue: 8848,
-                    steps: 5,
-                    colors: 'YlOrBr',
-                };
+    // Steps are less as we also have colors for above and below (not below if min = 0)
+    getStepsFromParams() {
+        const { palette, min } = this.props.params;
+        return palette.split(',').length - (min === 0 ? 1 : 2);
+    }
 
-            default:
-                return null; // TODO: Error
+    // Always set state to update text field, but only store if valid
+    onStepsChange(steps) {
+        const { min, max, palette } = this.props.params;
 
-      }
+        this.setState({ steps });
+
+        if (steps > 0 && steps < 8) { // Valid steps: 1-7
+            const scale = getColorScale(palette);
+            const classes = (steps == 1 && min == 0 ? 2 : steps) + (min == 0 ? 1 : 2);
+            const palette = getColorPalette(scale, classes);
+
+            if (palette) {
+                this.props.setParams(min, max, palette.join());
+            }
+        }
     }
 
     render() {
-        const { id, min, max, steps, setMin, setMax, setSteps, setColors } = this.props;
-
-        // console.log('render', id, min, max, steps);
+        const { id, params, filter, setParams, setFilter } = this.props;
+        const { min, max, palette } = params;
 
         return (
             <Tabs>
@@ -46,50 +53,36 @@ class EarthEngineDialog extends Component {
                     {id !== 'USGS/SRTMGL1_003' && // If not elevation
                         <Collection
                             id={id}
-                            onChange={console.log}
+                            filter={filter}
+                            onChange={setFilter}
                         />
                     }
                     <TextField
                         type='number'
                         label={i18next.t('Min')}
                         value={min}
-                        onChange={setMin}
-                        // style={styles.flexHalf}
+                        onChange={min => setParams(min, max, palette)}
                     />
                     <TextField
                         type='number'
                         label={i18next.t('Max')}
                         value={max}
-                        onChange={setMax}
-                      // style={styles.flexHalf}
+                        onChange={max => setParams(min, max, palette)}
                     />
                     <TextField
                         type='number'
                         label={i18next.t('Steps')}
-                        value={steps}
-                        onChange={setSteps}
-                      // style={styles.flexHalf}
+                        value={this.state.steps || ''}
+                        onChange={steps => this.onStepsChange(parseInt(steps))}
                     />
                     <ColorScaleSelect
-                        key='scale'
-                        label={i18next.t('Classes')}
-                        // onChange={colorScale => setColorScale(colorScale)}
+                        palette={palette}
                         onChange={console.log}
-                        style={styles.colorScaleSelect}
-                        classesStyle={styles.classes}
                     />
                 </Tab>
             </Tabs>
         );
     }
-
 }
 
-export default connect(
-  null, {
-    setMin,
-    setMax,
-    setSteps,
-    setColors,
-  }
-)(EarthEngineDialog);
+export default connect(null, { setParams, setFilter })(EarthEngineDialog);

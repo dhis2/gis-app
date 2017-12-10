@@ -1,5 +1,3 @@
-// import { apiFetch } from '../util/api';
-
 const datasets = {
     'USGS/SRTMGL1_003': {
         title: 'Elevation',
@@ -152,6 +150,8 @@ const datasets = {
 
 
 const earthEngineLoader = async (config) => { // Returns a promise
+    console.log('config', config);
+
     let layerConfig = {};
     let dataset;
 

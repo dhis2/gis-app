@@ -5,7 +5,16 @@ import i18next from 'i18next';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 import { loadEarthEngineCollection } from '../../actions/earthEngine';
 
-// Select collection (periods) for EarthEnigne layers
+const collectionFilters = {
+    'WorldPop/POP': (year) => [{
+        type: 'eq',
+        arguments: ['year', year],
+    }, {
+        type: 'eq',
+        arguments: ['UNadj', 'yes'],
+    }],
+};
+
 export class CollectionSelect extends Component {
 
     static propTypes = {
@@ -23,20 +32,23 @@ export class CollectionSelect extends Component {
     }
 
     render() {
-        const { id, collections, onChange, style } = this.props;
+        const { id, filter, collections, onChange, style } = this.props;
 
-        if (!id && !collections[id]) {
+        if (!collections[id]) {
             return null;
         }
 
-        console.log('## collection', collections[id]);
+        const collectionFilter = collectionFilters[id] || ((index) => [{
+            type: 'eq',
+            arguments: ['system:index', index],
+        }]);
 
         return (
             <SelectField
-                label={i18next.t('Add')}
+                label={i18next.t('Period')}
                 items={collections[id]}
-                //value={programStage ? programStage.id : null}
-                onChange={onChange}
+                value={filter && filter[0].arguments[1]}
+                onChange={period => onChange(collectionFilter(period.id))}
                 style={style}
             />
         );

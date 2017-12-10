@@ -94,6 +94,11 @@ const defaultOverlays = [{
     title: 'Population Preview',
     img: 'images/layers/population.png',
     subtitle: '2010',
+    params: {
+        min: 0,
+        max: 1000,
+        palette: '#ffffd4,#fee391,#fec44f,#fe9929,#d95f0e,#993404'
+    },
     opacity: 0.9,
 },{
     type: 'earthEngine',

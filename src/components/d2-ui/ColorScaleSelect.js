@@ -6,8 +6,15 @@ import Popover from 'material-ui/Popover/Popover';
 import { colorScales, getColorScale, getColorPalette } from '../../util/colorscale';
 
 const styles = {
+    container: {
+        width: '100%',
+        textAlign: 'center',
+    },
+    scale: {
+        marginTop: 30,
+    },
     popover: {
-        overflow: 'hidden',
+        height: '100%',
     },
     scaleItem: {
         display: 'block',
@@ -23,11 +30,6 @@ class ColorScaleSelect extends Component {
             open: false,
             anchorEl: null,
         };
-    }
-
-    getColorScaleFromPalette(palette) {
-        const classes = palette.split(',').length;
-        return Object.keys(colorbrewer).filter(key => colorbrewer[key][classes].join(',') === palette)[0];
     }
 
     // Show popover with allowed color scales
@@ -53,17 +55,17 @@ class ColorScaleSelect extends Component {
     };
 
     render() {
-        const { palette, style } = this.props;
+        const palette = this.props.palette;
         const classes = palette.split(',').length;
         const scale = getColorScale(palette);
 
         return (
-            <div>
+            <div style={styles.container}>
                 <ColorScale
                     classes={classes}
                     scale={scale}
                     onClick={this.showColorScales}
-                    style={style}
+                    style={styles.scale}
                 />
                 <Popover
                     style={styles.popover}

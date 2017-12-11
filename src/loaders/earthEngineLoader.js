@@ -183,9 +183,8 @@ const earthEngineLoader = async (config) => { // Returns a promise
 };
 
 
-
 // TODO: This function is currently duplicated from  GIS API
-const createLegend = (params) => {
+export const createLegend = (params) => {
     const min = params.min;
     const max = params.max;
     const palette = params.palette.split(',');

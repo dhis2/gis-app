@@ -1,5 +1,6 @@
 import { combineEpics } from 'redux-observable';
 import 'rxjs/add/operator/concatMap';
+import { timeFormat } from 'd3-time-format';
 import * as types from '../constants/actionTypes';
 import { apiFetch } from '../util/api';
 import { setEarthEngineCollection } from '../actions/earthEngine';
@@ -30,7 +31,7 @@ const collections = {
 
         featureCollection.getInfo(data => resolve(data.features.map(feature => ({
             id: feature.id,
-            name: new Date(feature.properties['system:time_start']).getFullYear(),
+            name: String(new Date(feature.properties['system:time_start']).getFullYear()), // TODO: Support numbers in d2-ui cmp
         }))));
     },
     'UCSB-CHG/CHIRPS/PENTAD': (resolve, reject) => { // Precipitation
@@ -67,7 +68,7 @@ const collections = {
 
         featureCollection.getInfo(data => resolve(data.features.map(feature => ({
             id: feature.id,
-            name: new Date(feature.properties['system:time_start']).getFullYear(),
+            name: String(new Date(feature.properties['system:time_start']).getFullYear()), // TODO: Support numbers in d2-ui cmp
         }))));
     },
 };

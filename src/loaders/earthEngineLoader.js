@@ -150,8 +150,6 @@ const datasets = {
 
 
 const earthEngineLoader = async (config) => { // Returns a promise
-    console.log('config', config);
-
     let layerConfig = {};
     let dataset;
 

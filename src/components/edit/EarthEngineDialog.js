@@ -12,6 +12,50 @@ import { getColorScale, getColorPalette } from '../../util/colorscale';
 import { createLegend } from '../../loaders/earthEngineLoader';
 import '../layers/legend/Legend.css';
 
+
+const datasets = {
+    'WorldPop/POP': { // Population density
+        description: 'Population density estimates with national totals adjusted to match UN population division estimates. Try a different year if you don\'t see data for your country.',
+        collectionLabel: 'Select year',
+        minValue: 0,
+        maxValue: Number.MAX_VALUE,
+        minLabel: 'Min people',
+        maxLabel: 'Max people',
+    },
+    'USGS/SRTMGL1_003': { // Elevation
+        description: 'Elevation above sea-level. You can adjust the min and max values so it better representes the terrain in your region.',
+        minValue: 0,
+        maxValue: 8848,
+        minLabel: 'Min meters',
+        maxLabel: 'Max meters',
+    },
+    'UCSB-CHG/CHIRPS/PENTAD' : { // Precipitation
+        description: 'Precipitation collected from satellite and weather stations on the ground. The values are in millimeters within 5 days periods. Updated monthly, during the 3rd week of the following month.',
+        minValue: 0,
+        maxValue: 100,
+        minLabel: 'Min mm',
+        maxLabel: 'Max mm',
+    },
+    'MODIS/MOD11A2' : { // Temperature
+        description: 'Land surface temperatures collected from satellite in 8 days periods. Blank spots will appear in areas with a persistent cloud cover.',
+        minValue: -100,
+        maxValue: 100,
+        minLabel: 'Min °C',
+        maxLabel: 'Max °C',
+    },
+    'MODIS/051/MCD12Q1' : { // Landcover
+        description: '17 distinct landcover types collected from satellites.',
+        valueLabel: 'Select year',
+
+    },
+    'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS' : { // Nighttime lights
+        description: 'Light intensity from cities, towns, and other sites with persistent lighting, including gas flares.',
+        valueLabel: 'Select year',
+        minValue: 0,
+        maxValue: 63,
+    },
+};
+
 const styles = {
     tabs: {
         height: 376,
@@ -80,62 +124,70 @@ class EarthEngineDialog extends Component {
 
     // TODO: Create a d2-ui number field that returns numbers (not text) and controls min and max
     render() {
-        const { id, params, filter, setParams, setFilter } = this.props;
-        const { min, max, palette } = params;
-        const steps = this.state ? this.state.steps : this.getStepsFromParams();
-        const legend = createLegend(params);
+        const { datasetId, params, filter, setParams, setFilter } = this.props;
+        const dataset = datasets[datasetId];
 
         return (
             <Tabs style={styles.tabs}>
                 <Tab label={i18next.t('Style')}>
                     <div style={styles.flex}>
                         <div style={styles.flexColumn}>
-                            {id !== 'USGS/SRTMGL1_003' && // If not elevation
+                            <div style={{ ...styles.flexFull, marginTop: 16 }}>{dataset.description}</div>
+                            {datasetId !== 'USGS/SRTMGL1_003' && // If not elevation
                                 <Collection
-                                    id={id}
+                                    label={i18next.t(dataset.collectionLabel)}
+                                    id={datasetId}
                                     filter={filter}
                                     onChange={setFilter}
                                     style={styles.flexFull}
                                 />
                             }
-                            <TextField
-                                type='number'
-                                label={i18next.t('Min')}
-                                value={min}
-                                onChange={min => setParams(parseInt(min), parseInt(max), palette)}
-                                style={styles.flexThird}
-                            />
-                            <TextField
-                                type='number'
-                                label={i18next.t('Max')}
-                                value={max}
-                                onChange={max => setParams(parseInt(min), parseInt(max), palette)}
-                                style={styles.flexThird}
-                            />
-                            <TextField
-                                type='number'
-                                label={i18next.t('Steps')}
-                                value={steps || ''}
-                                onChange={steps => this.onStepsChange(parseInt(steps))}
-                                style={styles.flexThird}
-                            />
-                            <ColorScaleSelect
-                                palette={palette}
-                                onChange={palette => setParams(min, max, palette.join())}
-                            />
+                            {params && [
+                                <TextField
+                                    key='min'
+                                    type='number'
+                                    label={i18next.t(dataset.minLabel || 'Min')}
+                                    value={params.min}
+                                    onChange={min => setParams(parseInt(min), parseInt(params.max), params.palette)}
+                                    style={styles.flexThird}
+                                />,
+                                <TextField
+                                    key='max'
+                                    type='number'
+                                    label={i18next.t(dataset.maxLabel || 'Max')}
+                                    value={params.max}
+                                    onChange={max => setParams(parseInt(params.min), parseInt(max), params.palette)}
+                                    style={styles.flexThird}
+                                />,
+                                <TextField
+                                    key='steps'
+                                    type='number'
+                                    label={i18next.t('Steps')}
+                                    value={this.state ? this.state.steps : this.getStepsFromParams() || ''}
+                                    onChange={steps => this.onStepsChange(parseInt(steps))}
+                                    style={styles.flexThird}
+                                />,
+                                <ColorScaleSelect
+                                    key='scale'
+                                    palette={params.palette}
+                                    onChange={palette => setParams(params.min, params.max, palette.join())}
+                                />,
+                            ]}
                         </div>
                         <div style={styles.flexColumn}>
-                            <div style={styles.legend}>
-                                <div style={styles.legendTitle}>{i18next.t('Legend preview')}</div>
-                                <dl className='Legend'>
-                                    {legend.map((item, index) => (
-                                        <LegendItem
-                                            {...item}
-                                            key={`item-${index}`}
-                                        />
-                                    ))}
-                                </dl>
-                            </div>
+                            {params &&
+                                <div style={styles.legend}>
+                                    <div style={styles.legendTitle}>{i18next.t('Legend preview')}</div>
+                                    <dl className='Legend'>
+                                        {createLegend(params).map((item, index) => (
+                                            <LegendItem
+                                                {...item}
+                                                key={`item-${index}`}
+                                            />
+                                        ))}
+                                    </dl>
+                                </div>
+                            }
                         </div>
                     </div>
                 </Tab>

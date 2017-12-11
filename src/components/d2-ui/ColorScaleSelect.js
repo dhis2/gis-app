@@ -73,7 +73,7 @@ class ColorScaleSelect extends Component {
                     anchorEl={this.state.anchorEl}
                     anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
                     targetOrigin={{ horizontal: 'left', vertical: 'top' }}
-                    onRequestClose={this.hideColorScales}
+                    onRequestClose={() => this.hideColorScales()}
                 >
                     {colorScales.map((scale, index) =>
                         <ColorScale

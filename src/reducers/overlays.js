@@ -90,32 +90,71 @@ const defaultOverlays = [{
 },{
     type: 'earthEngine',
     preview: true,
-    id: 'WorldPop/POP',
-    title: 'Population Preview',
+    datasetId: 'WorldPop/POP',
+    title: 'Population density',
     img: 'images/layers/population.png',
-    subtitle: '2010',
     params: {
         min: 0,
         max: 1000,
-        palette: '#ffffd4,#fee391,#fec44f,#fe9929,#d95f0e,#993404'
+        palette: '#fee5d9,#fcbba1,#fc9272,#fb6a4a,#de2d26,#a50f15', // Reds
     },
     opacity: 0.9,
 },{
     type: 'earthEngine',
     preview: true,
-    id: 'USGS/SRTMGL1_003',
-    title: 'Elevation Preview',
+    datasetId: 'USGS/SRTMGL1_003',
+    title: 'Elevation',
     img: 'images/layers/elevation.png',
-    description: 'Elevation above sea-level. You can adjust the min and max values so it better representes the terrain in your region.',
-    valueLabel: 'Min/max elevation',
-    min: 0,
-    max: 1500,
-    minValue: 0,
-    maxValue: 8848,
-    steps: 5,
-    colors: 'YlOrBr',
+    params: {
+        min: 0,
+        max: 1500,
+        palette: '#ffffd4,#fee391,#fec44f,#fe9929,#d95f0e,#993404', // YlOrBr
+    },
     opacity: 0.9,
 },{
+    type: 'earthEngine',
+    preview: true,
+    datasetId: 'MODIS/MOD11A2',
+    title: 'Temperature',
+    img: 'images/layers/temperature.png',
+    params: {
+        min: 0,
+        max: 50,
+        palette: '#fee5d9,#fcbba1,#fc9272,#fb6a4a,#ef3b2c,#cb181d,#99000d', // Reds
+    },
+    opacity: 0.9,
+},{
+    type: 'earthEngine',
+    preview: true,
+    datasetId: 'UCSB-CHG/CHIRPS/PENTAD',
+    title: 'Precipitation',
+    img: 'images/layers/precipitation.png',
+    params: {
+        min: 0,
+        max: 100,
+        palette: '#eff3ff,#c6dbef,#9ecae1,#6baed6,#4292c6,#2171b5,#084594', // Blues
+    },
+    opacity: 0.9,
+},{
+    type: 'earthEngine',
+    preview: true,
+    datasetId: 'MODIS/051/MCD12Q1',
+    title: 'Landcover',
+    img: 'images/layers/landcover.png',
+    opacity: 0.9,
+},{
+    type: 'earthEngine',
+    preview: true,
+    datasetId: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
+    title: 'Nighttime lights',
+    img: 'images/layers/nighttime.png',
+    params: {
+        min: 0,
+        max: 63,
+        palette: '#ffffd4,#fee391,#fec44f,#fe9929,#ec7014,#cc4c02,#8c2d04', // YlOrBr
+    },
+    opacity: 0.9,
+}/*,{
     type: 'earthEngine',
     title: 'Population density',
     img: 'images/layers/population.png',
@@ -147,7 +186,7 @@ const defaultOverlays = [{
     title: 'Nighttime lights',
     img: 'images/layers/nighttime.png',
     opacity: 0.9,
-}];
+}*/];
 
 const overlays = (state = defaultOverlays, action) => {
 

@@ -47,8 +47,6 @@ export const getOverlay = (layer) => (dispatch) => {
     return fetchOverlay(layer).then(layer => {
         layer.editCounter++;
 
-        console.log(layer.editCounter);
-
         if (layer.editCounter === 1) { // Add new layer
             dispatch(addOverlay(layer));
         } else { // Update existing layer

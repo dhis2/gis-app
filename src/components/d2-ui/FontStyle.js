@@ -29,7 +29,6 @@ const FontStyle = ({ color, size, weight, fontStyle, onColorChange, onSizeChange
             value={size !== undefined ? size : 11}
             onChange={onSizeChange}
             style={styles.sizeField}
-
         />
         <IconButton
             onClick={() => onWeightChange(weight === 'bold' ? 'normal' : 'bold')}

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import i18next from 'i18next';
 import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
+import TextField from 'd2-ui/lib/text-field/TextField';
 import OrgUnitGroupSetSelect from '../orgunits/OrgUnitGroupSetSelect';
 import OrgUnitTree from '../orgunits/OrgUnitTree';
 import OrgUnitGroupSelect from '../orgunits/OrgUnitGroupSelect';
@@ -22,6 +23,7 @@ import {
     setLabelFontSize,
     setLabelFontWeight,
     setLabelFontStyle,
+    setAreaRadius,
 } from '../../actions/layerEdit';
 
 import {
@@ -55,17 +57,22 @@ const styles = {
         justifyContent: 'space-between',
         alignContent: 'flex-start',
     },
-    labelWrapper: {
+    wrapper: {
         width: '100%',
         clear: 'both',
+        height: 64,
     },
-    labelCheckbox: {
+    checkbox: {
         float: 'left',
         margin: '24px 0 0 12px',
         width: 180,
     },
     font: {
         float: 'left',
+        marginTop: -8,
+    },
+    radius: {
+        width: 206,
         marginTop: -8,
     }
 };
@@ -81,6 +88,7 @@ class FacilityDialog extends Component {
             labelFontSize,
             labelFontWeight,
             labelFontStyle,
+            areaRadius,
             setOrganisationUnitGroupSet,
             setOrgUnitLevels,
             setOrgUnitGroups,
@@ -91,6 +99,7 @@ class FacilityDialog extends Component {
             setLabelFontSize,
             setLabelFontWeight,
             setLabelFontStyle,
+            setAreaRadius,
         } = this.props;
 
         const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
@@ -134,12 +143,12 @@ class FacilityDialog extends Component {
                 </Tab>
                 <Tab label={i18next.t('Style')}>
                     <div style={styles.content}>
-                        <div style={styles.labelWrapper}>
+                        <div style={styles.wrapper}>
                             <Checkbox
-                                label='Show labels'
+                                label={i18next.t('Show labels')}
                                 checked={labels}
                                 onCheck={setLabels}
-                                style={styles.labelCheckbox}
+                                style={styles.checkbox}
                             />
                             {labels &&
                                 <FontStyle
@@ -152,6 +161,23 @@ class FacilityDialog extends Component {
                                     onWeightChange={setLabelFontWeight}
                                     onStyleChange={setLabelFontStyle}
                                     style={styles.font}
+                                />
+                            }
+                        </div>
+                        <div style={styles.labelWrapper}>
+                            <Checkbox
+                                label={i18next.t('Show buffer')}
+                                checked={areaRadius === null || areaRadius === undefined ? false : true}
+                                onCheck={checked => setAreaRadius(checked ? areaRadius || 5000 : null)}
+                                style={styles.checkbox}
+                            />
+                            {(areaRadius !== null && areaRadius !== undefined) &&
+                                <TextField
+                                    type='number'
+                                    label={i18next.t('Radius in meters')}
+                                    value={areaRadius || ''}
+                                    onChange={setAreaRadius}
+                                    style={styles.radius}
                                 />
                             }
                         </div>
@@ -174,5 +200,6 @@ export default connect(
         setLabelFontSize,
         setLabelFontWeight,
         setLabelFontStyle,
+        setAreaRadius,
     }
 )(FacilityDialog);

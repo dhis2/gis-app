@@ -203,20 +203,26 @@ export const setLabelFontSize = (size) => ({
     size,
 });
 
-// Set label font weight
+// Set label font weight (bold)
 export const setLabelFontWeight = (weight) => ({
     type: types.LAYER_EDIT_LABEL_FONT_WEIGHT_SET,
     weight,
 });
 
-// Set label font style (italic)
+// Set label font style
 export const setLabelFontStyle = (style) => ({
     type: types.LAYER_EDIT_LABEL_FONT_STYLE_SET,
     style,
 });
 
-// Set label font style (italic)
+// Set label font color
 export const setLabelFontColor = (color) => ({
     type: types.LAYER_EDIT_LABEL_FONT_COLOR_SET,
     color,
+});
+
+// Set area radius (facility)
+export const setAreaRadius = (radius) => ({
+    type: types.LAYER_EDIT_AREA_RADIUS_SET,
+    radius,
 });

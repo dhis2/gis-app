@@ -321,6 +321,12 @@ const layerEdit = (state = null, action) => {
                 labelFontStyle: action.style,
             };
 
+        case types.LAYER_EDIT_AREA_RADIUS_SET:
+            return {
+                ...state,
+                areaRadius: action.radius,
+            };
+
         default:
             return state;
 

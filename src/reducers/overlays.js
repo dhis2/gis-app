@@ -55,7 +55,7 @@ const defaultOverlays = [{
           id: 'LEVEL-4'
         }]
     }],
-    labels: true,
+    // areaRadius: 5000,
 },{
     type: 'thematic',
     preview: true,

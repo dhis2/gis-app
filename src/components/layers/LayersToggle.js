@@ -15,6 +15,8 @@ const style = {
     height: 40,
     padding: 0,
     background: '#fff',
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
     boxShadow: '3px 1px 5px -1px rgba(0, 0, 0, 0.2)',
     zIndex: 1100,
 };

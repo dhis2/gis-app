@@ -190,3 +190,33 @@ export const setFilter = (filter) => ({
     type: types.LAYER_EDIT_FILTER_SET,
     filter,
 });
+
+// Set label visibility
+export const setLabels = (isChecked) => ({
+    type: types.LAYER_EDIT_LABELS_SET,
+    isChecked,
+});
+
+// Set label font style (italic)
+export const setLabelFontSize = (size) => ({
+    type: types.LAYER_EDIT_LABEL_FONT_SIZE_SET,
+    size,
+});
+
+// Set label font weight
+export const setLabelFontWeight = (weight) => ({
+    type: types.LAYER_EDIT_LABEL_FONT_WEIGHT_SET,
+    weight,
+});
+
+// Set label font style (italic)
+export const setLabelFontStyle = (style) => ({
+    type: types.LAYER_EDIT_LABEL_FONT_STYLE_SET,
+    style,
+});
+
+// Set label font style (italic)
+export const setLabelFontColor = (color) => ({
+    type: types.LAYER_EDIT_LABEL_FONT_COLOR_SET,
+    color,
+});

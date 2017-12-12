@@ -8,6 +8,8 @@ import OrgUnitTree from '../orgunits/OrgUnitTree';
 import OrgUnitGroupSelect from '../orgunits/OrgUnitGroupSelect';
 import OrgUnitLevelSelect from '../orgunits/OrgUnitLevelSelect';
 import UserOrgUnitsSelect from '../orgunits/UserOrgUnitsSelect';
+import Checkbox from '../d2-ui/Checkbox';
+import FontStyle from '../d2-ui/FontStyle';
 
 import {
     setOrganisationUnitGroupSet,
@@ -15,6 +17,11 @@ import {
     setOrgUnitGroups,
     setUserOrgUnits,
     toggleOrganisationUnit,
+    setLabels,
+    setLabelFontColor,
+    setLabelFontSize,
+    setLabelFontWeight,
+    setLabelFontStyle,
 } from '../../actions/layerEdit';
 
 import {
@@ -47,6 +54,19 @@ const styles = {
         flexFlow: 'row wrap',
         justifyContent: 'space-between',
         alignContent: 'flex-start',
+    },
+    labelWrapper: {
+        width: '100%',
+        clear: 'both',
+    },
+    labelCheckbox: {
+        float: 'left',
+        margin: '24px 0 0 12px',
+        width: 180,
+    },
+    font: {
+        float: 'left',
+        marginTop: -8,
     }
 };
 
@@ -55,13 +75,22 @@ class FacilityDialog extends Component {
     render() {
         const {
             rows = [],
-            orgUnitGroupSets,
             organisationUnitGroupSet,
+            labels,
+            labelFontColor,
+            labelFontSize,
+            labelFontWeight,
+            labelFontStyle,
             setOrganisationUnitGroupSet,
             setOrgUnitLevels,
             setOrgUnitGroups,
             setUserOrgUnits,
             toggleOrganisationUnit,
+            setLabels,
+            setLabelFontColor,
+            setLabelFontSize,
+            setLabelFontWeight,
+            setLabelFontStyle,
         } = this.props;
 
         const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
@@ -104,7 +133,29 @@ class FacilityDialog extends Component {
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Style')}>
-
+                    <div style={styles.content}>
+                        <div style={styles.labelWrapper}>
+                            <Checkbox
+                                label='Show labels'
+                                checked={labels}
+                                onCheck={setLabels}
+                                style={styles.labelCheckbox}
+                            />
+                            {labels &&
+                                <FontStyle
+                                    color={labelFontColor}
+                                    size={labelFontSize}
+                                    weight={labelFontWeight}
+                                    fontStyle={labelFontStyle}
+                                    onColorChange={setLabelFontColor}
+                                    onSizeChange={setLabelFontSize}
+                                    onWeightChange={setLabelFontWeight}
+                                    onStyleChange={setLabelFontStyle}
+                                    style={styles.font}
+                                />
+                            }
+                        </div>
+                    </div>
                 </Tab>
             </Tabs>
         );
@@ -118,5 +169,10 @@ export default connect(
         setOrgUnitGroups,
         setUserOrgUnits,
         toggleOrganisationUnit,
+        setLabels,
+        setLabelFontColor,
+        setLabelFontSize,
+        setLabelFontWeight,
+        setLabelFontStyle,
     }
 )(FacilityDialog);

@@ -291,6 +291,36 @@ const layerEdit = (state = null, action) => {
                 filter: action.filter,
             };
 
+        case types.LAYER_EDIT_LABELS_SET:
+            return {
+                ...state,
+                labels: action.isChecked,
+            };
+
+        case types.LAYER_EDIT_LABEL_FONT_COLOR_SET:
+            return {
+                ...state,
+                labelFontColor: action.color,
+            };
+
+        case types.LAYER_EDIT_LABEL_FONT_SIZE_SET:
+            return {
+                ...state,
+                labelFontSize: action.size,
+            };
+
+        case types.LAYER_EDIT_LABEL_FONT_WEIGHT_SET:
+            return {
+                ...state,
+                labelFontWeight: action.weight,
+            };
+
+        case types.LAYER_EDIT_LABEL_FONT_STYLE_SET:
+            return {
+                ...state,
+                labelFontStyle: action.style,
+            };
+
         default:
             return state;
 

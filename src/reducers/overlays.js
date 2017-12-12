@@ -54,7 +54,8 @@ const defaultOverlays = [{
         items:[{
           id: 'LEVEL-4'
         }]
-    }]
+    }],
+    labels: true,
 },{
     type: 'thematic',
     preview: true,

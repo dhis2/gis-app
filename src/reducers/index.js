@@ -1,56 +1,58 @@
 import { combineReducers } from 'redux';
-import ui from './ui';
-import map from './map';
 import basemaps from './basemaps';
-import overlays from './overlays';
-import layerEdit from './layerEdit';
-import dataTable from './dataTable';
 import contextMenu from './contextMenu';
+import dataElements from './dataElements';
+import dataElementGroups from './dataElementGroups';
+import dataSets from './dataSets';
+import dataTable from './dataTable';
+import earthEngine from './earthEngine';
+import layerEdit from './layerEdit';
+import indicators from './indicators';
+import indicatorGroups from './indicatorGroups';
+import legendSets from './legendSets';
+import loading from './loading';
+import map from './map';
+import optionSets from './optionSets';
 import orgUnit from './orgUnit';
 import orgUnitTree from './orgUnitTree';
 import orgUnitGroups from './orgUnitGroups';
 import orgUnitGroupSets from './orgUnitGroupSets';
 import orgUnitLevels from './orgUnitLevels';
-import relocate from './relocate';
-import loading from './loading';
+import overlays from './overlays';
 import programs from './programs';
+import programIndicators from './programIndicators';
 import programStages from './programStages';
 import programStageDataElements from './programStageDataElements';
 import programTrackedEntityAttributes from './programTrackedEntityAttributes';
-import programIndicators from './programIndicators';
-import indicators from './indicators';
-import indicatorGroups from './indicatorGroups';
-import optionSets from './optionSets';
-import dataElementGroups from './dataElementGroups';
-import dataElements from './dataElements';
-import dataSets from './dataSets';
-import earthEngine from './earthEngine';
+import relocate from './relocate';
+import ui from './ui';
 
 export default combineReducers({
-    ui,
-    map,
     basemaps,
-    overlays,
-    layerEdit,
-    dataTable,
     contextMenu,
+    dataElements,
+    dataElementGroups,
+    dataSets,
+    dataTable,
+    earthEngine,
+    indicators,
+    indicatorGroups,
+    layerEdit,
+    legendSets,
+    loading,
+    map,
+    optionSets,
     orgUnit,
     orgUnitTree,
     orgUnitGroupSets,
     orgUnitGroups,
     orgUnitLevels,
-    relocate,
-    loading,
+    overlays,
     programs,
+    programIndicators,
     programStages,
     programStageDataElements,
     programTrackedEntityAttributes,
-    programIndicators,
-    indicators,
-    indicatorGroups,
-    optionSets,
-    dataElementGroups,
-    dataElements,
-    dataSets,
-    earthEngine,
+    relocate,
+    ui,
 });

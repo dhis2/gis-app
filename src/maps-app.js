@@ -80,19 +80,20 @@ getManifest('manifest.webapp')
 
         // Include all API endpoints in use by this app
         config.schemas = [
+            'dataElement',
+            'dataElementGroup',
+            'dataSet',
+            'externalMapLayer',
+            'legendSet',
+            'indicator',
+            'indicatorGroup',
+            'optionSet',
             'organisationUnit',
             'organisationUnitGroup',
             'organisationUnitGroupSet',
             'organisationUnitLevel',
             'program',
             'programStage',
-            'externalMapLayer',
-            'optionSet',
-            'indicator',
-            'indicatorGroup',
-            'dataElement',
-            'dataElementGroup',
-            'dataSet',
         ];
     })
     .then(getUserSettings)

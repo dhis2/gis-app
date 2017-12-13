@@ -11,6 +11,7 @@ import optionSetsEpics from './optionSets';
 import externalLayersEpics from './externalLayers';
 import dataElementsEpics from './dataElements';
 import dataSetsEpics from './dataSets';
+import legendSetsEpics from './legendSets';
 import earthEngineEpics from './earthEngine';
 
 const errorEpic = (action$) =>
@@ -27,6 +28,7 @@ export default combineEpics(
     externalLayersEpics,
     dataElementsEpics,
     dataSetsEpics,
+    legendSetsEpics,
     errorEpic,
     earthEngineEpics
 );

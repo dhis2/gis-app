@@ -34,6 +34,8 @@ const thematicLoader = async (config) => {
         legendSet,
     } = config;
 
+    console.log('thematic config', config);
+
     const d2 = await getD2();
     const orgUnits = getOrgUnitsFromRows(rows);
     const period = getPeriodFromFilters(filters);

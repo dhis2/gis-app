@@ -226,3 +226,15 @@ export const setAreaRadius = (radius) => ({
     type: types.LAYER_EDIT_AREA_RADIUS_SET,
     radius,
 });
+
+// Set point radius low (thematic, boundary)
+export const setRadiusLow = (radius) => ({
+    type: types.LAYER_EDIT_RADIUS_LOW_SET,
+    radius,
+});
+
+// Set point radius high (thematic)
+export const setRadiusHigh = (radius) => ({
+    type: types.LAYER_EDIT_RADIUS_HIGH_SET,
+    radius,
+});

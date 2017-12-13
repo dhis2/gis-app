@@ -7,12 +7,19 @@ import OrgUnitTree from '../orgunits/OrgUnitTree';
 import OrgUnitGroupSelect from '../orgunits/OrgUnitGroupSelect';
 import OrgUnitLevelSelect from '../orgunits/OrgUnitLevelSelect';
 import UserOrgUnitsSelect from '../orgunits/UserOrgUnitsSelect';
+import TextField from 'd2-ui/lib/text-field/TextField';
+import Checkbox from '../d2-ui/Checkbox';
+import FontStyle from '../d2-ui/FontStyle';
 
 import {
     setOrgUnitLevels,
     setOrgUnitGroups,
     setUserOrgUnits,
     toggleOrganisationUnit,
+    setLabels,
+    setLabelFontSize,
+    setLabelFontStyle,
+    setRadiusLow,
 } from '../../actions/layerEdit';
 
 import {
@@ -45,7 +52,25 @@ const styles = {
         flexFlow: 'row wrap',
         justifyContent: 'space-between',
         alignContent: 'flex-start',
-    }
+    },
+    wrapper: {
+        width: '100%',
+        clear: 'both',
+        height: 64,
+    },
+    checkbox: {
+        float: 'left',
+        margin: '24px 0 0 12px',
+        width: 180,
+    },
+    font: {
+        float: 'left',
+        marginTop: -8,
+    },
+    radius: {
+        marginLeft: 12,
+        width: 127,
+    },
 };
 
 class BoundaryDialog extends Component {
@@ -53,10 +78,18 @@ class BoundaryDialog extends Component {
     render() {
         const {
             rows = [],
+            labels,
+            labelFontSize,
+            labelFontStyle,
+            radiusLow,
             setOrgUnitLevels,
             setOrgUnitGroups,
             setUserOrgUnits,
             toggleOrganisationUnit,
+            setLabels,
+            setLabelFontSize,
+            setLabelFontStyle,
+            setRadiusLow,
         } = this.props;
 
         const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
@@ -90,6 +123,32 @@ class BoundaryDialog extends Component {
                     </div>
                 </Tab>
                 <Tab label={i18next.t('Style')}>
+                    <div style={styles.content}>
+                        <div style={styles.wrapper}>
+                            <Checkbox
+                                label={i18next.t('Show labels')}
+                                checked={labels}
+                                onCheck={setLabels}
+                                style={styles.checkbox}
+                            />
+                            {labels &&
+                                <FontStyle
+                                    size={labelFontSize}
+                                    fontStyle={labelFontStyle}
+                                    onSizeChange={setLabelFontSize}
+                                    onStyleChange={setLabelFontStyle}
+                                    style={styles.font}
+                                />
+                            }
+                        </div>
+                        <TextField
+                            type='number'
+                            label={i18next.t('Point radius')}
+                            value={radiusLow !== undefined ? radiusLow : 5}
+                            onChange={setRadiusLow}
+                            style={styles.radius}
+                        />
+                    </div>
                 </Tab>
             </Tabs>
         );
@@ -102,5 +161,9 @@ export default connect(
         setOrgUnitGroups,
         setUserOrgUnits,
         toggleOrganisationUnit,
+        setLabels,
+        setLabelFontSize,
+        setLabelFontStyle,
+        setRadiusLow,
     }
 )(BoundaryDialog);

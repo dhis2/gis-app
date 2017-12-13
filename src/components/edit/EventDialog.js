@@ -242,7 +242,6 @@ export class EventDialog extends Component {
                                 onChange={setEventPointRadius}
                                 style={styles.flexHalf}
                             />
-
                         </div>
                         <div style={styles.flexHalf}>
                             <DataItemSelect

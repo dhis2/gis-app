@@ -74,11 +74,18 @@ const styles = {
         borderLeft: '12px solid #fff',
         borderRight: '12px solid #fff',
     },
+    flexThird: {
+        flex: '33%',
+        minWidth: 230,
+        boxSizing: 'border-box',
+        borderLeft: '12px solid #fff',
+        borderRight: '12px solid #fff',
+    },
     flexFull: {
         flex: '100%',
         display: 'flex',
         flexFlow: 'row wrap',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         alignContent: 'flex-start',
     },
     wrapper: {
@@ -254,12 +261,14 @@ const ThematicDialog = (props) => {
                     <LegendTypeSelect
                         method={method}
                         onChange={setClassification}
+                        style={{ ...styles.flexFull, marginTop: 12, marginLeft: 12 }}
                     />
                     {method !== 1 &&
                         <Classification
                             method={method}
                             classes={classes}
                             colorScale={colorScale}
+                            style={{ ...styles.flexFull, marginTop: 12, marginLeft: 12 }}
                         />
                     }
                     {method === 1 &&
@@ -267,20 +276,22 @@ const ThematicDialog = (props) => {
                             onChange={console.log}
                         />
                     }
-                    <TextField
-                        type='number'
-                        label={i18next.t('Low size')}
-                        value={radiusLow !== undefined ? radiusLow : 5}
-                        onChange={setRadiusLow}
-                        // style={styles.radius}
-                    />
-                    <TextField
-                        type='number'
-                        label={i18next.t('High size')}
-                        value={radiusHigh !== undefined ? radiusHigh : 15}
-                        onChange={setRadiusHigh}
-                        // style={styles.radius}
-                    />
+                    <div style={{ ...styles.flexFull, marginTop: -12, marginLeft: 12 }}>
+                        <TextField
+                            type='number'
+                            label={i18next.t('Low size')}
+                            value={radiusLow !== undefined ? radiusLow : 5}
+                            onChange={setRadiusLow}
+                            style={{ width: 125, marginRight: 24 }}
+                        />
+                        <TextField
+                            type='number'
+                            label={i18next.t('High size')}
+                            value={radiusHigh !== undefined ? radiusHigh : 15}
+                            onChange={setRadiusHigh}
+                            style={{ width: 125 }}
+                        />
+                    </div>
                     <div style={styles.wrapper}>
                         <Checkbox
                             label={i18next.t('Show labels')}

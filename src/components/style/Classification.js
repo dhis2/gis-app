@@ -16,10 +16,9 @@ const classificationTypes = [{
 
 const styles = {
     selectField: {
-        width: '100%',
-    },
-    colorScaleSelect: {
-        width: '100%',
+        marginRight: 24,
+        width: 200,
+        top: -8,
     },
     classes: {
         width: 50,
@@ -27,23 +26,24 @@ const styles = {
     },
 };
 
-const Classification = ({method, classes, colorScale, setClassification, setColorScale }) => [
-    <SelectField
-        key='type'
-        label={i18next.t('Classification')}
-        value={method || 2}
-        items={classificationTypes}
-        onChange={method =>setClassification(method.id)}
-        style={styles.selectField}
-    />,
-    <ColorScaleSelect
-        key='scale'
-        label={i18next.t('Classes')}
-        onChange={colorScale => setColorScale(colorScale)}
-        style={styles.colorScaleSelect}
-        classesStyle={styles.classes}
-    />
-];
+const Classification = ({method, classes, colorScale, setClassification, setColorScale, style }) => (
+    <div style={style}>
+        <SelectField
+            key='type'
+            label={i18next.t('Classification')}
+            value={method || 2}
+            items={classificationTypes}
+            onChange={method =>setClassification(method.id)}
+            style={styles.selectField}
+        />
+        <ColorScaleSelect
+            key='scale'
+            label={i18next.t('Classes')}
+            onChange={colorScale => setColorScale(colorScale)}
+            classesStyle={styles.classes}
+        />
+    </div>
+);
 
 Classification.propTypes = {
 

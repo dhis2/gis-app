@@ -1,3 +1,4 @@
+import omit from 'lodash/fp/omit';
 import * as types from '../constants/actionTypes';
 import {
     setFiltersFromPeriod,
@@ -90,9 +91,8 @@ const layerEdit = (state = null, action) => {
 
         case types.LAYER_EDIT_PERIOD_TYPE_SET:
             return {
-                ...state,
+                ...omit('filters', state),
                 periodType: action.periodType,
-                filters: null,
             };
 
         case types.LAYER_EDIT_PERIOD_SET:
@@ -337,6 +337,12 @@ const layerEdit = (state = null, action) => {
             return {
                 ...state,
                 radiusHigh: action.radius,
+            };
+
+        case types.LAYER_EDIT_LEGEND_SET_SET:
+            return {
+                ...state,
+                legendSet: action.legendSet,
             };
 
         default:

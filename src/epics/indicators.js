@@ -13,7 +13,7 @@ export const loadIndicators = (action$) =>
               .then(d2 => d2.models.indicators
                   .filter().on('indicatorGroups.id').equals(action.groupId)
                   .list({
-                      fields: 'id,displayName~rename(name)',
+                      fields: 'id,displayName~rename(name),legendSet[id]',
                       paging: false,
                   }))
               .then(indicators => setIndicators(action.groupId, indicators.toArray()))

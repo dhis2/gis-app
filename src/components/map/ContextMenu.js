@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import i18next from 'i18next';
 import Popover from 'material-ui/Popover';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import SvgIcon from 'd2-ui/lib/svg-icon/SvgIcon';
@@ -10,6 +11,28 @@ import { openOrgUnit, startRelocateOrgUnit, changeOrgUnitCoordinate} from '../..
 
 // https://github.com/callemall/material-ui/issues/2866
 const anchorEl = document.getElementById('context-menu');
+
+const styles = {
+    list: {
+        paddingTop: 4,
+        paddingBottom: 4,
+    },
+    menuItem: {
+        fontSize: 12,
+        lineHeight: '24px',
+        minHeight: '24px',
+    },
+
+    menuItemInner: {
+        padding: '0 8px 0 34px',
+    },
+    icon: {
+        margin: 3,
+        left: 6,
+        width: 18,
+        height: 18,
+    }
+};
 
 const ContextMenu = (props) => {
     const { feature, layerType } = props;
@@ -41,7 +64,7 @@ const ContextMenu = (props) => {
             anchorEl={anchorEl}
             onRequestClose={props.onClose}
         >
-            <Menu>
+            <Menu autoWidth={true} style={styles.menu} listStyle={styles.list} menuItemStyle={styles.menuItem}>
                 {layerType !== 'facility' && feature &&
                     <MenuItem
                         disabled={!attr.hasCoordinatesUp}
@@ -50,10 +73,11 @@ const ContextMenu = (props) => {
                             <SvgIcon
                                 icon='ArrowUpward'
                                 color={attr.hasCoordinatesUp ? iconColor : iconDisabledColor}
-                                style={style.icon}
+                                style={styles.icon}
                             />
                         }
-                    >{GIS.i18n.drill_up_one_level}</MenuItem>
+                        innerDivStyle={styles.menuItemInner}
+                    >{i18next.t('Drill up one level')}</MenuItem>
                 }
 
                 {layerType !== 'facility' && feature &&
@@ -64,10 +88,11 @@ const ContextMenu = (props) => {
                             <SvgIcon
                                 icon='ArrowDownward'
                                 color={attr.hasCoordinatesDown ? iconColor : iconDisabledColor}
-                                style={style.icon}
+                                style={styles.icon}
                             />
                         }
-                    >{GIS.i18n.drill_down_one_level}</MenuItem>
+                        innerDivStyle={styles.menuItemInner}
+                    >{i18next.t('Drill down one level')}</MenuItem>
                 }
 
                 {isRelocate && isPoint &&
@@ -76,10 +101,11 @@ const ContextMenu = (props) => {
                         leftIcon={
                             <SvgIcon
                                 icon='Room'
-                                style={style.icon}
+                                style={styles.icon}
                             />
                         }
-                    >{GIS.i18n.relocate}</MenuItem>
+                        innerDivStyle={styles.menuItemInner}
+                    >{i18next.t('Relocate')}</MenuItem>
                 }
 
                 {isRelocate && isPoint &&
@@ -88,44 +114,51 @@ const ContextMenu = (props) => {
                         leftIcon={
                             <SvgIcon
                                 icon='Room'
-                                style={style.icon}
+                                style={styles.icon}
                             />
                         }
-                    >{GIS.i18n.swap_lon_lat}</MenuItem>
+                        innerDivStyle={styles.menuItemInner}
+                    >{i18next.t('Swap longitude/latitude')}</MenuItem>
                 }
 
                 {!isPlugin && feature &&
                     <MenuItem
                         onClick={() => props.onShowInformation(attr)}
-                        innerDivStyle={style.menuItemInner}
+                        innerDivStyle={styles.menuItemInner}
                         leftIcon={
                             <SvgIcon
                                 icon='InfoOutline'
-                                style={style.icon}
+                                style={styles.icon}
                             />
                         }
-                    >{GIS.i18n.show_information_sheet}</MenuItem>
+                    >{i18next.t('Show information')}</MenuItem>
                 }
 
                 {layerType === 'earthEngine' &&
                     <MenuItem
                         onClick={() => props.onShowValue()}
-                        innerDivStyle={style.menuItemInner}
+                        innerDivStyle={styles.menuItemInner}
                         leftIcon={
                             <SvgIcon
                                 icon='InfoOutline'
-                                style={style.icon}
+                                style={styles.icon}
                             />
                         }
-                    >{GIS.i18n.show + ' todo'}</MenuItem>
+                    >{i18next.t('Show value')}</MenuItem>
                 }
 
                 {props.coordinate && !isPoint &&
                     <MenuItem
                         onClick={() => props.showCoordinate(props.coordinate)}
-                        leftIcon='room'
+                        leftIcon={
+                            <SvgIcon
+                                icon='Room'
+                                style={styles.icon}
+                            />
+                        }
                         disabled={true}
-                    >Show longitude/latitude</MenuItem>
+                        innerDivStyle={styles.menuItemInner}
+                    >{i18next.t('Show longitude/latitude')}</MenuItem>
                 }
             </Menu>
         </Popover>

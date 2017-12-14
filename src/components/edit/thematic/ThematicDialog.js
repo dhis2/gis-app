@@ -6,54 +6,60 @@ import { Tabs, Tab } from 'd2-ui/lib/tabs/Tabs';
 import TextField from 'd2-ui/lib/text-field/TextField';
 import ValueTypeSelect from './ValueTypeSelect';
 import AggregationTypeSelect from './AggregationTypeSelect';
-import IndicatorGroupSelect from '../../indicator/IndicatorGroupSelect';
-import GroupIndicatorSelect from '../../indicator/GroupIndicatorSelect';
-import ProgramSelect from '../../program/ProgramSelect';
-import ProgramIndicatorSelect from '../../program/ProgramIndicatorSelect';
+import Checkbox from '../../d2-ui/Checkbox';
+import Classification from '../../style/Classification';
 import DataElementGroupSelect  from '../../dataElement/DataElementGroupSelect';
 import DataElementSelect  from '../../dataElement/DataElementSelect';
 import DataItemSelect from '../../dataItem/DataItemSelect';
 import DataSetsSelect from '../../dataSets/DataSetsSelect';
-import ThematicPeriodSelect from '../../periods/ThematicPeriodSelect';
-import OrgUnitTree from '../../orgunits/OrgUnitTree';
+import FontStyle from '../../d2-ui/FontStyle';
+import IndicatorGroupSelect from '../../indicator/IndicatorGroupSelect';
+import LegendSetSelect from '../../legendSet/LegendSetSelect';
+import LegendTypeSelect from './LegendTypeSelect';
+import GroupIndicatorSelect from '../../indicator/GroupIndicatorSelect';
 import OrgUnitGroupSelect from '../../orgunits/OrgUnitGroupSelect';
 import OrgUnitLevelSelect from '../../orgunits/OrgUnitLevelSelect';
+import OrgUnitTree from '../../orgunits/OrgUnitTree';
+import PeriodSelect from '../../periods/PeriodSelect';
+import PeriodTypeSelect from '../../periods/PeriodTypeSelect';
+import ProgramSelect from '../../program/ProgramSelect';
+import ProgramIndicatorSelect from '../../program/ProgramIndicatorSelect';
+import RelativePeriodSelect from '../../periods/RelativePeriodSelect';
 import UserOrgUnitsSelect from '../../orgunits/UserOrgUnitsSelect';
-import LegendTypeSelect from './LegendTypeSelect';
-import Checkbox from '../../d2-ui/Checkbox';
-import FontStyle from '../../d2-ui/FontStyle';
-import Classification from '../../style/Classification';
-import LegendSetSelect from '../../legendSet/LegendSetSelect';
 
 import {
-    setIndicatorGroup,
-    setIndicator,
-    setProgram,
-    setProgramIndicator,
-    setDataElementGroup,
-    setDataElement,
-    setDataSetItem,
-    setOrgUnitLevels,
-    setOrgUnitGroups,
-    setUserOrgUnits,
-    toggleOrganisationUnit,
     setClassification,
-    setRadiusLow,
-    setRadiusHigh,
+    setDataElement,
+    setDataElementGroup,
+    setDataSetItem,
+    setIndicator,
+    setIndicatorGroup,
     setLabels,
     setLabelFontColor,
     setLabelFontSize,
     setLabelFontWeight,
     setLabelFontStyle,
+    setLegendSet,
+    setOrgUnitLevels,
+    setOrgUnitGroups,
+    setPeriod,
+    setPeriodType,
+    setProgram,
+    setProgramIndicator,
+    setRadiusLow,
+    setRadiusHigh,
+    setUserOrgUnits,
+    toggleOrganisationUnit,
 } from '../../../actions/layerEdit';
 
 import {
     getIndicatorFromColumns,
+    getOrgUnitGroupsFromRows,
+    getOrgUnitLevelsFromRows,
+    getOrgUnitNodesFromRows,
+    getPeriodFromFilters,
     getProgramIndicatorFromColumns,
     getReportingRateFromColumns,
-    getOrgUnitNodesFromRows,
-    getOrgUnitLevelsFromRows,
-    getOrgUnitGroupsFromRows,
     getUserOrgUnitsFromRows,
 } from '../../../util/analytics';
 
@@ -104,244 +110,298 @@ const styles = {
     },
 };
 
-const ThematicDialog = (props) => {
-    const {
-        rows,
-        columns,
-        valueType,
-        indicatorGroup,
-        program,
-        dataElementGroup,
-        method,
-        classes,
-        colorScale,
-        radiusLow,
-        radiusHigh,
-        labels,
-        labelFontColor,
-        labelFontSize,
-        labelFontWeight,
-        labelFontStyle,
-        setIndicatorGroup,
-        setIndicator,
-        setProgram,
-        setProgramIndicator,
-        setDataElementGroup,
-        setDataElement,
-        setDataSetItem,
-        setOrgUnitLevels,
-        setOrgUnitGroups,
-        setUserOrgUnits,
-        toggleOrganisationUnit,
-        setClassification,
-        setRadiusLow,
-        setRadiusHigh,
-        setLabels,
-        setLabelFontColor,
-        setLabelFontSize,
-        setLabelFontWeight,
-        setLabelFontStyle,
-    } = props;
+export class ThematicDialog extends Component {
 
-    const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
+    componentDidUpdate(prevProps) {
+        const { columns, setClassification, setLegendSet } = this.props;
 
-    return (
-        <Tabs>
-            <Tab label={i18next.t('data')}>
-                <div style={styles.content}>
-                    <ValueTypeSelect
-                        value={valueType}
-                        style={styles.flexHalf}
-                    />
-                    <div style={styles.flexFull}>
-                        {(!valueType || valueType === 'in') && [ // Indicator (default)
-                            <IndicatorGroupSelect
-                                key='group'
-                                indicatorGroup={indicatorGroup}
-                                onChange={setIndicatorGroup}
-                                style={styles.flexHalf}
-                            />,
-                            <GroupIndicatorSelect
-                                key='indicator'
-                                indicatorGroup={indicatorGroup}
-                                indicator={getIndicatorFromColumns(columns)}
-                                onChange={setIndicator}
-                                style={styles.flexHalf}
-                            />,
-                        ]}
-                        {valueType === 'pi' && [ // Program indicator
-                            <ProgramSelect
-                                key='program'
-                                program={program}
-                                onChange={setProgram}
-                                style={styles.flexHalf}
-                            />,
-                            <ProgramIndicatorSelect
-                                key='indicator'
-                                program={program}
-                                programIndicator={getProgramIndicatorFromColumns(columns)}
-                                onChange={setProgramIndicator}
-                                style={styles.flexHalf}
-                            />
-                        ]}
-                        {valueType === 'de' && [ // Data element
-                            <DataElementGroupSelect
-                                key='group'
-                                dataElementGroup={dataElementGroup}
-                                onChange={setDataElementGroup}
-                                style={styles.flexHalf}
-                            />,
-                            <DataElementSelect
-                                key='element'
-                                dataElementGroup={dataElementGroup}
-                                onChange={setDataElement}
-                                style={styles.flexHalf}
-                            />,
-                        ]}
-                        {valueType === 'di' && [ // Event data items
-                            <ProgramSelect
-                                key='program'
-                                program={program}
-                                onChange={setProgram}
-                                style={styles.flexHalf}
-                            />,
-                            <DataItemSelect
-                                key='item'
-                                program={program}
-                                // value={styleDataItem ? styleDataItem.id : null}
-                                onChange={console.log}
-                                style={styles.flexHalf}
-                            />
-                        ]}
-                        {valueType === 'ds' && ( // Reporting rates
-                            <DataSetsSelect
-                                key='item'
-                                dataSet={getReportingRateFromColumns(columns)}
-                                onChange={setDataSetItem}
-                                style={styles.flexHalf}
-                            />
-                        )}
-                    </div>
-                    <ThematicPeriodSelect
-                        style={styles.flexHalf}
-                    />
-                    <AggregationTypeSelect
-                        style={styles.flexHalf}
-                    />
-                </div>
-            </Tab>
-            <Tab label={i18next.t('Organisation units')}>
-                <div style={styles.content}>
-                    <div style={styles.flexHalf}>
-                        <OrgUnitTree
-                            selected={getOrgUnitNodesFromRows(rows)}
-                            onClick={toggleOrganisationUnit}
-                            disabled={selectedUserOrgUnits.length ? true : false}
-                        />
-                    </div>
-                    <div style={styles.flexHalf}>
-                        <OrgUnitLevelSelect
-                            orgUnitLevel={getOrgUnitLevelsFromRows(rows)}
-                            onChange={setOrgUnitLevels}
-                        />
-                        <OrgUnitGroupSelect
-                            orgUnitGroup={getOrgUnitGroupsFromRows(rows)}
-                            onChange={setOrgUnitGroups}
+        // Set connected legend set when indicator is selected
+        if (columns) {
+            const indicator = getIndicatorFromColumns(columns);
+            const prevIndicator = getIndicatorFromColumns(prevProps.columns);
 
+            // If user selected indicator with legend set
+            if (indicator && indicator !== prevIndicator && indicator.legendSet) {
+                setClassification(1); // TODO: Use constant
+                setLegendSet(indicator.legendSet);
+            }
+        }
+    }
+
+    render() {
+        const { // layer options
+            classes,
+            colorScale,
+            columns,
+            dataElementGroup,
+            filters,
+            indicatorGroup,
+            labels,
+            labelFontColor,
+            labelFontSize,
+            labelFontStyle,
+            labelFontWeight,
+            legendSet,
+            method,
+            periodType,
+            program,
+            radiusHigh,
+            radiusLow,
+            rows,
+            valueType,
+        } = this.props;
+
+        const { // Handlers
+            setClassification,
+            setDataElement,
+            setDataElementGroup,
+            setDataSetItem,
+            setIndicator,
+            setIndicatorGroup,
+            setLabels,
+            setLabelFontColor,
+            setLabelFontSize,
+            setLabelFontWeight,
+            setLabelFontStyle,
+            setLegendSet,
+            setOrgUnitLevels,
+            setOrgUnitGroups,
+            setPeriod,
+            setPeriodType,
+            setProgram,
+            setProgramIndicator,
+            setRadiusLow,
+            setRadiusHigh,
+            setUserOrgUnits,
+            toggleOrganisationUnit,
+        } = this.props;
+
+        const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
+
+        return (
+            <Tabs>
+                <Tab label={i18next.t('data')}>
+                    <div style={styles.content}>
+                        <ValueTypeSelect
+                            value={valueType}
+                            style={styles.flexHalf}
                         />
-                        <UserOrgUnitsSelect
-                            selected={selectedUserOrgUnits}
-                            onChange={setUserOrgUnits}
+                        <div style={styles.flexFull}>
+                            {(!valueType || valueType === 'in') && [ // Indicator (default)
+                                <IndicatorGroupSelect
+                                    key='group'
+                                    indicatorGroup={indicatorGroup}
+                                    onChange={setIndicatorGroup}
+                                    style={styles.flexHalf}
+                                />,
+                                <GroupIndicatorSelect
+                                    key='indicator'
+                                    indicatorGroup={indicatorGroup}
+                                    indicator={getIndicatorFromColumns(columns)}
+                                    onChange={setIndicator}
+                                    style={styles.flexHalf}
+                                />,
+                            ]}
+                            {valueType === 'pi' && [ // Program indicator
+                                <ProgramSelect
+                                    key='program'
+                                    program={program}
+                                    onChange={setProgram}
+                                    style={styles.flexHalf}
+                                />,
+                                <ProgramIndicatorSelect
+                                    key='indicator'
+                                    program={program}
+                                    programIndicator={getProgramIndicatorFromColumns(columns)}
+                                    onChange={setProgramIndicator}
+                                    style={styles.flexHalf}
+                                />
+                            ]}
+                            {valueType === 'de' && [ // Data element
+                                <DataElementGroupSelect
+                                    key='group'
+                                    dataElementGroup={dataElementGroup}
+                                    onChange={setDataElementGroup}
+                                    style={styles.flexHalf}
+                                />,
+                                <DataElementSelect
+                                    key='element'
+                                    dataElementGroup={dataElementGroup}
+                                    onChange={setDataElement}
+                                    style={styles.flexHalf}
+                                />,
+                            ]}
+                            {valueType === 'di' && [ // Event data items
+                                <ProgramSelect
+                                    key='program'
+                                    program={program}
+                                    onChange={setProgram}
+                                    style={styles.flexHalf}
+                                />,
+                                <DataItemSelect
+                                    key='item'
+                                    program={program}
+                                    // value={styleDataItem ? styleDataItem.id : null}
+                                    onChange={console.log}
+                                    style={styles.flexHalf}
+                                />
+                            ]}
+                            {valueType === 'ds' && ( // Reporting rates
+                                <DataSetsSelect
+                                    key='item'
+                                    dataSet={getReportingRateFromColumns(columns)}
+                                    onChange={setDataSetItem}
+                                    style={styles.flexHalf}
+                                />
+                            )}
+                        </div>
+                        <PeriodTypeSelect
+                            key='type'
+                            value={periodType}
+                            onChange={type => setPeriodType(type.id)}
+                            style={styles.flexHalf}
                         />
-                    </div>
-                </div>
-            </Tab>
-            <Tab label={i18next.t('Style')}>
-                <div style={styles.content}>
-                    <LegendTypeSelect
-                        method={method}
-                        onChange={setClassification}
-                        style={{ ...styles.flexFull, marginTop: 12, marginLeft: 12 }}
-                    />
-                    {method !== 1 &&
-                        <Classification
-                            method={method}
-                            classes={classes}
-                            colorScale={colorScale}
-                            style={{ ...styles.flexFull, marginTop: 12, marginLeft: 12 }}
-                        />
-                    }
-                    {method === 1 &&
-                        <LegendSetSelect
-                            onChange={console.log}
-                        />
-                    }
-                    <div style={{ ...styles.flexFull, marginTop: -12, marginLeft: 12 }}>
-                        <TextField
-                            type='number'
-                            label={i18next.t('Low size')}
-                            value={radiusLow !== undefined ? radiusLow : 5}
-                            onChange={setRadiusLow}
-                            style={{ width: 125, marginRight: 24 }}
-                        />
-                        <TextField
-                            type='number'
-                            label={i18next.t('High size')}
-                            value={radiusHigh !== undefined ? radiusHigh : 15}
-                            onChange={setRadiusHigh}
-                            style={{ width: 125 }}
-                        />
-                    </div>
-                    <div style={styles.wrapper}>
-                        <Checkbox
-                            label={i18next.t('Show labels')}
-                            checked={labels}
-                            onCheck={setLabels}
-                            style={styles.checkbox}
-                        />
-                        {labels &&
-                            <FontStyle
-                                color={labelFontColor}
-                                size={labelFontSize}
-                                weight={labelFontWeight}
-                                fontStyle={labelFontStyle}
-                                onColorChange={setLabelFontColor}
-                                onSizeChange={setLabelFontSize}
-                                onWeightChange={setLabelFontWeight}
-                                onStyleChange={setLabelFontStyle}
-                                style={styles.font}
+                        {periodType === 'relativePeriods' &&
+                            <RelativePeriodSelect
+                                key='relative'
+                                period={getPeriodFromFilters(filters)}
+                                onChange={setPeriod}
+                                style={styles.flexHalf}
                             />
                         }
+                        {periodType && periodType !== 'relativePeriods' &&
+                            <PeriodSelect
+                                key='periods'
+                                periodType={periodType}
+                                period={getPeriodFromFilters(filters)}
+                                onChange={setPeriod}
+                                style={styles.flexHalf}
+                            />
+                        }
+                        <AggregationTypeSelect
+                            style={styles.flexHalf}
+                        />
                     </div>
-                </div>
-            </Tab>
-        </Tabs>
-    );
+                </Tab>
+                <Tab label={i18next.t('Organisation units')}>
+                    <div style={styles.content}>
+                        <div style={styles.flexHalf}>
+                            <OrgUnitTree
+                                selected={getOrgUnitNodesFromRows(rows)}
+                                onClick={toggleOrganisationUnit}
+                                disabled={selectedUserOrgUnits.length ? true : false}
+                            />
+                        </div>
+                        <div style={styles.flexHalf}>
+                            <OrgUnitLevelSelect
+                                orgUnitLevel={getOrgUnitLevelsFromRows(rows)}
+                                onChange={setOrgUnitLevels}
+                            />
+                            <OrgUnitGroupSelect
+                                orgUnitGroup={getOrgUnitGroupsFromRows(rows)}
+                                onChange={setOrgUnitGroups}
+
+                            />
+                            <UserOrgUnitsSelect
+                                selected={selectedUserOrgUnits}
+                                onChange={setUserOrgUnits}
+                            />
+                        </div>
+                    </div>
+                </Tab>
+                <Tab label={i18next.t('Style')}>
+                    <div style={styles.content}>
+                        <LegendTypeSelect
+                            method={method}
+                            onChange={setClassification}
+                            style={{ ...styles.flexFull, marginTop: 12, marginLeft: 12 }}
+                        />
+                        {method !== 1 &&
+                            <Classification
+                                method={method}
+                                classes={classes}
+                                colorScale={colorScale}
+                                style={{ ...styles.flexFull, marginTop: 12, marginLeft: 12 }}
+                            />
+                        }
+                        {method === 1 &&
+                            <LegendSetSelect
+                                legendSet={legendSet}
+                                onChange={setLegendSet}
+                                style={{ width: 354, margin: '4px 0 8px 12px' }}
+                            />
+                        }
+                        <div style={{ ...styles.flexFull, marginTop: -12, marginLeft: 12 }}>
+                            <TextField
+                                type='number'
+                                label={i18next.t('Low size')}
+                                value={radiusLow !== undefined ? radiusLow : 5}
+                                onChange={setRadiusLow}
+                                style={{ width: 125, marginRight: 24 }}
+                            />
+                            <TextField
+                                type='number'
+                                label={i18next.t('High size')}
+                                value={radiusHigh !== undefined ? radiusHigh : 15}
+                                onChange={setRadiusHigh}
+                                style={{ width: 125 }}
+                            />
+                        </div>
+                        <div style={styles.wrapper}>
+                            <Checkbox
+                                label={i18next.t('Show labels')}
+                                checked={labels}
+                                onCheck={setLabels}
+                                style={styles.checkbox}
+                            />
+                            {labels &&
+                                <FontStyle
+                                    color={labelFontColor}
+                                    size={labelFontSize}
+                                    weight={labelFontWeight}
+                                    fontStyle={labelFontStyle}
+                                    onColorChange={setLabelFontColor}
+                                    onSizeChange={setLabelFontSize}
+                                    onWeightChange={setLabelFontWeight}
+                                    onStyleChange={setLabelFontStyle}
+                                    style={styles.font}
+                                />
+                            }
+                        </div>
+                    </div>
+                </Tab>
+            </Tabs>
+        );
+
+    }
 
 };
 
 export default connect(
     null,
     {
-        setIndicatorGroup,
-        setIndicator,
-        setProgram,
-        setProgramIndicator,
-        setDataElementGroup,
-        setDataElement,
-        setDataSetItem,
-        setOrgUnitLevels,
-        setOrgUnitGroups,
-        setUserOrgUnits,
-        toggleOrganisationUnit,
         setClassification,
-        setRadiusLow,
-        setRadiusHigh,
+        setDataElement,
+        setDataElementGroup,
+        setDataSetItem,
+        setIndicator,
+        setIndicatorGroup,
         setLabels,
         setLabelFontColor,
         setLabelFontSize,
         setLabelFontWeight,
         setLabelFontStyle,
+        setLegendSet,
+        setOrgUnitLevels,
+        setOrgUnitGroups,
+        setPeriod,
+        setPeriodType,
+        setProgram,
+        setProgramIndicator,
+        setRadiusLow,
+        setRadiusHigh,
+        setUserOrgUnits,
+        toggleOrganisationUnit,
     }
 )(ThematicDialog);
 

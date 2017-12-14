@@ -32,7 +32,7 @@ const ThematicPeriodSelect = ({ periodType, period, setPeriodType, setPeriod, st
                 onChange={setPeriod}
                 style={style}
             />
-            : periodType ?
+        : periodType ?
                 <PeriodSelect
                     key='periods'
                     periodType={periodType}
@@ -40,7 +40,7 @@ const ThematicPeriodSelect = ({ periodType, period, setPeriodType, setPeriod, st
                     onChange={setPeriod}
                     style={style}
                 />
-                : null}
+        : null}
     </div>
 );
 

@@ -238,3 +238,9 @@ export const setRadiusHigh = (radius) => ({
     type: types.LAYER_EDIT_RADIUS_HIGH_SET,
     radius,
 });
+
+// Set legend set (event, thematic)
+export const setLegendSet = (legendSet) => ({
+    type: types.LAYER_EDIT_LEGEND_SET_SET,
+    legendSet,
+});

@@ -6,7 +6,6 @@ import { relativePeriods } from '../../constants/periods';
 let periods;
 
 const RelativePeriodSelect = ({ startEndDates, period, onChange, style }) => {
-
     if (!periods) { // Create periods array on first run
         periods = (startEndDates ? [{ // Used in event layer dialog
             id: 'START_END_DATES',
@@ -21,7 +20,7 @@ const RelativePeriodSelect = ({ startEndDates, period, onChange, style }) => {
         <SelectField
             label={i18next.t('Period')}
             items={periods}
-            value={period.id}
+            value={period && period.id}
             onChange={onChange}
             style={style}
         />

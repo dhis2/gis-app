@@ -1,10 +1,7 @@
 import React from 'react';
 import i18next from 'i18next';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-
-// Method constants
-const PREDEFINED = 1;
-const EQUAL_INTERVALS = 2; // Default automaatic legend
+import { PREDEFINED, EQUAL_INTERVALS } from '../../../constants/layers';
 
 const styles = {
     label: {
@@ -27,12 +24,12 @@ export const LegendTypeSelect = ({ method, onChange, style }) => (
         <span style={styles.label}>{i18next.t('Legend type')}:</span>
         <RadioButtonGroup
             name='method'
-            defaultSelected={method === 1 ? PREDEFINED : EQUAL_INTERVALS}
+            valueSelected={method === PREDEFINED ? PREDEFINED : EQUAL_INTERVALS}
             onChange={(event, type) => onChange(type)}
             style={styles.radioGroup}
         >
             <RadioButton
-                value={EQUAL_INTERVALS}
+                value={EQUAL_INTERVALS }
                 label={i18next.t('Automatic')}
                 style={styles.radioButton}
             />
@@ -44,5 +41,6 @@ export const LegendTypeSelect = ({ method, onChange, style }) => (
         </RadioButtonGroup>
     </div>
 );
+
 
 export default LegendTypeSelect;

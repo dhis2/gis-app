@@ -5,14 +5,7 @@ import i18next from 'i18next';
 import SelectField from 'd2-ui/lib/select-field/SelectField';
 import ColorScaleSelect from 'd2-ui/lib/legend/ColorScaleSelect.component';
 import { setClassification, setColorScale } from '../../actions/layerEdit';
-
-const classificationTypes = [{
-    id: 2,
-    name: 'Equal Intervals',
-}, {
-    id: 3,
-    name: 'Equal counts'
-}];
+import { classificationTypes } from '../../constants/layers';
 
 const styles = {
     selectField: {
@@ -32,8 +25,8 @@ const Classification = ({method, classes, colorScale, setClassification, setColo
             key='type'
             label={i18next.t('Classification')}
             value={method || 2}
-            items={classificationTypes}
-            onChange={method =>setClassification(method.id)}
+            items={classificationTypes.map(({ id, name }) => ({ id, name: i18next.t(name) }))}
+            onChange={method => setClassification(method.id)}
             style={styles.selectField}
         />
         <ColorScaleSelect

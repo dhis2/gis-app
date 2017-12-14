@@ -31,6 +31,7 @@ export const setIndicatorInColumns = (indicator) => [
         id: indicator.id,
         name: indicator.name,
         dimensionItemType: 'INDICATOR',
+        legendSet: indicator.legendSet, // TODO: Keep outside of columns?
     }], { objectName: 'in' })
 ];
 

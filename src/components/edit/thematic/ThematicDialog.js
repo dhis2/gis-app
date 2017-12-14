@@ -372,10 +372,8 @@ export class ThematicDialog extends Component {
                 </Tab>
             </Tabs>
         );
-
     }
-
-};
+}
 
 export default connect(
     null,

@@ -127,9 +127,6 @@ export class ThematicDialog extends Component {
                 setLegendSet(indicator.legendSet);
             }
         }
-
-
-
     }
 
     render() {
@@ -183,8 +180,6 @@ export class ThematicDialog extends Component {
         const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
         const period = getPeriodFromFilters(filters);
         const indicator = getIndicatorFromColumns(columns);
-
-        console.log('filters', filters);
 
         return (
             <Tabs>

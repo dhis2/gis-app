@@ -22,7 +22,8 @@ export const getDataItemsFromColumns = (columns = []) => getDimensionItems('dx',
 /* INDICATORS */
 
 export const getIndicatorFromColumns = (columns = []) => {
-    const indicator = columns.filter(item => item.objectName === 'in')[0];
+    // const indicator = columns.filter(item => item.objectName === 'in')[0];
+    const indicator = columns.filter(item => item.dimension === 'dx')[0];
     return (indicator && indicator.items) ? indicator.items[0] : null;
 };
 

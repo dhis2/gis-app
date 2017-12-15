@@ -30,7 +30,7 @@ export class GroupIndicatorSelect extends Component {
         return (
             <SelectField
                 key='indicators'
-                label={i18next.t('Indicators')}
+                label={i18next.t('Indicator')}
                 items={indicators[indicatorGroup.id]}
                 value={indicator ? indicator.id : null}
                 onChange={onChange}

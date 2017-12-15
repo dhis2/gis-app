@@ -12,6 +12,7 @@ import DataElementGroupSelect  from '../../dataElement/DataElementGroupSelect';
 import DataElementSelect  from '../../dataElement/DataElementSelect';
 import DataItemSelect from '../../dataItem/DataItemSelect';
 import DataSetsSelect from '../../dataSets/DataSetsSelect';
+import DummySelectField from '../../d2-ui/DummySelectField';
 import FontStyle from '../../d2-ui/FontStyle';
 import IndicatorGroupSelect from '../../indicator/IndicatorGroupSelect';
 import LegendSetSelect from '../../legendSet/LegendSetSelect';
@@ -181,8 +182,9 @@ export class ThematicDialog extends Component {
 
         const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
         const period = getPeriodFromFilters(filters);
+        const indicator = getIndicatorFromColumns(columns);
 
-        console.log('period', period);
+        console.log('filters', filters);
 
         return (
             <Tabs>
@@ -207,6 +209,14 @@ export class ThematicDialog extends Component {
                                     onChange={setIndicator}
                                     style={styles.flexHalf}
                                 />,
+                                (!indicatorGroup && indicator && (
+                                    <DummySelectField
+                                        key='dummy'
+                                        label={i18next.t('Indicator')}
+                                        item={indicator}
+                                        style={styles.flexHalf}
+                                    />
+                                ))
                             ]}
                             {valueType === 'pi' && [ // Program indicator
                                 <ProgramSelect
@@ -262,14 +272,12 @@ export class ThematicDialog extends Component {
                             )}
                         </div>
                         <PeriodTypeSelect
-                            key='type'
                             value={periodType}
                             onChange={type => setPeriodType(type.id)}
                             style={styles.flexHalf}
                         />
                         {periodType === 'relativePeriods' &&
                             <RelativePeriodSelect
-                                key='relative'
                                 period={period}
                                 onChange={setPeriod}
                                 style={styles.flexHalf}
@@ -277,10 +285,16 @@ export class ThematicDialog extends Component {
                         }
                         {periodType && periodType !== 'relativePeriods' &&
                             <PeriodSelect
-                                key='periods'
                                 periodType={periodType}
                                 period={period}
                                 onChange={setPeriod}
+                                style={styles.flexHalf}
+                            />
+                        }
+                        {period && !periodType &&
+                            <DummySelectField
+                                label={i18next.t('Period')}
+                                item={period}
                                 style={styles.flexHalf}
                             />
                         }

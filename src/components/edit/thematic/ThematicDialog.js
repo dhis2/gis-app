@@ -126,6 +126,9 @@ export class ThematicDialog extends Component {
                 setLegendSet(indicator.legendSet);
             }
         }
+
+
+
     }
 
     render() {
@@ -177,6 +180,9 @@ export class ThematicDialog extends Component {
         } = this.props;
 
         const selectedUserOrgUnits = getUserOrgUnitsFromRows(rows);
+        const period = getPeriodFromFilters(filters);
+
+        console.log('period', period);
 
         return (
             <Tabs>
@@ -264,7 +270,7 @@ export class ThematicDialog extends Component {
                         {periodType === 'relativePeriods' &&
                             <RelativePeriodSelect
                                 key='relative'
-                                period={getPeriodFromFilters(filters)}
+                                period={period}
                                 onChange={setPeriod}
                                 style={styles.flexHalf}
                             />
@@ -273,7 +279,7 @@ export class ThematicDialog extends Component {
                             <PeriodSelect
                                 key='periods'
                                 periodType={periodType}
-                                period={getPeriodFromFilters(filters)}
+                                period={period}
                                 onChange={setPeriod}
                                 style={styles.flexHalf}
                             />
@@ -300,7 +306,6 @@ export class ThematicDialog extends Component {
                             <OrgUnitGroupSelect
                                 orgUnitGroup={getOrgUnitGroupsFromRows(rows)}
                                 onChange={setOrgUnitGroups}
-
                             />
                             <UserOrgUnitsSelect
                                 selected={selectedUserOrgUnits}

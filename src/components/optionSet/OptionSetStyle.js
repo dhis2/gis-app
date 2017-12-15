@@ -10,8 +10,6 @@ const colors = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fd
 
 const style = {
     marginTop: 20,
-    maxHeight: 195,
-    overflowY: 'auto',
 };
 
 class OptionSetStyle extends Component {

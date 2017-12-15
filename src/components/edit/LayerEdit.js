@@ -56,7 +56,7 @@ class LayerEdit extends Component {
             if (config.type === 'external') { // External layers has no edit widget
                 config.editCounter = 1;
                 getOverlay(config);
-            } else  if (!config.preview) { // TODO
+            } else  if (config.old) { // TODO
                 if (!widgets[id]) {
                     editCounter[id] = 0;
 
@@ -117,12 +117,11 @@ class LayerEdit extends Component {
     render() {
         const config = this.props.layer;
 
-        if (!config || !config.preview) {
+        if (!config || config.old) {
             return null;
         }
 
         const LayerDialog = layerType[config.type];
-
 
         if (!LayerDialog) {
             return null;

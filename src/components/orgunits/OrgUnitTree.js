@@ -67,7 +67,7 @@ export class OrgUnitTree extends Component {
             <div style={styles.container}>
                 <D2OrgUnitTree
                     root={root}
-                    selected={selected.map(item => item.path)}
+                    selected={selected.filter(item => item.path).map(item => item.path)} // TODO: Need to select all
                     initiallyExpanded={[root.path]}
                     hideCheckboxes={true}
                     hideMemberCount={true}

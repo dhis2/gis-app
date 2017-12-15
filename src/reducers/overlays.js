@@ -2,7 +2,6 @@ import * as types from '../constants/actionTypes';
 
 const defaultOverlays = [{
     type: 'event',
-    preview: true,
     title: 'Events Preview',
     img: 'images/layers/events.png',
     opacity: 0.95,
@@ -45,7 +44,6 @@ const defaultOverlays = [{
     */
 },{
     type: 'facility',
-    preview: true,
     title: 'Facilities Preview',
     img: 'images/layers/facilities.png',
     opacity: 1,
@@ -55,42 +53,18 @@ const defaultOverlays = [{
           id: 'LEVEL-4'
         }]
     }],
-    // areaRadius: 5000,
 },{
     type: 'thematic',
-    preview: true,
     title: 'Thematic Preview',
     img: 'images/layers/thematic.png',
     opacity: 0.8,
 },{
     type: 'boundary',
-    preview: true,
     title: 'Boundaries Preview',
     img: 'images/layers/boundaries.png',
     opacity: 1,
 },{
-    type: 'event',
-    title: 'Events',
-    img: 'images/layers/events.png',
-    opacity: 0.95,
-},{
-    type: 'facility',
-    title: 'Facilities',
-    img: 'images/layers/facilities.png',
-    opacity: 1,
-},{
-    type: 'thematic',
-    title: 'Thematic',
-    img: 'images/layers/thematic.png',
-    opacity: 0.8,
-},{
-    type: 'boundary',
-    title: 'Boundaries',
-    img: 'images/layers/boundaries.png',
-    opacity: 1,
-},{
     type: 'earthEngine',
-    preview: true,
     datasetId: 'WorldPop/POP',
     title: 'Population density',
     img: 'images/layers/population.png',
@@ -102,7 +76,6 @@ const defaultOverlays = [{
     opacity: 0.9,
 },{
     type: 'earthEngine',
-    preview: true,
     datasetId: 'USGS/SRTMGL1_003',
     title: 'Elevation',
     img: 'images/layers/elevation.png',
@@ -114,7 +87,6 @@ const defaultOverlays = [{
     opacity: 0.9,
 },{
     type: 'earthEngine',
-    preview: true,
     datasetId: 'MODIS/MOD11A2',
     title: 'Temperature',
     img: 'images/layers/temperature.png',
@@ -126,7 +98,6 @@ const defaultOverlays = [{
     opacity: 0.9,
 },{
     type: 'earthEngine',
-    preview: true,
     datasetId: 'UCSB-CHG/CHIRPS/PENTAD',
     title: 'Precipitation',
     img: 'images/layers/precipitation.png',
@@ -138,14 +109,12 @@ const defaultOverlays = [{
     opacity: 0.9,
 },{
     type: 'earthEngine',
-    preview: true,
     datasetId: 'MODIS/051/MCD12Q1',
     title: 'Landcover',
     img: 'images/layers/landcover.png',
     opacity: 0.9,
 },{
     type: 'earthEngine',
-    preview: true,
     datasetId: 'NOAA/DMSP-OLS/NIGHTTIME_LIGHTS',
     title: 'Nighttime lights',
     img: 'images/layers/nighttime.png',
@@ -156,34 +125,64 @@ const defaultOverlays = [{
     },
     opacity: 0.9,
 }/*,{
+    type: 'event',
+    old: true,
+    title: 'Events',
+    img: 'images/layers/events.png',
+    opacity: 0.95,
+},{
+    type: 'facility',
+    old: true,
+    title: 'Facilities',
+    img: 'images/layers/facilities.png',
+    opacity: 1,
+},{
+    type: 'thematic',
+    old: true,
+    title: 'Thematic',
+    img: 'images/layers/thematic.png',
+    opacity: 0.8,
+},{
+    type: 'boundary',
+    old: true,
+    title: 'Boundaries',
+    img: 'images/layers/boundaries.png',
+    opacity: 1,
+},{
     type: 'earthEngine',
+    old: true,
     title: 'Population density',
     img: 'images/layers/population.png',
     subtitle: '2010',
     opacity: 0.9,
 },{
     type: 'earthEngine',
+    old: true,
     title: 'Elevation',
     img: 'images/layers/elevation.png',
     opacity: 0.9,
 },{
     type: 'earthEngine',
+    old: true,
     title: 'Temperature',
     img: 'images/layers/temperature.png',
     opacity: 0.9,
 },{
     type: 'earthEngine',
+    old: true,
     title: 'Landcover',
     img: 'images/layers/landcover.png',
     opacity: 0.9,
 },{
     type: 'earthEngine',
+    old: true,
     title: 'Precipitation',
     img: 'images/layers/precipitation.png',
     subtitle: '26 - 28 Nov. 2016',
     opacity: 0.9,
 },{
     type: 'earthEngine',
+    old: true,
     title: 'Nighttime lights',
     img: 'images/layers/nighttime.png',
     opacity: 0.9,

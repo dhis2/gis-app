@@ -19,7 +19,7 @@ const PeriodSelect = ({ periodType, period, onChange, style }) => {
         <SelectField
             label={i18next.t('Period')}
             items={periods}
-            value={period ? period.id : periods[0].id}
+            value={period && period.id}
             onChange={onChange}
             style={style}
         />

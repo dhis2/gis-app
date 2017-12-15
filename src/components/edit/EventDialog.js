@@ -233,6 +233,7 @@ export class EventDialog extends Component {
                                 <ColorPicker
                                     color={eventPointColor || EVENT_COLOR}
                                     onChange={setEventPointColor}
+                                    style={{ width: 32, height: 32 }}
                                 />
                             </div>
                             <TextField

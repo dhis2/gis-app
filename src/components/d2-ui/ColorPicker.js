@@ -7,11 +7,11 @@ import { hcl } from 'd3-color';
 const styles = {
     wrapper: {
         position: 'relative',
-        overflow: 'visible',
         display: 'inline-block',
     },
     color: {
-        padding: '12px 0 12px 24px',
+        padding: 0,
+        textAlign: 'right',
     },
     cover: {
         position: 'fixed',
@@ -19,11 +19,11 @@ const styles = {
         right: 0,
         bottom: 0,
         left: 0,
+
     },
     picker: {
         position: 'absolute',
-        overflow: 'visible',
-        zIndex: 1000,
+        zIndex: 2000,
         top: 0,
         left: 72,
     }
@@ -61,10 +61,13 @@ export default class ColorPicker extends Component {
             <div style={styles.wrapper}>
                 <IconButton
                     onClick={this.handleOpen}
-                    style={{ ...styles.color, background: color }}
+                    style={{ ...styles.color, background: color, ...this.props.style }}
                     disableTouchRipple={true}
                 >
-                    <ArrowDropDownIcon color={hcl(color).l < 70 ? '#fff' : '#333'} style={{ background: 'yellow' }} />
+                    <ArrowDropDownIcon // TODO: Switch to d2-ui cmp
+                        color={hcl(color).l < 70 ? '#fff' : '#333'}
+                        // style={{ position: 'absolute', bottom: 0 }}
+                    />
                 </IconButton>
 
                 {isOpen ? <div is="popover">

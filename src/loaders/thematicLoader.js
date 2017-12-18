@@ -77,7 +77,7 @@ const thematicLoader = async (config) => {
       .displayProperty(displayPropertyUpper)
       .getAll();
 
-    const dataReq = apiFetch(`analytics.json${dataParams}`);
+    const dataReq = apiFetch(`/analytics.json${dataParams}`);
 
     // Load data from API
     const data = await Promise.all([orgUnitReq, dataReq]);
@@ -179,7 +179,7 @@ const thematicLoader = async (config) => {
 
         // TODO: Not sure why this is needed
         /*
-        apiFetch(`${elementUrl}.json?fields=legendSet[id,displayName~rename(name)]&paging=false&filter=id:eq:${id}`)
+        apiFetch(`/${elementUrl}.json?fields=legendSet[id,displayName~rename(name)]&paging=false&filter=id:eq:${id}`)
           .then(data => {
               const elements = data[elementUrl];
               let set;
@@ -288,7 +288,7 @@ class ThematicLoader {
                     .displayProperty(displayProperty.toUpperCase())
                     .getAll();
 
-                const dataReq = apiFetch(`analytics.json${dataParams}`);
+                const dataReq = apiFetch(`/analytics.json${dataParams}`);
 
                 // Load data from API
                 Promise.all([orgUnitReq, dataReq])
@@ -401,7 +401,7 @@ class ThematicLoader {
             }
 
             // TODO: Not sure why this is needed
-            apiFetch(`${elementUrl}.json?fields=legendSet[id,displayName~rename(name)]&paging=false&filter=id:eq:${id}`)
+            apiFetch(`/${elementUrl}.json?fields=legendSet[id,displayName~rename(name)]&paging=false&filter=id:eq:${id}`)
                 .then(data => {
                     const elements = data[elementUrl];
                     let set;
@@ -427,7 +427,7 @@ class ThematicLoader {
         const colors = this.colors;
         const names = this.names;
 
-        apiFetch(`legendSets/${layer.legendSet.id}.json?fields=${fields}`)
+        apiFetch(`/legendSets/${layer.legendSet.id}.json?fields=${fields}`)
             .then(data => {
                 const legendItems = data.legends;
 

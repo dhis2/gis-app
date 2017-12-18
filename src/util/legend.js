@@ -7,7 +7,7 @@ export const loadLegendSet = async (legendSet) => {
     // console.log(legendSet, fields);
 
     // TODO: Load with d2
-    return apiFetch(`legendSets/${legendSet.id}.json?fields=${fields}`);
+    return apiFetch(`/legendSets/${legendSet.id}.json?fields=${fields}`);
         //.then(legend => {
         //    const legendItems = legend.legends;
 

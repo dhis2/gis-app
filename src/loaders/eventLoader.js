@@ -158,8 +158,6 @@ export const getAnalyticsRequest = async (program, programStage, period, startDa
 
     analyticsRequest = analyticsRequest.addOrgUnitDimension(orgUnits.map(ou => ou.id));
 
-    console.log('dataItems', dataItems);
-
     dataItems.forEach(item => {
         analyticsRequest = analyticsRequest.addDimension(item.dimension, item.filter);
     });

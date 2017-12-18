@@ -4,5 +4,5 @@ import { apiFetch } from '../util/api';
 export function changeCoordinate(id, coordinate) {
 
     // TODO: Backend should accept proper JSON so we don't have to add quotes around arrays
-    return apiFetch('organisationUnits/' + id, 'PATCH', {coordinates: JSON.stringify(coordinate)});
+    return apiFetch('/organisationUnits/' + id, 'PATCH', {coordinates: JSON.stringify(coordinate)});
 }

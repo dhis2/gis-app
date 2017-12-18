@@ -23,7 +23,7 @@ export default class EarthEngineLayer extends Layer {
         }
 
         config.accessToken = (callback) => {
-            apiFetch('tokens/google')
+            apiFetch('/tokens/google')
                 .then(json => callback(json));
         };
 

@@ -1,9 +1,10 @@
-import Layer from './Layer';
+import i18next from 'i18next';
 import { getInstance as getD2 } from 'd2/lib/d2';
 import { apiFetch } from '../../util/api';
 import { getAnalyticsRequest, addStyleDataItem } from '../../loaders/eventLoader';
 import { getOrgUnitsFromRows, getPeriodFromFilters } from '../../util/analytics';
 import { EVENT_COLOR, EVENT_RADIUS } from '../../constants/layers';
+import Layer from './Layer';
 import { getDisplayPropertyUrl } from '../../util/helpers';
 
 class EventLayer extends Layer {
@@ -95,7 +96,11 @@ class EventLayer extends Layer {
     loadDataElements() {
         const props = this.props;
 
-        apiFetch(`programStages/${props.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${getDisplayPropertyUrl()},optionSet]]`)
+        console.log('loadDataElements');
+
+
+        /*
+        apiFetch(`/programStages/${props.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${getDisplayPropertyUrl()},optionSet]]`)
             .then(data => {
                 if (data.programStageDataElements) {
                     data.programStageDataElements.forEach(el => {
@@ -108,12 +113,13 @@ class EventLayer extends Layer {
                     });
                 }
             });
+        */
     }
 
     onEventClick(feature, callback) {
         const coord = feature.geometry.coordinates;
 
-        apiFetch('events/' + feature.id + '.json')
+        apiFetch('/events/' + feature.id + '.json')
             .then(data => {
                 const time = data.eventDate.substring(0, 10) + ' ' + data.eventDate.substring(11, 16);
                 const dataValues = data.dataValues;
@@ -137,14 +143,12 @@ class EventLayer extends Layer {
                     content += '<tr style="height:5px;"><th></th><td></td></tr>';
                 }
 
-                content += `<tr><th>${GIS.i18n.organisation_unit}</th><td>${data.orgUnitName}</td></tr>
-                            <tr><th>${GIS.i18n.event_time}</th><td>${time}</td></tr>
-                            <tr><th>${this.eventCoordinateFieldName || GIS.i18n.event_location}</th><td>${coord[0]}, ${coord[1]}</td></tr> 
+                content += `<tr><th>${i18next.t('Organisation unit')}</th><td>${data.orgUnitName}</td></tr>
+                            <tr><th>${i18next.t('Event time')}</th><td>${time}</td></tr>
+                            <tr><th>${this.eventCoordinateFieldName || i18next.t('Event location')}</th><td>${coord[0]}, ${coord[1]}</td></tr> 
                             </tbody></table>`;
 
                 callback(content);
-
-
             });
 
     }

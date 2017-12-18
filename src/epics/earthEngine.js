@@ -82,7 +82,7 @@ const setAuthToken = ({ client_id, access_token, expires_in }) => {
 export const loadCollection = (action$) =>
     action$
         .ofType(types.EARTH_ENGINE_COLLECTION_LOAD)
-        .concatMap((action) => apiFetch('tokens/google')
+        .concatMap((action) => apiFetch('/tokens/google')
             .then(setAuthToken)
             .then(() => new Promise(collections[action.id]))
             .then((data) => setEarthEngineCollection(action.id, data))

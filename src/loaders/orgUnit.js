@@ -8,5 +8,5 @@ export function fetchOrgUnit(id) {
 
 
 
-    return apiFetch(`maps/${id}.json?fields=${fields}`).then(res => res.json());
+    return apiFetch(`/maps/${id}.json?fields=${fields}`).then(res => res.json());
 }

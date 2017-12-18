@@ -46,6 +46,8 @@ getManifest('manifest.webapp')
     .then((manifest) => {
         const baseUrl = process.env.NODE_ENV === 'production' ? manifest.getBaseUrl() : DHIS_CONFIG.baseUrl;
         config.baseUrl = `${baseUrl}/api/29`;
+        config.context = manifest.activities.dhis; // Added temporarily for util/api.js
+
         log.info(`Loading: ${manifest.name} v${manifest.version}`);
         log.info(`Built ${manifest.manifest_generated_at}`);
 
@@ -82,6 +84,8 @@ getManifest('manifest.webapp')
 
         render(<Root d2={d2} store={store} />, document.getElementById('app'));
 
+
+
         /*
         const api = d2.Api.getApi();
         api.get('locales/ui') // TODO: Is locales used?
@@ -89,6 +93,7 @@ getManifest('manifest.webapp')
                 console.log('locales', locales);
             });
         */
+
     }, (err) => {
         log.error('Failed to initialize D2:', JSON.stringify(err));
         document.write(`D2 initialization error: ${err}`);

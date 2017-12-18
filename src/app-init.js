@@ -111,9 +111,11 @@ Ext.onReady( function() {
                 init.defaultHeaders = {};
 
                 if (context.auth) {
+                    /*
                     Ext.Ajax.defaultHeaders = {
                         'Authorization': 'Basic ' + btoa(context.auth)
                     };
+                    */
 
                     init.defaultHeaders['Authorization'] = 'Basic ' + btoa(context.auth); // Used by fetch
                 }

@@ -2,6 +2,7 @@ import * as types from '../constants/actionTypes';
 import { closeContextMenu } from './map';
 import { loading, loaded } from './loading';
 import { fetchOverlay } from '../loaders/overlays';
+import { dimConf } from '../constants/dimension';
 
 // Add new overlay
 export const addOverlay = (layer) => ({
@@ -87,7 +88,6 @@ export const sortOverlays = ({oldIndex, newIndex}) => ({
 export const drillOverlay = (layerId, parentId, parentGraph, level) => (dispatch, getState) => {
     dispatch(closeContextMenu());
 
-    const dimConf = gis.conf.finals.dimension; // TODO
     const state = getState();
     const layer = state.map.overlays.filter(overlay => overlay.id === layerId)[0]; // TODO: Add check
 

@@ -81,39 +81,35 @@ class EventLayer extends Layer {
         this.loadDataElements();
     }
 
-    // Get option sets by id (used for data elements i popup)
-    getDataElementOptionSets(dataElement){
-        if (dataElement.optionSet && dataElement.optionSet.id) {
-            console.log('TODO: getDataElementOptionSets', dataElement);
-
-            // dhis2.gis.store.get('optionSets', dataElement.optionSet.id).done(optionSet => {
-            //    optionSet.options.forEach(option => dataElement.optionSet[option.code] = option.name);
-            // });
-        }
-    }
-
     // Load data elements that should be displayed in popups
-    loadDataElements() {
+    async loadDataElements() {
         const props = this.props;
+        const d2 = await getD2();
+        const data = await d2.models.programStage.get(props.programStage.id, {
+            fields: `programStageDataElements[displayInReports,dataElement[id,${getDisplayPropertyUrl()},optionSet]]`,
+            paging: false,
+        });
 
-        console.log('loadDataElements');
+        if (data.programStageDataElements) {
+            data.programStageDataElements.forEach(el => {
+                const dataElement = el.dataElement;
 
+                if (el.displayInReports) {
+                    this.displayElements[dataElement.id] = dataElement;
 
-        /*
-        apiFetch(`/programStages/${props.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${getDisplayPropertyUrl()},optionSet]]`)
-            .then(data => {
-                if (data.programStageDataElements) {
-                    data.programStageDataElements.forEach(el => {
-                        if (el.displayInReports) {
-                            this.displayElements[el.dataElement.id] = el.dataElement;
-                            this.getDataElementOptionSets(el.dataElement);
-                        } else if (props.eventCoordinateField && el.dataElement.id === props.eventCoordinateField) {
-                            this.eventCoordinateFieldName = el.dataElement.name;
-                        }
-                    });
+                    if (dataElement.optionSet && dataElement.optionSet.id) {
+                        d2.models.optionSets.get(dataElement.optionSet.id, {
+                            fields: 'id,displayName~rename(name),options[code,displayName~rename(name)]',
+                            paging: false,
+                        }).then(optionSet => {
+                            optionSet.options.forEach(option => dataElement.optionSet[option.code] = option.name);
+                        });
+                    }
+                } else if (props.eventCoordinateField && dataElement.id === props.eventCoordinateField) {
+                    this.eventCoordinateFieldName = dataElement.name;
                 }
             });
-        */
+        }
     }
 
     onEventClick(feature, callback) {

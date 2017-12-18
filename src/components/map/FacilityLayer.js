@@ -1,5 +1,6 @@
-import Layer from './Layer';
+import i18next from 'i18next';
 import isObject from 'd2-utilizr/lib/isObject';
+import Layer from './Layer';
 
 class FacilityLayer extends Layer {
 
@@ -58,14 +59,14 @@ class FacilityLayer extends Layer {
     // Show pupup on facility click
     onFeatureClick(evt) {
         const attr = evt.layer.feature.properties;
-        let content = '<div class="leaflet-popup-orgunit"><em>' + attr.name + '</em>';
+        let content = `<div class="leaflet-popup-orgunit"><em>${attr.name}</em>`;
 
         if (isObject(attr.dimensions)) {
-            content += '<br/>' + GIS.i18n.groups + ': ' + Object.keys(attr.dimensions).map(id => attr.dimensions[id]).join(', ');
+            content += `<br/>${i18next.t('Groups')}: ${Object.keys(attr.dimensions).map(id => attr.dimensions[id]).join(', ')}`;
         }
 
         if (attr.pn) {
-            content += '<br/>' + GIS.i18n.parent_unit + ': ' + attr.pn;
+            content += `<br/>${i18next.t('Parent unit')}: ${attr.pn}`;
         }
 
         content += '</div>';

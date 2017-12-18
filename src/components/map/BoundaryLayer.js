@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 import Layer from './Layer';
 
 export default class BoundaryLayer extends Layer {
@@ -30,10 +31,7 @@ export default class BoundaryLayer extends Layer {
             config.style.radius = props.radiusLow;
         }
 
-        console.log('##', config);
-
         this.layer = map.createLayer(config);
-
         this.layer.on('click', this.onFeatureClick, this);
         this.layer.on('contextmenu', this.onFeatureRightClick, this);
 
@@ -42,14 +40,14 @@ export default class BoundaryLayer extends Layer {
 
     onFeatureClick(evt) {
         const attr = evt.layer.feature.properties;
-        let content = '<div class="leaflet-popup-orgunit"><em>' + attr.name + '</em>';
+        let content = `<div class="leaflet-popup-orgunit"><em>${attr.name}</em>`;
 
         if (attr.level) {
-            content += '<br/>' + GIS.i18n.level + ': ' + attr.level;
+            content += `<br/>${i18next.t('Level')}: ${attr.level}`;
         }
 
         if (attr.parentName) {
-            content += '<br/>' + GIS.i18n.parent_unit + ': ' + attr.parentName;
+            content += `<br/>${i18next.t('Parent unit')}: ${attr.parentName}`;
         }
 
         content += '</div>';
@@ -62,8 +60,8 @@ export default class BoundaryLayer extends Layer {
 
     onFeatureRightClick(evt) {
         L.DomEvent.stopPropagation(evt); // Don't propagate to map right-click
-        const contextMenu = GIS.core.ContextMenu(gis, this.props, evt.layer, evt.latlng); // TODO
-        contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y]);
+        // const contextMenu = GIS.core.ContextMenu(gis, this.props, evt.layer, evt.latlng); // TODO
+        // contextMenu.showAt([evt.originalEvent.x, evt.originalEvent.pageY || evt.originalEvent.y]);
     }
 
     removeLayer() {
@@ -72,5 +70,4 @@ export default class BoundaryLayer extends Layer {
 
         super.removeLayer();
     }
-
 }

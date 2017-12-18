@@ -3,6 +3,7 @@ import sortBy from 'lodash/fp/sortBy';
 import negate from 'lodash/fp/negate';
 import { isValidUid } from 'd2/lib/uid';
 import { relativePeriods } from '../constants/periods';
+import { dimConf } from '../constants/dimension';
 
 /* DIMENSIONS */
 
@@ -153,13 +154,12 @@ export const getFiltersFromColumns = (columns = []) => {
     return filters.length ? filters : null;
 };
 
-// TODO: Remove dependancy to global variables
 export const getDimensionIndexFromHeaders = (headers, dimension) => {
     if (!Array.isArray(headers) || !dimension) {
         return null;
     }
 
-    const dim = gis.conf.finals.dimension[dimension];
+    const dim = dimConf[dimension];
 
     if (!dim) {
         return null;
@@ -167,20 +167,6 @@ export const getDimensionIndexFromHeaders = (headers, dimension) => {
 
     // TODO: findIndex is not supported by IE, is it transpiled?
     return headers.findIndex(item => item.name === dim.dimensionName);
-};
-
-
-
-// TODO: Remove dependancy to global variables
-export const getDisplayProperty = (displayProperty) => {
-    const propertyMap = {
-        'name': 'name',
-        'displayName': 'name',
-        'shortName': 'shortName',
-        'displayShortName': 'shortName'
-    };
-    const keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty;
-    return propertyMap[keyAnalysisDisplayProperty] || propertyMap[displayProperty] || 'name';
 };
 
 export const getFiltersAsText = (filters = []) => {

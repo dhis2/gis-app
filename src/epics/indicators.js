@@ -4,7 +4,6 @@ import * as types from '../constants/actionTypes';
 import { setIndicators, setIndicatorGroups } from '../actions/indicators';
 import { errorActionCreator } from '../actions/helpers';
 
-// // indicator.store.proxy.url = encodeURI(gis.init.apiPath + 'indicators.json?fields=dimensionItem~rename(id),' + gis.init.namePropertyUrl + '&paging=false&filter=indicatorGroups.id:eq:' + this.getValue());
 export const loadIndicators = (action$) =>
   action$
       .ofType(types.INDICATORS_LOAD)

@@ -4,6 +4,7 @@ import 'rxjs/add/operator/concatMap';
 import * as types from '../constants/actionTypes';
 import { setOrgUnitTree, setOrgUnitLevels, setOrgUnitGroups, setOrgUnitGroupSets } from '../actions/orgUnits';
 import { errorActionCreator } from '../actions/helpers';
+import { getDisplayPropertyUrl } from '../util/helpers';
 
 export const loadOrgUnitTree = (action$) =>
     action$
@@ -24,7 +25,7 @@ export const loadOrgUnitLevels = (action$) =>
         .concatMap(() =>
             getD2()
                 .then((d2) => d2.models.organisationUnitLevels.list({
-                    fields: `id,displayName~rename(name),level`, // TODO: gis.init.namePropertyUrl
+                    fields: `id,${getDisplayPropertyUrl()},level`,
                     pageing: false,
                 }))
                 .then(levels => setOrgUnitLevels(levels.toArray()))
@@ -37,7 +38,7 @@ export const loadOrgUnitGroups = (action$) =>
         .concatMap(() =>
             getD2()
                 .then((d2) => d2.models.organisationUnitGroups.list({
-                    fields: `id,displayName~rename(name)`, // TODO: gis.init.namePropertyUrl
+                    fields: `id,${getDisplayPropertyUrl()}`,
                     pageing: false,
                 }))
                 .then(groups => setOrgUnitGroups(groups.toArray()))
@@ -50,7 +51,7 @@ export const loadOrgUnitGroupSets = (action$) =>
         .concatMap(() =>
             getD2()
                 .then((d2) => console.log && d2.models.organisationUnitGroupSets.list({
-                    fields: `id,displayName~rename(name)`, // TODO: gis.init.namePropertyUrl
+                    fields: `id,${getDisplayPropertyUrl()}`,
                     pageing: false,
                 }))
                 .then(groupSets => setOrgUnitGroupSets(groupSets.toArray()))

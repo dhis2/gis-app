@@ -5,6 +5,7 @@ import sortBy from 'lodash/fp/sortBy';
 import * as types from '../constants/actionTypes';
 import { setPrograms, setProgramStages, setProgramAttributes, setProgramIndicators, setProgramStageDataElements } from '../actions/programs';
 import { errorActionCreator } from '../actions/helpers';
+import { getDisplayPropertyUrl } from '../util/helpers';
 
 export const loadPrograms = (action$) =>
     action$
@@ -68,7 +69,7 @@ export const loadProgramStageDataElements = (action$) =>
         .concatMap((action) =>
             getD2()
                 .then(d2 => d2.models.programStage.get(action.programStageId, {
-                    fields: `programStageDataElements[dataElement[id,${gis.init.namePropertyUrl},valueType,optionSet[id,displayName~rename(name)]]]`,
+                    fields: `programStageDataElements[dataElement[id,${getDisplayPropertyUrl()},valueType,optionSet[id,displayName~rename(name)]]]`,
                     paging: false,
                 }))
                 .then(programStage => programStage.programStageDataElements.map(d => d.dataElement))

@@ -5,6 +5,7 @@ import sortBy from 'lodash/fp/sortBy';
 import * as types from '../constants/actionTypes';
 import { setDataElementGroups, setDataElements } from '../actions/dataElements';
 import { errorActionCreator } from '../actions/helpers';
+import { getDisplayPropertyUrl } from '../util/helpers';
 
 // Load all data element groups
 export const loadDataElementGroups = (action$) =>
@@ -13,7 +14,7 @@ export const loadDataElementGroups = (action$) =>
         .concatMap(() =>
             getD2()
                 .then(d2 => d2.models.dataElementGroups.list({
-                    fields: 'id,displayName~rename(name)', // TODO: id,' + namePropertyUrl + '&paging=false'),
+                    fields: `id,${getDisplayPropertyUrl()}`,
                     paging: false,
                 }))
                 .then(groups => setDataElementGroups(sortBy('name', groups.toArray())))
@@ -31,7 +32,7 @@ export const loadDataElements = (action$) =>
                     return d2.models.dataElements
                         .filter().on('dataElementGroups.id').equals(action.groupId)
                         .list({
-                            fields: 'dimensionItem~rename(id),displayName~rename(name)', // TODO: gis.init.namePropertyUrl
+                            fields: `dimensionItem~rename(id),${getDisplayPropertyUrl()}`,
                             domainType: 'aggregate',
                             paging: false,
                         });
@@ -40,15 +41,4 @@ export const loadDataElements = (action$) =>
                 .catch(errorActionCreator(types.DATA_ELEMENTS_LOAD_ERROR))
         );
 
-
 export default combineEpics(loadDataElementGroups, loadDataElements);
-
-
-/*
-if (isString(uid)) {
-    path = '/dataElements.json?fields=dimensionItem~rename(id),' + gis.init.namePropertyUrl + '&domainType=aggregate&paging=false&filter=dataElementGroups.id:eq:' + uid;
-}
-else if (uid === 0) {
-    path = '/dataElements.json?fields=dimensionItem~rename(id),' + gis.init.namePropertyUrl + '&domainType=aggregate&paging=false';
-}
-*/

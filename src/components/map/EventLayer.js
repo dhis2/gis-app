@@ -4,6 +4,7 @@ import { apiFetch } from '../../util/api';
 import { getAnalyticsRequest, addStyleDataItem } from '../../loaders/eventLoader';
 import { getOrgUnitsFromRows, getPeriodFromFilters } from '../../util/analytics';
 import { EVENT_COLOR, EVENT_RADIUS } from '../../constants/layers';
+import { getDisplayPropertyUrl } from '../../util/helpers';
 
 class EventLayer extends Layer {
 
@@ -47,8 +48,6 @@ class EventLayer extends Layer {
             popup: this.onEventClick.bind(this),
         };
 
-        // console.log('serverCluster', serverCluster);
-
         if (eventClustering) {
             if (serverCluster) {
 
@@ -84,18 +83,19 @@ class EventLayer extends Layer {
     // Get option sets by id (used for data elements i popup)
     getDataElementOptionSets(dataElement){
         if (dataElement.optionSet && dataElement.optionSet.id) {
-            dhis2.gis.store.get('optionSets', dataElement.optionSet.id).done(optionSet => {
-                optionSet.options.forEach(option => dataElement.optionSet[option.code] = option.name);
-            });
+            console.log('TODO: getDataElementOptionSets', dataElement);
+
+            // dhis2.gis.store.get('optionSets', dataElement.optionSet.id).done(optionSet => {
+            //    optionSet.options.forEach(option => dataElement.optionSet[option.code] = option.name);
+            // });
         }
     }
 
     // Load data elements that should be displayed in popups
     loadDataElements() {
         const props = this.props;
-        const namePropertyUrl = gis.init.namePropertyUrl; // TODO
 
-        apiFetch(`programStages/${props.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${namePropertyUrl},optionSet]]`)
+        apiFetch(`programStages/${props.programStage.id}.json?fields=programStageDataElements[displayInReports,dataElement[id,${getDisplayPropertyUrl()},optionSet]]`)
             .then(data => {
                 if (data.programStageDataElements) {
                     data.programStageDataElements.forEach(el => {

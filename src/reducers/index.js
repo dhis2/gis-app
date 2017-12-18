@@ -26,6 +26,7 @@ import programStageDataElements from './programStageDataElements';
 import programTrackedEntityAttributes from './programTrackedEntityAttributes';
 import relocate from './relocate';
 import ui from './ui';
+import userSettings from './userSettings';
 
 export default combineReducers({
     basemaps,
@@ -55,4 +56,5 @@ export default combineReducers({
     programTrackedEntityAttributes,
     relocate,
     ui,
+    userSettings,
 });

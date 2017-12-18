@@ -4,6 +4,7 @@ import 'rxjs/add/operator/concatMap';
 import * as types from '../constants/actionTypes';
 import { setDataSets } from '../actions/dataSets';
 import { errorActionCreator } from '../actions/helpers';
+import { getDisplayPropertyUrl } from '../util/helpers';
 
 // Load data sets
 export const loadDataSets = (action$) =>
@@ -12,7 +13,7 @@ export const loadDataSets = (action$) =>
         .concatMap((action) =>
             getD2()
                 .then(d2 => d2.models.dataSets.list({
-                    fields: 'dimensionItem~rename(id),displayName~rename(name)', // TODO: gis.init.namePropertyUrl
+                    fields: `dimensionItem~rename(id),${getDisplayPropertyUrl()}`,
                     paging: false,
                 }))
                 .then(dataSets => setDataSets(dataSets.toArray()))

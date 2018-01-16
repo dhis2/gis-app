@@ -208,6 +208,8 @@ export default function LayerHandlerThematic(gis, layer) {
             const metaData = response.metaData;
             const peIds = metaData[dimConf.period.objectName];
 
+            metaData.names = metaData.names || {}; // TODO: Remove quickfix
+
             for (let i = 0, dimension; i < dimensions.length; i++) {
                 dimension = dimensions[i];
 
@@ -218,7 +220,7 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
             // Period name without changing the id
-            view.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]];
+            // view.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]]; // TODO: Remove comment
         };
 
         const fn = function () {

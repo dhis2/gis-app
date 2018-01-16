@@ -1072,7 +1072,8 @@ Ext.onReady( function() {
                 init.contextPath = context.href;
 
                 init.apiPath = init.contextPath + '/api/' + GIS.apiVersion + '/';
-                init.analyticsPath = init.contextPath + '/api/25/'; // https://jira.dhis2.org/browse/DHIS2-502
+                // init.analyticsPath = init.contextPath + '/api/25/'; // https://jira.dhis2.org/browse/DHIS2-502
+                init.analyticsPath = init.apiPath;
                 init.defaultHeaders = {};
 
                 if (context.auth) {
@@ -1103,8 +1104,7 @@ Ext.onReady( function() {
 
                                 // user-account
                                 Ext.Ajax.request({
-                                    //url: encodeURI(init.contextPath + '/api/me/user-account.json'),
-                                    url: encodeURI(init.contextPath + '/api/23/me/user-account.json'), // https://jira.dhis2.org/browse/DHIS2-304
+                                    url: encodeURI(init.apiPath + 'me'),
                                     success(r) {
                                         init.userAccount = JSON.parse(r.responseText);
 

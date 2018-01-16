@@ -19,7 +19,7 @@ Ext.isIE11 = Ext.isIE && (/rv:11.0/.test(Ext.userAgent));
 
 // GIS
 export default {
-    apiVersion: 27,
+    apiVersion: 29,
     core: {
         instances: [],
         getMap,

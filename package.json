@@ -30,9 +30,9 @@
   "homepage": "https://github.com/dhis2/gis-app#readme",
   "dependencies": {
     "d2-utilizr": "^0.2.13",
-    "d3-time-format": "^2.0.5",
-    "dhis2-gis-api": "28.0.6",
-    "loglevel": "^1.4.1",
+    "d3-time-format": "^2.1.1",
+    "dhis2-gis-api": "29.0.1",
+    "loglevel": "^1.6.1",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {

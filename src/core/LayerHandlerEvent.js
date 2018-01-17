@@ -54,7 +54,10 @@ export default function LayerHandlerEvent(gis, layer) {
         const success = function(r) {
             const features = [];
             const rows = [];
-            const names = Ext.clone(r.metaData.names); //  || {};
+
+            // Quickfix for: https://jira.dhis2.org/browse/DHIS2-502
+            const names = {};
+            Object.keys(r.metaData.items).forEach(key => names[key] = r.metaData.items[key].name);
 
             const booleanNames = {
                 'true': GIS.i18n.yes || 'Yes',

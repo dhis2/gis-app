@@ -115,12 +115,6 @@ export default function LayerHandlerThematic(gis, layer) {
             const valueFeatures = []; // only include features with values
             const values = []; // to find min and max values
             const aggregationType = (GIS.i18n[(view.aggregationType || '').toLowerCase()] || '').toLowerCase();
-            const metaData = response.metaData;
-
-            // Quickfix for: https://jira.dhis2.org/browse/DHIS2-502
-            metaData.names = {};
-            Object.keys(metaData.items).forEach(key => metaData.names[key] = metaData.items[key].name);
-            Object.keys(metaData.dimensions).forEach(key => metaData[key] = metaData.dimensions[key]);
 
             let ouIndex;
             let valueIndex;
@@ -167,6 +161,12 @@ export default function LayerHandlerThematic(gis, layer) {
             values.sort((a, b) => {
                 return a - b;
             });
+
+            // Quickfix for: https://jira.dhis2.org/browse/DHIS2-502
+            const metaData = response.metaData;
+            metaData.names = {};
+            Object.keys(metaData.items).forEach(key => metaData.names[key] = metaData.items[key].name);
+            Object.keys(metaData.dimensions).forEach(key => metaData[key] = metaData.dimensions[key]);
 
             // TODO: Temporarily
             gis.data = {

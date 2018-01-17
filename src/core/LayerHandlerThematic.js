@@ -115,6 +115,12 @@ export default function LayerHandlerThematic(gis, layer) {
             const valueFeatures = []; // only include features with values
             const values = []; // to find min and max values
             const aggregationType = (GIS.i18n[(view.aggregationType || '').toLowerCase()] || '').toLowerCase();
+            const metaData = response.metaData;
+
+            // Quickfix for: https://jira.dhis2.org/browse/DHIS2-502
+            metaData.names = {};
+            Object.keys(metaData.items).forEach(key => metaData.names[key] = metaData.items[key].name);
+            Object.keys(metaData.dimensions).forEach(key => metaData[key] = metaData.dimensions[key]);
 
             let ouIndex;
             let valueIndex;
@@ -164,7 +170,7 @@ export default function LayerHandlerThematic(gis, layer) {
 
             // TODO: Temporarily
             gis.data = {
-                metaData: response.metaData,
+                metaData: metaData,
                 features: valueFeatures,
                 values: values,
                 aggregationType: aggregationType
@@ -206,9 +212,8 @@ export default function LayerHandlerThematic(gis, layer) {
             // All dimensions
             const dimensions = arrayClean([].concat(view.columns || [], view.rows || [], view.filters || []));
             const metaData = response.metaData;
-            const peIds = metaData[dimConf.period.objectName];
 
-            metaData.names = metaData.names || {}; // TODO: Remove quickfix
+            const peIds = metaData[dimConf.period.objectName];
 
             for (let i = 0, dimension; i < dimensions.length; i++) {
                 dimension = dimensions[i];
@@ -220,7 +225,7 @@ export default function LayerHandlerThematic(gis, layer) {
             }
 
             // Period name without changing the id
-            // view.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]]; // TODO: Remove comment
+            view.filters[0].items[0].name = metaData.names[peIds[peIds.length - 1]];
         };
 
         const fn = function () {

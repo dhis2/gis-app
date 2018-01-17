@@ -1,5 +1,3 @@
-// import d2map from 'dhis2-gis-api';
-
 import d2map from 'dhis2-gis-api/build';
 
 export default function getMap() {

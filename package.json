@@ -1,6 +1,6 @@
 {
   "name": "gis-app",
-  "version": "29.0.2",
+  "version": "29.0.3",
   "description": "GIS Web App for DHIS 2",
   "main": "build/index.js",
   "scripts": {

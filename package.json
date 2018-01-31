@@ -1,6 +1,6 @@
 {
   "name": "gis-app",
-  "version": "26.0.7",
+  "version": "26.0.8",
   "description": "GIS Web App for DHIS 2",
   "main": "src/app.js",
   "scripts": {
@@ -31,8 +31,9 @@
   "dependencies": {
     "d2-utilizr": "^0.2.13",
     "d3-time-format": "^2.0.5",
-    "dhis2-gis-api": "^27.0.12",
+    "dhis2-gis-api": "^26.0.3",
     "loglevel": "^1.4.1",
+    "script-loader": "^0.7.2",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {

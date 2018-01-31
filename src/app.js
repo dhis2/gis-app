@@ -765,7 +765,7 @@ Ext.onReady( function() {
                     this.map.addControl({
                         type: 'search',
                     });
-                    
+
                     // Add measurement control
                     this.map.addControl({
                         type: 'measure',

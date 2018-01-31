@@ -8,7 +8,7 @@ import arrayPluck from 'd2-utilizr/lib/arrayPluck';
 import log from 'loglevel';
 
 log.setLevel(log.levels.INFO); // TODO: Use DEBUG for development
-log.info('Loading: GIS app 28.0.15'); // TODO: Use manifest
+log.info('Loading: GIS app 28.0.16'); // TODO: Use manifest
 
 window.GIS = GIS;
 
@@ -765,11 +765,10 @@ Ext.onReady( function() {
                         imperial: false
                     });
 
-                    L.control.geocoder(gis.init.systemInfo.mapzenSearchKey, {
-                        position: 'topright',
-                        attribution: null,
-                        panToPoint: null
-                    }).addTo(this.map);
+                    // Add place search control (OSM Nominatim)
+                    this.map.addControl({
+                        type: 'search',
+                    });
 
                     // Add measurement control
                     this.map.addControl({

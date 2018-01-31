@@ -765,11 +765,10 @@ Ext.onReady( function() {
                         imperial: false
                     });
 
-                    L.control.geocoder(gis.init.systemInfo.mapzenSearchKey, {
-                        position: 'topright',
-                        attribution: null,
-                        panToPoint: null
-                    }).addTo(this.map);
+                    // Add place search control (OSM Nominatim)
+                    this.map.addControl({
+                        type: 'search',
+                    });
 
                     // Add measurement control
                     this.map.addControl({

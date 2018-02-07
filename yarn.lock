@@ -2122,9 +2122,9 @@ detect-node@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.3.tgz#a2033c09cc8e158d37748fbde7507832bd6ce127"
 
-dhis2-gis-api@^29.0.4:
-  version "29.0.4"
-  resolved "https://registry.yarnpkg.com/dhis2-gis-api/-/dhis2-gis-api-29.0.4.tgz#6f4f4c5ca7543e701a995e0e667d2700791b86a6"
+dhis2-gis-api@^29.0.5:
+  version "29.0.5"
+  resolved "https://registry.yarnpkg.com/dhis2-gis-api/-/dhis2-gis-api-29.0.5.tgz#58cf90ee0ff83af76fef2999d9f0e5342717faaf"
   dependencies:
     d3-color "^1.0.3"
     d3-scale "^1.0.7"

@@ -158,7 +158,7 @@ export default function ContextMenu(gis, layer, instance, latlng) {
                             r.rows.forEach(row => {
                                 const value = row[valueIndex];
                                 records.push({
-                                    name: r.metaData.names[row[dxIndex]],
+                                    name: r.metaData.items[row[dxIndex]].name,
                                     value: isNumeric(value) ? parseFloat(value) : value
                                 });
 

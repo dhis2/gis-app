@@ -6,12 +6,13 @@
   "scripts": {
     "validate": "npm ls --depth 0",
     "start": "webpack-dev-server",
-    "build": "rm -rf build && webpack --config webpack.config.prod.js && cp -r dhis2 build && cp -r extjs build && mkdir -p build/src/custom && cp -r src/custom build/src && cp index.html build && cp -r css build/css && cp src/app.js build/src/app.js && cp manifest.prod.webapp build/manifest.webapp && cp -r i18n build && cp -r images build",
+    "build": "rm -rf build && webpack --config webpack.config.prod.js && cp -r dhis2 build && cp -r extjs build && mkdir -p build/src/custom && cp -r src/custom build/src && cp index.html build && cp -r css build/css && cp src/app.js build/src/app.js && cp manifest.prod.webapp build/manifest.webapp && cp -r i18n build && cp -r images build && cp ./package.json ./build/package.json",
     "lint": "./node_modules/eslint/bin/eslint.js src",
     "test": "./node_modules/karma-cli/bin/karma start test/karma.config.js --single-run",
     "test-watch": "./node_modules/karma-cli/bin/karma start test/karma.config.js",
     "test-cov": "npm test",
-    "posttest-cov": "open ./coverage/phantomjs/lcov-report/index.html"
+    "posttest-cov": "open ./coverage/phantomjs/lcov-report/index.html",
+    "deploy": "deploy-build"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
+    "@dhis2/deploy-build": "^1.0.4",
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.0.0",

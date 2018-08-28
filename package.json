@@ -1,5 +1,5 @@
 {
-  "name": "gis-app",
+  "name": "mapping-app",
   "version": "29.0.4",
   "description": "GIS Web App for DHIS 2",
   "main": "build/index.js",

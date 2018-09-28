@@ -11,8 +11,7 @@
     "test": "./node_modules/karma-cli/bin/karma start test/karma.config.js --single-run",
     "test-watch": "./node_modules/karma-cli/bin/karma start test/karma.config.js",
     "test-cov": "npm test",
-    "posttest-cov": "open ./coverage/phantomjs/lcov-report/index.html",
-    "deploy": "deploy-build"
+    "posttest-cov": "open ./coverage/phantomjs/lcov-report/index.html"
   },
   "repository": {
     "type": "git",
@@ -37,7 +36,6 @@
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
-    "@dhis2/deploy-build": "^1.0.4",
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.0.0",

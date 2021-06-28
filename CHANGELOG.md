@@ -1,3 +1,11 @@
+## [27.0.18](https://github.com/dhis2/gis-app/compare/v27.0.17...v27.0.18) (2021-06-28)
+
+
+### Bug Fixes
+
+* **translations:** sync translations from transifex (master) ([ea629b4](https://github.com/dhis2/gis-app/commit/ea629b40d37e0abc1d320ce5c4b6bd5620696526))
+* **translations:** sync translations from transifex (master) ([3966206](https://github.com/dhis2/gis-app/commit/39662065227afb521000ca28d93ec3c9a070608e))
+
 ## [27.0.17](https://github.com/dhis2/gis-app/compare/v27.0.16...v27.0.17) (2021-02-01)
 
 

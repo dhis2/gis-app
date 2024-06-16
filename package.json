@@ -1,6 +1,6 @@
 {
   "name": "mapping-app",
-  "version": "27.0.40",
+  "version": "27.0.41",
   "description": "GIS Web App for DHIS 2",
   "main": "build/index.js",
   "scripts": {
